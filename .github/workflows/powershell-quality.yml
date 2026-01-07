@@ -1,0 +1,85 @@
+name: PowerShell Quality Check
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+
+jobs:
+  analyze:
+    name: PSScriptAnalyzer
+    runs-on: windows-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Install PSScriptAnalyzer
+        shell: pwsh
+        run: |
+          Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser -ErrorAction Stop
+          Write-Host "✓ PSScriptAnalyzer installed" -ForegroundColor Green
+      
+      - name: Run PSScriptAnalyzer
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Continue'
+          
+          Write-Host "🔍 Scanning for PowerShell files..." -ForegroundColor Cyan
+          $files = Get-ChildItem -Recurse -Filter *.ps1 | Where-Object { 
+            $_.FullName -notmatch '[\\/]\.git[\\/]' 
+          }
+          
+          if (-not $files) {
+            Write-Host "✓ No PowerShell files to analyze" -ForegroundColor Green
+            exit 0
+          }
+          
+          Write-Host "Found $($files.Count) PowerShell file(s)" -ForegroundColor Cyan
+          
+          $settingsPath = Join-Path $PWD '.PSScriptAnalyzerSettings.psd1'
+          $hasIssues = $false
+          $totalIssues = 0
+          
+          foreach ($file in $files) {
+            Write-Host "`nAnalyzing: $($file.FullName -replace [regex]::Escape($PWD), '.')" -ForegroundColor Cyan
+            
+            $results = Invoke-ScriptAnalyzer -Path $file.FullName -Settings $settingsPath
+            
+            if ($results) {
+              $hasIssues = $true
+              $totalIssues += $results.Count
+              
+              Write-Host "  ❌ Found $($results.Count) issue(s):" -ForegroundColor Red
+              
+              foreach ($result in $results) {
+                $color = if ($result.Severity -eq 'Error') { 'Red' } else { 'Yellow' }
+                Write-Host "    Line $($result.Line): [$($result.Severity)] $($result.RuleName)" -ForegroundColor $color
+                Write-Host "      $($result.Message)" -ForegroundColor Gray
+              }
+            } else {
+              Write-Host "  ✓ No issues" -ForegroundColor Green
+            }
+          }
+          
+          if ($hasIssues) {
+            Write-Host "`n❌ FAILED: Found $totalIssues issue(s) across $($files.Count) file(s)" -ForegroundColor Red
+            Write-Host "`n⚠️  Fix the issues above before merging" -ForegroundColor Yellow
+            Write-Host "See: .claude/skills/powershell/SKILL.md for guidance" -ForegroundColor Cyan
+            exit 1
+          }
+          
+          Write-Host "`n✓ All PowerShell files passed quality checks!" -ForegroundColor Green
+          exit 0
+      
+      - name: Upload analysis results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: psscriptanalyzer-results
+          path: |
+            **/*.ps1
+          retention-days: 30
