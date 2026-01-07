@@ -1,0 +1,207 @@
+---
+name: autohotkey
+description: V1.0 - Expert in AutoHotkey v2 scripting for hotkeys, automation, GUIs, and Windows integration. Use for creating, editing, or troubleshooting AHK scripts.
+---
+
+# AutoHotkey Expert
+
+Expert-level guidance for AutoHotkey v2 scripting.
+
+## ALWAYS: Log This Interaction
+
+After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
+
+```markdown
+## {HH:MM} - {Action Taken}
+{One-line summary of what was done}
+```
+
+## Environment
+
+- **Version**: AutoHotkey v2.0
+- **Installation**: `C:\Program Files\AutoHotkey\v2\`
+- **User Script**: `C:\Users\User\Documents\AutoHotkey.ahk`
+- **Help File**: `C:\Program Files\AutoHotkey\v2\AutoHotkey.chm`
+- **Window Spy**: `C:\Program Files\AutoHotkey\WindowSpy.ahk`
+
+## v2 Syntax Essentials
+
+### Script Header
+```autohotkey
+#Requires AutoHotkey v2.0
+#SingleInstance Force
+```
+
+### Modifier Keys
+| Symbol | Key |
+|--------|-----|
+| `^` | CTRL |
+| `+` | SHIFT |
+| `!` | ALT |
+| `#` | WIN |
+
+### Hotkey Syntax (v2)
+```autohotkey
+; Simple hotkey
+^+x:: MsgBox("Hello")
+
+; Multi-line hotkey (requires braces)
+^+x:: {
+    MsgBox("Line 1")
+    Run("notepad.exe")
+}
+```
+
+### Common Patterns
+
+**Run Application:**
+```autohotkey
+^+n:: Run("notepad.exe")
+```
+
+**Activate or Launch:**
+```autohotkey
+^+t:: {
+    if WinExist("ahk_exe app.exe") {
+        WinActivate
+    } else {
+        Run("C:\Path\To\app.exe")
+    }
+}
+```
+
+**Send Text/Keys:**
+```autohotkey
+::btw::by the way  ; Hotstring
+^+d:: Send(FormatTime(, "yyyy-MM-dd"))  ; Date stamp
+```
+
+**Run PowerShell Hidden:**
+```autohotkey
+^+p:: Run('powershell.exe -WindowStyle Hidden -Command "Get-Date"',, "Hide")
+```
+
+**Tooltip with Auto-Hide:**
+```autohotkey
+ShowTooltip(msg, duration := 1500) {
+    ToolTip(msg)
+    SetTimer(() => ToolTip(), -duration)
+}
+```
+
+**GUI Input Box:**
+```autohotkey
+#Space:: {
+    ib := InputBox("Enter command:", "Launcher")
+    if ib.Result = "OK"
+        ExecuteCommand(ib.Value)
+}
+```
+
+### Window Management
+
+**Identify Windows (use Window Spy):**
+```autohotkey
+; By executable
+WinExist("ahk_exe chrome.exe")
+; By class
+WinExist("ahk_class Notepad")
+; By title (partial match)
+WinExist("Document -")
+```
+
+**Window Operations:**
+```autohotkey
+WinActivate("ahk_exe app.exe")
+WinMinimize("ahk_exe app.exe")
+WinMaximize("ahk_exe app.exe")
+WinRestore("ahk_exe app.exe")
+WinClose("ahk_exe app.exe")
+WinGetMinMax("ahk_exe app.exe")  ; Returns: -1=minimized, 0=normal, 1=maximized
+```
+
+### Clipboard Operations
+```autohotkey
+; Get clipboard
+text := A_Clipboard
+
+; Set clipboard
+A_Clipboard := "New text"
+
+; Wait for clipboard
+ClipWait(2)  ; Wait up to 2 seconds
+```
+
+### File Operations
+```autohotkey
+; Read file
+content := FileRead("C:\path\file.txt")
+
+; Write file
+FileAppend("text", "C:\path\file.txt")
+
+; Check existence
+if FileExist("C:\path\file.txt")
+    MsgBox("File exists")
+```
+
+### Script Control
+```autohotkey
+Reload  ; Reload script
+Edit    ; Open script in editor
+ExitApp ; Terminate script
+Suspend ; Toggle hotkeys
+Pause   ; Pause script
+```
+
+## v1 to v2 Migration Notes
+
+| v1 | v2 |
+|----|-----|
+| `MsgBox, Text` | `MsgBox("Text")` |
+| `Run, app.exe` | `Run("app.exe")` |
+| `IfWinExist` | `if WinExist()` |
+| `%var%` | `var` (direct) |
+| `Label:` | `FunctionName() {` |
+| Commands | Functions with `()` |
+
+## Debugging
+
+```autohotkey
+; Show variable value
+MsgBox(myVar)
+
+; Output to debugger
+OutputDebug("Value: " . myVar)
+
+; List all hotkeys
+ListHotkeys
+
+; Show key history
+KeyHistory
+```
+
+## Best Practices
+
+1. **Always use** `#Requires AutoHotkey v2.0` at top
+2. **Use** `#SingleInstance Force` to prevent duplicates
+3. **Prefer** `ahk_exe` over window titles (more reliable)
+4. **Test hotkeys** with simple `MsgBox` first
+5. **Use Window Spy** to identify windows accurately
+6. **Backup scripts** before major changes
+
+## Operations
+
+| Action | Command |
+|--------|---------|
+| Edit Script | `notepad "$env:USERPROFILE\Documents\AutoHotkey.ahk"` |
+| Reload Script | `Start-Process "$env:USERPROFILE\Documents\AutoHotkey.ahk"` |
+| Open Help | `Start-Process "C:\Program Files\AutoHotkey\v2\AutoHotkey.chm"` |
+| Window Spy | `Start-Process "C:\Program Files\AutoHotkey\WindowSpy.ahk"` |
+
+## Common Troubleshooting
+
+- **Hotkey not working**: Check for conflicts, verify syntax, run as admin if needed
+- **Window not found**: Use Window Spy to get exact `ahk_exe` or `ahk_class`
+- **Script errors**: Check v1 vs v2 syntax (functions need parentheses in v2)
+- **UAC issues**: Some apps require AHK to run elevated

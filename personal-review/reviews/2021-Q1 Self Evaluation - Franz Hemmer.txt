@@ -1,0 +1,7 @@
+During Q1 2020 I worked primarily on the new Enrollment Context API adding new features and endpoints for the Required Training page. It has been fun to build a new API from the ground up and using best practices and the latest technologies to build a scalable and performance optimized API.
+
+Also I've fixed several bugs over the past quarter and worked on improvements and important fixes for the Service Dashboard. Also, our team owned the 2/4 and the 4/1 releases.
+
+It has been a true pleasure to work with the Scrummy Bears team, and the addition of Kyle has made that experience even better.
+
+I look forward to what is ahead on my new team and working with Microsoft will be an honor and an exciting opportunity.

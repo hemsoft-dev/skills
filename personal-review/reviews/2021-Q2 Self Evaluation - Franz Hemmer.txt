@@ -1,0 +1,5 @@
+During Q2 I transitioned from the Scrummy Bears team to the new Open Sourcerers team to focus on the Microsoft Legacy Optimization Workstream. I really enjoyed working with the Scrummy Bears and the creation of the enrollment-context-api will be a great asset in the work towards the Target Architecture.
+
+The Microsoft work stream is progressing nicely, and we are currently in a state where Microsoft has a good understanding of our current tech stack, processes and infrastructure and helping us making targeted improvements to the development experience and the release process.
+
+I look forward to seeing this materialize and as a result making the development experience and release process much better.

@@ -1,0 +1,4 @@
+# Slack Skill Temp Folder
+# This folder is used for temporary file downloads from Slack.
+# Contents are automatically cleaned up between sessions.
+# Do not store important files here.

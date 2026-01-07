@@ -1,0 +1,10 @@
+{
+  "excludeLabels": [
+    "@Regular Chores"
+  ],
+  "excludeTaskPatterns": [
+    "submit time sheet",
+    "submit timesheet"
+  ],
+  "excludeRecurring": false
+}
