@@ -1,4 +1,6 @@
-#Requires -Version 7.0
+﻿#Requires -Version 7.0
+$InformationPreference = 'Continue'
+
 <#
 .SYNOPSIS
     Get comments/activity for Todoist tasks.
@@ -46,7 +48,7 @@ try {
         $comments = Invoke-RestMethod -Uri $uri -Headers $headers
         
         if (-not $comments -or $comments.Count -eq 0) {
-            Write-Host "No comments found for task $TaskId" -ForegroundColor Yellow
+            Write-Information "No comments found for task $TaskId" -ForegroundColor Yellow
             exit 0
         }
         
@@ -60,8 +62,8 @@ try {
             'List' {
                 $comments | ForEach-Object {
                     $date = ([DateTime]$_.posted_at).ToString('yyyy-MM-dd HH:mm')
-                    Write-Host "[$date] " -NoNewline -ForegroundColor Gray
-                    Write-Host $_.content
+                    Write-Information "[$date] " -NoNewline -ForegroundColor Gray
+                    Write-Information $_.content
                 }
             }
             'JSON' {
@@ -77,7 +79,7 @@ try {
         $comments = Invoke-RestMethod -Uri $uri -Headers $headers
         
         if (-not $comments -or $comments.Count -eq 0) {
-            Write-Host "No comments found for project $ProjectId" -ForegroundColor Yellow
+            Write-Information "No comments found for project $ProjectId" -ForegroundColor Yellow
             exit 0
         }
         
@@ -85,10 +87,10 @@ try {
         $grouped = $comments | Group-Object -Property task_id
         
         foreach ($group in $grouped) {
-            Write-Host "`nTask ID: $($group.Name)" -ForegroundColor Cyan
+            Write-Information "`nTask ID: $($group.Name)" -ForegroundColor Cyan
             $group.Group | ForEach-Object {
                 $date = ([DateTime]$_.posted_at).ToString('yyyy-MM-dd HH:mm')
-                Write-Host "  [$date] $($_.content)"
+                Write-Information "  [$date] $($_.content)"
             }
         }
     }

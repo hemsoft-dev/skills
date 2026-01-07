@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Downloads and launches Sysinternals tools on demand.
 .DESCRIPTION
@@ -14,6 +14,8 @@
     .\Get-Sysinternals.ps1 -Tool Handle
     .\Get-Sysinternals.ps1 -Tool Autoruns -Run
 #>
+$InformationPreference = 'Continue'
+
 [CmdletBinding()]
 param(
     [Parameter(Mandatory)]
@@ -65,7 +67,7 @@ $tools = @{
     }
 }
 
-function Download-Tool {
+function Get-Tool {
     param(
         [string]$Name,
         [hashtable]$Info
@@ -75,12 +77,12 @@ function Download-Tool {
     $exePath = Join-Path $toolPath $Info.Exe
     $zipPath = Join-Path $env:TEMP "$Name.zip"
     
-    Write-Host "`n[$Name] $($Info.Description)" -ForegroundColor Yellow
+    Write-Information "`n[$Name] $($Info.Description)" -ForegroundColor Yellow
     
     if (Test-Path $exePath) {
-        Write-Host "  Already downloaded at: $exePath" -ForegroundColor Gray
+        Write-Information "  Already downloaded at: $exePath" -ForegroundColor Gray
     } else {
-        Write-Host "  Downloading..." -ForegroundColor Gray
+        Write-Information "  Downloading..." -ForegroundColor Gray
         
         try {
             # Create directory
@@ -95,9 +97,9 @@ function Download-Tool {
             Expand-Archive -Path $zipPath -DestinationPath $toolPath -Force
             Remove-Item $zipPath -Force
             
-            Write-Host "  Downloaded to: $toolPath" -ForegroundColor Green
+            Write-Information "  Downloaded to: $toolPath" -ForegroundColor Green
         } catch {
-            Write-Host "  Failed to download: $_" -ForegroundColor Red
+            Write-Information "  Failed to download: $_" -ForegroundColor Red
             return $null
         }
     }
@@ -105,7 +107,7 @@ function Download-Tool {
     return $exePath
 }
 
-Write-Host "`n=== SYSINTERNALS DOWNLOADER ===" -ForegroundColor Cyan
+Write-Information "`n=== SYSINTERNALS DOWNLOADER ===" -ForegroundColor Cyan
 
 # Ensure download directory exists
 if (-not (Test-Path $DownloadPath)) {
@@ -114,16 +116,16 @@ if (-not (Test-Path $DownloadPath)) {
 
 if ($Tool -eq 'All') {
     foreach ($toolName in $tools.Keys) {
-        $exePath = Download-Tool -Name $toolName -Info $tools[$toolName]
+        $exePath = Get-Tool -Name $toolName -Info $tools[$toolName]
     }
-    Write-Host "`nAll tools downloaded to: $DownloadPath" -ForegroundColor Green
+    Write-Information "`nAll tools downloaded to: $DownloadPath" -ForegroundColor Green
 } else {
-    $exePath = Download-Tool -Name $Tool -Info $tools[$Tool]
+    $exePath = Get-Tool -Name $Tool -Info $tools[$Tool]
     
     if ($Run -and $exePath -and (Test-Path $exePath)) {
-        Write-Host "`nLaunching $Tool..." -ForegroundColor Cyan
+        Write-Information "`nLaunching $Tool..." -ForegroundColor Cyan
         Start-Process $exePath
     }
 }
 
-Write-Host ""
+Write-Information ""

@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Manages Windows startup programs.
 .DESCRIPTION
@@ -21,8 +21,10 @@ param(
     [string]$Action,
     
     [Parameter()]
-    [string]$Name
+    [string]$Name = "*"
 )
+
+$InformationPreference = 'Continue'
 
 $ErrorActionPreference = 'Stop'
 
@@ -31,7 +33,7 @@ $RegPathLM = "HKLM:\Software\Microsoft\Windows\CurrentVersion\Run"
 $DisabledPathCU = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run"
 $DisabledPathLM = "HKLM:\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run"
 
-function Get-StartupEntries {
+function Get-StartupEntry {
     $entries = @()
     
     # User Registry Run
@@ -79,55 +81,54 @@ function Get-StartupEntries {
 
 switch ($Action) {
     'List' {
-        Write-Host "`n=== STARTUP PROGRAMS ===" -ForegroundColor Cyan
-        Write-Host ""
+        Write-Information "`n=== STARTUP PROGRAMS ===" -ForegroundColor Cyan
+        Write-Information ""
         
-        $entries = Get-StartupEntries
+        $entries = Get-StartupEntry
         
         if ($entries.Count -eq 0) {
-            Write-Host "No startup entries found." -ForegroundColor Gray
+            Write-Information "No startup entries found." -ForegroundColor Gray
             return
         }
         
         $enabled = $entries | Where-Object Status -eq "Enabled"
         $disabled = $entries | Where-Object Status -eq "Disabled"
         
-        Write-Host "ENABLED ($($enabled.Count)):" -ForegroundColor Green
+        Write-Information "ENABLED ($($enabled.Count)):" -ForegroundColor Green
         $enabled | ForEach-Object {
-            Write-Host "  $($_.Name)" -ForegroundColor White
-            Write-Host "    Command: $($_.Command)" -ForegroundColor Gray
-            Write-Host "    Scope: $($_.Scope)" -ForegroundColor Gray
+            Write-Information "  $($_.Name)" -ForegroundColor White
+            Write-Information "    Command: $($_.Command)" -ForegroundColor Gray
+            Write-Information "    Scope: $($_.Scope)" -ForegroundColor Gray
         }
         
         if ($disabled.Count -gt 0) {
-            Write-Host "`nDISABLED ($($disabled.Count)):" -ForegroundColor Yellow
+            Write-Information "`nDISABLED ($($disabled.Count)):" -ForegroundColor Yellow
             $disabled | ForEach-Object {
-                Write-Host "  $($_.Name)" -ForegroundColor Gray
-                Write-Host "    Command: $($_.Command)" -ForegroundColor DarkGray
+                Write-Information "  $($_.Name)" -ForegroundColor Gray
+                Write-Information "    Command: $($_.Command)" -ForegroundColor DarkGray
             }
         }
         
-        Write-Host "`nTotal: $($entries.Count) entries`n"
+        Write-Information "`nTotal: $($entries.Count) entries`n"
     }
     
     'Disable' {
         if (-not $Name) {
-            Write-Host "Error: -Name parameter required for Disable action" -ForegroundColor Red
+            Write-Information "Error: -Name parameter required for Disable action" -ForegroundColor Red
             return
         }
         
-        Write-Host "`n=== DISABLING STARTUP: $Name ===" -ForegroundColor Cyan
+        Write-Information "`n=== DISABLING STARTUP: $Name ===" -ForegroundColor Cyan
         
-        $entries = Get-StartupEntries | Where-Object { $_.Name -like $Name -and $_.Status -eq "Enabled" }
+        $entries = Get-StartupEntry | Where-Object { $_.Name -like $Name -and $_.Status -eq "Enabled" }
         
         if ($entries.Count -eq 0) {
-            Write-Host "No enabled entries found matching '$Name'" -ForegroundColor Yellow
+            Write-Information "No enabled entries found matching '$Name'" -ForegroundColor Yellow
             return
         }
         
         foreach ($entry in $entries) {
             try {
-                $regPath = if ($entry.Location -eq "HKCU\Run") { $RegPathCU } else { $RegPathLM }
                 $approvalPath = if ($entry.Location -eq "HKCU\Run") { $DisabledPathCU } else { $DisabledPathLM }
                 
                 # Create disabled flag (first byte 03 = disabled, 02 = enabled)
@@ -139,27 +140,27 @@ switch ($Action) {
                 $disabledValue = [byte[]](0x03,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00)
                 Set-ItemProperty -Path $approvalPath -Name $entry.Name -Value $disabledValue -Type Binary
                 
-                Write-Host "Disabled: $($entry.Name)" -ForegroundColor Green
+                Write-Information "Disabled: $($entry.Name)" -ForegroundColor Green
             } catch {
-                Write-Host "Failed to disable $($entry.Name): $_" -ForegroundColor Red
+                Write-Information "Failed to disable $($entry.Name): $_" -ForegroundColor Red
             }
         }
         
-        Write-Host "`nNote: Changes take effect after next login/reboot`n"
+        Write-Information "`nNote: Changes take effect after next login/reboot`n"
     }
     
     'Enable' {
         if (-not $Name) {
-            Write-Host "Error: -Name parameter required for Enable action" -ForegroundColor Red
+            Write-Information "Error: -Name parameter required for Enable action" -ForegroundColor Red
             return
         }
         
-        Write-Host "`n=== ENABLING STARTUP: $Name ===" -ForegroundColor Cyan
+        Write-Information "`n=== ENABLING STARTUP: $Name ===" -ForegroundColor Cyan
         
-        $entries = Get-StartupEntries | Where-Object { $_.Name -like $Name -and $_.Status -eq "Disabled" }
+        $entries = Get-StartupEntry | Where-Object { $_.Name -like $Name -and $_.Status -eq "Disabled" }
         
         if ($entries.Count -eq 0) {
-            Write-Host "No disabled entries found matching '$Name'" -ForegroundColor Yellow
+            Write-Information "No disabled entries found matching '$Name'" -ForegroundColor Yellow
             return
         }
         
@@ -171,12 +172,12 @@ switch ($Action) {
                 $enabledValue = [byte[]](0x02,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00)
                 Set-ItemProperty -Path $approvalPath -Name $entry.Name -Value $enabledValue -Type Binary
                 
-                Write-Host "Enabled: $($entry.Name)" -ForegroundColor Green
+                Write-Information "Enabled: $($entry.Name)" -ForegroundColor Green
             } catch {
-                Write-Host "Failed to enable $($entry.Name): $_" -ForegroundColor Red
+                Write-Information "Failed to enable $($entry.Name): $_" -ForegroundColor Red
             }
         }
         
-        Write-Host "`nNote: Changes take effect after next login/reboot`n"
+        Write-Information "`nNote: Changes take effect after next login/reboot`n"
     }
 }

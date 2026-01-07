@@ -1,4 +1,4 @@
-param(
+﻿param(
     [Parameter(Mandatory=$true)]
     [string]$TranscriptPath,
     [Parameter(Mandatory=$true)]
@@ -7,6 +7,8 @@ param(
     [string]$BaseFilename
 )
 
+$InformationPreference = 'Continue'
+
 # Ensure output directory exists
 if (!(Test-Path $OutputDir)) {
     New-Item -ItemType Directory -Path $OutputDir -Force | Out-Null
@@ -14,10 +16,10 @@ if (!(Test-Path $OutputDir)) {
 
 $summaryPath = Join-Path $OutputDir "$BaseFilename-summary.md"
 
-Write-Host "Reading transcript from $TranscriptPath..."
+Write-Information "Reading transcript from $TranscriptPath..."
 $transcript = Get-Content $TranscriptPath -Raw
 
-Write-Host "Generating summary using Gemini (gemini-3-flash-preview)..."
+Write-Information "Generating summary using Gemini (gemini-3-flash-preview)..."
 $prompt = @"
 Create a comprehensive and engaging summary of the following YouTube transcript.
 The summary should include:
@@ -50,6 +52,6 @@ if ($null -eq $summary -or $summary -eq "") {
 }
 
 $summary | Out-File -FilePath $summaryPath -Encoding utf8
-Write-Host "Summary saved to $summaryPath"
+Write-Information "Summary saved to $summaryPath"
 
 return $summaryPath

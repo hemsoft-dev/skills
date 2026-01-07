@@ -1,7 +1,9 @@
+﻿$InformationPreference = 'Continue'
+
 $ErrorActionPreference = 'Stop'
 
 $asm = [AppDomain]::CurrentDomain.GetAssemblies() | Where-Object { $_.GetName().Name -eq 'MailKit' } | Select-Object -First 1
-if (-not $asm) { Write-Host 'MailKit not loaded in AppDomain.'; return }
+if (-not $asm) { Write-Information 'MailKit not loaded in AppDomain.'; return }
 
 $methods = @()
 foreach ($t in $asm.GetTypes()) {
@@ -11,4 +13,4 @@ foreach ($t in $asm.GetTypes()) {
         }
     }
 }
-if ($methods.Count -eq 0) { Write-Host 'No matching methods found in loaded MailKit assembly.' } else { $methods | Format-Table -AutoSize }
+if ($methods.Count -eq 0) { Write-Information 'No matching methods found in loaded MailKit assembly.' } else { $methods | Format-Table -AutoSize }

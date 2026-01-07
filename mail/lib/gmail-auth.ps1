@@ -1,10 +1,12 @@
-<#
+﻿<#
 .SYNOPSIS
     Shared Gmail authentication module.
 .DESCRIPTION
     Token management for Gmail API using OAuth 2.0 localhost redirect.
     Used by Gmail child scripts in tasks/gmail/.
 #>
+
+$InformationPreference = 'Continue'
 
 $script:ClientId = $env:GMAIL_CLIENT_ID
 $script:ClientSecret = $env:GMAIL_CLIENT_SECRET
@@ -23,12 +25,15 @@ function Test-GmailConfigured {
     return $true
 }
 
-function Get-CachedTokens {
+function Get-CachedToken {
     if (Test-Path $script:TokenCachePath) {
         try {
             return Get-Content $script:TokenCachePath -Raw | ConvertFrom-Json
         }
-        catch { return $null }
+        catch {
+            Write-Verbose "Failed to parse token cache: $_"
+            return $null
+        }
     }
     return $null
 }
@@ -46,7 +51,7 @@ function Save-TokenCache {
 }
 
 function Get-GmailAccessTokenInteractive {
-    Write-Host "Authentication required for Gmail. Opening browser..." -ForegroundColor Cyan
+    Write-Information "Authentication required for Gmail. Opening browser..." -ForegroundColor Cyan
     $scopeString = $script:Scopes -join " "
     $state = [guid]::NewGuid().ToString("N")
     
@@ -69,10 +74,10 @@ function Get-GmailAccessTokenInteractive {
     try { $listener.Start() }
     catch { throw "Failed to start listener on port $($script:RedirectPort)" }
     
-    Write-Host "`nOpening browser for Google sign-in..." -ForegroundColor Yellow
-    try { Start-Process $authUrl } catch { Write-Host "Open: $authUrl" -ForegroundColor Yellow }
+    Write-Information "`nOpening browser for Google sign-in..." -ForegroundColor Yellow
+    try { Start-Process $authUrl } catch { Write-Information "Open: $authUrl" -ForegroundColor Yellow }
     
-    Write-Host "Waiting for authentication..." -ForegroundColor Cyan
+    Write-Information "Waiting for authentication..." -ForegroundColor Cyan
     
     $asyncResult = $listener.BeginGetContext($null, $null)
     $waitResult = $asyncResult.AsyncWaitHandle.WaitOne(120000)
@@ -86,16 +91,16 @@ function Get-GmailAccessTokenInteractive {
     $queryParams = [System.Web.HttpUtility]::ParseQueryString($request.Url.Query)
     $code = $queryParams["code"]
     $returnedState = $queryParams["state"]
-    $error = $queryParams["error"]
+    $errorParam = $queryParams["error"]
     
-    $responseHtml = if ($error) { "<html><body><h2>Authentication failed</h2><p>Error: $error</p></body></html>" } else { "<html><body><h2>Authentication successful!</h2><p>You can close this window.</p></body></html>" }
+    $responseHtml = if ($errorParam) { "<html><body><h2>Authentication failed</h2><p>Error: $errorParam</p></body></html>" } else { "<html><body><h2>Authentication successful!</h2><p>You can close this window.</p></body></html>" }
     $buffer = [System.Text.Encoding]::UTF8.GetBytes($responseHtml)
     $response.ContentLength64 = $buffer.Length
     $response.OutputStream.Write($buffer, 0, $buffer.Length)
     $response.Close()
     $listener.Stop()
     
-    if ($error) { throw "Authentication failed: $error" }
+    if ($errorParam) { throw "Authentication failed: $errorParam" }
     if ($returnedState -ne $state) { throw "State mismatch." }
     if (-not $code) { throw "No authorization code received." }
     
@@ -120,13 +125,15 @@ function Get-GmailAccessTokenInteractive {
                 $decoded = [System.Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($payload))
                 $claims = $decoded | ConvertFrom-Json
                 $accountEmail = $claims.email
-            } catch { }
+            } catch {
+                Write-Verbose "Failed to decode ID token: $_"
+            }
         }
     }
     
     $expiresAt = (Get-Date).AddSeconds($tokenResponse.expires_in)
     Save-TokenCache -AccessToken $tokenResponse.access_token -RefreshToken $tokenResponse.refresh_token -ExpiresAt $expiresAt -AccountEmail $accountEmail
-    Write-Host "Authenticated as: $accountEmail" -ForegroundColor Green
+    Write-Information "Authenticated as: $accountEmail" -ForegroundColor Green
     return $tokenResponse.access_token
 }
 
@@ -140,7 +147,7 @@ function Get-AccessTokenFromRefresh {
     }
     try {
         $response = Invoke-RestMethod -Uri $script:TokenUrl -Method POST -Body $body
-        $cache = Get-CachedTokens
+        $cache = Get-CachedToken
         $expiresAt = (Get-Date).AddSeconds($response.expires_in)
         Save-TokenCache -AccessToken $response.access_token -RefreshToken ($response.refresh_token ?? $RefreshToken) -ExpiresAt $expiresAt -AccountEmail $cache.Account
         return $response.access_token
@@ -176,7 +183,7 @@ function Get-GmailHeader {
     return $header.value
 }
 
-function Get-GmailMessageDetails {
+function Get-GmailMessage {
     param([string]$AccessToken, [string]$MessageId, [string]$Format = "metadata")
     Invoke-GmailApi -AccessToken $AccessToken -Uri "/users/me/messages/$MessageId`?format=$Format"
 }

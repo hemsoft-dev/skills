@@ -1,16 +1,18 @@
-param(
+﻿param(
     [Parameter(Mandatory=$true)]
     [string]$Url,
     [Parameter(Mandatory=$true)]
     [string]$OutputDir
 )
 
+$InformationPreference = 'Continue'
+
 # Ensure output directory exists
 if (!(Test-Path $OutputDir)) {
     New-Item -ItemType Directory -Path $OutputDir -Force | Out-Null
 }
 
-Write-Host "Extracting raw metadata for $Url..."
+Write-Information "Extracting raw metadata for $Url..."
 $rawMetadataJson = ytd --dump-json --no-download --no-warnings --quiet "$Url"
 
 if ($LASTEXITCODE -ne 0) {
@@ -66,7 +68,7 @@ Filtered Metadata:
 $filteredMetadata
 "@
 
-Write-Host "Transforming metadata using Gemini (gemini-3-flash-preview)..."
+Write-Information "Transforming metadata using Gemini (gemini-3-flash-preview)..."
 # Use Gemini CLI to transform
 $geminiOutput = $prompt | gemini -m gemini-3-flash-preview -o json
 
@@ -90,7 +92,7 @@ $baseFilename = $metadataObj.base_filename
 $outputPath = Join-Path $OutputDir "$baseFilename-metadata.json"
 
 $transformedMetadata | Out-File -FilePath $outputPath -Encoding utf8
-Write-Host "Metadata saved to $outputPath"
+Write-Information "Metadata saved to $outputPath"
 
 # Output the path for the next step
 return $outputPath

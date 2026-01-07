@@ -87,7 +87,7 @@ function Disconnect-Imap {
     }
 }
 
-function Get-ImapMessages {
+function Get-ImapMessage {
     <#
     .SYNOPSIS
         Fetch messages from IMAP inbox.

@@ -1,10 +1,12 @@
-<#
+﻿<#
 .SYNOPSIS
     Shared Outlook (Microsoft Graph) authentication module.
 .DESCRIPTION
     Token management for Microsoft Graph API using device code flow.
     Used by Outlook child scripts in tasks/outlook/.
 #>
+
+$InformationPreference = 'Continue'
 
 $script:ClientId = $env:GRAPH_CLIENT_ID
 $script:TokenCachePath = Join-Path $env:USERPROFILE ".my-mail-outlook.json"
@@ -21,12 +23,15 @@ function Test-OutlookConfigured {
     return $true
 }
 
-function Get-CachedTokens {
+function Get-CachedToken {
     if (Test-Path $script:TokenCachePath) {
         try {
             return Get-Content $script:TokenCachePath -Raw | ConvertFrom-Json
         }
-        catch { return $null }
+        catch {
+            Write-Verbose "Failed to parse token cache: $_"
+            return $null
+        }
     }
     return $null
 }
@@ -44,17 +49,21 @@ function Save-TokenCache {
 }
 
 function Get-OutlookAccessTokenInteractive {
-    Write-Host "Authentication required for Outlook. Starting device code flow..." -ForegroundColor Cyan
+    Write-Information "Authentication required for Outlook. Starting device code flow..." -ForegroundColor Cyan
     $scopeString = $script:Scopes -join " "
     $deviceCodeBody = @{ client_id = $script:ClientId; scope = $scopeString }
     $deviceCodeResponse = Invoke-RestMethod -Uri $script:DeviceCodeUrl -Method POST -Body $deviceCodeBody
 
-    Write-Host "`nTo sign in, open: " -NoNewline
-    Write-Host $deviceCodeResponse.verification_uri -ForegroundColor Yellow
-    Write-Host "Enter code: " -NoNewline
-    Write-Host $deviceCodeResponse.user_code -ForegroundColor Green
+    Write-Information "`nTo sign in, open: " -NoNewline
+    Write-Information $deviceCodeResponse.verification_uri -ForegroundColor Yellow
+    Write-Information "Enter code: " -NoNewline
+    Write-Information $deviceCodeResponse.user_code -ForegroundColor Green
 
-    try { Start-Process $deviceCodeResponse.verification_uri } catch { }
+    try {
+        Start-Process $deviceCodeResponse.verification_uri
+    } catch {
+        Write-Verbose "Failed to open browser: $_"
+    }
 
     $interval = if ($deviceCodeResponse.interval) { $deviceCodeResponse.interval } else { 5 }
     $expiresIn = $deviceCodeResponse.expires_in
@@ -65,7 +74,7 @@ function Get-OutlookAccessTokenInteractive {
         device_code = $deviceCodeResponse.device_code
     }
 
-    Write-Host "Waiting for authentication..." -ForegroundColor Cyan
+    Write-Information "Waiting for authentication..." -ForegroundColor Cyan
 
     while (((Get-Date) - $startTime).TotalSeconds -lt $expiresIn) {
         Start-Sleep -Seconds $interval
@@ -84,18 +93,26 @@ function Get-OutlookAccessTokenInteractive {
                         $accountEmail = $claims.email
                         if (-not $accountEmail) { $accountEmail = $claims.preferred_username }
                         if (-not $accountEmail) { $accountEmail = $claims.name }
-                    } catch { }
+                    } catch {
+                        Write-Verbose "Failed to decode ID token: $_"
+                    }
                 }
             }
             $expiresAt = (Get-Date).AddSeconds($tokenResponse.expires_in)
             Save-TokenCache -AccessToken $tokenResponse.access_token -RefreshToken $tokenResponse.refresh_token -ExpiresAt $expiresAt -AccountEmail $accountEmail
-            Write-Host "Authenticated as: $accountEmail" -ForegroundColor Green
+            Write-Information "Authenticated as: $accountEmail" -ForegroundColor Green
             return $tokenResponse.access_token
         }
         catch {
             $errContent = $_.ErrorDetails.Message
             $err = $null
-            if ($errContent) { try { $err = $errContent | ConvertFrom-Json } catch {} }
+            if ($errContent) {
+                try {
+                    $err = $errContent | ConvertFrom-Json
+                } catch {
+                    Write-Verbose "Failed to parse error response: $_"
+                }
+            }
             if ($err.error -eq "authorization_pending") { continue }
             elseif ($err.error -eq "slow_down") { $interval += 5; continue }
             else {
@@ -117,7 +134,7 @@ function Get-AccessTokenFromRefresh {
     }
     try {
         $response = Invoke-RestMethod -Uri $script:TokenUrl -Method POST -Body $body
-        $cache = Get-CachedTokens
+        $cache = Get-CachedToken
         $expiresAt = (Get-Date).AddSeconds($response.expires_in)
         Save-TokenCache -AccessToken $response.access_token -RefreshToken ($response.refresh_token ?? $RefreshToken) -ExpiresAt $expiresAt -AccountEmail $cache.Account
         return $response.access_token

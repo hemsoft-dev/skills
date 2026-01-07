@@ -1,3 +1,5 @@
+﻿$InformationPreference = 'Continue'
+
 #!/usr/bin/env pwsh
 <#
 .SYNOPSIS
@@ -31,12 +33,12 @@ try {
         $remaining = [math]::Round($totalCredits - $totalUsage, 2)
         $percentUsed = [math]::Round(($totalUsage / $totalCredits) * 100, 2)
         
-        Write-Host "`n💰 OpenRouter Credit Balance" -ForegroundColor Cyan
-        Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Gray
-        Write-Host "Total:     `$$totalCredits" -ForegroundColor White
-        Write-Host "Used:      `$$totalUsage ($percentUsed%)" -ForegroundColor Yellow
-        Write-Host "Remaining: `$$remaining" -ForegroundColor Green
-        Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`n" -ForegroundColor Gray
+        Write-Information "`n💰 OpenRouter Credit Balance" -ForegroundColor Cyan
+        Write-Information "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Gray
+        Write-Information "Total:     `$$totalCredits" -ForegroundColor White
+        Write-Information "Used:      `$$totalUsage ($percentUsed%)" -ForegroundColor Yellow
+        Write-Information "Remaining: `$$remaining" -ForegroundColor Green
+        Write-Information "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`n" -ForegroundColor Gray
 
         return @{
             Total = $totalCredits

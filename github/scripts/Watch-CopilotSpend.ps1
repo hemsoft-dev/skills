@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Monitor Copilot spending in real-time with alerts.
 
@@ -26,6 +26,8 @@
     .\Watch-CopilotSpend.ps1 -Once
     # Single check, no monitoring
 #>
+
+$InformationPreference = 'Continue'
 
 [CmdletBinding()]
 param(
@@ -65,17 +67,17 @@ if (-not $Username) {
 $proQuota = 1500
 $pricePerRequest = 0.04
 
-Write-Host "╔═══════════════════════════════════════════════════════╗" -ForegroundColor Cyan
-Write-Host "║  Copilot Spend Monitor - @$Username" -ForegroundColor Cyan
-Write-Host "║  Alert Threshold: `$$AlertThreshold" -ForegroundColor Cyan
-Write-Host "╚═══════════════════════════════════════════════════════╝" -ForegroundColor Cyan
+Write-Information "╔═══════════════════════════════════════════════════════╗" -ForegroundColor Cyan
+Write-Information "║  Copilot Spend Monitor - @$Username" -ForegroundColor Cyan
+Write-Information "║  Alert Threshold: `$$AlertThreshold" -ForegroundColor Cyan
+Write-Information "╚═══════════════════════════════════════════════════════╝" -ForegroundColor Cyan
 
 do {
     $timestamp = Get-Date -Format "HH:mm:ss"
     $spend = Get-CurrentSpend -User $Username
     
     if (-not $spend) {
-        Write-Host "[$timestamp] Failed to fetch data" -ForegroundColor Red
+        Write-Information "[$timestamp] Failed to fetch data" -ForegroundColor Red
     } else {
         $percentQuota = ($spend.Requests / $proQuota) * 100
         $overQuota = [Math]::Max(0, $spend.Requests - $proQuota)
@@ -89,20 +91,20 @@ do {
                        elseif ($spend.Billed -ge $AlertThreshold * 0.8) { 'Yellow' } 
                        else { 'Green' }
         
-        Write-Host ""
-        Write-Host "[$timestamp] Period: $($spend.Period)" -ForegroundColor DarkGray
-        Write-Host "  Requests: $("{0:N0}" -f $spend.Requests) [$bar] $("{0:N0}%" -f $percentQuota)" -ForegroundColor White
-        Write-Host "  Billed:   " -NoNewline
-        Write-Host "$("{0:C2}" -f $spend.Billed)" -ForegroundColor $statusColor
+        Write-Information ""
+        Write-Information "[$timestamp] Period: $($spend.Period)" -ForegroundColor DarkGray
+        Write-Information "  Requests: $("{0:N0}" -f $spend.Requests) [$bar] $("{0:N0}%" -f $percentQuota)" -ForegroundColor White
+        Write-Information "  Billed:   " -NoNewline
+        Write-Information "$("{0:C2}" -f $spend.Billed)" -ForegroundColor $statusColor
         
         if ($overQuota -gt 0) {
-            Write-Host "  Over Quota: $("{0:N0}" -f $overQuota) requests" -ForegroundColor Yellow
+            Write-Information "  Over Quota: $("{0:N0}" -f $overQuota) requests" -ForegroundColor Yellow
         }
         
         # Alert
         if ($spend.Billed -ge $AlertThreshold) {
-            Write-Host ""
-            Write-Host "  ⚠️  ALERT: Spend exceeds threshold of `$$AlertThreshold!" -ForegroundColor Red
+            Write-Information ""
+            Write-Information "  ⚠️  ALERT: Spend exceeds threshold of `$$AlertThreshold!" -ForegroundColor Red
             [Console]::Beep(800, 500)
         }
         
@@ -112,15 +114,15 @@ do {
         $projectedRequests = ($spend.Requests / $dayOfMonth) * $daysInMonth
         $projectedBilled = [Math]::Max(0, ($projectedRequests - $proQuota)) * $pricePerRequest
         
-        Write-Host ""
-        Write-Host "  Projected EOM:" -ForegroundColor DarkGray
-        Write-Host "    Requests: ~$("{0:N0}" -f $projectedRequests)" -ForegroundColor DarkGray
-        Write-Host "    Billed:   ~$("{0:C2}" -f $projectedBilled)" -ForegroundColor DarkGray
+        Write-Information ""
+        Write-Information "  Projected EOM:" -ForegroundColor DarkGray
+        Write-Information "    Requests: ~$("{0:N0}" -f $projectedRequests)" -ForegroundColor DarkGray
+        Write-Information "    Billed:   ~$("{0:C2}" -f $projectedBilled)" -ForegroundColor DarkGray
     }
     
     if (-not $Once) {
-        Write-Host ""
-        Write-Host "  Next check in $IntervalMinutes minutes... (Ctrl+C to stop)" -ForegroundColor DarkGray
+        Write-Information ""
+        Write-Information "  Next check in $IntervalMinutes minutes... (Ctrl+C to stop)" -ForegroundColor DarkGray
         Start-Sleep -Seconds ($IntervalMinutes * 60)
     }
     

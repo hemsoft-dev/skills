@@ -1,7 +1,7 @@
-param(
+﻿param(
     [Parameter(Mandatory=$true)] [string]$RepoName,
     [Parameter(Mandatory=$true)] [string]$Owner,
-    [Parameter(Mandatory=$true)] [ValidateSet("Personal", "Work")] [string]$Profile,
+    [Parameter(Mandatory=$true)] [ValidateSet("Personal1", "Personal2", "Work1")] [string]$Profile,
     [bool]$Private = $true
 )
 
@@ -12,27 +12,35 @@ if (!(Get-Command gh -ErrorAction SilentlyContinue)) { throw "GitHub CLI (gh) is
 
 # 2. Create GitHub Repository
 $visibility = if ($Private) { "--private" } else { "--public" }
-Write-Host "Creating repository $Owner/$RepoName..."
+Write-Information "Creating repository $Owner/$RepoName..."
 gh repo create "$Owner/$RepoName" $visibility --confirm
 
 # 3. Initialize Local Repository
 if (Test-Path .git) {
     Write-Warning "Git repository already initialized. Skipping git init."
 } else {
-    Write-Host "Initializing local git repository..."
+    Write-Information "Initializing local git repository..."
     git init -b main
 }
 
 # 3.5 Set Local Git Identity
-$gitName = if ($Profile -eq "Personal") { "Franz Hemmer" } else { "Franz Hemmer" }
-$gitEmail = if ($Profile -eq "Personal") { "franz_hemmer@hotmail.com" } else { "fhemmer@relias.com" }
+$gitName = "Franz Hemmer"
+$gitEmail = switch ($Profile) {
+    "Personal1" { "franz_hemmer@hotmail.com" }
+    "Personal2" { "fphemmer@gmail.com" }
+    "Work1"     { "fhemmer@relias.com" }
+}
 
-Write-Host "Setting local git identity to $gitName <$gitEmail>..."
+Write-Information "Setting local git identity to $gitName <$gitEmail>..."
 git config --local user.name "$gitName"
 git config --local user.email "$gitEmail"
 
 # 4. Commit and Push
-$alias = if ($Profile -eq "Personal") { "github-personal" } else { "github-work" }
+$alias = switch ($Profile) {
+    "Personal1" { "github-personal1" }
+    "Personal2" { "github-personal2" }
+    "Work1"     { "github-work1" }
+}
 $remoteUrl = "git@$($alias):$($Owner)/$($RepoName).git"
 
 git add .
@@ -50,10 +58,10 @@ if (git remote | Select-String "origin") {
     git remote add origin $remoteUrl
 }
 
-Write-Host "Pushing to $remoteUrl..."
+Write-Information "Pushing to $remoteUrl..."
 git push -u origin main
 
 # 5. Report Success
 $repoUrl = "https://github.com/$Owner/$RepoName"
-Write-Host "`nSUCCESS: Repository initialized and pushed."
-Write-Host "Repository URL: $repoUrl"
+Write-Information "`nSUCCESS: Repository initialized and pushed."
+Write-Information "Repository URL: $repoUrl"

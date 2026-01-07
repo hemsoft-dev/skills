@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Collects minimal repository metadata for the repo-summarizer skill.
 .DESCRIPTION
@@ -12,6 +12,8 @@
 .EXAMPLE
     .\Get-RepoSummary-Minimal.ps1 -Owner "HemSoft" -Repo "hemsoft-power-ai"
 #>
+$InformationPreference = 'Continue'
+
 param(
     [Parameter(Mandatory = $true)]
     [string]$Owner,
@@ -47,7 +49,7 @@ function Get-GitHubUserRealName {
 function Merge-ContributorsByRealName {
     param([array]$Contributors)
     
-    Write-Host "Resolving contributor identities..." -ForegroundColor Cyan
+    Write-Information "Resolving contributor identities..." -ForegroundColor Cyan
     
     # First, resolve all usernames to real names
     $contributorsWithNames = $Contributors | ForEach-Object {
@@ -88,7 +90,7 @@ $result = @{
 }
 
 # Get basic repo metadata
-Write-Host "Fetching repository metadata..." -ForegroundColor Cyan
+Write-Information "Fetching repository metadata..." -ForegroundColor Cyan
 $repoData = gh repo view "$Owner/$Repo" --json description,stargazerCount,forkCount,createdAt,pushedAt | ConvertFrom-Json
 
 $result.repository.description = $repoData.description
@@ -98,7 +100,7 @@ $result.repository.createdAt = $repoData.createdAt
 $result.repository.pushedAt = $repoData.pushedAt
 
 # Get commit history via GitHub API
-Write-Host "Fetching commit history..." -ForegroundColor Cyan
+Write-Information "Fetching commit history..." -ForegroundColor Cyan
 $commitsJson = gh api "repos/$Owner/$Repo/commits" --paginate --jq '.[]'
 $commits = $commitsJson | ConvertFrom-Json
 $result.repository.totalCommits = $commits.Count
@@ -112,7 +114,7 @@ $firstCommitDate = [datetime]::Parse($result.repository.firstCommitDate)
 $result.repository.ageDays = [math]::Floor(((Get-Date) - $firstCommitDate).TotalDays)
 
 # Get top 5 contributors (after consolidation by real name)
-Write-Host "Fetching contributors..." -ForegroundColor Cyan
+Write-Information "Fetching contributors..." -ForegroundColor Cyan
 $contributorsJson = gh api "repos/$Owner/$Repo/contributors" --paginate --jq '.[]'
 $contributors = $contributorsJson | ConvertFrom-Json
 $mergedContributors = Merge-ContributorsByRealName -Contributors $contributors

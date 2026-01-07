@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Master backup script for all Windows settings and configurations.
 .DESCRIPTION
@@ -9,6 +9,8 @@
 .EXAMPLE
     .\Backup-AllSettings.ps1 -Verbose
 #>
+$InformationPreference = 'Continue'
+
 [CmdletBinding()]
 param()
 
@@ -16,10 +18,10 @@ $ErrorActionPreference = 'Continue'
 $skillRoot = $PSScriptRoot
 $startTime = Get-Date
 
-Write-Host "`n========================================" -ForegroundColor Cyan
-Write-Host " Windows Settings Backup" -ForegroundColor Cyan
-Write-Host " $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" -ForegroundColor Gray
-Write-Host "========================================`n" -ForegroundColor Cyan
+Write-Information "`n========================================" -ForegroundColor Cyan
+Write-Information " Windows Settings Backup" -ForegroundColor Cyan
+Write-Information " $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" -ForegroundColor Gray
+Write-Information "========================================`n" -ForegroundColor Cyan
 
 $results = @()
 
@@ -57,15 +59,15 @@ $backupTasks = @(
 )
 
 foreach ($task in $backupTasks) {
-    Write-Host "[$($task.Name)]" -ForegroundColor Yellow
+    Write-Information "[$($task.Name)]" -ForegroundColor Yellow
     
     # Check if process is required and running
     if ($task.RequiresProcess) {
         $proc = Get-Process -Name $task.RequiresProcess -ErrorAction SilentlyContinue
         if (-not $proc) {
-            Write-Host "  ⊘ Skipped (requires $($task.RequiresProcess) to be running)" -ForegroundColor DarkGray
+            Write-Information "  ⊘ Skipped (requires $($task.RequiresProcess) to be running)" -ForegroundColor DarkGray
             $results += [PSCustomObject]@{ Task = $task.Name; Status = "Skipped"; Duration = "0s" }
-            Write-Host ""
+            Write-Information ""
             continue
         }
     }
@@ -78,22 +80,22 @@ foreach ($task in $backupTasks) {
             $results += [PSCustomObject]@{ Task = $task.Name; Status = "Success"; Duration = "${duration}s" }
         }
         catch {
-            Write-Host "  ✗ Error: $_" -ForegroundColor Red
+            Write-Information "  ✗ Error: $_" -ForegroundColor Red
             $results += [PSCustomObject]@{ Task = $task.Name; Status = "Failed"; Duration = "0s" }
         }
     }
     else {
-        Write-Host "  ✗ Script not found: $($task.Script)" -ForegroundColor Red
+        Write-Information "  ✗ Script not found: $($task.Script)" -ForegroundColor Red
         $results += [PSCustomObject]@{ Task = $task.Name; Status = "Not Found"; Duration = "0s" }
     }
-    Write-Host ""
+    Write-Information ""
 }
 
 # Summary
 $totalDuration = [math]::Round(((Get-Date) - $startTime).TotalSeconds, 1)
-Write-Host "========================================" -ForegroundColor Cyan
-Write-Host " Backup Summary" -ForegroundColor Cyan
-Write-Host "========================================" -ForegroundColor Cyan
+Write-Information "========================================" -ForegroundColor Cyan
+Write-Information " Backup Summary" -ForegroundColor Cyan
+Write-Information "========================================" -ForegroundColor Cyan
 $results | Format-Table -AutoSize
-Write-Host "Total time: ${totalDuration}s" -ForegroundColor Gray
-Write-Host ""
+Write-Information "Total time: ${totalDuration}s" -ForegroundColor Gray
+Write-Information ""

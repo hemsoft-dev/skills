@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Clean up temporary files downloaded by Slack scripts.
 
@@ -25,6 +25,8 @@
     Shows what files would be deleted.
 #>
 
+$InformationPreference = 'Continue'
+
 [CmdletBinding()]
 param(
     [switch]$Force,
@@ -35,7 +37,7 @@ $tempFolder = Join-Path $PSScriptRoot "..\temp"
 $tempFolder = [System.IO.Path]::GetFullPath($tempFolder)
 
 if (-not (Test-Path $tempFolder)) {
-    Write-Host "Temp folder does not exist: $tempFolder" -ForegroundColor Yellow
+    Write-Information "Temp folder does not exist: $tempFolder" -ForegroundColor Yellow
     exit 0
 }
 
@@ -43,7 +45,7 @@ if (-not (Test-Path $tempFolder)) {
 $files = Get-ChildItem -Path $tempFolder -File -Recurse | Where-Object { $_.Name -ne ".gitkeep" }
 
 if ($files.Count -eq 0) {
-    Write-Host "✓ Temp folder is already clean." -ForegroundColor Green
+    Write-Information "✓ Temp folder is already clean." -ForegroundColor Green
     exit 0
 }
 
@@ -57,21 +59,21 @@ $sizeStr = if ($totalSize -gt 1MB) {
     "$totalSize bytes"
 }
 
-Write-Host "`n=== Slack Temp Files ===" -ForegroundColor Cyan
-Write-Host "Location: $tempFolder" -ForegroundColor Gray
-Write-Host "Files: $($files.Count)" -ForegroundColor White
-Write-Host "Total Size: $sizeStr" -ForegroundColor White
-Write-Host ""
+Write-Information "`n=== Slack Temp Files ===" -ForegroundColor Cyan
+Write-Information "Location: $tempFolder" -ForegroundColor Gray
+Write-Information "Files: $($files.Count)" -ForegroundColor White
+Write-Information "Total Size: $sizeStr" -ForegroundColor White
+Write-Information ""
 
 if ($ListOnly) {
-    Write-Host "Files that would be deleted:" -ForegroundColor Yellow
+    Write-Information "Files that would be deleted:" -ForegroundColor Yellow
     foreach ($file in $files) {
         $fileSize = if ($file.Length -gt 1KB) {
             "{0:N1} KB" -f ($file.Length / 1KB)
         } else {
             "$($file.Length) bytes"
         }
-        Write-Host "  • $($file.Name) ($fileSize)" -ForegroundColor White
+        Write-Information "  • $($file.Name) ($fileSize)" -ForegroundColor White
     }
     exit 0
 }
@@ -80,7 +82,7 @@ if ($ListOnly) {
 if (-not $Force) {
     $response = Read-Host "Delete $($files.Count) temp files? (y/N)"
     if ($response -notmatch '^[yY]') {
-        Write-Host "Cancelled." -ForegroundColor Yellow
+        Write-Information "Cancelled." -ForegroundColor Yellow
         exit 0
     }
 }
@@ -101,7 +103,7 @@ foreach ($file in $files) {
 
 # Summary
 if ($errors -eq 0) {
-    Write-Host "✓ Deleted $deleted temp files ($sizeStr freed)." -ForegroundColor Green
+    Write-Information "✓ Deleted $deleted temp files ($sizeStr freed)." -ForegroundColor Green
 } else {
-    Write-Host "Deleted $deleted files, $errors errors." -ForegroundColor Yellow
+    Write-Information "Deleted $deleted files, $errors errors." -ForegroundColor Yellow
 }

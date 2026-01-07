@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Collects maximum repository metadata for the repo-summarizer skill.
 .DESCRIPTION
@@ -12,6 +12,8 @@
 .EXAMPLE
     .\Get-RepoSummary-Maximum.ps1 -Owner "HemSoft" -Repo "hemsoft-power-ai"
 #>
+$InformationPreference = 'Continue'
+
 param(
     [Parameter(Mandatory = $true)]
     [string]$Owner,
@@ -47,7 +49,7 @@ function Get-GitHubUserRealName {
 function Merge-ContributorsByRealName {
     param([array]$Contributors)
     
-    Write-Host "Resolving contributor identities..." -ForegroundColor Cyan
+    Write-Information "Resolving contributor identities..." -ForegroundColor Cyan
     
     # First, resolve all usernames to real names
     $contributorsWithNames = $Contributors | ForEach-Object {
@@ -88,7 +90,7 @@ $result = @{
 }
 
 # Get comprehensive repo metadata
-Write-Host "Fetching repository metadata..." -ForegroundColor Cyan
+Write-Information "Fetching repository metadata..." -ForegroundColor Cyan
 $repoData = gh repo view "$Owner/$Repo" --json description,stargazerCount,forkCount,createdAt,pushedAt,primaryLanguage,licenseInfo,homepageUrl,isArchived,isFork,watchers | ConvertFrom-Json
 
 $result.repository.description = $repoData.description
@@ -104,7 +106,7 @@ $result.repository.isArchived = $repoData.isArchived
 $result.repository.isFork = $repoData.isFork
 
 # Get commit history via GitHub API
-Write-Host "Fetching commit history..." -ForegroundColor Cyan
+Write-Information "Fetching commit history..." -ForegroundColor Cyan
 $commitsJson = gh api "repos/$Owner/$Repo/commits" --paginate --jq '.[]'
 $commits = $commitsJson | ConvertFrom-Json
 $result.repository.totalCommits = $commits.Count
@@ -118,7 +120,7 @@ $firstCommitDate = [datetime]::Parse($result.repository.firstCommitDate)
 $result.repository.ageDays = [math]::Floor(((Get-Date) - $firstCommitDate).TotalDays)
 
 # Analyze commit patterns
-Write-Host "Analyzing commit patterns..." -ForegroundColor Cyan
+Write-Information "Analyzing commit patterns..." -ForegroundColor Cyan
 $commitDates = $commits | ForEach-Object { [datetime]::Parse($_.commit.author.date) }
 
 # Commits by month
@@ -156,7 +158,7 @@ $commitsByHour = $commitDates | Group-Object { $_.Hour } | Sort-Object { [int]$_
 $result.commitsByHour = @($commitsByHour)
 
 # Get ALL contributors (after consolidation by real name)
-Write-Host "Fetching all contributors..." -ForegroundColor Cyan
+Write-Information "Fetching all contributors..." -ForegroundColor Cyan
 $contributorsJson = gh api "repos/$Owner/$Repo/contributors" --paginate --jq '.[]'
 $contributors = $contributorsJson | ConvertFrom-Json
 $mergedContributors = Merge-ContributorsByRealName -Contributors $contributors
@@ -176,7 +178,7 @@ for ($i = 0; $i -lt $result.contributors.Count; $i++) {
 $result.totalContributors = $mergedContributors.Count
 
 # Get comprehensive issue statistics
-Write-Host "Fetching issue statistics..." -ForegroundColor Cyan
+Write-Information "Fetching issue statistics..." -ForegroundColor Cyan
 $issues = gh issue list -R "$Owner/$Repo" --state all --json number,state,createdAt,closedAt,labels --limit 5000 | ConvertFrom-Json
 
 $openIssues = $issues | Where-Object { $_.state -eq "OPEN" }
@@ -210,7 +212,7 @@ $result.issues.topLabels = @($labelCounts | ForEach-Object {
 })
 
 # Get comprehensive PR statistics
-Write-Host "Fetching PR statistics..." -ForegroundColor Cyan
+Write-Information "Fetching PR statistics..." -ForegroundColor Cyan
 $prs = gh pr list -R "$Owner/$Repo" --state all --json number,state,createdAt,mergedAt,closedAt,author,additions,deletions --limit 5000 | ConvertFrom-Json
 
 $openPRs = $prs | Where-Object { $_.state -eq "OPEN" }
@@ -240,7 +242,7 @@ $result.pullRequests.totalAdditions = $totalAdditions
 $result.pullRequests.totalDeletions = $totalDeletions
 
 # Recent activity (last 30 days)
-Write-Host "Analyzing recent activity..." -ForegroundColor Cyan
+Write-Information "Analyzing recent activity..." -ForegroundColor Cyan
 $thirtyDaysAgo = (Get-Date).AddDays(-30)
 
 $recentIssues = $issues | Where-Object { [datetime]$_.createdAt -gt $thirtyDaysAgo }
@@ -255,7 +257,7 @@ $result.recentActivity = @{
 }
 
 # Get releases
-Write-Host "Fetching releases..." -ForegroundColor Cyan
+Write-Information "Fetching releases..." -ForegroundColor Cyan
 $releasesJson = gh api "repos/$Owner/$Repo/releases" --paginate --jq '.[]' 2>$null
 $releases = if ($releasesJson) { $releasesJson | ConvertFrom-Json } else { @() }
 if ($releases -and $releases.Count -gt 0) {
@@ -270,7 +272,7 @@ if ($releases -and $releases.Count -gt 0) {
 }
 
 # Get languages breakdown
-Write-Host "Fetching language breakdown..." -ForegroundColor Cyan
+Write-Information "Fetching language breakdown..." -ForegroundColor Cyan
 $languages = gh api "repos/$Owner/$Repo/languages" | ConvertFrom-Json
 $totalBytes = ($languages.PSObject.Properties | Measure-Object -Property Value -Sum).Sum
 $result.languages = @($languages.PSObject.Properties | ForEach-Object {

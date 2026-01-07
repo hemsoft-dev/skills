@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Get GitHub billing usage summary for a user account.
 
@@ -31,6 +31,8 @@
     # Get only Copilot usage
 #>
 
+$InformationPreference = 'Continue'
+
 [CmdletBinding()]
 param(
     [string]$Username,
@@ -55,7 +57,7 @@ if ($Product) {
     $queryParams += "&product=$Product"
 }
 
-Write-Host "Fetching billing for @$Username ($Month/$Year)..." -ForegroundColor Cyan
+Write-Information "Fetching billing for @$Username ($Month/$Year)..." -ForegroundColor Cyan
 
 # Fetch usage summary
 $response = gh api "/users/$Username/settings/billing/usage/summary?$queryParams" 2>&1
@@ -68,11 +70,11 @@ if ($LASTEXITCODE -ne 0) {
 $data = $response | ConvertFrom-Json
 
 # Display results
-Write-Host "`nBilling Period: $($data.timePeriod.month)/$($data.timePeriod.year)" -ForegroundColor Green
-Write-Host "User: $($data.user)`n" -ForegroundColor Green
+Write-Information "`nBilling Period: $($data.timePeriod.month)/$($data.timePeriod.year)" -ForegroundColor Green
+Write-Information "User: $($data.user)`n" -ForegroundColor Green
 
 if ($data.usageItems.Count -eq 0) {
-    Write-Host "No usage data found for this period." -ForegroundColor Yellow
+    Write-Information "No usage data found for this period." -ForegroundColor Yellow
     exit 0
 }
 
@@ -95,7 +97,7 @@ $totalGross = ($data.usageItems | Measure-Object -Property grossAmount -Sum).Sum
 $totalDiscount = ($data.usageItems | Measure-Object -Property discountAmount -Sum).Sum
 $totalNet = ($data.usageItems | Measure-Object -Property netAmount -Sum).Sum
 
-Write-Host "`nSummary:" -ForegroundColor Cyan
-Write-Host "  Gross Total:    $("{0:C2}" -f $totalGross)"
-Write-Host "  Discounts:     -$("{0:C2}" -f $totalDiscount)" -ForegroundColor Green
-Write-Host "  Net Total:      $("{0:C2}" -f $totalNet)" -ForegroundColor Yellow
+Write-Information "`nSummary:" -ForegroundColor Cyan
+Write-Information "  Gross Total:    $("{0:C2}" -f $totalGross)"
+Write-Information "  Discounts:     -$("{0:C2}" -f $totalDiscount)" -ForegroundColor Green
+Write-Information "  Net Total:      $("{0:C2}" -f $totalNet)" -ForegroundColor Yellow

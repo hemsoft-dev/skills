@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Delete emails by ID or delete today's emails.
 .DESCRIPTION
@@ -13,6 +13,8 @@
 .PARAMETER Force
     Skip confirmation prompt (USE WITH CAUTION).
 #>
+$InformationPreference = 'Continue'
+
 param(
     [string[]]$MessageIds,
     [ValidateSet("outlook", "gmail", "work", "hemmer.us")]
@@ -61,25 +63,25 @@ if ($Today) {
     }
     
     # Always show what will be deleted
-    Write-Host "`n========== EMAILS TO BE DELETED ==========" -ForegroundColor Red
-    Write-Host "Count: $($preview.Count) email(s)`n" -ForegroundColor Yellow
+    Write-Information "`n========== EMAILS TO BE DELETED ==========" -ForegroundColor Red
+    Write-Information "Count: $($preview.Count) email(s)`n" -ForegroundColor Yellow
     
     $grouped = $preview | Group-Object -Property account
     foreach ($group in $grouped) {
-        Write-Host "[$($group.Name)] - $($group.Count) email(s):" -ForegroundColor Cyan
+        Write-Information "[$($group.Name)] - $($group.Count) email(s):" -ForegroundColor Cyan
         foreach ($email in $group.Group) {
             $subjectDisplay = if ($email.subject.Length -gt 50) { $email.subject.Substring(0, 47) + "..." } else { $email.subject }
             $fromDisplay = if ($email.from.Length -gt 30) { $email.from.Substring(0, 27) + "..." } else { $email.from }
-            Write-Host "  • $subjectDisplay" -ForegroundColor White
-            Write-Host "    From: $fromDisplay | Date: $($email.date)" -ForegroundColor DarkGray
+            Write-Information "  • $subjectDisplay" -ForegroundColor White
+            Write-Information "    From: $fromDisplay | Date: $($email.date)" -ForegroundColor DarkGray
         }
-        Write-Host ""
+        Write-Information ""
     }
-    Write-Host "==========================================`n" -ForegroundColor Red
+    Write-Information "==========================================`n" -ForegroundColor Red
     
     if (-not $Force) {
-        Write-Host "Are you sure you want to DELETE these $($preview.Count) email(s)? " -NoNewline -ForegroundColor Yellow
-        Write-Host "[y/N] " -NoNewline -ForegroundColor Green
+        Write-Information "Are you sure you want to DELETE these $($preview.Count) email(s)? " -NoNewline -ForegroundColor Yellow
+        Write-Information "[y/N] " -NoNewline -ForegroundColor Green
         $confirm = Read-Host
         if ($confirm -ne 'y' -and $confirm -ne 'Y') {
             Write-Output "Cancelled. No emails were deleted."

@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Get GitHub Copilot premium request usage breakdown by model.
 
@@ -34,6 +34,8 @@
     # Get raw JSON for further processing
 #>
 
+$InformationPreference = 'Continue'
+
 [CmdletBinding()]
 param(
     [string]$Username,
@@ -59,7 +61,7 @@ if ($Model) {
 }
 
 if (-not $Raw) {
-    Write-Host "Fetching Copilot usage for @$Username ($Month/$Year)..." -ForegroundColor Cyan
+    Write-Information "Fetching Copilot usage for @$Username ($Month/$Year)..." -ForegroundColor Cyan
 }
 
 # Fetch premium request usage
@@ -78,11 +80,11 @@ if ($Raw) {
 $data = $response | ConvertFrom-Json
 
 # Display header
-Write-Host "`nCopilot Premium Requests - $($data.timePeriod.month)/$($data.timePeriod.year)" -ForegroundColor Green
-Write-Host "User: $($data.user)`n" -ForegroundColor Green
+Write-Information "`nCopilot Premium Requests - $($data.timePeriod.month)/$($data.timePeriod.year)" -ForegroundColor Green
+Write-Information "User: $($data.user)`n" -ForegroundColor Green
 
 if ($data.usageItems.Count -eq 0) {
-    Write-Host "No Copilot usage data found for this period." -ForegroundColor Yellow
+    Write-Information "No Copilot usage data found for this period." -ForegroundColor Yellow
     exit 0
 }
 
@@ -90,7 +92,7 @@ if ($data.usageItems.Count -eq 0) {
 $byType = $data.usageItems | Group-Object -Property sku
 
 foreach ($group in $byType) {
-    Write-Host "$($group.Name):" -ForegroundColor Cyan
+    Write-Information "$($group.Name):" -ForegroundColor Cyan
     
     $items = $group.Group | ForEach-Object {
         [PSCustomObject]@{
@@ -111,28 +113,28 @@ $totalGross = ($data.usageItems | Measure-Object -Property grossQuantity -Sum).S
 $totalDiscount = ($data.usageItems | Measure-Object -Property discountQuantity -Sum).Sum
 $totalBilled = ($data.usageItems | Measure-Object -Property netAmount -Sum).Sum
 
-Write-Host "Summary:" -ForegroundColor Cyan
-Write-Host "  Total Requests:     $("{0:N0}" -f $totalGross)"
-Write-Host "  Included (Pro+):   -$("{0:N0}" -f $totalDiscount)" -ForegroundColor Green
-Write-Host "  Billable Requests:  $("{0:N0}" -f ($totalGross - $totalDiscount))"
-Write-Host "  Amount Due:         $("{0:C2}" -f $totalBilled)" -ForegroundColor Yellow
+Write-Information "Summary:" -ForegroundColor Cyan
+Write-Information "  Total Requests:     $("{0:N0}" -f $totalGross)"
+Write-Information "  Included (Pro+):   -$("{0:N0}" -f $totalDiscount)" -ForegroundColor Green
+Write-Information "  Billable Requests:  $("{0:N0}" -f ($totalGross - $totalDiscount))"
+Write-Information "  Amount Due:         $("{0:C2}" -f $totalBilled)" -ForegroundColor Yellow
 
 # Show Pro+ quota status
 $proQuota = 1500
 $remaining = [Math]::Max(0, $proQuota - $totalGross)
 $percentUsed = [Math]::Min(100, ($totalGross / $proQuota) * 100)
 
-Write-Host "`nPro+ Quota Status:" -ForegroundColor Cyan
+Write-Information "`nPro+ Quota Status:" -ForegroundColor Cyan
 $barLength = 30
 $filledLength = [Math]::Floor($barLength * $percentUsed / 100)
 $bar = ('█' * $filledLength) + ('░' * ($barLength - $filledLength))
 
 $color = if ($percentUsed -ge 100) { 'Red' } elseif ($percentUsed -ge 80) { 'Yellow' } else { 'Green' }
-Write-Host "  [$bar] $("{0:N1}%" -f $percentUsed)" -ForegroundColor $color
+Write-Information "  [$bar] $("{0:N1}%" -f $percentUsed)" -ForegroundColor $color
 
 if ($remaining -gt 0) {
-    Write-Host "  $("{0:N0}" -f $remaining) requests remaining in quota" -ForegroundColor Green
+    Write-Information "  $("{0:N0}" -f $remaining) requests remaining in quota" -ForegroundColor Green
 } else {
     $over = $totalGross - $proQuota
-    Write-Host "  $("{0:N0}" -f $over) requests over quota @ `$0.04/request" -ForegroundColor Yellow
+    Write-Information "  $("{0:N0}" -f $over) requests over quota @ `$0.04/request" -ForegroundColor Yellow
 }

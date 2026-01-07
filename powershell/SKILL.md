@@ -18,6 +18,23 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 
 ## PSScriptAnalyzer - PowerShell Linter
 
+### ⚠️ CRITICAL: NO SUPPRESSIONS WITHOUT USER APPROVAL
+
+**NEVER add suppression attributes without explicit user consultation first.**
+
+When PSScriptAnalyzer finds issues:
+1. **STOP and present findings to the user**
+2. **Explain the impact** of each rule violation
+3. **Propose solutions** (fix the code vs. suppress the warning)
+4. **Wait for user decision** before proceeding
+
+Suppression attributes like `[Diagnostics.CodeAnalysis.SuppressMessageAttribute()]` hide warnings and should only be used when:
+- The user explicitly approves it
+- There's a valid reason the rule doesn't apply
+- Fixing the issue would break legitimate functionality
+
+**Default approach: FIX the code, don't suppress the warning.**
+
 ### What is PSScriptAnalyzer?
 
 **PSScriptAnalyzer** is the official PowerShell linter and static code analyzer that checks for:
@@ -203,23 +220,13 @@ if ($results) {
 }
 ```
 
-**Disable specific warnings inline:**
-```powershell
-# Suppress rule for entire script
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '')]
-param()
-
-# Suppress rule for specific line
-Write-Host "Message" # NoQA: PSAvoidUsingWriteHost
-```
-
 ### Best Practices for Analysis
 
 1. **Run on all scripts** - Include tests, build scripts, utilities
 2. **Fix errors first** - Errors are critical, warnings can wait
-3. **Use configuration file** - Consistent rules across team
-4. **Integrate in CI/CD** - Catch issues before merge
-5. **Review suppressions** - Don't overuse suppression comments
+3. **Never suppress without user approval** - Fix the code instead
+4. **Use configuration file** - Consistent rules across team
+5. **Integrate in CI/CD** - Catch issues before merge
 6. **Keep analyzer updated** - New rules and improvements
    ```powershell
    Update-Module -Name PSScriptAnalyzer
@@ -242,21 +249,45 @@ Get-Process | Where-Object Name -eq 'pwsh' | Format-Table
 ```
 
 **Issue: "Avoid using Write-Host"**
-```powershell
-# ❌ Bad
-Write-Host "Processing..."
 
-# ✅ Good - Use Write-Output for pipeline
+**DECISION: Use Write-Information with ANSI escape codes for cross-platform compatibility.**
+
+All scripts must work in PowerShell Core inside Linux containers. Write-Host is not cross-platform friendly.
+
+```powershell
+# ❌ Bad - Not cross-platform friendly
+Write-Host "Processing..." -ForegroundColor Green
+
+# ✅ Good - Cross-platform with colors using ANSI escape codes
+$InformationPreference = 'Continue'  # Add at start of script
+Write-Information "`e[32mProcessing...`e[0m"  # Green text
+
+# ✅ Good - Use Write-Output for pipeline data
 Write-Output "Processing..."
 
 # ✅ Good - Use Write-Verbose for diagnostic messages
 Write-Verbose "Processing..." -Verbose
-
-# ✅ OK - Write-Host acceptable for interactive scripts with UI
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '')]
-param()
-Write-Host "User Prompt: " -NoNewline -ForegroundColor Cyan
 ```
+
+**ANSI Color Codes Reference:**
+```powershell
+# Set $InformationPreference = 'Continue' at the start of your script
+
+Write-Information "`e[31mRed text`e[0m"      # Error/danger
+Write-Information "`e[32mGreen text`e[0m"    # Success
+Write-Information "`e[33mYellow text`e[0m"   # Warning
+Write-Information "`e[34mBlue text`e[0m"     # Info
+Write-Information "`e[35mMagenta text`e[0m"  # Debug
+Write-Information "`e[36mCyan text`e[0m"     # Highlight
+Write-Information "`e[90mGray text`e[0m"     # Muted
+
+# Unicode symbols work too
+Write-Information "`e[32m✓ Success`e[0m"
+Write-Information "`e[33m⚠️ Warning`e[0m"
+Write-Information "`e[31m✗ Error`e[0m"
+```
+
+**NEVER use suppression attributes for PSAvoidUsingWriteHost - fix the code instead.**
 
 **Issue: "Use full cmdlet names, not aliases"**
 ```powershell

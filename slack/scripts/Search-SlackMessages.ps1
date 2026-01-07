@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Search Slack messages using the Slack Web API.
 
@@ -47,6 +47,8 @@
     Requires SLACK_USER_TOKEN environment variable to be set.
     Token must have 'search:read' scope.
 #>
+
+$InformationPreference = 'Continue'
 
 [CmdletBinding()]
 param(
@@ -102,13 +104,13 @@ try {
         exit 1
     }
 
-    Write-Host "`n=== Slack Search Results ===" -ForegroundColor Cyan
-    Write-Host "Query: $Query" -ForegroundColor Yellow
-    Write-Host "Total matches: $($response.messages.total)" -ForegroundColor Green
-    Write-Host "Showing: $($response.messages.matches.Count) results`n" -ForegroundColor Green
+    Write-Information "`n=== Slack Search Results ===" -ForegroundColor Cyan
+    Write-Information "Query: $Query" -ForegroundColor Yellow
+    Write-Information "Total matches: $($response.messages.total)" -ForegroundColor Green
+    Write-Information "Showing: $($response.messages.matches.Count) results`n" -ForegroundColor Green
 
     if ($response.messages.matches.Count -eq 0) {
-        Write-Host "No messages found." -ForegroundColor Yellow
+        Write-Information "No messages found." -ForegroundColor Yellow
         return
     }
 
@@ -134,34 +136,34 @@ try {
         }
         
         'List' {
-            Write-Host "Messages:`n" -ForegroundColor Yellow
+            Write-Information "Messages:`n" -ForegroundColor Yellow
             
             foreach ($match in $response.messages.matches) {
                 $timestamp = [DateTimeOffset]::FromUnixTimeSeconds([double]$match.ts.Split('.')[0]).LocalDateTime
                 $dateStr = $timestamp.ToString('yyyy-MM-dd HH:mm:ss')
                 
-                Write-Host "[$dateStr] @$($match.username) in #$($match.channel.name)" -ForegroundColor Cyan
-                Write-Host "$($match.text)" -ForegroundColor White
+                Write-Information "[$dateStr] @$($match.username) in #$($match.channel.name)" -ForegroundColor Cyan
+                Write-Information "$($match.text)" -ForegroundColor White
                 
                 # Show permalink if available
                 if ($match.permalink) {
-                    Write-Host "Link: $($match.permalink)" -ForegroundColor Gray
+                    Write-Information "Link: $($match.permalink)" -ForegroundColor Gray
                 }
                 
-                Write-Host "---" -ForegroundColor DarkGray
-                Write-Host ""
+                Write-Information "---" -ForegroundColor DarkGray
+                Write-Information ""
             }
         }
     }
 
     # Summary statistics
-    Write-Host "`n=== Summary ===" -ForegroundColor Cyan
-    Write-Host "Total matches found: $($response.messages.total)" -ForegroundColor White
-    Write-Host "Results displayed: $($response.messages.matches.Count)" -ForegroundColor White
+    Write-Information "`n=== Summary ===" -ForegroundColor Cyan
+    Write-Information "Total matches found: $($response.messages.total)" -ForegroundColor White
+    Write-Information "Results displayed: $($response.messages.matches.Count)" -ForegroundColor White
     
     if ($response.messages.pagination.page_count -gt 1) {
-        Write-Host "Pages available: $($response.messages.pagination.page_count)" -ForegroundColor Yellow
-        Write-Host "Note: Use -Count parameter to retrieve more results per page" -ForegroundColor Yellow
+        Write-Information "Pages available: $($response.messages.pagination.page_count)" -ForegroundColor Yellow
+        Write-Information "Note: Use -Count parameter to retrieve more results per page" -ForegroundColor Yellow
     }
 
 } catch {

@@ -32,7 +32,7 @@ foreach ($base in @(2e13, 1e14, 1e15, 1e16, 1e17, 1e18)) {
 }
 $resilienceThresholds = $resilienceThresholds | Sort-Object -Unique
 
-function Get-CompletedTiers {
+function Get-CompletedTier {
     param([double]$delivered, [double[]]$thresholds)
     $tiers = 0
     foreach ($t in $thresholds) {

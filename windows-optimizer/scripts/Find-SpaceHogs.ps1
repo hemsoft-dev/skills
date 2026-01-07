@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Analyzes user profile folders to find space hogs.
 .DESCRIPTION
@@ -9,6 +9,8 @@
     .\Find-SpaceHogs.ps1
     .\Find-SpaceHogs.ps1 -MinSizeGB 5
 #>
+$InformationPreference = 'Continue'
+
 [CmdletBinding()]
 param(
     [double]$MinSizeGB = 1
@@ -16,8 +18,8 @@ param(
 
 $ErrorActionPreference = 'SilentlyContinue'
 
-Write-Host "`n=== SPACE HOG ANALYZER ===" -ForegroundColor Cyan
-Write-Host "Scanning folders (this may take a minute)...`n"
+Write-Information "`n=== SPACE HOG ANALYZER ===" -ForegroundColor Cyan
+Write-Information "Scanning folders (this may take a minute)...`n"
 
 $results = @()
 
@@ -59,15 +61,15 @@ Get-ChildItem "$env:USERPROFILE" -Directory -Force | ForEach-Object {
 $results = $results | Sort-Object SizeGB -Descending
 
 if ($results.Count -eq 0) {
-    Write-Host "No folders found larger than $MinSizeGB GB" -ForegroundColor Yellow
+    Write-Information "No folders found larger than $MinSizeGB GB" -ForegroundColor Yellow
     exit 0
 }
 
 $totalSize = ($results | Measure-Object SizeGB -Sum).Sum
 
-Write-Host "LARGE FOLDERS (>$MinSizeGB GB):`n" -ForegroundColor Yellow
-Write-Host ("{0,-25} {1,10} {2}" -f "FOLDER", "SIZE", "CATEGORY") -ForegroundColor Gray
-Write-Host ("-" * 60)
+Write-Information "LARGE FOLDERS (>$MinSizeGB GB):`n" -ForegroundColor Yellow
+Write-Information ("{0,-25} {1,10} {2}" -f "FOLDER", "SIZE", "CATEGORY") -ForegroundColor Gray
+Write-Information ("-" * 60)
 
 foreach ($r in $results) {
     $color = switch ($r.Category) {
@@ -75,11 +77,11 @@ foreach ($r in $results) {
         { $_ -match "moveable" } { "Yellow" }
         default { "White" }
     }
-    Write-Host ("{0,-25} {1,7} GB  {2}" -f $r.Folder, $r.SizeGB, $r.Category) -ForegroundColor $color
+    Write-Information ("{0,-25} {1,7} GB  {2}" -f $r.Folder, $r.SizeGB, $r.Category) -ForegroundColor $color
 }
 
-Write-Host ("-" * 60)
-Write-Host ("TOTAL: {0} GB" -f [math]::Round($totalSize, 1)) -ForegroundColor Cyan
+Write-Information ("-" * 60)
+Write-Information ("TOTAL: {0} GB" -f [math]::Round($totalSize, 1)) -ForegroundColor Cyan
 
 # Recommendations
 $cleanable = $results | Where-Object { $_.Category -match "cleanable" }
@@ -87,14 +89,14 @@ $moveable = $results | Where-Object { $_.Category -match "moveable" }
 
 if ($cleanable) {
     $cleanSize = ($cleanable | Measure-Object SizeGB -Sum).Sum
-    Write-Host "`nCLEANABLE: ~$([math]::Round($cleanSize, 1)) GB" -ForegroundColor Green
-    $cleanable | ForEach-Object { Write-Host "  - $($_.Folder)" -ForegroundColor Green }
+    Write-Information "`nCLEANABLE: ~$([math]::Round($cleanSize, 1)) GB" -ForegroundColor Green
+    $cleanable | ForEach-Object { Write-Information "  - $($_.Folder)" -ForegroundColor Green }
 }
 
 if ($moveable) {
     $moveSize = ($moveable | Measure-Object SizeGB -Sum).Sum
-    Write-Host "`nMOVEABLE TO OTHER DRIVE: ~$([math]::Round($moveSize, 1)) GB" -ForegroundColor Yellow
-    $moveable | ForEach-Object { Write-Host "  - $($_.Folder)" -ForegroundColor Yellow }
+    Write-Information "`nMOVEABLE TO OTHER DRIVE: ~$([math]::Round($moveSize, 1)) GB" -ForegroundColor Yellow
+    $moveable | ForEach-Object { Write-Information "  - $($_.Folder)" -ForegroundColor Yellow }
 }
 
-Write-Host ""
+Write-Information ""

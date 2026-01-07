@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Generates a comprehensive subscription expense report from normalized budget data.
 
@@ -17,6 +17,8 @@
 .EXAMPLE
     & "c:\Users\franz\.claude\skills\budget\scripts\subscriptions-report.ps1" -OutputPath "C:\Reports\subscriptions-report.md"
 #>
+
+$InformationPreference = 'Continue'
 
 param(
     [string]$OutputPath
@@ -122,7 +124,7 @@ function Get-RecurrencePattern {
 }
 
 # Load all normalized CSV data
-Write-Host "Loading transaction data..." -ForegroundColor Cyan
+Write-Information "Loading transaction data..." -ForegroundColor Cyan
 $csvFiles = Get-ChildItem "$StatementsPath\*\*.csv" -Recurse | Where-Object { $_.Name -match '^\d{4}-\d{2}\.csv$' }
 $allData = @()
 
@@ -131,16 +133,16 @@ foreach ($file in $csvFiles) {
     $allData += $data
 }
 
-Write-Host "Loaded $($allData.Count) total transactions" -ForegroundColor Green
+Write-Information "Loaded $($allData.Count) total transactions" -ForegroundColor Green
 
 # First, find all known subscription vendors across ALL transactions (not just subscription categories)
 # This catches subscriptions that might be miscategorized
-Write-Host "Scanning all transactions for known subscription vendors..." -ForegroundColor Cyan
+Write-Information "Scanning all transactions for known subscription vendors..." -ForegroundColor Cyan
 $vendorMatches = @()
 foreach ($pattern in $KnownSubscriptions.Keys) {
-    $matches = $allData | Where-Object { $_.Description -match [regex]::Escape($pattern) }
-    if ($matches) {
-        $vendorMatches += $matches
+    $matchedTransactions = $allData | Where-Object { $_.Description -match [regex]::Escape($pattern) }
+    if ($matchedTransactions) {
+        $vendorMatches += $matchedTransactions
     }
 }
 
@@ -160,7 +162,7 @@ foreach ($tx in $allSubscriptionCandidates) {
     }
 }
 
-Write-Host "Found $($subscriptions.Count) potential subscription transactions" -ForegroundColor Green
+Write-Information "Found $($subscriptions.Count) potential subscription transactions" -ForegroundColor Green
 
 # Check for excluded patterns
 $subscriptions = $subscriptions | Where-Object {
@@ -175,7 +177,7 @@ $subscriptions = $subscriptions | Where-Object {
     -not $excluded
 }
 
-Write-Host "After exclusions: $($subscriptions.Count) transactions" -ForegroundColor Green
+Write-Information "After exclusions: $($subscriptions.Count) transactions" -ForegroundColor Green
 
 # Group and analyze
 $analyzed = $subscriptions | Group-Object Description | ForEach-Object {
@@ -384,15 +386,15 @@ $(
 # Save or display report
 if ($OutputPath) {
     $report | Out-File -FilePath $OutputPath -Encoding UTF8
-    Write-Host "`n✅ Report saved to: $OutputPath" -ForegroundColor Green
-    Write-Host "`nQuick Summary:" -ForegroundColor Cyan
-    Write-Host "  • Total Spend: `$$totalSpendFormatted" -ForegroundColor Yellow
-    Write-Host "  • Monthly Cost: `$$monthlyFormatted" -ForegroundColor Yellow
-    Write-Host "  • Annual Cost: `$$annualFormatted" -ForegroundColor Yellow
-    Write-Host "  • Active Subscriptions: $subsCount" -ForegroundColor Yellow
+    Write-Information "`n✅ Report saved to: $OutputPath" -ForegroundColor Green
+    Write-Information "`nQuick Summary:" -ForegroundColor Cyan
+    Write-Information "  • Total Spend: `$$totalSpendFormatted" -ForegroundColor Yellow
+    Write-Information "  • Monthly Cost: `$$monthlyFormatted" -ForegroundColor Yellow
+    Write-Information "  • Annual Cost: `$$annualFormatted" -ForegroundColor Yellow
+    Write-Information "  • Active Subscriptions: $subsCount" -ForegroundColor Yellow
 } else {
-    Write-Host "`n" -ForegroundColor Cyan
-    Write-Host "Where would you like to save the report?" -ForegroundColor Cyan
+    Write-Information "`n" -ForegroundColor Cyan
+    Write-Information "Where would you like to save the report?" -ForegroundColor Cyan
     $OutputPath = Read-Host "Enter full path (e.g., C:\Reports\subscriptions-report.md)"
     
     if ([string]::IsNullOrWhiteSpace($OutputPath)) {
@@ -400,10 +402,10 @@ if ($OutputPath) {
     }
     
     $report | Out-File -FilePath $OutputPath -Encoding UTF8
-    Write-Host "`n✅ Report saved to: $OutputPath" -ForegroundColor Green
-    Write-Host "`nQuick Summary:" -ForegroundColor Cyan
-    Write-Host "  • Total Spend: `$$totalSpendFormatted" -ForegroundColor Yellow
-    Write-Host "  • Monthly Cost: `$$monthlyFormatted" -ForegroundColor Yellow
-    Write-Host "  • Annual Cost: `$$annualFormatted" -ForegroundColor Yellow
-    Write-Host "  • Active Subscriptions: $subsCount" -ForegroundColor Yellow
+    Write-Information "`n✅ Report saved to: $OutputPath" -ForegroundColor Green
+    Write-Information "`nQuick Summary:" -ForegroundColor Cyan
+    Write-Information "  • Total Spend: `$$totalSpendFormatted" -ForegroundColor Yellow
+    Write-Information "  • Monthly Cost: `$$monthlyFormatted" -ForegroundColor Yellow
+    Write-Information "  • Annual Cost: `$$annualFormatted" -ForegroundColor Yellow
+    Write-Information "  • Active Subscriptions: $subsCount" -ForegroundColor Yellow
 }

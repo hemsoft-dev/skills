@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Get recent messages from a Slack channel with thread support and file downloads.
 
@@ -41,6 +41,8 @@
     Requires SLACK_USER_TOKEN environment variable (for channel lookup and history).
     Token must have 'channels:read' and 'channels:history' scopes, or use search workaround.
 #>
+
+$InformationPreference = 'Continue'
 
 [CmdletBinding()]
 param(
@@ -193,7 +195,7 @@ function Get-UserName {
     return $UserId
 }
 
-function Download-SlackFile {
+function Copy-SlackFile {
     param(
         [object]$File,
         [string]$OutputDirectory
@@ -245,7 +247,7 @@ function Download-SlackFile {
     return $null
 }
 
-function Get-ThreadReplies {
+function Get-ThreadReply {
     param(
         [string]$ChannelId,
         [string]$ThreadTs,
@@ -291,11 +293,11 @@ function Get-ThreadReplies {
 # Main Execution
 # ============================================================================
 
-Write-Host "`n=== Slack Channel Messages ===" -ForegroundColor Cyan
+Write-Information "`n=== Slack Channel Messages ===" -ForegroundColor Cyan
 
 # Resolve channel ID
 $channelId = Get-ChannelId -ChannelInput $Channel
-Write-Host "Channel: #$Channel ($channelId)" -ForegroundColor Yellow
+Write-Information "Channel: #$Channel ($channelId)" -ForegroundColor Yellow
 
 # Create output directory if needed
 if ($IncludeFiles -and -not (Test-Path $OutputDir)) {
@@ -303,7 +305,7 @@ if ($IncludeFiles -and -not (Test-Path $OutputDir)) {
 }
 
 # Get channel history using search (workaround for missing history scope)
-Write-Host "Fetching last $Count messages..." -ForegroundColor Gray
+Write-Information "Fetching last $Count messages..." -ForegroundColor Gray
 
 $query = [System.Web.HttpUtility]::UrlEncode("in:$Channel")
 $searchUrl = "https://slack.com/api/search.messages?query=$query&count=$Count&sort=timestamp&sort_dir=desc"
@@ -315,10 +317,10 @@ if (-not $response.ok) {
 }
 
 $messages = $response.messages.matches
-Write-Host "Retrieved $($messages.Count) messages`n" -ForegroundColor Green
+Write-Information "Retrieved $($messages.Count) messages`n" -ForegroundColor Green
 
 if ($messages.Count -eq 0) {
-    Write-Host "No messages found in channel." -ForegroundColor Yellow
+    Write-Information "No messages found in channel." -ForegroundColor Yellow
     exit 0
 }
 
@@ -345,8 +347,8 @@ foreach ($msg in $messages) {
     
     # Output based on format
     if ($OutputFormat -ne 'JSON') {
-        Write-Host "[$($timestamp.ToString('yyyy-MM-dd HH:mm:ss'))] @$userName" -ForegroundColor Cyan
-        Write-Host $msg.text -ForegroundColor White
+        Write-Information "[$($timestamp.ToString('yyyy-MM-dd HH:mm:ss'))] @$userName" -ForegroundColor Cyan
+        Write-Information $msg.text -ForegroundColor White
     }
     
     # Handle files/attachments
@@ -361,16 +363,16 @@ foreach ($msg in $messages) {
             }
             
             if ($OutputFormat -ne 'JSON') {
-                Write-Host "  📎 Attachment: $($file.name) ($($file.mimetype))" -ForegroundColor Magenta
+                Write-Information "  📎 Attachment: $($file.name) ($($file.mimetype))" -ForegroundColor Magenta
             }
             
             if ($IncludeFiles) {
-                $localPath = Download-SlackFile -File $file -OutputDirectory $OutputDir
+                $localPath = Copy-SlackFile -File $file -OutputDirectory $OutputDir
                 if ($localPath) {
                     $fileInfo.LocalPath = $localPath
                     $downloadedFiles += $localPath
                     if ($OutputFormat -ne 'JSON') {
-                        Write-Host "     ✅ Downloaded to: $localPath" -ForegroundColor Green
+                        Write-Information "     ✅ Downloaded to: $localPath" -ForegroundColor Green
                     }
                 }
             }
@@ -381,16 +383,16 @@ foreach ($msg in $messages) {
     
     # Get thread replies if message has them
     if ($msg.thread_ts -or ($msg.reply_count -and $msg.reply_count -gt 0)) {
-        $threadData = Get-ThreadReplies -ChannelId $channelId -ThreadTs $msg.ts -Limit $MaxThreadReplies
+        $threadData = Get-ThreadReply -ChannelId $channelId -ThreadTs $msg.ts -Limit $MaxThreadReplies
         
         if ($threadData.Total -gt 0) {
             $result.ReplyCount = $threadData.Total
             $result.SkippedReplies = $threadData.Skipped
             
             if ($OutputFormat -ne 'JSON' -and $threadData.Skipped -gt 0) {
-                Write-Host "  💬 Thread: $($threadData.Total) replies (showing last $MaxThreadReplies, skipped $($threadData.Skipped))" -ForegroundColor DarkYellow
+                Write-Information "  💬 Thread: $($threadData.Total) replies (showing last $MaxThreadReplies, skipped $($threadData.Skipped))" -ForegroundColor DarkYellow
             } elseif ($OutputFormat -ne 'JSON' -and $threadData.Total -gt 0) {
-                Write-Host "  💬 Thread: $($threadData.Total) replies" -ForegroundColor DarkYellow
+                Write-Information "  💬 Thread: $($threadData.Total) replies" -ForegroundColor DarkYellow
             }
             
             foreach ($reply in $threadData.Replies) {
@@ -405,13 +407,13 @@ foreach ($msg in $messages) {
                 }
                 
                 if ($OutputFormat -ne 'JSON') {
-                    Write-Host "    ↳ [$($replyTime.ToString('HH:mm'))] @$replyUser" -ForegroundColor DarkCyan
+                    Write-Information "    ↳ [$($replyTime.ToString('HH:mm'))] @$replyUser" -ForegroundColor DarkCyan
                     # Truncate long replies in summary mode
                     $replyText = $reply.text
                     if ($OutputFormat -eq 'Summary' -and $replyText.Length -gt 200) {
                         $replyText = $replyText.Substring(0, 200) + "..."
                     }
-                    Write-Host "      $replyText" -ForegroundColor Gray
+                    Write-Information "      $replyText" -ForegroundColor Gray
                 }
                 
                 # Handle files in replies
@@ -424,16 +426,16 @@ foreach ($msg in $messages) {
                         }
                         
                         if ($OutputFormat -ne 'JSON') {
-                            Write-Host "      📎 $($file.name)" -ForegroundColor Magenta
+                            Write-Information "      📎 $($file.name)" -ForegroundColor Magenta
                         }
                         
                         if ($IncludeFiles) {
-                            $localPath = Download-SlackFile -File $file -OutputDirectory $OutputDir
+                            $localPath = Copy-SlackFile -File $file -OutputDirectory $OutputDir
                             if ($localPath) {
                                 $fileInfo.LocalPath = $localPath
                                 $downloadedFiles += $localPath
                                 if ($OutputFormat -ne 'JSON') {
-                                    Write-Host "         ✅ Downloaded: $localPath" -ForegroundColor Green
+                                    Write-Information "         ✅ Downloaded: $localPath" -ForegroundColor Green
                                 }
                             }
                         }
@@ -448,8 +450,8 @@ foreach ($msg in $messages) {
     }
     
     if ($OutputFormat -ne 'JSON') {
-        Write-Host "---" -ForegroundColor DarkGray
-        Write-Host ""
+        Write-Information "---" -ForegroundColor DarkGray
+        Write-Information ""
     }
     
     $allResults += $result
@@ -461,17 +463,17 @@ if ($OutputFormat -eq 'JSON') {
 }
 
 # Summary
-Write-Host "`n=== Summary ===" -ForegroundColor Cyan
-Write-Host "Messages retrieved: $($messages.Count)" -ForegroundColor White
-Write-Host "Thread reply limit: $MaxThreadReplies per message" -ForegroundColor White
+Write-Information "`n=== Summary ===" -ForegroundColor Cyan
+Write-Information "Messages retrieved: $($messages.Count)" -ForegroundColor White
+Write-Information "Thread reply limit: $MaxThreadReplies per message" -ForegroundColor White
 
 if ($downloadedFiles.Count -gt 0) {
-    Write-Host "Files downloaded: $($downloadedFiles.Count)" -ForegroundColor Green
-    Write-Host "Output directory: $(Resolve-Path $OutputDir)" -ForegroundColor Green
-    Write-Host "`nDownloaded files:" -ForegroundColor Yellow
+    Write-Information "Files downloaded: $($downloadedFiles.Count)" -ForegroundColor Green
+    Write-Information "Output directory: $(Resolve-Path $OutputDir)" -ForegroundColor Green
+    Write-Information "`nDownloaded files:" -ForegroundColor Yellow
     foreach ($file in $downloadedFiles) {
-        Write-Host "  • $file" -ForegroundColor White
+        Write-Information "  • $file" -ForegroundColor White
     }
 }
 
-Write-Host ""
+Write-Information ""

@@ -1,4 +1,4 @@
-# Get-Today.ps1 - Fetches current date/time and weather for the today skill
+﻿# Get-Today.ps1 - Fetches current date/time and weather for the today skill
 # Usage: .\Get-Today.ps1 [-Location "28117"]
 
 param(
@@ -46,7 +46,7 @@ try {
 
 # Weather icon mapping
 function Get-WeatherIcon {
-    param([string]$condition, [string]$icon)
+    param([string]$condition)
     switch -Regex ($condition.ToLower()) {
         'clear'         { return '☀️' }
         'few clouds'    { return '🌤️' }

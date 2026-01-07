@@ -1,3 +1,5 @@
+﻿$InformationPreference = 'Continue'
+
 # normalize-statements.ps1
 # Normalizes CSV statement files using Copilot CLI
 
@@ -8,7 +10,7 @@ $CategoryFile = Join-Path $StatementsRoot "category-choices.txt"
 
 # Verify required files exist
 if (-not (Test-Path $CategoryFile)) {
-    Write-Host "ERROR: category-choices.txt not found. Run generate-categories.ps1 first." -ForegroundColor Red
+    Write-Information "ERROR: category-choices.txt not found. Run generate-categories.ps1 first." -ForegroundColor Red
     exit 1
 }
 
@@ -23,14 +25,14 @@ Get-ChildItem -Path $StatementsRoot -Directory | Where-Object {
     $AccountRoot = $_.FullName
     $YearFolder = Join-Path $AccountRoot $Year
     
-    Write-Host "`n=== Processing: $AccountName ===" -ForegroundColor Cyan
+    Write-Information "`n=== Processing: $AccountName ===" -ForegroundColor Cyan
     
     # Process each CSV in the year folder
     Get-ChildItem -Path $YearFolder -Filter "*.csv" -File | ForEach-Object {
         $SourceFile = $_.FullName
         $SourceName = $_.BaseName
         
-        Write-Host "  Normalizing: $($_.Name)" -ForegroundColor Yellow
+        Write-Information "  Normalizing: $($_.Name)" -ForegroundColor Yellow
         
         $CsvContent = Get-Content $SourceFile -Raw
         
@@ -71,7 +73,7 @@ RULES:
         }
         
         if ($Lines.Count -eq 0) {
-            Write-Host "    WARNING: No valid CSV data found in output" -ForegroundColor Red
+            Write-Information "    WARNING: No valid CSV data found in output" -ForegroundColor Red
             continue
         }
         
@@ -103,9 +105,9 @@ RULES:
                 $OutputContent -join "`n" | Out-File -FilePath $OutputFile -Encoding UTF8
             }
             
-            Write-Host "    -> $YearMonth.csv ($($MonthGroups[$YearMonth].Count) transactions)" -ForegroundColor Green
+            Write-Information "    -> $YearMonth.csv ($($MonthGroups[$YearMonth].Count) transactions)" -ForegroundColor Green
         }
     }
 }
 
-Write-Host "`nNormalization complete." -ForegroundColor Cyan
+Write-Information "`nNormalization complete." -ForegroundColor Cyan

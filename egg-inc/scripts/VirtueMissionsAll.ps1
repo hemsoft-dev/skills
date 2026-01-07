@@ -1,3 +1,5 @@
+﻿$InformationPreference = 'Continue'
+
 # VirtueMissionsAll.ps1 - Shows Virtue (enlightenment) spaceship missions for all tracked accounts
 
 # Account definitions
@@ -60,5 +62,5 @@ foreach ($acct in $Accounts) {
 if ($results.Count -gt 0) {
     $results | Format-Table -AutoSize
 } else {
-    Write-Host "No active Virtue missions found."
+    Write-Information "No active Virtue missions found."
 }

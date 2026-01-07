@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Shared Work Outlook (Microsoft Graph) authentication module.
 .DESCRIPTION
@@ -6,6 +6,8 @@
     Uses "organizations" tenant to support work/school accounts.
     Attempts to reuse existing GRAPH_CLIENT_ID (multi-tenant scenario).
 #>
+
+$InformationPreference = 'Continue'
 
 # Try to reuse existing client ID - it may work if app is multi-tenant
 $script:ClientId = $env:GRAPH_WORK_CLIENT_ID
@@ -29,12 +31,15 @@ function Test-WorkConfigured {
     return $true
 }
 
-function Get-CachedTokens {
+function Get-CachedToken {
     if (Test-Path $script:TokenCachePath) {
         try {
             return Get-Content $script:TokenCachePath -Raw | ConvertFrom-Json
         }
-        catch { return $null }
+        catch {
+            Write-Verbose "Failed to parse token cache: $_"
+            return $null
+        }
     }
     return $null
 }
@@ -52,8 +57,8 @@ function Save-TokenCache {
 }
 
 function Get-WorkAccessTokenInteractive {
-    Write-Host "Authentication required for Work Outlook. Starting device code flow..." -ForegroundColor Cyan
-    Write-Host "Using client ID: $($script:ClientId.Substring(0,8))..." -ForegroundColor Gray
+    Write-Information "Authentication required for Work Outlook. Starting device code flow..." -ForegroundColor Cyan
+    Write-Information "Using client ID: $($script:ClientId.Substring(0,8))..." -ForegroundColor Gray
     
     $scopeString = $script:Scopes -join " "
     $deviceCodeBody = @{ client_id = $script:ClientId; scope = $scopeString }
@@ -67,18 +72,24 @@ function Get-WorkAccessTokenInteractive {
             try {
                 $errDetails = $_.ErrorDetails.Message | ConvertFrom-Json
                 $errMsg = "$($errDetails.error): $($errDetails.error_description)"
-            } catch {}
+            } catch {
+                Write-Verbose "Failed to parse error details: $_"
+            }
         }
         throw "Failed to start device code flow: $errMsg"
     }
 
-    Write-Host "`nTo sign in with your WORK account, open: " -NoNewline
-    Write-Host $deviceCodeResponse.verification_uri -ForegroundColor Yellow
-    Write-Host "Enter code: " -NoNewline
-    Write-Host $deviceCodeResponse.user_code -ForegroundColor Green
-    Write-Host "`nIMPORTANT: Sign in with your WORK email, not personal!" -ForegroundColor Magenta
+    Write-Information "`nTo sign in with your WORK account, open: " -NoNewline
+    Write-Information $deviceCodeResponse.verification_uri -ForegroundColor Yellow
+    Write-Information "Enter code: " -NoNewline
+    Write-Information $deviceCodeResponse.user_code -ForegroundColor Green
+    Write-Information "`nIMPORTANT: Sign in with your WORK email, not personal!" -ForegroundColor Magenta
 
-    try { Start-Process $deviceCodeResponse.verification_uri } catch { }
+    try {
+        Start-Process $deviceCodeResponse.verification_uri
+    } catch {
+        Write-Verbose "Failed to open browser: $_"
+    }
 
     $interval = if ($deviceCodeResponse.interval) { $deviceCodeResponse.interval } else { 5 }
     $expiresIn = $deviceCodeResponse.expires_in
@@ -89,7 +100,7 @@ function Get-WorkAccessTokenInteractive {
         device_code = $deviceCodeResponse.device_code
     }
 
-    Write-Host "Waiting for authentication..." -ForegroundColor Cyan
+    Write-Information "Waiting for authentication..." -ForegroundColor Cyan
 
     while (((Get-Date) - $startTime).TotalSeconds -lt $expiresIn) {
         Start-Sleep -Seconds $interval
@@ -109,18 +120,26 @@ function Get-WorkAccessTokenInteractive {
                         if (-not $accountEmail) { $accountEmail = $claims.preferred_username }
                         if (-not $accountEmail) { $accountEmail = $claims.upn }
                         if (-not $accountEmail) { $accountEmail = $claims.name }
-                    } catch { }
+                    } catch {
+                        Write-Verbose "Failed to decode ID token: $_"
+                    }
                 }
             }
             $expiresAt = (Get-Date).AddSeconds($tokenResponse.expires_in)
             Save-TokenCache -AccessToken $tokenResponse.access_token -RefreshToken $tokenResponse.refresh_token -ExpiresAt $expiresAt -AccountEmail $accountEmail
-            Write-Host "Authenticated as: $accountEmail" -ForegroundColor Green
+            Write-Information "Authenticated as: $accountEmail" -ForegroundColor Green
             return $tokenResponse.access_token
         }
         catch {
             $errContent = $_.ErrorDetails.Message
             $err = $null
-            if ($errContent) { try { $err = $errContent | ConvertFrom-Json } catch {} }
+            if ($errContent) {
+                try {
+                    $err = $errContent | ConvertFrom-Json
+                } catch {
+                    Write-Verbose "Failed to parse error response: $_"
+                }
+            }
             if ($err.error -eq "authorization_pending") { continue }
             elseif ($err.error -eq "slow_down") { $interval += 5; continue }
             else {
@@ -142,7 +161,7 @@ function Get-AccessTokenFromRefresh {
     }
     try {
         $response = Invoke-RestMethod -Uri $script:TokenUrl -Method POST -Body $body
-        $cache = Get-CachedTokens
+        $cache = Get-CachedToken
         $expiresAt = (Get-Date).AddSeconds($response.expires_in)
         Save-TokenCache -AccessToken $response.access_token -RefreshToken ($response.refresh_token ?? $RefreshToken) -ExpiresAt $expiresAt -AccountEmail $cache.Account
         return $response.access_token

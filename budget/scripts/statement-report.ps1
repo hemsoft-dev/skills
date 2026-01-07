@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Generate Markdown budget report from normalized CSV files.
 .PARAMETER AccountName
@@ -7,6 +7,8 @@
     .\statement-report.ps1
     .\statement-report.ps1 -AccountName "Chase Credit Card"
 #>
+$InformationPreference = 'Continue'
+
 param(
     [string]$AccountName
 )
@@ -156,7 +158,7 @@ foreach ($Acct in $Accounts) {
 }
 
 if ($AllReports.Count -eq 0) {
-    Write-Host "No normalized data found." -ForegroundColor Yellow
+    Write-Information "No normalized data found." -ForegroundColor Yellow
     exit
 }
 
@@ -193,10 +195,10 @@ foreach ($R in $AllReports | Sort-Object Account) {
 $ReportPath = Join-Path $StatementsRoot "budget-report.md"
 $Output -join "`n" | Out-File $ReportPath -Encoding UTF8
 
-Write-Host "Report generated: $ReportPath" -ForegroundColor Green
-Write-Host ""
-Write-Host "=== TOTALS ===" -ForegroundColor Cyan
-Write-Host "Total Income:   $(Format-Currency $GrandIncome)" -ForegroundColor Green
-Write-Host "Total Expenses: $(Format-Currency $GrandExpense)" -ForegroundColor Red
-Write-Host "Net Cash Flow:  $(Format-Currency $GrandNet)" -ForegroundColor $(if ($GrandNet -ge 0) { 'Green' } else { 'Red' })
-Write-Host "Transactions:   $GrandTxns"
+Write-Information "Report generated: $ReportPath" -ForegroundColor Green
+Write-Information ""
+Write-Information "=== TOTALS ===" -ForegroundColor Cyan
+Write-Information "Total Income:   $(Format-Currency $GrandIncome)" -ForegroundColor Green
+Write-Information "Total Expenses: $(Format-Currency $GrandExpense)" -ForegroundColor Red
+Write-Information "Net Cash Flow:  $(Format-Currency $GrandNet)" -ForegroundColor $(if ($GrandNet -ge 0) { 'Green' } else { 'Red' })
+Write-Information "Transactions:   $GrandTxns"

@@ -1,9 +1,11 @@
-<#
+﻿<#
 .SYNOPSIS
     Normalizes Chase Credit Card CSVs using GitHub Copilot CLI
 .DESCRIPTION
     Processes all CSV files in the 2025 folder and uses Copilot to categorize transactions
 #>
+
+$InformationPreference = 'Continue'
 
 $StatementsRoot = "F:\OneDrive\Documents\Budget\Statements"
 $AccountName = "Chase Credit Card"
@@ -16,14 +18,14 @@ $Categories = Get-Content $CategoryFile -Raw
 
 # Get all CSV files
 $CsvFiles = Get-ChildItem -Path $YearFolder -Filter "*.csv" | Sort-Object Name
-Write-Host "Processing $($CsvFiles.Count) files..."
+Write-Information "Processing $($CsvFiles.Count) files..."
 
 $AllData = @{}
 $Total = 0
 
 foreach ($CsvFile in $CsvFiles) {
     $Index = [array]::IndexOf($CsvFiles, $CsvFile) + 1
-    Write-Host "[$Index/$($CsvFiles.Count)] $($CsvFile.Name)"
+    Write-Information "[$Index/$($CsvFiles.Count)] $($CsvFile.Name)"
     
     $CsvContent = Get-Content $CsvFile.FullName -Raw
     
@@ -42,7 +44,7 @@ foreach ($CsvFile in $CsvFiles) {
     }
     
     $Total += $Lines.Count
-    Write-Host "  $($Lines.Count) transactions (total: $Total)"
+    Write-Information "  $($Lines.Count) transactions (total: $Total)"
     
     # Group by year-month
     foreach ($Line in $Lines) {
@@ -60,7 +62,7 @@ foreach ($YearMonth in ($AllData.Keys | Sort-Object)) {
     $OutFile = Join-Path $AccountRoot "$YearMonth.csv"
     $Header | Out-File -FilePath $OutFile -Encoding utf8
     $AllData[$YearMonth] | Out-File -FilePath $OutFile -Append -Encoding utf8
-    Write-Host "Created: $YearMonth.csv ($($AllData[$YearMonth].Count) transactions)"
+    Write-Information "Created: $YearMonth.csv ($($AllData[$YearMonth].Count) transactions)"
 }
 
-Write-Host "`nDone! $Total total transactions normalized."
+Write-Information "`nDone! $Total total transactions normalized."

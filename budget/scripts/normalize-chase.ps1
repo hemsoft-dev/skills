@@ -1,3 +1,5 @@
+﻿$InformationPreference = 'Continue'
+
 # normalize-chase.ps1
 # Normalizes all Chase Credit Card CSVs using Copilot CLI
 
@@ -8,11 +10,11 @@ $Files = Get-ChildItem "$StatementsRoot\$AccountName\2025\*.csv" | Sort-Object N
 $AllData = @{}
 $Total = 0
 
-Write-Host "Processing $($Files.Count) files (est. ~12 minutes)..."
+Write-Information "Processing $($Files.Count) files (est. ~12 minutes)..."
 
 for ($i = 0; $i -lt $Files.Count; $i++) {
     $File = $Files[$i]
-    Write-Host "[$($i + 1)/$($Files.Count)] $($File.Name)" -NoNewline
+    Write-Information "[$($i + 1)/$($Files.Count)] $($File.Name)" -NoNewline
     $Csv = Get-Content $File.FullName -Raw
     $Prompt = "Convert CSV to: Date,Account,Category,Description,Amount. YYYY-MM-DD. Negative=expense. Payments POSITIVE as 'Credit Card Payment'. Account: $AccountName. Categories: $Categories`n$Csv"
     $Result = $Prompt | copilot --model claude-haiku-4.5
@@ -25,7 +27,7 @@ for ($i = 0; $i -lt $Files.Count; $i++) {
             $AllData[$Month] += $Line
         }
     }
-    Write-Host " -> $($Lines.Count) txns (total: $Total)"
+    Write-Information " -> $($Lines.Count) txns (total: $Total)"
 }
 
 # Write output
@@ -33,6 +35,6 @@ $Header = "Date,Account,Category,Description,Amount"
 foreach ($Month in $AllData.Keys | Sort-Object) {
     $OutFile = "$StatementsRoot\$AccountName\$Month.csv"
     (@($Header) + $AllData[$Month]) -join "`n" | Out-File $OutFile -Encoding UTF8
-    Write-Host "Created: $Month.csv ($($AllData[$Month].Count) transactions)"
+    Write-Information "Created: $Month.csv ($($AllData[$Month].Count) transactions)"
 }
-Write-Host "`nDone! $Total total transactions."
+Write-Information "`nDone! $Total total transactions."

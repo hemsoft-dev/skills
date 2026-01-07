@@ -1,4 +1,6 @@
-#Requires -Version 7.0
+﻿#Requires -Version 7.0
+$InformationPreference = 'Continue'
+
 <#
 .SYNOPSIS
     Get a comprehensive summary of Todoist tasks.
@@ -36,7 +38,7 @@ $headers = @{
 }
 
 # Helper function to get tasks
-function Get-Tasks {
+function Get-Task {
     param([string]$Filter)
     try {
         $uri = "https://api.todoist.com/rest/v2/tasks?filter=$([uri]::EscapeDataString($Filter))"
@@ -47,7 +49,7 @@ function Get-Tasks {
 }
 
 # Helper function to get completed tasks
-function Get-CompletedTasks {
+function Get-CompletedTask {
     param([datetime]$TargetDate)
     try {
         $body = @{
@@ -74,28 +76,28 @@ function Get-CompletedTasks {
 }
 
 try {
-    Write-Host "`n╔════════════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
-    Write-Host "║         TODOIST SUMMARY - $($Date.ToString('yyyy-MM-dd'))                 ║" -ForegroundColor Cyan
-    Write-Host "╚════════════════════════════════════════════════════════════════╝`n" -ForegroundColor Cyan
+    Write-Information "`n╔════════════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
+    Write-Information "║         TODOIST SUMMARY - $($Date.ToString('yyyy-MM-dd'))                 ║" -ForegroundColor Cyan
+    Write-Information "╚════════════════════════════════════════════════════════════════╝`n" -ForegroundColor Cyan
 
     # Get completed tasks if requested
     if ($IncludeCompleted) {
         $completed = Get-CompletedTasks -TargetDate $Date
-        Write-Host "✓ Completed Today: " -NoNewline -ForegroundColor Green
-        Write-Host "$($completed.Count) tasks" -ForegroundColor White
+        Write-Information "✓ Completed Today: " -NoNewline -ForegroundColor Green
+        Write-Information "$($completed.Count) tasks" -ForegroundColor White
         if ($completed.Count -gt 0) {
             $completed | ForEach-Object {
                 $time = ([DateTime]::Parse($_.completed_at)).ToString('HH:mm')
-                Write-Host "  [$time] $($_.content)" -ForegroundColor Gray
+                Write-Information "  [$time] $($_.content)" -ForegroundColor Gray
             }
         }
-        Write-Host ""
+        Write-Information ""
     }
 
     # Get active tasks
     $today = Get-Tasks -Filter "today"
-    Write-Host "📅 Due Today: " -NoNewline -ForegroundColor Yellow
-    Write-Host "$($today.Count) tasks" -ForegroundColor White
+    Write-Information "📅 Due Today: " -NoNewline -ForegroundColor Yellow
+    Write-Information "$($today.Count) tasks" -ForegroundColor White
     if ($today.Count -gt 0) {
         $today | ForEach-Object {
             $priority = switch ($_.priority) {
@@ -104,43 +106,43 @@ try {
                 2 { "[P3]" }
                 default { "    " }
             }
-            Write-Host "  $priority $($_.content)" -ForegroundColor Gray
+            Write-Information "  $priority $($_.content)" -ForegroundColor Gray
         }
     }
-    Write-Host ""
+    Write-Information ""
 
     # Get overdue tasks
     $overdue = Get-Tasks -Filter "overdue"
-    Write-Host "⚠️  Overdue: " -NoNewline -ForegroundColor Red
-    Write-Host "$($overdue.Count) tasks" -ForegroundColor White
+    Write-Information "⚠️  Overdue: " -NoNewline -ForegroundColor Red
+    Write-Information "$($overdue.Count) tasks" -ForegroundColor White
     if ($overdue.Count -gt 0) {
         $overdue | ForEach-Object {
             $dueDate = if ($_.due) { $_.due.date } else { "?" }
-            Write-Host "  [Due: $dueDate] $($_.content)" -ForegroundColor Gray
+            Write-Information "  [Due: $dueDate] $($_.content)" -ForegroundColor Gray
         }
     }
-    Write-Host ""
+    Write-Information ""
 
     # Get priority tasks
     $p1 = Get-Tasks -Filter "p1"
     $p2 = Get-Tasks -Filter "p2"
     $totalPriority = $p1.Count + $p2.Count
     
-    Write-Host "🔥 High Priority: " -NoNewline -ForegroundColor Magenta
-    Write-Host "$totalPriority tasks (P1: $($p1.Count), P2: $($p2.Count))" -ForegroundColor White
+    Write-Information "🔥 High Priority: " -NoNewline -ForegroundColor Magenta
+    Write-Information "$totalPriority tasks (P1: $($p1.Count), P2: $($p2.Count))" -ForegroundColor White
     if ($p1.Count -gt 0) {
-        Write-Host "  P1 Tasks:" -ForegroundColor DarkMagenta
+        Write-Information "  P1 Tasks:" -ForegroundColor DarkMagenta
         $p1 | ForEach-Object {
-            Write-Host "    • $($_.content)" -ForegroundColor Gray
+            Write-Information "    • $($_.content)" -ForegroundColor Gray
         }
     }
     if ($p2.Count -gt 0) {
-        Write-Host "  P2 Tasks:" -ForegroundColor DarkMagenta
+        Write-Information "  P2 Tasks:" -ForegroundColor DarkMagenta
         $p2 | ForEach-Object {
-            Write-Host "    • $($_.content)" -ForegroundColor Gray
+            Write-Information "    • $($_.content)" -ForegroundColor Gray
         }
     }
-    Write-Host ""
+    Write-Information ""
 
     # Summary object for scripting
     $summary = [PSCustomObject]@{

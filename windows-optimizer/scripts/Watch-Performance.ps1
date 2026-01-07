@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Monitors system performance in real-time.
 .DESCRIPTION
@@ -21,12 +21,14 @@ param(
     [switch]$IncludeGPU
 )
 
+$InformationPreference = 'Continue'
+
 $ErrorActionPreference = 'SilentlyContinue'
 
-Write-Host "`n=== PERFORMANCE MONITOR ===" -ForegroundColor Cyan
-Write-Host "Refresh: ${Interval}s | Press Ctrl+C to stop`n"
-Write-Host ("{0,-8} {1,-12} {2,-12} {3,-12} {4,-15}" -f "TIME", "CPU %", "RAM %", "DISK %", "TOP PROCESS") -ForegroundColor Gray
-Write-Host ("-" * 65)
+Write-Information "`n=== PERFORMANCE MONITOR ===" -ForegroundColor Cyan
+Write-Information "Refresh: ${Interval}s | Press Ctrl+C to stop`n"
+Write-Information ("{0,-8} {1,-12} {2,-12} {3,-12} {4,-15}" -f "TIME", "CPU %", "RAM %", "DISK %", "TOP PROCESS") -ForegroundColor Gray
+Write-Information ("-" * 65)
 
 $startTime = Get-Date
 $iteration = 0
@@ -39,7 +41,7 @@ try {
         if ($Duration -gt 0) {
             $elapsed = ((Get-Date) - $startTime).TotalSeconds
             if ($elapsed -ge $Duration) {
-                Write-Host "`nDuration limit reached ($Duration seconds)" -ForegroundColor Yellow
+                Write-Information "`nDuration limit reached ($Duration seconds)" -ForegroundColor Yellow
                 break
             }
         }
@@ -64,11 +66,11 @@ try {
         $timeStr = (Get-Date).ToString("HH:mm:ss")
         
         # Build output line
-        Write-Host ("{0,-8} " -f $timeStr) -NoNewline
-        Write-Host ("{0,-12}" -f "$([math]::Round($cpu, 1))%") -ForegroundColor $cpuColor -NoNewline
-        Write-Host ("{0,-12}" -f "$ramPct%") -ForegroundColor $ramColor -NoNewline
-        Write-Host ("{0,-12}" -f "$([math]::Round($disk, 1))%") -ForegroundColor $diskColor -NoNewline
-        Write-Host ("{0,-15}" -f $topName)
+        Write-Information ("{0,-8} " -f $timeStr) -NoNewline
+        Write-Information ("{0,-12}" -f "$([math]::Round($cpu, 1))%") -ForegroundColor $cpuColor -NoNewline
+        Write-Information ("{0,-12}" -f "$ramPct%") -ForegroundColor $ramColor -NoNewline
+        Write-Information ("{0,-12}" -f "$([math]::Round($disk, 1))%") -ForegroundColor $diskColor -NoNewline
+        Write-Information ("{0,-15}" -f $topName)
         
         # GPU metrics (if requested)
         if ($IncludeGPU -and ($iteration % 5 -eq 0)) {
@@ -76,25 +78,25 @@ try {
             if ($gpuInfo) {
                 $gpuData = $gpuInfo -split ','
                 $gpuColor = if ([int]$gpuData[0] -gt 90) { "Red" } elseif ([int]$gpuData[0] -gt 50) { "Yellow" } else { "Green" }
-                Write-Host ("         GPU: {0}% | VRAM: {1} MB | Temp: {2}°C" -f $gpuData[0].Trim(), $gpuData[1].Trim(), $gpuData[2].Trim()) -ForegroundColor $gpuColor
+                Write-Information ("         GPU: {0}% | VRAM: {1} MB | Temp: {2}°C" -f $gpuData[0].Trim(), $gpuData[1].Trim(), $gpuData[2].Trim()) -ForegroundColor $gpuColor
             }
         }
         
         # Alert on anomalies
         if ($cpu -gt 95) {
-            Write-Host "  [!] CPU CRITICAL" -ForegroundColor Red
+            Write-Information "  [!] CPU CRITICAL" -ForegroundColor Red
         }
         if ($ramPct -gt 95) {
-            Write-Host "  [!] MEMORY CRITICAL" -ForegroundColor Red
+            Write-Information "  [!] MEMORY CRITICAL" -ForegroundColor Red
         }
         if ($disk -gt 95) {
-            Write-Host "  [!] DISK I/O CRITICAL" -ForegroundColor Red
+            Write-Information "  [!] DISK I/O CRITICAL" -ForegroundColor Red
         }
         
         Start-Sleep -Seconds $Interval
     }
 } finally {
-    Write-Host "`n=== MONITORING STOPPED ===" -ForegroundColor Cyan
-    Write-Host "Samples collected: $iteration"
-    Write-Host "Duration: $([math]::Round(((Get-Date) - $startTime).TotalSeconds, 0)) seconds`n"
+    Write-Information "`n=== MONITORING STOPPED ===" -ForegroundColor Cyan
+    Write-Information "Samples collected: $iteration"
+    Write-Information "Duration: $([math]::Round(((Get-Date) - $startTime).TotalSeconds, 0)) seconds`n"
 }

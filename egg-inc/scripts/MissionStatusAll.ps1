@@ -1,3 +1,5 @@
+﻿$InformationPreference = 'Continue'
+
 # MissionStatusAll.ps1 - Shows spaceship mission status for all tracked accounts
 param(
     [switch]$Refresh  # Force refresh data from API
@@ -142,5 +144,5 @@ foreach ($account in $Accounts) {
 if ($allMissions.Count -gt 0) {
     $allMissions | Format-Table -AutoSize
 } else {
-    Write-Host "No active missions found."
+    Write-Information "No active missions found."
 }

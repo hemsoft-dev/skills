@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Opens an image in Directory Opus viewer.
 
@@ -15,6 +15,8 @@
 .EXAMPLE
     .\Open-ImagePreview.ps1 "D:\slack-downloads\screenshot.png"
 #>
+
+$InformationPreference = 'Continue'
 
 param(
     [Parameter(Mandatory = $true, Position = 0)]
@@ -35,9 +37,9 @@ $Path = (Resolve-Path $Path).Path
 $dopusViewer = "C:\Program Files\GPSoftware\Directory Opus\d8viewer.exe"
 
 if (Test-Path $dopusViewer) {
-    Write-Host "Opening in Directory Opus viewer: $Path" -ForegroundColor Cyan
+    Write-Information "Opening in Directory Opus viewer: $Path" -ForegroundColor Cyan
     Start-Process $dopusViewer -ArgumentList "`"$Path`""
 } else {
-    Write-Host "Directory Opus not found. Opening with default viewer..." -ForegroundColor Yellow
+    Write-Information "Directory Opus not found. Opening with default viewer..." -ForegroundColor Yellow
     Start-Process $Path
 }

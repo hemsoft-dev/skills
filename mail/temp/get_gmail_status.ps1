@@ -12,7 +12,7 @@ if (-not (Test-GmailConfigured)) { throw 'Gmail not configured. Set GMAIL_CLIENT
 $accessToken = Get-GmailAccessToken
 if (-not $accessToken) { throw 'Failed to get access token.' }
 
-$details = Get-GmailMessageDetails -AccessToken $accessToken -MessageId $MessageId -Format 'metadata'
+$details = Get-GmailMessage -AccessToken $accessToken -MessageId $MessageId -Format 'metadata'
 $labels = $details.labelIds
 $status = if ($labels -contains 'UNREAD') { 'NEW' } else { 'Read' }
 

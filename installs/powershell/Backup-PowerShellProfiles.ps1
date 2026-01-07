@@ -1,15 +1,17 @@
-<#
+﻿<#
 .SYNOPSIS
     Backs up PowerShell profile files to this folder.
 .DESCRIPTION
     Copies all PowerShell 7 profile files that exist.
 #>
+$InformationPreference = 'Continue'
+
 [CmdletBinding()]
 param()
 
 $backupDir = $PSScriptRoot
 
-Write-Host "Backing up PowerShell profiles..." -ForegroundColor Cyan
+Write-Information "Backing up PowerShell profiles..." -ForegroundColor Cyan
 
 # PowerShell 7 profiles (CurrentUser)
 $profiles = @{
@@ -20,10 +22,10 @@ $profiles = @{
 foreach ($item in $profiles.GetEnumerator()) {
     if (Test-Path $item.Value) {
         Copy-Item $item.Value -Destination (Join-Path $backupDir $item.Key) -Force
-        Write-Host "  ✓ $($item.Key)" -ForegroundColor Green
+        Write-Information "  ✓ $($item.Key)" -ForegroundColor Green
     }
     else {
-        Write-Host "  - $($item.Key) (not found)" -ForegroundColor Gray
+        Write-Information "  - $($item.Key) (not found)" -ForegroundColor Gray
     }
 }
 
@@ -36,8 +38,8 @@ if (Test-Path $ompConfig) {
     }
     Get-ChildItem "$ompConfig\*.json" -ErrorAction SilentlyContinue | ForEach-Object {
         Copy-Item $_.FullName -Destination $ompBackupDir -Force
-        Write-Host "  ✓ omp/$($_.Name)" -ForegroundColor Green
+        Write-Information "  ✓ omp/$($_.Name)" -ForegroundColor Green
     }
 }
 
-Write-Host "PowerShell backup complete!" -ForegroundColor Green
+Write-Information "PowerShell backup complete!" -ForegroundColor Green

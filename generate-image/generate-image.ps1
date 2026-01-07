@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Generates an image using OpenRouter API.
 
@@ -28,6 +28,8 @@
 .EXAMPLE
     .\generate-image.ps1 -Prompt "Professional product shot" -OutputPath "C:\Images\product.png" -Model pro
 #>
+
+$InformationPreference = 'Continue'
 
 param(
     [Parameter(Mandatory = $true, Position = 0)]
@@ -68,7 +70,7 @@ if (-not [System.IO.Path]::IsPathRooted($OutputPath)) {
 # Ensure the directory exists
 $outputDir = [System.IO.Path]::GetDirectoryName($OutputPath)
 if (-not (Test-Path $outputDir)) {
-    Write-Host "Creating directory: $outputDir" -ForegroundColor Yellow
+    Write-Information "Creating directory: $outputDir" -ForegroundColor Yellow
     New-Item -ItemType Directory -Path $outputDir -Force | Out-Null
 }
 
@@ -79,7 +81,7 @@ if (-not $apiKey) {
     exit 1
 }
 
-Write-Host "Generating image with $resolvedModel..." -ForegroundColor Cyan
+Write-Information "Generating image with $resolvedModel..." -ForegroundColor Cyan
 
 $body = @{
     model = $resolvedModel
@@ -102,12 +104,12 @@ try {
             } else {
                 Invoke-WebRequest -Uri $imgUrl -OutFile $OutputPath
             }
-            Write-Host "Image saved to: $OutputPath ($([math]::Round((Get-Item $OutputPath).Length/1024))KB)" -ForegroundColor Green
+            Write-Information "Image saved to: $OutputPath ($([math]::Round((Get-Item $OutputPath).Length/1024))KB)" -ForegroundColor Green
             exit 0
         }
         if ($img.b64_json) {
             [IO.File]::WriteAllBytes($OutputPath, [Convert]::FromBase64String($img.b64_json))
-            Write-Host "Image saved to: $OutputPath ($([math]::Round((Get-Item $OutputPath).Length/1024))KB)" -ForegroundColor Green
+            Write-Information "Image saved to: $OutputPath ($([math]::Round((Get-Item $OutputPath).Length/1024))KB)" -ForegroundColor Green
             exit 0
         }
     }
@@ -115,7 +117,7 @@ try {
     # Handle inline base64 in content
     if ($msg.content -match 'base64,([A-Za-z0-9+/=]+)') {
         [IO.File]::WriteAllBytes($OutputPath, [Convert]::FromBase64String($matches[1]))
-        Write-Host "Image saved to: $OutputPath" -ForegroundColor Green
+        Write-Information "Image saved to: $OutputPath" -ForegroundColor Green
         exit 0
     }
 

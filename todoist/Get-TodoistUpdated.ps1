@@ -1,4 +1,6 @@
-#Requires -Version 7.0
+﻿#Requires -Version 7.0
+$InformationPreference = 'Continue'
+
 <#
 .SYNOPSIS
     Get Todoist tasks updated today (based on description field date logs).
@@ -44,8 +46,6 @@ try {
     
     # Date pattern to search for: "2026-01-06 - Tuesday - "
     $dateStr = $Date.ToString('yyyy-MM-dd')
-    $dayOfWeek = $Date.ToString('dddd')
-    $pattern = "$dateStr - $dayOfWeek -"
     
     $updatedTasks = @()
     
@@ -67,18 +67,18 @@ try {
     }
     
     if ($updatedTasks.Count -eq 0) {
-        Write-Host "No updated tasks found for $($Date.ToString('yyyy-MM-dd'))" -ForegroundColor Yellow
+        Write-Information "No updated tasks found for $($Date.ToString('yyyy-MM-dd'))" -ForegroundColor Yellow
         exit 0
     }
     
     switch ($Format) {
         'List' {
-            Write-Host "`n=== UPDATED TASKS ($($Date.ToString('yyyy-MM-dd'))) ===" -ForegroundColor Cyan
+            Write-Information "`n=== UPDATED TASKS ($($Date.ToString('yyyy-MM-dd'))) ===" -ForegroundColor Cyan
             foreach ($task in $updatedTasks) {
-                Write-Host "`n• " -NoNewline -ForegroundColor Green
-                Write-Host "$($task.Content)" -ForegroundColor White
+                Write-Information "`n• " -NoNewline -ForegroundColor Green
+                Write-Information "$($task.Content)" -ForegroundColor White
                 foreach ($log in $task.LogEntries) {
-                    Write-Host "  $log" -ForegroundColor Gray
+                    Write-Information "  $log" -ForegroundColor Gray
                 }
             }
         }

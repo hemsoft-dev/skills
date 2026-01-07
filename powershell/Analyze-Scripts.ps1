@@ -1,3 +1,5 @@
+﻿$InformationPreference = 'Continue'
+
 #!/usr/bin/env pwsh
 <#
 .SYNOPSIS
@@ -50,25 +52,25 @@ $ErrorActionPreference = 'Stop'
 
 # Ensure PSScriptAnalyzer is installed
 if (-not (Get-Module -Name PSScriptAnalyzer -ListAvailable)) {
-    Write-Host "📦 Installing PSScriptAnalyzer..." -ForegroundColor Yellow
+    Write-Information "📦 Installing PSScriptAnalyzer..." -ForegroundColor Yellow
     Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser
-    Write-Host "✅ PSScriptAnalyzer installed" -ForegroundColor Green
-    Write-Host ""
+    Write-Information "✅ PSScriptAnalyzer installed" -ForegroundColor Green
+    Write-Information ""
 }
 
-Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "PowerShell Script Analysis" -ForegroundColor Cyan
-Write-Host "========================================" -ForegroundColor Cyan
-Write-Host ""
-Write-Host "Path:     $Path" -ForegroundColor Gray
-Write-Host "Severity: $($Severity -join ', ')" -ForegroundColor Gray
+Write-Information "========================================" -ForegroundColor Cyan
+Write-Information "PowerShell Script Analysis" -ForegroundColor Cyan
+Write-Information "========================================" -ForegroundColor Cyan
+Write-Information ""
+Write-Information "Path:     $Path" -ForegroundColor Gray
+Write-Information "Severity: $($Severity -join ', ')" -ForegroundColor Gray
 if ($ExcludeRule) {
-    Write-Host "Excluded: $($ExcludeRule -join ', ')" -ForegroundColor Gray
+    Write-Information "Excluded: $($ExcludeRule -join ', ')" -ForegroundColor Gray
 }
 if ($Fix) {
-    Write-Host "Mode:     Auto-fix enabled" -ForegroundColor Yellow
+    Write-Information "Mode:     Auto-fix enabled" -ForegroundColor Yellow
 }
-Write-Host ""
+Write-Information ""
 
 $analyzeParams = @{
     Path = $Path
@@ -84,13 +86,13 @@ if ($Fix) {
     $analyzeParams['Fix'] = $true
 }
 
-Write-Host "🔍 Analyzing PowerShell scripts..." -ForegroundColor Yellow
+Write-Information "🔍 Analyzing PowerShell scripts..." -ForegroundColor Yellow
 $results = Invoke-ScriptAnalyzer @analyzeParams
 
 if ($results) {
-    Write-Host ""
-    Write-Host "Found $($results.Count) issue(s):" -ForegroundColor Yellow
-    Write-Host ""
+    Write-Information ""
+    Write-Information "Found $($results.Count) issue(s):" -ForegroundColor Yellow
+    Write-Information ""
     
     # Group by severity
     $grouped = $results | Group-Object Severity | Sort-Object Name
@@ -100,14 +102,14 @@ if ($results) {
             'Warning' { 'Yellow' }
             default { 'White' }
         }
-        Write-Host "  $($group.Name): $($group.Count)" -ForegroundColor $color
+        Write-Information "  $($group.Name): $($group.Count)" -ForegroundColor $color
     }
-    Write-Host ""
+    Write-Information ""
     
     # Group by file
     $byFile = $results | Group-Object ScriptName
     foreach ($fileGroup in $byFile) {
-        Write-Host "📄 $($fileGroup.Name)" -ForegroundColor Cyan
+        Write-Information "📄 $($fileGroup.Name)" -ForegroundColor Cyan
         
         foreach ($issue in $fileGroup.Group | Sort-Object Line) {
             $severityIcon = switch ($issue.Severity) {
@@ -122,27 +124,27 @@ if ($results) {
                 default { 'White' }
             }
             
-            Write-Host "  $severityIcon Line $($issue.Line): $($issue.RuleName)" -ForegroundColor $color
-            Write-Host "     $($issue.Message)" -ForegroundColor Gray
+            Write-Information "  $severityIcon Line $($issue.Line): $($issue.RuleName)" -ForegroundColor $color
+            Write-Information "     $($issue.Message)" -ForegroundColor Gray
         }
-        Write-Host ""
+        Write-Information ""
     }
     
     # Summary
-    Write-Host "========================================" -ForegroundColor Cyan
+    Write-Information "========================================" -ForegroundColor Cyan
     $errorCount = ($results | Where-Object Severity -eq 'Error').Count
     $warningCount = ($results | Where-Object Severity -eq 'Warning').Count
     
     if ($errorCount -gt 0) {
-        Write-Host "❌ Analysis failed with $errorCount error(s) and $warningCount warning(s)" -ForegroundColor Red
+        Write-Information "❌ Analysis failed with $errorCount error(s) and $warningCount warning(s)" -ForegroundColor Red
         exit 1
     } else {
-        Write-Host "⚠️  Analysis completed with $warningCount warning(s)" -ForegroundColor Yellow
+        Write-Information "⚠️  Analysis completed with $warningCount warning(s)" -ForegroundColor Yellow
         exit 0
     }
 } else {
-    Write-Host "========================================" -ForegroundColor Cyan
-    Write-Host "✅ No issues found!" -ForegroundColor Green
-    Write-Host "========================================" -ForegroundColor Cyan
+    Write-Information "========================================" -ForegroundColor Cyan
+    Write-Information "✅ No issues found!" -ForegroundColor Green
+    Write-Information "========================================" -ForegroundColor Cyan
     exit 0
 }

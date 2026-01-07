@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Backs up user profile folders to OneDrive backup location.
 .DESCRIPTION
@@ -19,6 +19,8 @@
     .\Backup-UserProfile.ps1 -Folders ".claude",".ssh"
     .\Backup-UserProfile.ps1 -WhatIf
 #>
+
+$InformationPreference = 'Continue'
 
 param(
     [string[]]$Folders,
@@ -83,16 +85,16 @@ if ($Folders) {
     $TargetFolders = $DefaultFolders
 }
 
-Write-Host "`n=== User Profile Backup ===" -ForegroundColor Cyan
-Write-Host "Source: $UserProfile" -ForegroundColor Gray
-Write-Host "Destination: $BackupPath" -ForegroundColor Gray
-Write-Host "Date: $Date $Time`n" -ForegroundColor Gray
+Write-Information "`n=== User Profile Backup ===" -ForegroundColor Cyan
+Write-Information "Source: $UserProfile" -ForegroundColor Gray
+Write-Information "Destination: $BackupPath" -ForegroundColor Gray
+Write-Information "Date: $Date $Time`n" -ForegroundColor Gray
 
 if (-not $WhatIf) {
     # Create backup directory
     if (-not (Test-Path $BackupPath)) {
         New-Item -ItemType Directory -Path $BackupPath -Force | Out-Null
-        Write-Host "Created backup folder: $BackupPath" -ForegroundColor Green
+        Write-Information "Created backup folder: $BackupPath" -ForegroundColor Green
     }
 }
 
@@ -104,7 +106,7 @@ foreach ($folder in $TargetFolders) {
     $sourcePath = Join-Path $UserProfile $folder
     
     if (-not (Test-Path $sourcePath)) {
-        Write-Host "  [SKIP] $folder (not found)" -ForegroundColor DarkGray
+        Write-Information "  [SKIP] $folder (not found)" -ForegroundColor DarkGray
         continue
     }
     
@@ -119,13 +121,13 @@ foreach ($folder in $TargetFolders) {
         $TotalFiles++
         
         if ($WhatIf) {
-            Write-Host "  [FILE] $folder ($([math]::Round($size/1KB,1)) KB)" -ForegroundColor Yellow
+            Write-Information "  [FILE] $folder ($([math]::Round($size/1KB,1)) KB)" -ForegroundColor Yellow
         } else {
             if (-not (Test-Path $destDir)) {
                 New-Item -ItemType Directory -Path $destDir -Force | Out-Null
             }
             Copy-Item $sourcePath -Destination $destPath -Force
-            Write-Host "  [OK] $folder" -ForegroundColor Green
+            Write-Information "  [OK] $folder" -ForegroundColor Green
             $BackedUp += $folder
         }
     } else {
@@ -146,14 +148,11 @@ foreach ($folder in $TargetFolders) {
                    else { "$([math]::Round($folderSize/1KB,1)) KB" }
         
         if ($WhatIf) {
-            Write-Host "  [DIR] $folder ($fileCount files, $sizeStr)" -ForegroundColor Yellow
+            Write-Information "  [DIR] $folder ($fileCount files, $sizeStr)" -ForegroundColor Yellow
         } else {
             $destPath = Join-Path $BackupPath $folder
             
             # Use robocopy for efficient copying with exclusions
-            $excludeDirs = ($Exclusions | ForEach-Object { "/XD", $_ }) -join " "
-            $excludeFiles = "/XF *.log Thumbs.db .DS_Store"
-            
             $robocopyArgs = @(
                 $sourcePath
                 $destPath
@@ -179,7 +178,7 @@ foreach ($folder in $TargetFolders) {
             
             $null = robocopy @robocopyArgs 2>$null
             
-            Write-Host "  [OK] $folder ($fileCount files, $sizeStr)" -ForegroundColor Green
+            Write-Information "  [OK] $folder ($fileCount files, $sizeStr)" -ForegroundColor Green
             $BackedUp += $folder
         }
     }
@@ -190,13 +189,13 @@ $totalStr = if ($TotalSize -gt 1GB) { "$([math]::Round($TotalSize/1GB,2)) GB" }
             elseif ($TotalSize -gt 1MB) { "$([math]::Round($TotalSize/1MB,1)) MB" }
             else { "$([math]::Round($TotalSize/1KB,1)) KB" }
 
-Write-Host "`n--- Summary ---" -ForegroundColor Cyan
-Write-Host "Total: $TotalFiles files, $totalStr" -ForegroundColor White
+Write-Information "`n--- Summary ---" -ForegroundColor Cyan
+Write-Information "Total: $TotalFiles files, $totalStr" -ForegroundColor White
 
 if ($WhatIf) {
-    Write-Host "`n[DRY RUN] No files were copied. Remove -WhatIf to perform backup." -ForegroundColor Yellow
+    Write-Information "`n[DRY RUN] No files were copied. Remove -WhatIf to perform backup." -ForegroundColor Yellow
 } else {
-    Write-Host "Backup complete: $BackupPath" -ForegroundColor Green
+    Write-Information "Backup complete: $BackupPath" -ForegroundColor Green
     
     # Create manifest
     $manifest = @{

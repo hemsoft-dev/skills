@@ -19,7 +19,7 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 ## Workflow
 
 1. **Profile Selection (CRITICAL)**
-   - **Mandatory Step**: Ask the user which GitHub profile to use: **Personal** or **Work**.
+   - **Mandatory Step**: Ask the user which GitHub profile to use: **Personal1** (HemSoft), **Personal2** (franzhemmer), or **Work1** (Relias).
    - **Never proceed** without this information.
    - This selection determines the SSH host alias used for the remote.
 
@@ -28,10 +28,10 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
    - Use the following parameters:
      - `RepoName`: The name of the repository.
      - `Owner`: The GitHub organization or username.
-     - `Profile`: "Personal" or "Work".
+     - `Profile`: "Personal1", "Personal2", or "Work1".
      - `Private`: (Optional) Default is `$true`.
    - **Report Success**: Always provide the user with the URL to the newly created repository.
 
 ## Requirements
 - Requires GitHub CLI (`gh`) to be installed and authenticated.
-- SSH keys must be configured in `~/.ssh/config` with appropriate aliases (`github-personal`, `github-work`).
+- SSH keys must be configured in `~/.ssh/config` with appropriate aliases (`github-personal1`, `github-personal2`, `github-work1`).

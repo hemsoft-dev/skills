@@ -1,4 +1,4 @@
-param(
+﻿param(
     [Parameter(Mandatory=$true)]
     [string]$Url,
     [Parameter(Mandatory=$true)]
@@ -6,6 +6,8 @@ param(
     [Parameter(Mandatory=$true)]
     [string]$BaseFilename
 )
+
+$InformationPreference = 'Continue'
 
 # Ensure output directory exists
 if (!(Test-Path $OutputDir)) {
@@ -15,7 +17,7 @@ if (!(Test-Path $OutputDir)) {
 $videoPath = Join-Path $OutputDir "$BaseFilename.webm"
 $audioPath = Join-Path $OutputDir "$BaseFilename.mp3"
 
-Write-Host "Downloading video for $Url..."
+Write-Information "Downloading video for $Url..."
 # Download best video + best audio, merged into webm (or mp4 if preferred)
 # Using --extractor-args to avoid 403 errors as seen in repo scripts
 & ytd "$Url" --output "$videoPath" --extractor-args "youtube:player_js_version=actual"
@@ -25,7 +27,7 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
-Write-Host "Extracting audio as MP3..."
+Write-Information "Extracting audio as MP3..."
 & ytd "$Url" --extract-audio --audio-format mp3 --output "$audioPath" --keep-video --extractor-args "youtube:player_js_version=actual"
 
 if ($LASTEXITCODE -ne 0) {
@@ -33,8 +35,8 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
-Write-Host "Video saved to $videoPath"
-Write-Host "Audio saved to $audioPath"
+Write-Information "Video saved to $videoPath"
+Write-Information "Audio saved to $audioPath"
 
 # Return the paths
 return @{

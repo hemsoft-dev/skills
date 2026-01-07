@@ -1,4 +1,6 @@
-#Requires -Version 7.0
+﻿#Requires -Version 7.0
+$InformationPreference = 'Continue'
+
 <#
 .SYNOPSIS
     Get completed Todoist tasks for a specific date.
@@ -59,7 +61,7 @@ try {
     }
 
     if (-not $completed) {
-        Write-Host "No tasks completed on $($Date.ToString('yyyy-MM-dd'))" -ForegroundColor Yellow
+        Write-Information "No tasks completed on $($Date.ToString('yyyy-MM-dd'))" -ForegroundColor Yellow
         exit 0
     }
 
@@ -73,7 +75,7 @@ try {
         }
         'List' {
             $completed | ForEach-Object {
-                Write-Host "✓ $($_.content)" -ForegroundColor Green
+                Write-Information "✓ $($_.content)" -ForegroundColor Green
             }
         }
         'JSON' {

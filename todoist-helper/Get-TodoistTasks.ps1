@@ -1,4 +1,6 @@
-#Requires -Version 7.0
+﻿#Requires -Version 7.0
+$InformationPreference = 'Continue'
+
 <#
 .SYNOPSIS
     Get active Todoist tasks with various filters.
@@ -41,7 +43,7 @@ try {
     $tasks = Invoke-RestMethod -Uri $uri -Headers $headers
 
     if (-not $tasks -or $tasks.Count -eq 0) {
-        Write-Host "No tasks found for filter: $Filter" -ForegroundColor Yellow
+        Write-Information "No tasks found for filter: $Filter" -ForegroundColor Yellow
         exit 0
     }
 
@@ -58,7 +60,7 @@ try {
             $tasks | ForEach-Object {
                 $priority = if ($_.priority -eq 4) { "[P1]" } elseif ($_.priority -eq 3) { "[P2]" } else { "" }
                 $due = if ($_.due) { " (Due: $($_.due.date))" } else { "" }
-                Write-Host "• $priority $($_.content)$due"
+                Write-Information "• $priority $($_.content)$due"
             }
         }
         'JSON' {

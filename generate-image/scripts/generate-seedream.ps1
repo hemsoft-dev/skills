@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Generates an image using Seedream 4.5 via OpenRouter API.
 
@@ -22,6 +22,8 @@
 .EXAMPLE
     .\generate-seedream.ps1 -Prompt "A futuristic cityscape at night" -OutputPath "D:\city.png" -Preview
 #>
+
+$InformationPreference = 'Continue'
 
 param(
     [Parameter(Mandatory = $true, Position = 0)]
@@ -53,7 +55,7 @@ $apiKey = [Environment]::GetEnvironmentVariable("OPENROUTER_API_KEY", "User")
 if (-not $apiKey) { $apiKey = $env:OPENROUTER_API_KEY }
 if (-not $apiKey) { throw "OPENROUTER_API_KEY not set" }
 
-Write-Host "Generating with Seedream 4.5..." -ForegroundColor Cyan
+Write-Information "Generating with Seedream 4.5..." -ForegroundColor Cyan
 
 $body = @{
     model = $Model
@@ -78,17 +80,17 @@ $imgUrl = if ($imgData.image_url.url) { $imgData.image_url.url } else { $imgData
 if ($imgUrl -match '^data:image/[^;]+;base64,(.+)$') {
     [IO.File]::WriteAllBytes($OutputPath, [Convert]::FromBase64String($matches[1]))
     $size = [math]::Round((Get-Item $OutputPath).Length / 1024)
-    Write-Host "✓ Saved: $OutputPath (${size}KB)" -ForegroundColor Green
+    Write-Information "✓ Saved: $OutputPath (${size}KB)" -ForegroundColor Green
     
     # Open in Directory Opus viewer if requested
     if ($Preview) {
         $dopusViewer = "C:\Program Files\GPSoftware\Directory Opus\d8viewer.exe"
         if (Test-Path $dopusViewer) {
-            Write-Host "Opening preview in Directory Opus..." -ForegroundColor Cyan
+            Write-Information "Opening preview in Directory Opus..." -ForegroundColor Cyan
             Start-Process $dopusViewer -ArgumentList "`"$OutputPath`""
         } else {
-            Write-Host "Directory Opus viewer not found at: $dopusViewer" -ForegroundColor Yellow
-            Write-Host "Opening with default viewer..." -ForegroundColor Yellow
+            Write-Information "Directory Opus viewer not found at: $dopusViewer" -ForegroundColor Yellow
+            Write-Information "Opening with default viewer..." -ForegroundColor Yellow
             Start-Process $OutputPath
         }
     }

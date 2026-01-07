@@ -1,4 +1,4 @@
-param(
+﻿param(
     [Parameter(Mandatory=$true)]
     [string]$Url,
     [Parameter(Mandatory=$true)]
@@ -11,6 +11,8 @@ param(
     [string]$WhisperEnvPath
 )
 
+$InformationPreference = 'Continue'
+
 # Ensure output directory exists
 if (!(Test-Path $OutputDir)) {
     New-Item -ItemType Directory -Path $OutputDir -Force | Out-Null
@@ -18,7 +20,7 @@ if (!(Test-Path $OutputDir)) {
 
 $transcriptPath = Join-Path $OutputDir "$BaseFilename.en.vtt"
 
-Write-Host "Attempting to download YouTube transcript for $Url..."
+Write-Information "Attempting to download YouTube transcript for $Url..."
 # Try downloading transcript using ytd
 & ytd "$Url" --write-auto-subs --sub-lang en --sub-format vtt --skip-download --output "$OutputDir\%(id)s" 2>$null
 
@@ -32,11 +34,11 @@ if ($vttFiles.Count -gt 0) {
     if ($sourceVtt -ne $transcriptPath) {
         Move-Item -Path $sourceVtt -Destination $transcriptPath -Force
     }
-    Write-Host "✓ YouTube transcript saved: $transcriptPath"
+    Write-Information "`e[32m✓ YouTube transcript saved: $transcriptPath`e[0m"
     return $transcriptPath
 }
 
-Write-Host "⚠️ No YouTube transcript available. Falling back to Whisper..."
+Write-Information "`e[33m⚠️ No YouTube transcript available. Falling back to Whisper...`e[0m"
 
 # Try to find Whisper environment
 $pythonExe = $null
@@ -56,7 +58,7 @@ if (!(Test-Path $VideoPath)) {
     exit 1
 }
 
-Write-Host "🎤 Transcribing with Whisper AI (medium model)..."
+Write-Information "🎤 Transcribing with Whisper AI (medium model)..."
 $whisperArgs = @(
     "-m", "whisper",
     $VideoPath,
@@ -81,7 +83,7 @@ $whisperOutput = Join-Path $OutputDir "$([System.IO.Path]::GetFileNameWithoutExt
 
 if (Test-Path $whisperOutput) {
     Move-Item -Path $whisperOutput -Destination $transcriptPath -Force
-    Write-Host "✓ Whisper transcript saved: $transcriptPath"
+    Write-Information "`e[32m✓ Whisper transcript saved: $transcriptPath`e[0m"
     return $transcriptPath
 } else {
     Write-Error "Whisper transcription failed to produce output."

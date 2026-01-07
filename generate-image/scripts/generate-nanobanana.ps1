@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Generates an image using Nano Banana (Gemini 2.5 Flash Image) via OpenRouter API.
 
@@ -22,6 +22,8 @@
 .EXAMPLE
     .\generate-nanobanana.ps1 -Prompt "A cute banana mascot" -OutputPath "D:\banana.png" -Preview
 #>
+
+$InformationPreference = 'Continue'
 
 param(
     [Parameter(Mandatory = $true, Position = 0)]
@@ -53,7 +55,7 @@ $apiKey = [Environment]::GetEnvironmentVariable("OPENROUTER_API_KEY", "User")
 if (-not $apiKey) { $apiKey = $env:OPENROUTER_API_KEY }
 if (-not $apiKey) { throw "OPENROUTER_API_KEY not set" }
 
-Write-Host "Generating with Nano Banana (Gemini 2.5 Flash)..." -ForegroundColor Cyan
+Write-Information "Generating with Nano Banana (Gemini 2.5 Flash)..." -ForegroundColor Cyan
 
 $body = @{
     model = $Model
@@ -75,10 +77,10 @@ function Open-ImagePreview {
     param([string]$ImagePath)
     $dopusViewer = "C:\Program Files\GPSoftware\Directory Opus\d8viewer.exe"
     if (Test-Path $dopusViewer) {
-        Write-Host "Opening preview in Directory Opus..." -ForegroundColor Cyan
+        Write-Information "Opening preview in Directory Opus..." -ForegroundColor Cyan
         Start-Process $dopusViewer -ArgumentList "`"$ImagePath`""
     } else {
-        Write-Host "Directory Opus viewer not found. Opening with default viewer..." -ForegroundColor Yellow
+        Write-Information "Directory Opus viewer not found. Opening with default viewer..." -ForegroundColor Yellow
         Start-Process $ImagePath
     }
 }
@@ -91,7 +93,7 @@ if ($msg.images -and $msg.images.Count -gt 0) {
     if ($imgUrl -match '^data:image/[^;]+;base64,(.+)$') {
         [IO.File]::WriteAllBytes($OutputPath, [Convert]::FromBase64String($matches[1]))
         $size = [math]::Round((Get-Item $OutputPath).Length / 1024)
-        Write-Host "✓ Saved: $OutputPath (${size}KB)" -ForegroundColor Green
+        Write-Information "✓ Saved: $OutputPath (${size}KB)" -ForegroundColor Green
         if ($Preview) { Open-ImagePreview -ImagePath $OutputPath }
         exit 0
     }
@@ -101,7 +103,7 @@ if ($msg.images -and $msg.images.Count -gt 0) {
 if ($msg.content -and $msg.content -match 'data:image/[^;]+;base64,([A-Za-z0-9+/=]+)') {
     [IO.File]::WriteAllBytes($OutputPath, [Convert]::FromBase64String($matches[1]))
     $size = [math]::Round((Get-Item $OutputPath).Length / 1024)
-    Write-Host "✓ Saved: $OutputPath (${size}KB)" -ForegroundColor Green
+    Write-Information "✓ Saved: $OutputPath (${size}KB)" -ForegroundColor Green
     if ($Preview) { Open-ImagePreview -ImagePath $OutputPath }
     exit 0
 }

@@ -14,10 +14,10 @@ if (-not $accessToken) { throw 'Failed to get access token.' }
 
 # Add UNREAD label to mark message as unread
 $body = @{ addLabelIds = @('UNREAD') }
-$resp = Invoke-GmailApi -AccessToken $accessToken -Uri "/users/me/messages/$MessageId/modify" -Method 'POST' -Body $body
+Invoke-GmailApi -AccessToken $accessToken -Uri "/users/me/messages/$MessageId/modify" -Method 'POST' -Body $body | Out-Null
 
 # Fetch message metadata to verify
-$details = Get-GmailMessageDetails -AccessToken $accessToken -MessageId $MessageId -Format 'metadata'
+$details = Get-GmailMessage -AccessToken $accessToken -MessageId $MessageId -Format 'metadata'
 $labels = $details.labelIds
 $status = if ($labels -contains 'UNREAD') { 'NEW' } else { 'Read' }
 

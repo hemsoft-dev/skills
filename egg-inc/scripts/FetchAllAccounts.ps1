@@ -1,3 +1,5 @@
+﻿$InformationPreference = 'Continue'
+
 # FetchAllAccounts.ps1
 # Fetches backup data for all tracked Egg Inc accounts and saves to JSON files
 
@@ -18,14 +20,14 @@ foreach ($account in $accounts) {
     $outputPath = Join-Path $dataDir "$($account.Name).json"
     
     try {
-        Write-Host "Fetching $($account.Name)..." -NoNewline
+        Write-Information "Fetching $($account.Name)..." -NoNewline
         $response = Invoke-RestMethod -Uri $url -Method Get
         $response | ConvertTo-Json -Depth 100 | Set-Content -Path $outputPath -Encoding UTF8
-        Write-Host " OK" -ForegroundColor Green
+        Write-Information " OK" -ForegroundColor Green
     }
     catch {
-        Write-Host " FAILED: $($_.Exception.Message)" -ForegroundColor Red
+        Write-Information " FAILED: $($_.Exception.Message)" -ForegroundColor Red
     }
 }
 
-Write-Host "`nData saved to: $dataDir"
+Write-Information "`nData saved to: $dataDir"
