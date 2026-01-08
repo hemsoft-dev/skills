@@ -1,0 +1,80 @@
+{
+  "channel": "C08H7CG4NTS",
+  "text": "PR Review: #501 - permissions implemented",
+  "blocks": [
+    {
+      "type": "header",
+      "text": {
+        "type": "plain_text",
+        "text": "👀 PR Review: #501 - Permissions Implementation",
+        "emoji": true
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*<https://github.com/relias-engineering/rlms-website/pull/501|#501: feature/RPLAT-9497: permissions implemented>*\n\nConverts permission checks from synchronous boolean to async observables with proper permission validation for course creation UI controls."
+      }
+    },
+    {
+      "type": "section",
+      "fields": [
+        {"type": "mrkdwn", "text": "*Author:*\nnmalhotra29"},
+        {"type": "mrkdwn", "text": "*Status:*\n🟡 Open"},
+        {"type": "mrkdwn", "text": "*Files:*\n8 changed"},
+        {"type": "mrkdwn", "text": "*Lines:*\n+328 / -21"}
+      ]
+    },
+    {"type": "divider"},
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*✅ Overall Assessment*\n\nWell-structured PR with good test coverage and proper RxJS patterns. Changes correctly implement permission-based UI controls."
+      }
+    },
+    {"type": "divider"},
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*🔴 Critical Issues*\n\nNone identified. Implementation follows Angular best practices."
+      }
+    },
+    {"type": "divider"},
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*🟡 Medium Issues (4)*\n\n• Memory leak risk - verify subscription cleanup with takeUntil\n• Missing error handling on permission observables\n• UI flash due to default false value before observable emits\n• 80 lines of commented-out feature flag tests"
+      }
+    },
+    {"type": "divider"},
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*🟢 Nitpicks (4)*\n\n• Inconsistent import formatting\n• Verbose test naming conventions\n• Empty PR description\n• Mixed assertion styles (toBe vs toBeNull)"
+      }
+    },
+    {"type": "divider"},
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*💡 Recommendation*\n\n✅ Approve with minor suggestions for error handling and test cleanup"
+      }
+    },
+    {"type": "divider"},
+    {
+      "type": "context",
+      "elements": [
+        {
+          "type": "mrkdwn",
+          "text": "🤖 PR Reviewer V1.4 Skill • Reviewed by <@U2XMZDPJ7>"
+        }
+      ]
+    }
+  ]
+}
