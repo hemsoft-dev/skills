@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Parent: Set message status (Read/Unread) for a given account.
 .DESCRIPTION
@@ -12,13 +12,14 @@
 .EXAMPLE
     pwsh -File tasks\mail-setstatus.ps1 -Account gmail -Status Unread -MessageId 19b3828cfee82924
 #>
-$InformationPreference = 'Continue'
 
 param(
     [string]$Account = 'gmail',
     [ValidateSet('Read','Unread')][string]$Status,
     [Parameter(Mandatory=$true)][string[]]$MessageId
 )
+
+$InformationPreference = 'Continue'
 
 $ErrorActionPreference = 'Stop'
 $account = $Account.ToLower()
@@ -37,7 +38,7 @@ switch ($account) {
         return
     }
     'outlook' {
-        Write-Information "Outlook (Graph) set-status is not implemented yet. Will add Graph based support in a follow-up." -ForegroundColor Yellow
+        Write-Information "[33mOutlook (Graph) set-status is not implemented yet. Will add Graph based support in a follow-up.`e[0m"
         return
     }
     default {

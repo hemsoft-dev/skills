@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Get recent messages from a Slack channel with thread support and file downloads.
 
@@ -42,7 +42,6 @@
     Token must have 'channels:read' and 'channels:history' scopes, or use search workaround.
 #>
 
-$InformationPreference = 'Continue'
 
 [CmdletBinding()]
 param(
@@ -67,6 +66,8 @@ param(
     [ValidateSet('Summary', 'Detailed', 'JSON')]
     [string]$OutputFormat = 'Summary'
 )
+
+$InformationPreference = 'Continue'
 
 # Set default OutputDir to temp folder under slack skill if not specified
 if ([string]::IsNullOrEmpty($OutputDir)) {
@@ -293,11 +294,11 @@ function Get-ThreadReply {
 # Main Execution
 # ============================================================================
 
-Write-Information "`n=== Slack Channel Messages ===" -ForegroundColor Cyan
+Write-Information "[36m`n=== Slack Channel Messages ===`e[0m"
 
 # Resolve channel ID
 $channelId = Get-ChannelId -ChannelInput $Channel
-Write-Information "Channel: #$Channel ($channelId)" -ForegroundColor Yellow
+Write-Information "[33mChannel: #$Channel ($channelId)`e[0m"
 
 # Create output directory if needed
 if ($IncludeFiles -and -not (Test-Path $OutputDir)) {
@@ -305,7 +306,7 @@ if ($IncludeFiles -and -not (Test-Path $OutputDir)) {
 }
 
 # Get channel history using search (workaround for missing history scope)
-Write-Information "Fetching last $Count messages..." -ForegroundColor Gray
+Write-Information "[90mFetching last $Count messages...`e[0m"
 
 $query = [System.Web.HttpUtility]::UrlEncode("in:$Channel")
 $searchUrl = "https://slack.com/api/search.messages?query=$query&count=$Count&sort=timestamp&sort_dir=desc"
@@ -317,10 +318,10 @@ if (-not $response.ok) {
 }
 
 $messages = $response.messages.matches
-Write-Information "Retrieved $($messages.Count) messages`n" -ForegroundColor Green
+Write-Information "[32mRetrieved $($messages.Count) messages`n`e[0m"
 
 if ($messages.Count -eq 0) {
-    Write-Information "No messages found in channel." -ForegroundColor Yellow
+    Write-Information "[33mNo messages found in channel.`e[0m"
     exit 0
 }
 
@@ -347,8 +348,8 @@ foreach ($msg in $messages) {
     
     # Output based on format
     if ($OutputFormat -ne 'JSON') {
-        Write-Information "[$($timestamp.ToString('yyyy-MM-dd HH:mm:ss'))] @$userName" -ForegroundColor Cyan
-        Write-Information $msg.text -ForegroundColor White
+        Write-Information "[36m[$($timestamp.ToString('yyyy-MM-dd HH:mm:ss'))] @$userName`e[0m"
+        Write-Information "[97m$($msg.text)`e[0m"
     }
     
     # Handle files/attachments
@@ -363,7 +364,7 @@ foreach ($msg in $messages) {
             }
             
             if ($OutputFormat -ne 'JSON') {
-                Write-Information "  📎 Attachment: $($file.name) ($($file.mimetype))" -ForegroundColor Magenta
+                Write-Information "[35m  📎 Attachment: $($file.name) ($($file.mimetype))`e[0m"
             }
             
             if ($IncludeFiles) {
@@ -372,7 +373,7 @@ foreach ($msg in $messages) {
                     $fileInfo.LocalPath = $localPath
                     $downloadedFiles += $localPath
                     if ($OutputFormat -ne 'JSON') {
-                        Write-Information "     ✅ Downloaded to: $localPath" -ForegroundColor Green
+                        Write-Information "[32m     ✅ Downloaded to: $localPath`e[0m"
                     }
                 }
             }
@@ -390,9 +391,9 @@ foreach ($msg in $messages) {
             $result.SkippedReplies = $threadData.Skipped
             
             if ($OutputFormat -ne 'JSON' -and $threadData.Skipped -gt 0) {
-                Write-Information "  💬 Thread: $($threadData.Total) replies (showing last $MaxThreadReplies, skipped $($threadData.Skipped))" -ForegroundColor DarkYellow
+                Write-Information "[33m  💬 Thread: $($threadData.Total) replies (showing last $MaxThreadReplies, skipped $($threadData.Skipped))`e[0m"
             } elseif ($OutputFormat -ne 'JSON' -and $threadData.Total -gt 0) {
-                Write-Information "  💬 Thread: $($threadData.Total) replies" -ForegroundColor DarkYellow
+                Write-Information "[33m  💬 Thread: $($threadData.Total) replies`e[0m"
             }
             
             foreach ($reply in $threadData.Replies) {
@@ -407,13 +408,13 @@ foreach ($msg in $messages) {
                 }
                 
                 if ($OutputFormat -ne 'JSON') {
-                    Write-Information "    ↳ [$($replyTime.ToString('HH:mm'))] @$replyUser" -ForegroundColor DarkCyan
+                    Write-Information "[36m    ↳ [$($replyTime.ToString('HH:mm'))] @$replyUser`e[0m"
                     # Truncate long replies in summary mode
                     $replyText = $reply.text
                     if ($OutputFormat -eq 'Summary' -and $replyText.Length -gt 200) {
                         $replyText = $replyText.Substring(0, 200) + "..."
                     }
-                    Write-Information "      $replyText" -ForegroundColor Gray
+                    Write-Information "[90m      $replyText`e[0m"
                 }
                 
                 # Handle files in replies
@@ -426,7 +427,7 @@ foreach ($msg in $messages) {
                         }
                         
                         if ($OutputFormat -ne 'JSON') {
-                            Write-Information "      📎 $($file.name)" -ForegroundColor Magenta
+                            Write-Information "[35m      📎 $($file.name)`e[0m"
                         }
                         
                         if ($IncludeFiles) {
@@ -435,7 +436,7 @@ foreach ($msg in $messages) {
                                 $fileInfo.LocalPath = $localPath
                                 $downloadedFiles += $localPath
                                 if ($OutputFormat -ne 'JSON') {
-                                    Write-Information "         ✅ Downloaded: $localPath" -ForegroundColor Green
+                                    Write-Information "[32m         ✅ Downloaded: $localPath`e[0m"
                                 }
                             }
                         }
@@ -450,7 +451,7 @@ foreach ($msg in $messages) {
     }
     
     if ($OutputFormat -ne 'JSON') {
-        Write-Information "---" -ForegroundColor DarkGray
+        Write-Information "[90m---`e[0m"
         Write-Information ""
     }
     
@@ -463,16 +464,16 @@ if ($OutputFormat -eq 'JSON') {
 }
 
 # Summary
-Write-Information "`n=== Summary ===" -ForegroundColor Cyan
-Write-Information "Messages retrieved: $($messages.Count)" -ForegroundColor White
-Write-Information "Thread reply limit: $MaxThreadReplies per message" -ForegroundColor White
+Write-Information "[36m`n=== Summary ===`e[0m"
+Write-Information "[97mMessages retrieved: $($messages.Count)`e[0m"
+Write-Information "[97mThread reply limit: $MaxThreadReplies per message`e[0m"
 
 if ($downloadedFiles.Count -gt 0) {
-    Write-Information "Files downloaded: $($downloadedFiles.Count)" -ForegroundColor Green
-    Write-Information "Output directory: $(Resolve-Path $OutputDir)" -ForegroundColor Green
-    Write-Information "`nDownloaded files:" -ForegroundColor Yellow
+    Write-Information "[32mFiles downloaded: $($downloadedFiles.Count)`e[0m"
+    Write-Information "[32mOutput directory: $(Resolve-Path $OutputDir)`e[0m"
+    Write-Information "[33m`nDownloaded files:`e[0m"
     foreach ($file in $downloadedFiles) {
-        Write-Information "  • $file" -ForegroundColor White
+        Write-Information "[97m  • $file`e[0m"
     }
 }
 

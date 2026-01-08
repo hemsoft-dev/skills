@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Monitor Copilot spending in real-time with alerts.
 
@@ -27,7 +27,6 @@
     # Single check, no monitoring
 #>
 
-$InformationPreference = 'Continue'
 
 [CmdletBinding()]
 param(
@@ -36,6 +35,8 @@ param(
     [int]$IntervalMinutes = 30,
     [switch]$Once
 )
+
+$InformationPreference = 'Continue'
 
 function Get-CurrentSpend {
     param([string]$User)
@@ -67,17 +68,17 @@ if (-not $Username) {
 $proQuota = 1500
 $pricePerRequest = 0.04
 
-Write-Information "╔═══════════════════════════════════════════════════════╗" -ForegroundColor Cyan
-Write-Information "║  Copilot Spend Monitor - @$Username" -ForegroundColor Cyan
-Write-Information "║  Alert Threshold: `$$AlertThreshold" -ForegroundColor Cyan
-Write-Information "╚═══════════════════════════════════════════════════════╝" -ForegroundColor Cyan
+Write-Information "[36m╔═══════════════════════════════════════════════════════╗`e[0m"
+Write-Information "[36m║  Copilot Spend Monitor - @$Username`e[0m"
+Write-Information "[36m║  Alert Threshold: `$$AlertThreshold`e[0m"
+Write-Information "[36m╚═══════════════════════════════════════════════════════╝`e[0m"
 
 do {
     $timestamp = Get-Date -Format "HH:mm:ss"
     $spend = Get-CurrentSpend -User $Username
     
     if (-not $spend) {
-        Write-Information "[$timestamp] Failed to fetch data" -ForegroundColor Red
+        Write-Information "[31m[$timestamp] Failed to fetch data`e[0m"
     } else {
         $percentQuota = ($spend.Requests / $proQuota) * 100
         $overQuota = [Math]::Max(0, $spend.Requests - $proQuota)
@@ -92,19 +93,19 @@ do {
                        else { 'Green' }
         
         Write-Information ""
-        Write-Information "[$timestamp] Period: $($spend.Period)" -ForegroundColor DarkGray
-        Write-Information "  Requests: $("{0:N0}" -f $spend.Requests) [$bar] $("{0:N0}%" -f $percentQuota)" -ForegroundColor White
+        Write-Information "[90m[$timestamp] Period: $($spend.Period)`e[0m"
+        Write-Information "[97m$("  Requests: $("{0:N0}" -f $spend.Requests) [$bar] $("{0:N0}%" -f $percentQuota)")`e[0m"
         Write-Information "  Billed:   " -NoNewline
         Write-Information "$("{0:C2}" -f $spend.Billed)" -ForegroundColor $statusColor
         
         if ($overQuota -gt 0) {
-            Write-Information "  Over Quota: $("{0:N0}" -f $overQuota) requests" -ForegroundColor Yellow
+            Write-Information "[33m$("  Over Quota: $("{0:N0}" -f $overQuota) requests")`e[0m"
         }
         
         # Alert
         if ($spend.Billed -ge $AlertThreshold) {
             Write-Information ""
-            Write-Information "  ⚠️  ALERT: Spend exceeds threshold of `$$AlertThreshold!" -ForegroundColor Red
+            Write-Information "[31m  ⚠️  ALERT: Spend exceeds threshold of `$$AlertThreshold!`e[0m"
             [Console]::Beep(800, 500)
         }
         
@@ -115,14 +116,14 @@ do {
         $projectedBilled = [Math]::Max(0, ($projectedRequests - $proQuota)) * $pricePerRequest
         
         Write-Information ""
-        Write-Information "  Projected EOM:" -ForegroundColor DarkGray
-        Write-Information "    Requests: ~$("{0:N0}" -f $projectedRequests)" -ForegroundColor DarkGray
-        Write-Information "    Billed:   ~$("{0:C2}" -f $projectedBilled)" -ForegroundColor DarkGray
+        Write-Information "[90m  Projected EOM:`e[0m"
+        Write-Information "[90m$("    Requests: ~$("{0:N0}" -f $projectedRequests)")`e[0m"
+        Write-Information "[90m$("    Billed:   ~$("{0:C2}" -f $projectedBilled)")`e[0m"
     }
     
     if (-not $Once) {
         Write-Information ""
-        Write-Information "  Next check in $IntervalMinutes minutes... (Ctrl+C to stop)" -ForegroundColor DarkGray
+        Write-Information "[90m  Next check in $IntervalMinutes minutes... (Ctrl+C to stop)`e[0m"
         Start-Sleep -Seconds ($IntervalMinutes * 60)
     }
     

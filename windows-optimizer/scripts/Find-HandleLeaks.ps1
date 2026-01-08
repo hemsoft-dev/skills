@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Detects and optionally restarts processes with handle leaks.
 .DESCRIPTION
@@ -13,13 +13,14 @@
     .\Find-HandleLeaks.ps1 -Threshold 5000
     .\Find-HandleLeaks.ps1 -AutoFix
 #>
-$InformationPreference = 'Continue'
 
 [CmdletBinding()]
 param(
     [int]$Threshold = 3000,
     [switch]$AutoFix
 )
+
+$InformationPreference = 'Continue'
 
 $ErrorActionPreference = 'SilentlyContinue'
 
@@ -32,18 +33,18 @@ $KnownLeakers = @{
     'Slack' = "$env:LOCALAPPDATA\slack\slack.exe"
 }
 
-Write-Information "`n=== HANDLE LEAK DETECTION ===" -ForegroundColor Cyan
+Write-Information "[36m`n=== HANDLE LEAK DETECTION ===`e[0m"
 Write-Information "Threshold: $Threshold handles`n"
 
 $leaks = Get-Process | Where-Object { $_.Handles -gt $Threshold } | Sort-Object Handles -Descending
 
 if (-not $leaks) {
-    Write-Information "No processes found with handle count > $Threshold" -ForegroundColor Green
+    Write-Information "[32mNo processes found with handle count > $Threshold`e[0m"
     Write-Information "System handles look healthy!`n"
     exit 0
 }
 
-Write-Information "Found $($leaks.Count) process(es) with high handle counts:`n" -ForegroundColor Yellow
+Write-Information "[33mFound $($leaks.Count) process(es) with high handle counts:`n`e[0m"
 
 $results = @()
 foreach ($proc in $leaks) {
@@ -74,31 +75,31 @@ foreach ($proc in $leaks) {
     if ($AutoFix -and $KnownLeakers.ContainsKey($proc.Name)) {
         $exePath = $KnownLeakers[$proc.Name]
         if ($exePath) {
-            Write-Information "  -> Auto-restarting $($proc.Name)..." -ForegroundColor Cyan
+            Write-Information "[36m  -> Auto-restarting $($proc.Name)...`e[0m"
             try {
                 Stop-Process -Id $proc.Id -Force -ErrorAction Stop
                 Start-Sleep -Seconds 2
                 Start-Process $exePath -ErrorAction Stop
-                Write-Information "  -> Restarted successfully" -ForegroundColor Green
+                Write-Information "[32m  -> Restarted successfully`e[0m"
             } catch {
-                Write-Information "  -> Failed to restart: $_" -ForegroundColor Red
+                Write-Information "[31m  -> Failed to restart: $_`e[0m"
             }
         } else {
-            Write-Information "  -> Known leaker but no auto-restart path configured" -ForegroundColor Gray
+            Write-Information "[90m  -> Known leaker but no auto-restart path configured`e[0m"
         }
     }
     
     Write-Information ""
 }
 
-Write-Information "=== SUMMARY ===" -ForegroundColor Cyan
+Write-Information "[36m=== SUMMARY ===`e[0m"
 Write-Information "Total processes with leaks: $($leaks.Count)"
 Write-Information "Critical (>10000): $(($results | Where-Object Severity -eq 'CRITICAL').Count)"
 Write-Information "Warning (>5000): $(($results | Where-Object Severity -eq 'WARNING').Count)"
 Write-Information "Elevated (>$Threshold): $(($results | Where-Object Severity -eq 'ELEVATED').Count)"
 
 if (-not $AutoFix) {
-    Write-Information "`nTip: Run with -AutoFix to automatically restart known problematic apps" -ForegroundColor Gray
+    Write-Information "[90m`nTip: Run with -AutoFix to automatically restart known problematic apps`e[0m"
 }
 
 Write-Information ""

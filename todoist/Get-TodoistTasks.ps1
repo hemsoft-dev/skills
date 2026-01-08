@@ -1,5 +1,4 @@
-﻿#Requires -Version 7.0
-$InformationPreference = 'Continue'
+#Requires -Version 7.0
 
 <#
 .SYNOPSIS
@@ -26,6 +25,8 @@ param(
     [string]$Format = 'Table'
 )
 
+$InformationPreference = 'Continue'
+
 $ErrorActionPreference = 'Stop'
 
 # Check for API token
@@ -43,7 +44,7 @@ try {
     $tasks = Invoke-RestMethod -Uri $uri -Headers $headers
 
     if (-not $tasks -or $tasks.Count -eq 0) {
-        Write-Information "No tasks found for filter: $Filter" -ForegroundColor Yellow
+        Write-Information "[33mNo tasks found for filter: $Filter`e[0m"
         exit 0
     }
 

@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Collects minimal repository metadata for the repo-summarizer skill.
 .DESCRIPTION
@@ -12,7 +12,6 @@
 .EXAMPLE
     .\Get-RepoSummary-Minimal.ps1 -Owner "HemSoft" -Repo "hemsoft-power-ai"
 #>
-$InformationPreference = 'Continue'
 
 param(
     [Parameter(Mandatory = $true)]
@@ -21,6 +20,8 @@ param(
     [Parameter(Mandatory = $true)]
     [string]$Repo
 )
+
+$InformationPreference = 'Continue'
 
 $ErrorActionPreference = "Stop"
 
@@ -49,7 +50,7 @@ function Get-GitHubUserRealName {
 function Merge-ContributorsByRealName {
     param([array]$Contributors)
     
-    Write-Information "Resolving contributor identities..." -ForegroundColor Cyan
+    Write-Information "[36mResolving contributor identities...`e[0m"
     
     # First, resolve all usernames to real names
     $contributorsWithNames = $Contributors | ForEach-Object {
@@ -90,7 +91,7 @@ $result = @{
 }
 
 # Get basic repo metadata
-Write-Information "Fetching repository metadata..." -ForegroundColor Cyan
+Write-Information "[36mFetching repository metadata...`e[0m"
 $repoData = gh repo view "$Owner/$Repo" --json description,stargazerCount,forkCount,createdAt,pushedAt | ConvertFrom-Json
 
 $result.repository.description = $repoData.description
@@ -100,7 +101,7 @@ $result.repository.createdAt = $repoData.createdAt
 $result.repository.pushedAt = $repoData.pushedAt
 
 # Get commit history via GitHub API
-Write-Information "Fetching commit history..." -ForegroundColor Cyan
+Write-Information "[36mFetching commit history...`e[0m"
 $commitsJson = gh api "repos/$Owner/$Repo/commits" --paginate --jq '.[]'
 $commits = $commitsJson | ConvertFrom-Json
 $result.repository.totalCommits = $commits.Count
@@ -114,7 +115,7 @@ $firstCommitDate = [datetime]::Parse($result.repository.firstCommitDate)
 $result.repository.ageDays = [math]::Floor(((Get-Date) - $firstCommitDate).TotalDays)
 
 # Get top 5 contributors (after consolidation by real name)
-Write-Information "Fetching contributors..." -ForegroundColor Cyan
+Write-Information "[36mFetching contributors...`e[0m"
 $contributorsJson = gh api "repos/$Owner/$Repo/contributors" --paginate --jq '.[]'
 $contributors = $contributorsJson | ConvertFrom-Json
 $mergedContributors = Merge-ContributorsByRealName -Contributors $contributors

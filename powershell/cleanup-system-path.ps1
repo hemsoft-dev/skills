@@ -1,4 +1,4 @@
-﻿#Requires -RunAsAdministrator
+#Requires -RunAsAdministrator
 $InformationPreference = 'Continue'
 
 <#
@@ -12,13 +12,13 @@ $InformationPreference = 'Continue'
     Run this script as Administrator
 #>
 
-Write-Information "=== System PATH Cleanup ===" -ForegroundColor Cyan
+Write-Information "[36m=== System PATH Cleanup ===`e[0m"
 
 # Backup first
 $backup = [Environment]::GetEnvironmentVariable("Path", "Machine")
 $backupFile = "$env:TEMP\system_path_backup_$(Get-Date -Format 'yyyyMMdd_HHmmss').txt"
 $backup | Out-File $backupFile
-Write-Information "Backed up to: $backupFile" -ForegroundColor Green
+Write-Information "[32mBacked up to: $backupFile`e[0m"
 
 # Current state
 $paths = $backup -split ";" | Where-Object { $_ }
@@ -36,7 +36,7 @@ foreach ($p in $paths) {
     }
 }
 $dupeCount = $paths.Count - $unique.Count
-Write-Information "Duplicates removed: $dupeCount" -ForegroundColor Yellow
+Write-Information "[33mDuplicates removed: $dupeCount`e[0m"
 
 # Remove dead paths
 $valid = @()
@@ -53,19 +53,19 @@ foreach ($p in $unique) {
         $valid += $p
     }
 }
-Write-Information "Dead paths removed: $($dead.Count)" -ForegroundColor Yellow
-$dead | ForEach-Object { Write-Information "  - $_" -ForegroundColor Red }
+Write-Information "[33mDead paths removed: $($dead.Count)`e[0m"
+Write-Information "[31m  - $_`e[0m"
 
 # Build new PATH
 $newPath = $valid -join ";"
-Write-Information "`nNew length: $($newPath.Length) chars (saved $($backup.Length - $newPath.Length) chars)" -ForegroundColor Green
+Write-Information "[32m`nNew length: $($newPath.Length) chars (saved $($backup.Length - $newPath.Length) chars)`e[0m"
 
 # Confirm and apply
 $confirm = Read-Host "`nApply changes? (y/n)"
 if ($confirm -eq 'y') {
     [Environment]::SetEnvironmentVariable("Path", $newPath, "Machine")
-    Write-Information "System PATH updated successfully!" -ForegroundColor Green
-    Write-Information "Please restart your terminals or sign out/in for changes to take effect." -ForegroundColor Yellow
+    Write-Information "[32mSystem PATH updated successfully!`e[0m"
+    Write-Information "[33mPlease restart your terminals or sign out/in for changes to take effect.`e[0m"
 } else {
-    Write-Information "Cancelled. No changes made." -ForegroundColor Yellow
+    Write-Information "[33mCancelled. No changes made.`e[0m"
 }

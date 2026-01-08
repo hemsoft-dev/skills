@@ -1,4 +1,4 @@
-﻿$InformationPreference = 'Continue'
+$InformationPreference = 'Continue'
 
 # normalize-account.ps1
 # Normalizes all CSVs for an account with ONE batched AI call
@@ -14,19 +14,19 @@ $YearFolder = "$AccountRoot\2025"
 $Categories = Get-Content "$StatementsRoot\category-choices.txt" -Raw
 
 if (-not (Test-Path $YearFolder)) {
-    Write-Information "ERROR: Folder not found: $YearFolder" -ForegroundColor Red
+    Write-Information "[31mERROR: Folder not found: $YearFolder`e[0m"
     exit 1
 }
 
 # Get source CSVs (exclude already-normalized YYYY-MM.csv files)
 $Files = Get-ChildItem "$YearFolder\*.csv" | Where-Object { $_.Name -notmatch '^\d{4}-\d{2}\.csv$' } | Sort-Object Name
 if ($Files.Count -eq 0) {
-    Write-Information "No source CSV files found in $YearFolder" -ForegroundColor Yellow
+    Write-Information "[33mNo source CSV files found in $YearFolder`e[0m"
     exit 0
 }
 
 # Collect ALL transactions from all files
-Write-Information "[$AccountName] Loading $($Files.Count) source files..." -ForegroundColor Cyan
+Write-Information "[36m[$AccountName] Loading $($Files.Count) source files...`e[0m"
 $AllLines = @()
 foreach ($File in $Files) {
     $Lines = Get-Content $File.FullName | Select-Object -Skip 1  # Skip header
@@ -35,7 +35,7 @@ foreach ($File in $Files) {
 }
 
 $TotalInput = $AllLines.Count
-Write-Information "[$AccountName] $TotalInput total transactions to categorize" -ForegroundColor Cyan
+Write-Information "[36m[$AccountName] $TotalInput total transactions to categorize`e[0m"
 
 if ($TotalInput -eq 0) {
     Write-Information "No transactions found."
@@ -67,7 +67,7 @@ $CombinedCsv
 $TempFile = [System.IO.Path]::GetTempFileName()
 $Prompt | Out-File -FilePath $TempFile -Encoding utf8
 
-Write-Information "[$AccountName] Calling AI (1 request for $TotalInput transactions)..." -ForegroundColor Yellow
+Write-Information "[33m[$AccountName] Calling AI (1 request for $TotalInput transactions)...`e[0m"
 
 # Call copilot with piped input
 $Result = Get-Content $TempFile -Raw | copilot --model claude-sonnet-4
@@ -77,10 +77,10 @@ Remove-Item $TempFile -Force
 # Parse output - only lines starting with YYYY-MM-DD,
 $NormalizedLines = $Result -split "`n" | ForEach-Object { $_.Trim() } | Where-Object { $_ -match '^\d{4}-\d{2}-\d{2},' }
 
-Write-Information "[$AccountName] Got $($NormalizedLines.Count) normalized transactions" -ForegroundColor Cyan
+Write-Information "[36m[$AccountName] Got $($NormalizedLines.Count) normalized transactions`e[0m"
 
 if ($NormalizedLines.Count -eq 0) {
-    Write-Information "ERROR: No transactions parsed from AI output" -ForegroundColor Red
+    Write-Information "[31mERROR: No transactions parsed from AI output`e[0m"
     Write-Information "Raw output (first 500 chars):"
     Write-Information ($Result.Substring(0, [Math]::Min(500, $Result.Length)))
     exit 1
@@ -101,7 +101,7 @@ $Header = "Date,Account,Category,Description,Amount"
 foreach ($Month in $AllData.Keys | Sort-Object) {
     $OutFile = "$AccountRoot\$Month.csv"
     (@($Header) + $AllData[$Month]) -join "`n" | Out-File $OutFile -Encoding UTF8
-    Write-Information "  Created: $Month.csv ($($AllData[$Month].Count) transactions)" -ForegroundColor Green
+    Write-Information "[32m  Created: $Month.csv ($($AllData[$Month].Count) transactions)`e[0m"
 }
 
-Write-Information "`n[$AccountName] Done! $($NormalizedLines.Count) transactions normalized in 1 AI call." -ForegroundColor Cyan
+Write-Information "[36m`n[$AccountName] Done! $($NormalizedLines.Count) transactions normalized in 1 AI call.`e[0m"

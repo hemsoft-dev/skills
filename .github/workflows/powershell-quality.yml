@@ -1,4 +1,4 @@
-name: PowerShell Quality Check
+name: Code Quality Check
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ main, master, develop ]
 
 jobs:
-  analyze:
+  powershell:
     name: PSScriptAnalyzer
     runs-on: windows-latest
     
@@ -83,3 +83,61 @@ jobs:
           path: |
             **/*.ps1
           retention-days: 30
+  
+  markdown:
+    name: Markdownlint
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install markdownlint-cli2
+        run: |
+          npm install -g markdownlint-cli2
+          echo "✓ markdownlint-cli2 installed"
+      
+      - name: Run markdownlint
+        run: |
+          echo "🔍 Scanning for Markdown files..."
+          
+          # Find all markdown files excluding node_modules and .git
+          FILES=$(find . -type f -name "*.md" ! -path "*/node_modules/*" ! -path "*/.git/*")
+          
+          if [ -z "$FILES" ]; then
+            echo "✓ No Markdown files to analyze"
+            exit 0
+          fi
+          
+          echo "Found $(echo "$FILES" | wc -l) Markdown file(s)"
+          
+          # Run markdownlint
+          if markdownlint-cli2 --config .markdownlint.jsonc "**/*.md" "#node_modules" "#.git"; then
+            echo ""
+            echo "✓ All Markdown files passed quality checks!"
+            exit 0
+          else
+            echo ""
+            echo "❌ FAILED: Markdown linting issues found"
+            echo ""
+            echo "⚠️  Fix the issues above before merging"
+            echo "See: .claude/skills/markdown/SKILL.md for guidance"
+            exit 1
+          fi
+      
+      - name: Upload analysis results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: markdownlint-results
+          path: |
+            **/*.md
+          retention-days: 30
+

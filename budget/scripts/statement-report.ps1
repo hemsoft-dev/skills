@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Generate Markdown budget report from normalized CSV files.
 .PARAMETER AccountName
@@ -158,7 +158,7 @@ foreach ($Acct in $Accounts) {
 }
 
 if ($AllReports.Count -eq 0) {
-    Write-Information "No normalized data found." -ForegroundColor Yellow
+    Write-Information "[33mNo normalized data found.`e[0m"
     exit
 }
 
@@ -195,10 +195,10 @@ foreach ($R in $AllReports | Sort-Object Account) {
 $ReportPath = Join-Path $StatementsRoot "budget-report.md"
 $Output -join "`n" | Out-File $ReportPath -Encoding UTF8
 
-Write-Information "Report generated: $ReportPath" -ForegroundColor Green
+Write-Information "[32mReport generated: $ReportPath`e[0m"
 Write-Information ""
-Write-Information "=== TOTALS ===" -ForegroundColor Cyan
-Write-Information "Total Income:   $(Format-Currency $GrandIncome)" -ForegroundColor Green
-Write-Information "Total Expenses: $(Format-Currency $GrandExpense)" -ForegroundColor Red
+Write-Information "[36m=== TOTALS ===`e[0m"
+Write-Information "[32mTotal Income:   $(Format-Currency $GrandIncome)`e[0m"
+Write-Information "[31mTotal Expenses: $(Format-Currency $GrandExpense)`e[0m"
 Write-Information "Net Cash Flow:  $(Format-Currency $GrandNet)" -ForegroundColor $(if ($GrandNet -ge 0) { 'Green' } else { 'Red' })
 Write-Information "Transactions:   $GrandTxns"

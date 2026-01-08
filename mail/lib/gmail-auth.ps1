@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Shared Gmail authentication module.
 .DESCRIPTION
@@ -51,7 +51,7 @@ function Save-TokenCache {
 }
 
 function Get-GmailAccessTokenInteractive {
-    Write-Information "Authentication required for Gmail. Opening browser..." -ForegroundColor Cyan
+    Write-Information "[36mAuthentication required for Gmail. Opening browser...`e[0m"
     $scopeString = $script:Scopes -join " "
     $state = [guid]::NewGuid().ToString("N")
     
@@ -74,10 +74,10 @@ function Get-GmailAccessTokenInteractive {
     try { $listener.Start() }
     catch { throw "Failed to start listener on port $($script:RedirectPort)" }
     
-    Write-Information "`nOpening browser for Google sign-in..." -ForegroundColor Yellow
-    try { Start-Process $authUrl } catch { Write-Information "Open: $authUrl" -ForegroundColor Yellow }
+    Write-Information "[33m`nOpening browser for Google sign-in...`e[0m"
+    Write-Information "[33mOpen: $authUrl`e[0m"
     
-    Write-Information "Waiting for authentication..." -ForegroundColor Cyan
+    Write-Information "[36mWaiting for authentication...`e[0m"
     
     $asyncResult = $listener.BeginGetContext($null, $null)
     $waitResult = $asyncResult.AsyncWaitHandle.WaitOne(120000)
@@ -133,7 +133,7 @@ function Get-GmailAccessTokenInteractive {
     
     $expiresAt = (Get-Date).AddSeconds($tokenResponse.expires_in)
     Save-TokenCache -AccessToken $tokenResponse.access_token -RefreshToken $tokenResponse.refresh_token -ExpiresAt $expiresAt -AccountEmail $accountEmail
-    Write-Information "Authenticated as: $accountEmail" -ForegroundColor Green
+    Write-Information "[32mAuthenticated as: $accountEmail`e[0m"
     return $tokenResponse.access_token
 }
 

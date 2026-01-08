@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Manages Windows startup programs.
 .DESCRIPTION
@@ -25,6 +25,7 @@ param(
 )
 
 $InformationPreference = 'Continue'
+
 
 $ErrorActionPreference = 'Stop'
 
@@ -81,31 +82,31 @@ function Get-StartupEntry {
 
 switch ($Action) {
     'List' {
-        Write-Information "`n=== STARTUP PROGRAMS ===" -ForegroundColor Cyan
+        Write-Information "[36m`n=== STARTUP PROGRAMS ===`e[0m"
         Write-Information ""
         
         $entries = Get-StartupEntry
         
         if ($entries.Count -eq 0) {
-            Write-Information "No startup entries found." -ForegroundColor Gray
+            Write-Information "[90mNo startup entries found.`e[0m"
             return
         }
         
         $enabled = $entries | Where-Object Status -eq "Enabled"
         $disabled = $entries | Where-Object Status -eq "Disabled"
         
-        Write-Information "ENABLED ($($enabled.Count)):" -ForegroundColor Green
+        Write-Information "[32mENABLED ($($enabled.Count)):`e[0m"
         $enabled | ForEach-Object {
-            Write-Information "  $($_.Name)" -ForegroundColor White
-            Write-Information "    Command: $($_.Command)" -ForegroundColor Gray
-            Write-Information "    Scope: $($_.Scope)" -ForegroundColor Gray
+            Write-Information "[97m  $($_.Name)`e[0m"
+            Write-Information "[90m    Command: $($_.Command)`e[0m"
+            Write-Information "[90m    Scope: $($_.Scope)`e[0m"
         }
         
         if ($disabled.Count -gt 0) {
-            Write-Information "`nDISABLED ($($disabled.Count)):" -ForegroundColor Yellow
+            Write-Information "[33m`nDISABLED ($($disabled.Count)):`e[0m"
             $disabled | ForEach-Object {
-                Write-Information "  $($_.Name)" -ForegroundColor Gray
-                Write-Information "    Command: $($_.Command)" -ForegroundColor DarkGray
+                Write-Information "[90m  $($_.Name)`e[0m"
+                Write-Information "[90m    Command: $($_.Command)`e[0m"
             }
         }
         
@@ -114,16 +115,16 @@ switch ($Action) {
     
     'Disable' {
         if (-not $Name) {
-            Write-Information "Error: -Name parameter required for Disable action" -ForegroundColor Red
+            Write-Information "[31mError: -Name parameter required for Disable action`e[0m"
             return
         }
         
-        Write-Information "`n=== DISABLING STARTUP: $Name ===" -ForegroundColor Cyan
+        Write-Information "[36m`n=== DISABLING STARTUP: $Name ===`e[0m"
         
         $entries = Get-StartupEntry | Where-Object { $_.Name -like $Name -and $_.Status -eq "Enabled" }
         
         if ($entries.Count -eq 0) {
-            Write-Information "No enabled entries found matching '$Name'" -ForegroundColor Yellow
+            Write-Information "[33mNo enabled entries found matching '$Name'`e[0m"
             return
         }
         
@@ -140,9 +141,9 @@ switch ($Action) {
                 $disabledValue = [byte[]](0x03,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00)
                 Set-ItemProperty -Path $approvalPath -Name $entry.Name -Value $disabledValue -Type Binary
                 
-                Write-Information "Disabled: $($entry.Name)" -ForegroundColor Green
+                Write-Information "[32mDisabled: $($entry.Name)`e[0m"
             } catch {
-                Write-Information "Failed to disable $($entry.Name): $_" -ForegroundColor Red
+                Write-Information "[31mFailed to disable $($entry.Name): $_`e[0m"
             }
         }
         
@@ -151,16 +152,16 @@ switch ($Action) {
     
     'Enable' {
         if (-not $Name) {
-            Write-Information "Error: -Name parameter required for Enable action" -ForegroundColor Red
+            Write-Information "[31mError: -Name parameter required for Enable action`e[0m"
             return
         }
         
-        Write-Information "`n=== ENABLING STARTUP: $Name ===" -ForegroundColor Cyan
+        Write-Information "[36m`n=== ENABLING STARTUP: $Name ===`e[0m"
         
         $entries = Get-StartupEntry | Where-Object { $_.Name -like $Name -and $_.Status -eq "Disabled" }
         
         if ($entries.Count -eq 0) {
-            Write-Information "No disabled entries found matching '$Name'" -ForegroundColor Yellow
+            Write-Information "[33mNo disabled entries found matching '$Name'`e[0m"
             return
         }
         
@@ -172,9 +173,9 @@ switch ($Action) {
                 $enabledValue = [byte[]](0x02,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00)
                 Set-ItemProperty -Path $approvalPath -Name $entry.Name -Value $enabledValue -Type Binary
                 
-                Write-Information "Enabled: $($entry.Name)" -ForegroundColor Green
+                Write-Information "[32mEnabled: $($entry.Name)`e[0m"
             } catch {
-                Write-Information "Failed to enable $($entry.Name): $_" -ForegroundColor Red
+                Write-Information "[31mFailed to enable $($entry.Name): $_`e[0m"
             }
         }
         

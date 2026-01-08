@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Cleans up User PATH by removing duplicates and dead entries.
 .DESCRIPTION
@@ -9,13 +9,13 @@
 
 $InformationPreference = 'Continue'
 
-Write-Information "=== User PATH Cleanup ===" -ForegroundColor Cyan
+Write-Information "[36m=== User PATH Cleanup ===`e[0m"
 
 # Backup first
 $backup = [Environment]::GetEnvironmentVariable("Path", "User")
 $backupFile = "$env:TEMP\user_path_backup_$(Get-Date -Format 'yyyyMMdd_HHmmss').txt"
 $backup | Out-File $backupFile
-Write-Information "Backed up to: $backupFile" -ForegroundColor Green
+Write-Information "[32mBacked up to: $backupFile`e[0m"
 
 # Current state
 $paths = $backup -split ";" | Where-Object { $_ }
@@ -33,7 +33,7 @@ foreach ($p in $paths) {
     }
 }
 $dupeCount = $paths.Count - $unique.Count
-Write-Information "Duplicates removed: $dupeCount" -ForegroundColor Yellow
+Write-Information "[33mDuplicates removed: $dupeCount`e[0m"
 
 # Remove dead paths
 $valid = @()
@@ -45,19 +45,19 @@ foreach ($p in $unique) {
         $dead += $p
     }
 }
-Write-Information "Dead paths removed: $($dead.Count)" -ForegroundColor Yellow
-$dead | ForEach-Object { Write-Information "  - $_" -ForegroundColor Red }
+Write-Information "[33mDead paths removed: $($dead.Count)`e[0m"
+Write-Information "[31m  - $_`e[0m"
 
 # Build new PATH
 $newPath = $valid -join ";"
-Write-Information "`nNew length: $($newPath.Length) chars (saved $($backup.Length - $newPath.Length) chars)" -ForegroundColor Green
+Write-Information "[32m`nNew length: $($newPath.Length) chars (saved $($backup.Length - $newPath.Length) chars)`e[0m"
 
 # Confirm and apply
 $confirm = Read-Host "`nApply changes? (y/n)"
 if ($confirm -eq 'y') {
     [Environment]::SetEnvironmentVariable("Path", $newPath, "User")
-    Write-Information "User PATH updated successfully!" -ForegroundColor Green
-    Write-Information "Run: `$env:Path = [Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [Environment]::GetEnvironmentVariable('Path','User')" -ForegroundColor Yellow
+    Write-Information "[32mUser PATH updated successfully!`e[0m"
+    Write-Information "[33mRun: `$env:Path = [Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [Environment]::GetEnvironmentVariable('Path','User')`e[0m"
 } else {
-    Write-Information "Cancelled. No changes made." -ForegroundColor Yellow
+    Write-Information "[33mCancelled. No changes made.`e[0m"
 }

@@ -1,5 +1,4 @@
-﻿#Requires -Version 7.0
-$InformationPreference = 'Continue'
+#Requires -Version 7.0
 
 <#
 .SYNOPSIS
@@ -25,6 +24,8 @@ param(
     [ValidateSet('Table', 'List', 'JSON', 'Raw')]
     [string]$Format = 'Table'
 )
+
+$InformationPreference = 'Continue'
 
 $ErrorActionPreference = 'Stop'
 
@@ -61,7 +62,7 @@ try {
     }
 
     if (-not $completed) {
-        Write-Information "No tasks completed on $($Date.ToString('yyyy-MM-dd'))" -ForegroundColor Yellow
+        Write-Information "[33mNo tasks completed on $($Date.ToString('yyyy-MM-dd'))`e[0m"
         exit 0
     }
 
@@ -75,7 +76,7 @@ try {
         }
         'List' {
             $completed | ForEach-Object {
-                Write-Information "✓ $($_.content)" -ForegroundColor Green
+                Write-Information "[32m✓ $($_.content)`e[0m"
             }
         }
         'JSON' {

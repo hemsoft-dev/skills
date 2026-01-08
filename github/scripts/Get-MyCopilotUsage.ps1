@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Get Copilot premium request usage for Franz's GitHub accounts.
 
@@ -29,7 +29,6 @@
     # Get HemSoft account only
 #>
 
-$InformationPreference = 'Continue'
 
 [CmdletBinding()]
 param(
@@ -39,6 +38,8 @@ param(
     [int]$Month = (Get-Date).Month,
     [switch]$Login
 )
+
+$InformationPreference = 'Continue'
 
 # Account configuration
 $accounts = @{
@@ -106,7 +107,7 @@ function Switch-GhAccount {
 
 function Invoke-GhLogin {
     param([string]$Username)
-    Write-Information "  Authenticating as $Username..." -ForegroundColor Cyan
+    Write-Information "[36m  Authenticating as $Username...`e[0m"
     gh auth login -h github.com -s user -w
     return ($LASTEXITCODE -eq 0)
 }
@@ -164,7 +165,7 @@ function Format-Number { param([double]$Number) return '{0:N2}' -f $Number }
 function Show-ModelBreakdown {
     param($UsageItems)
     if (-not $UsageItems -or $UsageItems.Count -eq 0) {
-        Write-Information "    (no usage this period)" -ForegroundColor DarkGray
+        Write-Information "[90m    (no usage this period)`e[0m"
         return
     }
     foreach ($item in $UsageItems) {
@@ -173,8 +174,8 @@ function Show-ModelBreakdown {
         $amt = Format-Currency $item.grossAmount
         $discount = Format-Currency $item.discountAmount
         $net = Format-Currency $item.netAmount
-        Write-Information "    $model" -ForegroundColor White
-        Write-Information "      Requests: $qty | Gross: $amt | Discount: $discount | Net: $net" -ForegroundColor DarkGray
+        Write-Information "[97m    $model`e[0m"
+        Write-Information "[90m      Requests: $qty | Gross: $amt | Discount: $discount | Net: $net`e[0m"
     }
 }
 
@@ -182,15 +183,15 @@ function Show-AccountUsage {
     param([hashtable]$Acct, [int]$Year, [int]$Month, [switch]$ForceLogin)
 
     Write-Information ""
-    Write-Information "  $($Acct.Label)" -ForegroundColor Yellow
-    Write-Information "  Email: $($Acct.Email) | Plan: $($Acct.Plan)" -ForegroundColor DarkGray
+    Write-Information "[33m  $($Acct.Label)`e[0m"
+    Write-Information "[90m  Email: $($Acct.Email) | Plan: $($Acct.Plan)`e[0m"
     Write-Information "  " + ("-" * 50)
 
     # Switch to account
     if (-not (Switch-GhAccount -Username $Acct.Username)) {
         if ($ForceLogin) { Invoke-GhLogin -Username $Acct.Username | Out-Null }
         else {
-            Write-Information "    Unable to switch to $($Acct.Username)" -ForegroundColor Red
+            Write-Information "[31m    Unable to switch to $($Acct.Username)`e[0m"
             return $null
         }
     }
@@ -213,7 +214,7 @@ function Show-AccountUsage {
         $bar = Show-UsageBar -Used $totalRequests -Quota $Acct.Quota
 
         Write-Information "    Personal Quota: " -NoNewline
-        Write-Information "$(Format-Number $totalRequests)" -ForegroundColor White -NoNewline
+        Write-Information "[97m$(Format-Number $totalRequests)`e[0m"
         Write-Information " / $($Acct.Quota) requests (" -NoNewline
         Write-Information "$("{0:N1}%" -f $bar.Percent)" -ForegroundColor $bar.Color -NoNewline
         Write-Information ")"
@@ -222,14 +223,14 @@ function Show-AccountUsage {
 
         if ($totalNet -gt 0) {
             Write-Information "    Overage Cost: " -NoNewline
-            Write-Information "$(Format-Currency $totalNet)" -ForegroundColor Red
+            Write-Information "[31m$(Format-Currency $totalNet)`e[0m"
         }
     } else {
-        Write-Information "    Personal Quota: N/A (org license only)" -ForegroundColor DarkGray
+        Write-Information "[90m    Personal Quota: N/A (org license only)`e[0m"
     }
 
     Write-Information ""
-    Write-Information "    Model Breakdown:" -ForegroundColor Cyan
+    Write-Information "[36m    Model Breakdown:`e[0m"
     Show-ModelBreakdown -UsageItems $data.usageItems
 
     return [PSCustomObject]@{
@@ -249,8 +250,8 @@ function Show-OrgUsage {
     param([string]$OrgKey, [hashtable]$Org, [int]$Year, [int]$Month)
 
     Write-Information ""
-    Write-Information "  Organization: $OrgKey ($($Org.Name))" -ForegroundColor Magenta
-    Write-Information "  Plan: $($Org.PlanType) | Seats: $($Org.Seats) | Members: $($Org.Members -join ', ')" -ForegroundColor DarkGray
+    Write-Information "[35m  Organization: $OrgKey ($($Org.Name))`e[0m"
+    Write-Information "[90m  Plan: $($Org.PlanType) | Seats: $($Org.Seats) | Members: $($Org.Members -join ', ')`e[0m"
     Write-Information "  " + ("-" * 50)
 
     $data = Get-OrgUsage -Org $OrgKey -Year $Year -Month $Month
@@ -260,7 +261,7 @@ function Show-OrgUsage {
     if ($info) {
         $seats = $info.seat_breakdown
         $activeSeats = $seats.active_this_cycle
-        Write-Information "    Seat Status: $($seats.total) total, $activeSeats active, $($seats.inactive_this_cycle) inactive" -ForegroundColor DarkGray
+        Write-Information "[90m    Seat Status: $($seats.total) total, $activeSeats active, $($seats.inactive_this_cycle) inactive`e[0m"
     }
 
     $totalRequests = 0
@@ -283,7 +284,7 @@ function Show-OrgUsage {
     if ($orgQuota -gt 0) {
         $bar = Show-UsageBar -Used $totalRequests -Quota $orgQuota
         Write-Information "    Premium Quota: " -NoNewline
-        Write-Information "$(Format-Number $totalRequests)" -ForegroundColor White -NoNewline
+        Write-Information "[97m$(Format-Number $totalRequests)`e[0m"
         Write-Information " / $orgQuota requests (" -NoNewline
         Write-Information "$("{0:N1}%" -f $bar.Percent)" -ForegroundColor $bar.Color -NoNewline
         Write-Information ")"
@@ -291,7 +292,7 @@ function Show-OrgUsage {
 
         if ($bar.Percent -gt 100) {
             $overageReqs = $totalRequests - $orgQuota
-            Write-Information "    ⚠️  Over quota by $(Format-Number $overageReqs) requests" -ForegroundColor Red
+            Write-Information "[31m    ⚠️  Over quota by $(Format-Number $overageReqs) requests`e[0m"
         }
     }
 
@@ -299,11 +300,11 @@ function Show-OrgUsage {
     
     if ($totalNet -gt 0) {
         Write-Information "    💰 Overage Cost: " -NoNewline
-        Write-Information "$(Format-Currency $totalNet)" -ForegroundColor Red
+        Write-Information "[31m$(Format-Currency $totalNet)`e[0m"
     }
 
     Write-Information ""
-    Write-Information "    Model Breakdown:" -ForegroundColor Cyan
+    Write-Information "[36m    Model Breakdown:`e[0m"
     Show-ModelBreakdown -UsageItems $data.usageItems
 
     return [PSCustomObject]@{
@@ -321,8 +322,8 @@ function Show-EnterpriseInfo {
     param([string]$Slug, [hashtable]$Ent)
 
     Write-Information ""
-    Write-Information "  Enterprise: $($Ent.Name)" -ForegroundColor Blue
-    Write-Information "  URL: $($Ent.Url)" -ForegroundColor DarkGray
+    Write-Information "[94m  Enterprise: $($Ent.Name)`e[0m"
+    Write-Information "[90m  URL: $($Ent.Url)`e[0m"
     Write-Information "  " + ("-" * 50)
 
     $info = Get-EnterpriseInfo -Slug $Slug
@@ -333,12 +334,12 @@ function Show-EnterpriseInfo {
         $admins = ($info.ownerInfo.admins.nodes | ForEach-Object { $_.login }) -join ', '
         $orgs = ($info.organizations.nodes | ForEach-Object { $_.login }) -join ', '
 
-        Write-Information "    Licenses: $used / $licenses used ($available available)" -ForegroundColor DarkGray
-        Write-Information "    Admins: $admins" -ForegroundColor DarkGray
-        Write-Information "    Organizations: $orgs" -ForegroundColor DarkGray
+        Write-Information "[90m    Licenses: $used / $licenses used ($available available)`e[0m"
+        Write-Information "[90m    Admins: $admins`e[0m"
+        Write-Information "[90m    Organizations: $orgs`e[0m"
     } else {
-        Write-Information "    Licenses: $($Ent.Licenses) | Admins: $($Ent.Admins -join ', ')" -ForegroundColor DarkGray
-        Write-Information "    Organizations: $($Ent.Orgs -join ', ')" -ForegroundColor DarkGray
+        Write-Information "[90m    Licenses: $($Ent.Licenses) | Admins: $($Ent.Admins -join ', ')`e[0m"
+        Write-Information "[90m    Organizations: $($Ent.Orgs -join ', ')`e[0m"
     }
 
     return [PSCustomObject]@{
@@ -356,11 +357,11 @@ $startTime = Get-Date
 $originalUser = Get-CurrentGhUser
 
 Write-Information ""
-Write-Information "  ================================================================" -ForegroundColor Cyan
-Write-Information "    GitHub Copilot Usage Report" -ForegroundColor Cyan
-Write-Information "    Period: $Month/$Year" -ForegroundColor Cyan
-Write-Information "    Generated: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" -ForegroundColor Cyan
-Write-Information "  ================================================================" -ForegroundColor Cyan
+Write-Information "[36m  ================================================================`e[0m"
+Write-Information "[36m    GitHub Copilot Usage Report`e[0m"
+Write-Information "[36m    Period: $Month/$Year`e[0m"
+Write-Information "[36m    Generated: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')`e[0m"
+Write-Information "[36m  ================================================================`e[0m"
 
 # Determine which accounts to query
 $targetAccounts = switch ($Account) {
@@ -411,9 +412,9 @@ if ($originalUser) {
 
 # Summary
 Write-Information ""
-Write-Information "  ================================================================" -ForegroundColor Cyan
-Write-Information "    SUMMARY" -ForegroundColor Cyan
-Write-Information "  ================================================================" -ForegroundColor Cyan
+Write-Information "[36m  ================================================================`e[0m"
+Write-Information "[36m    SUMMARY`e[0m"
+Write-Information "[36m  ================================================================`e[0m"
 
 $totalUsed = ($results | Measure-Object -Property Used -Sum).Sum
 $totalQuota = ($results | Where-Object { $_.Quota -gt 0 } | Measure-Object -Property Quota -Sum).Sum
@@ -427,7 +428,7 @@ $orgGross = ($orgResults | Measure-Object -Property GrossAmount -Sum).Sum
 $orgNet = ($orgResults | Measure-Object -Property NetCost -Sum).Sum
 
 Write-Information ""
-Write-Information "  Personal Accounts:" -ForegroundColor Yellow
+Write-Information "[33m  Personal Accounts:`e[0m"
 Write-Information "    Total Requests:  $(Format-Number $totalUsed) / $totalQuota (personal quota)"
 Write-Information "    Remaining Quota: $(Format-Number $totalRemaining) requests"
 Write-Information "    Gross Value:     $(Format-Currency $totalGross)"
@@ -436,7 +437,7 @@ Write-Information "    Net Cost:        $(Format-Currency $totalNet)"
 
 if ($orgResults.Count -gt 0) {
     Write-Information ""
-    Write-Information "  Organizations:" -ForegroundColor Magenta
+    Write-Information "[35m  Organizations:`e[0m"
     $orgQuota = ($orgResults | Measure-Object -Property Quota -Sum).Sum
     Write-Information "    Total Requests:  $(Format-Number $orgUsed) / $orgQuota (premium quota)"
     Write-Information "    Gross Value:     $(Format-Currency $orgGross)"
@@ -444,12 +445,12 @@ if ($orgResults.Count -gt 0) {
 }
 
 Write-Information ""
-Write-Information "  Combined Total:" -ForegroundColor Cyan
+Write-Information "[36m  Combined Total:`e[0m"
 Write-Information "    All Requests:    $(Format-Number ($totalUsed + $orgUsed))"
 Write-Information "    All Gross Value: $(Format-Currency ($totalGross + $orgGross))"
 Write-Information "    All Net Cost:    $(Format-Currency ($totalNet + $orgNet))"
 
 $elapsed = (Get-Date) - $startTime
 Write-Information ""
-Write-Information "  Completed in $("{0:N1}" -f $elapsed.TotalSeconds)s" -ForegroundColor DarkGray
+Write-Information "[90m$("  Completed in $("{0:N1}" -f $elapsed.TotalSeconds)s")`e[0m"
 Write-Information ""

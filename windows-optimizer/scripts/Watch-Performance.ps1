@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Monitors system performance in real-time.
 .DESCRIPTION
@@ -23,11 +23,12 @@ param(
 
 $InformationPreference = 'Continue'
 
+
 $ErrorActionPreference = 'SilentlyContinue'
 
-Write-Information "`n=== PERFORMANCE MONITOR ===" -ForegroundColor Cyan
+Write-Information "[36m`n=== PERFORMANCE MONITOR ===`e[0m"
 Write-Information "Refresh: ${Interval}s | Press Ctrl+C to stop`n"
-Write-Information ("{0,-8} {1,-12} {2,-12} {3,-12} {4,-15}" -f "TIME", "CPU %", "RAM %", "DISK %", "TOP PROCESS") -ForegroundColor Gray
+Write-Information "[90m$(("{0,-8} {1,-12} {2,-12} {3,-12} {4,-15}" -f "TIME", "CPU %", "RAM %", "DISK %", "TOP PROCESS"))`e[0m"
 Write-Information ("-" * 65)
 
 $startTime = Get-Date
@@ -41,7 +42,7 @@ try {
         if ($Duration -gt 0) {
             $elapsed = ((Get-Date) - $startTime).TotalSeconds
             if ($elapsed -ge $Duration) {
-                Write-Information "`nDuration limit reached ($Duration seconds)" -ForegroundColor Yellow
+                Write-Information "[33m`nDuration limit reached ($Duration seconds)`e[0m"
                 break
             }
         }
@@ -84,19 +85,19 @@ try {
         
         # Alert on anomalies
         if ($cpu -gt 95) {
-            Write-Information "  [!] CPU CRITICAL" -ForegroundColor Red
+            Write-Information "[31m  [!] CPU CRITICAL`e[0m"
         }
         if ($ramPct -gt 95) {
-            Write-Information "  [!] MEMORY CRITICAL" -ForegroundColor Red
+            Write-Information "[31m  [!] MEMORY CRITICAL`e[0m"
         }
         if ($disk -gt 95) {
-            Write-Information "  [!] DISK I/O CRITICAL" -ForegroundColor Red
+            Write-Information "[31m  [!] DISK I/O CRITICAL`e[0m"
         }
         
         Start-Sleep -Seconds $Interval
     }
 } finally {
-    Write-Information "`n=== MONITORING STOPPED ===" -ForegroundColor Cyan
+    Write-Information "[36m`n=== MONITORING STOPPED ===`e[0m"
     Write-Information "Samples collected: $iteration"
     Write-Information "Duration: $([math]::Round(((Get-Date) - $startTime).TotalSeconds, 0)) seconds`n"
 }

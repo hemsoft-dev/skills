@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Backs up PowerShell profile files to this folder.
 .DESCRIPTION
@@ -11,7 +11,7 @@ param()
 
 $backupDir = $PSScriptRoot
 
-Write-Information "Backing up PowerShell profiles..." -ForegroundColor Cyan
+Write-Information "[36mBacking up PowerShell profiles...`e[0m"
 
 # PowerShell 7 profiles (CurrentUser)
 $profiles = @{
@@ -22,10 +22,10 @@ $profiles = @{
 foreach ($item in $profiles.GetEnumerator()) {
     if (Test-Path $item.Value) {
         Copy-Item $item.Value -Destination (Join-Path $backupDir $item.Key) -Force
-        Write-Information "  ✓ $($item.Key)" -ForegroundColor Green
+        Write-Information "[32m  ✓ $($item.Key)`e[0m"
     }
     else {
-        Write-Information "  - $($item.Key) (not found)" -ForegroundColor Gray
+        Write-Information "[90m  - $($item.Key) (not found)`e[0m"
     }
 }
 
@@ -38,8 +38,8 @@ if (Test-Path $ompConfig) {
     }
     Get-ChildItem "$ompConfig\*.json" -ErrorAction SilentlyContinue | ForEach-Object {
         Copy-Item $_.FullName -Destination $ompBackupDir -Force
-        Write-Information "  ✓ omp/$($_.Name)" -ForegroundColor Green
+        Write-Information "[32m  ✓ omp/$($_.Name)`e[0m"
     }
 }
 
-Write-Information "PowerShell backup complete!" -ForegroundColor Green
+Write-Information "[32mPowerShell backup complete!`e[0m"

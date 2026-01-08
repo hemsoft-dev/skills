@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Finds large files consuming disk space.
 .DESCRIPTION
@@ -16,7 +16,6 @@
     .\Find-LargeFiles.ps1 -Path D:\ -MinSizeMB 500
     .\Find-LargeFiles.ps1 -Path C:\Users -Top 20
 #>
-$InformationPreference = 'Continue'
 
 [CmdletBinding()]
 param(
@@ -26,9 +25,11 @@ param(
     [switch]$ExcludeSystem
 )
 
+$InformationPreference = 'Continue'
+
 $ErrorActionPreference = 'SilentlyContinue'
 
-Write-Information "`n=== LARGE FILE SCANNER ===" -ForegroundColor Cyan
+Write-Information "[36m`n=== LARGE FILE SCANNER ===`e[0m"
 Write-Information "Path: $Path"
 Write-Information "Minimum Size: $MinSizeMB MB"
 Write-Information "Scanning... (this may take a while)`n"
@@ -43,7 +44,7 @@ if ($ExcludeSystem) {
         "${env:ProgramFiles(x86)}",
         "$env:ProgramData"
     )
-    Write-Information "Excluding system directories" -ForegroundColor Gray
+    Write-Information "[90mExcluding system directories`e[0m"
 }
 
 $files = Get-ChildItem -Path $Path -Recurse -File -Force -ErrorAction SilentlyContinue |
@@ -55,13 +56,13 @@ $files = Get-ChildItem -Path $Path -Recurse -File -Force -ErrorAction SilentlyCo
     Select-Object -First $Top
 
 if ($files.Count -eq 0) {
-    Write-Information "No files found larger than $MinSizeMB MB" -ForegroundColor Yellow
+    Write-Information "[33mNo files found larger than $MinSizeMB MB`e[0m"
     return
 }
 
-Write-Information "TOP $($files.Count) LARGEST FILES:" -ForegroundColor Yellow
+Write-Information "[33mTOP $($files.Count) LARGEST FILES:`e[0m"
 Write-Information ("-" * 80)
-Write-Information ("{0,-12} {1,-20} {2}" -f "SIZE", "MODIFIED", "PATH") -ForegroundColor Gray
+Write-Information "[90m$(("{0,-12} {1,-20} {2}" -f "SIZE", "MODIFIED", "PATH"))`e[0m"
 Write-Information ("-" * 80)
 
 $totalSize = 0
@@ -82,10 +83,10 @@ foreach ($file in $files) {
 
 $totalGB = [math]::Round($totalSize / 1GB, 2)
 Write-Information ("-" * 80)
-Write-Information "Total: $totalGB GB in $($files.Count) files`n" -ForegroundColor Cyan
+Write-Information "[36mTotal: $totalGB GB in $($files.Count) files`n`e[0m"
 
 # Category breakdown
-Write-Information "BY FILE TYPE:" -ForegroundColor Yellow
+Write-Information "[33mBY FILE TYPE:`e[0m"
 $files | Group-Object Extension | 
     Select-Object @{N='Extension';E={if($_.Name){"$($_.Name)"} else {"(none)"}}}, 
                   Count, 
@@ -94,7 +95,7 @@ $files | Group-Object Extension |
     Format-Table -AutoSize
 
 # Common cleanup candidates
-Write-Information "COMMON CLEANUP CANDIDATES:" -ForegroundColor Yellow
+Write-Information "[33mCOMMON CLEANUP CANDIDATES:`e[0m"
 $candidates = @(
     @{ Pattern = "*.iso"; Desc = "ISO Images" },
     @{ Pattern = "*.vhdx"; Desc = "Virtual Disks" },
@@ -109,7 +110,7 @@ foreach ($candidate in $candidates) {
     $matchedFiles = $files | Where-Object { $_.Name -like $candidate.Pattern }
     if ($matchedFiles) {
         $size = [math]::Round(($matchedFiles | Measure-Object Length -Sum).Sum / 1GB, 2)
-        Write-Information "  $($candidate.Desc): $($matchedFiles.Count) files, $size GB" -ForegroundColor Gray
+        Write-Information "[90m  $($candidate.Desc): $($matchedFiles.Count) files, $size GB`e[0m"
     }
 }
 

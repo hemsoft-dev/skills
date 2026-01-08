@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Shared Outlook (Microsoft Graph) authentication module.
 .DESCRIPTION
@@ -49,15 +49,15 @@ function Save-TokenCache {
 }
 
 function Get-OutlookAccessTokenInteractive {
-    Write-Information "Authentication required for Outlook. Starting device code flow..." -ForegroundColor Cyan
+    Write-Information "[36mAuthentication required for Outlook. Starting device code flow...`e[0m"
     $scopeString = $script:Scopes -join " "
     $deviceCodeBody = @{ client_id = $script:ClientId; scope = $scopeString }
     $deviceCodeResponse = Invoke-RestMethod -Uri $script:DeviceCodeUrl -Method POST -Body $deviceCodeBody
 
     Write-Information "`nTo sign in, open: " -NoNewline
-    Write-Information $deviceCodeResponse.verification_uri -ForegroundColor Yellow
+    Write-Information "[33m$($deviceCodeResponse.verification_uri)`e[0m"
     Write-Information "Enter code: " -NoNewline
-    Write-Information $deviceCodeResponse.user_code -ForegroundColor Green
+    Write-Information "[32m$($deviceCodeResponse.user_code)`e[0m"
 
     try {
         Start-Process $deviceCodeResponse.verification_uri
@@ -74,7 +74,7 @@ function Get-OutlookAccessTokenInteractive {
         device_code = $deviceCodeResponse.device_code
     }
 
-    Write-Information "Waiting for authentication..." -ForegroundColor Cyan
+    Write-Information "[36mWaiting for authentication...`e[0m"
 
     while (((Get-Date) - $startTime).TotalSeconds -lt $expiresIn) {
         Start-Sleep -Seconds $interval
@@ -100,7 +100,7 @@ function Get-OutlookAccessTokenInteractive {
             }
             $expiresAt = (Get-Date).AddSeconds($tokenResponse.expires_in)
             Save-TokenCache -AccessToken $tokenResponse.access_token -RefreshToken $tokenResponse.refresh_token -ExpiresAt $expiresAt -AccountEmail $accountEmail
-            Write-Information "Authenticated as: $accountEmail" -ForegroundColor Green
+            Write-Information "[32mAuthenticated as: $accountEmail`e[0m"
             return $tokenResponse.access_token
         }
         catch {

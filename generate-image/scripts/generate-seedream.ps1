@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Generates an image using Seedream 4.5 via OpenRouter API.
 
@@ -23,7 +23,6 @@
     .\generate-seedream.ps1 -Prompt "A futuristic cityscape at night" -OutputPath "D:\city.png" -Preview
 #>
 
-$InformationPreference = 'Continue'
 
 param(
     [Parameter(Mandatory = $true, Position = 0)]
@@ -35,6 +34,8 @@ param(
     [Parameter(Mandatory = $false)]
     [switch]$Preview
 )
+
+$InformationPreference = 'Continue'
 
 $ErrorActionPreference = "Stop"
 $Model = "bytedance-seed/seedream-4.5"
@@ -55,7 +56,7 @@ $apiKey = [Environment]::GetEnvironmentVariable("OPENROUTER_API_KEY", "User")
 if (-not $apiKey) { $apiKey = $env:OPENROUTER_API_KEY }
 if (-not $apiKey) { throw "OPENROUTER_API_KEY not set" }
 
-Write-Information "Generating with Seedream 4.5..." -ForegroundColor Cyan
+Write-Information "[36mGenerating with Seedream 4.5...`e[0m"
 
 $body = @{
     model = $Model
@@ -80,17 +81,17 @@ $imgUrl = if ($imgData.image_url.url) { $imgData.image_url.url } else { $imgData
 if ($imgUrl -match '^data:image/[^;]+;base64,(.+)$') {
     [IO.File]::WriteAllBytes($OutputPath, [Convert]::FromBase64String($matches[1]))
     $size = [math]::Round((Get-Item $OutputPath).Length / 1024)
-    Write-Information "✓ Saved: $OutputPath (${size}KB)" -ForegroundColor Green
+    Write-Information "[32m✓ Saved: $OutputPath (${size}KB)`e[0m"
     
     # Open in Directory Opus viewer if requested
     if ($Preview) {
         $dopusViewer = "C:\Program Files\GPSoftware\Directory Opus\d8viewer.exe"
         if (Test-Path $dopusViewer) {
-            Write-Information "Opening preview in Directory Opus..." -ForegroundColor Cyan
+            Write-Information "[36mOpening preview in Directory Opus...`e[0m"
             Start-Process $dopusViewer -ArgumentList "`"$OutputPath`""
         } else {
-            Write-Information "Directory Opus viewer not found at: $dopusViewer" -ForegroundColor Yellow
-            Write-Information "Opening with default viewer..." -ForegroundColor Yellow
+            Write-Information "[33mDirectory Opus viewer not found at: $dopusViewer`e[0m"
+            Write-Information "[33mOpening with default viewer...`e[0m"
             Start-Process $OutputPath
         }
     }

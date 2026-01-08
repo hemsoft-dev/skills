@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Generates an image using Nano Banana Pro (Gemini 3 Pro Image Preview) via OpenRouter API.
 
@@ -24,7 +24,6 @@
     .\generate-nananapro.ps1 -Prompt "Professional product photography" -OutputPath "D:\product.png" -Preview
 #>
 
-$InformationPreference = 'Continue'
 
 param(
     [Parameter(Mandatory = $true, Position = 0)]
@@ -36,6 +35,8 @@ param(
     [Parameter(Mandatory = $false)]
     [switch]$Preview
 )
+
+$InformationPreference = 'Continue'
 
 $ErrorActionPreference = "Stop"
 $Model = "google/gemini-3-pro-image-preview"
@@ -56,7 +57,7 @@ $apiKey = [Environment]::GetEnvironmentVariable("OPENROUTER_API_KEY", "User")
 if (-not $apiKey) { $apiKey = $env:OPENROUTER_API_KEY }
 if (-not $apiKey) { throw "OPENROUTER_API_KEY not set" }
 
-Write-Information "Generating with Nano Banana Pro (Gemini 3 Pro)..." -ForegroundColor Cyan
+Write-Information "[36mGenerating with Nano Banana Pro (Gemini 3 Pro)...`e[0m"
 
 $body = @{
     model = $Model
@@ -78,10 +79,10 @@ function Open-ImagePreview {
     param([string]$ImagePath)
     $dopusViewer = "C:\Program Files\GPSoftware\Directory Opus\d8viewer.exe"
     if (Test-Path $dopusViewer) {
-        Write-Information "Opening preview in Directory Opus..." -ForegroundColor Cyan
+        Write-Information "[36mOpening preview in Directory Opus...`e[0m"
         Start-Process $dopusViewer -ArgumentList "`"$ImagePath`""
     } else {
-        Write-Information "Directory Opus viewer not found. Opening with default viewer..." -ForegroundColor Yellow
+        Write-Information "[33mDirectory Opus viewer not found. Opening with default viewer...`e[0m"
         Start-Process $ImagePath
     }
 }
@@ -94,7 +95,7 @@ if ($msg.images -and $msg.images.Count -gt 0) {
     if ($imgUrl -match '^data:image/[^;]+;base64,(.+)$') {
         [IO.File]::WriteAllBytes($OutputPath, [Convert]::FromBase64String($matches[1]))
         $size = [math]::Round((Get-Item $OutputPath).Length / 1024)
-        Write-Information "✓ Saved: $OutputPath (${size}KB)" -ForegroundColor Green
+        Write-Information "[32m✓ Saved: $OutputPath (${size}KB)`e[0m"
         if ($Preview) { Open-ImagePreview -ImagePath $OutputPath }
         
         # Display credit balance
@@ -110,7 +111,7 @@ if ($msg.images -and $msg.images.Count -gt 0) {
 if ($msg.content -and $msg.content -match 'data:image/[^;]+;base64,([A-Za-z0-9+/=]+)') {
     [IO.File]::WriteAllBytes($OutputPath, [Convert]::FromBase64String($matches[1]))
     $size = [math]::Round((Get-Item $OutputPath).Length / 1024)
-    Write-Information "✓ Saved: $OutputPath (${size}KB)" -ForegroundColor Green
+    Write-Information "[32m✓ Saved: $OutputPath (${size}KB)`e[0m"
     if ($Preview) { Open-ImagePreview -ImagePath $OutputPath }
     
     # Display credit balance

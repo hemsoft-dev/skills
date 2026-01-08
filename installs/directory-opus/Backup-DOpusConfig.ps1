@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Backs up Directory Opus configuration to this folder.
 
@@ -21,13 +21,14 @@
     .\Backup-DOpusConfig.ps1 -IncludeLocalState
     Includes window positions and other machine-specific data
 #>
-$InformationPreference = 'Continue'
 
 [CmdletBinding()]
 param(
     [string]$Name = "dopus-config",
     [switch]$IncludeLocalState
 )
+
+$InformationPreference = 'Continue'
 
 $dopusrt = "C:\Program Files\GPSoftware\Directory Opus\dopusrt.exe"
 $backupDir = $PSScriptRoot
@@ -44,9 +45,9 @@ if ($IncludeLocalState) {
     $backupOptions = "all"
 }
 
-Write-Information "Backing up Directory Opus configuration..." -ForegroundColor Cyan
-Write-Information "  Options: $backupOptions" -ForegroundColor Gray
-Write-Information "  Output:  $backupPath" -ForegroundColor Gray
+Write-Information "[36mBacking up Directory Opus configuration...`e[0m"
+Write-Information "[90m  Options: $backupOptions`e[0m"
+Write-Information "[90m  Output:  $backupPath`e[0m"
 
 # Run the backup command silently
 & $dopusrt /cmd Prefs BACKUP=$backupOptions QUIET TO="$backupPath"
@@ -57,9 +58,9 @@ Start-Sleep -Milliseconds 500
 if ($LASTEXITCODE -eq 0) {
     if (Test-Path $backupPath) {
         $file = Get-Item $backupPath
-        Write-Information "`nBackup complete!" -ForegroundColor Green
-        Write-Information "  File: $backupPath" -ForegroundColor Gray
-        Write-Information "  Size: $([math]::Round($file.Length / 1KB, 1)) KB" -ForegroundColor Gray
+        Write-Information "[32m`nBackup complete!`e[0m"
+        Write-Information "[90m  File: $backupPath`e[0m"
+        Write-Information "[90m  Size: $([math]::Round($file.Length / 1KB, 1)) KB`e[0m"
     }
     else {
         Write-Warning "Backup command completed but file not found. Check if Directory Opus is running."

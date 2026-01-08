@@ -1,5 +1,3 @@
-﻿$InformationPreference = 'Continue'
-
 #!/usr/bin/env pwsh
 <#
 .SYNOPSIS
@@ -47,28 +45,30 @@ param(
     [switch]$Fix
 )
 
+$InformationPreference = 'Continue'
+
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 # Ensure PSScriptAnalyzer is installed
 if (-not (Get-Module -Name PSScriptAnalyzer -ListAvailable)) {
-    Write-Information "📦 Installing PSScriptAnalyzer..." -ForegroundColor Yellow
+    Write-Information "[33m📦 Installing PSScriptAnalyzer...`e[0m"
     Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser
-    Write-Information "✅ PSScriptAnalyzer installed" -ForegroundColor Green
+    Write-Information "[32m✅ PSScriptAnalyzer installed`e[0m"
     Write-Information ""
 }
 
-Write-Information "========================================" -ForegroundColor Cyan
-Write-Information "PowerShell Script Analysis" -ForegroundColor Cyan
-Write-Information "========================================" -ForegroundColor Cyan
+Write-Information "[36m========================================`e[0m"
+Write-Information "[36mPowerShell Script Analysis`e[0m"
+Write-Information "[36m========================================`e[0m"
 Write-Information ""
-Write-Information "Path:     $Path" -ForegroundColor Gray
-Write-Information "Severity: $($Severity -join ', ')" -ForegroundColor Gray
+Write-Information "[90mPath:     $Path`e[0m"
+Write-Information "[90mSeverity: $($Severity -join ', ')`e[0m"
 if ($ExcludeRule) {
-    Write-Information "Excluded: $($ExcludeRule -join ', ')" -ForegroundColor Gray
+    Write-Information "[90mExcluded: $($ExcludeRule -join ', ')`e[0m"
 }
 if ($Fix) {
-    Write-Information "Mode:     Auto-fix enabled" -ForegroundColor Yellow
+    Write-Information "[33mMode:     Auto-fix enabled`e[0m"
 }
 Write-Information ""
 
@@ -86,12 +86,12 @@ if ($Fix) {
     $analyzeParams['Fix'] = $true
 }
 
-Write-Information "🔍 Analyzing PowerShell scripts..." -ForegroundColor Yellow
+Write-Information "[33m🔍 Analyzing PowerShell scripts...`e[0m"
 $results = Invoke-ScriptAnalyzer @analyzeParams
 
 if ($results) {
     Write-Information ""
-    Write-Information "Found $($results.Count) issue(s):" -ForegroundColor Yellow
+    Write-Information "[33mFound $($results.Count) issue(s):`e[0m"
     Write-Information ""
     
     # Group by severity
@@ -109,7 +109,7 @@ if ($results) {
     # Group by file
     $byFile = $results | Group-Object ScriptName
     foreach ($fileGroup in $byFile) {
-        Write-Information "📄 $($fileGroup.Name)" -ForegroundColor Cyan
+        Write-Information "[36m📄 $($fileGroup.Name)`e[0m"
         
         foreach ($issue in $fileGroup.Group | Sort-Object Line) {
             $severityIcon = switch ($issue.Severity) {
@@ -125,26 +125,26 @@ if ($results) {
             }
             
             Write-Information "  $severityIcon Line $($issue.Line): $($issue.RuleName)" -ForegroundColor $color
-            Write-Information "     $($issue.Message)" -ForegroundColor Gray
+            Write-Information "[90m     $($issue.Message)`e[0m"
         }
         Write-Information ""
     }
     
     # Summary
-    Write-Information "========================================" -ForegroundColor Cyan
+    Write-Information "[36m========================================`e[0m"
     $errorCount = ($results | Where-Object Severity -eq 'Error').Count
     $warningCount = ($results | Where-Object Severity -eq 'Warning').Count
     
     if ($errorCount -gt 0) {
-        Write-Information "❌ Analysis failed with $errorCount error(s) and $warningCount warning(s)" -ForegroundColor Red
+        Write-Information "[31m❌ Analysis failed with $errorCount error(s) and $warningCount warning(s)`e[0m"
         exit 1
     } else {
-        Write-Information "⚠️  Analysis completed with $warningCount warning(s)" -ForegroundColor Yellow
+        Write-Information "[33m⚠️  Analysis completed with $warningCount warning(s)`e[0m"
         exit 0
     }
 } else {
-    Write-Information "========================================" -ForegroundColor Cyan
-    Write-Information "✅ No issues found!" -ForegroundColor Green
-    Write-Information "========================================" -ForegroundColor Cyan
+    Write-Information "[36m========================================`e[0m"
+    Write-Information "[32m✅ No issues found!`e[0m"
+    Write-Information "[36m========================================`e[0m"
     exit 0
 }

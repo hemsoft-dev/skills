@@ -1,6 +1,6 @@
 ---
 name: powershell
-description: V1.1 - Expert in PowerShell scripting, PSScriptAnalyzer linting, profile management, PATH optimization, environment variables, and troubleshooting on Windows.
+description: V1.2 - Expert in PowerShell scripting, PSScriptAnalyzer linting, Write-Information ANSI codes, profile management, PATH optimization, environment variables, and troubleshooting on Windows.
 ---
 
 # PowerShell Expert
@@ -23,12 +23,14 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 **NEVER add suppression attributes without explicit user consultation first.**
 
 When PSScriptAnalyzer finds issues:
+
 1. **STOP and present findings to the user**
 2. **Explain the impact** of each rule violation
 3. **Propose solutions** (fix the code vs. suppress the warning)
 4. **Wait for user decision** before proceeding
 
 Suppression attributes like `[Diagnostics.CodeAnalysis.SuppressMessageAttribute()]` hide warnings and should only be used when:
+
 - The user explicitly approves it
 - There's a valid reason the rule doesn't apply
 - Fixing the issue would break legitimate functionality
@@ -38,6 +40,7 @@ Suppression attributes like `[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 ### What is PSScriptAnalyzer?
 
 **PSScriptAnalyzer** is the official PowerShell linter and static code analyzer that checks for:
+
 - Best practices violations
 - Potential bugs and errors
 - Code style issues
@@ -45,6 +48,7 @@ Suppression attributes like `[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 - Security concerns
 
 **Integrated with:**
+
 - VS Code PowerShell extension (real-time feedback)
 - Command line execution
 - CI/CD pipelines
@@ -63,16 +67,19 @@ Get-Module -Name PSScriptAnalyzer -ListAvailable
 ### Basic Usage
 
 **Analyze a single script:**
+
 ```powershell
 Invoke-ScriptAnalyzer -Path .\script.ps1
 ```
 
 **Analyze all scripts in a directory (recursively):**
+
 ```powershell
 Invoke-ScriptAnalyzer -Path . -Recurse
 ```
 
 **Filter by severity:**
+
 ```powershell
 # Only show errors and warnings
 Invoke-ScriptAnalyzer -Path .\script.ps1 -Severity Error,Warning
@@ -82,11 +89,13 @@ Invoke-ScriptAnalyzer -Path .\script.ps1 -Severity Error
 ```
 
 **Exclude specific rules:**
+
 ```powershell
 Invoke-ScriptAnalyzer -Path .\script.ps1 -ExcludeRule PSAvoidUsingWriteHost
 ```
 
 **Output formats:**
+
 ```powershell
 # Default table format
 Invoke-ScriptAnalyzer -Path .\script.ps1
@@ -112,6 +121,7 @@ Invoke-ScriptAnalyzer -Path .\script.ps1 | Format-Table -AutoSize
 | PSAvoidUsingInvokeExpression | Avoid Invoke-Expression (security risk) | Warning |
 
 **Full rule list:**
+
 ```powershell
 Get-ScriptAnalyzerRule | Format-Table RuleName, Severity
 ```
@@ -119,12 +129,14 @@ Get-ScriptAnalyzerRule | Format-Table RuleName, Severity
 ### Analysis Workflow
 
 **Step 1: Run initial analysis**
+
 ```powershell
 $results = Invoke-ScriptAnalyzer -Path .\script.ps1
 $results | Group-Object Severity | Select-Object Count, Name
 ```
 
 **Step 2: Review issues by severity**
+
 ```powershell
 # Critical errors first
 $results | Where-Object Severity -eq 'Error' | Format-List
@@ -134,12 +146,14 @@ $results | Where-Object Severity -eq 'Warning' | Format-List
 ```
 
 **Step 3: Fix issues**
+
 ```powershell
 # Some rules support auto-fix
 Invoke-ScriptAnalyzer -Path .\script.ps1 -Fix
 ```
 
 **Step 4: Verify fixes**
+
 ```powershell
 Invoke-ScriptAnalyzer -Path .\script.ps1
 ```
@@ -173,6 +187,7 @@ Create `.PSScriptAnalyzerSettings.psd1` in your project root:
 ```
 
 **Use configuration file:**
+
 ```powershell
 Invoke-ScriptAnalyzer -Path .\script.ps1 -Settings .\.PSScriptAnalyzerSettings.psd1
 ```
@@ -180,6 +195,7 @@ Invoke-ScriptAnalyzer -Path .\script.ps1 -Settings .\.PSScriptAnalyzerSettings.p
 ### CI/CD Integration
 
 **Check for errors in build pipeline:**
+
 ```powershell
 # Analyze all scripts
 $results = Invoke-ScriptAnalyzer -Path . -Recurse -Severity Error
@@ -193,6 +209,7 @@ if ($results) {
 ```
 
 **Azure DevOps example:**
+
 ```yaml
 - task: PowerShell@2
   displayName: 'Run PSScriptAnalyzer'
@@ -213,6 +230,7 @@ if ($results) {
 **PowerShell extension automatically runs PSScriptAnalyzer.**
 
 **Settings (settings.json):**
+
 ```json
 {
     "powershell.scriptAnalysis.enable": true,
@@ -228,6 +246,7 @@ if ($results) {
 4. **Use configuration file** - Consistent rules across team
 5. **Integrate in CI/CD** - Catch issues before merge
 6. **Keep analyzer updated** - New rules and improvements
+
    ```powershell
    Update-Module -Name PSScriptAnalyzer
    ```
@@ -235,6 +254,7 @@ if ($results) {
 ### Common Issues and Fixes
 
 **Issue: "Variable assigned but never used"**
+
 ```powershell
 # ❌ Bad
 $result = Get-Process | Where-Object Name -eq 'pwsh'
@@ -270,6 +290,7 @@ Write-Verbose "Processing..." -Verbose
 ```
 
 **ANSI Color Codes Reference:**
+
 ```powershell
 # Set $InformationPreference = 'Continue' at the start of your script
 
@@ -289,7 +310,59 @@ Write-Information "`e[31m✗ Error`e[0m"
 
 **NEVER use suppression attributes for PSAvoidUsingWriteHost - fix the code instead.**
 
+#### ⚠️ CRITICAL: Write-Information -ForegroundColor Does NOT Exist
+
+**Common Mistake:** Using `Write-Information -ForegroundColor` parameter that doesn't exist.
+
+```powershell
+# ❌ WRONG - This parameter does not exist and will cause errors!
+Write-Information "Processing..." -ForegroundColor Cyan
+
+# ✅ CORRECT - Use ANSI escape codes instead
+$InformationPreference = 'Continue'
+Write-Information "`e[36mProcessing...`e[0m"
+```
+
+**Why This Matters:**
+
+- `Write-Information` does NOT have a `-ForegroundColor` parameter in any PowerShell version
+- Using it causes parameter binding errors
+- Scripts fail in automated environments and CI/CD pipelines
+- Must use ANSI escape codes for colored output with Write-Information
+
+**Lessons Learned (January 2026):**
+
+- Fixed 765 instances of this mistake across 69 PowerShell scripts
+- All scripts now work cross-platform (Windows, Linux, containers)
+- Automation tools created: `Fix-WriteInformation.ps1` and `Fix-InformationPreferencePlacement.ps1`
+- Always place `$InformationPreference = 'Continue'` after param blocks, before Set-StrictMode
+
+**Placement Best Practice:**
+
+```powershell
+#!/usr/bin/env pwsh
+<#
+.SYNOPSIS
+    Your script description
+#>
+
+[CmdletBinding()]
+param(
+    [Parameter(Mandatory=$false)]
+    [string]$Name
+)
+
+# ✅ Place $InformationPreference here - after param, before Set-StrictMode
+$InformationPreference = 'Continue'
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
+
+# Now use Write-Information with ANSI codes
+Write-Information "`e[36mStarting process...`e[0m"
+```
+
 **Issue: "Use full cmdlet names, not aliases"**
+
 ```powershell
 # ❌ Bad
 ls | ? {$_.Name -like '*.ps1'} | %{$_.FullName}
@@ -299,6 +372,7 @@ Get-ChildItem | Where-Object {$_.Name -like '*.ps1'} | ForEach-Object {$_.FullNa
 ```
 
 **Issue: "Avoid Invoke-Expression"**
+
 ```powershell
 # ❌ Bad - Security risk
 $command = "Get-Process"
@@ -496,12 +570,14 @@ PowerShell has **4 profile locations**. Understanding these prevents "works in T
 | CurrentUserCurrentHost | `$PROFILE.CurrentUserCurrentHost` | You, this PS version only | Source the above |
 
 **The Golden Rule**: Put ALL customizations in `$PROFILE.CurrentUserAllHosts` (`profile.ps1`). This works in:
+
 - Windows Terminal
 - VS Code integrated terminal
 - Regular PowerShell console
 - PowerShell 7 and Windows PowerShell
 
 **Check which profiles exist:**
+
 ```powershell
 @($PROFILE.AllUsersAllHosts, $PROFILE.AllUsersCurrentHost, $PROFILE.CurrentUserAllHosts, $PROFILE.CurrentUserCurrentHost) | ForEach-Object { Write-Host "$(if(Test-Path $_){'[X]'}else{'[ ]'}) $_" }
 ```
@@ -512,7 +588,9 @@ PowerShell has **4 profile locations**. Understanding these prevents "works in T
 **Cause**: Customizations in `Microsoft.PowerShell_profile.ps1` (CurrentHost) instead of `profile.ps1` (AllHosts).
 
 **Solution**:
+
 1. **Backup both profiles**:
+
    ```powershell
    $backupDir = "$env:USERPROFILE\Documents\PowerShell\backups"
    New-Item -ItemType Directory -Path $backupDir -Force
@@ -523,6 +601,7 @@ PowerShell has **4 profile locations**. Understanding these prevents "works in T
 2. **Move everything to `profile.ps1`** (CurrentUserAllHosts)
 
 3. **Replace `Microsoft.PowerShell_profile.ps1`** with a one-liner:
+
    ```powershell
    # This file sources the main profile for consistency across all terminals.
    . $PROFILE.CurrentUserAllHosts
@@ -561,13 +640,15 @@ New-Alias -Name k -Value kubectl
 ### Windows PATH Management
 
 **Core Concepts:**
+
 - **User vs. System**: User PATH is appended to System PATH
 - **Character Limit**: Effective limit is often 2048 characters - exceeding causes silent failures
-- **Registry Storage**: 
+- **Registry Storage**:
   - System: `HKLM:\System\CurrentControlSet\Control\Session Manager\Environment`
   - User: `HKCU:\Environment`
 
 **Analyze Current PATH:**
+
 ```powershell
 $userPath = [Environment]::GetEnvironmentVariable("Path", "User")
 Write-Host "Length: $($userPath.Length) chars"
@@ -575,12 +656,14 @@ $userPath -split ";" | ForEach-Object -Begin { $i = 0 } -Process { Write-Host "$
 ```
 
 **Identify Dead Paths:**
+
 ```powershell
 $paths = [Environment]::GetEnvironmentVariable("Path", "User") -split ";"
 $paths | Where-Object { $_ -and -not (Test-Path $_) }
 ```
 
 **Optimization Strategies:**
+
 | Strategy | When to Use | Savings |
 |----------|-------------|---------|
 | **Remove dead paths** | Path no longer exists | Variable |
@@ -588,12 +671,14 @@ $paths | Where-Object { $_ -and -not (Test-Path $_) }
 | **Consolidate** | Multiple sub-folders (e.g., miniconda) | ~100+ chars |
 
 **Example function replacement:**
+
 ```powershell
 # Instead of PATH: C:\Users\user\.lmstudio\bin (33 chars)
 function lms { & "$env:USERPROFILE\.lmstudio\bin\lms.exe" @args }
 ```
 
 **Apply PATH Changes:**
+
 ```powershell
 $pathsToRemove = @("C:\old\path1", "C:\old\path2")
 $currentPath = [Environment]::GetEnvironmentVariable("Path", "User")
@@ -603,6 +688,7 @@ $newPaths = ($currentPath -split ";") | Where-Object { $_ -and $_ -notin $pathsT
 
 **Post-Change Protocol:**
 After ANY environment or profile change:
+
 1. **Notify the User**: State what changed
 2. **Reload Options**: `. $PROFILE` or new terminal
 3. **Verification**: Provide test commands
@@ -610,6 +696,7 @@ After ANY environment or profile change:
 ### Terminal Synchronization
 
 **VS Code Terminal Gotchas:**
+
 - VS Code terminals may cache environment variables
 - Adding PATH reload to profile start ensures fresh PATH
 
@@ -652,16 +739,19 @@ $PSStyle.FileInfo.Directory
 ### Oh-My-Posh Configuration
 
 **Installation**:
+
 ```powershell
 winget install JanDeDobbeleer.OhMyPosh -s winget
 ```
 
 **Add to profile**:
+
 ```powershell
 oh-my-posh init pwsh --config "$env:USERPROFILE\.config\omp\theme.omp.json" | Invoke-Expression
 ```
 
 **Install Nerd Font**:
+
 ```powershell
 oh-my-posh font install CascadiaCode
 ```
@@ -687,6 +777,7 @@ Location: `$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\Lo
 ### PSStyle Customization (PowerShell 7+)
 
 **Directory Colors:**
+
 ```powershell
 # Bright yellow directories (no background)
 $PSStyle.FileInfo.Directory = "`e[93m"
@@ -696,6 +787,7 @@ $PSStyle.FileInfo.Directory = "`e[34m"
 ```
 
 **Common ANSI Color Codes:**
+
 | Code | Color |
 |------|-------|
 | `e[30m` | Black |
@@ -713,25 +805,68 @@ $PSStyle.FileInfo.Directory = "`e[34m"
 This skill includes helper scripts in the skill directory:
 
 ### Analyze-Scripts.ps1
+
 Analyzes PowerShell scripts with PSScriptAnalyzer:
+
 ```powershell
 & "$env:USERPROFILE\.claude\skills\powershell\Analyze-Scripts.ps1" -Path . -Severity Error,Warning
 ```
 
+### Fix-WriteInformation.ps1
+
+**NEW (2026-01-07)** - Automatically converts invalid `Write-Information -ForegroundColor` usage to proper ANSI escape codes:
+
+```powershell
+# Preview changes
+& "$env:USERPROFILE\.claude\skills\powershell\Fix-WriteInformation.ps1" -Path . -WhatIf
+
+# Apply fixes
+& "$env:USERPROFILE\.claude\skills\powershell\Fix-WriteInformation.ps1" -Path .
+```
+
+**What it does:**
+
+- Finds all `Write-Information -ForegroundColor` calls (which don't work)
+- Replaces with proper ANSI escape codes (e.g., `` `e[32m `` for green)
+- Adds `$InformationPreference = 'Continue'` if missing
+- Preserves indentation and code structure
+
+**Used to fix:** 765 instances across 69 scripts in January 2026.
+
+### Fix-InformationPreferencePlacement.ps1
+
+**NEW (2026-01-07)** - Corrects placement of `$InformationPreference = 'Continue'`:
+
+```powershell
+& "$env:USERPROFILE\.claude\skills\powershell\Fix-InformationPreferencePlacement.ps1" -Path .
+```
+
+**What it does:**
+
+- Removes misplaced `$InformationPreference` statements
+- Places them correctly: after param blocks, before Set-StrictMode
+- Handles scripts with [CmdletBinding()], param(), and various structures
+- Skips simpler scripts where current placement is acceptable
+
 ### cleanup-user-path.ps1
+
 Cleans User PATH (no admin required):
+
 ```powershell
 & "$env:USERPROFILE\.claude\skills\powershell\cleanup-user-path.ps1"
 ```
 
 ### cleanup-system-path.ps1
+
 Cleans System PATH (requires admin):
+
 ```powershell
 # Run as Administrator
 & "$env:USERPROFILE\.claude\skills\powershell\cleanup-system-path.ps1"
 ```
 
 Both cleanup scripts:
+
 - Backup before changes (timestamped in $env:TEMP)
 - Remove duplicate entries (case-insensitive)
 - Remove dead paths
@@ -743,6 +878,8 @@ Both cleanup scripts:
 powershell/
 ├── SKILL.md
 ├── Analyze-Scripts.ps1
+├── Fix-WriteInformation.ps1              # NEW: Convert Write-Information -ForegroundColor to ANSI
+├── Fix-InformationPreferencePlacement.ps1 # NEW: Correct $InformationPreference placement
 ├── cleanup-user-path.ps1
 ├── cleanup-system-path.ps1
 └── History/

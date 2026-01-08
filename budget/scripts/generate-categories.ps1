@@ -1,4 +1,4 @@
-﻿$InformationPreference = 'Continue'
+$InformationPreference = 'Continue'
 
 # generate-categories.ps1
 # One-time script to generate category-choices.txt by analyzing all CSV files
@@ -39,12 +39,12 @@ Statement samples:
 $SampleText
 "@
 
-Write-Information "Generating categories using Copilot CLI..." -ForegroundColor Cyan
+Write-Information "[36mGenerating categories using Copilot CLI...`e[0m"
 $Categories = & copilot --model claude-haiku-4.5 -p $Prompt
 
 # Save to file
 $Categories | Out-File -FilePath $CategoryFile -Encoding UTF8
 
-Write-Information "`nCategories saved to: $CategoryFile" -ForegroundColor Green
+Write-Information "[32m`nCategories saved to: $CategoryFile`e[0m"
 Write-Information "`nGenerated categories:"
 Get-Content $CategoryFile

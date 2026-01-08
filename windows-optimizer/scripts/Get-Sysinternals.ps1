@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Downloads and launches Sysinternals tools on demand.
 .DESCRIPTION
@@ -14,7 +14,6 @@
     .\Get-Sysinternals.ps1 -Tool Handle
     .\Get-Sysinternals.ps1 -Tool Autoruns -Run
 #>
-$InformationPreference = 'Continue'
 
 [CmdletBinding()]
 param(
@@ -26,6 +25,8 @@ param(
     
     [string]$DownloadPath = "$env:TEMP\Sysinternals"
 )
+
+$InformationPreference = 'Continue'
 
 $ErrorActionPreference = 'Stop'
 
@@ -77,12 +78,12 @@ function Get-Tool {
     $exePath = Join-Path $toolPath $Info.Exe
     $zipPath = Join-Path $env:TEMP "$Name.zip"
     
-    Write-Information "`n[$Name] $($Info.Description)" -ForegroundColor Yellow
+    Write-Information "[33m`n[$Name] $($Info.Description)`e[0m"
     
     if (Test-Path $exePath) {
-        Write-Information "  Already downloaded at: $exePath" -ForegroundColor Gray
+        Write-Information "[90m  Already downloaded at: $exePath`e[0m"
     } else {
-        Write-Information "  Downloading..." -ForegroundColor Gray
+        Write-Information "[90m  Downloading...`e[0m"
         
         try {
             # Create directory
@@ -97,9 +98,9 @@ function Get-Tool {
             Expand-Archive -Path $zipPath -DestinationPath $toolPath -Force
             Remove-Item $zipPath -Force
             
-            Write-Information "  Downloaded to: $toolPath" -ForegroundColor Green
+            Write-Information "[32m  Downloaded to: $toolPath`e[0m"
         } catch {
-            Write-Information "  Failed to download: $_" -ForegroundColor Red
+            Write-Information "[31m  Failed to download: $_`e[0m"
             return $null
         }
     }
@@ -107,7 +108,7 @@ function Get-Tool {
     return $exePath
 }
 
-Write-Information "`n=== SYSINTERNALS DOWNLOADER ===" -ForegroundColor Cyan
+Write-Information "[36m`n=== SYSINTERNALS DOWNLOADER ===`e[0m"
 
 # Ensure download directory exists
 if (-not (Test-Path $DownloadPath)) {
@@ -118,12 +119,12 @@ if ($Tool -eq 'All') {
     foreach ($toolName in $tools.Keys) {
         $exePath = Get-Tool -Name $toolName -Info $tools[$toolName]
     }
-    Write-Information "`nAll tools downloaded to: $DownloadPath" -ForegroundColor Green
+    Write-Information "[32m`nAll tools downloaded to: $DownloadPath`e[0m"
 } else {
     $exePath = Get-Tool -Name $Tool -Info $tools[$Tool]
     
     if ($Run -and $exePath -and (Test-Path $exePath)) {
-        Write-Information "`nLaunching $Tool..." -ForegroundColor Cyan
+        Write-Information "[36m`nLaunching $Tool...`e[0m"
         Start-Process $exePath
     }
 }

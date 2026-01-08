@@ -1,5 +1,4 @@
-﻿#Requires -Version 7.0
-$InformationPreference = 'Continue'
+#Requires -Version 7.0
 
 <#
 .SYNOPSIS
@@ -31,6 +30,8 @@ param(
     [string]$Format = 'List'
 )
 
+$InformationPreference = 'Continue'
+
 $ErrorActionPreference = 'Stop'
 
 if (-not $env:TODOIST_API_TOKEN) {
@@ -48,7 +49,7 @@ try {
         $comments = Invoke-RestMethod -Uri $uri -Headers $headers
         
         if (-not $comments -or $comments.Count -eq 0) {
-            Write-Information "No comments found for task $TaskId" -ForegroundColor Yellow
+            Write-Information "[33mNo comments found for task $TaskId`e[0m"
             exit 0
         }
         
@@ -62,7 +63,7 @@ try {
             'List' {
                 $comments | ForEach-Object {
                     $date = ([DateTime]$_.posted_at).ToString('yyyy-MM-dd HH:mm')
-                    Write-Information "[$date] " -NoNewline -ForegroundColor Gray
+                    Write-Information "[90m$("[$date] " -NoNewline)`e[0m"
                     Write-Information $_.content
                 }
             }
@@ -79,7 +80,7 @@ try {
         $comments = Invoke-RestMethod -Uri $uri -Headers $headers
         
         if (-not $comments -or $comments.Count -eq 0) {
-            Write-Information "No comments found for project $ProjectId" -ForegroundColor Yellow
+            Write-Information "[33mNo comments found for project $ProjectId`e[0m"
             exit 0
         }
         
@@ -87,7 +88,7 @@ try {
         $grouped = $comments | Group-Object -Property task_id
         
         foreach ($group in $grouped) {
-            Write-Information "`nTask ID: $($group.Name)" -ForegroundColor Cyan
+            Write-Information "[36m`nTask ID: $($group.Name)`e[0m"
             $group.Group | ForEach-Object {
                 $date = ([DateTime]$_.posted_at).ToString('yyyy-MM-dd HH:mm')
                 Write-Information "  [$date] $($_.content)"

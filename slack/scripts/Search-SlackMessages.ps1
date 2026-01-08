@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Search Slack messages using the Slack Web API.
 
@@ -48,7 +48,6 @@
     Token must have 'search:read' scope.
 #>
 
-$InformationPreference = 'Continue'
 
 [CmdletBinding()]
 param(
@@ -71,6 +70,8 @@ param(
     [ValidateSet('Table', 'List', 'JSON')]
     [string]$OutputFormat = 'List'
 )
+
+$InformationPreference = 'Continue'
 
 # Check for user token
 if (-not $env:SLACK_USER_TOKEN) {
@@ -104,13 +105,13 @@ try {
         exit 1
     }
 
-    Write-Information "`n=== Slack Search Results ===" -ForegroundColor Cyan
-    Write-Information "Query: $Query" -ForegroundColor Yellow
-    Write-Information "Total matches: $($response.messages.total)" -ForegroundColor Green
-    Write-Information "Showing: $($response.messages.matches.Count) results`n" -ForegroundColor Green
+    Write-Information "[36m`n=== Slack Search Results ===`e[0m"
+    Write-Information "[33mQuery: $Query`e[0m"
+    Write-Information "[32mTotal matches: $($response.messages.total)`e[0m"
+    Write-Information "[32mShowing: $($response.messages.matches.Count) results`n`e[0m"
 
     if ($response.messages.matches.Count -eq 0) {
-        Write-Information "No messages found." -ForegroundColor Yellow
+        Write-Information "[33mNo messages found.`e[0m"
         return
     }
 
@@ -136,34 +137,34 @@ try {
         }
         
         'List' {
-            Write-Information "Messages:`n" -ForegroundColor Yellow
+            Write-Information "[33mMessages:`n`e[0m"
             
             foreach ($match in $response.messages.matches) {
                 $timestamp = [DateTimeOffset]::FromUnixTimeSeconds([double]$match.ts.Split('.')[0]).LocalDateTime
                 $dateStr = $timestamp.ToString('yyyy-MM-dd HH:mm:ss')
                 
-                Write-Information "[$dateStr] @$($match.username) in #$($match.channel.name)" -ForegroundColor Cyan
-                Write-Information "$($match.text)" -ForegroundColor White
+                Write-Information "[36m[$dateStr] @$($match.username) in #$($match.channel.name)`e[0m"
+                Write-Information "[97m$($match.text)`e[0m"
                 
                 # Show permalink if available
                 if ($match.permalink) {
-                    Write-Information "Link: $($match.permalink)" -ForegroundColor Gray
+                    Write-Information "[90mLink: $($match.permalink)`e[0m"
                 }
                 
-                Write-Information "---" -ForegroundColor DarkGray
+                Write-Information "[90m---`e[0m"
                 Write-Information ""
             }
         }
     }
 
     # Summary statistics
-    Write-Information "`n=== Summary ===" -ForegroundColor Cyan
-    Write-Information "Total matches found: $($response.messages.total)" -ForegroundColor White
-    Write-Information "Results displayed: $($response.messages.matches.Count)" -ForegroundColor White
+    Write-Information "[36m`n=== Summary ===`e[0m"
+    Write-Information "[97mTotal matches found: $($response.messages.total)`e[0m"
+    Write-Information "[97mResults displayed: $($response.messages.matches.Count)`e[0m"
     
     if ($response.messages.pagination.page_count -gt 1) {
-        Write-Information "Pages available: $($response.messages.pagination.page_count)" -ForegroundColor Yellow
-        Write-Information "Note: Use -Count parameter to retrieve more results per page" -ForegroundColor Yellow
+        Write-Information "[33mPages available: $($response.messages.pagination.page_count)`e[0m"
+        Write-Information "[33mNote: Use -Count parameter to retrieve more results per page`e[0m"
     }
 
 } catch {

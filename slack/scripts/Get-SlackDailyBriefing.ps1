@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Get a comprehensive Slack daily briefing including mentions, DMs, and channel activity.
 
@@ -56,7 +56,6 @@
     Token must have 'search:read' scope.
 #>
 
-$InformationPreference = 'Continue'
 
 [CmdletBinding()]
 param(
@@ -97,17 +96,19 @@ param(
     [int]$MaxMessagesPerChannel = 10
 )
 
+$InformationPreference = 'Continue'
+
 #region Helper Functions
 
 function Write-Section {
     param([string]$Title, [string]$Emoji = "📌")
-    Write-Information "`n$Emoji $Title" -ForegroundColor Cyan
-    Write-Information ("=" * ($Title.Length + 3)) -ForegroundColor DarkCyan
+    Write-Information "[36m`n$Emoji $Title`e[0m"
+    Write-Information "[36m$(("=" * ($Title.Length + 3)))`e[0m"
 }
 
 function Write-SubSection {
     param([string]$Title)
-    Write-Information "`n  $Title" -ForegroundColor Yellow
+    Write-Information "[33m`n  $Title`e[0m"
 }
 
 function Format-SlackTimestamp {
@@ -166,7 +167,6 @@ function Initialize-UserCache {
     .SYNOPSIS
         Loads all workspace users into cache with a single API call.
     #>
-$InformationPreference = 'Continue'
 
     $botHeaders = @{
         "Authorization" = "Bearer $env:SLACK_TOKEN"
@@ -272,12 +272,12 @@ $briefingData = @{
 
 if ($OutputFormat -ne 'JSON') {
     Write-Information "`n" -NoNewline
-    Write-Information "╔════════════════════════════════════════════════════════════════╗" -ForegroundColor Magenta
-    Write-Information "║              📋 SLACK DAILY BRIEFING                           ║" -ForegroundColor Magenta
-    Write-Information "║              $(Get-Date -Format 'dddd, MMMM d, yyyy')                       ║" -ForegroundColor Magenta
-    Write-Information "╚════════════════════════════════════════════════════════════════╝" -ForegroundColor Magenta
-    Write-Information "`nDate Range: $startDate to $todayStr" -ForegroundColor Gray
-    Write-Information "User: @$Username" -ForegroundColor Gray
+    Write-Information "[35m╔════════════════════════════════════════════════════════════════╗`e[0m"
+    Write-Information "[35m║              📋 SLACK DAILY BRIEFING                           ║`e[0m"
+    Write-Information "[35m║              $(Get-Date -Format 'dddd, MMMM d, yyyy')                       ║`e[0m"
+    Write-Information "[35m╚════════════════════════════════════════════════════════════════╝`e[0m"
+    Write-Information "[90m`nDate Range: $startDate to $todayStr`e[0m"
+    Write-Information "[90mUser: @$Username`e[0m"
 }
 
 #endregion
@@ -294,7 +294,7 @@ if ($IncludeMentions) {
         $mentions = $mentionResults.messages.matches | Where-Object { $_.username -ne $Username }
         
         if ($OutputFormat -ne 'JSON') {
-            Write-Information "Found $($mentions.Count) mention(s)" -ForegroundColor Green
+            Write-Information "[32mFound $($mentions.Count) mention(s)`e[0m"
         }
         
         foreach ($mention in $mentions) {
@@ -323,20 +323,20 @@ if ($IncludeMentions) {
             }
             
             if ($OutputFormat -eq 'Detailed') {
-                Write-Information "`n  [$($ts.ToString('MM/dd HH:mm'))] #$($mention.channel.name) - @$($realName):" -ForegroundColor Cyan
-                Write-Information "  $preview" -ForegroundColor White
+                Write-Information "[36m`n  [$($ts.ToString('MM/dd HH:mm'))] #$($mention.channel.name) - @$($realName):`e[0m"
+                Write-Information "[97m  $preview`e[0m"
                 if ($mention.permalink) {
-                    Write-Information "  $($mention.permalink)" -ForegroundColor DarkGray
+                    Write-Information "[90m  $($mention.permalink)`e[0m"
                 }
             }
             elseif ($OutputFormat -eq 'Summary') {
-                Write-Information "  • [$($ts.ToString('MM/dd HH:mm'))] @$($realName) in #$($mention.channel.name)" -ForegroundColor White
+                Write-Information "[97m  • [$($ts.ToString('MM/dd HH:mm'))] @$($realName) in #$($mention.channel.name)`e[0m"
             }
         }
     }
     else {
         if ($OutputFormat -ne 'JSON') {
-            Write-Information "  No new mentions found." -ForegroundColor DarkGray
+            Write-Information "[90m  No new mentions found.`e[0m"
         }
     }
 }
@@ -362,7 +362,7 @@ if ($IncludeDMs) {
         
         if ($dms.Count -gt 0) {
             if ($OutputFormat -ne 'JSON') {
-                Write-Information "Found $($dms.Count) DM(s)" -ForegroundColor Green
+                Write-Information "[32mFound $($dms.Count) DM(s)`e[0m"
             }
             
             # Group by sender
@@ -387,24 +387,24 @@ if ($IncludeDMs) {
                     $briefingData.DirectMessages += $dmData
                     
                     if ($OutputFormat -eq 'Detailed') {
-                        Write-Information "    [$($ts.ToString('MM/dd HH:mm'))]" -ForegroundColor Gray
-                        Write-Information "    $preview" -ForegroundColor White
+                        Write-Information "[90m    [$($ts.ToString('MM/dd HH:mm'))]`e[0m"
+                        Write-Information "[97m    $preview`e[0m"
                     }
                     elseif ($OutputFormat -eq 'Summary') {
-                        Write-Information "    • [$($ts.ToString('MM/dd HH:mm'))] $($preview.Substring(0, [Math]::Min(80, $preview.Length)))..." -ForegroundColor White
+                        Write-Information "[97m    • [$($ts.ToString('MM/dd HH:mm'))] $($preview.Substring(0, [Math]::Min(80, $preview.Length)))...`e[0m"
                     }
                 }
             }
         }
         else {
             if ($OutputFormat -ne 'JSON') {
-                Write-Information "  No new DMs found." -ForegroundColor DarkGray
+                Write-Information "[90m  No new DMs found.`e[0m"
             }
         }
     }
     else {
         if ($OutputFormat -ne 'JSON') {
-            Write-Information "  No new DMs found." -ForegroundColor DarkGray
+            Write-Information "[90m  No new DMs found.`e[0m"
         }
     }
 }
@@ -422,7 +422,7 @@ if ($IncludeAnnouncements) {
     
     if ($announcementResults -and $announcementResults.messages.total -gt 0) {
         if ($OutputFormat -ne 'JSON') {
-            Write-Information "Found $($announcementResults.messages.matches.Count) announcement(s)" -ForegroundColor Green
+            Write-Information "[32mFound $($announcementResults.messages.matches.Count) announcement(s)`e[0m"
         }
         
         foreach ($ann in $announcementResults.messages.matches) {
@@ -440,18 +440,18 @@ if ($IncludeAnnouncements) {
             $briefingData.Announcements += $annData
             
             if ($OutputFormat -eq 'Detailed') {
-                Write-Information "`n  [$($ts.ToString('MM/dd HH:mm'))] #$($ann.channel.name) - @$($annRealName):" -ForegroundColor Cyan
-                Write-Information "  $preview" -ForegroundColor White
+                Write-Information "[36m`n  [$($ts.ToString('MM/dd HH:mm'))] #$($ann.channel.name) - @$($annRealName):`e[0m"
+                Write-Information "[97m  $preview`e[0m"
             }
             elseif ($OutputFormat -eq 'Summary') {
                 $shortPreview = Get-MessagePreview -Text $ann.text -MaxLength 80
-                Write-Information "  • [$($ts.ToString('MM/dd HH:mm'))] #$($ann.channel.name): $shortPreview" -ForegroundColor White
+                Write-Information "[97m  • [$($ts.ToString('MM/dd HH:mm'))] #$($ann.channel.name): $shortPreview`e[0m"
             }
         }
     }
     else {
         if ($OutputFormat -ne 'JSON') {
-            Write-Information "  No announcements found." -ForegroundColor DarkGray
+            Write-Information "[90m  No announcements found.`e[0m"
         }
     }
 }
@@ -519,20 +519,20 @@ foreach ($channel in $channelsToCheck) {
             if ($OutputFormat -eq 'Summary' -and $preview.Length -lt 10) { continue }
             
             if ($OutputFormat -eq 'Detailed') {
-                Write-Information "    [$($ts.ToString('MM/dd HH:mm'))] @$($msgRealName):" -ForegroundColor Gray
-                Write-Information "    $preview" -ForegroundColor White
+                Write-Information "[90m    [$($ts.ToString('MM/dd HH:mm'))] @$($msgRealName):`e[0m"
+                Write-Information "[97m    $preview`e[0m"
             }
             elseif ($OutputFormat -eq 'Summary') {
-                Write-Information "    • @$($msgRealName): $preview" -ForegroundColor White
+                Write-Information "[97m    • @$($msgRealName): $preview`e[0m"
             }
         }
         
         if ($channelResults.messages.total -gt $messagesToShow -and $OutputFormat -ne 'JSON') {
-            Write-Information "    ... and $($channelResults.messages.total - $messagesToShow) more" -ForegroundColor DarkGray
+            Write-Information "[90m    ... and $($channelResults.messages.total - $messagesToShow) more`e[0m"
         }
     }
     elseif ($OutputFormat -eq 'Detailed') {
-        Write-Information "`n  #$channel - No recent activity" -ForegroundColor DarkGray
+        Write-Information "[90m`n  #$channel - No recent activity`e[0m"
     }
 }
 
@@ -542,13 +542,13 @@ foreach ($channel in $channelsToCheck) {
 
 if ($briefingData.ActionItems.Count -gt 0 -and $OutputFormat -ne 'JSON') {
     Write-Section "⚡ Potential Action Items" "⚡"
-    Write-Information "  These messages may require your attention:" -ForegroundColor Yellow
+    Write-Information "[33m  These messages may require your attention:`e[0m"
     
     foreach ($item in $briefingData.ActionItems) {
-        Write-Information "`n  • From @$($item.From) in #$($item.Channel):" -ForegroundColor Cyan
-        Write-Information "    $($item.Text)" -ForegroundColor White
+        Write-Information "[36m`n  • From @$($item.From) in #$($item.Channel):`e[0m"
+        Write-Information "[97m    $($item.Text)`e[0m"
         if ($item.Link) {
-            Write-Information "    $($item.Link)" -ForegroundColor DarkGray
+            Write-Information "[90m    $($item.Link)`e[0m"
         }
     }
 }
@@ -563,9 +563,9 @@ if ($OutputFormat -eq 'JSON') {
 else {
     # Final summary
     Write-Information "`n" -NoNewline
-    Write-Information "╔════════════════════════════════════════════════════════════════╗" -ForegroundColor Magenta
-    Write-Information "║                        📊 SUMMARY                              ║" -ForegroundColor Magenta
-    Write-Information "╚════════════════════════════════════════════════════════════════╝" -ForegroundColor Magenta
+    Write-Information "[35m╔════════════════════════════════════════════════════════════════╗`e[0m"
+    Write-Information "[35m║                        📊 SUMMARY                              ║`e[0m"
+    Write-Information "[35m╚════════════════════════════════════════════════════════════════╝`e[0m"
     
     Write-Information "  🔔 Mentions:      $($briefingData.Mentions.Count)" -ForegroundColor $(if ($briefingData.Mentions.Count -gt 0) { 'Yellow' } else { 'Green' })
     Write-Information "  💬 DMs:           $($briefingData.DirectMessages.Count)" -ForegroundColor $(if ($briefingData.DirectMessages.Count -gt 0) { 'Yellow' } else { 'Green' })
@@ -573,9 +573,9 @@ else {
     Write-Information "  ⚡ Action Items:  $($briefingData.ActionItems.Count)" -ForegroundColor $(if ($briefingData.ActionItems.Count -gt 0) { 'Red' } else { 'Green' })
     
     $totalChannelMessages = ($briefingData.ChannelActivity.Values | ForEach-Object { $_.TotalMessages } | Measure-Object -Sum).Sum
-    Write-Information "  📁 Channel Msgs:  $totalChannelMessages (across $($briefingData.ChannelActivity.Count) channels)" -ForegroundColor White
+    Write-Information "[97m  📁 Channel Msgs:  $totalChannelMessages (across $($briefingData.ChannelActivity.Count) channels)`e[0m"
     
-    Write-Information "`n  Generated at $(Get-Date -Format 'HH:mm:ss')" -ForegroundColor DarkGray
+    Write-Information "[90m`n  Generated at $(Get-Date -Format 'HH:mm:ss')`e[0m"
 }
 
 #endregion

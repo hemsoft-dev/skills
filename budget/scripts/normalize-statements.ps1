@@ -1,4 +1,4 @@
-﻿$InformationPreference = 'Continue'
+$InformationPreference = 'Continue'
 
 # normalize-statements.ps1
 # Normalizes CSV statement files using Copilot CLI
@@ -10,7 +10,7 @@ $CategoryFile = Join-Path $StatementsRoot "category-choices.txt"
 
 # Verify required files exist
 if (-not (Test-Path $CategoryFile)) {
-    Write-Information "ERROR: category-choices.txt not found. Run generate-categories.ps1 first." -ForegroundColor Red
+    Write-Information "[31mERROR: category-choices.txt not found. Run generate-categories.ps1 first.`e[0m"
     exit 1
 }
 
@@ -25,14 +25,14 @@ Get-ChildItem -Path $StatementsRoot -Directory | Where-Object {
     $AccountRoot = $_.FullName
     $YearFolder = Join-Path $AccountRoot $Year
     
-    Write-Information "`n=== Processing: $AccountName ===" -ForegroundColor Cyan
+    Write-Information "[36m`n=== Processing: $AccountName ===`e[0m"
     
     # Process each CSV in the year folder
     Get-ChildItem -Path $YearFolder -Filter "*.csv" -File | ForEach-Object {
         $SourceFile = $_.FullName
         $SourceName = $_.BaseName
         
-        Write-Information "  Normalizing: $($_.Name)" -ForegroundColor Yellow
+        Write-Information "[33m  Normalizing: $($_.Name)`e[0m"
         
         $CsvContent = Get-Content $SourceFile -Raw
         
@@ -73,7 +73,7 @@ RULES:
         }
         
         if ($Lines.Count -eq 0) {
-            Write-Information "    WARNING: No valid CSV data found in output" -ForegroundColor Red
+            Write-Information "[31m    WARNING: No valid CSV data found in output`e[0m"
             continue
         }
         
@@ -105,9 +105,9 @@ RULES:
                 $OutputContent -join "`n" | Out-File -FilePath $OutputFile -Encoding UTF8
             }
             
-            Write-Information "    -> $YearMonth.csv ($($MonthGroups[$YearMonth].Count) transactions)" -ForegroundColor Green
+            Write-Information "[32m    -> $YearMonth.csv ($($MonthGroups[$YearMonth].Count) transactions)`e[0m"
         }
     }
 }
 
-Write-Information "`nNormalization complete." -ForegroundColor Cyan
+Write-Information "[36m`nNormalization complete.`e[0m"

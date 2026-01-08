@@ -1,4 +1,4 @@
-﻿param(
+param(
     [Parameter(Mandatory=$true)]
     [string]$SummaryPath,
 
@@ -12,11 +12,12 @@
     [string]$BaseFilename
 )
 
+
 $InformationPreference = 'Continue'
 
 $ErrorActionPreference = "Stop"
 
-Write-Information "Generating HTML report for: $BaseFilename" -ForegroundColor Cyan
+Write-Information "[36mGenerating HTML report for: $BaseFilename`e[0m"
 
 if (-not (Test-Path $SummaryPath)) {
     Write-Error "Summary file not found: $SummaryPath"
@@ -74,7 +75,7 @@ REQUIREMENTS:
 CRITICAL: Return ONLY the HTML content. No preamble, no postamble, no code blocks.
 "@
 
-Write-Information "Calling Gemini to generate HTML..." -ForegroundColor Yellow
+Write-Information "[33mCalling Gemini to generate HTML...`e[0m"
 
 try {
     $result = gemini -m gemini-3-flash-preview -p $prompt
@@ -89,9 +90,9 @@ try {
     $outputPath = Join-Path $OutputDir "$BaseFilename.html"
     $htmlContent | Out-File -FilePath $outputPath -Encoding utf8
 
-    Write-Information "Successfully generated HTML report: $outputPath" -ForegroundColor Green
+    Write-Information "[32mSuccessfully generated HTML report: $outputPath`e[0m"
 }
 catch {
-    Write-Information "Error generating HTML: $_" -ForegroundColor Red
+    Write-Information "[31mError generating HTML: $_`e[0m"
     exit 1
 }

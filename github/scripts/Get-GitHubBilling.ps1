@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Get GitHub billing usage summary for a user account.
 
@@ -31,7 +31,6 @@
     # Get only Copilot usage
 #>
 
-$InformationPreference = 'Continue'
 
 [CmdletBinding()]
 param(
@@ -41,6 +40,8 @@ param(
     [ValidateSet('Actions', 'Copilot', 'Packages', 'Codespaces', '')]
     [string]$Product = ''
 )
+
+$InformationPreference = 'Continue'
 
 # Get username if not provided
 if (-not $Username) {
@@ -57,7 +58,7 @@ if ($Product) {
     $queryParams += "&product=$Product"
 }
 
-Write-Information "Fetching billing for @$Username ($Month/$Year)..." -ForegroundColor Cyan
+Write-Information "[36mFetching billing for @$Username ($Month/$Year)...`e[0m"
 
 # Fetch usage summary
 $response = gh api "/users/$Username/settings/billing/usage/summary?$queryParams" 2>&1
@@ -70,11 +71,11 @@ if ($LASTEXITCODE -ne 0) {
 $data = $response | ConvertFrom-Json
 
 # Display results
-Write-Information "`nBilling Period: $($data.timePeriod.month)/$($data.timePeriod.year)" -ForegroundColor Green
-Write-Information "User: $($data.user)`n" -ForegroundColor Green
+Write-Information "[32m`nBilling Period: $($data.timePeriod.month)/$($data.timePeriod.year)`e[0m"
+Write-Information "[32mUser: $($data.user)`n`e[0m"
 
 if ($data.usageItems.Count -eq 0) {
-    Write-Information "No usage data found for this period." -ForegroundColor Yellow
+    Write-Information "[33mNo usage data found for this period.`e[0m"
     exit 0
 }
 
@@ -97,7 +98,7 @@ $totalGross = ($data.usageItems | Measure-Object -Property grossAmount -Sum).Sum
 $totalDiscount = ($data.usageItems | Measure-Object -Property discountAmount -Sum).Sum
 $totalNet = ($data.usageItems | Measure-Object -Property netAmount -Sum).Sum
 
-Write-Information "`nSummary:" -ForegroundColor Cyan
+Write-Information "[36m`nSummary:`e[0m"
 Write-Information "  Gross Total:    $("{0:C2}" -f $totalGross)"
-Write-Information "  Discounts:     -$("{0:C2}" -f $totalDiscount)" -ForegroundColor Green
-Write-Information "  Net Total:      $("{0:C2}" -f $totalNet)" -ForegroundColor Yellow
+Write-Information "[32m$("  Discounts:     -$("{0:C2}" -f $totalDiscount)")`e[0m"
+Write-Information "[33m$("  Net Total:      $("{0:C2}" -f $totalNet)")`e[0m"

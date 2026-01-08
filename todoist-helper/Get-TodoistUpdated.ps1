@@ -1,5 +1,4 @@
-﻿#Requires -Version 7.0
-$InformationPreference = 'Continue'
+#Requires -Version 7.0
 
 <#
 .SYNOPSIS
@@ -28,6 +27,8 @@ param(
     [ValidateSet('Table', 'List', 'JSON', 'Raw')]
     [string]$Format = 'List'
 )
+
+$InformationPreference = 'Continue'
 
 $ErrorActionPreference = 'Stop'
 
@@ -67,18 +68,18 @@ try {
     }
     
     if ($updatedTasks.Count -eq 0) {
-        Write-Information "No updated tasks found for $($Date.ToString('yyyy-MM-dd'))" -ForegroundColor Yellow
+        Write-Information "[33mNo updated tasks found for $($Date.ToString('yyyy-MM-dd'))`e[0m"
         exit 0
     }
     
     switch ($Format) {
         'List' {
-            Write-Information "`n=== UPDATED TASKS ($($Date.ToString('yyyy-MM-dd'))) ===" -ForegroundColor Cyan
+            Write-Information "[36m`n=== UPDATED TASKS ($($Date.ToString('yyyy-MM-dd'))) ===`e[0m"
             foreach ($task in $updatedTasks) {
-                Write-Information "`n• " -NoNewline -ForegroundColor Green
-                Write-Information "$($task.Content)" -ForegroundColor White
+                Write-Information "[32m$("`n• " -NoNewline)`e[0m"
+                Write-Information "[97m$($task.Content)`e[0m"
                 foreach ($log in $task.LogEntries) {
-                    Write-Information "  $log" -ForegroundColor Gray
+                    Write-Information "[90m  $log`e[0m"
                 }
             }
         }

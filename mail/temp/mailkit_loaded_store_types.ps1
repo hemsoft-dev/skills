@@ -1,4 +1,5 @@
-﻿$InformationPreference = 'Continue'
+
+$InformationPreference = 'Continue'
 
 $ErrorActionPreference = 'Stop'
 $asm = [AppDomain]::CurrentDomain.GetAssemblies() | Where-Object { $_.GetName().Name -match 'MailKit' } | Select-Object -First 1

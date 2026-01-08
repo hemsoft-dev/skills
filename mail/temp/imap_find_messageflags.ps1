@@ -1,4 +1,5 @@
-﻿$InformationPreference = 'Continue'
+
+$InformationPreference = 'Continue'
 
 $ErrorActionPreference = 'Stop'
 $lib = Join-Path (Split-Path -Parent $PSScriptRoot) 'lib'

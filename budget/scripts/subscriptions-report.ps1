@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Generates a comprehensive subscription expense report from normalized budget data.
 
@@ -124,7 +124,7 @@ function Get-RecurrencePattern {
 }
 
 # Load all normalized CSV data
-Write-Information "Loading transaction data..." -ForegroundColor Cyan
+Write-Information "[36mLoading transaction data...`e[0m"
 $csvFiles = Get-ChildItem "$StatementsPath\*\*.csv" -Recurse | Where-Object { $_.Name -match '^\d{4}-\d{2}\.csv$' }
 $allData = @()
 
@@ -133,11 +133,11 @@ foreach ($file in $csvFiles) {
     $allData += $data
 }
 
-Write-Information "Loaded $($allData.Count) total transactions" -ForegroundColor Green
+Write-Information "[32mLoaded $($allData.Count) total transactions`e[0m"
 
 # First, find all known subscription vendors across ALL transactions (not just subscription categories)
 # This catches subscriptions that might be miscategorized
-Write-Information "Scanning all transactions for known subscription vendors..." -ForegroundColor Cyan
+Write-Information "[36mScanning all transactions for known subscription vendors...`e[0m"
 $vendorMatches = @()
 foreach ($pattern in $KnownSubscriptions.Keys) {
     $matchedTransactions = $allData | Where-Object { $_.Description -match [regex]::Escape($pattern) }
@@ -162,7 +162,7 @@ foreach ($tx in $allSubscriptionCandidates) {
     }
 }
 
-Write-Information "Found $($subscriptions.Count) potential subscription transactions" -ForegroundColor Green
+Write-Information "[32mFound $($subscriptions.Count) potential subscription transactions`e[0m"
 
 # Check for excluded patterns
 $subscriptions = $subscriptions | Where-Object {
@@ -177,7 +177,7 @@ $subscriptions = $subscriptions | Where-Object {
     -not $excluded
 }
 
-Write-Information "After exclusions: $($subscriptions.Count) transactions" -ForegroundColor Green
+Write-Information "[32mAfter exclusions: $($subscriptions.Count) transactions`e[0m"
 
 # Group and analyze
 $analyzed = $subscriptions | Group-Object Description | ForEach-Object {
@@ -386,15 +386,15 @@ $(
 # Save or display report
 if ($OutputPath) {
     $report | Out-File -FilePath $OutputPath -Encoding UTF8
-    Write-Information "`n✅ Report saved to: $OutputPath" -ForegroundColor Green
-    Write-Information "`nQuick Summary:" -ForegroundColor Cyan
-    Write-Information "  • Total Spend: `$$totalSpendFormatted" -ForegroundColor Yellow
-    Write-Information "  • Monthly Cost: `$$monthlyFormatted" -ForegroundColor Yellow
-    Write-Information "  • Annual Cost: `$$annualFormatted" -ForegroundColor Yellow
-    Write-Information "  • Active Subscriptions: $subsCount" -ForegroundColor Yellow
+    Write-Information "[32m`n✅ Report saved to: $OutputPath`e[0m"
+    Write-Information "[36m`nQuick Summary:`e[0m"
+    Write-Information "[33m  • Total Spend: `$$totalSpendFormatted`e[0m"
+    Write-Information "[33m  • Monthly Cost: `$$monthlyFormatted`e[0m"
+    Write-Information "[33m  • Annual Cost: `$$annualFormatted`e[0m"
+    Write-Information "[33m  • Active Subscriptions: $subsCount`e[0m"
 } else {
-    Write-Information "`n" -ForegroundColor Cyan
-    Write-Information "Where would you like to save the report?" -ForegroundColor Cyan
+    Write-Information "[36m`n`e[0m"
+    Write-Information "[36mWhere would you like to save the report?`e[0m"
     $OutputPath = Read-Host "Enter full path (e.g., C:\Reports\subscriptions-report.md)"
     
     if ([string]::IsNullOrWhiteSpace($OutputPath)) {
@@ -402,10 +402,10 @@ if ($OutputPath) {
     }
     
     $report | Out-File -FilePath $OutputPath -Encoding UTF8
-    Write-Information "`n✅ Report saved to: $OutputPath" -ForegroundColor Green
-    Write-Information "`nQuick Summary:" -ForegroundColor Cyan
-    Write-Information "  • Total Spend: `$$totalSpendFormatted" -ForegroundColor Yellow
-    Write-Information "  • Monthly Cost: `$$monthlyFormatted" -ForegroundColor Yellow
-    Write-Information "  • Annual Cost: `$$annualFormatted" -ForegroundColor Yellow
-    Write-Information "  • Active Subscriptions: $subsCount" -ForegroundColor Yellow
+    Write-Information "[32m`n✅ Report saved to: $OutputPath`e[0m"
+    Write-Information "[36m`nQuick Summary:`e[0m"
+    Write-Information "[33m  • Total Spend: `$$totalSpendFormatted`e[0m"
+    Write-Information "[33m  • Monthly Cost: `$$monthlyFormatted`e[0m"
+    Write-Information "[33m  • Annual Cost: `$$annualFormatted`e[0m"
+    Write-Information "[33m  • Active Subscriptions: $subsCount`e[0m"
 }

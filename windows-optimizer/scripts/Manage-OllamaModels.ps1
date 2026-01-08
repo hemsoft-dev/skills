@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Manages Ollama LLM models - list, analyze, and bulk remove.
 .DESCRIPTION
@@ -23,16 +23,17 @@ param(
 
 $InformationPreference = 'Continue'
 
+
 $ErrorActionPreference = 'SilentlyContinue'
 
 # Check if Ollama is installed
 $ollamaPath = Get-Command ollama -ErrorAction SilentlyContinue
 if (-not $ollamaPath) {
-    Write-Information "Ollama is not installed or not in PATH" -ForegroundColor Red
+    Write-Information "[31mOllama is not installed or not in PATH`e[0m"
     exit 1
 }
 
-Write-Information "`n=== OLLAMA MODEL MANAGER ===" -ForegroundColor Cyan
+Write-Information "[36m`n=== OLLAMA MODEL MANAGER ===`e[0m"
 
 # Get current models
 $modelOutput = ollama list 2>&1
@@ -59,14 +60,14 @@ foreach ($line in ($modelOutput -split "`n" | Select-Object -Skip 1)) {
 }
 
 if ($models.Count -eq 0) {
-    Write-Information "No Ollama models found." -ForegroundColor Yellow
+    Write-Information "[33mNo Ollama models found.`e[0m"
     
     # Check folder size anyway
     $folderSize = (Get-ChildItem "$env:USERPROFILE\.ollama" -Recurse -Force -EA SilentlyContinue | 
                    Measure-Object Length -Sum).Sum / 1GB
     if ($folderSize -gt 0.1) {
-        Write-Information "However, .ollama folder is $([math]::Round($folderSize, 2)) GB" -ForegroundColor Yellow
-        Write-Information "You may want to delete: $env:USERPROFILE\.ollama" -ForegroundColor Gray
+        Write-Information "[33mHowever, .ollama folder is $([math]::Round($folderSize, 2)) GB`e[0m"
+        Write-Information "[90mYou may want to delete: $env:USERPROFILE\.ollama`e[0m"
     }
     exit 0
 }
@@ -75,31 +76,31 @@ $totalSize = ($models | Measure-Object SizeGB -Sum).Sum
 
 switch ($Action) {
     'List' {
-        Write-Information "`nInstalled Models ($($models.Count)):`n" -ForegroundColor Yellow
+        Write-Information "[33m`nInstalled Models ($($models.Count)):`n`e[0m"
         
         $models | Sort-Object SizeGB -Descending | ForEach-Object {
             $color = if ($_.SizeGB -gt 10) { "Red" } elseif ($_.SizeGB -gt 5) { "Yellow" } else { "White" }
             Write-Information ("  {0,-35} {1,10} {2}" -f $_.Name, $_.Size, $_.Modified) -ForegroundColor $color
         }
         
-        Write-Information "`nTotal: $([math]::Round($totalSize, 1)) GB in $($models.Count) models" -ForegroundColor Cyan
-        Write-Information "`nTip: Use -Action RemoveAll to delete all models" -ForegroundColor Gray
+        Write-Information "[36m`nTotal: $([math]::Round($totalSize, 1)) GB in $($models.Count) models`e[0m"
+        Write-Information "[90m`nTip: Use -Action RemoveAll to delete all models`e[0m"
     }
     
     'RemoveAll' {
-        Write-Information "`nRemoving all $($models.Count) models (~$([math]::Round($totalSize, 1)) GB)...`n" -ForegroundColor Yellow
+        Write-Information "[33m`nRemoving all $($models.Count) models (~$([math]::Round($totalSize, 1)) GB)...`n`e[0m"
         
         foreach ($model in $models) {
             Write-Information "  Removing $($model.Name)..." -NoNewline
             ollama rm $model.Name 2>&1 | Out-Null
-            Write-Information " done" -ForegroundColor Green
+            Write-Information "[32m done`e[0m"
         }
         
-        Write-Information "`n✓ All models removed! ~$([math]::Round($totalSize, 1)) GB freed" -ForegroundColor Green
+        Write-Information "[32m`n✓ All models removed! ~$([math]::Round($totalSize, 1)) GB freed`e[0m"
     }
     
     'RemoveOld' {
-        Write-Information "`nLooking for models older than $OlderThanDays days...`n" -ForegroundColor Yellow
+        Write-Information "[33m`nLooking for models older than $OlderThanDays days...`n`e[0m"
         
         $oldModels = @()
         
@@ -123,7 +124,7 @@ switch ($Action) {
         }
         
         if ($oldModels.Count -eq 0) {
-            Write-Information "No models older than $OlderThanDays days found." -ForegroundColor Green
+            Write-Information "[32mNo models older than $OlderThanDays days found.`e[0m"
         } else {
             $oldSize = ($oldModels | Measure-Object SizeGB -Sum).Sum
             Write-Information "Found $($oldModels.Count) old models (~$([math]::Round($oldSize, 1)) GB):`n"
@@ -131,10 +132,10 @@ switch ($Action) {
             foreach ($model in $oldModels) {
                 Write-Information "  Removing $($model.Name) ($($model.Modified))..." -NoNewline
                 ollama rm $model.Name 2>&1 | Out-Null
-                Write-Information " done" -ForegroundColor Green
+                Write-Information "[32m done`e[0m"
             }
             
-            Write-Information "`n✓ Removed $($oldModels.Count) old models! ~$([math]::Round($oldSize, 1)) GB freed" -ForegroundColor Green
+            Write-Information "[32m`n✓ Removed $($oldModels.Count) old models! ~$([math]::Round($oldSize, 1)) GB freed`e[0m"
         }
     }
 }

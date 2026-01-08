@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Shared Work Outlook (Microsoft Graph) authentication module.
 .DESCRIPTION
@@ -57,8 +57,8 @@ function Save-TokenCache {
 }
 
 function Get-WorkAccessTokenInteractive {
-    Write-Information "Authentication required for Work Outlook. Starting device code flow..." -ForegroundColor Cyan
-    Write-Information "Using client ID: $($script:ClientId.Substring(0,8))..." -ForegroundColor Gray
+    Write-Information "[36mAuthentication required for Work Outlook. Starting device code flow...`e[0m"
+    Write-Information "[90mUsing client ID: $($script:ClientId.Substring(0,8))...`e[0m"
     
     $scopeString = $script:Scopes -join " "
     $deviceCodeBody = @{ client_id = $script:ClientId; scope = $scopeString }
@@ -80,10 +80,10 @@ function Get-WorkAccessTokenInteractive {
     }
 
     Write-Information "`nTo sign in with your WORK account, open: " -NoNewline
-    Write-Information $deviceCodeResponse.verification_uri -ForegroundColor Yellow
+    Write-Information "[33m$($deviceCodeResponse.verification_uri)`e[0m"
     Write-Information "Enter code: " -NoNewline
-    Write-Information $deviceCodeResponse.user_code -ForegroundColor Green
-    Write-Information "`nIMPORTANT: Sign in with your WORK email, not personal!" -ForegroundColor Magenta
+    Write-Information "[32m$($deviceCodeResponse.user_code)`e[0m"
+    Write-Information "[35m`nIMPORTANT: Sign in with your WORK email, not personal!`e[0m"
 
     try {
         Start-Process $deviceCodeResponse.verification_uri
@@ -100,7 +100,7 @@ function Get-WorkAccessTokenInteractive {
         device_code = $deviceCodeResponse.device_code
     }
 
-    Write-Information "Waiting for authentication..." -ForegroundColor Cyan
+    Write-Information "[36mWaiting for authentication...`e[0m"
 
     while (((Get-Date) - $startTime).TotalSeconds -lt $expiresIn) {
         Start-Sleep -Seconds $interval
@@ -127,7 +127,7 @@ function Get-WorkAccessTokenInteractive {
             }
             $expiresAt = (Get-Date).AddSeconds($tokenResponse.expires_in)
             Save-TokenCache -AccessToken $tokenResponse.access_token -RefreshToken $tokenResponse.refresh_token -ExpiresAt $expiresAt -AccountEmail $accountEmail
-            Write-Information "Authenticated as: $accountEmail" -ForegroundColor Green
+            Write-Information "[32mAuthenticated as: $accountEmail`e[0m"
             return $tokenResponse.access_token
         }
         catch {
