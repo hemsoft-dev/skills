@@ -1,6 +1,6 @@
 ---
 name: cortex
-description: V1.1 - Expert in Cortex Internal Developer Portal setup, MCP server configuration, GitOps workflows, entity management, and direct API operations.
+description: V1.2 - Expert in Cortex Internal Developer Portal setup, MCP server configuration, GitOps workflows, entity management, and direct API operations. Now with corrected Teams API vs Catalog API guidance.
 ---
 
 # Cortex Internal Developer Portal
@@ -9,16 +9,17 @@ Expert guidance for Cortex IDP operations, MCP setup, entity management, and dir
 
 ## Cortex Instance
 
-- **Web UI**: https://app.getcortexapp.com
-- **API Documentation**: https://docs.cortex.io/
-- **API Base**: https://api.getcortexapp.com/api/v1
-- **GitOps Repository**: https://bitbucket.org/relias/cortex-gitops/src/main/ (team changes and entity management)
+- **Web UI**: <https://app.getcortexapp.com>
+- **API Documentation**: <https://docs.cortex.io/>
+- **API Base**: <https://api.getcortexapp.com/api/v1>
+- **GitOps Repository**: <https://bitbucket.org/relias/cortex-gitops/src/main/> (team changes and entity management)
 
 ## Key Learnings & Best Practices
 
 ### Authentication Methods
 
 **API Key vs Personal Access Token**:
+
 - **API Keys**: Used for direct REST API calls (`https://api.getcortexapp.com/api/v1/*`)
 - **Personal Access Tokens (PAT)**: Required for MCP remote server (`https://mcp.cortex.io/mcp`)
 - These are **different** authentication methods - do not confuse them
@@ -31,19 +32,26 @@ Expert guidance for Cortex IDP operations, MCP setup, entity management, and dir
 3. **Removing a member**: GET current team, filter out the member, PUT remaining members
 4. **Adding a member**: GET current team, append new member, PUT full list
 5. **Body structure must include** `type: "CORTEX"` and `members: []` array
-6. **Member object structure**:
+6. **Member object structure for PUT requests**:
+
    ```json
    {
      "email": "user@example.com",
      "name": "Full Name",
-     "role": { "tag": "developer" },
-     "notificationsEnabled": true
+     "roleTags": ["developer", "engineering-manager"],
+     "notificationsEnabled": true,
+     "description": "Optional description"
    }
    ```
+
+7. **Important**: Use `roleTags` (array of strings) in PUT requests. GET responses return `roles`
+   (array of objects with `tag`, `name`, `source`, `type` properties). Extract `.tag` from GET,
+   send as `roleTags` in PUT.
 
 ### GitOps Workflow Known Issues
 
 **Active Issue (Ticket 12171 - Reopened Jan 6, 2026)**:
+
 - Team YAML file changes in `.cortex/teams/*.yaml` not syncing to Cortex portal
 - Service changes process correctly
 - Team changes marked as "Filtered out" during event processing
@@ -53,6 +61,7 @@ Expert guidance for Cortex IDP operations, MCP setup, entity management, and dir
 ### MCP Server Configuration
 
 **Remote server setup lessons**:
+
 - Token substitution (`${input:CORTEX_TOKEN}`) may not work initially
 - May need to hardcode token temporarily or reload VS Code after configuration
 - Use `MCP: Restart All Servers` command after mcp.json changes
@@ -68,53 +77,105 @@ All API requests require an API key in the Authorization header:
 Authorization: Bearer <CORTEX_API_KEY>
 ```
 
-### Common API Endpoints
+### API Endpoints Summary
 
-**List Teams**:
+Cortex has **two main APIs** for entity access:
+
+| API             | Endpoint            | Use Case                                           |
+|-----------------|---------------------|----------------------------------------------------|
+| **Teams API**   | `/api/v1/teams`     | Full team details, members, Slack channels         |
+| **Catalog API** | `/api/v1/catalog`   | Services, domains, resources with pagination       |
+
+### Teams API (Recommended for Teams)
+
+**List All Teams** (with full details including members):
+
 ```bash
-GET https://api.getcortexapp.com/api/v1/catalog?type=team
+GET https://api.getcortexapp.com/api/v1/teams
+GET https://api.getcortexapp.com/api/v1/teams?includeTeamsWithoutMembers=true
 ```
 
-**Get Team Details**:
+**Get Specific Team**:
+
 ```bash
-GET https://api.getcortexapp.com/api/v1/catalog/{team-tag}
+GET https://api.getcortexapp.com/api/v1/teams/{team-tag}
 ```
 
-**List Services**:
+**Response includes**: teamTag, metadata (name, description), members array, slackChannels, links, isArchived
+
+### Catalog API (For Services, Domains, Resources)
+
+**List Services** (with pagination):
+
 ```bash
-GET https://api.getcortexapp.com/api/v1/catalog?type=service
+GET https://api.getcortexapp.com/api/v1/catalog?types=service&pageSize=250&page=0&includeOwners=true
+```
+
+**List Domains**:
+
+```bash
+GET https://api.getcortexapp.com/api/v1/catalog?types=domain&pageSize=250&page=0
 ```
 
 **Get Entity Details**:
+
 ```bash
 GET https://api.getcortexapp.com/api/v1/catalog/{entity-tag}
 ```
 
-**List Scorecards**:
+**Catalog Query Parameters**:
+
+- `types` - Filter by entity type (service, domain, team, etc.)
+- `pageSize` - Results per page (1-1000, default 250)
+- `page` - Page number (0-indexed)
+- `includeOwners` - Include ownership info (default false)
+- `includeArchived` - Include archived entities (default false)
+- `groups` - Filter by x-cortex-groups
+- `query` - Search query across entity properties
+
+### List Scorecards
+
 ```bash
 GET https://api.getcortexapp.com/api/v1/scorecards
 ```
 
-**Get Scorecard Scores**:
+### Get Scorecard Scores
+
 ```bash
 GET https://api.getcortexapp.com/api/v1/scorecards/{scorecard-tag}/scores
 ```
 
-**Remove Team Member**:
+### API Documentation References
 
-There is no direct DELETE endpoint for removing a single member. Instead, you must PUT the full members list excluding the member to remove:
+- **Teams API**: <https://docs.cortex.io/api/readme/teams>
+- **Catalog API**: <https://docs.cortex.io/api/readme/catalog-entities>
+- **Entity Types**: <https://docs.cortex.io/ingesting-data-into-cortex/entities>
+
+### Remove Team Member
+
+There is no direct DELETE endpoint for removing a single member. Instead, you must PUT the full
+members list excluding the member to remove:
 
 ```powershell
 # 1. Get current team
 $team = Invoke-RestMethod -Uri "https://api.getcortexapp.com/api/v1/teams/{team-tag}" -Headers $headers -Method Get
 
 # 2. Filter out the member to remove
-$updatedMembers = $team.cortexTeam.members | Where-Object { $_.email -ne "user@example.com" } | ForEach-Object {
-    @{
-        email = $_.email
-        name = $_.name
-        role = @{ tag = $_.role.tag }
-        notificationsEnabled = $_.notificationsEnabled
+$updatedMembers = @()
+foreach ($member in $team.cortexTeam.members) {
+    if ($member.email -ne "user@example.com") {
+        $memberObj = @{
+            email = $member.email
+            name = $member.name
+            notificationsEnabled = $member.notificationsEnabled
+        }
+        # Extract role tags from GET response, send as roleTags in PUT
+        if ($member.roles -and $member.roles.Count -gt 0) {
+            $memberObj.roleTags = $member.roles | ForEach-Object { $_.tag }
+        } else {
+            $memberObj.roleTags = @()
+        }
+        $updatedMembers += $memberObj
     }
 }
 
@@ -132,13 +193,36 @@ Invoke-RestMethod -Uri "https://api.getcortexapp.com/api/v1/teams/{team-tag}/mem
 To add a member, GET current members, append the new member to the array, then PUT the full list:
 
 ```powershell
+# 1. Get current team
+$team = Invoke-RestMethod -Uri "https://api.getcortexapp.com/api/v1/teams/{team-tag}" -Headers $headers -Method Get
+
+# 2. Transform existing members to preserve roles
+$currentMembers = @()
+foreach ($member in $team.cortexTeam.members) {
+    $memberObj = @{
+        email = $member.email
+        name = $member.name
+        notificationsEnabled = $member.notificationsEnabled
+    }
+    # Extract role tags from GET response (roles objects), send as roleTags in PUT
+    if ($member.roles -and $member.roles.Count -gt 0) {
+        $memberObj.roleTags = $member.roles | ForEach-Object { $_.tag }
+    } else {
+        $memberObj.roleTags = @()
+    }
+    $currentMembers += $memberObj
+}
+
+# 3. Create new member
 $newMember = @{
     email = "newuser@example.com"
     name = "New User"
-    role = @{ tag = "developer" }  # developer, manager, tester, cloud-engineer, etc.
+    roleTags = @("developer", "engineering-manager")  # developer, manager, tester, cloud-engineer, product-manager, etc.
     notificationsEnabled = $true
+    description = "Optional role description"
 }
 
+# 4. Combine and PUT
 $body = @{
     type = "CORTEX"
     members = $currentMembers + $newMember
@@ -172,17 +256,20 @@ $response | ConvertTo-Json -Depth 10
 **Address**: `https://mcp.cortex.io/mcp`
 
 **Claude CLI Usage**:
+
 ```bash
 claude mcp add --transport http cortex-remote https://mcp.cortex.io/mcp --header "Authorization: Bearer <CORTEX_TOKEN>"
 ```
 
 **Environment Variable**:
+
 ```bash
 # Set your Cortex token as an environment variable
 CORTEX_TOKEN=eyJ6aXAiOiJHWklQIiwiYWxnIjoiSFM1MTIifQ...
 ```
 
 **MCP Client Configuration** (for Claude Desktop, VS Code, etc.):
+
 ```json
 {
   "mcpServers": {
@@ -202,6 +289,7 @@ CORTEX_TOKEN=eyJ6aXAiOiJHWklQIiwiYWxnIjoiSFM1MTIifQ...
 **Image**: `ghcr.io/cortexapps/cortex-mcp:latest`
 
 **MCP Client Configuration**:
+
 ```json
 {
   "mcpServers": {
@@ -225,6 +313,7 @@ CORTEX_TOKEN=eyJ6aXAiOiJHWklQIiwiYWxnIjoiSFM1MTIifQ...
 **Self-Managed Instances**: Add `--env CORTEX_API_BASE_URL=https://<your-instance>`
 
 ### Prerequisites
+
 - Docker installed and running
 - Personal Access Token from Cortex (Settings → API Keys → Personal Tokens)
 - MCP-compatible client (Claude Desktop, VS Code, Cursor, etc.)
@@ -232,6 +321,7 @@ CORTEX_TOKEN=eyJ6aXAiOiJHWklQIiwiYWxnIjoiSFM1MTIifQ...
 ### Available MCP Tools
 
 The Cortex MCP provides read-only access to:
+
 - Entity catalog and descriptors
 - Dependencies and relationships
 - Custom data
@@ -243,7 +333,8 @@ The Cortex MCP provides read-only access to:
 ## GitOps Workflow
 
 ### Directory Structure
-```
+
+```text
 .cortex/
 ├── catalog/          # Services and resources
 │   └── {service-name}.yaml
@@ -276,6 +367,7 @@ info:
 ### Common Entity Properties
 
 **Ownership**:
+
 ```yaml
 x-cortex-owners:
   - type: group
@@ -288,6 +380,7 @@ x-cortex-owners:
 ```
 
 **Groups/Tags**:
+
 ```yaml
 x-cortex-groups:
   - framework-version:{value}
@@ -296,6 +389,7 @@ x-cortex-groups:
 ```
 
 **Dependencies**:
+
 ```yaml
 x-cortex-dependency:
   - tag: {dependency-service-tag}
@@ -306,6 +400,7 @@ x-cortex-dependency:
 ```
 
 **Links**:
+
 ```yaml
 x-cortex-link:
   - name: {Link Name}
@@ -314,12 +409,14 @@ x-cortex-link:
 ```
 
 **Domains**:
+
 ```yaml
 x-cortex-parents:
   - tag: {domain-tag}
 ```
 
 **SonarCloud**:
+
 ```yaml
 x-cortex-static-analysis:
   sonarqube:
@@ -344,6 +441,7 @@ info:
 ### Publisher Relationship
 
 In publishing service YAML:
+
 ```yaml
 x-cortex-dependency:
   - tag: {event-tag}
@@ -353,6 +451,7 @@ x-cortex-dependency:
 ### Subscriber Relationship
 
 In event topic YAML:
+
 ```yaml
 x-cortex-dependency:
   - tag: {subscriber-service-tag}
@@ -377,12 +476,14 @@ x-cortex-launch-darkly:
 ## Effective MCP Prompts
 
 **Best Practices**:
+
 - Be specific with service names, Scorecard names, and metrics
 - Combine related questions for richer context
 - Reference organization-specific constructs (custom Scorecards, Initiatives)
 - Use follow-up questions to drill down from broad to specific
 
 **Example Queries**:
+
 - "Who owns {service-name}, when was it last deployed, and are there any open incidents?"
 - "Show me all critical services failing the Production Readiness Scorecard"
 - "What's going on with my {initiative-name}?"
@@ -393,7 +494,8 @@ x-cortex-launch-darkly:
 
 ### Ticket 12171: Team Entity YAML Files Filtered Out During Event Processing
 
-**Issue**: GitOps changes to `.cortex/teams/*.yaml` files being incorrectly filtered out during Cortex event processing, despite PR merge and commit to main branch.
+**Issue**: GitOps changes to `.cortex/teams/*.yaml` files being incorrectly filtered out during
+Cortex event processing, despite PR merge and commit to main branch.
 
 **Timeline**:
 
@@ -440,7 +542,7 @@ x-cortex-launch-darkly:
   - Expected team entity changes to no longer be filtered out
 
 - **Jan 6, 2026** - **ISSUE RECURRED** - Franz reopened ticket
-  - New PR: https://bitbucket.org/relias/cortex-gitops/pull-requests/108
+  - New PR: <https://bitbucket.org/relias/cortex-gitops/pull-requests/108>
   - Commit SHA: `1399772`
   - Merged to `main` branch via `feature/pe-devex-team-update`
   - `.cortex/teams/productivity-engineering.yaml` still being filtered out
@@ -449,9 +551,13 @@ x-cortex-launch-darkly:
 
 **Status**: **REOPENED** - Issue persists after reported fix
 
-**Impact**: Team entity updates in GitOps workflow not syncing to Cortex, requiring manual intervention or alternative update methods.
+**Impact**: Team entity updates in GitOps workflow not syncing to Cortex, requiring manual
+intervention or alternative update methods.
 
-**Workaround Applied (Jan 6, 2026)**: Used direct REST API calls to update Productivity Engineering team members, bypassing GitOps workflow entirely. Successfully removed Ian Crowl and Sagar Thakore, added back Bryan Halterman and Nick Peterson using `PUT /api/v1/teams/productivity-engineering/members` endpoint.
+**Workaround Applied (Jan 6, 2026)**: Used direct REST API calls to update Productivity
+Engineering team members, bypassing GitOps workflow entirely. Successfully removed Ian Crowl and
+Sagar Thakore, added back Bryan Halterman and Nick Peterson using
+`PUT /api/v1/teams/productivity-engineering/members` endpoint.
 
 ## Lessons Learned (Jan 6, 2026 Session)
 
@@ -488,6 +594,7 @@ x-cortex-launch-darkly:
 ### Tools & Techniques
 
 **Effective**:
+
 - `Cortex query_docs MCP` - Official documentation retrieval
 - `Invoke-RestMethod` - PowerShell HTTP client
 - `$env:CORTEX_API_KEY` - Environment variable for token storage
@@ -495,16 +602,17 @@ x-cortex-launch-darkly:
 - Explicit foreach loops for building member arrays
 
 **Less Effective**:
+
 - MCP remote server (authentication issues)
 - Token substitution in mcp.json (required hardcoding)
 - Pipeline filtering with `-ne` operator (had mixed results, foreach more reliable)
 
 ## Resources
 
-- **GitHub Repository**: https://github.com/cortexapps/cortex-mcp
-- **MCP Prompt Library**: https://docs.cortex.io/get-started/mcp/library
-- **API Reference**: https://docs.cortex.io/api/
-- **Cortex Academy**: https://academy.cortex.io/
+- **GitHub Repository**: <https://github.com/cortexapps/cortex-mcp>
+- **MCP Prompt Library**: <https://docs.cortex.io/get-started/mcp/library>
+- **API Reference**: <https://docs.cortex.io/api/>
+- **Cortex Academy**: <https://academy.cortex.io/>
 
 ## Limitations
 
