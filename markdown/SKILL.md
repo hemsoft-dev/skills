@@ -310,10 +310,71 @@ markdown/
 
 ## Integration with Quality System
 
-Markdown linting is part of the repository's quality enforcement:
+Markdown linting is part of the repository's quality enforcement system, mirroring the PowerShell quality gates.
 
-- `.markdownlint.jsonc` - Configuration
-- `.git/hooks/pre-commit` - Pre-commit validation
-- `.github/workflows/quality-check.yml` - CI/CD validation
+### What's Enforced (January 2026)
 
-All markdown files must pass linting before being committed or merged.
+**Local Protection (Pre-Commit Hook)**:
+
+- Automatically runs on ALL staged `.md` files before commit
+- Blocks commits if any markdown issues are found
+- Shows exactly what needs fixing with line numbers and rule names
+- Located at `.git/hooks/pre-commit-markdown.ps1`
+- Integrated into `.git/hooks/pre-commit` alongside PowerShell checks
+
+**Remote Protection (CI/CD)**:
+
+- GitHub Actions workflow runs on every push and pull request
+- Separate job for markdown validation (runs in parallel with PowerShell)
+- Scans entire repository for markdown files
+- Fails build if issues are found
+- Provides detailed reports in Actions output
+
+### Configuration Files
+
+- **`.markdownlint.jsonc`** - Linting rules and preferences
+  - Line length: 120 characters
+  - Allows HTML elements: `<br>`, `<details>`, `<summary>`, `<kbd>`
+  - Fenced code blocks required with language specifiers
+  - Consistent heading hierarchy enforced
+- **`.git/hooks/pre-commit`** - Calls both PowerShell and Markdown checks
+- **`.github/workflows/quality-check.yml`** - CI/CD for both file types
+
+### Workflow
+
+**When you commit:**
+
+1. Pre-commit hook runs for staged `.md` files
+2. markdownlint-cli2 analyzes each file
+3. If issues found: commit is BLOCKED with detailed errors
+4. If clean: commit proceeds
+
+**Auto-fix available:**
+
+```powershell
+markdownlint-cli2 --fix "**/*.md"
+```
+
+This fixes most issues automatically (blank lines, trailing spaces, code block formatting).
+
+### Quality Standards
+
+All markdown files must adhere to:
+
+- ✅ Consistent heading hierarchy (no skipped levels)
+- ✅ Fenced code blocks with language specifiers
+- ✅ Proper blank lines around headings, lists, and code blocks
+- ✅ No trailing spaces
+- ✅ Files end with newline
+- ✅ Line length limits (120 chars for content)
+- ✅ Consistent list markers
+
+**No exceptions** - fix the markdown, don't disable rules.
+
+### Benefits
+
+- **Consistency** - All documentation follows same style
+- **Quality** - Catches common mistakes automatically
+- **Readability** - Enforces best practices for accessibility
+- **Prevention** - Stops low-quality markdown from entering the repository
+- **Speed** - Auto-fix handles most issues instantly
