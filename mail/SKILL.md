@@ -126,12 +126,14 @@ Parent scripts call same-named children in account folders. Unconfigured account
 ## TOON Output Format
 
 ```
+
 counts[2]{account,today,unread}:
   outlook,5,2
   gmail,17,7
 total: 22
 unread: 9
 unconfigured: work,hemmer.us
+
 ```
 
 ## Setup
@@ -155,10 +157,13 @@ unconfigured: work,hemmer.us
 ```
 
 ### Work Outlook ⏸️ BLOCKED
+
 Code complete but blocked by organization policy requiring admin consent for third-party apps.
 
 ### First Auth
+
 Run any task script - authentication will be triggered automatically on first use:
+
 ```powershell
 pwsh -File "$env:USERPROFILE\.claude\skills\mail\tasks\mail-today.ps1" -Account outlook
 pwsh -File "$env:USERPROFILE\.claude\skills\mail\tasks\mail-today.ps1" -Account gmail

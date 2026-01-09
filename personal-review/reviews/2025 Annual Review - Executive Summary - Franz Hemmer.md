@@ -1,4 +1,5 @@
 # 2025 Annual Review — Executive Summary
+
 ## Franz Hemmer | AI Evangelist - Productivity Engineering
 
 ---
@@ -12,6 +13,7 @@ Transformational year marked by **strategic AI enablement, critical infrastructu
 ## Key Accomplishments
 
 ### 🚀 **AI Enablement at Scale**
+
 - Launched **"Lunch and Learn AI Together"** pilot (3 sessions, 50+ engineers)
 - Evolved into **two-track AI Chapters** in Q4 (Foundation + Engineering)
 - **12 total AI meetings** hosted in 2025 (9 AI Chapter + 3 Lunch and Learn)
@@ -19,22 +21,26 @@ Transformational year marked by **strategic AI enablement, critical infrastructu
 - **7 AI Quick Tutorials** published by Relias Engineering contributors
 
 ### 🔄 **GitHub Migration Leadership**
+
 - Facilitated planning and execution across all four quarters, developing comprehensive documentation
 - Enabled teams to successfully migrate **160+ repositories** from Bitbucket to GitHub (ongoing)
 - Developed **Legacy Release Tool** enabling legacy releases from GitHub—critical custom tooling that unblocked migration path
 - **Reduced license costs significantly** through optimization
 
 ### 🤖 **Relias Assistant (Yakob!) — Production Ready**
+
 - Built **fully functioning AI assistant** tailored to Relias workflows
 - Strategic launch delay for MCP/skills integration improvements
 - Positioned for high-impact 2026 release
 
 ### ⚙️ **GitHub Copilot Enterprise Management**
+
 - Managed user provisioning, model rollouts (GPT 5.2, GPT 5.1-Max, Claude Sonnet 4.5, Claude Opus, Gemini 3 Pro)
 - Deployed **C# quality agent** in GitHub private repo
 - Enabled smooth enterprise adoption
 
 ### 🏗️ **Platform & Tooling Excellence**
+
 - **Configurator**: Established as critical onboarding tool (absolute success)
 - **Cortex partnership**: MCP server development, quarterly audits
 - **Cross-functional collaboration**: Presentations to Platform and Data & Gen AI teams
@@ -58,6 +64,7 @@ Transformational year marked by **strategic AI enablement, critical infrastructu
 ## Skills Developed
 
 Developed **comprehensive AI engineering expertise**:
+
 - Agentic workflows & autonomous agent design
 - MCP (Model Context Protocol) architecture
 - Knowledge systems (RAG, retrieval strategies)

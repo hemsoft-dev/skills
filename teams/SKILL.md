@@ -8,7 +8,7 @@ description: V1.0 - Expert in Microsoft Teams API via Microsoft Graph for readin
 Interact with Microsoft Teams via Microsoft Graph API using delegated user tokens.
 
 > ⚠️ **STATUS: BLOCKED** (Jan 2026)
-> 
+>
 > Azure app "Teams-Integration" (Client ID: `2c6945c4-7632-4568-8acf-fe585b838489`) was registered in Relias tenant but **admin consent is required** for ALL applications due to tenant policy. Request submitted to IT - approval unlikely. This skill is **non-functional** until IT approves the app or grants user consent permissions.
 
 ## ALWAYS: Log This Interaction
@@ -25,6 +25,7 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 **Token**: Uses delegated (user) access token stored in `$env:MS_GRAPH_TOKEN`
 
 Get token via OAuth 2.0 authorization code flow:
+
 ```
 https://login.microsoftonline.com/{tenant}/oauth2/v2.0/authorize
 ?client_id={app-id}
@@ -59,18 +60,21 @@ https://login.microsoftonline.com/{tenant}/oauth2/v2.0/authorize
 ## Common Operations
 
 ### List My Chats
+
 ```powershell
 $h = @{Authorization = "Bearer $env:MS_GRAPH_TOKEN"}
 Invoke-RestMethod -Uri "https://graph.microsoft.com/v1.0/me/chats" -Headers $h
 ```
 
 ### Get Chat Messages
+
 ```powershell
 $chatId = "19:xxx@thread.v2"
 Invoke-RestMethod -Uri "https://graph.microsoft.com/v1.0/me/chats/$chatId/messages?`$top=20" -Headers $h
 ```
 
 ### Send Chat Message
+
 ```powershell
 $body = @{
     body = @{
@@ -83,28 +87,33 @@ Invoke-RestMethod -Uri "https://graph.microsoft.com/v1.0/me/chats/$chatId/messag
 ```
 
 ### Get My Presence
+
 ```powershell
 Invoke-RestMethod -Uri "https://graph.microsoft.com/v1.0/me/presence" -Headers $h
 ```
 
 ### Get User Presence (by email)
+
 ```powershell
 $email = "user@company.com"
 Invoke-RestMethod -Uri "https://graph.microsoft.com/v1.0/users/$email/presence" -Headers $h
 ```
 
 ### List Teams I'm In
+
 ```powershell
 Invoke-RestMethod -Uri "https://graph.microsoft.com/v1.0/me/joinedTeams" -Headers $h
 ```
 
 ### Get Team Channels
+
 ```powershell
 $teamId = "team-guid-here"
 Invoke-RestMethod -Uri "https://graph.microsoft.com/v1.0/teams/$teamId/channels" -Headers $h
 ```
 
 ### Send Channel Message
+
 ```powershell
 $teamId = "team-guid"
 $channelId = "channel-id"
@@ -115,6 +124,7 @@ Invoke-RestMethod -Uri "https://graph.microsoft.com/v1.0/teams/$teamId/channels/
 ```
 
 ### Get Activity Feed
+
 ```powershell
 Invoke-RestMethod -Uri "https://graph.microsoft.com/v1.0/me/teamwork/installedApps" -Headers $h
 ```
@@ -122,6 +132,7 @@ Invoke-RestMethod -Uri "https://graph.microsoft.com/v1.0/me/teamwork/installedAp
 ## Calendar Operations
 
 ### List Today's Events
+
 ```powershell
 $today = (Get-Date).ToString("yyyy-MM-ddT00:00:00")
 $tomorrow = (Get-Date).AddDays(1).ToString("yyyy-MM-ddT00:00:00")
@@ -130,6 +141,7 @@ Invoke-RestMethod -Uri $url -Headers $h
 ```
 
 ### List Upcoming Events (Next 7 Days)
+
 ```powershell
 $start = (Get-Date).ToString("yyyy-MM-ddTHH:mm:ss")
 $end = (Get-Date).AddDays(7).ToString("yyyy-MM-ddTHH:mm:ss")
@@ -138,17 +150,20 @@ Invoke-RestMethod -Uri $url -Headers $h
 ```
 
 ### Get All Calendars
+
 ```powershell
 Invoke-RestMethod -Uri "https://graph.microsoft.com/v1.0/me/calendars" -Headers $h
 ```
 
 ### Get Specific Event
+
 ```powershell
 $eventId = "event-id-here"
 Invoke-RestMethod -Uri "https://graph.microsoft.com/v1.0/me/events/$eventId" -Headers $h
 ```
 
 ### Create Calendar Event
+
 ```powershell
 $event = @{
     subject = "Team Meeting"
@@ -180,6 +195,7 @@ Invoke-RestMethod -Uri "https://graph.microsoft.com/v1.0/me/events" `
 ```
 
 ### Create Teams Meeting
+
 ```powershell
 $meeting = @{
     subject = "Teams Video Call"
@@ -197,6 +213,7 @@ $response.onlineMeeting.joinUrl
 ```
 
 ### Update Event
+
 ```powershell
 $eventId = "event-id"
 $update = @{ subject = "Updated Meeting Title" } | ConvertTo-Json
@@ -205,6 +222,7 @@ Invoke-RestMethod -Uri "https://graph.microsoft.com/v1.0/me/events/$eventId" `
 ```
 
 ### Delete Event
+
 ```powershell
 $eventId = "event-id"
 Invoke-RestMethod -Uri "https://graph.microsoft.com/v1.0/me/events/$eventId" `
@@ -212,6 +230,7 @@ Invoke-RestMethod -Uri "https://graph.microsoft.com/v1.0/me/events/$eventId" `
 ```
 
 ### Find Free/Busy Time
+
 ```powershell
 $body = @{
     schedules = @("user1@company.com", "user2@company.com")
@@ -227,6 +246,7 @@ Invoke-RestMethod -Uri "https://graph.microsoft.com/v1.0/me/calendar/getSchedule
 ## Pagination
 
 Results are paginated. Check `@odata.nextLink` for more results:
+
 ```powershell
 $response = Invoke-RestMethod -Uri $url -Headers $h
 if ($response.'@odata.nextLink') {
@@ -252,7 +272,7 @@ $url = "https://graph.microsoft.com/v1.0/me/chats/$chatId/messages?`$filter=crea
 
 ## Token Setup Guide
 
-1. Register app at https://entra.microsoft.com (Azure Portal > App Registrations)
+1. Register app at <https://entra.microsoft.com> (Azure Portal > App Registrations)
 2. Add redirect URI: `http://localhost`
 3. Under API Permissions, add Microsoft Graph delegated permissions
 4. Generate auth URL and complete OAuth flow
@@ -261,6 +281,7 @@ $url = "https://graph.microsoft.com/v1.0/me/chats/$chatId/messages?`$filter=crea
 ## Refresh Token
 
 Tokens expire (~1 hour). Use refresh token for new access:
+
 ```powershell
 $body = @{
     client_id = $clientId
@@ -276,6 +297,7 @@ $env:MS_GRAPH_TOKEN = $response.access_token
 ## Permissions Requiring Admin Consent (NOT Available)
 
 These require IT admin approval:
+
 - ChannelMessage.Read.All (read all channel messages)
 - Chat.Read.All (read all chats)
 - Group.Read.All (read all groups)

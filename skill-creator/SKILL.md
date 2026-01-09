@@ -19,6 +19,7 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 ## Skill Structure
 
 Each skill requires:
+
 ```
 .claude/skills/{skill-name}/
 └── SKILL.md
@@ -49,17 +50,21 @@ description: V{major}.{minor} - {One sentence describing when to use this skill}
 **CRITICAL: Always ask these questions BEFORE creating anything:**
 
 ### Step 1: Get Skill Details
+
 Ask user for skill name and purpose.
 
 ### Step 2: Choose Location (REQUIRED - NEVER SKIP)
+
 **ALWAYS ask the user where to create the skill:**
 
 **Option A - User Folder (Global)**:
+
 - Location: `~/.claude/skills/{skill-name}/`
 - Available across all projects
 - Use for: General-purpose skills, tools, utilities
 
 **Option B - Repository (Project-Scoped)**:
+
 - Location: `{repo-root}/.claude/skills/{skill-name}/`
 - Only available in this project
 - Use for: Project-specific workflows, context
@@ -67,11 +72,13 @@ Ask user for skill name and purpose.
 **Prompt to user**: "Where should I create this skill? A) User folder (~/.claude/skills/) for global access, or B) This repository (./.claude/skills/) for project-specific use?"
 
 ### Step 3: Enable History Tracking? (REQUIRED - NEVER SKIP)
+
 **ALWAYS ask the user about history tracking:**
 
 **Prompt to user**: "Would you like to enable History Tracking for this skill? This logs all interactions to History/{YYYY-MM-DD}.md for future reference."
 
 If yes, add this section after the title:
+
 ```markdown
 ## ALWAYS: Log This Interaction
 
@@ -84,12 +91,14 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 ```
 
 ### Step 4: Create Files
+
 1. Create directory at chosen location
 2. Write SKILL.md with frontmatter and instructions
 3. Apply version prefix (V1.0)
 4. Apply history tracking (if user said yes)
 
 ### Step 5: Confirm Creation
+
 Tell user where the skill was created and what features are enabled.
 
 ## Skill-Improver Integration
@@ -98,7 +107,7 @@ Before finalizing the skill, check the `skill-improver` skill for available impr
 
 | Improvement | Default | Ask User |
 |-------------|---------|----------|
-| Version prefix (`V1.0 - `) | Always applied | No |
+| Version prefix (`V1.0 -`) | Always applied | No |
 | History Tracking | Off | Yes |
 
 **Prompt**: "Would you like to enable History Tracking for this skill? This logs all interactions to `History/{YYYY-MM-DD}.md`."

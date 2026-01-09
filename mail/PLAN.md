@@ -16,6 +16,7 @@ Unified multi-account email skill with parent/child script architecture for simp
 ## Architecture: Parent/Child Scripts
 
 ### Design Principles
+
 - **One use case = one parent script** - deterministic, no runtime discovery
 - **Hardcoded account list** - parent knows all 4 accounts, calls each child
 - **Unless `-Account` specified** - query all accounts by default
@@ -56,6 +57,7 @@ Unified multi-account email skill with parent/child script architecture for simp
 ### Script Interface Pattern
 
 **Parent scripts** accept:
+
 ```powershell
 param(
     [ValidateSet("outlook", "gmail", "work", "hemmer.us")]
@@ -98,6 +100,7 @@ User: "How many emails on my work account?"
 ## Provider Implementation Notes
 
 ### Personal Outlook
+
 - Microsoft Graph API
 - Personal Microsoft accounts (consumers tenant)
 - Device code flow auth
@@ -105,12 +108,14 @@ User: "How many emails on my work account?"
 - Token cache: `~/.my-mail-outlook.json`
 
 ### Personal Gmail
+
 - Gmail API
 - OAuth 2.0 with localhost redirect
 - Env: `GMAIL_CLIENT_ID`, `GMAIL_CLIENT_SECRET`
 - Token cache: `~/.my-mail-gmail.json`
 
 ### Work Outlook ⏸️ BLOCKED (Awaiting Admin Consent)
+
 - Microsoft Graph API
 - Work/school account (Azure AD tenant)
 - Code complete, blocked by organization policy requiring admin consent for third-party apps
@@ -119,6 +124,7 @@ User: "How many emails on my work account?"
 - **TODO:** Re-test once admin grants consent, or register app directly in work Azure AD
 
 ### Personal IMAP (hemmer.us)
+
 - MailKit library (loaded from `packages/` folder)
 - IMAP4 over SSL (port 993)
 - Env: `IMAP_HEMMER_HOST`, `IMAP_HEMMER_PORT` (default 993), `IMAP_HEMMER_USER`, `IMAP_HEMMER_PASS`
@@ -151,14 +157,17 @@ unread: 21
 ## Implementation Phases
 
 ### Phase 0: TOON Encoder ✅ COMPLETE
+
 - [x] Implement `toon-encode.ps1` wrapper for official `@toon-format/cli`
 
 ### Phase 1: Initial Structure ✅ COMPLETE
+
 - [x] Create task scripts for existing accounts (monolithic)
 - [x] Restructure SKILL.md to two-layer format
 - [x] Test with Gmail/Outlook
 
 ### Phase 1.5: Refactor to Parent/Child Architecture ✅ COMPLETE
+
 - [x] Create account subfolders: `outlook/`, `gmail/`, `work/`, `imap/`
 - [x] Extract provider-specific logic from current scripts into children
 - [x] Create parent orchestrator scripts
@@ -168,6 +177,7 @@ unread: 21
 - [x] Test parent/child flow with existing accounts
 
 ### Phase 2: Work Outlook ⏸️ BLOCKED
+
 - [x] Create `work/` child scripts
 - [x] Create `lib/work-auth.ps1` (device code flow, "organizations" tenant)
 - [x] Configure app for multi-tenant (`signInAudience: AzureADandPersonalMicrosoftAccount`)
@@ -175,6 +185,7 @@ unread: 21
 - Options when unblocked: wait for admin approval, or register app directly in work Azure AD
 
 ### Phase 3: IMAP Support ✅ COMPLETE
+
 - [x] Choose IMAP library (MailKit)
 - [x] Install MailKit DLLs to `packages/` folder
 - [x] Create `lib/imap-auth.ps1` helper (connection, auth, message fetching)
@@ -184,6 +195,7 @@ unread: 21
 - [x] Test IMAP integration - working with 83 messages
 
 ### Phase 3.5: mail-recent.ps1 Use Case ✅ COMPLETE
+
 - [x] Create parent `mail-recent.ps1`
 - [x] Create `outlook/mail-recent.ps1`
 - [x] Create `gmail/mail-recent.ps1`
@@ -191,6 +203,7 @@ unread: 21
 - [x] Create `work/mail-recent.ps1` (stub - blocked)
 
 ### Phase 4: Additional Use Cases ✅ COMPLETE
+
 - [x] Implement `mail-search.ps1` (parent + children) - keyword search across accounts
 - [x] Implement `mail-summary.ps1` (parent + children) - daily digest with counts + highlights
 - [ ] Any other use cases as needed

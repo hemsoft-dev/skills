@@ -8,6 +8,7 @@ description: V1.1 - Expert guidance for writing perfect unit tests with Vitest a
 ## ALWAYS: Log This Interaction
 
 After completing the request, append to `History/{YYYY-MM-DD}.md`:
+
 ```
 ## {HH:MM} - {Action}
 

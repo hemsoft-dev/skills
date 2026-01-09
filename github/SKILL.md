@@ -15,6 +15,7 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 ```
 
 **CRITICAL:** When running a Copilot usage report:
+
 1. Always run the `Get-MyCopilotUsage.ps1` script to ensure data is current.
 2. Present the results in a **Markdown table format** for better readability.
 3. Always log the summary results in the `History/` file for the current date.
@@ -24,16 +25,16 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 
 | Account | Type | Email | Username | Plan |
 |---------|------|-------|----------|------|
-| Personal #1 | HemSoft | franz_hemmer@hotmail.com | HemSoft | Copilot Pro+ (1500 req/mo) + Business (fhemmer org) |
-| Personal #2 | franzhemmer | fphemmer@gmail.com | franzhemmer | Copilot Business (fhemmer org) |
-| Work #1 | Relias | fhemmer@relias.com | fhemmerrelias | Copilot Pro+ (1500 req/mo) |
+| Personal #1 | HemSoft | <franz_hemmer@hotmail.com> | HemSoft | Copilot Pro+ (1500 req/mo) + Business (fhemmer org) |
+| Personal #2 | franzhemmer | <fphemmer@gmail.com> | franzhemmer | Copilot Business (fhemmer org) |
+| Work #1 | Relias | <fhemmer@relias.com> | fhemmerrelias | Copilot Pro+ (1500 req/mo) |
 
 ## Franz's Organizations
 
 | Organization | Owner(s) | Enterprise | URL |
 |--------------|----------|------------|-----|
-| fhemmer (HemSoft Developments) | Personal #1, Personal #2 | hemsoft-corp | https://github.com/fhemmer |
-| Relias Engineering (Relias LLC) | Work #1 | — | https://github.com/relias-engineering |
+| fhemmer (HemSoft Developments) | Personal #1, Personal #2 | hemsoft-corp | <https://github.com/fhemmer> |
+| Relias Engineering (Relias LLC) | Work #1 | — | <https://github.com/relias-engineering> |
 
 ## Franz's Enterprises
 
@@ -41,22 +42,25 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 |------------|------|----------|--------|------|
 | HemSoft Corp | hemsoft-corp | 50 | HemSoft, franzhemmer | fhemmer |
 
-**Enterprise URL**: https://github.com/enterprises/hemsoft-corp
+**Enterprise URL**: <https://github.com/enterprises/hemsoft-corp>
 
 ## Copilot Quota System
 
 ### Personal Quotas (Pro+ Plans)
+
 - **Pro+**: 1500 premium requests/month included
 - Overage: $0.04/request after quota exhausted
 - Resets on 1st of each month
 
 ### Organization Quotas (Business Plans)
+
 - **Business**: **300 premium requests/seat/month** ($19/seat/mo)
 - fhemmer org: 2 seats × 300 = **600 requests/month**
 - Overage: $0.04/request after quota exhausted
 - GitHub UI shows percentage like "147.6%" when over quota (often relative to individual seat allowance)
 
 ### Value Comparison (Requests per Dollar)
+
 | Plan | Price | Requests | Req/$1 |
 | :--- | :--- | :--- | :--- |
 | Pro | $10/mo | 300 | 30.0 |
@@ -65,7 +69,9 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 | Enterprise | $39/mo | 1,000 | 25.6 |
 
 ### Important: Personal vs Org Usage
+
 When a user has BOTH Pro+ personal AND Business org seat:
+
 - **Personal quota**: Tracks requests made under personal context (1,500 req/mo)
 - **Org quota**: Tracks requests made in org repos/context (300 req/seat/mo)
 - These are **separate quotas** - HemSoft can use 1,500 personal + share 600 org (total 2,100)
@@ -141,9 +147,9 @@ Test connection: `ssh -T git@github-personal1`
 1. **Transfer on GitHub**: Settings → Danger Zone → Transfer ownership → Select `fhemmer`
 2. **Update local remote**: `git remote set-url origin git@github-personal1:fhemmer/REPO.git`
 3. **Update Vercel** (if applicable):
-   - Install Vercel GitHub App in fhemmer org: https://github.com/apps/vercel/installations/new
+   - Install Vercel GitHub App in fhemmer org: <https://github.com/apps/vercel/installations/new>
    - Link project: `bunx vercel link`
-   - Connect Git: https://vercel.com/franz-hemmers-projects/PROJECT/settings/git
+   - Connect Git: <https://vercel.com/franz-hemmers-projects/PROJECT/settings/git>
 4. **Set secrets**: `gh auth token | gh secret set SECRET_NAME --repo fhemmer/REPO`
 
 ## Releases and Tags

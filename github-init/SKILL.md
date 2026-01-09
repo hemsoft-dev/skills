@@ -33,5 +33,6 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
    - **Report Success**: Always provide the user with the URL to the newly created repository.
 
 ## Requirements
+
 - Requires GitHub CLI (`gh`) to be installed and authenticated.
 - SSH keys must be configured in `~/.ssh/config` with appropriate aliases (`github-personal1`, `github-personal2`, `github-work1`).

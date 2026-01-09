@@ -10,6 +10,7 @@ Generate thorough, well-researched biographies using the template in this skill 
 ## ALWAYS: Log This Interaction
 
 After completing the request, append to `History/{YYYY-MM-DD}.md`:
+
 ```
 ## {HH:MM} - {Action}
 
@@ -37,7 +38,7 @@ After completing the request, append to `History/{YYYY-MM-DD}.md`:
 2. **Image Capture** - **ALWAYS** locate and document the last known image of the person:
    - **Primary Source**: LinkedIn profile photo (use Playwright to screenshot if needed)
    - **Secondary Sources**: Company website, GitHub profile, Twitter/X, official website, news articles
-   - **Image Requirements**: 
+   - **Image Requirements**:
      - Must be a professional/recent headshot or photo
      - Capture the URL source
      - Note the date the photo was last seen (when available)

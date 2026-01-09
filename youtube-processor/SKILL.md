@@ -19,7 +19,9 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 ## Core Commands
 
 ### Process-YouTubeUrl
+
 The primary command to run the entire pipeline for a single URL.
+
 ```powershell
 # 1. Extract Metadata
 $metadata = & "c:\Users\franz\.claude\skills\youtube-processor\scripts\Get-YouTubeMetadata.ps1" -Url "{URL}" -OutputDir "{OUTPUT_DIR}"

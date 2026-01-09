@@ -19,6 +19,7 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 ## History Management
 
 Every interaction MUST be logged to the History folder:
+
 - Location: `~/.claude/skills/shopping/History/{YYYY-MM-DD}.md`
 - Create file if it doesn't exist for the current date
 - Append new entries with timestamp
@@ -41,6 +42,7 @@ Every interaction MUST be logged to the History folder:
 ## Live Tracking
 
 **CRITICAL**: When checking order status or showing tracking info:
+
 1. **Always fetch the tracking URL** using `fetch_webpage` to get live status
 2. Extract the latest checkpoint data (dates, times, locations, status)
 3. Update the history file with the fresh timeline

@@ -8,7 +8,7 @@
 
 ---
 
-### 1) Results-Driven — Commit. Plan. Deliver.
+### 1) Results-Driven — Commit. Plan. Deliver
 
 #### **AI Enablement at Scale**
 
@@ -16,7 +16,8 @@
 
 **Task**: Design and launch a scalable AI enablement program accessible to engineers at all skill levels.
 
-**Action**: 
+**Action**:
+
 - Launched **"Lunch and Learn AI Together"** pilot in late May/early June (3 sessions: 5/21, 5/28, 6/04) achieving 50+ regular participants
 - Scaled program to two specialized tracks in Q4: **AI Foundation Chapter** (bi-weekly, Technology Group-wide, launched 11/12) and **AI Engineering Chapter** (bi-weekly, engineering-focused, launched 11/19)
 - Delivered **9 AI Chapter meetings** throughout Q4 (October-December: 10/1, 10/8, 10/22, 10/29, 11/5, 11/19, 12/3, 12/17)
@@ -35,6 +36,7 @@
 **Task**: Lead technical planning, develop migration tooling, and drive adoption across 100+ engineering teams.
 
 **Action**:
+
 - Facilitated planning and organization efforts throughout the year (Q1 foundation → Q2 acceleration → Q3/Q4 progression), developing comprehensive documentation
 - Developed **Legacy Release Tool** (beta Q2, refined Q3/Q4) - critical custom tooling that unblocked migration path and made legacy releases from GitHub possible
 - Enhanced **Configurator** to streamline workstation setup on the new platform
@@ -53,6 +55,7 @@
 **Task**: Design, build, and prepare Relias Assistant for internal launch while incorporating cutting-edge AI engineering patterns.
 
 **Action**:
+
 - Q1: Initiated "Yakob!" project, laying technical groundwork
 - Q2: Advanced toward real-world application with Azure resource deployments
 - Q3: Completed Milestone 1 - migrated infrastructure from playground to Azure dev environment
@@ -69,6 +72,7 @@
 **Task**: Manage Copilot Enterprise deployment, user allocation, model enablement, and develop organization-specific agents.
 
 **Action**:
+
 - Managed user provisioning, license allocation, and access controls throughout the year
 - Enabled **GPT 5.2, GPT 5.1-Max, Claude Sonnet 4.5, Claude Opus, and Gemini 3 Pro** models for Enterprise subscription (Q4)
 - Deployed **C# quality agent** in GitHub private repo to enforce coding standards
@@ -85,6 +89,7 @@
 **Task**: Act as primary Cortex liaison, beta tester, and strategic partner.
 
 **Action**:
+
 - Q1: Advanced Cortex through feature testing and actionable feedback
 - Q2: Partnered on dashboard expansion with **DORA metrics** and improved Home Dashboard consolidating PR overviews
 - Q3/Q4: Contributed to **Cortex MCP server** development and demonstrations; conducted quarterly audits and metrics awareness initiatives
@@ -94,7 +99,7 @@
 
 ---
 
-### 2) Responsible — Represent. Initiate. Develop.
+### 2) Responsible — Represent. Initiate. Develop
 
 #### **Proactive Technical Leadership**
 
@@ -106,6 +111,7 @@
 #### **Professional Development & Expertise**
 
 **Developed comprehensive AI engineering skill set in 2025:**
+
 - **Agentic workflows** and autonomous agent design patterns
 - **MCP (Model Context Protocol)** - servers, clients, integration patterns
 - **Knowledge systems** - RAG, knowledge models, retrieval strategies
@@ -123,7 +129,7 @@ Continued deep work with Azure, GitHub ecosystem, and platform engineering to ke
 
 ---
 
-### 3) Relationship-Building — Engage. Include. Collaborate.
+### 3) Relationship-Building — Engage. Include. Collaborate
 
 #### **Cross-Functional Partnership**
 
@@ -136,6 +142,7 @@ Continued deep work with Azure, GitHub ecosystem, and platform engineering to ke
 #### **Conflict Resolution & Program Governance**
 
 When "Learn AI Together" expansion concerns surfaced regarding audience scope and content ownership (Q3), I:
+
 - Proposed **two-track model** (Engineering-focused vs. Foundation/Company track)
 - Created **content governance rubric** to clarify standards and cadence
 - Successfully launched both tracks with clear charters and audience definitions (Q4)
@@ -152,6 +159,7 @@ When "Learn AI Together" expansion concerns surfaced regarding audience scope an
 ## Key Accomplishments Summary
 
 ### **Impact Metrics**
+
 - **~60-70 engineers** trained and enabled through AI education programs
 - **12 AI meetings** hosted in 2025 (3 Lunch and Learn + 9 AI Chapter)
 - **7 AI Quick Tutorials** published by Relias Engineering contributors
@@ -161,6 +169,7 @@ When "Learn AI Together" expansion concerns surfaced regarding audience scope an
 - **Two AI Chapters**: Foundation track + Engineering track serving different audience needs
 
 ### **Strategic Initiatives Delivered**
+
 1. ✅ GitHub migration substantial progress (160+ repos migrated through facilitation, documentation, and tooling)
 2. ✅ "Learn AI Together" → AI Chapters evolution (scaled to two tracks)
 3. ✅ Relias Assistant to production-ready state (launch delayed strategically for MCP/skills integration)
@@ -178,6 +187,7 @@ When "Learn AI Together" expansion concerns surfaced regarding audience scope an
 **Challenge**: Building Relias Assistant involved navigating rapidly evolving AI engineering landscape, balancing feature completeness with launch timing, and incorporating emerging patterns (MCP, skills, agentic workflows) while maintaining production readiness.
 
 **How I Overcame It**:
+
 - Adopted iterative milestone approach (Q1 foundation → Q2 Azure → Q3 dev infra → Q4 production-ready)
 - Made strategic decision to delay launch for MCP/skills integration vs. rushing incomplete solution
 - Stayed current with cutting-edge AI engineering practices through continuous learning
@@ -188,6 +198,7 @@ When "Learn AI Together" expansion concerns surfaced regarding audience scope an
 ### **Skills Developed**
 
 Developed **comprehensive AI engineering expertise** in 2025:
+
 - **Agentic workflows** and autonomous agent design
 - **MCP (Model Context Protocol)** architecture and integration
 - **Knowledge systems** (RAG, knowledge models, retrieval)
@@ -200,27 +211,32 @@ Became recognized subject matter expert on AI engineering practices, enabling me
 ## Goals for 2026
 
 ### **1. Complete GitHub Migration**
+
 - Finalize remaining repository transitions and edge cases
 - Deprecate Bitbucket infrastructure completely
 - Ensure all teams fully operational on GitHub with optimal workflows
 
 ### **2. Launch Relias Assistant Publicly (First Release)**
+
 - Deliver internal beta and iterate based on user feedback
 - Incorporate MCP/skills enhancements for maximum impact
 - Prepare for broader organizational rollout
 - **Note**: 2026 will be a massive year for AI; Relias must be at the forefront to capture full benefits
 
 ### **3. Continue AI Education & Enablement**
+
 - Maintain AI Foundation Chapter and AI Engineering Chapter with fresh, relevant content
 - Adapt content to latest AI developments and emerging patterns
 - Expand reach where appropriate based on organizational needs
 - Keep Relias Engineering current with AI landscape to maintain competitive advantage
 
 ### **4. Professional Development**
+
 - Attend major developer/AI conference to stay current with industry trends and bring insights back to organization
 - Continue deep learning on emerging AI engineering patterns and tooling
 
 ### **Supporting Initiatives**
+
 - Package **"GitHub + Copilot playbook"** (templates, PR practices, guardrails) and measure adoption
 - Execute Cortex leadership workshops for metrics awareness
 - Optimize Configurator and Legacy Release Tool based on usage patterns

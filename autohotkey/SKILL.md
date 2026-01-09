@@ -27,12 +27,14 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 ## v2 Syntax Essentials
 
 ### Script Header
+
 ```autohotkey
 #Requires AutoHotkey v2.0
 #SingleInstance Force
 ```
 
 ### Modifier Keys
+
 | Symbol | Key |
 |--------|-----|
 | `^` | CTRL |
@@ -41,6 +43,7 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 | `#` | WIN |
 
 ### Hotkey Syntax (v2)
+
 ```autohotkey
 ; Simple hotkey
 ^+x:: MsgBox("Hello")
@@ -55,11 +58,13 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 ### Common Patterns
 
 **Run Application:**
+
 ```autohotkey
 ^+n:: Run("notepad.exe")
 ```
 
 **Activate or Launch:**
+
 ```autohotkey
 ^+t:: {
     if WinExist("ahk_exe app.exe") {
@@ -71,17 +76,20 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 ```
 
 **Send Text/Keys:**
+
 ```autohotkey
 ::btw::by the way  ; Hotstring
 ^+d:: Send(FormatTime(, "yyyy-MM-dd"))  ; Date stamp
 ```
 
 **Run PowerShell Hidden:**
+
 ```autohotkey
 ^+p:: Run('powershell.exe -WindowStyle Hidden -Command "Get-Date"',, "Hide")
 ```
 
 **Tooltip with Auto-Hide:**
+
 ```autohotkey
 ShowTooltip(msg, duration := 1500) {
     ToolTip(msg)
@@ -90,6 +98,7 @@ ShowTooltip(msg, duration := 1500) {
 ```
 
 **GUI Input Box:**
+
 ```autohotkey
 #Space:: {
     ib := InputBox("Enter command:", "Launcher")
@@ -101,6 +110,7 @@ ShowTooltip(msg, duration := 1500) {
 ### Window Management
 
 **Identify Windows (use Window Spy):**
+
 ```autohotkey
 ; By executable
 WinExist("ahk_exe chrome.exe")
@@ -111,6 +121,7 @@ WinExist("Document -")
 ```
 
 **Window Operations:**
+
 ```autohotkey
 WinActivate("ahk_exe app.exe")
 WinMinimize("ahk_exe app.exe")
@@ -121,6 +132,7 @@ WinGetMinMax("ahk_exe app.exe")  ; Returns: -1=minimized, 0=normal, 1=maximized
 ```
 
 ### Clipboard Operations
+
 ```autohotkey
 ; Get clipboard
 text := A_Clipboard
@@ -133,6 +145,7 @@ ClipWait(2)  ; Wait up to 2 seconds
 ```
 
 ### File Operations
+
 ```autohotkey
 ; Read file
 content := FileRead("C:\path\file.txt")
@@ -146,6 +159,7 @@ if FileExist("C:\path\file.txt")
 ```
 
 ### Script Control
+
 ```autohotkey
 Reload  ; Reload script
 Edit    ; Open script in editor

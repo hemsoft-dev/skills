@@ -12,9 +12,9 @@ Manage the HemSoft Developments Patreon creator account.
 | Field | Value |
 |-------|-------|
 | Creator Name | HemSoft Developments |
-| Email | fphemmer@gmail.com |
-| URL | https://www.patreon.com/c/HemSoft |
-| Dashboard | https://www.patreon.com/dashboard |
+| Email | <fphemmer@gmail.com> |
+| URL | <https://www.patreon.com/c/HemSoft> |
+| Dashboard | <https://www.patreon.com/dashboard> |
 
 ## ALWAYS: Log This Interaction
 
@@ -30,12 +30,14 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 ### Content Creation
 
 Generate Patreon posts with:
+
 - Engaging titles and descriptions
 - Appropriate tier visibility settings
 - Tags and categories
 - Embedded media suggestions
 
 **Post Template:**
+
 ```markdown
 # {Title}
 
@@ -65,6 +67,7 @@ Track and suggest membership tiers:
 **Base URL:** `https://www.patreon.com/api/oauth2/v2`
 
 **Key Endpoints:**
+
 - `GET /identity` - Current user info
 - `GET /campaigns` - Creator's campaigns
 - `GET /campaigns/{id}/members` - Patron list
@@ -73,6 +76,7 @@ Track and suggest membership tiers:
 **Authentication:** OAuth2 with Creator Access Token
 
 **Example - Get Campaign Stats:**
+
 ```bash
 curl -H "Authorization: Bearer {ACCESS_TOKEN}" \
   "https://www.patreon.com/api/oauth2/v2/campaigns/{CAMPAIGN_ID}?fields[campaign]=patron_count,creation_name,pledge_sum"
@@ -81,6 +85,7 @@ curl -H "Authorization: Bearer {ACCESS_TOKEN}" \
 ### Analytics & Reporting
 
 Track key metrics:
+
 - Patron count and growth
 - Monthly revenue (pledge_sum)
 - Post engagement

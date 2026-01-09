@@ -17,6 +17,7 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 ```
 
 ## Requirements
+
 - **Bun**: Must be installed. If `bun` is not recognized, use the `env-manager` skill to fix the Windows PATH.
   - Installation: `powershell -c "irm bun.sh/install.ps1 | iex"`
 - **Git**: Required for repository initialization.
@@ -25,6 +26,7 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
   - **Fallback**: If global installation is not possible, use the local binary: `.\node_modules\.bin\supabase.cmd` (after `bun add supabase --dev`).
 
 ## Core Stack
+
 - **Runtime/PM**: Bun
 - **Frontend**: Next.js 16+ (App Router, TypeScript, React 19)
 - **UI**: shadcn/ui (Tailwind CSS 4+, Radix)
@@ -35,9 +37,11 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 ## Workflow
 
 ### 1. Repository Initialization
+
 Use the `github-init` skill to set up the repository and initial history.
 
 ### 2. Project Scaffolding (Bun)
+
 If the directory is not empty (e.g., after `github-init`), use this "Safe Scaffolding" approach:
 
 ```powershell
@@ -94,13 +98,16 @@ if (Test-Path $gitIgnorePath) {
 ```
 
 ### 3. Core Dependencies
+
 ```powershell
 bun add lucide-react zod zod-form-data clsx tailwind-merge @supabase/supabase-js
 bun add -d vitest @vitest/coverage-v8 jsdom @vitejs/plugin-react @testing-library/react @testing-library/jest-dom
 ```
 
 ### 4. Directory Structure
+
 Ensure the following structure is established:
+
 - `src/app/`: Next.js App Router pages.
 - `src/components/ui/`: shadcn/ui components.
 - `src/lib/`: Shared utilities (supabase client, zod schemas).
@@ -110,14 +117,17 @@ Ensure the following structure is established:
 ### 5. Database & Auth (Supabase Cloud)
 
 #### Remote Setup (Primary Path)
+
 Always use a remote Supabase project for POCs to ensure the environment is ready for deployment. Use the CLI to link and push migrations.
 
 **Required Credentials:**
+
 - `SUPABASE_ACCESS_TOKEN`: From [supabase.com/dashboard/account/tokens](https://supabase.com/dashboard/account/tokens).
 - `SUPABASE_DB_PASSWORD`: The password set when creating the project.
 - `SUPABASE_PROJECT_REF`: The unique ID in your project URL (e.g., `krdpxbpnvemzfxbnkgcq`).
 
 **Workflow:**
+
 ```powershell
 # 1. Link to the remote project
 # Set credentials in the current session (do not store in .env.local)
@@ -133,7 +143,9 @@ $env:SUPABASE_DB_PASSWORD = "your_db_password"
 ```
 
 #### Initial Schema
+
 Define the initial schema in `supabase/migrations/00001_initial_schema.sql`:
+
 ```sql
 -- Demo table
 CREATE TABLE demo (
@@ -153,7 +165,9 @@ INSERT INTO demo (name) VALUES ('First Demo Record'), ('Second Demo Record');
 ```
 
 ### 6. Environment Variables & Supabase Client
+
 Create `src/lib/env.ts` for validation:
+
 ```typescript
 import { z } from "zod";
 
@@ -171,6 +185,7 @@ export const env = envSchema.parse({
 ```
 
 Create `src/lib/supabase.ts` for the client:
+
 ```typescript
 import { createClient } from "@supabase/supabase-js";
 import { env } from "./env";
@@ -187,7 +202,9 @@ export const supabaseAdmin = createClient(
 ```
 
 ### 7. Initial CRUD Implementation
+
 Create `src/app/actions.ts` for Server Actions:
+
 ```typescript
 "use server";
 
@@ -209,6 +226,7 @@ export async function addDemoRecord(formData: FormData) {
 ```
 
 Update `src/app/page.tsx` with a working POC:
+
 ```tsx
 import { supabase } from "@/lib/supabase";
 import {
@@ -282,7 +300,9 @@ export default async function Home() {
 ```
 
 ### 8. Testing (Vitest)
+
 Create `vitest.config.ts` in the root:
+
 ```typescript
 import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
@@ -315,6 +335,7 @@ export default defineConfig({
 ```
 
 Create `src/test/setup.ts`:
+
 ```typescript
 import '@testing-library/jest-dom'
 import { vi } from 'vitest'
@@ -331,6 +352,7 @@ vi.mock('@/lib/supabase', () => ({
 ```
 
 Add test scripts to `package.json`:
+
 ```json
 {
   "scripts": {
@@ -342,6 +364,7 @@ Add test scripts to `package.json`:
 ```
 
 ## Post-Scaffold Checklist
+
 After scaffolding, the agent MUST communicate the following steps to the user:
 
 1. **GitHub Setup**:
@@ -371,6 +394,7 @@ After scaffolding, the agent MUST communicate the following steps to the user:
    - Run `bun dev --port 5001` to start the Next.js dev server on the preferred port.
 
 ## Conventions
+
 - **Server-First**: Perform DB writes and AI calls in Server Actions or API Routes.
 - **Validation**: Use `zod` for all environment variables and request payloads.
 - **Observability**: Every AI call must log to the `ai_runs` table (latency, tokens, provider, model).
@@ -380,13 +404,16 @@ After scaffolding, the agent MUST communicate the following steps to the user:
 ## Agentic Best Practices & Limitations (CRITICAL)
 
 ### 1. Strict Consent Protocol (Plan-First)
+
 Agents MUST follow a "Plan-First, Execute-Second" workflow for any non-trivial changes:
-1.  **Research**: Read necessary files to understand context.
-2.  **Plan**: Present a numbered list of intended file creations, modifications, and terminal commands.
-3.  **Wait**: Do NOT execute any tool calls (except `read_file`) until the user provides explicit approval (e.g., "Go", "Approved").
-4.  **Execute**: Perform the approved steps exactly as planned.
+
+1. **Research**: Read necessary files to understand context.
+2. **Plan**: Present a numbered list of intended file creations, modifications, and terminal commands.
+3. **Wait**: Do NOT execute any tool calls (except `read_file`) until the user provides explicit approval (e.g., "Go", "Approved").
+4. **Execute**: Perform the approved steps exactly as planned.
 
 ### 2. CLI & Environment Limitations
+
 - **Non-Interactive Only**: Agents cannot respond to interactive prompts (e.g., `[Y/n]`). Always use non-interactive flags:
   - `supabase db push --yes`
   - `supabase db reset --linked --yes`
@@ -395,19 +422,24 @@ Agents MUST follow a "Plan-First, Execute-Second" workflow for any non-trivial c
 - **Credential Management**: Provide placeholders in `.env.local` for the user to fill in. Never ask for secrets in plain text if they can be provided via the environment.
 
 ### 3. Port Management
+
 - Always respect the user's preferred port (e.g., 5001).
 - Use `Get-NetTCPConnection` and `Stop-Process` to clear conflicting processes before starting a server.
 
 ### 4. Persistence of Protocol
+
 Since agents are stateless across sessions, these instructions MUST be treated as the primary source of truth for maintaining strict boundaries and following the "Plan-First, Execute-Second" workflow.
 
 ### 5. Quality Standards
+
 - **Clean Lint Requirement**: ALL changes and improvements MUST result in a clean `bun lint` result. No code should be committed to the repository unless linting passes with zero errors and zero warnings. This requirement must be explicitly stated in the `AGENTS.md` file generated for the project.
 
 ## Related Skills
+
 - `bun-manager`: For ongoing package and runtime management.
 - `env-manager`: For PATH cleanup and environment variable optimization.
 - `github-init`: For repository setup.
 
 ## Theme Management
+
 Refer to the **Theme Management & Discovery** section in `AGENTS.md` for efficient theme research and OKLCH conversion protocols. Always preserve the "Finesse" visual system (mesh/grid/glass) when applying new themes.

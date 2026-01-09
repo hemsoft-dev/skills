@@ -10,6 +10,7 @@ Use this skill when a task was particularly difficult, required multiple retries
 ## Reference: Core Behavior Guidelines
 
 When reflecting on mistakes, always review `~/.claude/CLAUDE.md` which contains core principles:
+
 - **Never Fabricate** - Don't invent numbers, counts, paths, or URLs without verifying
 - **Verify Before Asserting** - Read files, check paths, run commands to get real data
 - **Admit Uncertainty** - Say "I don't know" rather than guessing with false confidence
@@ -36,7 +37,7 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
    - Explain what you intend to save to memory.
    - Ask for their agreement.
    - Ask if they have any additional input or corrections to the reflection.
-4. **Record to Memory**: Once approved, use the `memory` tool to save the insight.
+5. **Record to Memory**: Once approved, use the `memory` tool to save the insight.
    - Prefer creating or updating a file like `/memories/lessons-learned.md` or a task-specific file under `/memories/troubleshooting/`.
    - If the `memory` tool is unavailable, consult the user for an alternative storage location.
 
@@ -49,6 +50,7 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 ## Example Entry Format
 
 ### {Date} - {Task/Tool Name}
+
 - **Issue**: {Brief description of the hiccup}
 - **Root Cause**: {Why it happened}
 - **Lesson**: {Actionable instruction for future self}

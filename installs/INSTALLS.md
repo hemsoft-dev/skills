@@ -29,6 +29,7 @@ scoop install cloc ffmpeg
 ```
 
 **Installed fonts:**
+
 - JetBrains Mono - Clean, modern, highly readable
 - GeistMono NF - Vercel's font with Nerd Font icons
 - Victor Mono - Elegant cursive italics
@@ -154,7 +155,6 @@ npx --version
 
 **Note:** Restart terminal after installation for PATH to update.
 
-
 ### 8.3. Python 3.12
 
 `powershell
@@ -170,6 +170,7 @@ C:\Users\User\AppData\Local\Programs\Python\Python312\python.exe -m pip install 
 `
 
 Creates a speak-clipboard script for AutoHotkey TTS shortcut (CTRL+ALT+P).
+
 ### 8.5. .NET SDK (Latest)
 
 The official dotnet-install script installs to user directory (no admin required) and supports any version/channel.
@@ -326,11 +327,11 @@ Start-Process "$env:USERPROFILE\Documents\AutoHotkey.ahk"
 winget install --id Wispr.Flow -e --source winget
 ```
 
-If not available via winget, download from: https://www.wispr.com/flow
+If not available via winget, download from: <https://www.wispr.com/flow>
 
 ### 18. Directory Opus
 
-Download from: https://www.gpsoft.com.au/
+Download from: <https://www.gpsoft.com.au/>
 
 ```powershell
 Start-Process "https://www.gpsoft.com.au/DScripts/download.asp"
@@ -346,14 +347,16 @@ Control software for Corsair Xeneon Edge 14.5" LCD Touchscreen and other Corsair
 winget install --id Corsair.iCUE.5 -e --source winget
 ```
 
-If not available via winget, download from: https://www.corsair.com/us/en/s/downloads
+If not available via winget, download from: <https://www.corsair.com/us/en/s/downloads>
 
 **Xeneon Edge 14.5" Specs:**
+
 - 2560x720 resolution (32:9 ultrawide), 60Hz, 5-point touchscreen
 - USB-C DP-Alt Mode and HDMI 2.0 inputs
 - Magnetic mount for desktop, case, or metal surfaces
 
 **iCUE Features:**
+
 - Custom widget layouts and system metrics display
 - Virtual Stream Deck integration
 - RGB lighting sync across Corsair devices

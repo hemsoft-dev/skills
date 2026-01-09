@@ -5,6 +5,7 @@ Last Updated: 2025-12-24
 ## Model Selection Guide
 
 ### By Use Case
+
 - **Agentic Coding**: Gemini 3 Flash, Kimi K2, Grok Code Fast 1, GLM 4.7
 - **Complex Reasoning**: Claude Opus 4.5, Gemini 3 Pro, Grok 4
 - **High-Volume/Low-Cost**: GLM 4.7, Kimi K2, Claude Haiku 4.5
@@ -34,6 +35,7 @@ Last Updated: 2025-12-24
 ### Anthropic Models
 
 #### Claude Opus 4.5
+
 **The Frontier Reasoning Powerhouse**
 
 | Spec | Value |
@@ -45,6 +47,7 @@ Last Updated: 2025-12-24
 | Modalities | Text, Vision |
 
 **Capabilities:**
+
 - Frontier reasoning model optimized for complex software engineering and agentic workflows
 - Handles long-horizon tasks requiring extensive planning and execution
 - Extended thinking capability for deep problem decomposition
@@ -59,6 +62,7 @@ Last Updated: 2025-12-24
 ---
 
 #### Claude Sonnet 4.5
+
 **The Production Coding Champion**
 
 | Spec | Value |
@@ -70,6 +74,7 @@ Last Updated: 2025-12-24
 | Modalities | Text, Vision |
 
 **Capabilities:**
+
 - State-of-the-art performance on SWE-bench Verified (coding benchmarks)
 - 1M token context window for massive codebases and documentation
 - Improved agentic capabilities with sophisticated tool orchestration
@@ -78,6 +83,7 @@ Last Updated: 2025-12-24
 - Strong security analysis and code review capabilities
 
 **Benchmarks:**
+
 - SWE-bench Verified: State-of-the-art
 - Coding benchmarks: Top performer
 
@@ -88,6 +94,7 @@ Last Updated: 2025-12-24
 ---
 
 #### Claude Haiku 4.5
+
 **The Speed Demon**
 
 | Spec | Value |
@@ -99,6 +106,7 @@ Last Updated: 2025-12-24
 | Modalities | Text, Vision |
 
 **Capabilities:**
+
 - Fastest and most efficient model in Anthropic's lineup
 - >73% on SWE-bench Verified (approaches Sonnet 4 performance)
 - Near-instant responses for real-time applications
@@ -107,6 +115,7 @@ Last Updated: 2025-12-24
 - Computer use (beta) and MCP tool support
 
 **Performance Metrics:**
+
 - Throughput: 129 tokens/second (fastest Claude)
 - Latency: 0.7s TTFT
 - SWE-bench: >73%
@@ -120,6 +129,7 @@ Last Updated: 2025-12-24
 ### Google Models
 
 #### Gemini 3 Pro Preview
+
 **The Multimodal Frontier Leader**
 
 | Spec | Value |
@@ -131,6 +141,7 @@ Last Updated: 2025-12-24
 | Modalities | Text, Vision, Audio, Video |
 
 **Capabilities:**
+
 - Flagship frontier model for high-precision multimodal reasoning
 - Leads LMArena leaderboard for human preference alignment
 - GPQA Diamond leader for scientific reasoning
@@ -140,6 +151,7 @@ Last Updated: 2025-12-24
 - Excels at SWE-Bench Verified and Terminal-Bench 2.0
 
 **Key Strengths:**
+
 - True multimodal: processes text, images, audio, video, and PDFs natively
 - Infers intent with minimal prompting
 - Superior zero-shot generation for complex UI and visualization
@@ -152,6 +164,7 @@ Last Updated: 2025-12-24
 ---
 
 #### Gemini 3 Flash Preview
+
 **The Fast Multimodal Workhorse**
 
 | Spec | Value |
@@ -163,6 +176,7 @@ Last Updated: 2025-12-24
 | Modalities | Text, Vision, Audio, Video |
 
 **Capabilities:**
+
 - High-speed thinking model with near-Pro level reasoning
 - Substantially lower latency than larger Gemini variants
 - Broad quality improvements over Gemini 2.5 Flash in reasoning, multimodal, and reliability
@@ -171,6 +185,7 @@ Last Updated: 2025-12-24
 - Strong tool use performance for agentic workflows
 
 **Performance Metrics:**
+
 - Throughput: 75-123 tokens/second
 - Latency: 0.85s TTFT (via AI Studio)
 - E2E Latency: 2.8-4.1s
@@ -184,6 +199,7 @@ Last Updated: 2025-12-24
 ### OpenAI Models
 
 #### GPT-5.2
+
 **The Adaptive Reasoner**
 
 | Spec | Value |
@@ -194,6 +210,7 @@ Last Updated: 2025-12-24
 | Modalities | Text |
 
 **Capabilities:**
+
 - Latest in the GPT-5 series with adaptive reasoning
 - Dynamically allocates computation based on task complexity
 - Enhanced agentic and long-context performance over GPT-4o
@@ -210,6 +227,7 @@ Last Updated: 2025-12-24
 ### xAI Models
 
 #### Grok 4
+
 **The Premium Reasoner**
 
 | Spec | Value |
@@ -221,6 +239,7 @@ Last Updated: 2025-12-24
 | Modalities | Text, Vision |
 
 **Capabilities:**
+
 - Latest reasoning model from xAI
 - Parallel tool calling for complex agentic workflows
 - 256K context window for large document processing
@@ -234,6 +253,7 @@ Last Updated: 2025-12-24
 ---
 
 #### Grok Code Fast 1
+
 **The Budget Speed Coder**
 
 | Spec | Value |
@@ -245,6 +265,7 @@ Last Updated: 2025-12-24
 | Modalities | Text |
 
 **Capabilities:**
+
 - Speedy and economical reasoning model optimized for agentic coding
 - Visible reasoning traces for debugging and understanding
 - Strong at agent-driven file manipulation and code generation
@@ -252,6 +273,7 @@ Last Updated: 2025-12-24
 - 256K context for large codebases
 
 **Performance Metrics:**
+
 - Throughput: 89 tokens/second
 - Latency: 3.1s TTFT
 - Cost: One of the cheapest capable coding models
@@ -265,6 +287,7 @@ Last Updated: 2025-12-24
 ### MoonshotAI Models
 
 #### Kimi K2
+
 **The Trillion-Parameter MoE Beast**
 
 | Spec | Value |
@@ -275,6 +298,7 @@ Last Updated: 2025-12-24
 | Modalities | Text |
 
 **Capabilities:**
+
 - 1 trillion total parameters with 32B active per forward pass (MoE architecture)
 - Excels at coding (LiveCodeBench, SWE-bench), reasoning (ZebraLogic, GPQA), and tool-use (Tau2, AceBench)
 - Optimized for agentic tool orchestration
@@ -282,6 +306,7 @@ Last Updated: 2025-12-24
 - Open-weights model available on HuggingFace
 
 **Architecture:**
+
 - Total Parameters: 1 trillion
 - Active Parameters: 32B (MoE)
 - Context: 128K tokens
@@ -293,6 +318,7 @@ Last Updated: 2025-12-24
 ---
 
 #### Kimi K2 Thinking
+
 **The Extended Reasoning Specialist**
 
 | Spec | Value |
@@ -303,6 +329,7 @@ Last Updated: 2025-12-24
 | Modalities | Text |
 
 **Capabilities:**
+
 - Extended reasoning variant of Kimi K2
 - 256K token context window (double K2)
 - Stable operation with 200-300+ tool calls in single sessions
@@ -311,6 +338,7 @@ Last Updated: 2025-12-24
 - Chain-of-thought reasoning visible in output
 
 **Key Differentiator:**
+
 - Handles complex multi-step agent tasks with hundreds of tool invocations
 - Best value for extended reasoning workflows
 
@@ -323,6 +351,7 @@ Last Updated: 2025-12-24
 ### Z.AI Models
 
 #### GLM 4.7
+
 **The Value-Packed Coder**
 
 | Spec | Value |
@@ -334,6 +363,7 @@ Last Updated: 2025-12-24
 | Modalities | Text |
 
 **Capabilities:**
+
 - Latest flagship from Z.AI (Zhipu/Tsinghua)
 - Enhanced programming capabilities over GLM 4.6
 - More stable multi-step reasoning and execution
@@ -344,6 +374,7 @@ Last Updated: 2025-12-24
 - Built-in reasoning mode support
 
 **Performance Metrics:**
+
 - Throughput: 48-61 tokens/second
 - Latency: 0.88-1.5s TTFT
 - Context: 203K tokens

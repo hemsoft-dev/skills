@@ -10,6 +10,7 @@ Search JIRA and Confluence, create/modify JIRA tickets with proper team field co
 ## ALWAYS: Log This Interaction
 
 After completing the request, append to `History/{YYYY-MM-DD}.md`:
+
 ```
 ## {HH:MM} - {Action}
 
@@ -24,8 +25,9 @@ After completing the request, append to `History/{YYYY-MM-DD}.md`:
 ## JIRA API Script
 
 Use this PowerShell script to query JIRA with proper JQL. Requires environment variables:
+
 - `ATLASSIAN_EMAIL`: Your Atlassian email
-- `ATLASSIAN_API_TOKEN`: API token from https://id.atlassian.com/manage-profile/security/api-tokens
+- `ATLASSIAN_API_TOKEN`: API token from <https://id.atlassian.com/manage-profile/security/api-tokens>
 
 ```powershell
 # Get-JiraTickets.ps1
@@ -90,8 +92,9 @@ $response.issues | ForEach-Object {
 ## Confluence API Scripts
 
 Use these PowerShell scripts to interact with Confluence. Requires environment variables:
+
 - `ATLASSIAN_EMAIL`: Your Atlassian email
-- `ATLASSIAN_API_TOKEN`: API token from https://id.atlassian.com/manage-profile/security/api-tokens
+- `ATLASSIAN_API_TOKEN`: API token from <https://id.atlassian.com/manage-profile/security/api-tokens>
 
 ### Get Confluence Pages
 
@@ -468,6 +471,7 @@ The `mcp_atlassian_mcp_search` tool uses **Rovo Search**—semantic/natural lang
 ## Creating Epics (Model after PE-939)
 
 Ask for:
+
 1. Is the epic capitalizable?
 2. Who is the Stakeholder?
 3. Flip from TODO to IN PROGRESS?
@@ -479,6 +483,7 @@ Note: You may get an error on creation—modify the ticket after creation to upd
 ## Creating Tickets (Model after PE-940)
 
 Ask for:
+
 1. Story or Task?
 2. Status: Backlog (default), TODO, or IN PROGRESS?
 3. Assignee?

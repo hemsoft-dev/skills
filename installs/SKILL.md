@@ -29,7 +29,7 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 
 - Windows 11 with internet connection
 - Administrator access
-- HemSoft GitHub credentials (franz_hemmer@hotmail.com)
+- HemSoft GitHub credentials (<franz_hemmer@hotmail.com>)
 
 ## Installation Steps
 
@@ -130,4 +130,3 @@ See [INSTALLS.md](INSTALLS.md) for full installation instructions.
 | `Ctrl+Shift+G` | Activate/Launch ChatGPT |
 | `Ctrl+Shift+N` | Activate/Launch Obsidian (Notes) |
 | `Ctrl+Shift+T` | Activate/Launch Todoist |
-

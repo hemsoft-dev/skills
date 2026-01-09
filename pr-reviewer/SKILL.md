@@ -20,6 +20,7 @@ Generate a `pr-review-report.md` file in the repository root.
 **Output location**: `{repo-root}/pr-review-report.md` (or user-specified path)
 
 **Report structure**:
+
 ```markdown
 # PR Review Report
 **PR**: #{number} - {title}
@@ -50,20 +51,24 @@ Leave feedback directly as **inline review comments** on the PR with severity pr
 **Trigger**: User says "comment on PR", "leave PR feedback", or "review with comments"
 
 **Comment format**:
+
 ```
 **[CRITICAL]** 🔴 {description}
 {explanation and suggested fix}
 ```
+
 ```
 **[MEDIUM]** 🟡 {description}
 {explanation and suggested fix}
 ```
+
 ```
 **[NITPICK]** 🟢 {description}
 {optional suggestion}
 ```
 
 **Workflow**:
+
 1. Analyze the PR diff
 2. Submit a formal review with inline comments using `gh api` with JSON input
 3. Group comments by severity (Medium issues first, then Nitpicks)
@@ -101,6 +106,7 @@ Leave feedback directly as **inline review comments** on the PR with severity pr
 ```
 
 **Key points**:
+
 - Use `line` (integer) for the line number in the diff
 - Use `path` for the file path relative to repo root
 - Use `event`: `"COMMENT"` for feedback, `"REQUEST_CHANGES"` for blocking issues, `"APPROVE"` when ready
@@ -108,6 +114,7 @@ Leave feedback directly as **inline review comments** on the PR with severity pr
 - Group related comments into a single review submission when possible
 
 **For summary-only comments** (no inline):
+
 ```powershell
 gh pr comment {pr} --body "## Summary comment at bottom of PR..."
 ```
@@ -123,12 +130,14 @@ Actively resolve all PR comments until every thread is marked outdated or resolv
 You **MUST NOT** programmatically resolve review threads without properly addressing each one. GitHub's `resolveReviewThread` mutation is **only** for use by maintainers after they've reviewed a fix—**never** by the agent to bypass review gates.
 
 **Each comment MUST be addressed by one of these two outcomes:**
+
 1. **Code fix** → The fix outdates the comment naturally when the underlying code changes
 2. **Reply with justification** → Explain why the comment won't be addressed (already fixed, not applicable, intentional design choice, etc.)
 
 **Never resolve a thread programmatically.** If branch protection requires conversation resolution, the human reviewer or maintainer must resolve threads after verifying fixes.
 
 **Workflow**:
+
 1. Fetch all PR comments: `gh api repos/{owner}/{repo}/pulls/{pr}/comments`
 2. Fetch review comments: `gh api repos/{owner}/{repo}/pulls/{pr}/reviews`
 3. Build a checklist of all unresolved comments
@@ -147,12 +156,14 @@ You **MUST NOT** programmatically resolve review threads without properly addres
 8. **Loop until all comments are either outdated or have substantive replies**
 
 **Completion criteria**:
+
 - Every comment thread is either:
   - Outdated (code was changed, which automatically indicates the issue was addressed)
   - Has a substantive reply explaining why no code change was made
 - **Never** programmatically resolved by the agent
 
 **GitHub CLI commands**:
+
 ```powershell
 # List review threads with status (IMPORTANT: use GraphQL for accurate status)
 gh api graphql -f query='query { 
@@ -191,6 +202,7 @@ gh api graphql -f query='...' --jq '.data.repository.pullRequest.reviewThreads.n
 ```
 
 **Key distinction**:
+
 - `gh pr comment` → Creates standalone comment at bottom of PR (for summaries)
 - `addPullRequestReviewThreadReply` GraphQL mutation → Replies inline to review threads (for addressing feedback)
 
@@ -233,6 +245,7 @@ gh api graphql -f query='...' --jq '.data.repository.pullRequest.reviewThreads.n
 ## Resume Behavior
 
 If user says "resume", "continue", or "try again":
+
 1. Check conversation history for the active mode
 2. In Fix Mode: re-fetch comments, continue addressing unresolved items
 3. Complete all remaining items before returning control
@@ -240,6 +253,7 @@ If user says "resume", "continue", or "try again":
 ## Memory
 
 Store user preferences in `.github/instructions/memory.instruction.md`:
+
 - Preferred review mode
 - Custom report location
 - Severity thresholds

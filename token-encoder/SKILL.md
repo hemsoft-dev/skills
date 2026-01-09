@@ -39,7 +39,8 @@ $data | pwsh -File tasks/encode.ps1 -Delimiter tab
 
 - **Objects**: `key: value` with indentation.
 - **Arrays**: `name[count]: val1,val2,val3`
-- **Tabular Arrays**: 
+- **Tabular Arrays**:
+
   ```toon
   users[2]{id,name,role}:
     1,Alice,admin

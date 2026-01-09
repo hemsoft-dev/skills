@@ -47,6 +47,7 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 ### 3. Propose Simplification
 
 Present findings with:
+
 1. **What**: Description of complexity
 2. **Where**: Exact location(s)
 3. **Why**: Impact on readability/maintainability
@@ -68,6 +69,7 @@ Present findings with:
 **🛑 STOP AND WAIT** — Never change code without approval.
 
 Present options:
+
 1. ✅ **Approve** — Proceed with simplification
 2. 🔧 **Refine** — Modify approach (request feedback)
 3. ❌ **Reject** — Skip this simplification

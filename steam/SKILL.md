@@ -19,20 +19,25 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 ## Steam Installation Paths
 
 ### Registry Lookup (Authoritative)
+
 ```powershell
 (Get-ItemProperty -Path "HKCU:\Software\Valve\Steam").SteamPath
 ```
+
 Default: `C:\Program Files (x86)\Steam`
 
 ### Game Installation Path
+
 ```
 {SteamPath}\steamapps\common\{GameName}
 ```
 
 ### Library Folders Config
+
 ```
 {SteamPath}\steamapps\libraryfolders.vdf
 ```
+
 Parse this file for additional Steam library locations on other drives.
 
 ## Common Game Folder Names
@@ -50,16 +55,21 @@ Parse this file for additional Steam library locations on other drives.
 ## Mod Installation
 
 ### Standard Mods Folder
+
 Most Unity-based games use:
+
 ```
 {GamePath}\Mods\{ModName}\
 ```
 
 ### 7 Days to Die Mods
+
 ```
 C:\Program Files (x86)\Steam\steamapps\common\7 Days To Die\Mods\
 ```
+
 Structure:
+
 ```
 Mods\
 └── {ModName}\
@@ -68,6 +78,7 @@ Mods\
 ```
 
 ### BepInEx Mods (Many Unity Games)
+
 ```
 {GamePath}\BepInEx\plugins\{ModName}\
 ```
@@ -75,6 +86,7 @@ Mods\
 ## Useful Commands
 
 ### Find Game Path
+
 ```powershell
 $steamPath = (Get-ItemProperty -Path "HKCU:\Software\Valve\Steam").SteamPath -replace '/', '\'
 $gamePath = Join-Path $steamPath "steamapps\common\{GameName}"
@@ -82,12 +94,14 @@ if (Test-Path $gamePath) { explorer $gamePath }
 ```
 
 ### List All Installed Games
+
 ```powershell
 $steamPath = (Get-ItemProperty -Path "HKCU:\Software\Valve\Steam").SteamPath -replace '/', '\'
 Get-ChildItem (Join-Path $steamPath "steamapps\common") -Directory | Select-Object Name
 ```
 
 ### Open Game Folder in Explorer
+
 ```powershell
 explorer "C:\Program Files (x86)\Steam\steamapps\common\{GameName}"
 ```

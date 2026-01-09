@@ -43,6 +43,7 @@ Split layout: **Left = Content** | **Right = Visual**
 ```
 
 **Content hierarchy:**
+
 1. Badge/eyebrow text (optional)
 2. Headline: Bold, gradient text, 2-line max
 3. Subheadline: Value prop in 1-2 sentences
@@ -68,6 +69,7 @@ const transition = {
 ```
 
 **Key techniques:**
+
 - `perspective: "1000px"` on container for 3D depth
 - `transformStyle: "preserve-3d"` on animated elements
 - Staggered delays for multiple items
@@ -125,6 +127,7 @@ bg-card/50 backdrop-blur-xl rounded-xl border shadow-sm
 ```
 
 For widget previews with gradient accents:
+
 ```css
 bg-card/60 backdrop-blur-xl bg-gradient-to-br from-{color}-500/20 to-{color}-500/20
 ```
@@ -140,6 +143,7 @@ bg-card/60 backdrop-blur-xl bg-gradient-to-br from-{color}-500/20 to-{color}-500
 ## Background Effects
 
 Hero section layered backgrounds:
+
 ```tsx
 {/* Blurred gradient orbs */}
 <div className="absolute left-1/4 top-1/4 size-96 rounded-full bg-primary/10 blur-[120px]" />
@@ -149,6 +153,7 @@ Hero section layered backgrounds:
 ## Motion Entrance Patterns
 
 Staggered content reveal:
+
 ```tsx
 initial={{ opacity: 0, y: 20 }}
 animate={{ opacity: 1, y: 0 }}
@@ -156,6 +161,7 @@ transition={{ delay: 0.3 }}  // Increment by 0.1-0.2 per element
 ```
 
 Scale-in for visual elements:
+
 ```tsx
 initial={{ opacity: 0, scale: 0.8 }}
 animate={{ opacity: 1, scale: 1 }}

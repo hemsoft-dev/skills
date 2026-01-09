@@ -32,6 +32,7 @@ Run the PowerShell script:
 ```
 
 For a different location:
+
 ```powershell
 & "$env:USERPROFILE\.claude\skills\today\Get-Today.ps1" -Location "Seattle,WA"
 ```
@@ -79,6 +80,7 @@ If a source is unavailable or has no fresh news, note at the end:
 ### Category 1: US News
 
 **Sources:**
+
 1. Associated Press (apnews.com)
 2. Reuters US (reuters.com/world/us)
 3. NPR News (npr.org/sections/news)
@@ -92,6 +94,7 @@ If a source is unavailable or has no fresh news, note at the end:
 ### Category 2: World News
 
 **Sources:**
+
 1. Associated Press International (apnews.com/world-news)
 2. Reuters World (reuters.com/world)
 3. BBC World (bbc.com/news/world)
@@ -105,6 +108,7 @@ If a source is unavailable or has no fresh news, note at the end:
 ### Category 3: AI News
 
 **Sources:**
+
 1. The Verge AI (theverge.com/ai-artificial-intelligence)
 2. Ars Technica AI (arstechnica.com/ai)
 3. TechCrunch AI (techcrunch.com/category/artificial-intelligence)

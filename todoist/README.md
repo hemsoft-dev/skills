@@ -10,11 +10,12 @@ Set your Todoist API token as an environment variable:
 $env:TODOIST_API_TOKEN = "your_token_here"
 ```
 
-Get your token from: https://todoist.com/app/settings/integrations/developer
+Get your token from: <https://todoist.com/app/settings/integrations/developer>
 
 ## Scripts
 
 ### Get-TodoistSummary.ps1
+
 Get a comprehensive overview of your tasks.
 
 ```powershell
@@ -26,6 +27,7 @@ Get a comprehensive overview of your tasks.
 ```
 
 ### Get-TodoistCompleted.ps1
+
 Get completed tasks for a specific date.
 
 ```powershell
@@ -43,6 +45,7 @@ Get completed tasks for a specific date.
 ```
 
 ### Get-TodoistTasks.ps1
+
 Get active tasks with filters.
 
 ```powershell
@@ -62,6 +65,7 @@ Get active tasks with filters.
 ## Output Formats
 
 All scripts support multiple output formats:
+
 - **Table** (default): Formatted table view
 - **List**: Simple list with checkmarks
 - **JSON**: JSON output for scripting

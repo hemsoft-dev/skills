@@ -10,6 +10,7 @@ Expert guidance for selecting, styling, and implementing high-quality GitHub REA
 ## ALWAYS: Log This Interaction
 
 After completing the request, append to `History/{YYYY-MM-DD}.md`:
+
 ```
 ## {HH:MM} - {Action}
 
@@ -33,6 +34,7 @@ After completing the request, append to `History/{YYYY-MM-DD}.md`:
 ## Curated Badge Templates
 
 ### Tech Stack (for-the-badge)
+
 - **Next.js**: `https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white`
 - **React**: `https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB`
 - **Supabase**: `https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white`
@@ -43,6 +45,7 @@ After completing the request, append to `History/{YYYY-MM-DD}.md`:
 - **Bun**: `https://img.shields.io/badge/Bun-000000?style=for-the-badge&logo=bun&logoColor=white`
 
 ### Project Metrics (flat/flat-square)
+
 - **NuGet Version**: `https://img.shields.io/nuget/v/{PACKAGE}?style=flat-square&color=004880`
 - **Build Status**: `https://img.shields.io/github/actions/workflow/status/{USER}/{REPO}/{WORKFLOW}.yml?branch=main`
 - **Vercel Deployment (via GitHub API)**: `https://img.shields.io/github/deployments/{USER}/{REPO}/production?label=vercel&logo=vercel&logoColor=white` (Uses GitHub's deployment status API - most accurate for Vercel)
@@ -51,10 +54,12 @@ After completing the request, append to `History/{YYYY-MM-DD}.md`:
 - **Test Coverage**: `https://img.shields.io/badge/coverage-90%25-brightgreen` (Static or dynamic via Vitest/Codecov)
 
 ### Community (social)
+
 - **GitHub Stars**: `https://img.shields.io/github/stars/{USER}/{REPO}?style=social`
 - **GitHub Forks**: `https://img.shields.io/github/forks/{USER}/{REPO}?style=social`
 
 ### Specialty Badges
+
 - **Vercel Deploy Button**: `[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url={REPO_URL})`
 
 ## Implementation Best Practices

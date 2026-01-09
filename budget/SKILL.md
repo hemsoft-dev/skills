@@ -50,6 +50,7 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 **File**: `c:\Users\franz\.claude\skills\budget\tracking\confirmed-subscriptions.md`
 
 Just read this file and present it. No scripts needed. Summarize:
+
 - Active subscriptions with renewal dates
 - Recently cancelled (still have access until expiry)
 - Monthly/annual cost totals
@@ -72,11 +73,13 @@ Read this file to show confirmed utility providers, account numbers, and typical
 | `DUKE ENERGY` | Multiple ACH payments for separate service address (e.g., $97.48 on 12/22/2025; acct #910185995089, 273 Rose St, Mooresville NC). | Alert immediately with date/amount/account; confirm active service vs. legacy and stop duplicate auto-pay. |
 
 ### Watchlist Check Command
+
 ```powershell
 python "c:\Users\franz\.claude\skills\budget\scripts\search-pdfs.py" "CONDENAST"
 ```
 
 If new CONDENAST charges found:
+
 1. **Alert the user immediately** with date, amount, and description
 2. Compare against confirmed subscriptions ($169/year New Yorker renewal expected ~Feb 2026)
 3. Any charge other than the expected renewal is suspicious
@@ -130,32 +133,38 @@ c:\Users\franz\.claude\skills\budget\
 ## Workflow
 
 ### Step 1: Extract from PDFs (per account)
+
 ```powershell
 cd "c:\Users\franz\.claude\skills\budget\scripts"
 python extract-usaa.py "USAA Classic Checking"
 ```
 
 ### Step 2: Normalize with AI (1 premium request per account)
+
 ```powershell
 & "c:\Users\franz\.claude\skills\budget\scripts\normalize-account.ps1" -AccountName "USAA Classic Checking"
 ```
 
 ### Step 3: Generate Reports
+
 ```powershell
 & "c:\Users\franz\.claude\skills\budget\scripts\statement-report.ps1"
 ```
 
 ### Step 4: Subscription Analysis
+
 ```powershell
 & "c:\Users\franz\.claude\skills\budget\scripts\subscriptions-report.ps1"
 ```
 
 When prompted, choose where to save the report:
+
 1. Budget Statements folder (default)
 2. Current directory
 3. Custom path
 
 Or specify directly:
+
 ```powershell
 & "c:\Users\franz\.claude\skills\budget\scripts\subscriptions-report.ps1" -OutputPath "C:\Reports\subscriptions-report.md"
 ```
@@ -193,18 +202,20 @@ The subscription report provides:
 Apple Services, Microsoft 365, YouTube Premium, ESPN+, SiriusXM, Prime Video, Cursor AI, Devin AI, GitKraken, Todoist, The Atlantic, The Economist, The New Yorker (CONDENAST), NordVPN, ChessBase, Google Play, Twitch Turbo, and 10+ more.
 
 Each service includes a direct cancellation/management link:
-- **Apple**: https://appleid.apple.com/account/subscriptions
-- **Microsoft**: https://account.microsoft.com/subscriptions
-- **Amazon Prime Video**: https://www.amazon.com/gp/video/settings/subscriptions
-- **ESPN+**: https://www.espn.com/watch/espnplus
-- **GitKraken**: https://www.gitkraken.com/account/subscriptions
-- **Todoist**: https://todoist.com/app/settings/account
-- **NordVPN**: https://account.nordvpn.com/billing
+
+- **Apple**: <https://appleid.apple.com/account/subscriptions>
+- **Microsoft**: <https://account.microsoft.com/subscriptions>
+- **Amazon Prime Video**: <https://www.amazon.com/gp/video/settings/subscriptions>
+- **ESPN+**: <https://www.espn.com/watch/espnplus>
+- **GitKraken**: <https://www.gitkraken.com/account/subscriptions>
+- **Todoist**: <https://todoist.com/app/settings/account>
+- **NordVPN**: <https://account.nordvpn.com/billing>
 - (Plus 17+ more with one-click access in the report)
 
 ### Data Quality Notes
 
 **YouTube Premium Missing**: Despite being in the known services list, YouTube Premium does not appear in current normalized CSV files. Possible causes:
+
 1. Charged to a payment method not yet extracted (Apple Card, Google Wallet, etc.)
 2. Bundled within Google One or other umbrella service
 3. Not in the date range of extracted statements
@@ -243,6 +254,7 @@ Date,Account,Category,Description,Amount
 ### Exclusion Patterns Filtered
 
 The script filters out 208+ generic USAA entries:
+
 - `RECURRING DEB CARD PURCH` (unidentifiable USAA codes — **FAULTY PARSING INDICATOR**)
 - `DEBIT CARD PURCHASE|REFUND`
 - `ACH WITHDRAWAL|PAYMENT|CREDIT`
@@ -264,7 +276,8 @@ Batching all transactions per account into ONE AI call reduced costs from ~50 pr
 
 **Root Cause**: USAA statements use a two-line format where merchant name is on line 1 and transaction details (date/amount) are on line 2. Fixed December 2025.
 
-**Solution**: 
+**Solution**:
+
 1. Use `search-pdfs.py "merchant name"` to search raw PDFs
 2. If found in PDF but not CSV, re-run `extract-usaa.py` for that account
 3. The extraction script now handles two-line format:
@@ -277,7 +290,8 @@ Batching all transactions per account into ONE AI call reduced costs from ~50 pr
 
 **Root Cause**: Previous script only scanned subscription-category transactions. Now uses vendor-first detection.
 
-**Solution**: 
+**Solution**:
+
 1. Verify subscription is in `$KnownSubscriptions` hash table
 2. Check the pattern matches actual transaction descriptions (use `-match [regex]::Escape($pattern)`)
 3. Verify transaction exists in source CSV files for the date range
@@ -290,6 +304,7 @@ Batching all transactions per account into ONE AI call reduced costs from ~50 pr
 To add cancellation links for new services:
 
 1. Update `$KnownSubscriptions` hash table with service pattern and CancelUrl:
+
 ```powershell
 'SERVICE_PATTERN' = @{ 
     Name = 'Service Name'
@@ -298,8 +313,8 @@ To add cancellation links for new services:
 }
 ```
 
-2. Script automatically includes the link in High-Value Subscriptions table and Management Links section
-3. Re-run report to see new subscription with clickable link
+1. Script automatically includes the link in High-Value Subscriptions table and Management Links section
+2. Re-run report to see new subscription with clickable link
 
 ## Confirmed Subscriptions Tracking
 

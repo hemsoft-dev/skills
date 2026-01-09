@@ -1,6 +1,6 @@
 ---
 name: screenshot
-description: V1.1 - Expert in taking screenshots of windows, full screens, or partial regions. Supports multi-monitor setups with proper DPI handling using python-mss.
+description: V1.2 - Expert in taking screenshots of windows, full screens, or partial regions. Supports multi-monitor setups with proper DPI handling using python-mss. Automatically compresses to WebP for AI-optimized images.
 ---
 
 # Screenshot
@@ -14,6 +14,27 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 ```markdown
 ## {HH:MM} - {Action Taken}
 {One-line summary of what was done}
+```
+
+## Screenshot Storage
+
+All screenshots are saved to `$env:TEMP` (typically `C:\Users\User\AppData\Local\Temp`):
+
+- **Pattern**: `screenshot-*.png`, `screenshot-*.webp`
+- **Temporary**: Files persist until system cleanup or manual deletion
+- **Cleanup**: Use the cleanup command below to remove old screenshots
+
+```powershell
+# Clean up all screenshots older than 7 days
+Get-ChildItem $env:TEMP | Where-Object { 
+  ($_.Name -like "screenshot-*" -or $_.Name -like "test*.webp" -or $_.Name -like "test*.jpg" -or $_.Name -like "monitor-index-*") -and 
+  $_.LastWriteTime -lt (Get-Date).AddDays(-7) 
+} | Remove-Item -Force
+
+# Or clean up ALL screenshots immediately
+Get-ChildItem $env:TEMP | Where-Object { 
+  $_.Name -like "screenshot-*" -or $_.Name -like "test*.webp" -or $_.Name -like "test*.jpg" -or $_.Name -like "monitor-index-*" 
+} | Remove-Item -Force
 ```
 
 ## Monitor Mapping
@@ -34,13 +55,16 @@ The user has 3 monitors with the following mapping:
 
 ### Full Screen Capture
 
-Capture entire monitors using python-mss (handles DPI scaling correctly):
+Capture entire monitors using python-mss and compress to WebP for AI:
 
 ```powershell
 # Map user monitor number to MSS index
 $monitorMap = @{1=3; 2=1; 3=2}
 $mssIndex = $monitorMap[$userMonitorNumber]
+$timestamp = Get-Date -Format 'yyyyMMdd-HHmmss'
 
+# Capture to PNG first
+$pngPath = Join-Path $env:TEMP "screenshot-$timestamp.png"
 $script = @"
 import mss
 import sys
@@ -51,22 +75,26 @@ with mss.mss() as sct:
     mss.tools.to_png(screenshot.rgb, screenshot.size, output=output_path)
     print(f'{screenshot.width}x{screenshot.height}')
 "@
-
-$outputPath = Join-Path $env:TEMP "screenshot-$(Get-Date -Format 'yyyyMMdd-HHmmss').png"
 $script | Out-File "$env:TEMP\capture.py" -Encoding UTF8
-py "$env:TEMP\capture.py" $mssIndex $outputPath
+py "$env:TEMP\capture.py" $mssIndex $pngPath
+
+# Compress to WebP (82% size reduction, excellent quality for AI)
+$webpPath = Join-Path $env:TEMP "screenshot-$timestamp.webp"
+ffmpeg -i $pngPath -vf "scale=1024:-1" -c:v libwebp -quality 85 $webpPath -y 2>&1 | Out-Null
+Remove-Item $pngPath -Force  # Clean up original PNG
+Write-Host "Screenshot saved: $webpPath" -ForegroundColor Green
 ```
 
 ### Partial Screen Capture
 
-Capture a specific region of a monitor using custom coordinates:
+Capture a specific region of a monitor and compress to WebP:
 
 ```powershell
 # Example: Capture right 50% of Monitor 2 (MSS index 1)
 $monitorMap = @{1=3; 2=1; 3=2}
 $mssIndex = $monitorMap[$userMonitorNumber]
 $timestamp = Get-Date -Format "yyyyMMdd-HHmmss"
-$outputPath = Join-Path $env:TEMP "screenshot-partial-$timestamp.png"
+$pngPath = Join-Path $env:TEMP "screenshot-partial-$timestamp.png"
 
 $script = @"
 import mss
@@ -90,12 +118,18 @@ with mss.mss() as sct:
     
     # Capture the region
     screenshot = sct.grab(region)
-    mss.tools.to_png(screenshot.rgb, screenshot.size, output='$($outputPath.Replace('\','\\'))')
+    mss.tools.to_png(screenshot.rgb, screenshot.size, output='$($pngPath.Replace('\','\\'))')
     print(f'Captured: {screenshot.width}x{screenshot.height}')
 "@
 
 $script | Out-File "$env:TEMP\capture-partial.py" -Encoding UTF8
 py "$env:TEMP\capture-partial.py"
+
+# Compress to WebP
+$webpPath = Join-Path $env:TEMP "screenshot-partial-$timestamp.webp"
+ffmpeg -i $pngPath -vf "scale=1024:-1" -c:v libwebp -quality 85 $webpPath -y 2>&1 | Out-Null
+Remove-Item $pngPath -Force
+Write-Host "Screenshot saved: $webpPath" -ForegroundColor Green
 ```
 
 **Common region calculations:**
@@ -172,33 +206,62 @@ After capturing, use the display-image skill with zoom-to-fit:
 & "C:\Program Files\GPSoftware\Directory Opus\d8viewer.exe" /fittopage $screenshotPath
 ```
 
+## Default Compression
+
+All screenshots are automatically compressed to **WebP Q85 @ 1024px** for optimal AI vision quality:
+
+- **Size reduction**: ~82% smaller than original PNG
+- **Quality**: Excellent for AI interpretation
+- **Token usage**: ~765 tokens vs 1400+ for original
+
+### Alternative: Aggressive Compression
+
+For maximum compression (UI/layout analysis only):
+
+```powershell
+# WebP Q75 @ 512px (95% smaller, acceptable quality)
+ffmpeg -i $inputPath -vf "scale=512:-1" -c:v libwebp -quality 75 $outputPath -y 2>&1 | Out-Null
+```
+
+### Keep Original PNG
+
+To skip compression and keep full-resolution PNG, comment out the ffmpeg and Remove-Item lines in the capture scripts.
+
 ## Dependencies
 
 - Python 3.x with `mss` package: `py -m pip install mss`
 - PowerShell (for window capture)
 - Directory Opus (for viewing)
+- FFmpeg (for compression): Available system-wide
 
 ## Examples
 
-**Capture Monitor 2:**
+**Capture Monitor 2 (Compressed):**
 
 ```powershell
 # User's Monitor 2 = MSS Index 1
+$timestamp = Get-Date -Format 'yyyyMMdd-HHmmss'
+$pngPath = Join-Path $env:TEMP "screenshot-$timestamp.png"
 $script = @"
 import mss
 with mss.mss() as sct:
     screenshot = sct.grab(sct.monitors[1])
-    mss.tools.to_png(screenshot.rgb, screenshot.size, output='monitor2.png')
+    mss.tools.to_png(screenshot.rgb, screenshot.size, output='$($pngPath.Replace('\','\\'))')
 "@
 $script | Out-File "$env:TEMP\cap.py" -Encoding UTF8
 py "$env:TEMP\cap.py"
+
+# Compress
+$webpPath = Join-Path $env:TEMP "screenshot-$timestamp.webp"
+ffmpeg -i $pngPath -vf "scale=1024:-1" -c:v libwebp -quality 85 $webpPath -y 2>&1 | Out-Null
+Remove-Item $pngPath -Force
 ```
 
-**Capture Right 50% of Monitor 2:**
+**Capture Right 50% of Monitor 2 (Compressed):**
 
 ```powershell
 $timestamp = Get-Date -Format "yyyyMMdd-HHmmss"
-$outputPath = Join-Path $env:TEMP "screenshot-monitor2-right50-$timestamp.png"
+$pngPath = Join-Path $env:TEMP "screenshot-monitor2-right50-$timestamp.png"
 $script = @"
 import mss
 with mss.mss() as sct:
@@ -212,10 +275,15 @@ with mss.mss() as sct:
         'height': height
     }
     screenshot = sct.grab(region)
-    mss.tools.to_png(screenshot.rgb, screenshot.size, output='$($outputPath.Replace('\','\\'))')
+    mss.tools.to_png(screenshot.rgb, screenshot.size, output='$($pngPath.Replace('\','\\'))')
 "@
 $script | Out-File "$env:TEMP\cap.py" -Encoding UTF8
 py "$env:TEMP\cap.py"
+
+# Compress
+$webpPath = Join-Path $env:TEMP "screenshot-monitor2-right50-$timestamp.webp"
+ffmpeg -i $pngPath -vf "scale=1024:-1" -c:v libwebp -quality 85 $webpPath -y 2>&1 | Out-Null
+Remove-Item $pngPath -Force
 ```
 
 **Capture Slack Window:**

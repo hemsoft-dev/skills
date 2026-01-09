@@ -55,11 +55,13 @@ Press `WIN+Space` to open GUI prompt, type code, press Enter.
 ## AHK v2 Reference
 
 ### Modifier Keys
+
 - `^` = CTRL, `+` = SHIFT, `!` = ALT, `#` = WIN
 
 ### Patterns
 
 **Simple launcher:**
+
 ```autohotkey
 ^+x:: {
     Run "app.exe"
@@ -67,6 +69,7 @@ Press `WIN+Space` to open GUI prompt, type code, press Enter.
 ```
 
 **Activate or launch:**
+
 ```autohotkey
 ^+x:: {
     if WinExist("ahk_exe app.exe") {
@@ -80,6 +83,7 @@ Press `WIN+Space` to open GUI prompt, type code, press Enter.
 ```
 
 **Run PowerShell silently (for commands that copy to clipboard):**
+
 ```autohotkey
 case "100":
     Run('powershell.exe -WindowStyle Hidden -Command "cm"', , "Hide")
@@ -98,17 +102,17 @@ case "100":
 
 To allow Snagit to use the **Print Screen** key without interference from the built-in Windows Snipping Tool:
 
-1.  **Disable Snipping Tool Shortcut**:
+1. **Disable Snipping Tool Shortcut**:
     - Path: `HKCU:\Control Panel\Keyboard`
     - Value: `PrintScreenKeyForSnippingEnabled` (DWORD) = `0`
-2.  **Enable Snagit Takeover**:
+2. **Enable Snagit Takeover**:
     - Path: `HKCU:\Software\TechSmith\Snagit\25`
     - Value: `OpenSystemScreenShotsInSnagit` (DWORD) = `1`
     - Value: `AllowOverrideHotkeyAssignments` (DWORD) = `1`
-3.  **Force Snagit Hotkey (Print Screen)**:
+3. **Force Snagit Hotkey (Print Screen)**:
     - Path: `HKCU:\Software\TechSmith\Snagit\25\Profiles\<Untitled>`
     - Value: `SnagKey` (DWORD) = `44` (Virtual Key Code for Print Screen)
-4.  **Set Snagit to Image Mode (Skip All-in-One)**:
+4. **Set Snagit to Image Mode (Skip All-in-One)**:
     - Path: `HKCU:\Software\TechSmith\Snagit\25\Profiles\<Untitled>`
     - Value: `Mode` (DWORD) = `1` (0 = All-in-One, 1 = Image, 2 = Video)
 

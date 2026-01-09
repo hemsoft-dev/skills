@@ -10,6 +10,7 @@ Expert guidance for using Bun as an all-in-one toolkit for JavaScript and TypeSc
 ## ALWAYS: Log This Interaction
 
 After completing the request, append to `History/{YYYY-MM-DD}.md`:
+
 ```
 ## {HH:MM} - {Action}
 
@@ -19,6 +20,7 @@ After completing the request, append to `History/{YYYY-MM-DD}.md`:
 ## Core Commands
 
 ### Package Management
+
 - **Install all**: `bun install`
 - **Add package**: `bun add {package}` (use `-d` for devDependencies)
 - **Remove package**: `bun remove {package}`
@@ -26,6 +28,7 @@ After completing the request, append to `History/{YYYY-MM-DD}.md`:
 - **Update lockfile**: `bun install --save-text-lockfile` (upgrades from binary `bun.lockb`)
 
 ### Runtime & Execution
+
 - **Run file**: `bun {file.ts}` or `bun run {file.ts}`
 - **Run script**: `bun run {script-name}` (or `bun {script-name}` if no name collision with built-in commands)
 - **Watch mode**: `bun --watch run {file.ts}` (Flags must come BEFORE `run`)
@@ -34,12 +37,14 @@ After completing the request, append to `History/{YYYY-MM-DD}.md`:
 - **Execute remote package**: `bunx {package}`
 
 ### Bundling & Building
+
 - **Basic build**: `bun build {entry} --outdir {dir}`
 - **Targeted build**: `bun build {entry} --outdir {dir} --target {browser|bun|node}`
 - **Compile to executable**: `bun build {entry} --outfile {name} --compile`
 - **Minify**: `bun build {entry} --outdir {dir} --minify`
 
 ### Testing
+
 - **Run tests**: `bun test`
 - **Watch tests**: `bun test --watch`
 
@@ -50,11 +55,12 @@ After completing the request, append to `History/{YYYY-MM-DD}.md`:
 3. **Command Collisions**: Use `bun run {script}` explicitly if the script name matches a Bun built-in (like `test`, `build`, `init`, `add`).
 4. **Flag Order**: Always place Bun-specific flags (e.g., `--watch`, `--hot`, `--bun`, `--smol`) immediately after `bun` and before the command/script name.
 5. **Environment Variables**: Bun automatically loads `.env` files. Use `process.env.VAR` or `import.meta.env.VAR`.
-4. **Lifecycle Scripts**: For security, Bun doesn't run scripts by default. Add to `trustedDependencies` in `package.json` if needed.
-5. **Performance**: Use `--smol` in memory-constrained environments (e.g., small Docker containers).
-6. **Shell**: Use `bun shell` (via `import { $ } from "bun"`) for cross-platform scripting instead of complex shell commands.
+6. **Lifecycle Scripts**: For security, Bun doesn't run scripts by default. Add to `trustedDependencies` in `package.json` if needed.
+7. **Performance**: Use `--smol` in memory-constrained environments (e.g., small Docker containers).
+8. **Shell**: Use `bun shell` (via `import { $ } from "bun"`) for cross-platform scripting instead of complex shell commands.
 
 ## Configuration (`bunfig.toml`)
+
 ```toml
 [install]
 optional = true
@@ -66,5 +72,6 @@ root = "./tests"
 ```
 
 ## Troubleshooting
+
 - **Cache issues**: `bun pm cache rm`
 - **Node compatibility**: If a package fails, try `bun run --bun {command}` to force Bun's implementation of Node APIs.

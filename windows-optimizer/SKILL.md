@@ -19,6 +19,7 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 ## Key Takeaways
 
 ### Handle Leaks = Silent Killer
+
 - **Symptom**: Mouse stuttering, gradual system slowdown, UI lag
 - **Cause**: Apps accumulating OS handles without releasing them
 - **Threshold**: >5000 handles is concerning, >10000 is critical
@@ -26,12 +27,14 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 - **Fix**: Restart the offending app (don't need full reboot)
 
 ### Startup Bloat
+
 - Most PCs have 15-25+ startup apps; 10-12 is healthier
 - Each adds boot time and background resource usage
 - Safe to disable: Printer monitors, updaters, chat apps, virtual cams
 - Keep: Hardware drivers (Logitech, Razer), VPN, cloud sync
 
 ### C: Drive Space Hogs
+
 - **LLM Models** (.ollama, .lmstudio): Often 50-250+ GB, easily forgotten
 - **Downloads folder**: Accumulates indefinitely
 - **Dev caches** (.nuget, npm-cache, .cache): 10-30+ GB, safe to clear
@@ -39,6 +42,7 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 - **Videos/Media**: Should live on secondary drives
 
 ### User Profile Cache Folders (Safe to Clear)
+
 | Folder | Typical Size | Notes |
 |--------|--------------|-------|
 | `.cache/huggingface` | 1-10+ GB | ML models, re-downloads when needed |
@@ -49,6 +53,7 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 | `.bun/install/cache` | 0.5-2 GB | Bun package cache |
 
 ### Quick Wins Checklist
+
 1. Check handle counts → restart leakers
 2. Review startup programs → disable unnecessary ones
 3. Clean dev caches (npm, nuget)
@@ -73,6 +78,7 @@ Ready-to-run PowerShell scripts in `~/.claude/skills/windows-optimizer/scripts/`
 | `Manage-OllamaModels.ps1` | List and bulk-remove Ollama LLM models |
 
 ### Usage Examples
+
 ```powershell
 # Run from skill directory
 $skillPath = "$env:USERPROFILE\.claude\skills\windows-optimizer\scripts"
@@ -117,6 +123,7 @@ $skillPath = "$env:USERPROFILE\.claude\skills\windows-optimizer\scripts"
 ## Quick Diagnostics
 
 ### System Overview
+
 ```powershell
 # One-liner system health check
 $cpu = (Get-Counter '\Processor(_Total)\% Processor Time' -SampleInterval 1).CounterSamples[0].CookedValue
@@ -127,6 +134,7 @@ $memGB = [math]::Round(($os.TotalVisibleMemorySize - $os.FreePhysicalMemory) / 1
 ```
 
 ### Top Resource Consumers
+
 ```powershell
 # Top 10 by CPU (cumulative)
 Get-Process | Sort-Object CPU -Descending | Select-Object -First 10 Name, Id, CPU, @{N='MemMB';E={[math]::Round($_.WorkingSet64/1MB,1)}}, Handles
@@ -139,18 +147,22 @@ Get-Process | Sort-Object Handles -Descending | Select-Object -First 10 Name, Id
 ```
 
 ### Handle Leak Detection
+
 Handle counts above **5000** indicate potential leaks. Common offenders: NZXT CAM, Razer Synapse, Discord, Electron apps.
+
 ```powershell
 # Find processes with high handle counts
 Get-Process | Where-Object { $_.Handles -gt 3000 } | Sort-Object Handles -Descending | Select-Object Name, Id, Handles
 ```
 
 ### GPU Status (NVIDIA)
+
 ```powershell
 nvidia-smi --query-gpu=utilization.gpu,utilization.memory,memory.used,memory.total,temperature.gpu --format=csv,noheader
 ```
 
 ### Disk I/O Check
+
 ```powershell
 Get-Counter '\PhysicalDisk(*)\% Disk Time' -SampleInterval 1 | ForEach-Object { 
     $_.CounterSamples | Where-Object { $_.InstanceName -ne '_total' -and $_.CookedValue -gt 1 } | 
@@ -159,6 +171,7 @@ Get-Counter '\PhysicalDisk(*)\% Disk Time' -SampleInterval 1 | ForEach-Object {
 ```
 
 ### Memory Commit Charge
+
 ```powershell
 (Get-Counter '\Memory\Committed Bytes', '\Memory\Commit Limit', '\Memory\Available MBytes').CounterSamples | 
 Select-Object Path, @{N='GB';E={[math]::Round($_.CookedValue/1GB,2)}}
@@ -167,17 +180,20 @@ Select-Object Path, @{N='GB';E={[math]::Round($_.CookedValue/1GB,2)}}
 ## Startup Management
 
 ### List Startup Programs
+
 ```powershell
 Get-ItemProperty "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" | 
 Select-Object * -ExcludeProperty PSPath,PSParentPath,PSChildName,PSDrive,PSProvider
 ```
 
 ### Remove Startup Entry
+
 ```powershell
 Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "{APP_NAME}"
 ```
 
 ### Disable via Task Manager (alternative)
+
 ```powershell
 Get-CimInstance Win32_StartupCommand | Select-Object Name, Command, Location
 ```
@@ -185,11 +201,13 @@ Get-CimInstance Win32_StartupCommand | Select-Object Name, Command, Location
 ## Process Management
 
 ### Kill Process
+
 ```powershell
 Stop-Process -Name "{PROCESS_NAME}" -Force
 ```
 
 ### Restart Process (kill and relaunch)
+
 ```powershell
 Stop-Process -Name "{PROCESS_NAME}" -Force; Start-Process "{EXE_PATH}"
 ```
@@ -197,11 +215,13 @@ Stop-Process -Name "{PROCESS_NAME}" -Force; Start-Process "{EXE_PATH}"
 ## Disk Space Cleanup
 
 ### Analyze Disk Usage
+
 ```powershell
 Get-PSDrive -PSProvider FileSystem | Select-Object Name, @{N='UsedGB';E={[math]::Round($_.Used/1GB,2)}}, @{N='FreeGB';E={[math]::Round($_.Free/1GB,2)}}, @{N='TotalGB';E={[math]::Round(($_.Used+$_.Free)/1GB,2)}}
 ```
 
 ### Large Files Finder
+
 ```powershell
 Get-ChildItem -Path C:\ -Recurse -File -ErrorAction SilentlyContinue | 
 Where-Object { $_.Length -gt 500MB } | 
@@ -210,6 +230,7 @@ Select-Object -First 20 @{N='SizeMB';E={[math]::Round($_.Length/1MB,0)}}, FullNa
 ```
 
 ### Folder Size Analysis (like `du` or `tree`)
+
 ```powershell
 # Recursive folder sizes (1 GB+ only, sorted)
 Get-ChildItem -Directory "C:\Users\$env:USERNAME" | ForEach-Object { 
@@ -238,6 +259,7 @@ function Get-FolderSize {
 ```
 
 ### Selective Cache Cleanup
+
 ```powershell
 # Preview .cache subfolder sizes
 Get-ChildItem "$env:USERPROFILE\.cache" -Directory | ForEach-Object { 
@@ -252,6 +274,7 @@ Remove-Item "$env:USERPROFILE\.cache\puppeteer" -Recurse -Force -ErrorAction Sil
 ```
 
 ### Temp Files Cleanup
+
 ```powershell
 # Preview temp files
 Get-ChildItem -Path $env:TEMP -Recurse -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum | 
@@ -262,6 +285,7 @@ Remove-Item -Path "$env:TEMP\*" -Recurse -Force -ErrorAction SilentlyContinue
 ```
 
 ### Windows Update Cleanup
+
 ```powershell
 # Analyze component store
 Dism.exe /Online /Cleanup-Image /AnalyzeComponentStore
@@ -271,11 +295,13 @@ Dism.exe /Online /Cleanup-Image /StartComponentCleanup /ResetBase
 ```
 
 ### Clear Windows Delivery Optimization Cache
+
 ```powershell
 Delete-DeliveryOptimizationCache -Force
 ```
 
 ### Browser Cache Locations
+
 ```powershell
 # Edge cache size
 (Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Edge\User Data\Default\Cache" -Recurse -ErrorAction SilentlyContinue | Measure-Object Length -Sum).Sum / 1MB
@@ -287,12 +313,14 @@ Delete-DeliveryOptimizationCache -Force
 ## Memory Optimization
 
 ### Clear Standby Memory (requires elevation)
+
 ```powershell
 # Requires RAMMap from Sysinternals or use Empty Standby List utility
 # Download: https://www.wagnardsoft.com/forums/viewtopic.php?t=1256
 ```
 
 ### WSL Memory Management
+
 ```powershell
 # Check WSL memory usage
 Get-Process vmmemWSL -ErrorAction SilentlyContinue | Select-Object Name, @{N='MemGB';E={[math]::Round($_.WorkingSet64/1GB,2)}}
@@ -312,6 +340,7 @@ wsl --shutdown
 ## Service Management
 
 ### High-Impact Services to Review
+
 ```powershell
 # Services using significant memory
 Get-Process -IncludeUserName | Where-Object { $_.WorkingSet64 -gt 200MB } | 
@@ -325,6 +354,7 @@ Select-Object Name, State, PathName
 ```
 
 ### Disable Service
+
 ```powershell
 Stop-Service -Name "{SERVICE_NAME}" -Force
 Set-Service -Name "{SERVICE_NAME}" -StartupType Disabled
@@ -333,6 +363,7 @@ Set-Service -Name "{SERVICE_NAME}" -StartupType Disabled
 ## Advanced Tools
 
 ### Sysinternals (download on demand)
+
 ```powershell
 # Process Explorer - GUI process manager with handle/DLL view
 Invoke-WebRequest -Uri "https://live.sysinternals.com/procexp.exe" -OutFile "$env:TEMP\procexp.exe"; & "$env:TEMP\procexp.exe"
@@ -357,11 +388,13 @@ Invoke-WebRequest -Uri "https://live.sysinternals.com/Diskmon.exe" -OutFile "$en
 ### Third-Party Utilities
 
 **Chris Titus Windows Utility** - Safe debloating and tweaks:
+
 ```powershell
 irm christitus.com/win | iex
 ```
 
 **Sophia Script** - Most comprehensive Windows fine-tuning:
+
 ```powershell
 iwr script.sophia.team -useb | iex
 ```
@@ -390,6 +423,7 @@ iwr script.sophia.team -useb | iex
 ## Scheduled Maintenance Script
 
 Create a scheduled task to run weekly:
+
 ```powershell
 $action = New-ScheduledTaskAction -Execute 'PowerShell.exe' -Argument '-NoProfile -WindowStyle Hidden -Command "Remove-Item $env:TEMP\* -Recurse -Force -ErrorAction SilentlyContinue; Clear-RecycleBin -Force -ErrorAction SilentlyContinue"'
 $trigger = New-ScheduledTaskTrigger -Weekly -DaysOfWeek Sunday -At 3am

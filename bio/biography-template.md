@@ -31,12 +31,14 @@
 ## Early Life & Background
 
 ### Family Origins
+
 - **Parents**: {PARENT_NAMES_AND_OCCUPATIONS}
 - **Siblings**: {SIBLINGS}
 - **Socioeconomic Background**: {BACKGROUND}
 - **Cultural/Religious Heritage**: {HERITAGE}
 
 ### Childhood
+
 - **Birthplace Details**: {BIRTHPLACE_CONTEXT}
 - **Childhood Home(s)**: {CHILDHOOD_LOCATIONS}
 - **Formative Experiences**: {FORMATIVE_EXPERIENCES}
@@ -44,6 +46,7 @@
 - **Childhood Interests/Talents**: {EARLY_TALENTS}
 
 ### Education
+
 | Level | Institution | Years | Notes |
 |-------|-------------|-------|-------|
 | Primary | {SCHOOL} | {YEARS} | {NOTES} |
@@ -56,6 +59,7 @@
 ## Personal Life
 
 ### Relationships
+
 - **Spouse(s)/Partner(s)**: {RELATIONSHIPS}
 - **Children**: {CHILDREN}
 - **Significant Friendships**: {NOTABLE_FRIENDS}
@@ -63,6 +67,7 @@
 - **Mentees/Protégés**: {MENTEES}
 
 ### Lifestyle
+
 - **Residences**: {PLACES_LIVED}
 - **Hobbies & Interests**: {HOBBIES}
 - **Personality Traits**: {PERSONALITY}
@@ -70,6 +75,7 @@
 - **Religious/Spiritual Beliefs**: {BELIEFS}
 
 ### Health
+
 - **Known Health Issues**: {HEALTH_ISSUES}
 - **Mental Health**: {MENTAL_HEALTH_IF_PUBLIC}
 
@@ -84,22 +90,27 @@
 | {YEARS} | {ROLE} | {ORG} | {ACHIEVEMENT} |
 
 ### Major Accomplishments
+
 1. {ACCOMPLISHMENT_1}
 2. {ACCOMPLISHMENT_2}
 3. {ACCOMPLISHMENT_3}
 
 ### Signature Works/Projects
+
 - **{WORK_1}**: {DESCRIPTION}
 - **{WORK_2}**: {DESCRIPTION}
 - **{WORK_3}**: {DESCRIPTION}
 
 ### Professional Philosophy
+
 {PROFESSIONAL_PHILOSOPHY}
 
 ### Collaborations
+
 - {NOTABLE_COLLABORATIONS}
 
 ### Controversies & Challenges
+
 - {CONTROVERSIES}
 - {PROFESSIONAL_SETBACKS}
 
@@ -108,9 +119,11 @@
 ## Impact & Legacy
 
 ### Influence on Field/Industry
+
 {FIELD_INFLUENCE}
 
 ### Cultural Impact
+
 {CULTURAL_IMPACT}
 
 ### Awards & Honors
@@ -120,9 +133,11 @@
 | {YEAR} | {AWARD} | {BODY} | {CATEGORY} |
 
 ### Honorary Degrees & Titles
+
 - {HONORARY_TITLES}
 
 ### Named After Them
+
 - Buildings, streets, institutions, or awards named in their honor: {NAMED_ITEMS}
 
 ---
@@ -139,16 +154,19 @@
 ## Public Image
 
 ### Media Presence
+
 - **Social Media**: {SOCIAL_MEDIA_PRESENCE}
 - **Public Persona**: {PUBLIC_PERSONA}
 - **Media Coverage**: {MEDIA_COVERAGE}
 
 ### Quotes By Them
+>
 > "{NOTABLE_QUOTE_1}"
 
 > "{NOTABLE_QUOTE_2}"
 
 ### Quotes About Them
+>
 > "{QUOTE_ABOUT_THEM}" — {QUOTE_SOURCE}
 
 ---
@@ -156,11 +174,13 @@
 ## Later Life & Death (if applicable)
 
 ### Later Years
+
 - **Activities**: {LATER_ACTIVITIES}
 - **Health Decline**: {HEALTH_DECLINE}
 - **Final Projects**: {FINAL_PROJECTS}
 
 ### Death
+
 - **Date**: {DEATH_DATE}
 - **Location**: {DEATH_LOCATION}
 - **Cause**: {CAUSE_OF_DEATH}
@@ -168,6 +188,7 @@
 - **Burial Location**: {BURIAL_SITE}
 
 ### Posthumous Recognition
+
 - {POSTHUMOUS_HONORS}
 
 ---
@@ -175,16 +196,20 @@
 ## Additional Resources
 
 ### Bibliography (Works by Subject)
+
 1. {WORK_1}
 2. {WORK_2}
 
 ### Biographies & Documentaries About Them
+
 - {BOOK_OR_DOCUMENTARY}
 
 ### Archives & Collections
+
 - {ARCHIVE_LOCATIONS}
 
 ### Official Links
+
 - Website: {WEBSITE}
 - Foundation: {FOUNDATION}
 

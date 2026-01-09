@@ -22,6 +22,7 @@ This is the signature HemSoft look - luxurious, refined, premium tech aesthetic.
 ## ALWAYS: Log This Interaction
 
 After completing the request, append to `History/{YYYY-MM-DD}.md`:
+
 ```
 ## {HH:MM} - {Action}
 
@@ -51,7 +52,7 @@ After completing the request, append to `History/{YYYY-MM-DD}.md`:
 
 ## Design System: shadcn/ui
 
-**Primary Component Library**: https://ui.shadcn.com/
+**Primary Component Library**: <https://ui.shadcn.com/>
 
 shadcn/ui is a set of beautifully-designed, accessible components and a code distribution platform. It's **not** a traditional component library—you own the code.
 
@@ -76,11 +77,11 @@ npx shadcn@latest add button card dialog
 
 ### Key Resources
 
-- **Docs**: https://ui.shadcn.com/docs
-- **Components**: https://ui.shadcn.com/docs/components
-- **Themes**: https://ui.shadcn.com/themes
-- **Examples**: https://ui.shadcn.com/examples
-- **GitHub**: https://github.com/shadcn-ui/ui
+- **Docs**: <https://ui.shadcn.com/docs>
+- **Components**: <https://ui.shadcn.com/docs/components>
+- **Themes**: <https://ui.shadcn.com/themes>
+- **Examples**: <https://ui.shadcn.com/examples>
+- **GitHub**: <https://github.com/shadcn-ui/ui>
 
 ## Usage Checklist
 

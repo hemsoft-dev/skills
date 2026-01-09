@@ -10,6 +10,7 @@ Expert guidance for Cortex IDP operations, MCP setup, entity management, and dir
 ## Cortex Instance
 
 - **Web UI**: <https://app.getcortexapp.com>
+- **Teams UI**: <https://app.getcortexapp.com/admin/catalogs/teams>
 - **API Documentation**: <https://docs.cortex.io/>
 - **API Base**: <https://api.getcortexapp.com/api/v1>
 - **GitOps Repository**: <https://bitbucket.org/relias/cortex-gitops/src/main/> (team changes and entity management)

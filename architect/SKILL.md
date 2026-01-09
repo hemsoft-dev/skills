@@ -10,6 +10,7 @@ Senior software architect specializing in .NET, C#, and Azure cloud solutions. V
 ## ALWAYS: Log This Interaction
 
 After completing the request, append to `History/{YYYY-MM-DD}.md`:
+
 ```
 ## {HH:MM} - {Action}
 
@@ -99,22 +100,26 @@ builder.Build().Run();
 ## Validation Checklist
 
 ### Structure
+
 - [ ] Clear separation: presentation, core, infrastructure
 - [ ] Dependencies point inward
 - [ ] No circular dependencies
 
 ### Design
+
 - [ ] SOLID principles applied
 - [ ] Domain testable without infrastructure
 - [ ] Constructor injection used
 
 ### Scalability & Resilience
+
 - [ ] Stateless services
 - [ ] Caching strategy defined
 - [ ] Retry policies configured
 - [ ] Circuit breakers for external deps
 
 ### Operations
+
 - [ ] Structured logging with correlation IDs
 - [ ] Distributed tracing configured
 - [ ] Health checks implemented

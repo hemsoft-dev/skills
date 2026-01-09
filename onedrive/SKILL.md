@@ -25,6 +25,7 @@ All OneDrive syncing should be directed to this location. Any other OneDrive fol
 ## Core Functions
 
 ### 1. Detect OneDrive Locations
+
 Find all OneDrive folders on the system:
 
 ```powershell
@@ -45,6 +46,7 @@ Get-ChildItem env: | Where-Object Name -like "*OneDrive*"
 ```
 
 ### 2. Verify Primary Location
+
 Ensure `D:\OneDrive` is the active sync folder:
 
 ```powershell
@@ -57,6 +59,7 @@ $oneDriveSettings | Select-Object UserFolder, DisplayName
 ```
 
 ### 3. Identify Redundant Folders
+
 List any OneDrive folders that are NOT `D:\OneDrive`:
 
 - Check for `C:\Users\{username}\OneDrive`
@@ -64,6 +67,7 @@ List any OneDrive folders that are NOT `D:\OneDrive`:
 - Identify old/orphaned OneDrive folders (no recent activity)
 
 **Report Format**:
+
 ```
 ✅ Active: D:\OneDrive (last synced: {datetime})
 ⚠️  Found: C:\Users\User\OneDrive (potential duplicate)
@@ -71,6 +75,7 @@ List any OneDrive folders that are NOT `D:\OneDrive`:
 ```
 
 ### 4. Sync Health Check
+
 Verify OneDrive is running and syncing properly:
 
 ```powershell
@@ -88,18 +93,20 @@ Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer
 ```
 
 ### 5. Cleanup Guidance
+
 When redundant folders are found:
 
 1. **Verify D:\OneDrive is current**:
    - Check last modified dates
    - Confirm files are syncing
-   
+
 2. **Before removing redundant folders**:
    - Compare file counts: `(Get-ChildItem -Recurse -File).Count`
    - Check for unique files not in D:\OneDrive
    - Create backup if uncertain
 
 3. **Unlink/Remove process**:
+
    ```powershell
    # Stop OneDrive
    Stop-Process -Name OneDrive -Force
@@ -112,6 +119,7 @@ When redundant folders are found:
    ```
 
 ### 6. Set Primary Location
+
 If OneDrive needs to be relocated to D:\OneDrive:
 
 ```powershell
@@ -129,12 +137,14 @@ Start-Process "$env:LOCALAPPDATA\Microsoft\OneDrive\OneDrive.exe" -ArgumentList 
 ### Common Issues with Large File Collections (1M+ files)
 
 **Performance Optimization:**
+
 - Enable **Files On-Demand** to reduce local storage footprint
 - Monitor disk I/O during heavy sync operations
 - Consider selective sync for rarely accessed folders
 - Ensure adequate free disk space (minimum 50 GB recommended)
 
 **Sync Status Indicators:**
+
 - **Last Sync Time**: Check `HKCU:\Software\Microsoft\OneDrive\Accounts\*\LastUpdateTime`
 - **Error Codes**: Check `HKCU:\Software\Microsoft\OneDrive\Accounts\*\LastError`
 - **Files On-Demand**: `HKCU:\Software\Microsoft\OneDrive\FilesOnDemandEnabled`
@@ -142,6 +152,7 @@ Start-Process "$env:LOCALAPPDATA\Microsoft\OneDrive\OneDrive.exe" -ArgumentList 
 ### Monitoring Sync Backlog
 
 For large collections, track:
+
 1. **Cloud-only files**: Files not yet downloaded (ReparsePoint attribute)
 2. **Local files**: Fully synced and available offline
 3. **Sync percentage**: `(Local Files / Total Files) * 100`
@@ -149,6 +160,7 @@ For large collections, track:
 ### Troubleshooting Steps
 
 1. **OneDrive Not Syncing**:
+
    ```powershell
    # Check process
    Get-Process OneDrive
@@ -159,12 +171,15 @@ For large collections, track:
    ```
 
 2. **Check for Errors**:
+
    ```powershell
    Get-ItemProperty -Path "HKCU:\Software\Microsoft\OneDrive\Accounts\*" -Name "LastError"
    ```
+
    Reference: [OneDrive Error Codes](https://support.microsoft.com/en-us/office/what-do-the-onedrive-error-codes-mean-f7a68338-e540-4ebf-ad5d-56c5633acded)
 
 3. **Reset OneDrive** (last resort):
+
    ```powershell
    & "$env:LOCALAPPDATA\Microsoft\OneDrive\OneDrive.exe" /reset
    Start-Sleep -Seconds 10
@@ -182,14 +197,18 @@ For large collections, track:
 ## Key Takeaways from Real-World Usage
 
 ### Deletion Syncing (Verified Jan 2026)
+
 **Finding**: OneDrive syncs file deletions **extremely fast** - often appearing as instant
+
 - **Why**: OneDrive uses Windows Push Notification Services (WNS) for real-time sync
 - **Metadata changes** (rename, delete) happen **immediately** - no large data transfer required
 - **Observation**: Deleting 580,000+ files synced to cloud in seconds, showing "Your files are synced" immediately
 - **Reference**: [Microsoft Learn - How Sync Works](https://learn.microsoft.com/en-us/onedrive/sync-process)
 
 ### Understanding Sync States (Common Confusion)
+
 Users often misunderstand OneDrive file states:
+
 - **"Cloud-only" does NOT mean "not synced"** - it means the file IS in the cloud but not downloaded locally
 - **ALL files in OneDrive folder are synced to the cloud** - regardless of local download status
 - **Two states exist**:
@@ -198,7 +217,9 @@ Users often misunderstand OneDrive file states:
 - Files On-Demand can be "disabled" in settings but still work for some files (previous settings persist)
 
 ### Large File Collection Management (1M+ files)
+
 **Tested with 1,049,215 files:**
+
 - Initial state: ~1M files, ~94% locally downloaded, ~58K cloud-only
 - **Major cleanup**: Removed 580K files from two large folders (Backup, Bitbucket)
 - **Result**: Reduced to ~470K files, dramatic performance improvement
@@ -208,13 +229,16 @@ Users often misunderstand OneDrive file states:
   - Better stored outside OneDrive on local drive
 
 ### Folder Analysis Efficiency
+
 When analyzing large OneDrive folders:
+
 - Recursive file counts are **slow** with 1M+ files (several minutes per folder)
 - Use targeted analysis: scan top-level folders individually
 - Identify largest folders first, then decide what to keep
 - Use `-ErrorAction SilentlyContinue` to handle access denied errors
 
 ### Best Practices Confirmed
+
 1. **One primary OneDrive location** - multiple sync folders cause confusion
 2. **Files On-Demand is essential** for large collections (1M+ files)
 3. **Regular cleanup** - analyze and remove unnecessary folders
@@ -237,6 +261,7 @@ When analyzing large OneDrive folders:
 Reusable scripts are located in `Scripts/` subfolder:
 
 ### Invoke-OneDriveAudit.ps1
+
 Comprehensive audit of OneDrive status, locations, and configuration.
 
 ```powershell
@@ -244,6 +269,7 @@ Comprehensive audit of OneDrive status, locations, and configuration.
 ```
 
 ### Get-OneDriveSyncStatus.ps1
+
 **NEW** - Monitor sync status, detect backlog, and analyze sync progress (optimized for 1M+ files).
 
 ```powershell
@@ -258,6 +284,7 @@ Comprehensive audit of OneDrive status, locations, and configuration.
 ```
 
 ### Test-OneDriveHealth.ps1
+
 **NEW** - Comprehensive health check with automatic issue detection and optional auto-fix.
 
 ```powershell
@@ -269,6 +296,7 @@ Comprehensive audit of OneDrive status, locations, and configuration.
 ```
 
 ### Remove-RedundantOneDrive.ps1
+
 Safely removes redundant OneDrive folders with verification.
 
 ```powershell
@@ -278,6 +306,7 @@ Safely removes redundant OneDrive folders with verification.
 Add `-Force` to skip confirmation for empty folders.
 
 ### Start-OneDriveProcess.ps1
+
 Starts OneDrive and verifies it's running.
 
 ```powershell
@@ -285,6 +314,7 @@ Starts OneDrive and verifies it's running.
 ```
 
 ### Get-OneDriveLocations.ps1
+
 Returns all OneDrive folder locations found on the system.
 
 ```powershell

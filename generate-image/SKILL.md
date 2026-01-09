@@ -44,7 +44,7 @@ Each model has its own dedicated script in `~/.claude/skills/generate-image/scri
 ## Requirements
 
 - `OPENROUTER_API_KEY` environment variable must be set (User or Process scope)
-- Get a key at: https://openrouter.ai/keys
+- Get a key at: <https://openrouter.ai/keys>
 
 ## CRITICAL: Prompt Quality
 
@@ -53,11 +53,13 @@ Each model has its own dedicated script in `~/.claude/skills/generate-image/scri
 When crafting prompts, you MUST be **verbose and specific**. A sparse prompt wastes money and produces generic results.
 
 ### Bad Prompt (DO NOT DO THIS)
+
 ```
 "Dashboard infographic with logos"
 ```
 
 ### Good Prompt (DO THIS)
+
 ```
 "A professional, modern infographic poster for HemSoft Dashboard, a developer analytics platform. 
 Dark theme with deep navy (#0a0a1a) background and subtle gradient overlays. 
@@ -70,6 +72,7 @@ Professional tech startup aesthetic, clean typography, high contrast, 4K quality
 ```
 
 ### Prompt Checklist
+
 - [ ] **Subject**: What is being shown? (product, concept, scene)
 - [ ] **Style**: Art style, aesthetic (modern, minimalist, cyberpunk, professional)
 - [ ] **Colors**: Specific hex codes or color palette description
@@ -82,15 +85,18 @@ Professional tech startup aesthetic, clean typography, high contrast, 4K quality
 ## Default Settings
 
 **Aspect Ratio**: 16:9 (widescreen format, ideal for presentations and displays)
+
 - Use for: Infographics, presentations, social media headers
 - Alternative ratios only when specifically requested (1:1 for square posts, 9:16 for vertical/mobile)
 
 ## Infographic Templates
 
 ### Professional Infographic Style (Preferred)
+
 For business reports, executive summaries, and data visualizations, use this signature style:
 
 **Color Palette:**
+
 - Background: Black (#000000)
 - Primary Text: White (#FFFFFF)
 - Accent 1: Vibrant Yellow (#FFD700)
@@ -98,6 +104,7 @@ For business reports, executive summaries, and data visualizations, use this sig
 - Accent 3: Orange (#FF8C00)
 
 **Design Elements:**
+
 - Slick black background with subtle geometric patterns
 - High contrast white text for readability
 - Yellow/gold/orange highlights for emphasis
@@ -108,6 +115,7 @@ For business reports, executive summaries, and data visualizations, use this sig
 - 4K resolution for presentations
 
 **Example Prompt Structure:**
+
 ```
 "Professional [TYPE] infographic in 16:9 aspect ratio. Black background (#000000) with elegant white text, 
 vibrant yellow (#FFD700) highlights, and luxurious gold (#FFA500) accents.
@@ -156,6 +164,7 @@ Remaining: $28.36
 ```
 
 **Manual Balance Check:**
+
 ```powershell
 & ~/.claude/skills/generate-image/scripts/Get-OpenRouterBalance.ps1
 ```
@@ -186,6 +195,7 @@ The dedicated scripts handle these differences automatically.
 ### API Structure
 
 All models use OpenRouter's chat completions endpoint:
+
 - URL: `https://openrouter.ai/api/v1/chat/completions`
 - Method: POST
 - Body: `{ "model": "<model-id>", "messages": [{ "role": "user", "content": "Generate an image: <prompt>" }] }`

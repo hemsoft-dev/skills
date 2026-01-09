@@ -10,16 +10,18 @@ Expert assistant for the mobile game Egg Inc by Auxbrain. Specializes in player 
 ## Community Resources
 
 ### Majeggstics
+
 The largest organized co-op group in Egg Inc Discord. Motto: "No Farmer is Left Behind!"
 
 | Resource | URL |
 |----------|-----|
-| Website | https://majeggstics.com |
-| Guide | https://majeggstics.com/guide |
-| Boost Calculator | https://majeggstics.com/contract-boost-calculator |
-| Discord | https://discord.gg/egginc (then DM recruiters) |
+| Website | <https://majeggstics.com> |
+| Guide | <https://majeggstics.com/guide> |
+| Boost Calculator | <https://majeggstics.com/contract-boost-calculator> |
+| Discord | <https://discord.gg/egginc> (then DM recruiters) |
 
 **Key Channels** (Discord):
+
 - `#mj-announcements` - Contract registration, minimums
 - `#mj-contracts` - Co-op threads
 - `#the_majeggstics` - General discussion
@@ -28,27 +30,30 @@ The largest organized co-op group in Egg Inc Discord. Motto: "No Farmer is Left 
 **Wonky Bot** - Manages co-op assignments, player tracking, leaderboards
 
 ### wasmegg Tools (by @mk2)
-Community tools at https://wasmegg.netlify.app/
+
+Community tools at <https://wasmegg.netlify.app/>
 
 | Tool | URL | Purpose |
 |------|-----|---------|
-| CoopTracker | https://eicoop.netlify.app/ | Live co-op tracking |
-| Rockets Tracker | https://wasmegg.netlify.app/rockets-tracker/ | Mission tracking, artifact collection |
-| Smart Assistant | https://wasmegg.netlify.app/smart-assistant/ | Artifact loadout optimizer |
-| Enlightenment Companion | https://wasmegg.netlify.app/enlightenment/ | Diamond trophy guide |
-| Artifact Explorer | https://wasmegg.netlify.app/artifact-explorer/ | Artifact database |
-| Inventory Visualizer | https://wasmegg.netlify.app/inventory-visualizer/ | Share artifact inventory |
+| CoopTracker | <https://eicoop.netlify.app/> | Live co-op tracking |
+| Rockets Tracker | <https://wasmegg.netlify.app/rockets-tracker/> | Mission tracking, artifact collection |
+| Smart Assistant | <https://wasmegg.netlify.app/smart-assistant/> | Artifact loadout optimizer |
+| Enlightenment Companion | <https://wasmegg.netlify.app/enlightenment/> | Diamond trophy guide |
+| Artifact Explorer | <https://wasmegg.netlify.app/artifact-explorer/> | Artifact database |
+| Inventory Visualizer | <https://wasmegg.netlify.app/inventory-visualizer/> | Share artifact inventory |
 
 ### Other Tools
+
 | Tool | URL | Purpose |
 |------|-----|---------|
-| Gompaniyon | https://docs.google.com/spreadsheets/d/1hudIh0FG5HZro7mGHrnSYqd7afdFU3s1uPFSDxjLbKU/ | Boost calculator spreadsheet |
-| Legendary Study | https://legendary-study.netlify.app/ | Legendary artifact stats |
-| Ad-hoc Tools | https://eiadhoc.netlify.app/ | Crafting cost, shipping time calculators |
+| Gompaniyon | <https://docs.google.com/spreadsheets/d/1hudIh0FG5HZro7mGHrnSYqd7afdFU3s1uPFSDxjLbKU/> | Boost calculator spreadsheet |
+| Legendary Study | <https://legendary-study.netlify.app/> | Legendary artifact stats |
+| Ad-hoc Tools | <https://eiadhoc.netlify.app/> | Crafting cost, shipping time calculators |
 
 ## ALWAYS: Log This Interaction
 
 After completing the request, append to `History/{YYYY-MM-DD}.md`:
+
 ```
 ## {HH:MM} - {Action}
 
@@ -89,27 +94,32 @@ Account data is cached locally in JSON files for quick querying without API call
 ## API Endpoints
 
 ### Player Info
+
 ```
 https://eggincdatacollection.azurewebsites.net/api/formulae/all?eid={EID}
 https://ei_worker.tylertms.workers.dev/backup?EID={EID}
 ```
 
 ### Events & Contracts
+
 ```
 https://ei_worker.tylertms.workers.dev/periodicals?EID={EID}
 ```
 
 ### Player Contracts Archive
+
 ```
 https://ei_worker.tylertms.workers.dev/archive?EID={EID}
 ```
 
 ### Contract Details
+
 ```
 https://ei_worker.tylertms.workers.dev/contract?EID={EID}&contract={contractId}&coop={coopId}
 ```
 
 ### MAJ Rankings (Google Sheets)
+
 ```
 https://sheets.googleapis.com/v4/spreadsheets/17juaBpcUiw1Rw3sMnVRbRkY_rxW-AdTCD-WyIO8YPs8/values/SE!P1:Y1000?key={API_KEY}
 ```
@@ -117,17 +127,20 @@ https://sheets.googleapis.com/v4/spreadsheets/17juaBpcUiw1Rw3sMnVRbRkY_rxW-AdTCD
 ## Core Currencies
 
 ### Soul Eggs (SE)
+
 - Earned via prestige, contracts, trophies, daily calendar
 - Each SE provides +10% earnings (base), up to +150% with max Soul Food
 - Displayed in Egg Inc format: **123.330s** (sextillion)
 
 ### Prophecy Eggs (PE)
+
 - Multiply SE effectiveness by 5-10% each (compounding)
 - Earned from contracts, trophies, daily calendar, seasons
 - Integer count: **231** PE
 
-### Truth Eggs (EoV) - NEW!
-- Also called "Eggs of Virtue" 
+### Truth Eggs (EoV) - NEW
+
+- Also called "Eggs of Virtue"
 - Earned from the Virtue system (5 enlightenment paths)
 - API Location: `response.virtue`
   - `eovEarnedList[5]` - EoV earned per path (sum for total earned)
@@ -140,9 +153,11 @@ https://sheets.googleapis.com/v4/spreadsheets/17juaBpcUiw1Rw3sMnVRbRkY_rxW-AdTCD
 ## Core Calculations
 
 ### Earnings Bonus (EB)
+
 ```
 Base EB = SoulEggs × 150 × (1.1 ^ ProphecyEggs) × (1.035 ^ TruthEggs)
 ```
+
 - Base Soul Egg bonus: 150% (with max Soul Food Epic Research)
 - Prophecy Egg multiplier: 1.1x per PE (with max Prophecy Bonus)
 - Truth Egg multiplier: ~1.035x per EoV (compounding)
@@ -191,6 +206,7 @@ Base EB = SoulEggs × 150 × (1.1 ^ ProphecyEggs) × (1.035 ^ TruthEggs)
 **Example**: King Friday has **103.440d%** EB = **Vendafarmer** (between 100d and 1U)
 
 ### Number Suffixes (Case Sensitive!)
+
 | Suffix | Value | Example |
 |--------|-------|---------|
 | K | 10³ | 1.234K = 1,234 |
@@ -235,28 +251,34 @@ Base EB = SoulEggs × 150 × (1.1 ^ ProphecyEggs) × (1.035 ^ TruthEggs)
 ## Key Game Mechanics
 
 ### Prestige
+
 Resets farm progress but grants Soul Eggs based on lifetime earnings. Soul Eggs permanently boost earnings on all future farms.
 
 ### Soul Eggs (SE)
+
 - Earned via prestige, contracts, trophies, daily calendar
 - Each SE provides +10% earnings (base), up to +150% with max Soul Food
 
 ### Prophecy Eggs (PE)
+
 - Multiply SE effectiveness by 5-10% each (compounding)
 - Earned from contracts, trophies, daily calendar, seasons
 - Current max available: ~231 PE
 
 ### Artifacts & Stones
+
 - Collected from spaceship missions
 - Provide passive bonuses when equipped
 - Key artifacts: Phoenix Feather (SE gain), Book of Basan (PE bonus), Lunar Totem (away earnings)
 
 ### Contracts
+
 - Multiplayer co-op goals
 - Reward SE, PE, Golden Eggs, artifacts
 - Leggacy contracts available Fridays
 
 ### Events
+
 Types: Double Prestige, Generous Drones, Longer Boosts, etc.
 
 ## Spaceship Missions
@@ -264,6 +286,7 @@ Types: Double Prestige, Generous Drones, Longer Boosts, etc.
 Spaceships are sent on missions to collect Artifacts, Stones, and Ingredients. Each account can have **3 active missions** at a time, plus 1 fueling.
 
 ### Ship Types (by ID)
+
 | ID | Ship Name | Max Stars |
 |----|-----------|-----------|
 | 0 | Chicken One | 2 |
@@ -279,6 +302,7 @@ Spaceships are sent on missions to collect Artifacts, Stones, and Ingredients. E
 | 10 | Atreggies Henliner | 8 |
 
 ### Duration Types
+
 | ID | Type | Description |
 |----|------|-------------|
 | 0 | Short | Fastest, lowest quality |
@@ -286,12 +310,14 @@ Spaceships are sent on missions to collect Artifacts, Stones, and Ingredients. E
 | 2 | Extended | Slowest, highest quality |
 
 ### Mission Types
+
 | ID | Type | Description |
 |----|------|-------------|
 | 0 | Normal | Standard artifact missions |
 | 1 | Virtue | Enlightenment/Virtue path missions |
 
 ### Mission Status Codes
+
 | ID | Status |
 |----|--------|
 | 0 | Fueling |
@@ -302,12 +328,14 @@ Spaceships are sent on missions to collect Artifacts, Stones, and Ingredients. E
 | 25 | Complete |
 
 ### API Structure (`response.artifactsDb`)
+
 | Field | Description |
 |-------|-------------|
 | `missionInfosList` | Array of active/returned missions |
 | `fuelingMission` | Currently fueling mission (if any) |
 
 **Mission object fields:**
+
 - `ship` - Ship ID (0-10)
 - `status` - Mission status code
 - `durationType` - Duration type (0-2)
@@ -324,12 +352,14 @@ Spaceships are sent on missions to collect Artifacts, Stones, and Ingredients. E
 The Virtue system is the endgame enlightenment prestige mechanic that awards **Truth Eggs (Eggs of Virtue / EoV)**. Introduced ~September 2025.
 
 ### Community EoT Tracking
+
 - **Majeggstics Leaderboard**: Tracked via Discord/Wonky bot (old spreadsheet deprecated)
 - **Top Players** (as of late 2025): 100-150+ EoT
 - **Leading Pack**: 85-130 EoT typical for active players
 - **Average First Run**: 25-55 EoT in 7-8 shifts
 
 ### The 5 Virtue Paths
+
 | Index | Path | Focus | Threshold per EoV |
 |-------|------|-------|-------------------|
 | 0 | Curiosity | Research | ~10q eggs |
@@ -339,12 +369,14 @@ The Virtue system is the endgame enlightenment prestige mechanic that awards **T
 | 4 | Kindness | Vehicles | ~10q eggs |
 
 ### How It Works
+
 1. **Enlightenment Farms**: Deliver enlightenment eggs to progress each path
 2. **Pending EoV**: Calculated when hitting thresholds on each path
 3. **Virtue Reset**: Reset to collect all pending EoV and start over
 4. **Shifts**: Total milestone completions across all paths (`shiftCount`)
 
 ### API Structure (`response.virtue`)
+
 | Field | Type | Description |
 |-------|------|-------------|
 | `shiftCount` | int | Total shifts completed (NOT pending - purpose unclear) |
@@ -357,11 +389,13 @@ The Virtue system is the endgame enlightenment prestige mechanic that awards **T
 **Pending = Completed Tiers - Earned** for each path.
 
 **Standard Paths** (Curiosity, Integrity, Humility, Kindness) use 1-2-5 progression:
+
 ```
 500B, 1T, 2T, 5T, 10T, 20T, 50T, 100T, 200T, 500T, 1q, 2q, 5q, 10q, 20q, 50q, 100q, ...
 ```
 
 **Resilience Path** uses linear then 1-2-5 progression:
+
 ```
 1T, 2T, 3T, 4T, 5T, 6T, 7T, 20T, 50T, 100T, 200T, 500T, 1q, ...
 ```
@@ -369,12 +403,14 @@ The Virtue system is the endgame enlightenment prestige mechanic that awards **T
 Algorithm: Count how many thresholds the `eggsDeliveredList[path]` value exceeds, subtract `eovEarnedList[path]`.
 
 ### Truth Egg Bonus
+
 - Each Truth Egg provides a **multiplier to Earnings Bonus**
 - Stacks multiplicatively with SE and PE
 - Exact multiplier per EoV: ~3.5% compounding (estimated)
 - Formula: `EB = SE × 150 × (1.1^PE) × (1.035^EoV)` (approximate)
 
 ### King Monday's Virtue Stats (Example)
+
 ```
 Path            | Earned | Pending | Progress
 ----------------|--------|---------|------------------
@@ -388,6 +424,7 @@ Total           | 45     | 17      |
 ```
 
 ### Virtue Strategy
+
 1. **Early Virtue**: Focus on completing enlightenment diamond trophy first
 2. **Path Focus**: Prioritize paths closest to next threshold
 3. **Reset Timing**: Reset when pending EoV is high enough to justify losing progress
@@ -396,16 +433,19 @@ Total           | 45     | 17      |
 ## Prestige Strategies
 
 ### Single Prestige (Early-Mid Game)
+
 1. Max Universe egg
 2. Use boosts: Soul Beacon + Bird Feed + Boost Beacon
 3. Run chickens, prestige when boosts expire
 
 ### Multistige (Late Game, 100Q%+ EB)
+
 1. Use dilithium stones to extend boosts
 2. Multiple prestiges per boost set
 3. Optimal legs ≈ 0.58 × (T + τ) / τ
 
 ### Lunarstige (Lazy Strategy)
+
 1. Equip Lunar Totem + Lunar Stones
 2. Go offline during boost duration
 3. Prestige when returning
@@ -413,6 +453,7 @@ Total           | 45     | 17      |
 ## Reference Project
 
 The Egg-Inc-Tracker project at `F:\github\HemSoft\Egg-Inc-Tracker` contains:
+
 - `sources/HemSoft.EggIncTracker.Domain/PlayerManager.cs` - EB calculations, title progression
 - `sources/HemSoft.EggIncTracker.Domain/Api.cs` - API call implementations
 - `sources/HemSoft.EggIncTracker.Data/Dtos/PlayerDto.cs` - Player data model
@@ -424,13 +465,17 @@ The Egg-Inc-Tracker project at `F:\github\HemSoft\Egg-Inc-Tracker` contains:
 All scripts are located in `c:\Users\User\.claude\skills\egg-inc\scripts\`
 
 ### FetchAllAccounts.ps1
+
 Fetches backup data for all tracked accounts and saves to JSON files in the `data` folder.
+
 ```powershell
 & "c:\Users\User\.claude\skills\egg-inc\scripts\FetchAllAccounts.ps1"
 ```
 
 ### TruthEggsStatusAll.ps1
+
 Returns Truth Eggs status for all tracked accounts with both earned AND pending:
+
 ```powershell
 & "c:\Users\User\.claude\skills\egg-inc\scripts\TruthEggsStatusAll.ps1"
 ```
@@ -438,7 +483,9 @@ Returns Truth Eggs status for all tracked accounts with both earned AND pending:
 Output columns: Account, Earned, Pending, Total, Curiosity (earned+pending), Integrity, Humility, Resilience, Kindness, Resets
 
 ### MissionStatusAll.ps1
+
 Returns active spaceship missions for all tracked accounts:
+
 ```powershell
 & "c:\Users\User\.claude\skills\egg-inc\scripts\MissionStatusAll.ps1"
 ```
@@ -446,7 +493,9 @@ Returns active spaceship missions for all tracked accounts:
 Output columns: Account, Ship, Duration, Type, Stars, Capacity, Status, TimeLeft
 
 ### VirtueMissionsAll.ps1
+
 Returns Virtue (enlightenment path) missions for all tracked accounts with arrival times:
+
 ```powershell
 & "c:\Users\User\.claude\skills\egg-inc\scripts\VirtueMissionsAll.ps1"
 ```
@@ -456,6 +505,7 @@ Output columns: Account, Ship, Duration, Stars, Capacity, Arrival (local time)
 ## Usage Examples
 
 ### Fetch Player Status
+
 ```powershell
 $EID = "EI6335140328505344"  # King Friday
 $r = Invoke-RestMethod "https://ei_worker.tylertms.workers.dev/backup?EID=$EID"
@@ -468,6 +518,7 @@ $EoV_earned = ($r.virtue.eovEarnedList | Measure-Object -Sum).Sum  # 43
 ```
 
 ### Example Output Format
+
 ```
 King Friday!
 ────────────────────
@@ -479,6 +530,7 @@ Title: Vendafarmer
 ```
 
 ### Calculate EB (with Truth Eggs)
+
 ```csharp
 // Full EB calculation including Truth Eggs
 var baseEB = soulEggs * 150 * Math.Pow(1.1, prophecyEggs);
@@ -494,6 +546,7 @@ $EB = $SE * 150 * [Math]::Pow(1.1, $PE) * [Math]::Pow(1.035, $EoV)
 ```
 
 ### Format Large Numbers
+
 ```csharp
 Utils.FormatBigInteger(bigNumber.ToString()) // Returns "1.234Q"
 ```

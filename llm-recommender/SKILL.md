@@ -19,6 +19,7 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 ## Recommendation Criteria
 
 When recommending models, consider:
+
 - **Task Type**: Coding, reasoning, chat, multimodal, agentic workflows
 - **Context Needs**: How much input/output the task requires
 - **Budget**: Cost per million tokens (input/output)
@@ -43,6 +44,7 @@ For OpenRouter/direct API, calculate: `(input_tokens / 1M × input_price) + (out
 ## Updating the Registry
 
 When adding new models to `LLMs.md`, include all required fields:
+
 - Model Full Name, Reference Name, Created Date
 - Host, Cost (input/output or multiplier)
 - Context (input/output limits), Modalities

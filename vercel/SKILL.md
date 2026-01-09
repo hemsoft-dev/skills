@@ -17,7 +17,7 @@ Command-line interface for deploying and managing applications on Vercel.
 
 | Project | Domain | Repo |
 |---------|--------|------|
-| dashboard | https://dashboard.hemmer.us | fhemmer/dashboard |
+| dashboard | <https://dashboard.hemmer.us> | fhemmer/dashboard |
 
 ## ALWAYS: Log This Interaction
 
@@ -60,6 +60,7 @@ vercel logout
 ```
 
 ### Config Locations
+
 - **Linux**: `~/.local/share/com.vercel.cli/`
 - **macOS**: `~/Library/Application Support/com.vercel.cli/`
 - **Windows**: `%APPDATA%\Roaming\xdg.data\com.vercel.cli\`
@@ -69,6 +70,7 @@ Files: `config.json` (settings), `auth.json` (credentials - never share)
 ## Core Commands
 
 ### Deploy
+
 ```bash
 # Deploy to preview
 vercel
@@ -99,6 +101,7 @@ vercel --yes
 ```
 
 ### Project Linking
+
 ```bash
 # Link local directory to Vercel project
 vercel link
@@ -107,6 +110,7 @@ vercel link
 ```
 
 ### Environment Variables
+
 ```bash
 # Pull env vars to local file
 vercel env pull                    # → .env.local
@@ -126,6 +130,7 @@ vercel env rm MY_VAR production
 ```
 
 ### Local Development
+
 ```bash
 # Start local dev server (mirrors Vercel environment)
 vercel dev
@@ -138,6 +143,7 @@ vercel dev --yes
 ```
 
 ### Inspect & Logs
+
 ```bash
 # View deployment details
 vercel inspect <deployment-url>
@@ -153,6 +159,7 @@ vercel logs <deployment-url>
 ```
 
 ### Domains & Aliases
+
 ```bash
 # Set alias for deployment
 vercel alias set <deployment-url> <custom-domain>
@@ -165,6 +172,7 @@ vercel alias rm <custom-domain> --yes
 ```
 
 ### Promote & Rollback
+
 ```bash
 # Promote deployment to production
 vercel promote <deployment-url>
@@ -174,6 +182,7 @@ vercel promote <deployment-url> --scope my-team
 ```
 
 ### Redeploy
+
 ```bash
 # Redeploy existing deployment
 vercel redeploy <deployment-id-or-url>
@@ -183,6 +192,7 @@ vercel redeploy <deployment-url> --no-wait
 ```
 
 ### Remove
+
 ```bash
 # Remove single deployment
 vercel remove <deployment-url>
@@ -201,6 +211,7 @@ vercel remove <deployment-url> --yes
 ```
 
 ### Pull Project Settings
+
 ```bash
 # Pull project settings and env vars
 vercel pull
@@ -217,6 +228,7 @@ vercel pull --yes
 ## CI/CD Integration
 
 ### GitHub Actions Example
+
 ```yaml
 name: Deploy to Vercel
 env:
@@ -241,6 +253,7 @@ jobs:
 ```
 
 ### Required Secrets
+
 - `VERCEL_TOKEN`: Personal access token from Vercel dashboard
 - `VERCEL_ORG_ID`: Team/org ID (from `.vercel/project.json` after linking)
 - `VERCEL_PROJECT_ID`: Project ID (from `.vercel/project.json` after linking)
@@ -248,6 +261,7 @@ jobs:
 ## Token-Based Authentication
 
 For CI/CD and automation:
+
 ```bash
 # Use token directly
 vercel --token <TOKEN> <command>
@@ -279,6 +293,7 @@ vercel <command>
 ## Common Workflows
 
 ### Initial Setup
+
 ```bash
 vercel login
 vercel link
@@ -287,18 +302,21 @@ vercel dev
 ```
 
 ### Deploy Preview → Production
+
 ```bash
 vercel                           # Preview deployment
 vercel --prod                    # Production deployment
 ```
 
 ### Staged Rollout
+
 ```bash
 vercel --prod --skip-domain      # Deploy without domain assignment
 vercel promote <deployment-url>  # Manually promote when ready
 ```
 
 ### Using bunx (No Global Install)
+
 ```bash
 bunx vercel whoami               # Check auth
 bunx vercel link                 # Link project
@@ -311,37 +329,46 @@ bunx vercel env ls               # List env vars
 When transferring a GitHub repo to a new org/account:
 
 1. **Install Vercel GitHub App** in the new org:
+
    ```
    https://github.com/apps/vercel/installations/new
    ```
+
    - Select the organization
    - Grant access to specific repos or all repos
 
 2. **Link the local project**:
+
    ```bash
    bunx vercel link
    ```
 
 3. **Connect Git via Dashboard** (CLI has issues with SSH URLs):
+
    ```
    https://vercel.com/<team>/<project>/settings/git
    ```
+
    - Disconnect old repo (if connected)
    - Connect new repo from the org
 
 4. **Test deployment**:
+
    ```bash
    bunx vercel --prod
    ```
 
 ### Git Connect CLI Issues
+
 The `vercel git connect` command may fail with SSH-style URLs:
+
 ```bash
 # This may fail:
 vercel git connect https://github.com/org/repo
 
 # Error: Failed to parse URL "git@github-personal:org/repo.git"
 ```
+
 **Workaround**: Use the Vercel Dashboard to connect Git repos.
 
 ## CLI Shortcuts
@@ -357,7 +384,9 @@ vercel git connect https://github.com/org/repo
 ## Troubleshooting
 
 ### Diagnosing Failed Deployments
+
 The most reliable way to get build logs for failed deployments:
+
 ```bash
 # This is the key command - vercel logs doesn't work for errored deployments
 vercel inspect <deployment-url> --logs --wait
@@ -366,12 +395,15 @@ vercel inspect <deployment-url> --logs --wait
 Note: `vercel logs <url>` will fail with "Deployment not ready" for errored builds. Always use `inspect --logs --wait` instead.
 
 ### Repeated Login Prompts
+
 - Token may have expired
 - Check `auth.json` exists and is valid
 - Re-run `vercel login`
 
 ### Build Failures
+
 Common causes:
+
 1. **TypeScript errors** - Vercel runs fresh builds with strict checking. Always run `tsc --noEmit` locally before pushing.
 2. **Missing environment variables** - Use `vercel env ls` to verify
 3. **Nullable database fields** - Ensure null checks for fields like `created_at` when using `new Date()`
@@ -385,18 +417,23 @@ vercel ls
 ```
 
 ### Environment Variable Issues
+
 ```bash
 vercel env ls
 vercel env pull --environment=production
 ```
 
 ### Deprecated CLI Flags (Avoid)
+
 These flags are silently ignored:
+
 - `--output` (on logs command)
 - `--since` (on logs command)
 
 ### VS Code Extension
+
 The community extension `frenco.vscode-vercel` has known issues:
+
 - Endless "Loading..." spinner (GitHub Issue #11)
 - OAuth authentication problems
 - **Recommendation**: Use CLI instead of the extension for reliability

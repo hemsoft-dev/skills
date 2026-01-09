@@ -23,21 +23,25 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 ## Quick Commands
 
 ### Full Backup (default folders)
+
 ```powershell
 & "$env:USERPROFILE\.claude\skills\backup\scripts\Backup-UserProfile.ps1"
 ```
 
 ### Backup Specific Folders
+
 ```powershell
 & "$env:USERPROFILE\.claude\skills\backup\scripts\Backup-UserProfile.ps1" -Folders ".claude",".ssh",".gitconfig"
 ```
 
 ### List What Would Be Backed Up (dry run)
+
 ```powershell
 & "$env:USERPROFILE\.claude\skills\backup\scripts\Backup-UserProfile.ps1" -WhatIf
 ```
 
 ### Restore
+
 ```powershell
 & "$env:USERPROFILE\.claude\skills\backup\scripts\Restore-UserProfile.ps1" -BackupDate "2025-12-25"
 ```

@@ -1,17 +1,53 @@
 ---
 name: slack
-description: V1.9 - Full-featured Slack Web API with beautiful Block Kit formatting, comprehensive scopes for messaging,
+description: V2.1 - Full-featured Slack Web API with beautiful Block Kit formatting, comprehensive scopes for messaging,
   channels, files, reactions, DMs, reminders, bookmarks, AI Agent capabilities, daily briefing script, and isolated temp
-  folder for downloads.
+  folder for downloads. Includes block-kit-templates.md with ready-to-use message templates.
 ---
 
 # Slack Web API
 
 Expert guidance for Slack API operations including messaging, channel management, user interactions, files, reactions, reminders, bookmarks, and AI Agent capabilities via PowerShell scripts.
 
+---
+
+## 🚨🚨🚨 ABSOLUTE RULE: NEVER RETRY MESSAGE POSTS 🚨🚨🚨
+
+**THIS IS THE MOST IMPORTANT RULE IN THIS ENTIRE SKILL.**
+
+When you post a message to Slack:
+
+1. **RUN THE COMMAND ONCE. EXACTLY ONCE.**
+2. **DO NOT CHECK IF IT WORKED.**
+3. **DO NOT RETRY IF OUTPUT LOOKS EMPTY OR WEIRD.**
+4. **TELL THE USER "Posted to #channel" AND STOP.**
+
+**WHY THIS MATTERS:**
+
+- Terminal output is often blank or truncated — **this is normal, not a failure**
+- Slack API calls almost always succeed
+- Every retry = another duplicate message in the channel
+- Users HATE seeing the same message 2-3 times
+- If the message truly failed, the user will tell you
+
+**THE ONLY TIME TO RETRY:** When the user explicitly says "it didn't post" or "I don't see it."
+
+**VIOLATING THIS RULE IS UNACCEPTABLE.** It damages user trust and spams channels.
+
+---
+
+## 📁 Companion Files in This Skill
+
+| File | Purpose |
+|------|---------|
+| [block-kit-templates.md](block-kit-templates.md) | **Ready-to-use templates** for deployments, alerts, reports, PR reviews, announcements |
+| [scripts/](scripts/) | PowerShell scripts for common operations |
+
 ## 🎨 REQUIRED: Beautiful Message Formatting
 
 **ALL messages MUST use Block Kit for professional, polished posts.**
+
+> 📋 **Need a template?** See [block-kit-templates.md](block-kit-templates.md) for 5 complete, copy-paste examples including deployment notifications, alerts, weekly reports, PR reviews, and announcements.
 
 When composing ANY Slack message, ALWAYS:
 
@@ -163,13 +199,11 @@ Before executing ANY write operation (post message, add reaction, upload file, e
 
 **Read-only operations** (list channels, get messages, user info) are safe and don't require approval.
 
-## ⛔ CRITICAL: NO RETRIES WHEN POSTING
+## ⛔ REMINDER: NO RETRIES (See Top of File)
 
-**Run the post command once. Do not retry. Ever.**
+**See the 🚨🚨🚨 ABSOLUTE RULE at the top of this file.**
 
-- Terminal output may be blank — this is normal, not a failure
-- Tell user "Posted to #channel" and move on
-- If user says it didn't work, only then check or retry with their approval
+Post once. Say "Posted to #channel." Stop. Do not verify. Do not retry.
 
 ## 🚨 CRITICAL: Channel Access and Bot Membership
 
@@ -616,9 +650,11 @@ Channel IDs start with `C` (e.g., `C1234567890`). To find a channel ID:
 
 ### Known User IDs
 
-| User | ID | Role |
-|------|----|----- |
-| Franz Hemmer | `U2XMZDPJ7` | AI Evangelist - Productivity Engineering |
+| User | ID | Type | Notes |
+|------|----|----- |-------|
+| Franz Hemmer | `U2XMZDPJ7` | Human | AI Evangelist - Productivity Engineering |
+| Relias Assistant | `U08GJU7S7BM` | Bot | AI Assistant bot (relias-assistant project) |
+| slack_skill_bot | `U0A780L15S8` | Bot | General purpose Slack skill bot |
 
 ## Finding User IDs
 
@@ -632,6 +668,65 @@ User IDs start with `U` (e.g., `U1234567890`). To find a user ID:
 $user = Invoke-RestMethod -Uri "https://slack.com/api/users.lookupByEmail?email=user@example.com" -Headers $headers -Method Get
 Write-Output "User ID: $($user.user.id)"
 ```
+
+## Finding Bot User IDs
+
+**This is critical for mentioning bots in messages!** Bot user IDs are different from regular user IDs and can be tricky to find.
+
+### Method 1: auth.test (Recommended - if you have the bot's token)
+
+The **easiest and most reliable** method when you have access to the bot's token:
+
+```powershell
+# If you have the bot's token
+$botToken = "xoxb-your-bot-token"
+$h = @{"Authorization"="Bearer $botToken"}
+$r = Invoke-RestMethod -Uri "https://slack.com/api/auth.test" -Headers $h
+if ($r.ok) {
+    Write-Host "Bot User ID: $($r.user_id)"  # This is what you need for @mentions
+    Write-Host "Bot Name: $($r.user)"
+    Write-Host "Bot ID: $($r.bot_id)"  # Different from user_id!
+}
+```
+
+**Important distinction:**
+
+- `user_id` (e.g., `U08GJU7S7BM`) - Use this for `<@U08GJU7S7BM>` mentions
+- `bot_id` (e.g., `B08GJU7QU91`) - Internal bot identifier, NOT for mentions
+
+### Method 2: Check .env or config files
+
+For project-specific bots, check the project's configuration:
+
+```powershell
+# Example: Reading from .env file
+$token = (Get-Content ".env" | Where-Object { $_ -match "^Slack__BotToken=" }) -replace "^Slack__BotToken=",""
+$h = @{"Authorization"="Bearer $token"}
+$r = Invoke-RestMethod -Uri "https://slack.com/api/auth.test" -Headers $h
+$r | ConvertTo-Json
+```
+
+### Method 3: Search users.list for bots
+
+```powershell
+$h = @{"Authorization"="Bearer $env:SLACK_TOKEN"}
+$r = Invoke-RestMethod -Uri "https://slack.com/api/users.list?limit=500" -Headers $h
+$r.members | Where-Object { $_.is_bot -eq $true } | Select-Object id, name, real_name
+```
+
+### Method 4: Check recent messages from the bot
+
+```powershell
+# Look at messages in a channel where the bot has posted
+$h = @{"Authorization"="Bearer $env:SLACK_TOKEN"}
+$r = Invoke-RestMethod -Uri "https://slack.com/api/conversations.history?channel=C08H7CG4NTS&limit=20" -Headers $h
+$r.messages | Where-Object { $_.bot_id } | Select-Object user, bot_id, @{N='text';E={$_.text.Substring(0, [Math]::Min(50, $_.text.Length))}}
+# The 'user' field is the bot's user_id for mentions
+```
+
+### Common Pitfall: Multiple Bots
+
+If you have multiple bots (e.g., `slack_skill_bot` and `Relias Assistant`), make sure you're using the **correct token** to get the **correct bot's user ID**. The `auth.test` endpoint returns info for whatever token you authenticate with.
 
 ## Response Format
 
@@ -935,9 +1030,14 @@ Post messages to Slack channels with approval workflow:
 
 ## Resources
 
+### Local Files (Check These First!)
+
+- **[block-kit-templates.md](block-kit-templates.md)** - ⭐ Ready-to-use templates for common scenarios
+
+### External Documentation
+
 - **Web API Methods**: <https://docs.slack.dev/reference/methods>
 - **Block Kit Builder**: <https://app.slack.com/block-kit-builder>
-- **Block Kit Templates**: See [block-kit-templates.md](block-kit-templates.md) for complete examples
 - **OAuth Guide**: <https://docs.slack.dev/authentication>
 - **Rate Limits**: <https://docs.slack.dev/apis/rate-limits>
 - **Formatting Guide**: <https://docs.slack.dev/messaging/formatting-message-text>

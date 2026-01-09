@@ -118,22 +118,40 @@ try {
     # Process and display results based on format
     switch ($OutputFormat) {
         'JSON' {
-            $response.messages.matches | ConvertTo-Json -Depth 5
+            # Ensure each result has a link
+            $resultsWithLinks = $response.messages.matches | ForEach-Object {
+                $result = $_
+                if (-not $result.permalink) {
+                    # Construct permalink: https://{team}.slack.com/archives/{channel_id}/p{ts without dot}
+                    $tsNoDot = $result.ts -replace '\.', ''
+                    $result | Add-Member -NotePropertyName 'permalink' -NotePropertyValue "https://relias-engineering.slack.com/archives/$($result.channel.id)/p$tsNoDot" -Force
+                }
+                $result
+            }
+            $resultsWithLinks | ConvertTo-Json -Depth 5
         }
         
         'Table' {
             $results = $response.messages.matches | ForEach-Object {
                 $timestamp = [DateTimeOffset]::FromUnixTimeSeconds([double]$_.ts.Split('.')[0]).LocalDateTime
-                $preview = $_.text.Substring(0, [Math]::Min(80, $_.text.Length))
+                $preview = $_.text.Substring(0, [Math]::Min(60, $_.text.Length))
+                
+                # Construct link if not present
+                $link = $_.permalink
+                if (-not $link) {
+                    $tsNoDot = $_.ts -replace '\.', ''
+                    $link = "https://relias-engineering.slack.com/archives/$($_.channel.id)/p$tsNoDot"
+                }
                 
                 [PSCustomObject]@{
                     Date     = $timestamp.ToString('yyyy-MM-dd HH:mm')
                     User     = $_.username
                     Channel  = $_.channel.name
                     Preview  = $preview
+                    Link     = $link
                 }
             }
-            $results | Format-Table -AutoSize
+            $results | Format-Table -AutoSize -Wrap
         }
         
         'List' {
@@ -146,10 +164,13 @@ try {
                 Write-Information "[36m[$dateStr] @$($match.username) in #$($match.channel.name)`e[0m"
                 Write-Information "[97m$($match.text)`e[0m"
                 
-                # Show permalink if available
-                if ($match.permalink) {
-                    Write-Information "[90mLink: $($match.permalink)`e[0m"
+                # Always show link - construct if not present
+                $link = $match.permalink
+                if (-not $link) {
+                    $tsNoDot = $match.ts -replace '\.', ''
+                    $link = "https://relias-engineering.slack.com/archives/$($match.channel.id)/p$tsNoDot"
                 }
+                Write-Information "[90mLink: $link`e[0m"
                 
                 Write-Information "[90m---`e[0m"
                 Write-Information ""

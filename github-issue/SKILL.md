@@ -43,6 +43,7 @@ gh issue create --repo {owner}/{repo} --title "{title}" --body $body --label "{l
 **Why separate?** Running both in one terminal call truncates output, hiding the issue URL or errors.
 
 **Never use**:
+
 - Inline `--body "..."` with markdown
 - Backticks in markdown (PowerShell interprets as escape)
 - ASCII art with box-drawing characters (use bullet points instead)
@@ -72,6 +73,7 @@ Use only labels confirmed to exist. If a label fails, retry without it.
 ## Code Snippet Formatting
 
 Use triple backticks with language identifier:
+
 - `typescript` for TS/JS
 - `sql` for database
 - `bash` for shell commands

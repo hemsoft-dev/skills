@@ -30,6 +30,7 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 ## Common Workflows
 
 ### Listing Tasks
+
 ```powershell
 # List all tasks in the root folder
 Get-ScheduledTask -TaskPath "\"
@@ -39,6 +40,7 @@ Get-ScheduledTask -TaskName "MyTask"
 ```
 
 ### Creating a Task
+
 ```powershell
 $Action = New-ScheduledTaskAction -Execute "C:\Path\To\App.exe" -Argument "--scan"
 $Trigger = New-ScheduledTaskTrigger -Daily -At 3am
@@ -46,16 +48,19 @@ Register-ScheduledTask -TaskName "DailyScan" -Action $Action -Trigger $Trigger -
 ```
 
 ### Removing a Task
+
 ```powershell
 Unregister-ScheduledTask -TaskName "DailyScan" -Confirm:$false
 ```
 
 ### Checking Task Status
+
 ```powershell
 Get-ScheduledTaskInfo -TaskName "DailyScan" | Select-Object LastRunTime, LastTaskResult, NextRunTime
 ```
 
 ### Advanced Task Creation (Admin/Settings)
+
 ```powershell
 $Action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-File 'C:\Scripts\Backup.ps1'"
 $Trigger = New-ScheduledTaskTrigger -Weekly -DaysOfWeek Sunday -At 2am
@@ -65,6 +70,7 @@ Register-ScheduledTask -TaskName "SystemBackup" -Action $Action -Trigger $Trigge
 ```
 
 ### Modifying an Existing Task (Requires Elevation)
+
 `Set-ScheduledTask` often fails to update triggers due to permission issues. The reliable approach is to **unregister and re-register** in an elevated session:
 
 ```powershell
@@ -85,6 +91,7 @@ Write-Host 'Done - press Enter'; Read-Host
 **Why this works**: Task Scheduler stores triggers with embedded timestamps. `Set-ScheduledTask` may silently fail to update triggers without admin elevation. The unregister/re-register pattern ensures a clean slate.
 
 ## Best Practices
+
 1. **Task Paths**: Use `-TaskPath` to organize tasks. For this user, the default path is `\HemSoft\`. **Always verify the path with the user before creating a task.**
 2. **Principals**: Use `New-ScheduledTaskPrincipal` to specify the user account and run level (e.g., `-RunLevel Highest` for admin tasks).
 3. **Settings**: Use `New-ScheduledTaskSettingsSet` to configure advanced options like `AllowStartIfOnBatteries` or `ExecutionTimeLimit`.
@@ -96,6 +103,7 @@ Write-Host 'Done - press Enter'; Read-Host
 9. **Trigger Updates**: To reliably change a task's schedule, unregister and re-register the task rather than using `Set-ScheduledTask` on the trigger. The trigger's `StartBoundary` timestamp can be stubborn.
 10. **Avoid schtasks.exe**: The legacy `schtasks /change` command requires password input. Prefer PowerShell cmdlets with elevation.
 11. **ALWAYS List Schedule After Changes**: After creating, modifying, or deleting any scheduled task, **always** run the schedule listing script to confirm the change and show the user the full schedule:
+
 ```powershell
 & "c:\Users\User\.claude\skills\windows-schedule-manager\Get-HemSoftSchedule.ps1"
 ```

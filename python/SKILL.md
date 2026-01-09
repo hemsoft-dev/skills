@@ -21,6 +21,7 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 ### Best Practice: Minimal PATH Impact Strategy
 
 The cleanest Python installation on Windows 11 follows these principles:
+
 1. **Use Python Launcher (`py.exe`)** - Official Windows tool, no PATH pollution
 2. **Never add Python to PATH** - Use `py` command instead
 3. **Install to default user location** - Keeps system clean
@@ -30,17 +31,20 @@ The cleanest Python installation on Windows 11 follows these principles:
 ### Installation Steps
 
 **Step 1: Install Python 3.12 via winget**
+
 ```powershell
 # Install WITHOUT adding to PATH
 winget install Python.Python.3.12 --custom "/quiet InstallAllUsers=0 PrependPath=0 Include_test=0"
 ```
 
 **Important flags:**
+
 - `InstallAllUsers=0` - User install (no admin rights needed)
 - `PrependPath=0` - **Do NOT add to PATH** (key for minimal impact)
 - `Include_test=0` - Skip test suite (saves space)
 
 **Step 2: Verify Python Launcher**
+
 ```powershell
 py --version          # Should show Python 3.12.x
 py -0                 # List all installed Python versions
@@ -48,17 +52,20 @@ py -m pip --version   # Verify pip works
 ```
 
 **Step 3: Upgrade pip**
+
 ```powershell
 py -m pip install --upgrade pip
 ```
 
 **Step 4: Install pipx for global CLI tools**
+
 ```powershell
 py -m pip install --user pipx
 py -m pipx ensurepath
 ```
 
 **Step 5: Verify installation**
+
 ```powershell
 # Check Python Launcher works
 py --version
@@ -74,11 +81,13 @@ Get-Command python -ErrorAction SilentlyContinue  # Should not find it
 ### Post-Installation Configuration
 
 **Enable script execution (if needed):**
+
 ```powershell
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
 **Verify PATH is minimal:**
+
 ```powershell
 $env:PATH -split ';' | Where-Object { $_ -like '*Python*' }
 # Should show minimal entries (only Python Launcher, not Python itself)
@@ -87,23 +96,27 @@ $env:PATH -split ';' | Where-Object { $_ -like '*Python*' }
 ### Why This Approach?
 
 **PATH Pollution Problem:**
+
 - Traditional installations add Python, Scripts, and pip to PATH
 - Multiple Python versions create conflicts
 - Hard to manage which Python is active
 
 **Python Launcher Solution:**
+
 - Single `py.exe` entry point for all Python versions
 - Automatically finds and manages installed versions
 - Clean, predictable behavior
 - Microsoft-recommended approach for Windows
 
 **Virtual Environments (venv) - ALWAYS USE:**
+
 - Every project gets isolated dependencies
 - No version conflicts between projects
 - Clean uninstall (just delete folder)
 - Reproducible environments
 
 **pipx for CLI Tools:**
+
 - Tools like `goose-ai`, `black`, `pytest` installed in isolation
 - Each tool gets its own venv automatically
 - Available globally without PATH pollution
@@ -112,6 +125,7 @@ $env:PATH -split ';' | Where-Object { $_ -like '*Python*' }
 ### Working with Python (No PATH needed)
 
 **Run Python:**
+
 ```powershell
 py                    # Interactive interpreter
 py script.py          # Run script
@@ -120,6 +134,7 @@ py -m module          # Run module
 ```
 
 **Use pip:**
+
 ```powershell
 py -m pip install package      # Never use 'pip install'
 py -m pip list
@@ -127,6 +142,7 @@ py -m pip freeze > requirements.txt
 ```
 
 **Create project:**
+
 ```powershell
 # Navigate to project folder
 cd D:\projects\myapp
@@ -146,6 +162,7 @@ deactivate
 ```
 
 **Install global CLI tool:**
+
 ```powershell
 pipx install goose-ai       # Isolated install
 pipx install black          # Another isolated install
@@ -156,6 +173,7 @@ goose --version             # Works globally
 ### Verification Checklist
 
 After clean install, verify:
+
 - [ ] `py --version` works (shows 3.12.x)
 - [ ] `py -m pip --version` works
 - [ ] `python --version` does NOT work (not in PATH)
@@ -175,6 +193,7 @@ winget install Python.Python.3.12
 ```
 
 ### Verify Installation
+
 ```powershell
 python --version
 # or
@@ -188,6 +207,7 @@ py --version
 If Python is installed but not found, add to PATH:
 
 **Option 1: Find Python location**
+
 ```powershell
 # Common locations
 C:\Users\{username}\AppData\Local\Programs\Python\Python312\
@@ -196,12 +216,14 @@ C:\Python312\
 ```
 
 **Option 2: Use Python Launcher**
+
 ```powershell
 py --version          # Check version
 py -m pip --version   # Check pip
 ```
 
 **Option 3: Add to PATH manually**
+
 ```powershell
 $env:Path += ";C:\Users\$env:USERNAME\AppData\Local\Programs\Python\Python312;C:\Users\$env:USERNAME\AppData\Local\Programs\Python\Python312\Scripts"
 ```
@@ -211,6 +233,7 @@ For permanent PATH changes, use System Properties > Environment Variables.
 ## Virtual Environments
 
 ### Create venv
+
 ```powershell
 # Standard library venv
 python -m venv .venv
@@ -220,6 +243,7 @@ py -m venv .venv
 ```
 
 ### Activate venv
+
 ```powershell
 # PowerShell
 .\.venv\Scripts\Activate.ps1
@@ -229,11 +253,13 @@ py -m venv .venv
 ```
 
 ### Deactivate
+
 ```powershell
 deactivate
 ```
 
 ### Check Active Environment
+
 ```powershell
 Get-Command python | Select-Object Source
 # Should show path inside .venv
@@ -242,6 +268,7 @@ Get-Command python | Select-Object Source
 ## Package Management
 
 ### pip Basics
+
 ```powershell
 # Install package
 pip install {package-name}
@@ -269,6 +296,7 @@ pip freeze > requirements.txt
 ```
 
 ### pipx (for CLI tools)
+
 ```powershell
 # Install pipx
 python -m pip install --user pipx
@@ -287,17 +315,20 @@ pipx upgrade {tool-name}
 ## Common Issues
 
 ### "Python not found"
+
 - Check if installed: `Get-Command python -ErrorAction SilentlyContinue`
 - Try `python3` or `py` launcher
 - Check PATH environment variable
 - Reinstall with winget
 
 ### "Script execution disabled"
+
 ```powershell
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
 ### pip not found
+
 ```powershell
 python -m ensurepip --upgrade
 # or
@@ -305,6 +336,7 @@ py -m ensurepip --upgrade
 ```
 
 ### Multiple Python versions
+
 ```powershell
 # Python Launcher can manage versions
 py -3.12 --version    # Use Python 3.12
@@ -313,6 +345,7 @@ py -0                 # List all installed versions
 ```
 
 ### Module not found (after install)
+
 - Ensure venv is activated
 - Check you're using correct Python: `Get-Command python`
 - Reinstall package in active environment
@@ -334,18 +367,21 @@ py -0                 # List all installed versions
 ### When Installing CLI Tools
 
 **ALWAYS** check these before using pip/pipx:
+
 1. Is this tool written in Python? (Check GitHub language stats)
 2. What does the official documentation recommend?
 3. Is there a better package manager for this? (Scoop for dev tools, winget for apps)
 4. Are there name conflicts? (e.g., `goose-ai` PyPI package vs Block's Goose CLI)
 
 **Red Flags:**
+
 - Tool has dedicated installers or package manager support → Use those instead
 - Tool is written in Rust/Go/C++ → NOT a Python package
 - PyPI package has different name than official tool → Likely wrong package
 - Installation docs don't mention pip → Don't use pip
 
 ## Python Project Structure
+
 ```
 project/
 ├── .venv/              # Virtual environment (gitignored)

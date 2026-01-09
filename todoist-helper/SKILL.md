@@ -34,31 +34,41 @@ When asked about priorities, what to focus on, next steps, or workload:
 Use the provided PowerShell scripts for reliable Todoist interaction:
 
 ### Get-TodoistSummary.ps1
+
 Comprehensive overview with all task categories:
+
 ```powershell
 .\Get-TodoistSummary.ps1 -IncludeCompleted
 ```
 
 ### Get-TodoistCompleted.ps1
+
 Completed tasks for a specific date:
+
 ```powershell
 .\Get-TodoistCompleted.ps1 -Date "2026-01-06" -Format List
 ```
 
 ### Get-TodoistTasks.ps1
+
 Active tasks with custom filters:
+
 ```powershell
 .\Get-TodoistTasks.ps1 -Filter "today | overdue" -Format List
 ```
 
 ### Get-TodoistUpdated.ps1
+
 Tasks with comments/updates today (shows progress logs):
+
 ```powershell
 .\Get-TodoistUpdated.ps1
 ```
 
 ### Get-TodoistComments.ps1
+
 Get comments for specific tasks:
+
 ```powershell
 .\Get-TodoistComments.ps1 -TaskId 1234567890
 .\Get-TodoistComments.ps1 -ProjectId 2221463722
@@ -69,6 +79,7 @@ All scripts are located in the skill directory and support multiple output forma
 ## MCP Tools (If Available)
 
 Use mcp_doist_todoist_search with these queries:
+
 - `p1` - Urgent priority tasks
 - `p2` - High priority tasks
 - `overdue` - Overdue tasks
@@ -78,11 +89,12 @@ Use mcp_doist_todoist_fetch with `task:{id}` or `project:{id}` (numeric IDs only
 
 ## REST API Direct Access
 
-**Authentication:** Set environment variable `TODOIST_API_TOKEN` with your API token from https://todoist.com/app/settings/integrations/developer
+**Authentication:** Set environment variable `TODOIST_API_TOKEN` with your API token from <https://todoist.com/app/settings/integrations/developer>
 
 **Base URL:** `https://api.todoist.com/rest/v2`
 
 ### Get Today's Tasks
+
 ```powershell
 $headers = @{ Authorization = "Bearer $env:TODOIST_API_TOKEN" }
 $tasks = Invoke-RestMethod -Uri "https://api.todoist.com/rest/v2/tasks?filter=today" -Headers $headers
@@ -90,6 +102,7 @@ $tasks | ForEach-Object { Write-Host "$($_.id): $($_.content) | Priority: $($_.p
 ```
 
 ### Get Overdue Tasks
+
 ```powershell
 $headers = @{ Authorization = "Bearer $env:TODOIST_API_TOKEN" }
 $tasks = Invoke-RestMethod -Uri "https://api.todoist.com/rest/v2/tasks?filter=overdue" -Headers $headers
@@ -97,6 +110,7 @@ $tasks | ForEach-Object { Write-Host "$($_.id): $($_.content) | Priority: $($_.p
 ```
 
 ### List Projects (with hierarchy)
+
 ```powershell
 $headers = @{ Authorization = "Bearer $env:TODOIST_API_TOKEN" }
 $projects = Invoke-RestMethod -Uri "https://api.todoist.com/rest/v2/projects" -Headers $headers
@@ -104,6 +118,7 @@ $projects | ForEach-Object { Write-Host "$($_.id): $($_.name) | Parent: $($_.par
 ```
 
 ### Complete a Task
+
 ```powershell
 $headers = @{ Authorization = "Bearer $env:TODOIST_API_TOKEN" }
 Invoke-RestMethod -Method Post -Uri "https://api.todoist.com/rest/v2/tasks/TASK_ID/close" -Headers $headers

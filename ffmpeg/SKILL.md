@@ -10,6 +10,7 @@ FFmpeg is a universal media converter that reads, filters, and transcodes virtua
 ## ALWAYS: Log This Interaction
 
 After completing the request, append to `History/{YYYY-MM-DD}.md`:
+
 ```
 ## {HH:MM} - {Action}
 
@@ -27,6 +28,7 @@ Options apply to the **next** file specified. Order matters.
 ## Core Operations
 
 ### Format Conversion
+
 ```powershell
 # Basic conversion (auto-detects formats)
 ffmpeg -i input.avi output.mp4
@@ -36,6 +38,7 @@ ffmpeg -i input.mkv -f mp4 output.mp4
 ```
 
 ### Stream Copy (No Re-encoding)
+
 ```powershell
 # Copy all streams without transcoding (fast, lossless)
 ffmpeg -i input.mkv -c copy output.mp4
@@ -45,6 +48,7 @@ ffmpeg -i input.mkv -c:v copy -c:a aac output.mp4
 ```
 
 ### Transcoding
+
 ```powershell
 # Re-encode with specific codecs
 ffmpeg -i input.avi -c:v libx264 -c:a aac output.mp4
@@ -69,6 +73,7 @@ ffmpeg -i input.avi -c:v libx264 -crf 23 output.mp4
 | `-vframes n` | Output n frames | `-vframes 100` |
 
 ### Common Video Codecs
+
 - `libx264` - H.264 (most compatible)
 - `libx265` - H.265/HEVC (better compression)
 - `libvpx-vp9` - VP9 (WebM)
@@ -87,6 +92,7 @@ ffmpeg -i input.avi -c:v libx264 -crf 23 output.mp4
 | `-af filter` | Audio filter | `-af volume=2` |
 
 ### Common Audio Codecs
+
 - `aac` - AAC (MP4 default)
 - `libmp3lame` - MP3
 - `libopus` - Opus (best quality)
@@ -124,6 +130,7 @@ ffmpeg -i video.mp4 -i audio.m4a -map 0:v -map 1:a -c copy output.mp4
 ```
 
 ### Stream Specifiers
+
 - `0:v` - All video streams from input 0
 - `0:a:1` - Second audio stream from input 0
 - `0:s` - All subtitle streams from input 0
@@ -132,6 +139,7 @@ ffmpeg -i video.mp4 -i audio.m4a -map 0:v -map 1:a -c copy output.mp4
 ## Video Filters (`-vf` or `-filter:v`)
 
 ### Scaling
+
 ```powershell
 # Scale to specific size
 ffmpeg -i input.mp4 -vf "scale=1280:720" output.mp4
@@ -144,6 +152,7 @@ ffmpeg -i input.mp4 -vf "scale='min(1280,iw)':'min(720,ih)'" output.mp4
 ```
 
 ### Cropping
+
 ```powershell
 # Crop to WxH at position X,Y
 ffmpeg -i input.mp4 -vf "crop=640:480:100:50" output.mp4
@@ -153,6 +162,7 @@ ffmpeg -i input.mp4 -vf "crop=in_w/2:in_h/2" output.mp4
 ```
 
 ### Rotation & Flipping
+
 ```powershell
 # Rotate 90° clockwise
 ffmpeg -i input.mp4 -vf "transpose=1" output.mp4
@@ -169,6 +179,7 @@ ffmpeg -i input.mp4 -vf "rotate=PI/4" output.mp4
 ```
 
 ### Speed Adjustment
+
 ```powershell
 # 2x speed (video)
 ffmpeg -i input.mp4 -vf "setpts=0.5*PTS" output.mp4
@@ -178,6 +189,7 @@ ffmpeg -i input.mp4 -vf "setpts=2*PTS" output.mp4
 ```
 
 ### Common Video Filters
+
 | Filter | Description | Example |
 |--------|-------------|---------|
 | `scale=W:H` | Resize | `scale=1920:1080` |
@@ -196,6 +208,7 @@ ffmpeg -i input.mp4 -vf "setpts=2*PTS" output.mp4
 | `loop=3` | Loop video | `loop=3:size=999` |
 
 ### Filter Chains
+
 ```powershell
 # Multiple filters (comma-separated)
 ffmpeg -i input.mp4 -vf "scale=1280:720,fps=30,eq=brightness=0.1" output.mp4
@@ -259,6 +272,7 @@ ffmpeg -i input1.mp3 -i input2.mp3 -filter_complex "[0:a][1:a]amix=inputs=2:dura
 ## Image Operations
 
 ### Extract Frames
+
 ```powershell
 # Extract all frames
 ffmpeg -i input.mp4 frames/frame_%04d.png
@@ -274,6 +288,7 @@ ffmpeg -i input.mp4 -vf "thumbnail=100" -frames:v 1 thumb.png
 ```
 
 ### Create Video from Images
+
 ```powershell
 # Image sequence to video
 ffmpeg -framerate 30 -i image_%04d.png -c:v libx264 -pix_fmt yuv420p output.mp4
@@ -283,6 +298,7 @@ ffmpeg -framerate 1/5 -i image_%04d.png -c:v libx264 -r 30 -pix_fmt yuv420p slid
 ```
 
 ### Image Conversion
+
 ```powershell
 # Convert image format
 ffmpeg -i input.png output.jpg
@@ -410,27 +426,32 @@ ffmpeg -i input.mp4 -map_metadata -1 -c copy output.mp4
 ## Common Recipes
 
 ### Compress Video for Web
+
 ```powershell
 ffmpeg -i input.mp4 -c:v libx264 -crf 28 -preset slow -c:a aac -b:a 128k -movflags +faststart output.mp4
 ```
 
 ### Create Thumbnail Grid
+
 ```powershell
 ffmpeg -i input.mp4 -vf "select='not(mod(n,100))',scale=160:-1,tile=5x5" -frames:v 1 grid.png
 ```
 
 ### Loop Video
+
 ```powershell
 # Loop 3 times
 ffmpeg -stream_loop 3 -i input.mp4 -c copy output.mp4
 ```
 
 ### Reverse Video
+
 ```powershell
 ffmpeg -i input.mp4 -vf "reverse" -af "areverse" output.mp4
 ```
 
 ### Create Test Patterns
+
 ```powershell
 # Color bars
 ffmpeg -f lavfi -i testsrc2=duration=10:size=1920x1080:rate=30 test.mp4
@@ -440,11 +461,13 @@ ffmpeg -f lavfi -i "sine=frequency=1000:duration=5" tone.wav
 ```
 
 ### Detect Scene Changes
+
 ```powershell
 ffmpeg -i input.mp4 -vf "select='gt(scene,0.4)',showinfo" -f null -
 ```
 
 ### Stabilize Shaky Video
+
 ```powershell
 # Analyze
 ffmpeg -i input.mp4 -vf "vidstabdetect=shakiness=5:accuracy=15" -f null -
@@ -482,6 +505,7 @@ ffprobe -v quiet -print_format json -show_streams input.mp4
 ## Filter Reference
 
 ### Video Filters Summary
+
 - **Transform**: scale, crop, pad, rotate, transpose, hflip, vflip, shear
 - **Overlay**: overlay, blend, alphamerge
 - **Color**: eq, hue, colorbalance, curves, lut, colorkey, chromakey
@@ -493,6 +517,7 @@ ffprobe -v quiet -print_format json -show_streams input.mp4
 - **Deinterlace**: yadif, bwdif, w3fdif, estdif
 
 ### Audio Filters Summary
+
 - **Volume**: volume, loudnorm, dynaudnorm, compand
 - **EQ**: bass, treble, equalizer, bandpass, highpass, lowpass
 - **Effects**: afade, acrossfade, aecho, chorus, flanger, tremolo
