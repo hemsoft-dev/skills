@@ -608,6 +608,133 @@ Sagar Thakore, added back Bryan Halterman and Nick Peterson using
 - Token substitution in mcp.json (required hardcoding)
 - Pipeline filtering with `-ne` operator (had mixed results, foreach more reliable)
 
+## PowerShell Scripts
+
+All scripts are located in the `scripts/` subfolder and require `CORTEX_API_KEY` environment variable.
+
+### Listing & Querying
+
+#### `List-CortexTeams.ps1`
+
+Lists all teams with optional member details.
+
+```powershell
+.\scripts\List-CortexTeams.ps1                # List teams without member details
+.\scripts\List-CortexTeams.ps1 -WithMembers   # Include member information
+```
+
+**Output**: Team name, tag, member count, and (optionally) member names with roles.
+
+#### `Get-CortexTeams.ps1`
+
+Gets detailed information for a specific team or all teams with members.
+
+```powershell
+.\scripts\Get-CortexTeams.ps1                      # List all teams with members
+.\scripts\Get-CortexTeams.ps1 -TeamTag "my-team"   # Get specific team details
+```
+
+#### `Get-CortexServices.ps1`
+
+Lists all services from the Catalog API with pagination.
+
+```powershell
+.\scripts\Get-CortexServices.ps1           # Default 100 per page
+.\scripts\Get-CortexServices.ps1 -PageSize 250  # Custom page size
+```
+
+**Output**: Service names, tags, descriptions, and owners.
+
+#### `Get-CortexEntity.ps1`
+
+Gets detailed information about a specific entity (service, resource, domain).
+
+```powershell
+.\scripts\Get-CortexEntity.ps1 -EntityTag "my-service"
+```
+
+**Output**: Full entity details including owners, groups, links, and JSON representation.
+
+#### `Get-CortexScorecards.ps1`
+
+Lists all scorecards or scores for a specific scorecard.
+
+```powershell
+.\scripts\Get-CortexScorecards.ps1                        # List all scorecards
+.\scripts\Get-CortexScorecards.ps1 -ScorecardTag "prod-readiness"  # Get scores
+```
+
+**Output**: Scorecard names, descriptions, levels, and (optionally) entity scores grouped by achievement level.
+
+#### `Search-CortexEntities.ps1`
+
+Searches entities across the catalog by query and optional type filter.
+
+```powershell
+.\scripts\Search-CortexEntities.ps1 -Query "api"
+.\scripts\Search-CortexEntities.ps1 -Query "payment" -Types "service"
+```
+
+**Output**: Matching entities with descriptions and owners.
+
+### Team Member Management
+
+#### `New-CortexTeam.ps1`
+
+Creates a new team with validated members.
+
+```powershell
+$members = @(
+    @{
+        email = "user1@example.com"
+        name = "User One"
+        role = "developer"
+        notificationsEnabled = $true
+    },
+    @{
+        email = "user2@example.com"
+        name = "User Two"
+        role = "manager"
+        notificationsEnabled = $true
+    }
+)
+.\scripts\New-CortexTeam.ps1 -TeamTag "my-team" -TeamName "My Team" -Description "Team Description" -Members $members
+```
+
+**Validation**:
+
+- Checks team doesn't already exist
+- Validates all members have required fields (email, name, role, notificationsEnabled)
+- Validates role is one of: `developer`, `manager`, `tester`, `cloud-engineer`, `product-manager`, `engineering-manager`
+- Verifies team creation was successful
+
+#### `Update-TeamMember.ps1`
+
+Updates a single team member's role.
+
+```powershell
+.\scripts\Update-TeamMember.ps1 -TeamTag "my-team" -MemberEmail "user@example.com" -NewRole "developer"
+```
+
+**Supported roles**: `developer`, `manager`, `tester`, `cloud-engineer`, `product-manager`, etc.
+
+**Behavior**:
+
+- Gets current team members
+- Updates target member's role
+- Preserves all other members' roles
+- Verifies change was successful
+
+#### `Update-PETeam.ps1`
+
+Special batch script for Productivity Engineering team member roles. Uses internal role mapping.
+
+```powershell
+.\scripts\Update-PETeam.ps1
+```
+
+**Note**: This is hardcoded for the Productivity Engineering team. Use `Update-TeamMember.ps1` for other teams.
+
 ## Resources
 
 - **GitHub Repository**: <https://github.com/cortexapps/cortex-mcp>

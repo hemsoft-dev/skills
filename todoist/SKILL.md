@@ -128,6 +128,8 @@ Use mcp_doist_todoist_fetch with `task:{id}` or `project:{id}` (numeric IDs only
 
 **Base URL:** `https://api.todoist.com/rest/v2`
 
+**Task Link Format:** Always use `https://todoist.com/app/task/{task_id}` (old `showTask?id=` format deprecated)
+
 ### Get Today's Tasks
 
 ```powershell

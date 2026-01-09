@@ -1,6 +1,6 @@
 ---
 name: diary
-description: V1.6 - Captures daily accomplishments, goals, and reflections with Todoist integration. Includes highlighted news section. Filters out routine tasks tagged with @Regular Chores. Structured Work/Personal/Personal Reflections format with consistent subsections. Keeps entries high-level and summarized. Queries user for missing content.
+description: V1.7 - Captures daily accomplishments, goals, and reflections with Todoist integration. Includes highlighted news section. Supports meeting notes creation with auto-formatted markdown files. Filters out routine tasks tagged with @Regular Chores. Structured Work/Personal/Personal Reflections format with consistent subsections. Keeps entries high-level and summarized. Queries user for missing content.
 ---
 
 # Diary
@@ -89,7 +89,121 @@ Expert in daily journaling that integrates with Todoist to capture what you've a
 
 ## Core Functions
 
-### 1. Daily Entry Creation Workflow
+### 1. Meeting Notes Creation
+
+When user requests to save meeting notes (flexible phrasing):
+
+- "Add meeting notes for '{title}'"
+- "Create meeting notes for '{title}'"
+- "Meeting notes: '{title}'"
+- "Save meeting notes '{title}'"
+
+**Workflow:**
+
+**Step 1: Detect Request**
+
+- Identify meeting notes request with flexible pattern matching
+- Extract meeting title from user's request
+- Extract content (the "lots of text" following the title)
+
+**Step 2: Generate Filename**
+
+- Convert title to slug format: lowercase, replace spaces/special chars with hyphens
+- Examples:
+  - `"AI Weekly SyncUp - Harbinger"` → `ai-weekly-syncup-harbinger`
+  - `"Q1 2026 Planning (Budget & Goals)"` → `q1-2026-planning-budget-goals`
+  - `"Team Retro #3 [Action Items]"` → `team-retro-3-action-items`
+- Format: `history/{YYYY-MM-DD}-{slug}.md`
+
+**Step 3: Confirm with User**
+Ask for confirmation before creating the file:
+
+```
+I'll create a meeting notes file:
+- Title: {Original Title}
+- File: history/{YYYY-MM-DD}-{slug}.md
+- Content: {X} lines of notes
+
+Proceed?
+```
+
+**Step 4: Format Content**
+
+- Assume raw text input
+- Format into clean markdown:
+  - Add level 1 header with meeting title and date
+  - Detect and format lists (bullet points, numbered items)
+  - Preserve paragraphs and spacing
+  - Detect and format common meeting sections (Attendees, Action Items, Decisions, etc.)
+  - Clean up excessive whitespace
+- Add footer: `*Meeting notes created with diary skill v1.7*`
+
+**Step 5: Create File**
+
+- Write to `history/{YYYY-MM-DD}-{slug}.md`
+
+**Step 6: Provide Receipt**
+Confirm completion with details:
+
+```
+✅ Meeting notes saved!
+- File: history/{YYYY-MM-DD}-{slug}.md
+- Title: {Original Title}
+- Date: {YYYY-MM-DD}
+- Size: {X} lines
+```
+
+**Step 7: Offer to Update Main Diary Entry**
+Ask if user wants to add a reference to the meeting in today's diary entry:
+
+```
+Would you like me to add an entry about this meeting to today's diary (history/{YYYY-MM-DD}.md)?
+I'll add it to the Work Done section with a link to the meeting notes.
+```
+
+If confirmed:
+
+- Check if `history/{YYYY-MM-DD}.md` exists
+- If it exists, add to appropriate section (Work Done or Personal Done based on context)
+- If it doesn't exist, offer to create a basic diary entry
+- Add a line like: `- Attended {Meeting Title} ([meeting notes](history/{YYYY-MM-DD}-{slug}.md))`
+
+**Step 8: Offer to Create Todoist Tasks**
+If follow-up tasks are detected in the meeting notes, offer to add them:
+
+```
+I found {X} follow-up tasks in the meeting notes. Would you like me to add them to Todoist?
+```
+
+For each task:
+
+1. Show the task title and owner
+2. Ask: "Add this task? (y/n/skip all)"
+3. If yes, ask: "Due date? (today/tomorrow/monday/next week/custom date/no date)"
+4. Ask: "Which project? (Work/Personal/Other)"
+5. Query available Todoist projects via API if needed
+6. Ask: "Priority? (P1/P2/P3/P4/none)"
+7. Suggest appropriate labels based on task content:
+   - `@quick_win` for simple tasks
+   - `@high_impact` for important items
+   - `@needs_research` for investigation tasks
+   - `@blocked` for waiting/dependency items
+8. Create task via Todoist REST API
+9. Confirm creation with task ID and link
+
+**Example Meeting Note Format:**
+
+```markdown
+# AI Weekly SyncUp - Harbinger
+*2026-01-09*
+
+{Formatted content from user}
+
+---
+*Meeting notes created with diary skill v1.7*
+```
+
+### 2. Daily Entry Creation Workflow
 
 When user wants to record today's diary entry, follow this process:
 
@@ -136,7 +250,7 @@ For each section that's empty or sparse, ask user:
 
 Write to `history/{YYYY-MM-DD}.md` with proper formatting.
 
-### 2. Review Past Entries
+### 3. Review Past Entries
 
 When user wants to review previous entries:
 
@@ -184,6 +298,83 @@ Tasks are categorized by project hierarchy:
 
 Use project parent_id to determine category.
 
+## Todoist Task Creation (Meeting Follow-ups)
+
+When creating tasks from meeting notes:
+
+**Fetch Available Projects and Labels:**
+
+```powershell
+$headers = @{ Authorization = "Bearer $env:TODOIST_API_TOKEN" }
+$projects = Invoke-RestMethod -Uri "https://api.todoist.com/rest/v2/projects" -Headers $headers
+$labels = Invoke-RestMethod -Uri "https://api.todoist.com/rest/v2/labels" -Headers $headers
+```
+
+**Known Projects:**
+
+- **Work** (id: 2221463722) - Main work project
+- **Home** (id: 2200472795) - Personal tasks
+- Query API for current project list and their IDs
+
+**Known Labels:**
+
+- `Todo` - Default task label (use this for meeting follow-ups)
+- `Regular Chores` - Routine maintenance (excluded from diary)
+- `AI` - AI-related tasks
+- `AI Chapter` - AI chapter work
+- `Event` - Event-related tasks
+- `Relias Assistant` - Relias Assistant work
+- `Software Dev Chapter` - Software development chapter
+
+Query available labels via API before suggesting:
+
+```powershell
+$labels = Invoke-RestMethod -Uri "https://api.todoist.com/rest/v2/labels" -Headers @{ Authorization = "Bearer $env:TODOIST_API_TOKEN" }
+$labels | ForEach-Object { $_.name }
+```
+
+**Create Task API Call:**
+
+```powershell
+# Load token from environment (may not be in $env: on fresh sessions)
+$env:TODOIST_API_TOKEN = [System.Environment]::GetEnvironmentVariable('TODOIST_API_TOKEN', 'User')
+
+$headers = @{ 
+    Authorization = "Bearer $env:TODOIST_API_TOKEN"
+    "Content-Type" = "application/json"
+}
+
+$body = @{
+    content = "Task title"
+    description = "Task description with owner and context"
+    project_id = "2221463722"  # Use appropriate project ID
+    due_string = "tomorrow"    # Or specific date: "2026-01-15"
+    priority = 3               # 4=P1, 3=P2, 2=P3, 1=P4
+    labels = @("Todo")         # MUST include labels in initial creation, not after
+} | ConvertTo-Json
+
+$task = Invoke-RestMethod -Uri "https://api.todoist.com/rest/v2/tasks" -Headers $headers -Method Post -Body $body
+
+Write-Host "✓ Created task: $($task.content) (ID: $($task.id))"
+Write-Host "  Labels: $($task.labels -join ', ')"
+Write-Host "  Link: https://todoist.com/app/task/$($task.id)"
+```
+
+**Important Best Practices:**
+
+1. **Include labels in initial creation** - Adding labels after creation doesn't work reliably
+2. **Never retry automatically** - Only retry if user explicitly requests it
+3. **Check for duplicates** - After creation, verify no duplicate tasks exist with same content
+4. **Load token properly** - Use `[System.Environment]::GetEnvironmentVariable('TODOIST_API_TOKEN', 'User')` if `$env:` is empty
+
+**Due Date Parsing:**
+
+- `today` → `"due_string": "today"`
+- `tomorrow` → `"due_string": "tomorrow"`
+- `monday` / `next week` → `"due_string": "monday"` / `"due_string": "next week"`
+- Custom date → `"due_string": "2026-01-15"` (YYYY-MM-DD format)
+- No date → Omit `due_string` field
+
 ## Todoist Integration Scripts
 
 Use PowerShell scripts from todoist skill:
@@ -201,12 +392,16 @@ diary/
 ├── SKILL.md
 ├── exclusion.json
 └── history/
-    ├── 2026-01-06.md  (TEMPLATE REFERENCE)
+    ├── 2026-01-06.md  (TEMPLATE REFERENCE - Daily diary)
     ├── 2026-01-07.md
+    ├── 2026-01-09-ai-weekly-syncup-harbinger.md  (Meeting notes)
     └── ...
 ```
 
-Format: `history/yyyy-mm-dd.md`
+**Formats:**
+
+- Daily diary: `history/yyyy-mm-dd.md`
+- Meeting notes: `history/yyyy-mm-dd-{meeting-title-slug}.md`
 
 ## Example Entry (Template Reference)
 
@@ -240,6 +435,13 @@ See `history/2026-01-06.md` for the canonical template showing:
 
 After creating a diary entry, log to todoist skill's `History/{YYYY-MM-DD}.md`:
 
+```
+
+After creating meeting notes, log to todoist skill's `History/{YYYY-MM-DD}.md`:
+
+```markdown
+## {HH:MM} - Created meeting notes
+Saved meeting notes: {meeting-title} → history/{YYYY-MM-DD}-{slug}.md
 ```markdown
 ## {HH:MM} - Created diary entry
 Generated daily journal entry with Work/Personal/Personal Reflections structure

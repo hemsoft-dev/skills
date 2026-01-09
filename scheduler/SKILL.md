@@ -1,9 +1,9 @@
 ---
-name: windows-schedule-manager
+name: scheduler
 description: V1.1 - Expert in managing Windows Scheduled Tasks using PowerShell cmdlets (Get, Register, Unregister, Start, Stop).
 ---
 
-# Windows Schedule Manager
+# Scheduler
 
 Manage Windows Task Scheduler tasks using the `ScheduledTasks` PowerShell module. This skill provides expertise in listing, creating, modifying, and removing scheduled tasks on a Windows system.
 
@@ -105,5 +105,5 @@ Write-Host 'Done - press Enter'; Read-Host
 11. **ALWAYS List Schedule After Changes**: After creating, modifying, or deleting any scheduled task, **always** run the schedule listing script to confirm the change and show the user the full schedule:
 
 ```powershell
-& "c:\Users\User\.claude\skills\windows-schedule-manager\Get-HemSoftSchedule.ps1"
+& "c:\Users\User\.claude\skills\scheduler\Get-HemSoftSchedule.ps1"
 ```

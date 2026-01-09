@@ -79,7 +79,6 @@ Items being tracked and monitored.
 | **VS Code Issues**           | <https://github.com/microsoft/vscode/issues>                                   | Feature requests, bugs                                |
 | **VS Code Blog**             | <https://code.visualstudio.com/blogs>                                          | Announcements                                         |
 | **Copilot Docs**             | <https://code.visualstudio.com/docs/copilot/overview>                          | Official documentation                                |
-| **Claude Code CHANGELOG**    | <https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md>             | Track Claude Code release notes and updates           |
 
 ### Current Stable: v1.107.1 (Dec 10, 2025)
 
@@ -139,3 +138,64 @@ Major release with multi-agent orchestration, background agents with Git worktre
 - **YouTube**: <https://www.youtube.com/@code>
 - **VS Code Insiders Podcast**: <https://www.vscodepodcast.com/>
 - **Reddit**: <https://www.reddit.com/r/vscode/>
+
+---
+
+## Claude Code
+
+- **Status**: Active
+- **Added**: 2026-01-09
+- **Expires**: Never
+- **Notes**: Tracking Claude Code evolution, releases, and feature updates as Anthropic's AI-powered coding assistant.
+
+### Key Resources to Monitor
+
+| Resource                     | URL                                                                            | What to Watch                            |
+|------------------------------|--------------------------------------------------------------------------------|------------------------------------------|
+| **GitHub: anthropics/claude-code** | <https://github.com/anthropics/claude-code>                            | Source code, commits, PRs, releases      |
+| **Claude Code CHANGELOG**    | <https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md>             | Version history and feature releases     |
+| **Claude Code Releases**     | <https://github.com/anthropics/claude-code/releases>                           | Release notes and version tags           |
+| **Anthropic Engineering Blog** | <https://www.anthropic.com/engineering>                                      | New posts about Claude Code              |
+
+### Latest Updates
+
+- Integrated with VS Code as extended Copilot Chat functionality
+- Part of multi-agent orchestration in v1.107.1+
+- Claude Skills support added in v1.107
+
+---
+
+## Gemini CLI
+
+- **Status**: Active
+- **Added**: 2026-01-09
+- **Expires**: Never
+- **Notes**: Tracking Google's Gemini CLI - an open-source AI agent bringing Google's Gemini directly to your terminal. Lightweight, developer-focused with MCP server support and real-time web grounding.
+
+### Key Resources to Monitor
+
+| Resource                     | URL                                                                            | What to Watch                            |
+|------------------------------|--------------------------------------------------------------------------------|------------------------------------------|
+| **GitHub: google-gemini/gemini-cli** | <https://github.com/google-gemini/gemini-cli>                         | Source code, commits, PRs, issues        |
+| **Changelog**                | <https://github.com/google-gemini/gemini-cli/blob/main/docs/changelogs/index.md> | Version history and changes              |
+| **Releases**                 | <https://github.com/google-gemini/gemini-cli/releases>                        | Release notes (weekly stable, nightly)   |
+| **Official Documentation**   | <https://geminicli.com/docs/>                                                  | Docs and guides                          |
+| **Roadmap**                  | <https://github.com/google-gemini/gemini-cli/blob/main/ROADMAP.md>             | Planned features and improvements        |
+| **NPM Package**              | <https://www.npmjs.com/package/@google/gemini-cli>                             | Package info and version history         |
+
+### Current Status
+
+- **Latest Stable**: v0.23.0 (Jan 6, 2026)
+- **Release Cadence**: Weekly stable (Tuesdays 20:00 UTC), weekly preview (Tuesdays 23:59 UTC), nightly builds
+- **Total Releases**: 284
+- **License**: Apache 2.0
+- **Stars**: 90.3k
+
+### Key Features
+
+- Code understanding and generation
+- Automation & integration (MCP servers support)
+- Google Search grounding for real-time information
+- Terminal-first design for developers
+- Free tier: 60 req/min, 1,000 req/day
+- Gemini 2.5 Pro with 1M token context window
