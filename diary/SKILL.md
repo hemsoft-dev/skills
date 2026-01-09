@@ -12,7 +12,7 @@ Expert in daily journaling that integrates with Todoist to capture what you've a
 **REQUIRED STRUCTURE** - Every diary entry must contain all these sections:
 
 ```markdown
-# {YYYY-MM-DD Full Date}
+# {Weekday}, {YYYY-MM-DD}
 
 ## 🎯 Today's Highlight
 

@@ -735,6 +735,15 @@ $PSStyle.FileInfo.Directory
 | PATH truncated | Exceeds 2048 chars | Optimize with functions/consolidation |
 | Changes not persisting | Modified `$env:Path` not registry | Use `[Environment]::SetEnvironmentVariable()` |
 | Font issues (broken glyphs) | Missing Nerd Font | Install with `oh-my-posh font install CascadiaCode` |
+| Alias disappeared | OneDrive sync overwrote profile | Check history for original definition, re-add |
+
+**Troubleshooting Missing Aliases:**
+
+```powershell
+# Search command history for how the alias was used/defined
+$hist = (Get-PSReadLineOption).HistorySavePath
+Get-Content $hist | Select-String 'alias.*ALIASNAME|^ALIASNAME\s' -Context 3,3
+```
 
 ### Oh-My-Posh Configuration
 

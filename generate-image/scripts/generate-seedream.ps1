@@ -81,7 +81,7 @@ $imgUrl = if ($imgData.image_url.url) { $imgData.image_url.url } else { $imgData
 if ($imgUrl -match '^data:image/[^;]+;base64,(.+)$') {
     [IO.File]::WriteAllBytes($OutputPath, [Convert]::FromBase64String($matches[1]))
     $size = [math]::Round((Get-Item $OutputPath).Length / 1024)
-    Write-Information "[32m✓ Saved: $OutputPath (${size}KB)`e[0m"
+    Write-Information "[32m✓ Saved: $OutputPath (${size}KB)`e[0m" -InformationAction Continue
     
     # Open in Directory Opus viewer if requested
     if ($Preview) {
