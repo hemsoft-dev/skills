@@ -1,11 +1,24 @@
 ---
 name: skill-creator
-description: V1.2 - Creates new Claude skills with optimized SKILL.md files following best practices for clarity and conciseness.
+description: V1.3 - Creates new Claude skills with optimized SKILL.md files following best practices for clarity and conciseness.
 ---
 
 # Skill Creator
 
 Create new skills in the user's `.claude/skills/` directory.
+
+## Agent Skills Specification - Frontmatter Reference
+
+Per the official spec at <https://agentskills.io/specification>, SKILL.md frontmatter supports:
+
+| Field    | Required | Constraints                                                     |
+| `name`             | ✅ | Max 64 chars. Lowercase alphanumeric + hyphens.    |
+| `description`      | ✅ | Max 1024 chars. Include what + when to use.        |
+| `license`          | ❌ | License name or reference (e.g., `Apache-2.0`)    |
+| `dependencies`     | ❌ | Software packages required (e.g., `python>=3.8`)  |
+| `compatibility`    | ❌ | Max 500 chars. Environment requirements             |
+| `metadata`         | ❌ | Key-value map for custom properties                 |
+| `allowed-tools`    | ❌ | Space-delimited pre-approved tools                 |
 
 ## ALWAYS: Log This Interaction
 
@@ -13,6 +26,7 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 
 ```markdown
 ## {HH:MM} - {Action Taken}
+
 {One-line summary of what was done}
 ```
 
@@ -20,12 +34,14 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 
 Each skill requires:
 
-```
+```text
 .claude/skills/{skill-name}/
 └── SKILL.md
 ```
 
 ## SKILL.md Format
+
+**Minimal (required only):**
 
 ```markdown
 ---
@@ -36,6 +52,20 @@ description: V{major}.{minor} - {One sentence describing when to use this skill}
 # {Skill Title}
 
 {Concise instructions for the LLM}
+```
+
+**With optional fields:**
+
+```markdown
+---
+name: {skill-name}
+description: V{major}.{minor} - {Description of what + when to use}
+license: Apache-2.0
+compatibility: Requires git, network access
+metadata:
+  author: {author-name}
+  version: "1.0"
+---
 ```
 
 ## Best Practices
@@ -69,13 +99,13 @@ Ask user for skill name and purpose.
 - Only available in this project
 - Use for: Project-specific workflows, context
 
-**Prompt to user**: "Where should I create this skill? A) User folder (~/.claude/skills/) for global access, or B) This repository (./.claude/skills/) for project-specific use?"
+**Prompt to user**: "Where should I create this skill?\nA) User folder for access\nB) Repo for project use?"
 
 ### Step 3: Enable History Tracking? (REQUIRED - NEVER SKIP)
 
 **ALWAYS ask the user about history tracking:**
 
-**Prompt to user**: "Would you like to enable History Tracking for this skill? This logs all interactions to History/{YYYY-MM-DD}.md for future reference."
+**Prompt to user**: "Would you like to enable History Tracking for this skill?\nLogs all interactions to History/{YYYY-MM-DD}.md."
 
 If yes, add this section after the title:
 
@@ -105,12 +135,12 @@ Tell user where the skill was created and what features are enabled.
 
 Before finalizing the skill, check the `skill-improver` skill for available improvements and offer them:
 
-| Improvement | Default | Ask User |
-|-------------|---------|----------|
-| Version prefix (`V1.0 -`) | Always applied | No |
-| History Tracking | Off | Yes |
+| Improvement          | Default        | Ask User |
+|----------------------|----------------|----------|
+| Version prefix       | Always applied | No       |
+| History Tracking     | Off            | Yes      |
 
-**Prompt**: "Would you like to enable History Tracking for this skill? This logs all interactions to `History/{YYYY-MM-DD}.md`."
+**Prompt**: "Would you like to enable History Tracking for this skill?\nThis logs all interactions to `History/{YYYY-MM-DD}.md`."
 
 ## Anti-Patterns
 

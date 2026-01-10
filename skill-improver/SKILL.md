@@ -1,11 +1,39 @@
 ---
 name: skill-improver
-description: V1.3 - Applies standardized improvements to skills. Use when modifying any skill.
+description: V1.4 - Applies standardized improvements to skills. Use when modifying any skill.
 ---
 
 # Skill Improver
 
 Meta-skill for applying consistent improvements across all skills.
+
+## Agent Skills Specification - Frontmatter Reference
+
+Per the official spec at <https://agentskills.io/specification>, SKILL.md frontmatter supports:
+
+| Field         | Required | Constraints                                           |
+| `name`             | ✅ | Max 64 chars. Lowercase alphanumeric + hyphens.    |
+| `description`      | ✅ | Max 1024 chars. Include what + when to use.        |
+| `license`          | ❌ | License name or reference (e.g., `Apache-2.0`)    |
+| `dependencies`     | ❌ | Software packages required (e.g., `python>=3.8`)  |
+| `compatibility`    | ❌ | Max 500 chars. Environment requirements             |
+| `metadata`         | ❌ | Key-value map for custom properties                 |
+| `allowed-tools`    | ❌ | Space-delimited pre-approved tools                 |
+
+**Example with optional fields:**
+
+```yaml
+---
+name: my-skill
+description: Does X when Y. Use for Z scenarios.
+license: Apache-2.0
+compatibility: Requires git, docker, network access
+metadata:
+  author: example-org
+  version: "1.0"
+allowed-tools: Bash(git:*) Read
+---
+```
 
 ## When Modifying a Skill
 
@@ -13,11 +41,11 @@ Apply all relevant improvements from the registry below.
 
 ## Improvements Registry
 
-| ID | Name | Status |
-|----|------|--------|
-| 1 | Version Implementation | Active |
-| 2 | History Tracking | Opt-in |
-| 3 | File Size Management | Active |
+| ID  | Name                          | Status |
+| 1   | Version Implementation     | Active |
+| 2   | History Tracking           | Opt-in |
+| 3   | File Size Management       | Active |
+| 4   | Frontmatter Validation     | Active |
 
 ---
 
@@ -34,11 +62,11 @@ Apply all relevant improvements from the registry below.
 
 **Examples**:
 
-| Before | After |
-|--------|-------|
-| `Creates new skills...` | `V1.0 - Creates new skills...` |
-| `V1.3 - Creates new skills...` | `V1.4 - Creates new skills...` |
-| `V2.9 - Expert in...` | `V2.10 - Expert in...` |
+| Before       | After        |
+|--------------|--------------|
+| Creates v1   | V1.0 - v1    |
+| V1.3 - v1    | V1.4 - v1    |
+| V2.9 - v1    | V2.10 - v1   |
 
 **Regex Pattern**: `^V(\d+)\.(\d+) -`
 
@@ -63,13 +91,12 @@ Apply all relevant improvements from the registry below.
 
 **Refactoring Strategies**:
 
-| Pattern | Solution |
-|---------|----------|
-| **Multiple distinct commands/APIs** | Split into separate skills (e.g., `slack-messages`, `slack-files`, `slack-admin`) |
-| **Large reference sections** | Move to separate reference files (e.g., `reference.md`, `api-reference.md`) |
-| **Extensive examples** | Extract to `examples/` directory with individual files |
-| **Multiple workflows** | Keep core skill, move complex workflows to separate `workflows/` files |
-| **Historical notes** | Already handled by `History/` directory - ensure not in SKILL.md |
+| Pattern                   | Solution                                         |
+| **Multiple distinct commands/APIs** | Split into separate skills (see examples) |
+| **Large reference sections**         | Move to separate reference files                |
+| **Extensive examples**               | Extract to `examples/` directory                |
+| **Multiple workflows**               | Move complex workflows to `workflows/` files    |
+| **Historical notes**                 | Already handled by `History/` directory         |
 
 **When NOT to Split**:
 
@@ -112,4 +139,40 @@ After completing the request, append to `History/{YYYY-MM-DD}.md`:
 
 {One-line summary of request and outcome}
 
+```markdown
+
+---
+
+### 4. Frontmatter Validation
+
+**Rule**: Validate frontmatter against official Agent Skills Specification.
+
+**Checks**:
+
+| Field      | Validation                                                |
+| `name`           | Max 64 chars, lowercase alphanumeric + hyphens                 |
+| `description`    | Max 1024 chars, non-empty, includes what + when to use       |
+| `license`        | Optional - license name or file reference                     |
+| `compatibility`  | Optional - max 500 chars, environment requirements            |
+| `metadata`       | Optional - key-value map only                                 |
+| `allowed-tools`  | Optional - space-delimited tool list                          |
+
+**When to Suggest Optional Fields**:
+
+| Field                | Suggest When...                                    |
+| `license`          | Skill has LICENSE.txt file or uses open-source       |
+| `compatibility`    | Skill requires specific tools or network access     |
+| `metadata.author`  | Skill is for distribution or team use              |
+
+**Example Validation Feedback**:
+
+```markdown
+⚠️ Frontmatter Issues Found:
+
+- description exceeds 1024 character limit (1203 chars)
+- name contains uppercase: "My-Skill" → should be "my-skill"
+
+💡 Optional Fields to Consider:
+
+- Add `compatibility: Requires git, docker` since skill uses these tools
 ```
