@@ -646,7 +646,14 @@ Channel IDs start with `C` (e.g., `C1234567890`). To find a channel ID:
 
 | Channel | ID | Notes |
 |---------|----|----- |
+| #productivity-engineering | (search for channel) | Primary PE team channel |
+| #productivity-engineering-public | (search for channel) | Public PE announcements and updates |
 | pe-bot-test | `C08H7CG4NTS` | **"test channel"** - Safe test channel for bot experiments |
+
+**Channel Name Mapping:**
+- `pe` → `#productivity-engineering` 
+- `pe-public` → `#productivity-engineering-public`
+- Use full names in Slack API calls
 
 ### Known User IDs
 
