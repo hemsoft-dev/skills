@@ -99,6 +99,7 @@ az account list --query '[].id' -o tsv | ForEach-Object {
 ## Common Workflows
 
 ### List All Resources Across Subscriptions
+
 ```bash
 for sub in $(az account list --query '[].id' -o tsv); do
   az account set -s $sub
@@ -107,16 +108,19 @@ done
 ```
 
 ### Find Resources by Tag
+
 ```bash
 az resource list --query "[?tags.Environment=='prod']" --output table
 ```
 
 ### Export Resource Group Template
+
 ```bash
 az group export --name my-rg --resource-ids "*" --export-format bicep > template.bicep
 ```
 
 ### Create Service Principal with Certificate
+
 ```bash
 az ad sp create-for-rbac \
   --name "relias-automation" \
@@ -135,4 +139,3 @@ az ad sp create-for-rbac \
 - **Use managed identities** when possible instead of service principals with secrets
 - **Filter by query** to avoid human error with wildcards in deletion commands
 - **Test in non-prod** before executing automation scripts
-

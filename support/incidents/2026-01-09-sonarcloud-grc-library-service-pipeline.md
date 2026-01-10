@@ -56,6 +56,7 @@ Reviewed GRC Library Service related pipelines:
 | GRC Library Service Gitops PR | - | GitOps |
 
 Recent runs on Pipeline 646 (GRC Library Service PR):
+
 - Run 80235 (main): Failed - code formatting issue
 - Run 80232 (PR #2): Canceled
 - Run 80229 (PR #2): Failed - code formatting issue
@@ -87,6 +88,7 @@ This same pattern was observed on another Cortex-scaffolded project (`relias-eng
 **Pending** - Requires re-running the pipeline on `main` branch to establish Quality Gate baseline.
 
 Proposed fix:
+
 ```powershell
 az pipelines run --id 646 --branch main --organization https://dev.azure.com/ReliasEngineering --project PlatformDevelopment
 ```

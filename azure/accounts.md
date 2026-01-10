@@ -1,7 +1,7 @@
 # Azure Account Tracking
 
 **Last Updated**: 2026-01-09  
-**User**: fhemmer@relias.com  
+**User**: <fhemmer@relias.com>  
 **Default Subscription**: S00-DEVOPS-SERVICES
 
 ---
@@ -21,6 +21,7 @@
 ### Relias Azure Cloud (Primary Production Tenant)
 
 #### S00 - Connectivity Subscriptions
+
 | Name | ID | Environment | Status | Workload |
 |------|----|----|--------|---------|
 | S00-DEVOPS-SERVICES | e4ab9a4c-5333-4e52-a0e3-fd16c0c8e2f5 | Production | 🟢 **DEFAULT** | Relias Assistant |
@@ -31,6 +32,7 @@
 | S00-PLAYGROUND-NONPROD | 45bd3c2e-3e13-4195-a597-c0e403d27dc3 | Non-Production | 🟢 Enabled |
 
 #### S01 - Management Subscriptions
+
 | Name | ID | Environment | Status |
 |------|----|----|--------|
 | S01-DEV-MGMT-NONPROD | 5d8f65cc-1c9a-4fac-a100-f56c5e8a0070 | Non-Production | 🟢 Enabled |
@@ -39,6 +41,7 @@
 | S01-CA-MGMT-PROD | 4f20d1e5-7e76-44e1-8303-94fabcedc798 | Production | 🟢 Enabled |
 
 #### S02 - Identity Subscriptions
+
 | Name | ID | Environment | Status |
 |------|----|----|--------|
 | S02-DEV-IDENTITY-NONPROD | 9404d162-9023-4d1f-b400-5f06c2c85e44 | Non-Production | 🟢 Enabled |
@@ -46,6 +49,7 @@
 | S02-US-IDENTITY-PROD | cbfa1789-275e-4361-a320-5eddaa3cc414 | Production | 🟢 Enabled |
 
 #### S03 - Workload Subscriptions
+
 | Name | ID | Environment | Status |
 |------|----|----|--------|
 | S03-DEV-WORKLOAD-NONPROD | 3741355f-a2fe-4aa7-b024-1cecffdca327 | Non-Production | 🟢 Enabled |
@@ -54,6 +58,7 @@
 | S03-US-WORKLOAD-PROD | 48d98a9a-2f7b-46ac-9a18-3aabd9fbd39a | Production | 🟢 Enabled |
 
 #### S04 - Workload Subscriptions
+
 | Name | ID | Environment | Status |
 |------|----|----|--------|
 | S04-DE-WORKLOAD-NONPROD | e6036236-a7f0-41c5-850a-54de53a62b15 | Non-Production | 🟢 Enabled |
@@ -83,6 +88,7 @@
 ## Subscription Organization Patterns
 
 ### Naming Convention
+
 **Format**: `S{N}-{REGION}-{WORKLOAD}-{ENVIRONMENT}`
 
 - **S#** (00-04): Subscription tier (Connectivity, Management, Identity, Workload-1, Workload-2)
@@ -93,11 +99,13 @@
 ### Environment Distribution
 
 **Production** (14 subscriptions):
+
 - All S01-S04 with PROD suffix
 - Multi-region: US, DE, CA
 - Default: S00-DEVOPS-SERVICES
 
 **Non-Production** (10 subscriptions):
+
 - NONPROD environments for testing & staging
 - DEV environments for development
 - Playground for experimentation
@@ -133,7 +141,7 @@ az account list --query "[].{Name:name, ID:id, Tenant:tenantDisplayName, Env:sta
 ## Notes
 
 - All subscriptions are currently **Enabled** and accessible
-- Single user: **fhemmer@relias.com**
+- Single user: **<fhemmer@relias.com>**
 - Total: **26 subscriptions** across 3 tenants
 - Primary workload tenant: **Relias Azure Cloud**
 - Multi-region deployment strategy: US, DE, CA regions

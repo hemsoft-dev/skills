@@ -36,6 +36,7 @@ git -C "C:\Users\User\.claude\skills\developer-documentation\repos\developer-doc
 ```
 
 **First-time setup**: If the repo folder is empty, clone it:
+
 ```powershell
 cd C:\Users\User\.claude\skills\developer-documentation\repos
 gh auth setup-git  # Configure GitHub CLI authentication
@@ -64,11 +65,13 @@ git clone https://github.com/relias-engineering/developer-documentation.git
 ## Quick Reference
 
 ### Development Workflow
+
 1. Branch from main → code → test (unit/integration/E2E)
 2. Create PR with security checks
 3. Code review & approval → merge → auto-deploy
 4. Validation testing with LaunchDarkly feature flags
 **Pull updates regularly** before consulting docs to ensure accuracy
+
 - Repository requires GitHub CLI authentication (`gh auth setup-git`)
 - All Relias software must meet WCAG accessibility standards
 - Refer to full docs for comprehensive guides on any topic
@@ -76,6 +79,7 @@ git clone https://github.com/relias-engineering/developer-documentation.git
 ## Available Documentation Files
 
 The repository contains 50+ documentation files covering:
+
 - **Onboarding**: Workstation setup, test automation, tool recommendations
 - **Engineering Process**: SDLC, code review standards, release procedures
 - **How-To Guides**: GitHub, Docker, Cortex scaffolding, security rulesets, code quality
@@ -88,6 +92,7 @@ The repository contains 50+ documentation files covering:
 - 📊 Few: E2E tests (full user workflows)
 
 ### Essential Processes
+
 - **Service Creation**: Use Cortex for scaffolding
 - **Local Dev**: Docker + custom subdomains + local SQL Server
 - **Testing**: Cypress for E2E, Testcontainers for integration
@@ -104,4 +109,3 @@ The repository contains 50+ documentation files covering:
 - Pull updates regularly: `git -C ./repos/developer-documentation pull`
 - All Relias software must meet WCAG accessibility standards
 - Refer to full docs for comprehensive guides on any topic
-

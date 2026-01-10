@@ -51,12 +51,14 @@ developer-documentation/
 ## Quick Reference
 
 ### Fetch a specific document via GitHub API
+
 ```powershell
 gh api repos/relias-engineering/developer-documentation/contents/docs/onboarding/developer-workstation-setup.md \
   --jq '.content' | [System.Convert]::FromBase64String($_) | [System.Text.Encoding]::UTF8.GetString()
 ```
 
 ### List all documentation files
+
 ```bash
 gh api repos/relias-engineering/developer-documentation/contents/docs --jq '.[].name'
 ```
