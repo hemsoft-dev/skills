@@ -5,7 +5,8 @@ description: V1.0 - Expert in all software engineering standards, processes, and
 
 # Developer Documentation
 
-Expert guide to Relias software engineering practices. Full documentation sourced from [relias-engineering/developer-documentation](https://github.com/relias-engineering/developer-documentation) GitHub repository.
+Expert guide to Relias software engineering practices. Full documentation sourced from the
+[relias-engineering/developer-documentation](https://github.com/relias-engineering/developer-documentation) repo.
 
 ## ALWAYS: Log This Interaction
 
@@ -18,9 +19,9 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 
 ## Documentation Locations
 
-- **Full Docs**: `./repos/developer-documentation/docs/`
-- **Main Index**: `./repos/developer-documentation/README.md`
-- **Update Docs**: `cd ./repos/developer-documentation && git pull origin main`
+- **Full Docs**: `D:\github\HemSoft\developer-documentation\docs\`
+- **Main Index**: `D:\github\HemSoft\developer-documentation\README.md`
+- **Update Docs**: `cd D:\github\HemSoft\developer-documentation && git pull origin main`
 
 ### Pulling Latest Documentation
 
@@ -28,32 +29,24 @@ Keep documentation in sync with the source repository:
 
 ```powershell
 # Quick update
-cd C:\Users\User\.claude\skills\developer-documentation\repos\developer-documentation
+cd D:\github\HemSoft\developer-documentation
 git pull origin main
 
 # Or from any location
-git -C "C:\Users\User\.claude\skills\developer-documentation\repos\developer-documentation" pull origin main
-```
-
-**First-time setup**: If the repo folder is empty, clone it:
-
-```powershell
-cd C:\Users\User\.claude\skills\developer-documentation\repos
-gh auth setup-git  # Configure GitHub CLI authentication
-git clone https://github.com/relias-engineering/developer-documentation.git
+git -C "D:\github\HemSoft\developer-documentation" pull origin main
 ```
 
 ## Key Areas
 
-| Topic | Purpose |
-|-------|---------|
-| **Onboarding** | Workstation setup, tool recommendations, test automation |
-| **Engineering Process** | SDLC, code review, branching, release procedures |
-| **How-To Guides** | GitHub, Docker, local dev, Cortex scaffolding |
-| **Test Automation** | Cypress E2E, integration testing, test pyramid |
-| **Troubleshooting** | Common error solutions (.NET, EF, storage, auth) |
-| **Accessibility** | WCAG standards, inclusive design, keyboard/screen reader support |
-| **Helpful Commands** | Dotnet, Git, port management utilities |
+| Topic                  | Purpose                                                   |
+|------------------------|-----------------------------------------------------------|
+| **Onboarding**         | Workstation setup, tool recommendations, test automation  |
+| **Engineering Process**| SDLC, code review, branching, release procedures          |
+| **How-To Guides**      | GitHub, Docker, local dev, Cortex scaffolding             |
+| **Test Automation**    | Cypress E2E, integration testing, test pyramid            |
+| **Troubleshooting**    | Common error solutions (.NET, EF, storage, auth)          |
+| **Accessibility**      | WCAG standards, inclusive design, keyboard/screen reader  |
+| **Helpful Commands**   | Dotnet, Git, port management utilities                    |
 
 ## Technology Stack
 
@@ -105,7 +98,7 @@ The repository contains 50+ documentation files covering:
 
 ## Notes
 
-- Documentation is kept in `./repos/developer-documentation` for easy offline access
-- Pull updates regularly: `git -C ./repos/developer-documentation pull`
+- Documentation lives in `D:\github\HemSoft\developer-documentation`
+- Pull updates regularly: `git -C "D:\github\HemSoft\developer-documentation" pull`
 - All Relias software must meet WCAG accessibility standards
 - Refer to full docs for comprehensive guides on any topic
