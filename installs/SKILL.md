@@ -75,6 +75,9 @@ See [INSTALLS.md](INSTALLS.md) for full installation instructions.
 - [x] cloc installed
 - [x] Pandoc installed (document conversion)
 - [ ] ffmpeg installed (media processing)
+- [ ] docling installed (document processing and parsing)
+- [ ] Ollama installed (local LLM runtime)
+- [ ] OpenCode installed
 
 ## Install Tracking
 
@@ -120,6 +123,9 @@ See [INSTALLS.md](INSTALLS.md) for full installation instructions.
 - [x] edge-tts installed
 - [x] ffmpeg installed
 - [x] Goose CLI installed (v1.18.0, GitHub Copilot provider)
+- [x] Ollama installed (local LLM runtime)
+- [ ] docling installed (document processing and parsing)
+- [ ] OpenCode installed
 
 ## Hotkey Reference (AutoHotkey)
 

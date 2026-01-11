@@ -1,6 +1,6 @@
 ---
 name: diary
-description: V1.7 - Captures daily accomplishments, goals, and reflections with Todoist integration. Includes highlighted news section. Supports meeting notes creation with auto-formatted markdown files. Filters out routine tasks tagged with @Regular Chores. Structured Work/Personal/Personal Reflections format with consistent subsections. Keeps entries high-level and summarized. Queries user for missing content.
+description: V1.8 - Captures daily accomplishments, goals, and reflections with Todoist integration. Includes highlighted news section. Supports meeting notes creation with auto-formatted markdown files. Filters out routine tasks tagged with @Regular Chores. Structured Work/Personal/Personal Reflections format with consistent subsections. Keeps entries high-level and summarized. Queries user for missing content. Omits Work section on Saturdays; Sundays only include Work → Tomorrow's Goals.
 ---
 
 # Diary
@@ -62,6 +62,36 @@ Expert in daily journaling that integrates with Todoist to capture what you've a
 - "Any personal goals for tomorrow?"
 - "Any personal thoughts or learnings?"
 - "Any overall reflections about today?"
+
+## Weekend Work Section Handling
+
+**Saturday (Day 6):**
+
+- **Omit entire Work section** - No Work Done, no Tomorrow's Goals, no Reflections
+- Only include Personal section and Personal Reflections
+
+**Sunday (Day 0):**
+
+- Include Work section ONLY for "Tomorrow's Goals" (Monday preparation)
+- Omit "Work Done" and "Reflections" subsections
+- Personal section remains fully populated
+
+**Monday-Friday (Days 1-5):**
+
+- Include all Work sections as normal
+
+**Detection logic:**
+
+```powershell
+$dayOfWeek = (Get-Date).DayOfWeek.value__  # 0=Sunday, 6=Saturday
+if ($dayOfWeek -eq 6) {
+    # Saturday: Skip entire Work section
+} elseif ($dayOfWeek -eq 0) {
+    # Sunday: Only include Work → Tomorrow's Goals
+} else {
+    # Weekdays: Full Work section
+}
+```
 
 ## Entry Style
 

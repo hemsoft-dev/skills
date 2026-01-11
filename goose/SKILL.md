@@ -1,6 +1,6 @@
 ---
 name: goose
-description: V1.1 - Use a CLI AI tool called Goose to execute the prompt.
+description: V1.2 - Use a CLI AI tool called Goose to execute the prompt. Supports local Ollama models and cloud providers with MCP extensions.
 ---
 
 # Goose
@@ -140,6 +140,107 @@ Launch the app and interact via GUI. Supports:
 - Project context awareness
 - File operations and code generation
 - MCP server extensions
+
+## Provider Configuration
+
+**Config Location:** `%APPDATA%\Block\goose\config\config.yaml`
+
+### Available Providers
+
+| Provider | Config Name | Notes |
+|----------|-------------|-------|
+| GitHub Copilot | `github_copilot` | Use underscore, NOT hyphen |
+| Ollama (local) | `ollama` | Requires local Ollama installation |
+| OpenAI | `openai` | Requires API key |
+| Anthropic | `anthropic` | Requires API key |
+| Amazon Bedrock | `amazon_bedrock` | AWS credentials required |
+
+**IMPORTANT:** Provider names use underscores (e.g., `github_copilot`), not hyphens.
+
+### Configure via CLI
+
+```powershell
+goose configure
+```
+
+Select provider from interactive menu and follow prompts.
+
+## Web Search (Tavily Extension)
+
+**CRITICAL:** Web search requires the Tavily MCP extension. Setting `TAVILY_API_KEY` alone does NOT enable web search.
+
+### Config with Tavily Web Search
+
+```yaml
+GOOSE_PROVIDER: ollama
+GOOSE_MODEL: qwen3:14b
+extensions:
+  tavily:
+    name: Tavily Web Search
+    cmd: npx
+    args: ["-y", "tavily-mcp"]
+    enabled: true
+    envs:
+      TAVILY_API_KEY: "{your-tavily-api-key}"
+    type: stdio
+    timeout: 300
+  developer:
+    bundled: true
+    enabled: true
+```
+
+### Tavily API Key
+
+Get key from: <https://tavily.com>
+
+Environment variable: `WebSearch__ApiKey` or `TAVILY_API_KEY`
+
+## Ollama Integration
+
+For local LLM execution with Ollama:
+
+1. **Install Ollama:** `winget install Ollama.Ollama`
+2. **Pull a tool-capable model:** `ollama pull qwen3:14b`
+3. **Configure Goose:** Set provider to `ollama`
+
+### Tool-Calling Requirement
+
+**CRITICAL:** The Ollama model MUST support tool/function calling for extensions to work.
+
+**Models WITH tool support:** qwen3, qwen2.5, hermes3, llama3.1, mistral-nemo
+
+**Models WITHOUT tool support:** nemotron-3-nano (will NOT call extensions)
+
+See the `ollama` skill for detailed model recommendations.
+
+## Adding Extensions
+
+Extensions are MCP servers that add capabilities to Goose.
+
+### Via Config File
+
+```yaml
+extensions:
+  {extension-id}:
+    name: {Display Name}
+    cmd: npx
+    args: ["-y", "{npm-package}"]
+    enabled: true
+    envs:
+      {ENV_VAR}: "{value}"
+    type: stdio
+    timeout: 300
+```
+
+### Via CLI (Session Only)
+
+```powershell
+goose session --with-extension "npx -y {npm-package}"
+```
+
+### Extension Directory
+
+Browse available extensions: <https://block.github.io/goose/extensions>
 
 ## Resources
 

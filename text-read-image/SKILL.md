@@ -78,6 +78,11 @@ The default `google/gemini-2.0-flash-001` is fast and cost-effective. For specif
 - Preserves line breaks from the original image
 - Plain text format for easy processing
 
+## Summary Format
+
+Input: `file path`
+Output: `file path`
+
 ## Lessons Learned
 
 | Issue                                              | Solution                                                       |

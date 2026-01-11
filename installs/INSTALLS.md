@@ -28,6 +28,13 @@ scoop install JetBrains-Mono GeistMono-NF Victor-Mono Iosevka-NF
 scoop install cloc ffmpeg
 ```
 
+### Install Python Packages
+
+```powershell
+# docling - Document processing and parsing for gen AI
+pip install docling
+```
+
 **Installed fonts:**
 
 - JetBrains Mono - Clean, modern, highly readable
@@ -171,7 +178,19 @@ C:\Users\User\AppData\Local\Programs\Python\Python312\python.exe -m pip install 
 
 Creates a speak-clipboard script for AutoHotkey TTS shortcut (CTRL+ALT+P).
 
-### 8.5. .NET SDK (Latest)
+### 8.5. Ollama
+
+```powershell
+winget install --id Ollama.Ollama -e --source winget
+```
+
+Verify:
+
+```powershell
+ollama --version
+```
+
+### 8.6. .NET SDK (Latest)
 
 The official dotnet-install script installs to user directory (no admin required) and supports any version/channel.
 
@@ -209,7 +228,7 @@ dotnet --version
 
 **Channel options:** `LTS`, `STS`, `10.0`, `9.0`, `8.0`, etc.
 
-### 8.6. Docker Desktop
+### 8.7. Docker Desktop
 
 ```powershell
 winget install --id Docker.DockerDesktop -e --source winget
@@ -349,6 +368,14 @@ winget install --id Corsair.iCUE.5 -e --source winget
 
 If not available via winget, download from: <https://www.corsair.com/us/en/s/downloads>
 
+### 20. OpenCode
+
+Open source code editor and IDE.
+
+```powershell
+winget install --id SST.opencode -e --source winget
+```
+
 **Xeneon Edge 14.5" Specs:**
 
 - 2560x720 resolution (32:9 ultrawide), 60Hz, 5-point touchscreen
@@ -373,6 +400,7 @@ $apps = @(
     "Microsoft.VisualStudioCode.Insiders",
     "OpenJS.NodeJS.LTS",
     "Python.Python.3.12",
+    "Ollama.Ollama",
     "Docker.DockerDesktop",
     "Obsidian.Obsidian",
     "Discord.Discord",
@@ -381,7 +409,8 @@ $apps = @(
     "Valve.Steam",
     "AutoHotkey.AutoHotkey",
     "Corsair.iCUE.5",
-    "AlDanial.Cloc"
+    "AlDanial.Cloc",
+    "SST.opencode"
 )
 
 foreach ($app in $apps) {
@@ -389,7 +418,11 @@ foreach ($app in $apps) {
     winget install --id $app -e --source winget --accept-package-agreements --accept-source-agreements
 }
 
-Write-Host "All winget apps installed!" -ForegroundColor Green
+# Install Python packages
+Write-Host "Installing Python packages..." -ForegroundColor Cyan
+pip install docling
+
+Write-Host "All apps installed!" -ForegroundColor Green
 ```
 
 ## Troubleshooting

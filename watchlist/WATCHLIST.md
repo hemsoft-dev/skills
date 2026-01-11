@@ -199,3 +199,57 @@ Major release with multi-agent orchestration, background agents with Git worktre
 - Terminal-first design for developers
 - Free tier: 60 req/min, 1,000 req/day
 - Gemini 2.5 Pro with 1M token context window
+
+---
+
+## Ollama Models for RTX 5090
+
+- **Status**: Active
+- **Added**: 2026-01-11
+- **Expires**: Never
+- **Notes**: Tracking new Ollama models optimized for RTX 5090 (32GB VRAM). Focus on models with tool/function calling support for AI agent integration (Goose, etc.).
+
+### Hardware Constraints
+
+- **GPU**: NVIDIA RTX 5090 (32GB VRAM)
+- **Sweet Spot**: Models 5-20GB (comfortable headroom)
+- **Max Practical**: ~24GB models (leaves room for context)
+
+### Current Recommended Models
+
+| Model | Size | Tool Support | Status |
+|-------|------|--------------|--------|
+| `qwen3:14b` | 9.3GB | ✅ | Primary choice |
+| `qwen2.5-coder:32b` | 19GB | ✅ | Best for coding |
+| `hermes3:8b` | 5GB | ✅ | Function calling specialist |
+| `llama3.1:8b` | 5GB | ✅ | General purpose |
+| `mistral-nemo:12b` | 7GB | ✅ | Strong tool support |
+| `deepseek-r1:14b` | 9GB | ✅ | Reasoning model |
+
+### Key Resources to Monitor
+
+| Resource | URL | What to Watch |
+|----------|-----|---------------|
+| **Ollama Model Library** | <https://ollama.com/library> | New model releases |
+| **Ollama Blog** | <https://ollama.com/blog> | Announcements, new features |
+| **Ollama GitHub** | <https://github.com/ollama/ollama> | Releases, issues |
+| **Ollama Discord** | <https://discord.gg/ollama> | Community discussions |
+| **r/LocalLLaMA** | <https://reddit.com/r/LocalLLaMA> | Community model reviews |
+| **Hugging Face Trending** | <https://huggingface.co/models?sort=trending> | New models to watch |
+
+### Models to Watch For
+
+- [ ] Qwen3 larger variants (30b+) when released
+- [ ] Llama 4 family (expected 2026)
+- [ ] DeepSeek R2 (next generation reasoning)
+- [ ] Mistral next-gen models
+- [ ] Phi-4 larger variants
+- [ ] New function-calling optimized models
+
+### What Makes a Good 5090 Model
+
+1. **Size**: 5-20GB optimal, up to 24GB workable
+2. **Tool Calling**: MUST support function/tool calling for agent use
+3. **Context Window**: Larger is better (32k+ preferred)
+4. **Speed**: Good tokens/sec on consumer hardware
+5. **Quantization**: Q4_K_M or Q5_K_M for size/quality balance
