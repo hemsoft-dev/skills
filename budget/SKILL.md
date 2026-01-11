@@ -38,7 +38,7 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 ## Quick Commands
 
 | User Says | Action |
-|-----------|--------|
+| --- | --- |
 | "list my subs" / "subscriptions" / "what am I paying for" | Read `confirmed-subscriptions.md` and display active vs cancelled |
 | "list my utilities" / "utility bills" | Read `confirmed-utilities.md` and display confirmed utility bills |
 | "run subscription report" | Execute `subscriptions-report.ps1` |
@@ -67,7 +67,7 @@ Read this file to show confirmed utility providers, account numbers, and typical
 **CRITICAL**: Before any budget analysis, search for these flagged vendors in new statements:
 
 | Vendor Pattern | Reason | Action |
-|----------------|--------|--------|
+| --- | --- | --- |
 | `CONDENAST` | Unverified $11.99 charge (Feb 2025). Unknown source - possibly duplicate New Yorker subscription | Report ANY new charges immediately. Call 1-855-680-3077 to investigate. |
 | `DOMINION ENERGY` | High, irregular ACH drafts (e.g., $764.26 on 12/09/2025). Possible legacy/second property auto-pay. | Alert immediately with date/amount/account; verify service address and cancel if legacy. |
 | `DUKE ENERGY` | Multiple ACH payments for separate service address (e.g., $97.48 on 12/22/2025; acct #910185995089, 273 Rose St, Mooresville NC). | Alert immediately with date/amount/account; confirm active service vs. legacy and stop duplicate auto-pay. |
@@ -89,16 +89,51 @@ If new CONDENAST charges found:
 ## Capabilities
 
 | Feature | Description |
-|---------|-------------|
+| --- | --- |
 | **Extract** | Pull transactions from bank statement PDFs |
 | **Normalize** | AI-categorize transactions in batches |
 | **Report** | Generate combined budget report |
 | **Subscriptions** | Deep-dive analysis of recurring expenses |
 
+## Downloading Statements
+
+### Bank Login URLs
+
+| Bank | Login URL | Notes |
+| --- | --- | --- |
+| **Chase** | [login.chase.com](https://www.chase.com/) | Main login |
+| **Chase Statements** | [Statements Dashboard](https://secure.chase.com/web/auth/dashboard#/dashboard/documents/myDocs/index;accountId=978545853;documentType=STATEMENTS;mode=documents) | Direct link to statements |
+| **Citi** | [login.citi.com](https://www.citi.com/) | Main login |
+| **Citi Statements** | [Citi Dashboard](https://online.citi.com/US/ag/dashboard/credit-card) | Click "View Statements" button |
+| **USAA** | [usaa.com](https://www.usaa.com) | Checking, Savings, Loans |
+| **USAA Statements** | [USAA Documents](https://www.usaa.com/my/documents) | All accounts - available 16th of each month |
+
+After logging in, navigate to Statements section and download PDFs to the appropriate account folder.
+
+**Statement Availability:**
+
+- **USAA**: 16th of each month (all accounts)
+
+## Account Details
+
+| Account | Type | Credit Limit | Notes |
+| --- | --- | --- | --- |
+| Chase Credit Card | Credit Card | TBD | Account #978545853 |
+| Citi Credit Card | Credit Card | $24,000 | Account ID: c4ec08f2...; Bi-monthly statements |
+| USAA Classic Checking | Checking | N/A | — |
+| USAA Spending Checking | Checking | N/A | — |
+| USAA Savings | Savings | N/A | — |
+
+### Rewards & Points
+
+| Program | Balance | Last Updated |
+| --- | --- | --- |
+| AA Advantage Miles | 156,242 | 2026-01-11 |
+
 ## Data Location
 
-```
-F:\OneDrive\Documents\Budget\Statements\
+```text
+D:\OneDrive\Documents\Budget\Statements\
 ├── category-choices.txt      # 34 categories for AI
 ├── budget-report.md          # Combined report output
 ├── subscriptions-report.md   # Subscription analysis output
@@ -109,7 +144,7 @@ F:\OneDrive\Documents\Budget\Statements\
 │   └── YYYY-MM.csv           # Normalized monthly CSVs
 
 Skill Location:
-c:\Users\franz\.claude\skills\budget\
+c:\Users\User\.claude\skills\budget\
 ├── tracking/                        # Confirmed manual tracking
 │   ├── confirmed-subscriptions.md   # Verified subscriptions
 │   └── confirmed-utilities.md       # Verified utility bills
@@ -123,7 +158,7 @@ c:\Users\franz\.claude\skills\budget\
 ## Scripts
 
 | Script | Purpose |
-|--------|---------|
+| --- | --- |
 | `extract-usaa.py` | Extract transactions from USAA PDFs using pdfplumber |
 | `search-pdfs.py` | Search raw PDFs for merchant names not found in CSVs |
 | `normalize-account.ps1` | Normalize with AI (batched - 1 call per account) |
@@ -182,11 +217,13 @@ The subscription report provides:
 
 ### Vendor-First Detection
 
-**Architecture**: Script searches ALL transactions for known vendor patterns, then includes subscription-category transactions. This overcomes AI categorization gaps where subscriptions get classified as Entertainment, Technology, Shopping, etc.
+**Architecture**: Script searches ALL transactions for known vendor patterns, then includes
+subscription-category transactions. This overcomes AI categorization gaps where subscriptions
+get classified as Entertainment, Technology, Shopping, etc.
 
 **Deduplication**: Removes duplicate transactions that match both vendor patterns and category filters.
 
-**Result**: Detects subscriptions regardless of how they're categorized, improving accuracy for miscategorized services.
+**Result**: Detects subscriptions regardless of categorization, improving accuracy.
 
 ### Subscription Categories Tracked
 
@@ -199,7 +236,9 @@ The subscription report provides:
 
 ### Known Services Auto-Identified
 
-Apple Services, Microsoft 365, YouTube Premium, ESPN+, SiriusXM, Prime Video, Cursor AI, Devin AI, GitKraken, Todoist, The Atlantic, The Economist, The New Yorker (CONDENAST), NordVPN, ChessBase, Google Play, Twitch Turbo, and 10+ more.
+Apple Services, Microsoft 365, YouTube Premium, ESPN+, SiriusXM, Prime Video, Cursor AI,
+Devin AI, GitKraken, Todoist, The Atlantic, The Economist, The New Yorker (CONDENAST),
+NordVPN, ChessBase, Google Play, Twitch Turbo, and more.
 
 Each service includes a direct cancellation/management link:
 
@@ -214,13 +253,14 @@ Each service includes a direct cancellation/management link:
 
 ### Data Quality Notes
 
-**YouTube Premium Missing**: Despite being in the known services list, YouTube Premium does not appear in current normalized CSV files. Possible causes:
+**YouTube Premium Missing**: Despite being in the known services list, YouTube Premium does
+not appear in current normalized CSV files. Possible causes:
 
 1. Charged to a payment method not yet extracted (Apple Card, Google Wallet, etc.)
 2. Bundled within Google One or other umbrella service
 3. Not in the date range of extracted statements
 
-Recommendation: Check Google account billing history and update extraction scripts if YouTube Premium found on different card.
+**Recommendation**: Check Google account billing and update scripts if YouTube Premium is on a different card.
 
 ## Normalized CSV Format
 
@@ -236,7 +276,7 @@ Date,Account,Category,Description,Amount
 ## Current Data Summary
 
 | Account | Transactions | Months | Status |
-|---------|-------------|--------|--------|
+| --- | --- | --- | --- |
 | Chase Credit Card | 599 | 17 | ✅ Complete |
 | USAA Classic Checking | 284 | 13 | ✅ Complete |
 | USAA Spending Checking | 311 | 12 | ✅ Complete |
@@ -262,7 +302,9 @@ The script filters out 208+ generic USAA entries:
 - `ONLINE BANKING TRANSFER`
 - `WIRE TRANSFER`
 
-**⚠️ PARSING WARNING**: If you see `RECURRING DEB CARD PURCH` in normalized CSVs without a merchant name, this indicates faulty PDF parsing. The merchant name was not properly captured during extraction. **Re-run `extract-usaa.py` for that account** to fix the issue.
+**⚠️ PARSING WARNING**: If you see `RECURRING DEB CARD PURCH` without a merchant name in
+normalized CSVs, this indicates faulty PDF parsing. The merchant name was not properly
+captured. **Re-run `extract-usaa.py` for that account** to fix the issue.
 
 ## Cost Efficiency
 
@@ -274,7 +316,8 @@ Batching all transactions per account into ONE AI call reduced costs from ~50 pr
 
 **Problem**: Known subscription not appearing in extracted CSVs but visible in PDF.
 
-**Root Cause**: USAA statements use a two-line format where merchant name is on line 1 and transaction details (date/amount) are on line 2. Fixed December 2025.
+**Root Cause**: USAA statements use a two-line format where merchant name is on line 1 and
+transaction details (date/amount) are on line 2. This was fixed in December 2025.
 
 **Solution**:
 
@@ -297,7 +340,7 @@ Batching all transactions per account into ONE AI call reduced costs from ~50 pr
 3. Verify transaction exists in source CSV files for the date range
 4. If found but categorized differently, add to category list or check exclusion patterns
 
-**Example**: YouTube Premium search returned 0 results - indicates it's on a different payment method or account not yet extracted.
+**Example**: YouTube Premium search returned 0 results - it's on a different payment method or account not yet extracted.
 
 ### Adding New Subscriptions
 
@@ -320,12 +363,13 @@ To add cancellation links for new services:
 
 **File**: `c:\Users\franz\.claude\skills\budget\tracking\confirmed-subscriptions.md`
 
-Manual tracking of verified subscriptions with actual pricing and cancellation status. Used to cross-reference against automated report and maintain historical record.
+Manual tracking of verified subscriptions with actual pricing and cancellation status.
+Cross-reference against automated report and maintain historical record.
 
 ### Format
 
 | Service | Price | Frequency | Status | Notes |
-|---------|-------|-----------|--------|-------|
+| --- | --- | --- | --- | --- |
 | [The Economist](https://myaccount.economist.com/s/my-account) | $319.00 | Annual | Cancelled | Cancelled as of December 2025 |
 
 Service names are linked to their management/cancellation pages when available.

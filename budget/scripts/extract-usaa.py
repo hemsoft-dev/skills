@@ -10,7 +10,7 @@ import pdfplumber
 from pathlib import Path
 from datetime import datetime
 
-STATEMENTS_ROOT = Path(r"F:\OneDrive\Documents\Budget\Statements")
+STATEMENTS_ROOT = Path(r"D:\OneDrive\Documents\Budget\Statements")
 
 def extract_transactions(pdf_path):
     """Extract transactions from a USAA statement PDF."""
@@ -164,6 +164,15 @@ def main():
         txns = extract_transactions(pdf_file)
         all_transactions.extend(txns)
         print(f" -> {len(txns)} transactions")
+        
+        # Write individual CSV next to PDF
+        csv_file = pdf_file.with_suffix('.csv')
+        with open(csv_file, 'w', encoding='utf-8') as f:
+            f.write("Date,Description,Amount\n")
+            for date, desc, amount in sorted(txns):
+                if ',' in desc:
+                    desc = f'"{desc}"'
+                f.write(f"{date},{desc},{amount:.2f}\n")
     
     print(f"\nTotal: {len(all_transactions)} transactions")
     
