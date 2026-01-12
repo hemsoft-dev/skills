@@ -156,7 +156,7 @@ function Get-AccessTokenFromRefresh {
 }
 
 function Get-GmailAccessToken {
-    $cache = Get-CachedTokens
+    $cache = Get-CachedToken
     if ($cache) {
         $expiresAt = [datetime]::Parse($cache.ExpiresAt)
         if ($expiresAt -gt (Get-Date).AddMinutes(5)) { return $cache.AccessToken }

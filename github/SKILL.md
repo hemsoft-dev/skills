@@ -91,6 +91,12 @@ Run the script to get current billing for all accounts:
 
 Options: -Account personal1|personal2|work|all
 
+## Pull Requests Check
+
+Check for open PRs you created and PRs awaiting your review:
+
+    & "c:\Users\User\.claude\skills\github\scripts\Get-MyPRs.ps1"
+
 ### Required Token Scopes
 
 For full enterprise visibility, ensure the GitHub token has these scopes:

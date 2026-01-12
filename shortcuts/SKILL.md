@@ -39,6 +39,7 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 | CTRL+SHIFT+T | `^+t` | Activate/launch Todoist |
 | CTRL+SHIFT+C | `^+c` | Activate/launch Windows Terminal |
 | CTRL+SHIFT+V | `^+v` | Activate/launch VS Code Insiders |
+| CTRL+SHIFT+S | `^+s` | Activate/launch VS Code with Skills repo |
 | CTRL+ALT+P | `^!p` | Speak clipboard (TTS via edge-tts) |
 
 ### Command Launcher (WIN+Space)

@@ -1,11 +1,11 @@
 ---
 name: diary
-description: V1.8 - Captures daily accomplishments, goals, and reflections with Todoist integration. Includes highlighted news section. Supports meeting notes creation with auto-formatted markdown files. Filters out routine tasks tagged with @Regular Chores. Structured Work/Personal/Personal Reflections format with consistent subsections. Keeps entries high-level and summarized. Queries user for missing content. Omits Work section on Saturdays; Sundays only include Work → Tomorrow's Goals.
+description: V1.9 - Captures daily accomplishments, goals, and reflections with Todoist integration. Auto-includes weather and news from today skill. Supports meeting notes creation with auto-formatted markdown files. Filters out routine tasks tagged with @Regular Chores. Structured Work/Personal/Personal Reflections format with consistent subsections. Keeps entries high-level and summarized. Queries user for missing content. Omits Work section on Saturdays; Sundays only include Work → Tomorrow's Goals.
 ---
 
 # Diary
 
-Expert in daily journaling that integrates with Todoist to capture what you've accomplished and what your goals are.
+Expert in daily journaling that integrates with Todoist to capture what you've accomplished and what your goals are. Automatically includes weather and news context from the today skill.
 
 ## Entry Template
 
@@ -19,6 +19,53 @@ Expert in daily journaling that integrates with Todoist to capture what you've a
 **[{Headline}]({url})**
 
 {Optional 1-2 sentence context provided by user}
+
+---
+
+### 📍 {City}, {Country}
+
+| 📅 Date | 📆 Day | 🕐 Time |
+|---------|--------|---------|
+| {YYYY-MM-DD} | {Weekday} | {H:MM AM/PM} {Timezone} |
+
+### Current Weather
+
+| 🌡️ Temp | 🤔 Feels Like | {Icon} Condition | 💨 Wind | 💧 Humidity |
+|---------|---------------|------------------|---------|-------------|
+| {temp}°F | {feels}°F | {condition} | {wind} mph | {humidity}% |
+
+### 3-Day Forecast
+
+| Day | Icon | Condition | Low | High | Wind |
+|-----|------|-----------|-----|------|------|
+| {Weekday} (Today) | {icon} | {condition} | {low}°F | {high}°F | {wind} mph |
+| {Weekday} | {icon} | {condition} | {low}°F | {high}°F | {wind} mph |
+| {Weekday} | {icon} | {condition} | {low}°F | {high}°F | {wind} mph |
+
+---
+
+## 📰 News Headlines ({Month Day, Year})
+
+### 🇺🇸 US News
+| # | Headline | Source |
+|---|----------|--------|
+| 1 | [Headline text](url) | Source |
+...
+
+### 🌍 World News
+| # | Headline | Source |
+|---|----------|--------|
+| 1 | [Headline text](url) | Source |
+...
+
+### 🤖 AI News
+| # | Headline | Source |
+|---|----------|--------|
+| 1 | [Headline text](url) | Source |
+...
+
+---
+*News gathered at {time}. Sources checked: {count}. Items within last 24 hours only.*
 
 ---
 
@@ -118,6 +165,38 @@ if ($dayOfWeek -eq 6) {
 - Both professional satisfaction AND personal life concerns
 
 ## Core Functions
+
+### 0. Weather and News Integration (today skill)
+
+**ALWAYS run the today skill first** to gather weather and news context.
+
+**Step 1: Execute Today Skill**
+
+Run the PowerShell script from the today skill:
+
+```powershell
+& "$env:USERPROFILE\.claude\skills\today\Get-Today.ps1"
+```
+
+This fetches current date, time, weather, and 3-day forecast.
+
+**Step 2: Launch News Sub-Agents**
+
+The today skill automatically launches 3 parallel sub-agents to gather:
+- US News headlines (last 24 hours)
+- World News headlines (last 24 hours)
+- AI News headlines (last 24 hours)
+
+**Step 3: Include Full Output in Diary Entry**
+
+Copy the complete output from the today skill into the diary entry, including:
+- Today's Highlight (top news story)
+- Weather section (current conditions + 3-day forecast)
+- News Headlines (all three categories with tables)
+
+This provides valuable context for future reflection on what was happening in the world when you wrote each entry.
+
+**Note:** If the user provides a specific highlight article, use that instead of the top news story from today skill.
 
 ### 1. Meeting Notes Creation
 
@@ -237,6 +316,10 @@ For each task:
 
 When user wants to record today's diary entry, follow this process:
 
+**Step 0: Run Today Skill** *(NEW)*
+
+Execute the today skill to get weather and news context (see section 0 above).
+
 **Step 1: Pull Todoist Data**
 
 Use PowerShell scripts from todoist skill:
@@ -262,7 +345,7 @@ Load `exclusion.json` and filter out:
 
 **Step 4: Generate Initial Entry**
 
-Create diary entry with all required sections populated from Todoist data.
+Create diary entry starting with weather/news section from today skill, followed by all required sections populated from Todoist data.
 
 **Step 5: Query for Missing Content**
 
@@ -325,6 +408,13 @@ Tasks are categorized by project hierarchy:
 
 - **Work**: Tasks under project "Work" (id: 2221463722) and its children
 - **Personal**: Tasks under "Home" (id: 2200472795) or other non-work projects
+
+**CRITICAL:** Always verify project membership before categorizing. Use the project_id field from Todoist task data:
+- If project_id = 2221463722 (or child of Work) → Work section
+- If project_id = 2200472795 (Home) → Personal section
+- All other projects → Personal section
+
+**Never assume** a task is work-related based on content alone. The project_id is the authoritative source.
 
 Use project parent_id to determine category.
 
@@ -435,8 +525,9 @@ diary/
 
 ## Example Entry (Template Reference)
 
-See `history/2026-01-06.md` for the canonical template showing:
+See `history/2026-01-11.md` for the canonical template showing:
 
+- Full weather and news integration from today skill
 - Proper section structure and hierarchy
 - Appropriate level of detail (high-level, not granular)
 - Balance of accomplishments and concerns
@@ -447,7 +538,7 @@ See `history/2026-01-06.md` for the canonical template showing:
 ## User Interaction Prompts
 
 **Initial prompt:**
-"Let's create today's diary entry. I'll pull your Todoist data and we'll build it together."
+"Let's create today's diary entry. I'll gather weather, news, and your Todoist data."
 
 **For missing content:**
 

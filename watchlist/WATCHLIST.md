@@ -253,3 +253,44 @@ Major release with multi-agent orchestration, background agents with Git worktre
 3. **Context Window**: Larger is better (32k+ preferred)
 4. **Speed**: Good tokens/sec on consumer hardware
 5. **Quantization**: Q4_K_M or Q5_K_M for size/quality balance
+
+---
+
+## Apple Siri Assistant
+
+- **Status**: Active
+- **Added**: 2026-01-12
+- **Expires**: Never
+- **Notes**: Tracking Apple's Siri AI assistant evolution, especially AI/LLM improvements, developer API updates, and integration with Apple Intelligence features.
+
+### Key Resources to Monitor
+
+| Resource | URL | What to Watch |
+|----------|-----|---------------|
+| **Apple Newsroom** | <https://www.apple.com/newsroom/> | Official announcements |
+| **Apple Developer News** | <https://developer.apple.com/news/> | API updates, WWDC info |
+| **SiriKit Documentation** | <https://developer.apple.com/documentation/sirikit> | Developer API changes |
+| **Apple Intelligence** | <https://www.apple.com/apple-intelligence/> | AI features integration |
+| **iOS Release Notes** | <https://developer.apple.com/documentation/ios-release-notes> | iOS updates |
+| **WWDC Sessions** | <https://developer.apple.com/videos/> | Annual conference updates |
+
+### Key Features to Watch
+
+- [ ] LLM/Generative AI improvements
+- [ ] On-device AI capabilities
+- [ ] Developer API expansions
+- [ ] Third-party app integrations
+- [ ] Privacy-preserving AI features
+- [ ] Multi-modal capabilities (vision, audio)
+- [ ] App Intents framework updates
+- [ ] Shortcuts automation improvements
+
+### Expected Updates
+
+- **WWDC 2026**: Major annual announcement (typically June)
+- **iOS 19**: Expected Fall 2026
+- **Apple Intelligence v2**: Expected throughout 2026
+
+### Competitive Context
+
+Monitoring against: Google Assistant, Amazon Alexa, Claude, ChatGPT, Gemini, Copilot

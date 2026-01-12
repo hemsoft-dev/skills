@@ -1,6 +1,6 @@
 ---
 name: skill-creator
-description: V1.3 - Creates new Claude skills with optimized SKILL.md files following best practices for clarity and conciseness.
+description: V1.4 - Creates new Claude skills with optimized SKILL.md files following best practices for clarity and conciseness.
 ---
 
 # Skill Creator
@@ -83,11 +83,11 @@ metadata:
 
 Ask user for skill name and purpose.
 
-### Step 2: Choose Location (REQUIRED - NEVER SKIP)
+### Step 2: Choose Location
 
-**ALWAYS ask the user where to create the skill:**
+**Default: User folder (unless user specifies otherwise)**
 
-**Option A - User Folder (Global)**:
+**Option A - User Folder (Global)** [DEFAULT]:
 
 - Location: `~/.claude/skills/{skill-name}/`
 - Available across all projects
@@ -99,15 +99,17 @@ Ask user for skill name and purpose.
 - Only available in this project
 - Use for: Project-specific workflows, context
 
-**Prompt to user**: "Where should I create this skill?\nA) User folder for access\nB) Repo for project use?"
+**Only ask if unclear**: If user explicitly mentions "repo", "repository", or "project-specific", use Option B. Otherwise, default to Option A (user folder).
 
-### Step 3: Enable History Tracking? (REQUIRED - NEVER SKIP)
+### Step 3: Enable History Tracking
 
-**ALWAYS ask the user about history tracking:**
+**Default: Enabled (unless user specifies otherwise)**
 
-**Prompt to user**: "Would you like to enable History Tracking for this skill?\nLogs all interactions to History/{YYYY-MM-DD}.md."
+History tracking logs all interactions to `History/{YYYY-MM-DD}.md`.
 
-If yes, add this section after the title:
+**Only disable if**: User explicitly says "no history", "don't track", or "disable history".
+
+**When enabled** (default), add this section after the title:
 
 ```markdown
 ## ALWAYS: Log This Interaction
@@ -122,10 +124,10 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 
 ### Step 4: Create Files
 
-1. Create directory at chosen location
+1. Create directory at chosen location (default: user folder)
 2. Write SKILL.md with frontmatter and instructions
 3. Apply version prefix (V1.0)
-4. Apply history tracking (if user said yes)
+4. Create History/ directory and apply history tracking section (default: enabled)
 
 ### Step 5: Confirm Creation
 
@@ -135,12 +137,11 @@ Tell user where the skill was created and what features are enabled.
 
 Before finalizing the skill, check the `skill-improver` skill for available improvements and offer them:
 
-| Improvement          | Default        | Ask User |
-|----------------------|----------------|----------|
-| Version prefix       | Always applied | No       |
-| History Tracking     | Off            | Yes      |
-
-**Prompt**: "Would you like to enable History Tracking for this skill?\nThis logs all interactions to `History/{YYYY-MM-DD}.md`."
+| Improvement          | Default        | Override                                    |
+|----------------------|----------------|---------------------------------------------|
+| Version prefix       | Always applied | Never (always V1.0 for new skills)          |
+| History Tracking     | Enabled        | Only if user says "no history" or similar   |
+| Location             | User folder    | Only if user says "repo" or "project-specific" |
 
 ## Anti-Patterns
 
