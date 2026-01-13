@@ -29,12 +29,14 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 All HR-related documents are stored in the `HR/` subfolder as Markdown files converted from original PDF/DOCX formats using docling.
 
 **Document Conversion Process**:
+
 1. User provides PDF or DOCX HR document
 2. Use docling skill to convert to Markdown
 3. Save converted Markdown to `HR/{document-name}.md`
 4. Original formats are not stored; only Markdown versions
 
 **Document Types**:
+
 - Employee handbooks
 - Benefits guides
 - Policy documents
@@ -46,12 +48,14 @@ All HR-related documents are stored in the `HR/` subfolder as Markdown files con
 ## Core Knowledge Areas
 
 ### 1. Company Overview
+
 - Mission, vision, and values
 - Company history and milestones
 - Products and services
 - Market position and industry focus
 
 ### 2. HR & Benefits
+
 - Health insurance (medical, dental, vision)
 - Retirement plans (401k, matching)
 - Paid time off (PTO, holidays, sick leave)
@@ -60,6 +64,7 @@ All HR-related documents are stored in the `HR/` subfolder as Markdown files con
 - Professional development and tuition reimbursement
 
 ### 3. Workplace Policies
+
 - Code of conduct
 - Remote work policies
 - Hybrid work arrangements
@@ -68,18 +73,21 @@ All HR-related documents are stored in the `HR/` subfolder as Markdown files con
 - Equipment and technology use
 
 ### 4. Organizational Structure
+
 - Departments and teams
 - Reporting relationships
 - Key leadership contacts
 - Productivity Engineering team structure
 
 ### 5. Career Development
+
 - Performance review processes
 - Career pathing opportunities
 - Training and certification programs
 - Internal mobility
 
 ### 6. Culture & Values
+
 - Company culture
 - Diversity, equity, and inclusion initiatives
 - Employee resource groups
@@ -92,6 +100,7 @@ All HR-related documents are stored in the `HR/` subfolder as Markdown files con
 When user provides a new HR document:
 
 1. **Convert to Markdown**: Use docling skill
+
    ```bash
    docling {document-path} --to markdown --output HR/
    ```

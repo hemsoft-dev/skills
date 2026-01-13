@@ -1,6 +1,6 @@
 ---
 name: diary
-description: V1.9 - Captures daily accomplishments, goals, and reflections with Todoist integration. Auto-includes weather and news from today skill. Supports meeting notes creation with auto-formatted markdown files. Filters out routine tasks tagged with @Regular Chores. Structured Work/Personal/Personal Reflections format with consistent subsections. Keeps entries high-level and summarized. Queries user for missing content. Omits Work section on Saturdays; Sundays only include Work → Tomorrow's Goals.
+description: V2.2 - Captures daily accomplishments, goals, and reflections with Todoist integration. Auto-includes weather, ALL news headlines (5-7 per category: US, World, AI), Slack highlights, and watchlist updates. Supports meeting notes creation with auto-formatted markdown files. Filters out routine tasks tagged with @Regular Chores. Structured Work/Personal/Personal Reflections format with consistent subsections. Keeps entries high-level and summarized. Queries user for missing content. Omits Work section on Saturdays; Sundays only include Work → Tomorrow's Goals.
 ---
 
 # Diary
@@ -19,6 +19,10 @@ Expert in daily journaling that integrates with Todoist to capture what you've a
 **[{Headline}]({url})**
 
 {Optional 1-2 sentence context provided by user}
+
+### 💬 Slack Highlights
+
+{5 bullet points of interesting/important Slack messages from today}
 
 ---
 
@@ -66,6 +70,12 @@ Expert in daily journaling that integrates with Todoist to capture what you've a
 
 ---
 *News gathered at {time}. Sources checked: {count}. Items within last 24 hours only.*
+
+---
+
+## 👀 Watchlist Updates
+
+{Only include items that have updates today. Skip items with no activity.}
 
 ---
 
@@ -183,16 +193,71 @@ This fetches current date, time, weather, and 3-day forecast.
 **Step 2: Launch News Sub-Agents**
 
 The today skill automatically launches 3 parallel sub-agents to gather:
+
 - US News headlines (last 24 hours)
 - World News headlines (last 24 hours)
 - AI News headlines (last 24 hours)
 
-**Step 3: Include Full Output in Diary Entry**
+**Step 3: Gather Slack Highlights**
+
+Use the slack skill to retrieve today's most interesting messages:
+
+```powershell
+# Search for today's messages (excluding your own noise)
+$today = Get-Date -Format "yyyy-MM-dd"
+$query = "after:$today -from:me"
+$encodedQuery = [System.Web.HttpUtility]::UrlEncode($query)
+$headers = @{ "Authorization" = "Bearer $env:SLACK_TOKEN" }
+$results = Invoke-RestMethod -Uri "https://slack.com/api/search.messages?query=$encodedQuery&count=50" -Headers $headers
+
+# Filter and compile 5 interesting highlights:
+# - Important announcements
+# - Team updates or decisions
+# - Interesting technical discussions
+# - Mentions of you (@fhemmer)
+# - Project updates
+# Format as bullet points with channel context and brief summary
+```
+
+**Slack Highlight Criteria:**
+
+- Exclude routine/low-value messages (bot notifications, simple acks)
+- Prioritize: decisions made, action items, important announcements
+- Include channel name for context: `- **#channel-name**: Brief summary of message`
+- Aim for 5 highlights; if fewer than 5 interesting items, that's fine
+- Focus on messages that would be useful to remember later
+
+**Step 4: Check Watchlist for Updates**
+
+Use the watchlist skill to check for any updates on tracked items:
+
+- Review the WATCHLIST.md file for items marked as "Active" or "Watching"
+- For each item, check its key resources for updates from today
+- Only include items that have actual updates/changes
+- Format as: `- **{Item Name}**: {Brief summary of what changed/updated}`
+- If no watchlist items have updates today, omit this section entirely
+
+**Step 5: Include Full Output in Diary Entry**
 
 Copy the complete output from the today skill into the diary entry, including:
+
 - Today's Highlight (top news story)
+- Slack Highlights (5 bullet points)
+- Watchlist Updates (items with changes/updates from today)
 - Weather section (current conditions + 3-day forecast)
 - News Headlines (all three categories with tables)
+
+Copy the **complete, unfiltered output** from the today skill into the diary entry, including:
+
+- Today's Highlight (top news story)
+- Weather section (current conditions + 3-day forecast)
+- **News Headlines - ALL categories with ALL headlines** (typically 5-7 per category):
+  - 🇺🇸 US News (full table with all headlines)
+  - 🌍 World News (full table with all headlines)
+  - 🤖 AI News (full table with all headlines)
+- News gathering metadata footer
+
+**CRITICAL:** Include **every single headline** returned by the today skill's sub-agents. Do not truncate, summarize, or filter the news tables. The diary entry should contain the complete news snapshot from that day.
 
 This provides valuable context for future reflection on what was happening in the world when you wrote each entry.
 
@@ -222,7 +287,7 @@ When user requests to save meeting notes (flexible phrasing):
   - `"AI Weekly SyncUp - Harbinger"` → `ai-weekly-syncup-harbinger`
   - `"Q1 2026 Planning (Budget & Goals)"` → `q1-2026-planning-budget-goals`
   - `"Team Retro #3 [Action Items]"` → `team-retro-3-action-items`
-- Format: `history/{YYYY-MM-DD}-{slug}.md`
+- Format: `entries/{YYYY-MM-DD}-{slug}.md`
 
 **Step 3: Confirm with User**
 Ask for confirmation before creating the file:
@@ -230,7 +295,7 @@ Ask for confirmation before creating the file:
 ```
 I'll create a meeting notes file:
 - Title: {Original Title}
-- File: history/{YYYY-MM-DD}-{slug}.md
+- File: entries/{YYYY-MM-DD}-{slug}.md
 - Content: {X} lines of notes
 
 Proceed?
@@ -249,14 +314,14 @@ Proceed?
 
 **Step 5: Create File**
 
-- Write to `history/{YYYY-MM-DD}-{slug}.md`
+- Write to `entries/{YYYY-MM-DD}-{slug}.md`
 
 **Step 6: Provide Receipt**
 Confirm completion with details:
 
 ```
 ✅ Meeting notes saved!
-- File: history/{YYYY-MM-DD}-{slug}.md
+- File: entries/{YYYY-MM-DD}-{slug}.md
 - Title: {Original Title}
 - Date: {YYYY-MM-DD}
 - Size: {X} lines
@@ -266,16 +331,16 @@ Confirm completion with details:
 Ask if user wants to add a reference to the meeting in today's diary entry:
 
 ```
-Would you like me to add an entry about this meeting to today's diary (history/{YYYY-MM-DD}.md)?
+Would you like me to add an entry about this meeting to today's diary (entries/{YYYY-MM-DD}.md)?
 I'll add it to the Work Done section with a link to the meeting notes.
 ```
 
 If confirmed:
 
-- Check if `history/{YYYY-MM-DD}.md` exists
+- Check if `entries/{YYYY-MM-DD}.md` exists
 - If it exists, add to appropriate section (Work Done or Personal Done based on context)
 - If it doesn't exist, offer to create a basic diary entry
-- Add a line like: `- Attended {Meeting Title} ([meeting notes](history/{YYYY-MM-DD}-{slug}.md))`
+- Add a line like: `- Attended {Meeting Title} ([meeting notes](entries/{YYYY-MM-DD}-{slug}.md))`
 
 **Step 8: Offer to Create Todoist Tasks**
 If follow-up tasks are detected in the meeting notes, offer to add them:
@@ -361,13 +426,13 @@ For each section that's empty or sparse, ask user:
 
 **Step 6: Save Entry**
 
-Write to `history/{YYYY-MM-DD}.md` with proper formatting.
+Write to `entries/{YYYY-MM-DD}.md` with proper formatting.
 
 ### 3. Review Past Entries
 
 When user wants to review previous entries:
 
-- Read from `history/{YYYY-MM-DD}.md` files
+- Read from `entries/{YYYY-MM-DD}.md` files
 - Summarize patterns, progress, recurring themes
 - Compare goals vs accomplishments over time
 - Identify trends in work/personal balance
@@ -401,6 +466,7 @@ When user wants to review previous entries:
 - Basic self-care (sleep tracking, meals)
 - Recurring household chores
 - Submit timesheet tasks
+- Egg Inc game tasks (chores/entertainment, not work)
 
 ## Task Categorization
 
@@ -410,6 +476,7 @@ Tasks are categorized by project hierarchy:
 - **Personal**: Tasks under "Home" (id: 2200472795) or other non-work projects
 
 **CRITICAL:** Always verify project membership before categorizing. Use the project_id field from Todoist task data:
+
 - If project_id = 2221463722 (or child of Work) → Work section
 - If project_id = 2200472795 (Home) → Personal section
 - All other projects → Personal section
@@ -511,7 +578,7 @@ Use PowerShell scripts from todoist skill:
 diary/
 ├── SKILL.md
 ├── exclusion.json
-└── history/
+└── entries/
     ├── 2026-01-06.md  (TEMPLATE REFERENCE - Daily diary)
     ├── 2026-01-07.md
     ├── 2026-01-09-ai-weekly-syncup-harbinger.md  (Meeting notes)
@@ -525,7 +592,7 @@ diary/
 
 ## Example Entry (Template Reference)
 
-See `history/2026-01-11.md` for the canonical template showing:
+See `entries/2026-01-11.md` for the canonical template showing:
 
 - Full weather and news integration from today skill
 - Proper section structure and hierarchy
@@ -554,15 +621,15 @@ See `history/2026-01-11.md` for the canonical template showing:
 
 ## ALWAYS: Log Skill Usage
 
-After creating a diary entry, log to todoist skill's `History/{YYYY-MM-DD}.md`:
+After creating a diary entry, log to todoist skill's `entries/{YYYY-MM-DD}.md`:
 
 ```
 
-After creating meeting notes, log to todoist skill's `History/{YYYY-MM-DD}.md`:
+After creating meeting notes, log to todoist skill's `entries/{YYYY-MM-DD}.md`:
 
 ```markdown
 ## {HH:MM} - Created meeting notes
-Saved meeting notes: {meeting-title} → history/{YYYY-MM-DD}-{slug}.md
+Saved meeting notes: {meeting-title} → entries/{YYYY-MM-DD}-{slug}.md
 ```markdown
 ## {HH:MM} - Created diary entry
 Generated daily journal entry with Work/Personal/Personal Reflections structure

@@ -5,22 +5,22 @@
 | PAGE: 1 of 2              | DEPARTMENT: Human Resources                                                                       |
 | EFFECTIVE DATE: 1/1/2025  | REVISION DATE: -                                                                                  |
 
-## Purpose:
+## Purpose
 
 Relias will provide paid time off to employees to provide caregiving duties for a qualifying individual. The purpose of caregiver leave is to allow employees to participate in caregiving activities, including coordination of care, for a period of time while also maintaining pay and benefits through Relias, alleviating stress during this time. This policy will run concurrently with the Family and Medical Leave Act (FMLA), as applicable.
 
-## Scope:
+## Scope
 
 Relians who meet the eligibility requirements set forth below, regardless of work location.
 
-## Policy Statement:
+## Policy Statement
 
 Eligible employees must meet the following criteria:
 
 - Have been employed with the company for at least 12 consecutive months at the time leave begins.
 - Be a full or part-time, regular employee schedule to work at least 30 hours per week totaling at least 1250 hours in the previous 12 months , aligning with FMLA requirements (temporary employees and interns are not eligible for this benefit).
 
-## Qualifying Family Members/Individuals:
+## Qualifying Family Members/Individuals
 
 - Spouse/Documented Domestic Partner
 - Child (biological, adopted, foster, stepchild, or legal ward)
@@ -30,36 +30,36 @@ Eligible employees must meet the following criteria:
 - Grandchild
 - Any individual with whom the employee shares a family-like relationship, as determined and approved by Relias.
 
-## Amount of Leave:
+## Amount of Leave
 
 Eligible employees are entitled to up to 4 weeks (160 hours) of paid caregiving leave within a rolling 12-month period. Leave must be used in a continuous block of time (up to 2 instances per year with a minimum of 2 weeks per instance) but may not be used intermittently.
 
-## Concurrent Leave with FMLA:
+## Concurrent Leave with FMLA
 
 This caregiving leave policy runs concurrently with the Family and Medical Leave Act (FMLA), where applicable. If the employee is eligible for FMLA leave and is using this leave for caregiving purposes, the 4 weeks of paid caregiving leave will count toward the employee's
 
-## FMLA entitlement.
+## FMLA entitlement
 
-## Coordination with Sick PTO:
+## Coordination with Sick PTO
 
 Employees do not need to exhaust sick PTO before taking caregiver leave. However, remaining sick PTO balances may be used after caregiver leave is exhausted if additional time off is required related to the caregiving event and approved (and FMLA is not exhausted, where applicable).
 
-## Pay During Leave:
+## Pay During Leave
 
 - Caregiver leave is paid at the employee's regular base rate of pay.
 - Benefits will remain in place for the period of the leave.
 - Those in commission earning roles may apply for quota relief if they will use the full 4 weeks of caregiver leave.
 - If an employee exhausts their 4 weeks of paid leave and still requires time off for caregiving, any remaining sick PTO balance may be used before the leave continues in unpaid status.
 
-## Reporting Procedure:
+## Reporting Procedure
 
-## Requesting Leave/Process:
+## Requesting Leave/Process
 
 - Employees must notify HR and their supervisor as soon as possible of the need for caregiving leave and should provide a reasonable estimate of the duration of the leave. 30 days in advance is preferable, unless it is due to a sudden health crisis.
 - Employees should complete the LOA form in UKG to initiate the leave process and the Caregiving Leave Request Form.
 - Employees may be required to provide medical certification/FMLA documentation to verify the need for caregiving leave for the family member or individual in question, if the leave qualifies for FMLA as well.
 
-## Return to Work:
+## Return to Work
 
 - Employees are expected to return to work on the agreed-upon return date, unless additional leave is requested and approved in advance.
 - In the event that the individual for whom you are providing caregiving duties passes away prior to the scheduled end date of your leave, the date of that individual's passing automatically becomes the new end date of your leave.  Bereavement PTO is available per the policy, and if additional time away is needed, applicable PTO may be used as approved by management.

@@ -34,7 +34,7 @@ the time of birth of Flexible PTO for non -eligible part -time or full -time reg
 
 ## Amount, Time Frame, and Duration of Paid Parental Leave
 
-## · Newborn Parents:
+## · Newborn Parents
 
 - o Eligible for up to ten (10) weeks (50 business days) of paid parental leave. Depending upon birth type and STD approval. Birthing parents will have a total of 20 weeks of paid leave (STD, PL, and Phaseback). Parental leave must be a minimum of two (2) weeks. Flexible PTO cannot be taken prior to or after leave has ended to extend leave.
 - o If applicable, Short -Term Disability must be exhausted before Parental Leave can begin
@@ -51,7 +51,7 @@ the time of birth of Flexible PTO for non -eligible part -time or full -time reg
 - Employees are prohibited from working while on approved leave of absence.
 - Upon termination of the individual's employment at the company, he or she will not be paid for any unused parental leave for which he or she was eligible.
 
-## Coordination with Other Policies:
+## Coordination with Other Policies
 
 - Parental leave taken under this policy will run concurrently with leave under the FMLA; thus, any leave taken under this policy that falls under the definition of circumstances qualifying for leave due to the birth or placement of a child due to adoption or foster care, the leave will be counted toward the 12 weeks of available FMLA leave per a 12 -month period. All FMLA leave for the birth of a child is to be taken consecutively. All other requirements and provisions under the FMLA will apply. Please refer to the Family and Medical Leave Act section in the Employee Handbook for further guidance on FMLA.
 - After the parental leave (and any short -term disability leave for employees giving birth) is exhausted, the balance of FMLA leave (if applicable) will be unpaid leave. Please refer to the Family and Medical Leave Policy for further guidance on the FMLA.
@@ -65,7 +65,7 @@ the time of birth of Flexible PTO for non -eligible part -time or full -time reg
 - The employee will provide his or her manager and HR with notice of the request for leave at least 30 days prior to the proposed date of the leave (or if the leave was not foreseeable, as soon as possible). The employee must complete the necessary HR forms and provide all documentation as required by HR to substantiate the request. For those on a compensation plan, additional documentation may be required for Quota Relief.
 - As is the case with all company policies, the organization has the exclusive right to interpret this policy.
 
-## Return to work after Parental Leave:
+## Return to work after Parental Leave
 
 - If an employee determines they will not be returning to work following leave for the birth, adoption, or placement of a child; or if they return to work and leave voluntarily within the timeframe that they took leave, the employee will be required to repay the paid parental leave to the company.
 

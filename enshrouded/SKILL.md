@@ -49,12 +49,14 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 
 **Method A: Using GitHub CLI (Recommended)**
 
-1. Install GitHub CLI from https://cli.github.com/ if not already installed
+1. Install GitHub CLI from <https://cli.github.com/> if not already installed
 2. Open PowerShell and run:
+
    ```powershell
    gh auth login
    gh run download 20083688075 --repo Brabb3l/kfc-parser
    ```
+
 3. Files will be downloaded to subdirectories - extract the actual files:
    - `dbghelp.dll` (10.60 MB)
    - `dinput8.dll` (10.46 MB)
@@ -63,9 +65,9 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 
 **Method B: Manual Download from GitHub**
 
-1. **Create a free GitHub account** at https://github.com (required to download artifacts)
+1. **Create a free GitHub account** at <https://github.com> (required to download artifacts)
 2. **Log into GitHub**
-3. Navigate to: https://github.com/Brabb3l/kfc-parser/actions/workflows/build_release.yml
+3. Navigate to: <https://github.com/Brabb3l/kfc-parser/actions/workflows/build_release.yml>
 4. Click on the **topmost successful run** (green checkmark icon)
 5. Scroll to the **bottom** of the run page to find the "Artifacts" section
 6. Click each artifact name to download
@@ -73,13 +75,14 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 
 **Install to Enshrouded:**
 
-7. Find your Enshrouded installation folder:
+1. Find your Enshrouded installation folder:
    - **Steam**: Usually `C:\Program Files (x86)\Steam\steamapps\common\Enshrouded\`
    - Right-click game in Steam → Manage → Browse local files
-8. **IMPORTANT**: Backup `enshrouded.kfc` (copy it somewhere safe)
+2. **IMPORTANT**: Backup `enshrouded.kfc` (copy it somewhere safe)
    - If using Steam, you can skip this (Steam will verify files if needed)
-9. Copy all 4 downloaded files directly into the Enshrouded root folder (where `enshrouded.exe` is located)
-10. Verify files are in the right place:
+3. Copy all 4 downloaded files directly into the Enshrouded root folder (where `enshrouded.exe` is located)
+4. Verify files are in the right place:
+
     ```
     Enshrouded/
     ├── enshrouded.exe
@@ -97,6 +100,7 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 2. Create a `mods` folder in your Enshrouded directory if it doesn't exist
 3. Extract the mod's contents into `Enshrouded/mods/`
 4. Each mod should have its own subfolder with this structure:
+
    ```
    Enshrouded/mods/
    └── buildZonePlus/
@@ -104,6 +108,7 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
        └── src/
            └── mod.lua
    ```
+
 5. Repeat for each module you want to install (the Immersive Embervale mod has multiple modules like `craftingPlus`, `inventoryPlus`, etc.)
 
 ### Step 3: Launch and Verify

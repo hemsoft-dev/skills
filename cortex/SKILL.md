@@ -1,6 +1,6 @@
 ---
 name: cortex
-description: V1.2 - Expert in Cortex Internal Developer Portal setup, MCP server configuration, GitOps workflows, entity management, and direct API operations. Now with corrected Teams API vs Catalog API guidance.
+description: V1.3 - Expert in Cortex Internal Developer Portal setup, MCP server configuration, GitOps workflows, entity management, and direct API operations. Includes dual-repository setup (Bitbucket/GitHub) and team deletion endpoints.
 ---
 
 # Cortex Internal Developer Portal
@@ -13,7 +13,25 @@ Expert guidance for Cortex IDP operations, MCP setup, entity management, and dir
 - **Teams UI**: <https://app.getcortexapp.com/admin/catalogs/teams>
 - **API Documentation**: <https://docs.cortex.io/>
 - **API Base**: <https://api.getcortexapp.com/api/v1>
-- **GitOps Repository**: <https://bitbucket.org/relias/cortex-gitops/src/main/> (team changes and entity management)
+
+### GitOps Repositories
+
+**IMPORTANT**: Relias has TWO separate cortex-gitops repositories:
+
+1. **Bitbucket Repository** (Primary for team management)
+   - URL: <https://bitbucket.org/relias/cortex-gitops/src/main/>
+   - Local path: `d:\bitbucket\cortex-gitops`
+   - Purpose: Team definitions and service entity management
+   - Team files: `.cortex/teams/*.yaml`
+   - Pull requests: Numbered independently from GitHub
+
+2. **GitHub Repository** (Migrated services)
+   - URL: <https://github.com/relias-engineering/cortex-gitops>
+   - Local path: `D:\github\relias\cortex-gitops`
+   - Purpose: Services migrated from Bitbucket to GitHub
+   - Note: Different PR numbering scheme
+
+**When working with teams**: Always use the Bitbucket repository at `d:\bitbucket\cortex-gitops`
 
 ## Key Learnings & Best Practices
 
@@ -51,13 +69,20 @@ Expert guidance for Cortex IDP operations, MCP setup, entity management, and dir
 
 ### GitOps Workflow Known Issues
 
-**Active Issue (Ticket 12171 - Reopened Jan 6, 2026)**:
+**Active Issue (Ticket 12171 - Reopened Jan 6, 2026, Still Active Jan 12, 2026)**:
 
 - Team YAML file changes in `.cortex/teams/*.yaml` not syncing to Cortex portal
 - Service changes process correctly
 - Team changes marked as "Filtered out" during event processing
 - **Workaround**: Use direct API calls to update team members until resolved
 - **Impact**: Cannot rely on GitOps for team updates - manual API calls required
+
+**Successful Workarounds (Jan 12, 2026)**:
+
+- Created new team "Globally Scoped" via `New-CortexTeam.ps1` script (PR 107)
+- Deleted "Byte Wizards" team via DELETE API endpoint
+- Updated "The Async Operators" and "TNT" teams by removing members via PUT endpoint
+- All operations successful - API is reliable for team management
 
 ### MCP Server Configuration
 
@@ -560,6 +585,14 @@ Engineering team members, bypassing GitOps workflow entirely. Successfully remov
 Sagar Thakore, added back Bryan Halterman and Nick Peterson using
 `PUT /api/v1/teams/productivity-engineering/members` endpoint.
 
+**Workaround Applied (Jan 12, 2026)**: PR 107 team restructuring applied via API:
+
+- Created new "Globally Scoped" team with 8 members using `New-CortexTeam.ps1`
+- Deleted "Byte Wizards" team using DELETE endpoint
+- Updated "The Async Operators" (removed 1 member) using PUT endpoint
+- Updated "TNT" (removed 6 members) using PUT endpoint
+- All operations successful, confirming API is reliable for team management
+
 ## Lessons Learned (Jan 6, 2026 Session)
 
 ### What Worked Well
@@ -734,6 +767,17 @@ Special batch script for Productivity Engineering team member roles. Uses intern
 ```
 
 **Note**: This is hardcoded for the Productivity Engineering team. Use `Update-TeamMember.ps1` for other teams.
+
+### Team Deletion
+
+Teams can be deleted via the DELETE API endpoint:
+
+```powershell
+$headers = @{ "Authorization" = "Bearer $env:CORTEX_API_KEY" }
+Invoke-RestMethod -Uri "https://api.getcortexapp.com/api/v1/teams/{team-tag}" -Headers $headers -Method Delete
+```
+
+**Example**: Successfully deleted "Byte Wizards" team (Jan 12, 2026) as part of PR 107 team restructuring.
 
 ## Resources
 

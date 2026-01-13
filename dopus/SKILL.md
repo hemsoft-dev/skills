@@ -50,17 +50,20 @@ DOpus uses its own command language for buttons and hotkeys:
 ### Example Button Definitions
 
 **Open PowerShell Here**:
+
 ```
 @runmode hide
 PowerShell.exe -NoExit -Command "Set-Location '{sourcepath}'"
 ```
 
 **Copy Full Path to Clipboard**:
+
 ```
 Clipboard COPYNAMES=path
 ```
 
 **Batch Rename**:
+
 ```
 Rename PRESET="MyPreset"
 ```
@@ -95,6 +98,7 @@ Folder formats control how folders are displayed (columns, view mode, sorting).
 Access: `Settings > Preferences > Folders > Folder Formats`
 
 Formats can be saved and applied automatically based on:
+
 - Path matching
 - Content type detection
 - Folder type
@@ -106,6 +110,7 @@ Virtual folders that can contain files from multiple locations.
 Create: `File > New > File Collection`
 
 Useful for:
+
 - Organizing files across different folders
 - Building temporary working sets
 - Search result management
@@ -119,6 +124,7 @@ DOpus filters control which files are affected by operations:
 - **Display Filters**: Hide/show files in listers
 
 Syntax supports:
+
 - Wildcards: `*.txt`, `photo*.jpg`
 - Regular expressions (when enabled)
 - Size/date/attribute criteria
@@ -131,6 +137,7 @@ Save: `Settings > Lister Layouts > Save Layout`
 Load: `Settings > Lister Layouts > {LayoutName}`
 
 Can be triggered via:
+
 - Startup options
 - Button commands
 - Hotkeys
@@ -142,6 +149,7 @@ Built-in file viewer with plugin support.
 Command: `Show VIEWERCMD=find` (opens viewer)
 
 Supported formats:
+
 - Images (all common formats)
 - Text files
 - Office documents (with plugins)
@@ -171,6 +179,7 @@ Recommended: Regular backups before major configuration changes
 ## When to Use This Skill
 
 Invoke this skill when:
+
 - Creating or modifying DOpus buttons and toolbars
 - Writing DOpus scripts or automation
 - Configuring folder formats and layouts

@@ -5,46 +5,47 @@
 | PAGE: 1 of 2               | DEPARTMENT: Human Resources |
 | EFFECTIVE DATE: 1/1/2025   | REVISION DATE: 12/3/2025    |
 
-## Purpose:
+## Purpose
 
 Relias' Sabbatical Leave is designed to reward long-term employees for their dedicated service to the Company, promote work-life balance, and allow employees to take time for personal growth, rest, and rejuvenation.
 
-## Scope:
+## Scope
 
 Relians who meet the eligibility requirements below, regardless of work location.
 
-## Policy Statement:
+## Policy Statement
 
 Eligible employees must meet the following criteria:
 
 - Have at least 10 years of continuous employment with Relias* in a full-time position**
 - Must be in good standing (not on corrective action of any kind) and meeting all expectations of their role.
 - May not have taken any type of leave in the previous 12 months.
-* Includes verifiable, continuous time with another Bertelsmann company
+- Includes verifiable, continuous time with another Bertelsmann company
+
 - ** At least 30 hours per week
 
-## Amount of Leave:
+## Amount of Leave
 
 Eligible employees may take up to 4 weeks (20 business days) of leave. Sabbatical leave must be taken in one continuous period and cannot be split or taken intermittently. Sabbatical is not extended by Company holidays that may occur during the course of the leave.
 
-## Pay and Benefits:
+## Pay and Benefits
 
 - During the leave period, employees will continue to receive their regular base pay.
 - Benefits will remain in place for the period of the leave.
 - Commission-earning employees are eligible for quota relief for their leave period.
 
-## Request Process:
+## Request Process
 
 - Employees should discuss with their manager and submit an LOA request form at least 3 months (and up to 6 months) prior to the desired start date of the sabbatical leave. This allows for proper planning and staffing during the leave period.
 - All requests are subject to approval by the employee's manager and HR, based on business needs, coordination with other leave types and operational requirements.
 - Once a leave is approved, employees will receive a letter from HR confirming the leave dates.
 
-## Timing:
+## Timing
 
 - Sabbaticals will typically be granted once every 10 years of employment. An employee who has taken a previous sabbatical will be eligible again at their 20-year anniversary.
 - Sabbaticals are encouraged to be taken after reaching the 10-year milestone and may be requested in anticipation of a 10-year anniversary.
 
-## Other Details:
+## Other Details
 
 - Sabbatical leave is not transferable or redeemable for cash/other benefits if not used.
 - Sabbatical leave may not be combined with any other leave type (PTO, Sick PTO, etc.) to extend the length of the leave.

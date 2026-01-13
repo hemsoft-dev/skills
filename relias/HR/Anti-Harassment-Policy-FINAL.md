@@ -20,11 +20,13 @@ Relias is committed to providing a work environment free from unlawful discrimin
 ## DEFINITIONS
 
 1. Sexual harassment: unwelcome sexual advances, requests for sexual acts or favors, or other verbal or physical conduct of a sexual nature when (i) submission or rejection of such conduct is a term or condition of employment or is a basis for employment decisions, or (ii) such conduct has the purpose or effect of unreasonably interfering with an individual's working conditions or performance by creating an intimidating, hostile, humiliating or offensive work environment. Following is a partial list of unwelcome behaviors that may be considered sexual harassment:
+
 - Verbal conduct such as racial or ethnic epithets, derogatory jokes or comments, slurs, sexual innuendo, sexually suggestive 'kidding or teasing,' jokes about gender-specific traits, unwanted sexual overtures or comments, inquiries or discussions concerning one's sexual experiences, comments on an individual's body
 - Visual conduct such as derogatory and/or sexually oriented posters, photography, cartoons, drawings or gestures;
 - Physical conduct such as unwanted touching, hugging, kissing, intentional brushing up against the body of another employee;
 - Threats or demands (quid pro quo) to submit to sexual requests as a condition of continued employment or to avoid a loss of benefits, or offers of benefits in return for sexual favors.
-2. Harassment: verbal, written or physical conduct that denigrates or shows hostility or aversion toward an individual because of one's race, color, religion, sex, sexual orientation, gender identity or expression, national origin, age, disability, marital status, citizenship, genetic information, or any other characteristic protected by law, or that one's relatives, friends or associates, and that: a) has the purpose or effect of creating an intimidating, hostile or offensive work environment, b) has the purpose or effect of unreasonably interfering with an individual's work performance, or c) otherwise adversely affects an individual's employment opportunities. Following is a partial list of behaviors that may be considered harassment:
+1. Harassment: verbal, written or physical conduct that denigrates or shows hostility or aversion toward an individual because of one's race, color, religion, sex, sexual orientation, gender identity or expression, national origin, age, disability, marital status, citizenship, genetic information, or any other characteristic protected by law, or that one's relatives, friends or associates, and that: a) has the purpose or effect of creating an intimidating, hostile or offensive work environment, b) has the purpose or effect of unreasonably interfering with an individual's work performance, or c) otherwise adversely affects an individual's employment opportunities. Following is a partial list of behaviors that may be considered harassment:
+
 - epithets, slurs or negative stereotyping;
 - threatening, intimidating or hostile acts;
 - denigrating jokes;
@@ -35,18 +37,18 @@ Relias is committed to providing a work environment free from unlawful discrimin
 
 ## RESPONSIBILITIES
 
-## 1. Employee:
+## 1. Employee
 
 - a. Whenever possible, any person who is experiencing unwelcome conduct of the type generally described in this policy should inform the person engaging in the conduct that it is unwelcome and request that it stop. The complainant may choose to pursue this option alone, or may ask a supervisor human resources to be present or serve as an intermediary.
 - b. In any case, a person who believes that he/she has been harassed by a co-worker, supervisor, client, vendor, or business visitor, or who has witnessed such harassment, is strongly encouraged to report the facts of the incident or incidents in accordance with the reporting procedure laid out below.  All persons are urged to come forward with information about allegations of unlawful harassment.
 
-## 2.  Managers:
+## 2.  Managers
 
 - a. If you are made aware of any conduct of the type generally described in this policy from either a verbal report of witnessing the conduct, you must report the incident to HR so that it can be investigated.
 - b. If you are witness or are made aware of any retaliatory action taking place for those that have reported harassment or participated in an investigation, please promptly inform HR.
 - c. Pending the outcome of an investigation, you may be asked by HR to put temporary or more permanent accommodations into place for one or more of your direct reports.
 
-## 3.  Human Resources:
+## 3.  Human Resources
 
 - a. HR will provide consultation and guidance to managers regarding application of this policy.
 - b. HR will promptly and thoroughly conduct an object investigation of all complaints of harassment and discrimination.

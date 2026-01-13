@@ -28,7 +28,7 @@ The following criteria may be considered prior to approving a personal leave:
 - The maximum length of a personal leave is twelve (12) weeks.
 - Employees are prohibited to work while on an approved leave of absence.
 
-## Coordination with Other Policies:
+## Coordination with Other Policies
 
 - The company will maintain all benefits for employees during personal leave. For the employee's benefits to remain active, the employee is responsible for paying the Company the benefit premiums. Benefit premiums can be paid in one-lump sum at the beginning of the leave or on a bi-weekly basis per the payroll calendar. Payment can be submitted via personal check or bank wire. Failure to pay benefit premiums within 30 days may result in cancellation of benefits.
 - For employees on a compensation plan and that are on personal leave for a period of four (4) weeks or longer, the Quota Relief policy is automatically put into effect.  Coordination with Sales Operations and advanced notice is required to ensure full benefits of the Quota Relief policy are applied.
@@ -41,7 +41,7 @@ The following criteria may be considered prior to approving a personal leave:
 - The employee will provide his or her manager and HR with notice of the request for leave at least 30 days prior to the proposed date of the leave (or if the leave was not foreseeable, as soon as possible). The employee must complete the necessary HR forms and provide all documentation as required by HR to substantiate the request. For those on a compensation plan, additional documentation may be required for Quota Relief.
 - As is the case with all company policies, the organization has the exclusive right to interpret this policy.
 
-## Return to work after Personal Leave:
+## Return to work after Personal Leave
 
 - If the employee is unable to return to work at the agreed upon date or after 12 weeks, they will be considered to have voluntarily resigned from employment.
 - If the employee does not communicate that they are unable to return, they will be considered to have involuntarily resigned due to job abandonment.

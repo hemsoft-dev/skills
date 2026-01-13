@@ -39,7 +39,7 @@ benefit (i.e., short term disability), unless the annual allotment of sick leave
 -  Flexible PTO can only be taken in ½ day (4 hour) or full day (8 hour) increments.
 - o For example, hourly/non -exempt employees, if you leave early at 4pm but you are scheduled until 5:30pm, you cannot use PTO to supplement the time off.
 -  Sick PTO can be taken in increments of 2 hours to accommodate appointments, up to a full day (8 hours). 
--  Any PTO requests over two (2) consecutive weeks at a time requires pre -approval from the Executive Leadership Team member who oversees your department. Pre -approvals should be sent to hr@relias.com when the request is approved. 
+-  Any PTO requests over two (2) consecutive weeks at a time requires pre -approval from the Executive Leadership Team member who oversees your department. Pre -approvals should be sent to <hr@relias.com> when the request is approved. 
 -  This policy is intended to provide employees with the time off necessary to do their best while at work. If an employee's performance declines due to abuse of this policy, management has the right to decline future requests, if appropriate. 
 
 ## RELATED POLICIES

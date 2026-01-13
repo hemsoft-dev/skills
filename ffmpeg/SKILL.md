@@ -1,11 +1,77 @@
 ---
 name: ffmpeg
-description: V1.1 - Universal media processing toolkit for transcoding, filtering, streaming, and format conversion. Use when the user needs to manipulate audio, video, or multimedia files.
+description: V1.2 - Universal media processing toolkit with Appender workflow for concatenating video segments with smooth transitions. Use for transcoding, filtering, streaming, and format conversion.
 ---
 
 # FFmpeg
 
 FFmpeg is a universal media converter that reads, filters, and transcodes virtually any multimedia format.
+
+## Terminology
+
+- **"!" folder** - Shorthand for `D:\AI\Media\Videos\!\`
+- **"!!" folder** - Shorthand for `D:\AI\Media\Videos\!\!!`
+
+## Appender Workflow
+
+**Purpose**: Append video segments to `!! Best.mp4` with smooth transitions.
+
+**When to use**: User requests "use ffmpeg with Appender" or "append to Best.mp4"
+
+**Requirements**:
+
+- Source filename (searches in `!` folder)
+- Time range (e.g., "2:31-2:52")
+
+**Automated workflow**:
+
+1. **Backup** `!! Best.mp4` with timestamp: `Best_backup_YYYYMMDD_HHmmss.mp4`
+2. **Extract** segment from source file using `-ss` and `-to` with stream copy
+3. **Scale** segment to match Best.mp4 format:
+   - Resolution: 1280x720
+   - Frame rate: 30 fps
+   - Audio: 48000 Hz, stereo
+   - Use: `scale=1280:720:flags=lanczos,fps=30` and `-ar 48000`
+4. **Get duration** of Best.mp4 using `ffprobe`
+5. **Apply transitions**:
+   - **Try crossfade first** (xfade + acrossfade filters)
+   - **Fallback to fade effects** if crossfade fails due to timebase/format mismatches:
+     - Add 1-second fade-out to end of Best.mp4 (`st=duration-1`)
+     - Add 1-second fade-in to start of segment (`st=0`)
+     - Concatenate using concat demuxer
+6. **Replace** original Best.mp4 with new version
+7. **Cleanup** temp files (`temp_*.mp4`, `concat_list.txt`)
+8. **Log** to history
+
+**Example commands**:
+
+```powershell
+# Backup
+Copy-Item "D:\AI\Media\Videos\!\!!\Best.mp4" "D:\AI\Media\Videos\!\!!\Best_backup_$(Get-Date -Format 'yyyyMMdd_HHmmss').mp4"
+
+# Extract segment (e.g., 2:31 to 2:52)
+ffmpeg -ss 00:02:31 -i $sourceFile -to 00:00:21 -c copy temp_segment.mp4 -y
+
+# Scale to match format
+ffmpeg -i temp_segment.mp4 -vf "scale=1280:720:flags=lanczos,fps=30" -c:v libx264 -crf 23 -preset fast -c:a aac -ar 48000 temp_segment_scaled.mp4 -y
+
+# Get Best.mp4 duration
+$duration = ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 Best.mp4
+
+# Add fade transitions (fallback method)
+ffmpeg -i Best.mp4 -vf "fade=out:st=$($duration-1):d=1" -af "afade=out:st=$($duration-1):d=1" -c:v libx264 -crf 23 -preset fast -c:a aac temp_best_faded.mp4 -y
+ffmpeg -i temp_segment_scaled.mp4 -vf "fade=in:st=0:d=1" -af "afade=in:st=0:d=1" -c:v libx264 -crf 23 -preset fast -c:a aac temp_segment_faded.mp4 -y
+
+# Concatenate
+"file 'temp_best_faded.mp4'`nfile 'temp_segment_faded.mp4'" | Out-File concat_list.txt -Encoding utf8
+ffmpeg -f concat -safe 0 -i concat_list.txt -c copy Best_new.mp4 -y
+
+# Replace and cleanup
+Move-Item Best_new.mp4 Best.mp4 -Force
+Remove-Item temp_*.mp4, concat_list.txt
+```
+
+**Why crossfade often fails**: Different source videos have different timebases, frame rates, and color spaces. The fade-out/fade-in approach is more reliable as it processes each video independently before concatenation.
 
 ## ALWAYS: Log This Interaction
 
