@@ -12,6 +12,7 @@ Expert in daily journaling that integrates with Todoist to capture what you've a
 **NEVER delete or remove any diary entry files without explicit user consent.**
 
 Diary entries are valuable personal records. Before removing any `.md` files from `entries/` or `History/`:
+
 1. Always ask the user first
 2. Explain what will be deleted and why
 3. Wait for explicit approval
@@ -137,6 +138,7 @@ The today skill automatically launches 3 parallel sub-agents to gather:
 Use the slack skill to retrieve today's most interesting messages from these channels:
 
 **Monitored Channels:**
+
 - All DMs
 - #ai-chapter
 - #dev-ex-private

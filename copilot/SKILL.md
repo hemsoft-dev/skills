@@ -133,6 +133,7 @@ gh copilot alias
 | `gh` | GitHub CLI operations | "list my open pull requests" |
 
 ## Common Use Cases
+
 Available Models
 
 | Model | Use Case |
@@ -254,10 +255,13 @@ copilot -i "Debug why the API returns 500 errors" --allow-all
 copilot --additional-mcp-config @./mcp-config.json
 
 # Disable specific MCP server
+
 copilot --disable-mcp-server github-mcp-server
 
 # Disable all built-in MCPs
+
 copilot --disable-builtin-mcps
+
 ```
 
 ## Common Use Cases
@@ -315,9 +319,9 @@ copilot -p "Create script to backup database" --allow-all --silent > backup.sh
 4. **Resume sessions** - Use `--continue` to pick up where you left off in interactive mode
 5. **Share results** - Use `--share` or `--share-gist` to document outcomes
 6. **Silent mode for scripting** - Already included in copilot-free; outputs only the response
-3. **Explain before executing** - Use `explain` to understand commands before running them
-4. **Shell-out for automation** - Use `-s` flag to save commands for scripts
-5. **Learn from suggestions** - Review generated commands to improve your CLI knowledge
+7. **Explain before executing** - Use `explain` to understand commands before running them
+8. **Shell-out for automation** - Use `-s` flag to save commands for scripts
+9. **Learn from suggestions** - Review generated commands to improve your CLI knowledge
 
 ## Troubleshooting
 

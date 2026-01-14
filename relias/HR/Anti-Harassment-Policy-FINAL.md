@@ -25,6 +25,7 @@ Relias is committed to providing a work environment free from unlawful discrimin
 - Visual conduct such as derogatory and/or sexually oriented posters, photography, cartoons, drawings or gestures;
 - Physical conduct such as unwanted touching, hugging, kissing, intentional brushing up against the body of another employee;
 - Threats or demands (quid pro quo) to submit to sexual requests as a condition of continued employment or to avoid a loss of benefits, or offers of benefits in return for sexual favors.
+
 1. Harassment: verbal, written or physical conduct that denigrates or shows hostility or aversion toward an individual because of one's race, color, religion, sex, sexual orientation, gender identity or expression, national origin, age, disability, marital status, citizenship, genetic information, or any other characteristic protected by law, or that one's relatives, friends or associates, and that: a) has the purpose or effect of creating an intimidating, hostile or offensive work environment, b) has the purpose or effect of unreasonably interfering with an individual's work performance, or c) otherwise adversely affects an individual's employment opportunities. Following is a partial list of behaviors that may be considered harassment:
 
 - epithets, slurs or negative stereotyping;

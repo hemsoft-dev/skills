@@ -48,9 +48,11 @@ When you post a message to Slack:
 When gathering daily Slack highlights (e.g., for diary entries), monitor these 18 channels:
 
 **Direct Messages:**
+
 - All DMs
 
 **AI & Development:**
+
 - #ai-chapter
 - #dev-ex-private
 - #prod-eng-devex-private
@@ -59,6 +61,7 @@ When gathering daily Slack highlights (e.g., for diary entries), monitor these 1
 - #relias-cortex-external
 
 **Platform & Engineering:**
+
 - #dev-tribe
 - #next-deployment
 - #swatteam
@@ -72,6 +75,7 @@ When gathering daily Slack highlights (e.g., for diary entries), monitor these 1
 - #sonarcloud-public
 
 **Highlight Criteria:**
+
 - Important announcements and decisions
 - Technical discussions with actionable insights
 - Project updates and milestones
