@@ -1,6 +1,6 @@
 ---
 name: pr-reviewer
-description: V1.4 - Performs thorough, critical PR reviews with 3 modes: local report, PR comments, or active fix assistance.
+description: "V1.4 - Performs thorough, critical PR reviews with 3 modes: local report, PR comments, or active fix assistance."
 ---
 
 # PR Reviewer

@@ -250,6 +250,19 @@ docker-compose --version
 npm install -g @anthropic-ai/claude-code
 ```
 
+### 9.5. Gemini CLI
+
+```powershell
+# Install Gemini CLI globally (requires Node.js)
+npm install -g @google/gemini-cli
+```
+
+Verify:
+
+```powershell
+gemini --version
+```
+
 ### 10. Clone HemSoft Repos
 
 #### Skills Repository
@@ -376,6 +389,42 @@ Open source code editor and IDE.
 winget install --id SST.opencode -e --source winget
 ```
 
+### 21. GitHub Copilot CLI
+
+AI-powered coding assistant that runs directly in your terminal.
+
+```powershell
+npm install -g @github/copilot
+```
+
+**Verify installation:**
+
+```powershell
+copilot --version
+```
+
+**Features:**
+
+- Interactive AI coding sessions
+- Non-interactive prompt execution
+- Multiple AI models (Claude, GPT, Gemini)
+- Built-in MCP server support
+- Session persistence and resumption
+- Permission management for tools, paths, and URLs
+
+**Basic usage:**
+
+```powershell
+# Interactive mode
+copilot
+
+# Quick prompt
+copilot -p "Generate password validator function" --silent
+
+# With auto-approval
+copilot --allow-all
+```
+
 **Xeneon Edge 14.5" Specs:**
 
 - 2560x720 resolution (32:9 ultrawide), 60Hz, 5-point touchscreen
@@ -421,6 +470,10 @@ foreach ($app in $apps) {
 # Install Python packages
 Write-Host "Installing Python packages..." -ForegroundColor Cyan
 pip install docling
+
+# Install npm packages
+Write-Host "Installing npm packages..." -ForegroundColor Cyan
+npm install -g @github/copilot
 
 Write-Host "All apps installed!" -ForegroundColor Green
 ```

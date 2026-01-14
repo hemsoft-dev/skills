@@ -1,115 +1,49 @@
 ---
 name: diary
-description: V2.2 - Captures daily accomplishments, goals, and reflections with Todoist integration. Auto-includes weather, ALL news headlines (5-7 per category: US, World, AI), Slack highlights, and watchlist updates. Supports meeting notes creation with auto-formatted markdown files. Filters out routine tasks tagged with @Regular Chores. Structured Work/Personal/Personal Reflections format with consistent subsections. Keeps entries high-level and summarized. Queries user for missing content. Omits Work section on Saturdays; Sundays only include Work → Tomorrow's Goals.
+description: "V2.4 - Captures daily accomplishments, goals, and reflections with Todoist integration. Auto-includes weather, ALL news headlines (5-7 per category: US, World, AI), Slack highlights from 18 monitored channels, and watchlist updates. Supports meeting notes creation with auto-formatted markdown files. Filters out routine tasks tagged with @Regular Chores. Structured Work/Personal/Personal Reflections format with consistent subsections. Keeps entries high-level and summarized. Queries user for missing content. Omits Work section on Saturdays; Sundays only include Work → Tomorrow's Goals. NEVER removes files without user consent."
 ---
 
 # Diary
 
 Expert in daily journaling that integrates with Todoist to capture what you've accomplished and what your goals are. Automatically includes weather and news context from the today skill.
 
-## Entry Template
+## ⚠️ CRITICAL: File Management
 
-**REQUIRED STRUCTURE** - Every diary entry must contain all these sections:
+**NEVER delete or remove any diary entry files without explicit user consent.**
 
-```markdown
-# {Weekday}, {YYYY-MM-DD}
+Diary entries are valuable personal records. Before removing any `.md` files from `entries/` or `History/`:
+1. Always ask the user first
+2. Explain what will be deleted and why
+3. Wait for explicit approval
 
-## 🎯 Today's Highlight
+## Creating New Entries
 
-**[{Headline}]({url})**
+When creating a new diary entry:
 
-{Optional 1-2 sentence context provided by user}
+1. **Copy the template**: Use `yyyy-mm-dd.md` as the base template
+2. **Replace placeholders**: Fill in date-specific values (`{YYYY-MM-DD}`, `{Weekday}`, etc.)
+3. **Run weather script**: Execute `Get-Today.ps1` for current weather and forecast
+4. **Gather Todoist tasks**: Use `Get-TodoistCompleted.ps1` for completed tasks
+5. **Get Slack highlights**: Use the slack skill to retrieve 5 important messages
+6. **Fetch news**: Gather 5-7 headlines each for US, World, and AI news
+7. **Check watchlist**: Use watchlist skill for any updates
+8. **Save to**: `entries/{YYYY-MM-DD}.md`
 
-### 💬 Slack Highlights
+**Template location**: `~/.claude/skills/diary/yyyy-mm-dd.md`
 
-{5 bullet points of interesting/important Slack messages from today}
+## Entry Structure
 
----
+All diary entries follow the template at `yyyy-mm-dd.md`. Key sections:
 
-### 📍 {City}, {Country}
+- **Today's Highlight**: Featured news article with user context
+- **Slack Highlights**: 5 bullet points from today's messages
+- **Weather**: Current conditions and 3-day forecast (from `Get-Today.ps1`)
+- **News Headlines**: 5-7 items each for US, World, AI (last 24 hours only)
+- **Work**: Work Done, Tomorrow's Goals
+- **Personal**: Work Done, Tomorrow's Goals
+- **Personal Reflections**: Freeform thoughts
 
-| 📅 Date | 📆 Day | 🕐 Time |
-|---------|--------|---------|
-| {YYYY-MM-DD} | {Weekday} | {H:MM AM/PM} {Timezone} |
-
-### Current Weather
-
-| 🌡️ Temp | 🤔 Feels Like | {Icon} Condition | 💨 Wind | 💧 Humidity |
-|---------|---------------|------------------|---------|-------------|
-| {temp}°F | {feels}°F | {condition} | {wind} mph | {humidity}% |
-
-### 3-Day Forecast
-
-| Day | Icon | Condition | Low | High | Wind |
-|-----|------|-----------|-----|------|------|
-| {Weekday} (Today) | {icon} | {condition} | {low}°F | {high}°F | {wind} mph |
-| {Weekday} | {icon} | {condition} | {low}°F | {high}°F | {wind} mph |
-| {Weekday} | {icon} | {condition} | {low}°F | {high}°F | {wind} mph |
-
----
-
-## 📰 News Headlines ({Month Day, Year})
-
-### 🇺🇸 US News
-| # | Headline | Source |
-|---|----------|--------|
-| 1 | [Headline text](url) | Source |
-...
-
-### 🌍 World News
-| # | Headline | Source |
-|---|----------|--------|
-| 1 | [Headline text](url) | Source |
-...
-
-### 🤖 AI News
-| # | Headline | Source |
-|---|----------|--------|
-| 1 | [Headline text](url) | Source |
-...
-
----
-*News gathered at {time}. Sources checked: {count}. Items within last 24 hours only.*
-
----
-
-## 👀 Watchlist Updates
-
-{Only include items that have updates today. Skip items with no activity.}
-
----
-
-## Work
-
-### Work Done
-{Content required - query user if empty}
-
-### Tomorrow's Goals
-{Content required - query user if empty}
-
-### Reflections
-{Content required - query user if empty}
-
-## Personal
-
-### Work Done
-{Content required - query user if empty}
-
-### Tomorrow's Goals
-{Content required - query user if empty}
-
-### Reflections
-{Content required - query user if empty}
-
-## Personal Reflections
-
-{Content required - query user if empty}
-
----
-*Entry created with diary skill v{version} | todoist v{version}*
-```
-
-**CRITICAL:** If any section is empty after pulling Todoist data, explicitly ask the user:
+**CRITICAL:** If any section is empty after pulling data, explicitly ask the user:
 
 - "What's today's highlight article? (headline + URL + optional context)"
 - "Anything else for Work Done today?"
@@ -200,32 +134,44 @@ The today skill automatically launches 3 parallel sub-agents to gather:
 
 **Step 3: Gather Slack Highlights**
 
-Use the slack skill to retrieve today's most interesting messages:
+Use the slack skill to retrieve today's most interesting messages from these channels:
+
+**Monitored Channels:**
+- All DMs
+- #ai-chapter
+- #dev-ex-private
+- #prod-eng-devex-private
+- #productivity-engineering-private
+- #productivity-engineering-public
+- #relias-cortex-external
+- #dev-tribe
+- #next-deployment
+- #swatteam
+- #systems-mangement
+- #architecture
+- #dev-env-help
+- #platform
+- #product-engineering
+- #relias-engineering
+- #software-quality
+- #sonarcloud-public
+
+**Method:**
+Use `Get-SlackChannelMessages.ps1` to check recent messages (10-15 per channel):
 
 ```powershell
-# Search for today's messages (excluding your own noise)
-$today = Get-Date -Format "yyyy-MM-dd"
-$query = "after:$today -from:me"
-$encodedQuery = [System.Web.HttpUtility]::UrlEncode($query)
-$headers = @{ "Authorization" = "Bearer $env:SLACK_TOKEN" }
-$results = Invoke-RestMethod -Uri "https://slack.com/api/search.messages?query=$encodedQuery&count=50" -Headers $headers
-
-# Filter and compile 5 interesting highlights:
-# - Important announcements
-# - Team updates or decisions
-# - Interesting technical discussions
-# - Mentions of you (@fhemmer)
-# - Project updates
-# Format as bullet points with channel context and brief summary
+# Example: Check dev-tribe for today's messages
+& "$env:USERPROFILE\.claude\skills\slack\scripts\Get-SlackChannelMessages.ps1" -Channel "dev-tribe" -Count 10 -MaxThreadReplies 0
 ```
 
 **Slack Highlight Criteria:**
 
 - Exclude routine/low-value messages (bot notifications, simple acks)
 - Prioritize: decisions made, action items, important announcements
-- Include channel name for context: `- **#channel-name**: Brief summary of message`
+- Include channel name for context: `- **[#channel-name](link)**: Brief summary of message`
 - Aim for 5 highlights; if fewer than 5 interesting items, that's fine
 - Focus on messages that would be useful to remember later
+- Include direct links to messages when available
 
 **Step 4: Check Watchlist for Updates**
 

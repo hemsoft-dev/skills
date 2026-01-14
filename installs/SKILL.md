@@ -47,6 +47,7 @@ See [INSTALLS.md](INSTALLS.md) for full installation instructions.
 - [ ] Bun installed
 - [ ] VS Code Insiders installed with settings restored
 - [ ] Claude Code installed (`claude --version`)
+- [ ] Gemini CLI installed (`gemini --version`)
 - [ ] Skills copied to `~/.claude/skills/`
 - [ ] Agents copied to VSCode Insiders global agents
 - [ ] Obsidian installed and vault configured
@@ -78,6 +79,7 @@ See [INSTALLS.md](INSTALLS.md) for full installation instructions.
 - [ ] docling installed (document processing and parsing)
 - [ ] Ollama installed (local LLM runtime)
 - [ ] OpenCode installed
+- [ ] GitHub Copilot CLI installed (`copilot --version`)
 
 ## Install Tracking
 
@@ -109,6 +111,7 @@ See [INSTALLS.md](INSTALLS.md) for full installation instructions.
 - [x] Git configured with name/email
 - [x] GitHub CLI authenticated to HemSoft
 - [x] Claude Code installed
+- [x] Gemini CLI installed (v0.23.0)
 - [x] Skills copied to `~/.claude/skills/`
 - [ ] Agents copied to VSCode Insiders global agents
 - [x] Obsidian installed and vault configured
@@ -126,6 +129,7 @@ See [INSTALLS.md](INSTALLS.md) for full installation instructions.
 - [x] Ollama installed (local LLM runtime)
 - [ ] docling installed (document processing and parsing)
 - [ ] OpenCode installed
+- [x] GitHub Copilot CLI installed (v0.0.381)
 
 ## Hotkey Reference (AutoHotkey)
 

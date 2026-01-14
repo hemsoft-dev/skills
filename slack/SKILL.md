@@ -1,7 +1,7 @@
 ---
 name: slack
-description: V2.1 - Full-featured Slack Web API with beautiful Block Kit formatting, comprehensive scopes for messaging,
-  channels, files, reactions, DMs, reminders, bookmarks, AI Agent capabilities, daily briefing script, and isolated temp
+description: V2.2 - Full-featured Slack Web API with beautiful Block Kit formatting, comprehensive scopes for messaging,
+  channels, files, reactions, DMs, reminders, bookmarks, AI Agent capabilities, daily briefing with 18 monitored channels, and isolated temp
   folder for downloads. Includes block-kit-templates.md with ready-to-use message templates.
 ---
 
@@ -42,6 +42,43 @@ When you post a message to Slack:
 |------|---------|
 | [block-kit-templates.md](block-kit-templates.md) | **Ready-to-use templates** for deployments, alerts, reports, PR reviews, announcements |
 | [scripts/](scripts/) | PowerShell scripts for common operations |
+
+## 📢 Monitored Channels for Daily Highlights
+
+When gathering daily Slack highlights (e.g., for diary entries), monitor these 18 channels:
+
+**Direct Messages:**
+- All DMs
+
+**AI & Development:**
+- #ai-chapter
+- #dev-ex-private
+- #prod-eng-devex-private
+- #productivity-engineering-private
+- #productivity-engineering-public
+- #relias-cortex-external
+
+**Platform & Engineering:**
+- #dev-tribe
+- #next-deployment
+- #swatteam
+- #systems-mangement
+- #architecture
+- #dev-env-help
+- #platform
+- #product-engineering
+- #relias-engineering
+- #software-quality
+- #sonarcloud-public
+
+**Highlight Criteria:**
+- Important announcements and decisions
+- Technical discussions with actionable insights
+- Project updates and milestones
+- Mentions of @fhemmer
+- Exclude: Bot notifications, simple acks, routine alerts
+
+---
 
 ## 🎨 REQUIRED: Beautiful Message Formatting
 
