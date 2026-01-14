@@ -1,6 +1,6 @@
 ---
 name: github
-description: V1.8 - GitHub API operations including billing, usage statistics, Copilot metrics, SSH keys, releases/tags, and account management for personal and organization accounts.
+description: V1.9 - GitHub API operations including billing, usage statistics, Copilot metrics, SSH keys, releases/tags, account management, and unified PR checking for GitHub/Bitbucket via CLI Tools.
 ---
 
 # GitHub API Skill
@@ -75,7 +75,8 @@ When a user has BOTH Pro+ personal AND Business org seat:
 - **Personal quota**: Tracks requests made under personal context (1,500 req/mo)
 - **Org quota**: Tracks requests made in org repos/context (300 req/seat/mo)
 - These are **separate quotas** - HemSoft can use 1,500 personal + share 600 org (total 2,100)
-- **Context-Based Billing**: Copilot automatically uses the Org quota when working in an Org repo, and the Personal quota otherwise.
+- **Context-Based Billing**: Copilot automatically uses the Org quota when working in an Org repo, and the
+  Personal quota otherwise.
 
 ## Primary Repos (fhemmer org)
 
@@ -92,6 +93,48 @@ Run the script to get current billing for all accounts:
 Options: -Account personal1|personal2|work|all
 
 ## Pull Requests Check
+
+### Quick Check (CLI Tools Repository)
+
+Check PRs across GitHub and Bitbucket with interactive features:
+
+    & "D:\github\HemSoft\cli-tools\scripts\check-my-prs.ps1"
+
+**Options:**
+
+- `-Once` - Run once and exit (default is continuous watch mode)
+- `-ApprovedAndOpen` - Show only PRs you approved that are still open
+- `-ApprovedAndMergedSince [date]` - Show PRs you approved merged since a date
+- `-Interactive` - Enable interactive PR browser (press I to browse, Enter to open)
+- `-SkipBitbucket` - Check GitHub only
+- `-GitHubOrg [org]` - GitHub org to check (default: relias-engineering)
+- `-BitbucketWorkspace [ws]` - Bitbucket workspace (default: relias)
+- `-Watch [minutes]` - Refresh interval in watch mode (default: 15)
+
+**Examples:**
+
+```powershell
+# Run once (default)
+& "D:\github\HemSoft\cli-tools\scripts\check-my-prs.ps1" -Once
+
+# Watch mode (continuous, refresh every 5 minutes)
+& "D:\github\HemSoft\cli-tools\scripts\check-my-prs.ps1" -Watch 5
+
+# Check only approved PRs still open
+& "D:\github\HemSoft\cli-tools\scripts\check-my-prs.ps1" -ApprovedAndOpen -Once
+
+# GitHub only (skip Bitbucket)
+& "D:\github\HemSoft\cli-tools\scripts\check-my-prs.ps1" -SkipBitbucket -Once
+```
+
+**Requirements:**
+
+- `gh` CLI installed and authenticated
+- `BITBUCKET_API_KEY` and `BITBUCKET_USERNAME` environment variables (for Bitbucket checks)
+
+---
+
+### Legacy Check (Skills Repository)
 
 Check for open PRs you created and PRs awaiting your review:
 
@@ -173,7 +216,8 @@ gh release create v1.0.0 --title "Project v1.0.0" --notes "Release notes here" p
 
 ### Updating a Release (Moving Tag to New Commit)
 
-**CRITICAL**: Tags and releases are linked by name. If you delete and recreate a tag, the release becomes **orphaned** and points to a non-existent tag (`untagged-XXXXX`).
+**CRITICAL**: Tags and releases are linked by name. If you delete and recreate a tag, the release becomes
+**orphaned** and points to a non-existent tag (`untagged-XXXXX`).
 
 **Correct workflow to update a release:**
 
