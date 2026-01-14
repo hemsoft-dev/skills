@@ -23,24 +23,24 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 
 ## Franz's GitHub Accounts
 
-| Account | Type | Email | Username | Plan |
-|---------|------|-------|----------|------|
-| Personal #1 | HemSoft | <franz_hemmer@hotmail.com> | HemSoft | Copilot Pro+ (1500 req/mo) + Business (fhemmer org) |
-| Personal #2 | franzhemmer | <fphemmer@gmail.com> | franzhemmer | Copilot Business (fhemmer org) |
-| Work #1 | Relias | <fhemmer@relias.com> | fhemmerrelias | Copilot Pro+ (1500 req/mo) |
+| Account     | Type        | Email                      | Username      | Plan                                                  |
+|-------------|-------------|----------------------------|---------------|-------------------------------------------------------|
+| Personal #1 | HemSoft     | <franz_hemmer@hotmail.com> | HemSoft       | Copilot Pro+ (1500 req/mo) + Business (fhemmer org)   |
+| Personal #2 | franzhemmer | <fphemmer@gmail.com>       | franzhemmer   | Copilot Business (fhemmer org)                        |
+| Work #1     | Relias      | <fhemmer@relias.com>       | fhemmerrelias | Copilot Pro+ (1500 req/mo)                            |
 
 ## Franz's Organizations
 
-| Organization | Owner(s) | Enterprise | URL |
-|--------------|----------|------------|-----|
-| fhemmer (HemSoft Developments) | Personal #1, Personal #2 | hemsoft-corp | <https://github.com/fhemmer> |
-| Relias Engineering (Relias LLC) | Work #1 | — | <https://github.com/relias-engineering> |
+| Organization                    | Owner(s)                 | Enterprise   | URL                                       |
+|---------------------------------|--------------------------|--------------|-------------------------------------------|
+| fhemmer (HemSoft Developments)  | Personal #1, Personal #2 | hemsoft-corp | <https://github.com/fhemmer>              |
+| Relias Engineering (Relias LLC) | Work #1                  | —            | <https://github.com/relias-engineering>   |
 
 ## Franz's Enterprises
 
-| Enterprise | Slug | Licenses | Admins | Orgs |
-|------------|------|----------|--------|------|
-| HemSoft Corp | hemsoft-corp | 50 | HemSoft, franzhemmer | fhemmer |
+| Enterprise   | Slug         | Licenses | Admins               | Orgs    |
+|--------------|--------------|----------|----------------------|---------|
+| HemSoft Corp | hemsoft-corp | 50       | HemSoft, franzhemmer | fhemmer |
 
 **Enterprise URL**: <https://github.com/enterprises/hemsoft-corp>
 
@@ -80,15 +80,17 @@ When a user has BOTH Pro+ personal AND Business org seat:
 
 ## Primary Repos (fhemmer org)
 
-| Repo | Description | SSH Clone |
-|------|-------------|-----------|
-| dashboard | Personal dashboard app (Next.js/Supabase) | `git@github-personal1:fhemmer/dashboard.git` |
+| Repo      | Description                              | SSH Clone                                         |
+|-----------|------------------------------------------|---------------------------------------------------|
+| dashboard | Personal dashboard app (Next.js/Supabase)| `git@github-personal1:fhemmer/dashboard.git`      |
 
 ## Usage Check
 
 Run the script to get current billing for all accounts:
 
-    & "c:\Users\User\.claude\skills\github\scripts\Get-MyCopilotUsage.ps1"
+```powershell
+& "c:\Users\User\.claude\skills\github\scripts\Get-MyCopilotUsage.ps1"
+```
 
 Options: -Account personal1|personal2|work|all
 
@@ -98,7 +100,9 @@ Options: -Account personal1|personal2|work|all
 
 Check PRs across GitHub and Bitbucket with interactive features:
 
-    & "D:\github\HemSoft\cli-tools\scripts\check-my-prs.ps1"
+```powershell
+& "D:\github\HemSoft\cli-tools\scripts\check-my-prs.ps1" -Once
+```
 
 **Options:**
 
@@ -138,7 +142,9 @@ Check PRs across GitHub and Bitbucket with interactive features:
 
 Check for open PRs you created and PRs awaiting your review:
 
-    & "c:\Users\User\.claude\skills\github\scripts\Get-MyPRs.ps1"
+```powershell
+& "c:\Users\User\.claude\skills\github\scripts\Get-MyPRs.ps1"
+```
 
 ### Required Token Scopes
 
@@ -150,17 +156,17 @@ gh auth refresh -h github.com -s read:enterprise,manage_billing:enterprise,read:
 
 ## SSH Keys (Home PC 2026)
 
-| Account | Host Alias | Key File |
-|---------|------------|----------|
-| Personal #1 | github-personal1 | ~/.ssh/id_ed25519_github_home2026_personal1 |
-| Personal #2 | github-personal2 | ~/.ssh/id_ed25519_github_home2026_personal2 |
-| Work #1 | github-work1 | ~/.ssh/id_ed25519_github_home2026_work1 |
+| Account     | Host Alias       | Key File                                        |
+|-------------|------------------|-------------------------------------------------|
+| Personal #1 | github-personal1 | ~/.ssh/id_ed25519_github_home2026_personal1     |
+| Personal #2 | github-personal2 | ~/.ssh/id_ed25519_github_home2026_personal2     |
+| Work #1     | github-work1     | ~/.ssh/id_ed25519_github_home2026_work1         |
 
 SSH config location: `~/.ssh/config`
 
 ### SSH Config Content
 
-```
+```text
 # HemSoft (Personal #1) - franz_hemmer@hotmail.com / HemSoft
 Host github-personal1
     HostName github.com
@@ -257,8 +263,8 @@ git tag -l
 
 ### Common Pitfalls
 
-| Problem | Cause | Solution |
-|---------|-------|----------|
-| Release shows "untagged-XXXXX" | Tag deleted but release not recreated | Delete release with `gh release delete`, recreate both tag and release |
-| Release shows "Draft" | Release not published | Edit on GitHub or recreate without `--draft` flag |
-| Asset missing from release | Forgot to attach file | `gh release upload v1.0.0 path/to/file.zip` |
+| Problem                         | Cause                                 | Solution                                                                     |
+|---------------------------------|---------------------------------------|------------------------------------------------------------------------------|
+| Release shows "untagged-XXXXX" | Tag deleted but release not recreated | Delete release with `gh release delete`, recreate both tag and release      |
+| Release shows "Draft"           | Release not published                 | Edit on GitHub or recreate without `--draft` flag                           |
+| Asset missing from release      | Forgot to attach file                 | `gh release upload v1.0.0 path/to/file.zip`                                 |
