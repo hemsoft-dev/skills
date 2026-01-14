@@ -1,5 +1,3 @@
-$InformationPreference = 'Continue'
-
 #!/usr/bin/env pwsh
 <#
 .SYNOPSIS
@@ -11,6 +9,8 @@ $InformationPreference = 'Continue'
 #>
 
 param()
+
+$InformationPreference = 'Continue'
 
 # Check for API key
 if (-not $env:OPENROUTER_API_KEY) {
