@@ -33,6 +33,39 @@ scoop install cloc ffmpeg
 ```powershell
 # docling - Document processing and parsing for gen AI
 pip install docling
+
+# uv - Fast Python package manager (recommended for LangFlow)
+pipx install uv
+```
+
+### Install LangFlow (venv-based)
+
+LangFlow requires a dedicated virtual environment due to its large dependency tree (591 packages).
+
+```powershell
+# Create dedicated directory and venv
+$langflowDir = "$env:USERPROFILE\.langflow"
+New-Item -ItemType Directory -Path $langflowDir -Force | Out-Null
+Set-Location $langflowDir
+uv venv .venv --python 3.12
+
+# Activate and install
+.\.venv\Scripts\Activate.ps1
+uv pip install langflow -U
+deactivate
+```
+
+**Run LangFlow:**
+
+```powershell
+# Option 1: Use the launcher script
+& "$env:USERPROFILE\.langflow\Start-LangFlow.ps1"
+
+# Option 2: Manual activation
+Set-Location "$env:USERPROFILE\.langflow"
+.\.venv\Scripts\Activate.ps1
+langflow run
+# Opens at http://127.0.0.1:7860
 ```
 
 **Installed fonts:**
@@ -234,13 +267,62 @@ dotnet --version
 winget install --id Docker.DockerDesktop -e --source winget
 ```
 
-**Note:** Requires Windows Subsystem for Linux 2 (WSL2). Docker Desktop will prompt to install/enable WSL2 if not already configured.
+**Note:** Requires Windows Subsystem for Linux 2 (WSL2). Docker Desktop will prompt to
+install/enable WSL2 if not already configured.
 
 Verify (after restart):
 
 ```powershell
 docker --version
 docker-compose --version
+```
+
+#### Neo4j (Docker)
+
+Run Neo4j graph database in a local Docker container.
+
+```powershell
+# Pull Neo4j image
+docker pull neo4j:latest
+
+# Run Neo4j container
+docker run -d `
+  --name neo4j `
+  -p 7474:7474 -p 7687:7687 `
+  -e NEO4J_AUTH=neo4j/password `
+  -v neo4j_data:/data `
+  -v neo4j_logs:/logs `
+  neo4j:latest
+```
+
+**Access Neo4j Browser:**
+
+- URL: <http://localhost:7474>
+- Username: `neo4j`
+- Password: `password` (change on first login)
+
+**Connection details:**
+
+- Bolt protocol: `bolt://localhost:7687`
+- HTTP: `http://localhost:7474`
+
+**Useful commands:**
+
+```powershell
+# Stop Neo4j
+docker stop neo4j
+
+# Start Neo4j
+docker start neo4j
+
+# View logs
+docker logs neo4j
+
+# Remove container (preserves data volume)
+docker rm neo4j
+
+# Remove data volume (WARNING: deletes all data)
+docker volume rm neo4j_data neo4j_logs
 ```
 
 ### 9. Claude Code
@@ -470,6 +552,18 @@ foreach ($app in $apps) {
 # Install Python packages
 Write-Host "Installing Python packages..." -ForegroundColor Cyan
 pip install docling
+pipx install uv
+
+# Install LangFlow in dedicated venv
+Write-Host "Installing LangFlow..." -ForegroundColor Cyan
+$langflowDir = "$env:USERPROFILE\.langflow"
+New-Item -ItemType Directory -Path $langflowDir -Force | Out-Null
+Push-Location $langflowDir
+uv venv .venv --python 3.12
+.\.venv\Scripts\Activate.ps1
+uv pip install langflow -U
+deactivate
+Pop-Location
 
 # Install npm packages
 Write-Host "Installing npm packages..." -ForegroundColor Cyan

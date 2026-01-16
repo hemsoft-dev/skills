@@ -66,6 +66,7 @@ See [INSTALLS.md](INSTALLS.md) for full installation instructions.
 - [ ] .NET SDK installed
 - [ ] Python 3.12 installed
 - [ ] Docker Desktop installed
+- [ ] Neo4j running in Docker (<http://localhost:7474>)
 - [ ] edge-tts installed (TTS for AutoHotkey)
 - [ ] Goose CLI installed (AI agent)
 - [ ] VLC media player installed
@@ -80,6 +81,8 @@ See [INSTALLS.md](INSTALLS.md) for full installation instructions.
 - [ ] Ollama installed (local LLM runtime)
 - [ ] OpenCode installed
 - [ ] GitHub Copilot CLI installed (`copilot --version`)
+- [ ] uv installed (fast Python package manager)
+- [ ] LangFlow installed (AI workflow builder, venv at ~/.langflow)
 
 ## Install Tracking
 
@@ -123,6 +126,7 @@ See [INSTALLS.md](INSTALLS.md) for full installation instructions.
 - [x] Wispr Flow installed and configured
 - [x] Directory Opus installed and licensed
 - [x] Python 3.12 installed
+- [ ] Neo4j running in Docker (<http://localhost:7474>)
 - [x] edge-tts installed
 - [x] ffmpeg installed
 - [x] Goose CLI installed (v1.18.0, GitHub Copilot provider)
@@ -130,11 +134,13 @@ See [INSTALLS.md](INSTALLS.md) for full installation instructions.
 - [ ] docling installed (document processing and parsing)
 - [ ] OpenCode installed
 - [x] GitHub Copilot CLI installed (v0.0.381)
+- [x] uv installed (v0.9.26, via pipx)
+- [x] LangFlow installed (v1.7.2, venv at ~/.langflow)
 
 ## Hotkey Reference (AutoHotkey)
 
-| Hotkey | Action |
-|--------|--------|
+| Hotkey             | Action                         |
+|--------------------|--------------------------------|
 | `Ctrl+Shift+E` | Edit AutoHotkey script |
 | `Ctrl+Shift+R` | Reload AutoHotkey script |
 | `Ctrl+Shift+G` | Activate/Launch ChatGPT |
