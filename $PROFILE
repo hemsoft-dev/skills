@@ -16,3 +16,9 @@ function opencode-ask { opencode run -m "openrouter/anthropic/claude-3.5-haiku" 
 ##---------------------------------------
 # Uses GPT-5 Mini (free tier) with all permissions auto-approved (silent output)
 function copilot-free { copilot --allow-all --model gpt-5-mini --silent --prompt $args }
+
+##---------------------------------------
+## Check My PRs: cmpr
+##---------------------------------------
+# Executes HemSoft CLI Tools PR checker
+function cmpr { & "D:\github\HemSoft\cli-tools\scriopts\check-my-prs.ps1" $args }

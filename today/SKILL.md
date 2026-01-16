@@ -1,6 +1,6 @@
 ---
 name: today
-description: V1.1 - Displays highlighted news, current date/time, weather conditions, and 3-day forecast with news headlines.
+description: V1.2 - Displays highlighted news, current date/time, weather conditions, and 3-day forecast with news headlines. Uses web search (not playwright) for news gathering.
 ---
 
 # Today
@@ -64,7 +64,8 @@ REQUIREMENTS:
 2. Return exactly 5-7 of the most significant stories
 3. Verify each story's date before including - REJECT anything older than 24 hours
 4. No duplicates - if same story appears on multiple sources, pick the best one
-5. Use fetch_webpage tool to check each source's homepage or news section
+5. **ALWAYS use fetch_webpage tool or web search for news gathering** - NEVER use playwright
+6. If a tool is unavailable, skip to the next news source
 
 OUTPUT FORMAT (return EXACTLY this format, no other text):
 | # | Headline | Source | Link |

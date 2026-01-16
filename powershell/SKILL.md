@@ -1,6 +1,6 @@
 ---
 name: powershell
-description: V1.2 - Expert in PowerShell scripting, PSScriptAnalyzer linting, Write-Information ANSI codes, profile management, PATH optimization, environment variables, and troubleshooting on Windows.
+description: V1.3 - Expert in PowerShell scripting, PSScriptAnalyzer linting, Write-Information ANSI codes, profile management, PATH optimization, environment variables, and troubleshooting on Windows.
 ---
 
 # PowerShell Expert
@@ -554,9 +554,32 @@ if ($results) {
 - Example: `function ci { & code-insiders @args }` instead of adding VSCode Insiders bin to PATH
 - Only add to PATH when the tool requires it (e.g., multiple sub-commands, DLL dependencies)
 
-### ⚠️ NEVER: Source Profile in VSCode
+### ⚠️ CRITICAL: NEVER Source Profile - It Freezes Terminals
 
-**NEVER run `. $PROFILE` in VSCode or VSCode Insiders** - it hangs indefinitely. After profile changes, ask the user to reload/restart their terminal instead.
+**NEVER EVER run `. $PROFILE` in ANY terminal** - it freezes/hangs indefinitely and the terminal must be killed.
+
+**After profile changes:**
+- Tell the user to **restart their terminal** or open a new one
+- DO NOT attempt to reload the profile programmatically
+- DO NOT suggest `. $PROFILE` to the user
+
+### ⚠️ CRITICAL: User's Actual Profile Location
+
+**The user's actual PowerShell profile is:**
+```
+D:\OneDrive\Documents\PowerShell\Microsoft.PowerShell_profile.ps1
+```
+
+**NOT** the `$PROFILE` file in the `.claude\skills` directory - that's a reference/backup file.
+
+**To modify the user's profile:**
+```powershell
+# Append to actual profile
+Add-Content -Path "D:\OneDrive\Documents\PowerShell\Microsoft.PowerShell_profile.ps1" -Value "function myFunc { ... }"
+
+# Or use $PROFILE variable (it resolves to the correct path)
+Add-Content -Path $PROFILE -Value "function myFunc { ... }"
+```
 
 ### Profile Locations
 

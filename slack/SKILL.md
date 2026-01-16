@@ -1,13 +1,20 @@
 ---
 name: slack
-description: V2.2 - Full-featured Slack Web API with beautiful Block Kit formatting, comprehensive scopes for messaging,
-  channels, files, reactions, DMs, reminders, bookmarks, AI Agent capabilities, daily briefing with 18 monitored channels, and isolated temp
-  folder for downloads. Includes block-kit-templates.md with ready-to-use message templates.
+description: V2.3 - Slack Web API for messaging, channels, search, and files. Primary entry point with links to specialized sub-skills for search, files, and advanced features.
+compatibility: Requires SLACK_TOKEN and SLACK_USER_TOKEN environment variables, PowerShell, network access
 ---
 
 # Slack Web API
 
-Expert guidance for Slack API operations including messaging, channel management, user interactions, files, reactions, reminders, bookmarks, and AI Agent capabilities via PowerShell scripts.
+**Primary entry point** for Slack API operations. For specialized functionality, see the sub-skills below.
+
+## 📋 Sub-Skills
+
+| Skill | Purpose |
+|-------|---------|
+| **[slack-search](../slack-search/SKILL.md)** | Message search, channel discovery, user lookup |
+| **[slack-files](../slack-files/SKILL.md)** | File uploads, downloads, temp folder management |
+| **[slack-advanced](../slack-advanced/SKILL.md)** | Reminders, bookmarks, pins, DMs, reactions, AI Agent |
 
 ---
 
@@ -36,188 +43,6 @@ When you post a message to Slack:
 
 ---
 
-## 📁 Companion Files in This Skill
-
-| File | Purpose |
-|------|---------|
-| [block-kit-templates.md](block-kit-templates.md) | **Ready-to-use templates** for deployments, alerts, reports, PR reviews, announcements |
-| [scripts/](scripts/) | PowerShell scripts for common operations |
-
-## 📢 Monitored Channels for Daily Highlights
-
-When gathering daily Slack highlights (e.g., for diary entries), monitor these 18 channels:
-
-**Direct Messages:**
-
-- All DMs
-
-**AI & Development:**
-
-- #ai-chapter
-- #dev-ex-private
-- #prod-eng-devex-private
-- #productivity-engineering-private
-- #productivity-engineering-public
-- #relias-cortex-external
-
-**Platform & Engineering:**
-
-- #dev-tribe
-- #next-deployment
-- #swatteam
-- #systems-mangement
-- #architecture
-- #dev-env-help
-- #platform
-- #product-engineering
-- #relias-engineering
-- #software-quality
-- #sonarcloud-public
-
-**Highlight Criteria:**
-
-- Important announcements and decisions
-- Technical discussions with actionable insights
-- Project updates and milestones
-- Mentions of @fhemmer
-- Exclude: Bot notifications, simple acks, routine alerts
-
----
-
-## 🎨 REQUIRED: Beautiful Message Formatting
-
-**ALL messages MUST use Block Kit for professional, polished posts.**
-
-> 📋 **Need a template?** See [block-kit-templates.md](block-kit-templates.md) for 5 complete, copy-paste examples including deployment notifications, alerts, weekly reports, PR reviews, and announcements.
-
-When composing ANY Slack message, ALWAYS:
-
-1. Use Block Kit blocks instead of plain text
-2. Include a header block for titles
-3. Use dividers between sections
-4. Add context blocks for metadata (timestamps, authors)
-5. Use emoji strategically for visual cues
-6. Include a fallback `text` field for notifications
-
-### Quick Block Kit Template (Use This!)
-
-```powershell
-$body = @{
-    channel = "C08H7CG4NTS"
-    text = "Fallback text for notifications"  # REQUIRED for accessibility
-    blocks = @(
-        @{
-            type = "header"
-            text = @{ type = "plain_text"; text = "🚀 Your Title Here"; emoji = $true }
-        }
-        @{
-            type = "section"
-            text = @{ type = "mrkdwn"; text = "*Key info:* Details here`n*More info:* More details" }
-        }
-        @{ type = "divider" }
-        @{
-            type = "context"
-            elements = @(
-                @{ type = "mrkdwn"; text = "Posted by <@U2XMZDPJ7> • $(Get-Date -Format 'MMM d, yyyy h:mm tt')" }
-            )
-        }
-    )
-} | ConvertTo-Json -Depth 10
-```
-
-### Block Types Reference
-
-| Block | Purpose | Example |
-|-------|---------|---------|
-| `header` | Large bold title | `"🎉 Deployment Complete"` |
-| `section` | Main content with optional accessory | Text, fields, images, buttons |
-| `divider` | Horizontal separator | `{ "type": "divider" }` |
-| `context` | Small grey metadata | Author, timestamp, status |
-| `actions` | Interactive buttons | Approve, View, Cancel |
-| `image` | Standalone image | Charts, screenshots |
-| `rich_text` | Advanced lists/quotes | Bullet lists, blockquotes |
-
-### mrkdwn Text Formatting
-
-```text
-*bold*          _italic_         ~strikethrough~
-`inline code`   ```code block``` >blockquote
-```
-
-### Mentions & Links
-
-```text
-User:     <@U2XMZDPJ7>
-Channel:  <#C08H7CG4NTS>
-Link:     <https://example.com|Click here>
-Date:     <!date^1704564789^{date_short} at {time}|Jan 6, 2026>
-Special:  <!here> <!channel> <!everyone>
-```
-
-### Two-Column Layout (fields)
-
-```powershell
-@{
-    type = "section"
-    fields = @(
-        @{ type = "mrkdwn"; text = "*Status:*`n✅ Complete" }
-        @{ type = "mrkdwn"; text = "*Duration:*`n2m 34s" }
-        @{ type = "mrkdwn"; text = "*Environment:*`nProduction" }
-        @{ type = "mrkdwn"; text = "*Version:*`nv2.3.1" }
-    )
-}
-```
-
-### Recommended Emoji by Category
-
-```text
-Status:   🟢 🟡 🔴 ✅ ❌ ⚠️ 🔵 ⏳
-Actions:  🚀 📦 🔧 🔍 💬 📊 📈 📝 🔄
-Alerts:   🎉 🏆 💡 🔔 📢 ⚡ 🛑 🚨
-```
-
-### Message Type Templates
-
-**Deployment/Release:**
-
-```
-🚀 header → 📊 section with fields → divider → context
-```
-
-**Alert/Warning:**
-
-```
-⚠️ header → section (description) → section (fields) → actions (buttons)
-```
-
-**Report/Summary:**
-
-```
-📊 header → context (date range) → section (metrics) → divider → context (generated by)
-```
-
-**Announcement:**
-
-```
-📢 header → section (main content) → divider → section (call to action) → context
-```
-
-### ❌ DON'T
-
-- Post plain text without blocks
-- Create walls of text without structure
-- Forget the fallback `text` field
-- Overuse @channel or @everyone
-- Skip emoji in headers
-
-### ✅ DO
-
-- Always use header + section + context minimum
-- Add dividers between logical sections
-- Use fields for key-value pairs
-- Include relevant emoji
-- Test in #pe-bot-test first
-
 ## ALWAYS: Log This Interaction
 
 After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
@@ -240,854 +65,234 @@ Before executing ANY write operation (post message, add reaction, upload file, e
 
 **Read-only operations** (list channels, get messages, user info) are safe and don't require approval.
 
-## ⛔ REMINDER: NO RETRIES (See Top of File)
+---
 
-**See the 🚨🚨🚨 ABSOLUTE RULE at the top of this file.**
+## 📢 Monitored Channels for Daily Highlights
 
-Post once. Say "Posted to #channel." Stop. Do not verify. Do not retry.
+When gathering daily Slack highlights (e.g., for diary entries), monitor these 18 channels:
 
-## 🚨 CRITICAL: Channel Access and Bot Membership
+**Direct Messages:** All DMs
 
-**Bot must be a member of private channels to post to them.**
+**AI & Development:**
+- #ai-chapter, #dev-ex-private, #prod-eng-devex-private
+- #productivity-engineering-private, #productivity-engineering-public
+- #relias-cortex-external
 
-If you get `channel_not_found` error:
+**Platform & Engineering:**
+- #dev-tribe, #next-deployment, #swatteam, #systems-mangement
+- #architecture, #dev-env-help, #platform, #product-engineering
+- #relias-engineering, #software-quality, #sonarcloud-public
 
-1. The channel exists but bot isn't a member (most common)
-2. Channel ID is incorrect
-3. Bot token lacks required scopes
+**Highlight Criteria:**
+- Important announcements and decisions
+- Technical discussions with actionable insights
+- Project updates and milestones
+- Mentions of @fhemmer
+- Exclude: Bot notifications, simple acks, routine alerts
 
-**Resolution steps:**
+**⚠️ CRITICAL: Activity Validation**
 
-1. Ask user to invite bot to the channel: `/invite @slack_skill_bot`
-2. Or use a public channel the bot can access with `chat:write.public` scope
-3. Verify channel ID is correct using search with user token
+**There is ALWAYS Slack activity Monday through Friday (both days included).** If a search or query returns no results for a weekday:
 
-**Known accessible channels:**
+1. **The query is wrong** - not the absence of activity
+2. Use `Get-SlackChannelMessages.ps1` directly instead of search
+3. Check multiple monitored channels - at least one will have activity
+4. Verify date range is correct (not searching future dates)
 
-- `C08H7CG4NTS` - #pe-bot-test (always use for testing)
+**If search returns empty, switch to direct channel retrieval immediately.**
 
-## ⚠️ Block Kit JSON Pitfalls
+---
 
-**PowerShell's ConvertTo-Json can corrupt complex Block Kit messages with backticks and special characters.**
+## 🎨 REQUIRED: Beautiful Message Formatting
 
-**Best practices for complex Block Kit:**
+**ALL messages MUST use Block Kit for professional, polished posts.**
 
-1. **Use raw JSON files** - Write JSON to a file, read it back as raw string
-2. **Test with simple messages first** - Verify channel access before sending complex blocks
-3. **Avoid inline code blocks in mrkdwn** - Backticks (`) in PowerShell strings conflict with PowerShell escaping
-4. **Use -Compress** - Helps avoid newline/whitespace issues: `| ConvertTo-Json -Depth 10 -Compress`
-5. **Always include fallback text** - The `text` field is required for notifications
+> 📋 **Need a template?** See [block-kit-templates.md](block-kit-templates.md) for complete examples.
 
-**If Block Kit fails:**
+### Quick Block Kit Template
 
 ```powershell
-# Save JSON to file instead
-$jsonContent | Out-File -FilePath "temp/message.json" -Encoding UTF8
-$body = Get-Content "temp/message.json" -Raw
-Invoke-RestMethod -Uri "https://slack.com/api/chat.postMessage" -Method Post -Headers $headers -Body $body
+$body = @{
+    channel = "C08H7CG4NTS"
+    text = "Fallback text for notifications"  # REQUIRED
+    blocks = @(
+        @{
+            type = "header"
+            text = @{ type = "plain_text"; text = "🚀 Your Title Here"; emoji = $true }
+        }
+        @{
+            type = "section"
+            text = @{ type = "mrkdwn"; text = "*Key info:* Details here" }
+        }
+        @{ type = "divider" }
+        @{
+            type = "context"
+            elements = @(
+                @{ type = "mrkdwn"; text = "Posted by <@U2XMZDPJ7> • $(Get-Date -Format 'MMM d, yyyy h:mm tt')" }
+            )
+        }
+    )
+} | ConvertTo-Json -Depth 10
 ```
 
-## Slack API Base
+**Common Patterns:**
+- Deployment: `🚀 header → 📊 fields → divider → context`
+- Alert: `⚠️ header → section → fields → actions`
+- Report: `📊 header → context (dates) → section → divider → context`
 
-- **API Base**: <https://slack.com/api/>
-- **Documentation**: <https://docs.slack.dev/apis/web-api>
-- **Methods Reference**: <https://docs.slack.dev/reference/methods>
+---
 
 ## Authentication
 
-All API requests require a Bearer token in the Authorization header:
+All API requests require a Bearer token:
 
-```bash
-Authorization: Bearer xoxb-your-token-here  # or xoxp- for user tokens
+```powershell
+$headers = @{
+    "Authorization" = "Bearer $env:SLACK_TOKEN"  # or $env:SLACK_USER_TOKEN
+    "Content-Type" = "application/json"
+}
 ```
 
 ### Token Types
 
-**Bot Token** (`xoxb-`):
+**Bot Token** (`$env:SLACK_TOKEN` / `xoxb-`):
+- Use for: Posting messages, reactions, file uploads, DMs, reminders, bookmarks
+- Scopes: Full messaging, files, reactions, channels, users, AI Agent
 
-- Use for: Posting messages, reactions, file uploads, user lookups, channel operations, DMs, reminders, bookmarks
-- **Full scope list (27 scopes)**:
-  - **Channels**: `channels:read`, `channels:join`, `channels:history`
-  - **Messaging**: `chat:write`, `chat:write.public`, `chat:write.customize`
-  - **Users**: `users:read`, `users:read.email`, `users.profile:read`
-  - **Reactions**: `reactions:read`, `reactions:write`
-  - **Files**: `files:read`, `files:write`
-  - **Direct Messages**: `im:read`, `im:write`, `im:history`
-  - **Pins**: `pins:read`, `pins:write`
-  - **Bookmarks**: `bookmarks:read`, `bookmarks:write`
-  - **Reminders**: `reminders:read`, `reminders:write`
-  - **Team/Workspace**: `team:read`, `usergroups:read`, `emoji:read`, `dnd:read`
-  - **AI Agent**: `assistant:write`, `app_mentions:read`
-- Environment variable: `SLACK_TOKEN`
-- Example: `xoxb-53356079991-10246020039892-...`
+**User Token** (`$env:SLACK_USER_TOKEN` / `xoxp-`):
+- Use for: Searching messages, listing all channels, reading history
+- Scopes: search:read, channels:read, users:read, files:read
 
-**User Token** (`xoxp-`):
+**Current Status (Relias Engineering):** Both tokens valid ✓
 
-- Use for: Searching messages, listing channels, reading history across all channels, downloading files
-- Permissions: Acts as the authenticated user
-- Current scopes: `search:read`, `channels:read`, `users:read`, `users:read.email`, `users.profile:read`, `files:read`
-- Environment variable: `SLACK_USER_TOKEN`
-- Example: `xoxp-53356079991-99747465619-...`
+---
 
-**App-Level Token** (`xapp-`):
-
-- Use for: App management and Socket Mode connections
-
-### Current Token Status (Relias Engineering workspace)
-
-| Token | Valid | Key Capabilities |
-|-------|-------|------------------|
-| Bot (`SLACK_TOKEN`) | ✓ | Full messaging, files, reactions, DMs, reminders, bookmarks, AI Agent |
-| User (`SLACK_USER_TOKEN`) | ✓ | Search messages, list channels, user profiles, download files |
-
-### User ID to Name Resolution
-
-With `users:read` scope, you can now translate user IDs to names:
-
-```powershell
-# Look up a user by ID
-$h = @{"Authorization"="Bearer $env:SLACK_TOKEN"}
-$r = Invoke-RestMethod -Uri "https://slack.com/api/users.info?user=U2XMZDPJ7" -Headers $h
-if ($r.ok) {
-    Write-Host "Display Name: $($r.user.profile.display_name)"
-    Write-Host "Real Name: $($r.user.real_name)"
-    Write-Host "Username: $($r.user.name)"
-}
-```
-
-### Environment Variables
-
-```powershell
-# Bot token (for messaging)
-$env:SLACK_TOKEN = "xoxb-your-bot-token-here"
-
-# User token (for search)
-$env:SLACK_USER_TOKEN = "xoxp-your-user-token-here"
-```
-
-## Common API Endpoints
+## Common Operations
 
 ### Send Message
 
-**Endpoint**: `POST https://slack.com/api/chat.postMessage`
-
 ```powershell
-$headers = @{
-    "Authorization" = "Bearer $env:SLACK_TOKEN"
-    "Content-Type" = "application/json"
-}
-
 $body = @{
     channel = "C1234567890"  # or "#channel-name"
     text = "Hello from PowerShell!"
-    thread_ts = "1234567890.123456"  # Optional: reply to thread
 } | ConvertTo-Json
 
 Invoke-RestMethod -Uri "https://slack.com/api/chat.postMessage" -Headers $headers -Method Post -Body $body
+```
+
+### Get Channel Messages
+
+**PRIMARY TOOL** for retrieving messages:
+
+```powershell
+.\scripts\Get-SlackChannelMessages.ps1 -Channel "dev-tribe" -Count 10 -MaxThreadReplies 0
 ```
 
 ### List Channels
 
-**Endpoint**: `GET https://slack.com/api/conversations.list`
-
 ```powershell
-$params = @{
-    types = "public_channel,private_channel"
-    limit = 100
-}
-$queryString = ($params.GetEnumerator() | ForEach-Object { "$($_.Key)=$($_.Value)" }) -join "&"
-
-Invoke-RestMethod -Uri "https://slack.com/api/conversations.list?$queryString" -Headers $headers -Method Get
-```
-
-### Get Channel Info
-
-**Endpoint**: `GET https://slack.com/api/conversations.info`
-
-```powershell
-Invoke-RestMethod -Uri "https://slack.com/api/conversations.info?channel=C1234567890" -Headers $headers -Method Get
-```
-
-### List Users
-
-**Endpoint**: `GET https://slack.com/api/users.list`
-
-```powershell
-Invoke-RestMethod -Uri "https://slack.com/api/users.list" -Headers $headers -Method Get
+$h = @{"Authorization"="Bearer $env:SLACK_USER_TOKEN"}
+Invoke-RestMethod -Uri "https://slack.com/api/conversations.list?types=public_channel,private_channel" -Headers $h
 ```
 
 ### Get User Info
 
-**Endpoint**: `GET https://slack.com/api/users.info`
-
-```powershell
-Invoke-RestMethod -Uri "https://slack.com/api/users.info?user=U1234567890" -Headers $headers -Method Get
-```
-
-### Search Messages
-
-**Endpoint**: `GET https://slack.com/api/search.messages`
-
-**Requires**: User token (`SLACK_USER_TOKEN`) with `search:read` scope
-
-```powershell
-$userHeaders = @{
-    "Authorization" = "Bearer $env:SLACK_USER_TOKEN"
-    "Content-Type" = "application/json"
-}
-
-$query = [System.Web.HttpUtility]::UrlEncode("Cortex support ticket")
-$search = Invoke-RestMethod -Uri "https://slack.com/api/search.messages?query=$query&count=10" -Headers $userHeaders
-
-# Parse results
-foreach ($match in $search.messages.matches) {
-    $date = [DateTimeOffset]::FromUnixTimeSeconds([double]$match.ts.Split('.')[0]).LocalDateTime
-    Write-Output "$($date.ToString('yyyy-MM-dd HH:mm')): $($match.text)"
-}
-```
-
-**Query syntax**:
-
-- `in:#channel-name` - Search in specific channel
-- `from:@username` - Search from specific user
-- `from:me` - Your own messages
-- `to:me` - Messages sent to you (DMs and mentions)
-- `-from:me` - Exclude your own messages (useful for finding mentions)
-- `@username` - Messages mentioning a user
-- `after:2024-01-01` - Search after date
-- `before:2024-12-31` - Search before date
-- `has:link` - Messages with links
-- `has:emoji` - Messages with reactions
-
-**Useful search patterns**:
-
-```powershell
-# Find all channels you've posted to in last 3 months
-$q = [System.Web.HttpUtility]::UrlEncode("from:me after:$((Get-Date).AddMonths(-3).ToString('yyyy-MM-dd'))")
-
-# Find @mentions of you from others
-$q = [System.Web.HttpUtility]::UrlEncode("@fhemmer -from:fhemmer after:2025-01-01")
-
-# Find messages to you (DMs + mentions)
-$q = [System.Web.HttpUtility]::UrlEncode("to:me after:2025-01-01")
-
-# Find channel ID when you can't list channels
-$q = [System.Web.HttpUtility]::UrlEncode("in:#channel-name")
-# Then extract: $r.messages.matches[0].channel.id
-```
-
-**Search results include**:
-
-- `channel.id` and `channel.name` - Useful for discovering channel IDs
-- `username` - The sender's username (workaround when `users:read` scope is missing)
-- `ts` - Timestamp for threading or referencing
-- `text` - Message content
-
-### Add Reaction
-
-**Endpoint**: `POST https://slack.com/api/reactions.add`
-
-```powershell
-$body = @{
-    channel = "C1234567890"
-    timestamp = "1234567890.123456"
-    name = "thumbsup"  # emoji name without colons
-} | ConvertTo-Json
-
-Invoke-RestMethod -Uri "https://slack.com/api/reactions.add" -Headers $headers -Method Post -Body $body
-```
-
-### Upload File
-
-**Endpoint**: `POST https://slack.com/api/files.upload`
-
-```powershell
-$body = @{
-    channels = "C1234567890"
-    content = "File content here"
-    filename = "example.txt"
-    title = "Example File"
-} | ConvertTo-Json
-
-Invoke-RestMethod -Uri "https://slack.com/api/files.upload" -Headers $headers -Method Post -Body $body
-```
-
-## New Capabilities (V1.5)
-
-### Direct Messages
-
-**Open DM with user**: `POST https://slack.com/api/conversations.open`
-
-```powershell
-$body = @{ users = "U2XMZDPJ7" } | ConvertTo-Json  # Franz's user ID
-$headers = @{ "Authorization"="Bearer $env:SLACK_TOKEN"; "Content-Type"="application/json" }
-$dm = Invoke-RestMethod -Uri "https://slack.com/api/conversations.open" -Headers $headers -Method Post -Body $body
-# Then use $dm.channel.id to send messages
-```
-
-### Reminders
-
-**Create reminder**: `POST https://slack.com/api/reminders.add`
-
-```powershell
-$body = @{
-    text = "Review pull request"
-    time = "in 2 hours"  # or Unix timestamp, or "tomorrow at 9am"
-    user = "U2XMZDPJ7"   # optional: remind someone else
-} | ConvertTo-Json
-Invoke-RestMethod -Uri "https://slack.com/api/reminders.add" -Headers $headers -Method Post -Body $body
-```
-
-**List reminders**: `GET https://slack.com/api/reminders.list`
-
-### Bookmarks
-
-**Add bookmark to channel**: `POST https://slack.com/api/bookmarks.add`
-
-```powershell
-$body = @{
-    channel_id = "C08H7CG4NTS"
-    title = "Team Wiki"
-    type = "link"
-    link = "https://wiki.example.com"
-} | ConvertTo-Json
-Invoke-RestMethod -Uri "https://slack.com/api/bookmarks.add" -Headers $headers -Method Post -Body $body
-```
-
-**List channel bookmarks**: `GET https://slack.com/api/bookmarks.list?channel_id=C08H7CG4NTS`
-
-### Pins
-
-**Pin message**: `POST https://slack.com/api/pins.add`
-
-```powershell
-$body = @{
-    channel = "C08H7CG4NTS"
-    timestamp = "1234567890.123456"  # message ts
-} | ConvertTo-Json
-Invoke-RestMethod -Uri "https://slack.com/api/pins.add" -Headers $headers -Method Post -Body $body
-```
-
-**List pins**: `GET https://slack.com/api/pins.list?channel=C08H7CG4NTS`
-
-### User Groups (Handles)
-
-**List user groups**: `GET https://slack.com/api/usergroups.list`
-
 ```powershell
 $h = @{"Authorization"="Bearer $env:SLACK_TOKEN"}
-$r = Invoke-RestMethod -Uri "https://slack.com/api/usergroups.list?include_users=true" -Headers $h
-$r.usergroups | Select-Object handle, name, user_count
+$r = Invoke-RestMethod -Uri "https://slack.com/api/users.info?user=U2XMZDPJ7" -Headers $h
+Write-Host "Name: $($r.user.real_name)"
 ```
 
-### Custom Emoji
+---
 
-**List workspace emoji**: `GET https://slack.com/api/emoji.list`
+## Finding IDs
+
+### Channel IDs (start with `C`)
+
+**Recommended method:**
 
 ```powershell
-$h = @{"Authorization"="Bearer $env:SLACK_TOKEN"}
-$r = Invoke-RestMethod -Uri "https://slack.com/api/emoji.list" -Headers $h
-$r.emoji.PSObject.Properties | Select-Object Name, Value | Format-Table
-```
-
-### Do Not Disturb Status
-
-**Get user's DND status**: `GET https://slack.com/api/dnd.info?user=U2XMZDPJ7`
-
-```powershell
-$h = @{"Authorization"="Bearer $env:SLACK_TOKEN"}
-$r = Invoke-RestMethod -Uri "https://slack.com/api/dnd.info?user=U2XMZDPJ7" -Headers $h
-if ($r.dnd_enabled) { "DND active until: $([DateTimeOffset]::FromUnixTimeSeconds($r.next_dnd_end_ts))" }
-```
-
-### Team/Workspace Info
-
-**Get workspace info**: `GET https://slack.com/api/team.info`
-
-```powershell
-$h = @{"Authorization"="Bearer $env:SLACK_TOKEN"}
-$r = Invoke-RestMethod -Uri "https://slack.com/api/team.info" -Headers $h
-Write-Host "Workspace: $($r.team.name) ($($r.team.domain).slack.com)"
-```
-
-### Join Public Channels
-
-**Bot can now join public channels**: `POST https://slack.com/api/conversations.join`
-
-```powershell
-$body = @{ channel = "C1234567890" } | ConvertTo-Json
-$headers = @{ "Authorization"="Bearer $env:SLACK_TOKEN"; "Content-Type"="application/json" }
-Invoke-RestMethod -Uri "https://slack.com/api/conversations.join" -Headers $headers -Method Post -Body $body
-```
-
-### Post to Any Public Channel
-
-With `chat:write.public`, the bot can post to public channels without being a member:
-
-```powershell
-# No need to join first - just post directly
-$body = @{
-    channel = "C1234567890"  # Any public channel
-    text = "Hello from the bot!"
-} | ConvertTo-Json
-Invoke-RestMethod -Uri "https://slack.com/api/chat.postMessage" -Headers $headers -Method Post -Body $body
-```
-
-### Customized Bot Messages
-
-With `chat:write.customize`, post with custom username/icon:
-
-```powershell
-$body = @{
-    channel = "C08H7CG4NTS"
-    text = "Deploy notification"
-    username = "DeployBot"
-    icon_emoji = ":rocket:"
-} | ConvertTo-Json
-Invoke-RestMethod -Uri "https://slack.com/api/chat.postMessage" -Headers $headers -Method Post -Body $body
-```
-
-### AI Agent Capabilities (assistant:write)
-
-The bot can act as an AI Agent in Slack:
-
-- Receive messages via `app_mentions:read`
-- Respond with `assistant:write` scope
-- Access AI Agent features in the Slack platform
-
-## Finding Channel IDs
-
-Channel IDs start with `C` (e.g., `C1234567890`). To find a channel ID:
-
-1. **Via Search (Recommended)** - Works even without `channels:read` scope:
-
-   ```powershell
-   # Use search.messages with user token to find channel ID
-   $h = @{"Authorization"="Bearer $env:SLACK_USER_TOKEN"}
-   $q = [System.Web.HttpUtility]::UrlEncode("in:#channel-name")
-   $r = Invoke-RestMethod -Uri "https://slack.com/api/search.messages?query=$q&count=1" -Headers $h
-   if ($r.ok -and $r.messages.matches.Count -gt 0) {
-       $channelId = $r.messages.matches[0].channel.id
-       Write-Host "Channel ID: $channelId"
-   }
-   ```
-
-2. **Via conversations.list** - Requires `channels:read` scope (user token has this):
-
-   ```powershell
-   $h = @{"Authorization"="Bearer $env:SLACK_USER_TOKEN"}
-   $r = Invoke-RestMethod -Uri "https://slack.com/api/conversations.list?types=public_channel,private_channel&limit=1000" -Headers $h
-   $channel = $r.channels | Where-Object { $_.name -eq "channel-name" }
-   Write-Host "Channel ID: $($channel.id)"
-   ```
-
-3. **Via Slack UI**: Right-click channel → View channel details → Copy link (ID is in URL)
-
-### Known Channel IDs
-
-| Channel | ID | Notes |
-|---------|----|----- |
-| #productivity-engineering | (search for channel) | Primary PE team channel |
-| #productivity-engineering-public | (search for channel) | Public PE announcements and updates |
-| pe-bot-test | `C08H7CG4NTS` | **"test channel"** - Safe test channel for bot experiments |
-
-**Channel Name Mapping:**
-
-- `pe` → `#productivity-engineering`
-- `pe-public` → `#productivity-engineering-public`
-- Use full names in Slack API calls
-
-### Known User IDs
-
-| User | ID | Type | Notes |
-|------|----|----- |-------|
-| Franz Hemmer | `U2XMZDPJ7` | Human | AI Evangelist - Productivity Engineering |
-| Relias Assistant | `U08GJU7S7BM` | Bot | AI Assistant bot (relias-assistant project) |
-| slack_skill_bot | `U0A780L15S8` | Bot | General purpose Slack skill bot |
-
-## Finding User IDs
-
-User IDs start with `U` (e.g., `U1234567890`). To find a user ID:
-
-1. **Via API**: Use `users.list` and filter by name/email
-2. **Via Email**: Use `users.lookupByEmail`
-
-```powershell
-# Find user by email
-$user = Invoke-RestMethod -Uri "https://slack.com/api/users.lookupByEmail?email=user@example.com" -Headers $headers -Method Get
-Write-Output "User ID: $($user.user.id)"
-```
-
-## Finding Bot User IDs
-
-**This is critical for mentioning bots in messages!** Bot user IDs are different from regular user IDs and can be tricky to find.
-
-### Method 1: auth.test (Recommended - if you have the bot's token)
-
-The **easiest and most reliable** method when you have access to the bot's token:
-
-```powershell
-# If you have the bot's token
-$botToken = "xoxb-your-bot-token"
-$h = @{"Authorization"="Bearer $botToken"}
-$r = Invoke-RestMethod -Uri "https://slack.com/api/auth.test" -Headers $h
-if ($r.ok) {
-    Write-Host "Bot User ID: $($r.user_id)"  # This is what you need for @mentions
-    Write-Host "Bot Name: $($r.user)"
-    Write-Host "Bot ID: $($r.bot_id)"  # Different from user_id!
-}
-```
-
-**Important distinction:**
-
-- `user_id` (e.g., `U08GJU7S7BM`) - Use this for `<@U08GJU7S7BM>` mentions
-- `bot_id` (e.g., `B08GJU7QU91`) - Internal bot identifier, NOT for mentions
-
-### Method 2: Check .env or config files
-
-For project-specific bots, check the project's configuration:
-
-```powershell
-# Example: Reading from .env file
-$token = (Get-Content ".env" | Where-Object { $_ -match "^Slack__BotToken=" }) -replace "^Slack__BotToken=",""
-$h = @{"Authorization"="Bearer $token"}
-$r = Invoke-RestMethod -Uri "https://slack.com/api/auth.test" -Headers $h
-$r | ConvertTo-Json
-```
-
-### Method 3: Search users.list for bots
-
-```powershell
-$h = @{"Authorization"="Bearer $env:SLACK_TOKEN"}
-$r = Invoke-RestMethod -Uri "https://slack.com/api/users.list?limit=500" -Headers $h
-$r.members | Where-Object { $_.is_bot -eq $true } | Select-Object id, name, real_name
-```
-
-### Method 4: Check recent messages from the bot
-
-```powershell
-# Look at messages in a channel where the bot has posted
-$h = @{"Authorization"="Bearer $env:SLACK_TOKEN"}
-$r = Invoke-RestMethod -Uri "https://slack.com/api/conversations.history?channel=C08H7CG4NTS&limit=20" -Headers $h
-$r.messages | Where-Object { $_.bot_id } | Select-Object user, bot_id, @{N='text';E={$_.text.Substring(0, [Math]::Min(50, $_.text.Length))}}
-# The 'user' field is the bot's user_id for mentions
-```
-
-### Common Pitfall: Multiple Bots
-
-If you have multiple bots (e.g., `slack_skill_bot` and `Relias Assistant`), make sure you're using the **correct token** to get the **correct bot's user ID**. The `auth.test` endpoint returns info for whatever token you authenticate with.
-
-## Response Format
-
-All Slack API responses follow this structure:
-
-```json
-{
-    "ok": true,
-    "channel": "C1234567890",
-    "ts": "1234567890.123456",
-    "message": {...}
-}
-```
-
-**Error Response**:
-
-```json
-{
-    "ok": false,
-    "error": "channel_not_found"
-}
-```
-
-## Common Use Cases
-
-### Post to Specific Channel
-
-```powershell
-# Find channel ID
-$channels = Invoke-RestMethod -Uri "https://slack.com/api/conversations.list" -Headers $headers -Method Get
-$channelId = ($channels.channels | Where-Object { $_.name -eq "general" }).id
-
-# Post message
-$body = @{ channel = $channelId; text = "Hello, team!" } | ConvertTo-Json
-Invoke-RestMethod -Uri "https://slack.com/api/chat.postMessage" -Headers $headers -Method Post -Body $body
-```
-
-### Send Rich Message with Blocks
-
-```powershell
-$body = @{
-    channel = "C1234567890"
-    blocks = @(
-        @{
-            type = "section"
-            text = @{
-                type = "mrkdwn"
-                text = "*Important Update*\nThis is a rich message with formatting"
-            }
-        }
-    )
-} | ConvertTo-Json -Depth 10
-
-Invoke-RestMethod -Uri "https://slack.com/api/chat.postMessage" -Headers $headers -Method Post -Body $body
-```
-
-## Rate Limits
-
-- **Tier 1**: 1+ requests per minute
-- **Tier 2**: 20+ requests per minute
-- **Tier 3**: 50+ requests per minute
-- **Tier 4**: 100+ requests per minute
-
-Rate limit tier depends on the method. Most common methods are Tier 3.
-
-## Best Practices
-
-1. **Always check `ok` field** in response before assuming success
-2. **Use channel IDs** instead of names for reliability
-3. **Store tokens securely** - never commit to git
-4. **Handle rate limits** - add retry logic with exponential backoff
-5. **Use JSON POST bodies** for complex payloads (blocks, attachments)
-6. **Test with test channels first** - use `#pe-bot-test` (C08H7CG4NTS) before production
-7. **Verify command completion** - before re-running write operations, check if the previous command succeeded to avoid duplicates
-8. **Use the right token** - bot token for posting, user token for searching/listing
-
-## Troubleshooting
-
-### "missing_scope" Error
-
-The token doesn't have the required OAuth scope. Check which token you're using:
-
-- Bot token: Can post messages, but cannot list channels or search
-- User token: Can search and list channels, but posting shows as user not bot
-
-### Finding Channel ID When conversations.list Fails
-
-If the bot token returns `missing_scope` for `conversations.list`, use search instead:
-
-```powershell
-# Search for any message in the channel to get its ID
 $h = @{"Authorization"="Bearer $env:SLACK_USER_TOKEN"}
 $q = [System.Web.HttpUtility]::UrlEncode("in:#channel-name")
 $r = Invoke-RestMethod -Uri "https://slack.com/api/search.messages?query=$q&count=1" -Headers $h
 $r.messages.matches[0].channel.id
 ```
 
-### Verifying Token Validity
+**Known Channels:**
+- `C08H7CG4NTS` - #pe-bot-test (always use for testing)
+- `C065W8AUL8P` - #productivity-engineering-private
+
+### User IDs (start with `U`)
 
 ```powershell
-# Test any token
-$r = Invoke-RestMethod -Uri "https://slack.com/api/auth.test" -Headers @{"Authorization"="Bearer $env:SLACK_TOKEN"}
-if ($r.ok) { "Valid: $($r.user) on $($r.team)" } else { "Error: $($r.error)" }
+# By email
+$h = @{"Authorization"="Bearer $env:SLACK_TOKEN"}
+$r = Invoke-RestMethod -Uri "https://slack.com/api/users.lookupByEmail?email=user@example.com" -Headers $h
+Write-Host $r.user.id
 ```
+
+**Known Users:**
+- `U2XMZDPJ7` - Franz Hemmer
+- `U08GJU7S7BM` - Relias Assistant (bot)
+- `U0A780L15S8` - slack_skill_bot (bot)
+
+---
 
 ## PowerShell Scripts
 
-Pre-built scripts are available in the `scripts/` directory:
+### Get-SlackDailyBriefing.ps1 ⭐
 
-### Get-SlackDailyBriefing.ps1 ⭐ NEW
-
-**RECOMMENDED** for getting a comprehensive overview of Slack activity:
+**RECOMMENDED** for daily Slack overview:
 
 ```powershell
-# Get today's briefing (default)
-.\scripts\Get-SlackDailyBriefing.ps1
-
-# Get briefing for the last 3 days with detailed output
-.\scripts\Get-SlackDailyBriefing.ps1 -DaysBack 3 -OutputFormat Detailed
-
-# Focus on specific channels
-.\scripts\Get-SlackDailyBriefing.ps1 -Channels @("relias-engineering", "dev-tribe")
-
-# Get JSON output for parsing
-.\scripts\Get-SlackDailyBriefing.ps1 -DaysBack 1 -OutputFormat JSON
-
-# Different user (if checking for someone else)
-.\scripts\Get-SlackDailyBriefing.ps1 -Username "jsmith"
+.\scripts\Get-SlackDailyBriefing.ps1 -DaysBack 1 -OutputFormat Detailed
 ```
 
-**Parameters:**
-
-- `-Username` - Slack username without @ (default: 'fhemmer')
-- `-DaysBack` - Number of days to look back (1-30, default 1)
-- `-Channels` - Array of channels to monitor (has defaults)
-- `-IncludeDMs` - Include DM summary (default $true)
-- `-IncludeMentions` - Include @mentions (default $true)
-- `-IncludeAnnouncements` - Include @channel/@here (default $true)
-- `-OutputFormat` - 'Summary', 'Detailed', or 'JSON'
-- `-MaxMessagesPerChannel` - Max messages per channel (5-50, default 10)
-
-**Features:**
-
-- Finds @mentions from others
-- Lists DMs grouped by sender
-- Detects @channel/@here announcements
-- Auto-discovers active deployment channels
-- Identifies potential action items (approve, review, please, etc.)
-- Color-coded summary with counts
-- Outputs formatted briefing or JSON for parsing
-
-**Use this when:**
-
-- Starting your day - get a quick overview
-- Returning from PTO - catch up on what you missed
-- Agent needs to check Slack for the user
+Features: @mentions, DMs, @channel announcements, action items
 
 ### Get-SlackChannelMessages.ps1
 
-**PRIMARY TOOL** for retrieving recent channel messages with thread support and file downloads:
+**PRIMARY TOOL** for retrieving messages:
 
 ```powershell
-# Get last 5 messages from #dev-tribe (default)
-.\scripts\Get-SlackChannelMessages.ps1 -Channel "dev-tribe"
-
-# Get last message with up to 5 thread replies and download attachments
-.\scripts\Get-SlackChannelMessages.ps1 -Channel "dev-tribe" -Count 1 -MaxThreadReplies 5 -IncludeFiles
-
-# Get last 3 messages without thread replies
-.\scripts\Get-SlackChannelMessages.ps1 -Channel "dev-tribe" -Count 3 -MaxThreadReplies 0
-
-# Get messages with all files downloaded to specific directory
-.\scripts\Get-SlackChannelMessages.ps1 -Channel "dev-tribe" -Count 3 -IncludeFiles -OutputDir "D:\slack-downloads"
+.\scripts\Get-SlackChannelMessages.ps1 -Channel "dev-tribe" -Count 10 -MaxThreadReplies 0
 ```
-
-**Parameters:**
-
-- `-Channel` (required) - Channel name (without #) or ID
-- `-Count` - Number of parent messages (1-50, default 5)
-- `-MaxThreadReplies` - Max thread replies per message (default 2, 0=none, -1=all)
-- `-IncludeFiles` - Download attached files
-- `-OutputDir` - Where to save files (default: `~/.claude/skills/slack/temp/`)
-- `-OutputFormat` - 'Summary' (default), 'Detailed', or 'JSON'
-
-**Features:**
-
-- Auto-resolves channel names to IDs (with fallback methods)
-- Limits thread replies to prevent output overflow
-- Downloads files to isolated temp folder by default (won't pollute repos!)
-- Caches user ID lookups for performance
-
-**⚠️ File Download Limitation:**
-To download files from a channel, the **bot must be a member of that channel**. If the bot isn't in the channel, file downloads will fail (returns HTML login page instead of file).
-
-**To fix**: Invite the bot to the channel:
-
-1. In Slack, go to the channel
-2. Type `/invite @YourBotName` or click channel settings → Integrations → Add apps
-3. Re-run the script
-
-Alternatively, add `files:read` scope to the **user token** and reinstall the app.
-
-### Clear-SlackTempFiles.ps1
-
-**Cleanup utility** for removing downloaded files from the temp folder:
-
-```powershell
-# List what would be deleted (dry run)
-.\scripts\Clear-SlackTempFiles.ps1 -ListOnly
-
-# Interactive cleanup with confirmation prompt
-.\scripts\Clear-SlackTempFiles.ps1
-
-# Force cleanup without prompts (useful for session end)
-.\scripts\Clear-SlackTempFiles.ps1 -Force
-```
-
-**Parameters:**
-
-- `-ListOnly` - Preview files without deleting
-- `-Force` - Skip confirmation prompt
-
-**Temp Folder Location**: `~/.claude/skills/slack/temp/`
-
-**When to clean up:**
-
-- At the end of a session when downloaded files are no longer needed
-- Before starting a new task to free disk space
-- The agent should run this automatically when finishing file-related work
-
-### Search-SlackMessages.ps1
-
-Search Slack messages with advanced filtering:
-
-```powershell
-# Basic search
-.\scripts\Search-SlackMessages.ps1 -Query "deployment" -Count 10
-
-# Channel-specific search
-.\scripts\Search-SlackMessages.ps1 -Query "in:#dev-portal after:2024-12-01" -Count 20
-
-# User-specific search
-.\scripts\Search-SlackMessages.ps1 -Query "from:@fhemmer Cortex" -Count 15
-
-# Table output format
-.\scripts\Search-SlackMessages.ps1 -Query "support ticket" -OutputFormat Table
-
-# JSON output for parsing
-.\scripts\Search-SlackMessages.ps1 -Query "error" -Count 5 -OutputFormat JSON
-```
-
-**Parameters:**
-
-- `-Query` (required) - Search query with advanced syntax support
-- `-Count` - Number of results (1-100, default 10)
-- `-SortBy` - Sort by 'timestamp' or 'score' (default timestamp)
-- `-SortDirection` - 'desc' or 'asc' (default desc)
-- `-OutputFormat` - 'List', 'Table', or 'JSON' (default List)
-
-**Advanced Query Syntax:**
-
-- `in:#channel-name` - Search specific channel
-- `from:@username` - Messages from user
-- `after:2024-01-01` - After date
-- `before:2024-12-31` - Before date
-- `has:link` - Messages with links
-- `has:emoji` - Messages with reactions
 
 ### Send-SlackMessage.ps1
 
-Post messages to Slack channels with approval workflow:
+Post with approval workflow:
 
 ```powershell
-# Post to channel by name
-.\scripts\Send-SlackMessage.ps1 -Channel "#pe-bot-test" -Text "Deployment complete!"
-
-# Post to channel by ID
-.\scripts\Send-SlackMessage.ps1 -Channel "C08H7CG4NTS" -Text "Hello team"
-
-# Reply in thread
-.\scripts\Send-SlackMessage.ps1 -Channel "#general" -Text "Follow-up message" -ThreadTs "1704564789.123456"
-
-# Post as user (requires user token in SLACK_TOKEN)
-.\scripts\Send-SlackMessage.ps1 -Channel "#announcements" -Text "Important update" -AsUser
+.\scripts\Send-SlackMessage.ps1 -Channel "#pe-bot-test" -Text "Test message"
 ```
 
-**Parameters:**
+**For search, files, and advanced features, see the sub-skills listed at the top.**
 
-- `-Channel` (required) - Channel name (`#name`), ID (`C123ABC`), or user ID (`U123ABC`)
-- `-Text` (required) - Message text (supports Slack markdown)
-- `-ThreadTs` (optional) - Parent message timestamp for thread replies
-- `-AsUser` (optional) - Post as authenticated user instead of bot
+---
 
-**Safety Features:**
+## Troubleshooting
 
-- Shows approval prompt before sending
-- Displays channel, message, and thread context
-- Requires explicit "yes" confirmation
-- Auto-resolves channel names to IDs
-- Validates SLACK_TOKEN environment variable
+**"missing_scope" error:** Use correct token (bot for posting, user for searching)
+
+**"channel_not_found" error:** 
+1. Bot not a member → `/invite @slack_skill_bot`
+2. Use `chat:write.public` scope for public channels
+3. Verify channel ID with search
+
+**Verify token:**
+
+```powershell
+$r = Invoke-RestMethod -Uri "https://slack.com/api/auth.test" -Headers @{"Authorization"="Bearer $env:SLACK_TOKEN"}
+if ($r.ok) { "Valid: $($r.user) on $($r.team)" }
+```
+
+---
 
 ## Resources
 
-### Local Files (Check These First!)
-
-- **[block-kit-templates.md](block-kit-templates.md)** - ⭐ Ready-to-use templates for common scenarios
-
-### External Documentation
-
-- **Web API Methods**: <https://docs.slack.dev/reference/methods>
+- **[block-kit-templates.md](block-kit-templates.md)** - Ready-to-use message templates
+- **[slack-search](../slack-search/SKILL.md)** - Search and discovery
+- **[slack-files](../slack-files/SKILL.md)** - File operations
+- **[slack-advanced](../slack-advanced/SKILL.md)** - Advanced features
+- **Web API**: <https://docs.slack.dev/reference/methods>
 - **Block Kit Builder**: <https://app.slack.com/block-kit-builder>
-- **OAuth Guide**: <https://docs.slack.dev/authentication>
-- **Rate Limits**: <https://docs.slack.dev/apis/rate-limits>
-- **Formatting Guide**: <https://docs.slack.dev/messaging/formatting-message-text>
-- **Rich Text Tutorial**: <https://docs.slack.dev/block-kit/formatting-with-rich-text>
