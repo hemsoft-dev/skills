@@ -559,6 +559,7 @@ if ($results) {
 **NEVER EVER run `. $PROFILE` in ANY terminal** - it freezes/hangs indefinitely and the terminal must be killed.
 
 **After profile changes:**
+
 - Tell the user to **restart their terminal** or open a new one
 - DO NOT attempt to reload the profile programmatically
 - DO NOT suggest `. $PROFILE` to the user
@@ -566,6 +567,7 @@ if ($results) {
 ### ⚠️ CRITICAL: User's Actual Profile Location
 
 **The user's actual PowerShell profile is:**
+
 ```
 D:\OneDrive\Documents\PowerShell\Microsoft.PowerShell_profile.ps1
 ```
@@ -573,6 +575,7 @@ D:\OneDrive\Documents\PowerShell\Microsoft.PowerShell_profile.ps1
 **NOT** the `$PROFILE` file in the `.claude\skills` directory - that's a reference/backup file.
 
 **To modify the user's profile:**
+
 ```powershell
 # Append to actual profile
 Add-Content -Path "D:\OneDrive\Documents\PowerShell\Microsoft.PowerShell_profile.ps1" -Value "function myFunc { ... }"

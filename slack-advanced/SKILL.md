@@ -102,6 +102,7 @@ Invoke-RestMethod -Uri "https://slack.com/api/reminders.add" -Headers $headers -
 ```
 
 **Time formats:**
+
 - Relative: `"in 2 hours"`, `"in 30 minutes"`, `"tomorrow"`
 - Specific: `"tomorrow at 9am"`, `"next Monday at 3pm"`
 - Unix timestamp: `1704564789`
@@ -239,6 +240,7 @@ $r.usergroups | Select-Object handle, name, user_count
 ```
 
 **Example output:**
+
 - `@developers` (handle: `developers`, name: `Developers`, users: 45)
 - `@leads` (handle: `leads`, name: `Team Leads`, users: 8)
 
@@ -376,6 +378,7 @@ Invoke-RestMethod -Uri "https://slack.com/api/chat.postMessage" -Headers $header
 ```
 
 **Options:**
+
 - `username` - Custom display name
 - `icon_emoji` - Emoji as avatar (e.g., `:robot_face:`)
 - `icon_url` - Image URL as avatar
@@ -393,6 +396,7 @@ With `assistant:write` and `app_mentions:read` scopes, the bot can act as an AI 
 - Provide contextual assistance
 
 **Use cases:**
+
 - Automated support responses
 - Interactive command execution
 - Workflow automation triggered by mentions

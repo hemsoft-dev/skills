@@ -198,6 +198,7 @@ $r.files | Select-Object name, size, timestamp, mimetype
 **Problem:** Bot is not a member of the channel.
 
 **Solution:** Invite bot to the channel:
+
 1. `/invite @slack_skill_bot` in Slack
 2. Or add bot via channel settings → Integrations → Add apps
 
@@ -205,7 +206,8 @@ $r.files | Select-Object name, size, timestamp, mimetype
 
 **Problem:** Token lacks `files:read` or `files:write` scope.
 
-**Solution:** 
+**Solution:**
+
 - For downloads: Use bot token with `files:read` scope
 - For uploads: Use bot token with `files:write` scope
 - Verify scopes: `https://slack.com/api/auth.test`

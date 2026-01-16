@@ -61,6 +61,7 @@ See [INSTALLS.md](INSTALLS.md) for full installation instructions.
 - [ ] SnagIt installed and licensed
 - [ ] Slack installed and logged in
 - [ ] Microsoft Teams installed and logged in
+- [ ] Microsoft 365 installed and signed in
 - [ ] NVIDIA Broadcast installed and configured
 - [ ] XSplit VCam installed and licensed
 - [ ] .NET SDK installed
@@ -97,6 +98,7 @@ See [INSTALLS.md](INSTALLS.md) for full installation instructions.
 - [x] SnagIt installed and licensed
 - [x] Slack installed and logged in
 - [x] Microsoft Teams installed and logged in
+- [ ] Microsoft 365 installed and signed in
 - [x] NVIDIA Broadcast installed and configured
 - [x] XSplit VCam installed and licensed
 - [x] .NET SDK installed

@@ -62,7 +62,7 @@ Set-Location "$env:USERPROFILE\.langflow"
 langflow run
 ```
 
-**URL:** http://127.0.0.1:7860
+**URL:** <http://127.0.0.1:7860>
 
 ## Key Features
 
@@ -93,6 +93,6 @@ $env:ANTHROPIC_API_KEY = "sk-ant-..."
 
 ## Resources
 
-- **GitHub:** https://github.com/langflow-ai/langflow
-- **Docs:** https://docs.langflow.org
-- **Desktop App:** https://www.langflow.org/desktop (includes all dependencies)
+- **GitHub:** <https://github.com/langflow-ai/langflow>
+- **Docs:** <https://docs.langflow.org>
+- **Desktop App:** <https://www.langflow.org/desktop> (includes all dependencies)

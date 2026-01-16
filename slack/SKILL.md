@@ -74,16 +74,19 @@ When gathering daily Slack highlights (e.g., for diary entries), monitor these 1
 **Direct Messages:** All DMs
 
 **AI & Development:**
+
 - #ai-chapter, #dev-ex-private, #prod-eng-devex-private
 - #productivity-engineering-private, #productivity-engineering-public
 - #relias-cortex-external
 
 **Platform & Engineering:**
+
 - #dev-tribe, #next-deployment, #swatteam, #systems-mangement
 - #architecture, #dev-env-help, #platform, #product-engineering
 - #relias-engineering, #software-quality, #sonarcloud-public
 
 **Highlight Criteria:**
+
 - Important announcements and decisions
 - Technical discussions with actionable insights
 - Project updates and milestones
@@ -136,6 +139,7 @@ $body = @{
 ```
 
 **Common Patterns:**
+
 - Deployment: `🚀 header → 📊 fields → divider → context`
 - Alert: `⚠️ header → section → fields → actions`
 - Report: `📊 header → context (dates) → section → divider → context`
@@ -156,10 +160,12 @@ $headers = @{
 ### Token Types
 
 **Bot Token** (`$env:SLACK_TOKEN` / `xoxb-`):
+
 - Use for: Posting messages, reactions, file uploads, DMs, reminders, bookmarks
 - Scopes: Full messaging, files, reactions, channels, users, AI Agent
 
 **User Token** (`$env:SLACK_USER_TOKEN` / `xoxp-`):
+
 - Use for: Searching messages, listing all channels, reading history
 - Scopes: search:read, channels:read, users:read, files:read
 
@@ -219,6 +225,7 @@ $r.messages.matches[0].channel.id
 ```
 
 **Known Channels:**
+
 - `C08H7CG4NTS` - #pe-bot-test (always use for testing)
 - `C065W8AUL8P` - #productivity-engineering-private
 
@@ -232,6 +239,7 @@ Write-Host $r.user.id
 ```
 
 **Known Users:**
+
 - `U2XMZDPJ7` - Franz Hemmer
 - `U08GJU7S7BM` - Relias Assistant (bot)
 - `U0A780L15S8` - slack_skill_bot (bot)
@@ -274,7 +282,8 @@ Post with approval workflow:
 
 **"missing_scope" error:** Use correct token (bot for posting, user for searching)
 
-**"channel_not_found" error:** 
+**"channel_not_found" error:**
+
 1. Bot not a member → `/invite @slack_skill_bot`
 2. Use `chat:write.public` scope for public channels
 3. Verify channel ID with search

@@ -471,7 +471,24 @@ Open source code editor and IDE.
 winget install --id SST.opencode -e --source winget
 ```
 
-### 21. GitHub Copilot CLI
+### 21. Microsoft 365
+
+Microsoft 365 subscription suite (formerly Office 365) including Word, Excel, PowerPoint, Outlook, and more.
+
+**Recommended:** Install directly from Microsoft (winget often has hash mismatch issues):
+
+- Web: <https://www.office.com/setup>
+- Direct: <https://www.microsoft.com/microsoft-365/get-started-with-office-365>
+
+**Alternative (winget):** May fail with hash mismatch error - use web installer instead:
+
+```powershell
+winget install --id Microsoft.Office -e --source winget
+```
+
+After installation, sign in with your Microsoft account to activate your subscription.
+
+### 22. GitHub Copilot CLI
 
 AI-powered coding assistant that runs directly in your terminal.
 
@@ -529,6 +546,7 @@ $apps = @(
     "Git.Git",
     "GitHub.cli",
     "Microsoft.VisualStudioCode.Insiders",
+    "Microsoft.Office",
     "OpenJS.NodeJS.LTS",
     "Python.Python.3.12",
     "Ollama.Ollama",
@@ -591,3 +609,9 @@ gh auth login --web
 1. Verify AutoHotkey v2 is installed
 2. Check script syntax with: `C:\Program Files\AutoHotkey\v2\AutoHotkey.exe "$env:USERPROFILE\Documents\AutoHotkey.ahk"`
 3. Run as administrator if needed
+
+### Microsoft Office winget hash mismatch
+
+If `winget install --id Microsoft.Office` fails with "Installer hash does not match", use the web installer instead:
+
+- <https://www.office.com/setup>

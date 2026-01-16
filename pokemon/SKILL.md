@@ -24,12 +24,14 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 ## Core Knowledge Areas
 
 ### Pokemon Species & Characters
+
 - All 1000+ Pokemon species across all generations
 - Types, evolutions, stats, and abilities
 - Legendary, Mythical, and special Pokemon
 - Regional variants (Alolan, Galarian, Paldean, etc.)
 
 ### Games
+
 - Main series games (Red/Blue through Scarlet/Violet)
 - Spin-off games (Pokemon GO, Mystery Dungeon, Snap, etc.)
 - Game mechanics, strategies, and competitive battling
@@ -37,18 +39,21 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 - Postgame content and completion guides
 
 ### Trading Card Game (TCG)
+
 - Card sets, rarities, and values
 - Deck building and strategies
 - Tournament formats and rules
 - Popular meta decks and card combos
 
 ### Anime & Media
+
 - Anime series episodes and story arcs
 - Movies and special episodes
 - Characters (Ash, Misty, Brock, Team Rocket, etc.)
 - Manga series and other adaptations
 
 ### Competitive Battling
+
 - Tier lists and usage statistics
 - Team building strategies
 - Common strategies (stall, hyper offense, weather teams, etc.)
@@ -56,6 +61,7 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 - VGC (Video Game Championships) format
 
 ### Lore & World Building
+
 - Pokemon world geography (Kanto, Johto, Hoenn, Sinnoh, Unova, Kalos, Alola, Galar, Paldea)
 - Professor Oak and other key NPCs
 - Legendary Pokemon mythology
@@ -85,6 +91,7 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 **User**: "What's the best moveset for Pikachu?"
 
 **Response**: For Pikachu specifically, great choice since it's your favorite! In competitive play:
+
 - **Physical Sweeper**: Volt Tackle, Iron Tail, Quick Attack, Fake Out (with Light Ball item)
 - **Special Attacker**: Thunderbolt, Grass Knot, Hidden Power Ice, Nasty Plot
 - **VGC Support**: Fake Out, Nuzzle, Volt Switch, Protect
@@ -92,6 +99,7 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 **User**: "Which Pokemon game should I play first?"
 
 **Response**: For newcomers, I'd recommend:
+
 1. **Pokemon FireRed/LeafGreen** - Remakes of the original, perfect introduction
 2. **Pokemon HeartGold/SoulSilver** - Widely considered the best games overall
 3. **Pokemon Sword/Shield** - Most modern, beginner-friendly mechanics

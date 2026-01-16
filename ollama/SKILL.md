@@ -1,4 +1,3 @@
-```markdown
 ---
 name: ollama
 description: V1.0 - Local LLM runtime for running open-source models. Use for model management, installation, and integration with AI agents like Goose.
@@ -129,5 +128,3 @@ extensions:
 - **Official Site:** <https://ollama.com>
 - **Model Library:** <https://ollama.com/library>
 - **GitHub:** <https://github.com/ollama/ollama>
-
-```

@@ -9,7 +9,7 @@ Manual tracking of subscription status and pricing.
 | [APOB AI](https://app.apob.ai/subscription/) | $12.00 | Monthly | Cancelled | — | — | Cancelled as of December 23, 2025. AI influencer/video generator by Atomstopbits Labs Inc |
 | [ChessBase Premium](https://account.chessbase.com) | $57.96 | Annual | Cancelled | — | — | Cancelled as of December 2025 |
 | [Claude](https://claude.ai/settings/billing) | $20.00 | Monthly | Active | January 17, 2026 | — | Last charge 12/17/2025; billed on the 17th each month |
-| [Cursor AI](https://cursor.com) | $20.00 | Monthly | Cancelled | January 3, 2026 | Chase Credit Card | Prior charges: $100 (Feb 12, 2025 USAA Classic), $10 (Mar 13, 2025 USAA Classic), $55.96 (Jul 1, 2025 USAA Classic) |
+| [Cursor AI](https://cursor.com) | $192.00 | Annual | Active | January 16, 2027 | — | Pro subscription billed annually on the 16th |
 | [Discord Nitro](https://discord.com/settings/subscriptions) | $104.21 | Annual | Active | October 8, 2026 | USAA Spending Checking | — |
 | [Discord Bot MEE6](https://mee6.xyz/dashboard) | $83.88 | Annual | Cancelled | July 6, 2026 | Chase Credit Card | Cancelled as of December 2025 |
 | [Disney Plus](https://www.disneyplus.com/account) | $35.99 | Monthly | Cancelled | — | — | Cancelled as of December 2025 |
