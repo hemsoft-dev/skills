@@ -38,11 +38,10 @@ git status
 
 ### Critical Rules
 
-1. **NEVER commit until git status is clean**
-2. **ALWAYS run linting before commit**
-3. **ALWAYS verify git status after commit**
-4. **ALWAYS use conventional commit format**
-5. **NEVER push without confirming clean state**
+1. **ALWAYS run linting before commit**
+2. **ALWAYS verify [clean state](#verifying-clean-state) after commit and push**
+3. **ALWAYS use conventional commit format**
+4. **NEVER commit/push without confirming clean state**
 
 ## Pre-Commit Quality Checks
 
@@ -123,98 +122,57 @@ This sets up the pre-commit hook to automatically:
 
 ### Standard Workflow
 
-When asked to "commit and push changes":
+When asked to "commit and push changes", follow the [Quick Reference](#quick-reference) steps, then:
 
 ```powershell
-# Step 1: Run linters and auto-fix
-markdownlint-cli2 --fix "**/*.md"
-Invoke-ScriptAnalyzer -Path . -Recurse -Settings .PSScriptAnalyzerSettings.psd1
-
-# Step 2: Check status BEFORE staging
-git status
-
-# Step 3: Stage all changes
-git add .
-
-# Step 4: Verify what's staged
-git status
-
-# Step 5: Commit with conventional commit message
+# After linting and staging (see Quick Reference)
 git commit -m "feat(skill-name): add feature description"
-
-# Step 6: CRITICAL - Verify git status is clean
-git status
-# Output should show: "nothing to commit, working tree clean"
-
-# Step 7: Push to remote
 git push
-
-# Step 8: FINAL verification
-git status
 ```
+
+**Critical**: Always [verify clean state](#verifying-clean-state) after commit and push.
 
 ### Critical Checkpoints
 
 **✅ You are NOT done until**:
 
-1. `git status` shows: `nothing to commit, working tree clean`
-2. `git push` completes successfully without errors
-3. Final `git status` confirms clean state
+1. [Clean state verified](#verifying-clean-state) after commit
+2. `git push` completes successfully
+3. [Clean state verified](#verifying-clean-state) after push
 
-**❌ NEVER stop here**:
+**❌ NEVER stop after**:
 
-- After `git add` - Changes are only staged, not committed
-- After `git commit` - Changes are local, not pushed
-- Before final `git status` - Cannot confirm clean state
+- `git add` - Changes are only staged, not committed
+- `git commit` - Changes are local, not pushed
+- Before final verification - Cannot confirm clean state
 
 ### Handling Linting Failures
 
 If pre-commit hook blocks your commit:
 
-```powershell
-# 1. Read the error output carefully
-# The hook shows exactly which file and rule failed
-
-# 2. For PowerShell issues
-Invoke-ScriptAnalyzer -Path ./path/to/file.ps1
-
-# 3. For Markdown issues  
-markdownlint-cli2 --fix ./path/to/file.md
-
-# 4. Fix the issues manually if auto-fix doesn't work
-
-# 5. Stage the fixes
-git add ./path/to/fixed/file.ps1
-
-# 6. Try commit again
-git commit -m "fix(skill): resolve linting issues"
-
-# 7. Verify clean status
-git status
-```
+1. Read the error output (hook shows exact file and rule)
+2. Fix PowerShell issues: `Invoke-ScriptAnalyzer -Path ./path/to/file.ps1`
+3. Fix Markdown issues: `markdownlint-cli2 --fix ./path/to/file.md`
+4. Stage fixes: `git add ./path/to/fixed/file.md`
+5. Retry commit: `git commit -m "fix(skill): resolve linting issues"`
+6. [Verify clean state](#verifying-clean-state)
 
 ### Verifying Clean State
 
-**Clean git status output**:
+**✅ Clean state** (you're done):
 
 ```text
 On branch main
 Your branch is up to date with 'origin/main'.
-
 nothing to commit, working tree clean
 ```
 
-**NOT clean (do NOT stop here)**:
+**❌ NOT clean** (continue workflow):
 
 ```text
-Changes to be committed:
-  modified:   some-file.md
-
-Changes not staged for commit:
-  modified:   other-file.ps1
-
-Untracked files:
-  new-file.md
+Changes to be committed: ...
+Changes not staged for commit: ...
+Untracked files: ...
 ```
 
 ## Commit Message Guidelines
@@ -234,7 +192,7 @@ All commits MUST follow this format:
 ### Types
 
 | Type | When to Use | Example |
-|------|-------------|---------|
+| --- | --- | --- |
 | `feat` | New feature or capability | `feat(diary): add weather integration` |
 | `fix` | Bug fix | `fix(slack): resolve API token issue` |
 | `docs` | Documentation only | `docs(readme): update installation steps` |
@@ -268,53 +226,43 @@ Use the skill name or component as scope:
 
 ### Examples
 
-**✅ Good commit messages**:
+**✅ Good**:
 
 ```text
-feat(diary): add Todoist integration for daily tasks
-fix(slack): resolve channel listing pagination issue
-docs(agents): add commit message guidelines
-refactor(scripts): consolidate duplicate API calls
-chore(markdown): update linting configuration
+feat(diary): add Todoist integration
+fix(slack): resolve pagination issue
+docs(agents): add commit guidelines
 ```
 
-**❌ Bad commit messages**:
+**❌ Bad**:
 
 ```text
-Update files           # Too vague, no type or scope
+Update files           # Too vague, no type/scope
 Fixed bug              # What bug? Where?
-WIP                    # Never commit work-in-progress
-asdf                   # Meaningless
-Changes to skill.md    # No type, no scope, describes WHAT not WHY
+WIP                    # Never commit WIP
 ```
 
 ### Multi-Line Messages
 
-For complex changes, use body and footer:
+For complex changes:
 
 ```text
 feat(github): add PR review automation
 
-Implements automated PR reviews with configurable modes:
-- Local report generation
-- Direct PR comments via API  
-- Interactive fix assistance
-
-Includes retry logic for API rate limiting and proper
-authentication handling for enterprise repositories.
+Implements automated PR reviews with configurable modes.
+Includes retry logic for API rate limiting.
 
 Closes #123
 ```
 
 ### Breaking Changes
 
-Indicate breaking changes with `BREAKING CHANGE:` in footer or `!` after type/scope:
+Use `!` after type/scope or `BREAKING CHANGE:` footer:
 
 ```text
 feat(api)!: change authentication method
 
 BREAKING CHANGE: API now requires OAuth tokens instead of API keys.
-Migration guide available in docs/migration.md
 ```
 
 ## Repository Structure
@@ -322,7 +270,7 @@ Migration guide available in docs/migration.md
 ### Top-Level Files
 
 | File | Purpose |
-|------|---------|
+| --- | --- |
 | `.markdownlint.jsonc` | Markdown linting configuration |
 | `.PSScriptAnalyzerSettings.psd1` | PowerShell linting configuration |
 | `Install-GitHooks.ps1` | Pre-commit hook installer |
@@ -428,93 +376,37 @@ description: V1.2 - Brief description of skill
 
 **Cause**: Linting issues in staged files
 
-**Solution**:
-
-```powershell
-# Check what failed
-git status
-
-# For PowerShell issues
-Invoke-ScriptAnalyzer -Path ./path/to/file.ps1
-
-# For Markdown issues
-markdownlint-cli2 ./path/to/file.md
-
-# Auto-fix if possible
-markdownlint-cli2 --fix ./path/to/file.md
-
-# Stage fixes and retry
-git add ./path/to/file.md
-git commit -m "fix(skill): resolve linting issues"
-```
+**Solution**: See [Handling Linting Failures](#handling-linting-failures) section.
 
 ### "Changes not staged for commit"
 
-**Cause**: Files modified but not added to staging area
+**Cause**: Files modified but not staged
 
-**Solution**:
-
-```powershell
-# Stage all changes
-git add .
-
-# Or stage specific files
-git add ./path/to/file.md
-
-# Verify
-git status
-```
+**Solution**: `git add .` (or specific files), then [verify clean state](#verifying-clean-state).
 
 ### "Your branch is ahead of origin"
 
-**Cause**: Local commits not pushed to remote
+**Cause**: Local commits not pushed
 
-**Solution**:
-
-```powershell
-# Push to remote
-git push
-
-# Verify clean state
-git status
-```
+**Solution**: `git push`, then [verify clean state](#verifying-clean-state).
 
 ### "Detached HEAD state"
 
-**Cause**: Checked out a specific commit instead of a branch
+**Cause**: Checked out a commit instead of branch
 
-**Solution**:
-
-```powershell
-# Return to main branch
-git checkout main
-
-# Verify
-git status
-```
+**Solution**: `git checkout main`, then [verify clean state](#verifying-clean-state).
 
 ### "Merge conflicts"
 
-**Cause**: Remote changes conflict with local changes
+**Cause**: Remote conflicts with local changes
 
 **Solution**:
 
-```powershell
-# Pull latest changes
-git pull
-
-# Resolve conflicts in editor
-# Look for <<<<<<< HEAD markers
-
-# Stage resolved files
-git add .
-
-# Complete merge
-git commit -m "merge: resolve conflicts with remote"
-
-# Verify
-git status
-```
+1. `git pull`
+2. Resolve conflicts (look for `<<<<<<< HEAD` markers)
+3. `git add .`
+4. `git commit -m "merge: resolve conflicts"`
+5. [Verify clean state](#verifying-clean-state)
 
 ## Best Practices
 
@@ -554,10 +446,10 @@ Before completing any commit and push task:
 - [ ] Linters run successfully (PowerShell and Markdown)
 - [ ] All changes staged with `git add`
 - [ ] Commit message follows conventional format
-- [ ] `git status` shows clean state after commit
+- [ ] [Clean state verified](#verifying-clean-state) after commit
 - [ ] `git push` completed successfully
-- [ ] Final `git status` confirms clean state
+- [ ] [Clean state verified](#verifying-clean-state) after push
 - [ ] History log updated if modifying a skill
 - [ ] Version number incremented if appropriate
 
-**Remember**: You are not done until `git status` shows `nothing to commit, working tree clean` after pushing.
+**Remember**: You are not done until [clean state is verified](#verifying-clean-state) after pushing.
