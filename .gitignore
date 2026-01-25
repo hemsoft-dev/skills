@@ -31,7 +31,9 @@ temp/
 # Python virtual environments
 browser-use/venv/
 
-# ChatGPT export binary files
+# ChatGPT export files (including large HTML/JSON exports)
+me/gpt-export/**/*.html
+me/gpt-export/**/*.json
 me/gpt-export/**/*.png
 me/gpt-export/**/*.jpg
 me/gpt-export/**/*.jpeg
