@@ -28,6 +28,9 @@ tmp/
 temp/
 *.tmp
 
+# Python virtual environments
+browser-use/venv/
+
 # ChatGPT export binary files
 me/gpt-export/**/*.png
 me/gpt-export/**/*.jpg
