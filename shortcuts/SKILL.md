@@ -1,6 +1,6 @@
 ---
 name: shortcuts
-description: V1.1 - Manages AutoHotkey keyboard shortcuts for launching tools, utilities, and processes. Use when adding, editing, listing, or removing shortcuts.
+description: V1.2 - Manages AutoHotkey keyboard shortcuts and text expansion hotstrings for launching tools, utilities, and processes. Use when adding, editing, listing, or removing shortcuts.
 ---
 
 # Shortcuts Manager
@@ -34,12 +34,12 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 | CTRL+SHIFT+/ | `^+/` | Insert date stamp (YYYY-MM-DD - ) |
 | CTRL+SHIFT+E | `^+e` | Edit AutoHotkey.ahk in default editor |
 | CTRL+SHIFT+R | `^+r` | Reload AHK script |
-| CTRL+SHIFT+G | `^+g` | Activate/launch ChatGPT |
+| CTRL+SHIFT+G | `^+g` | Activate/launch Claude |
 | CTRL+SHIFT+N | `^+n` | Activate/launch Obsidian Notes |
 | CTRL+SHIFT+T | `^+t` | Activate/launch Todoist |
 | CTRL+SHIFT+C | `^+c` | Activate/launch Windows Terminal |
 | CTRL+SHIFT+V | `^+v` | Activate/launch VS Code Insiders |
-| CTRL+SHIFT+S | `^+s` | Activate/launch VS Code with Skills repo |
+| CTRL+SHIFT+S | `^+s` | Activate/launch Cursor with Skills repo |
 | CTRL+ALT+P | `^!p` | Speak clipboard (TTS via edge-tts) |
 
 ### Command Launcher (WIN+Space)
@@ -52,6 +52,14 @@ Press `WIN+Space` to open GUI prompt, type code, press Enter.
 | `101` | Activate/launch VS Code Insiders |
 | `102` | Activate/launch Windows Terminal |
 | `103` | Paint (mspaint) |
+
+### Text Expansion Hotstrings
+
+Type the trigger text followed by a space, tab, or Enter to expand.
+
+| Trigger | Expansion |
+|---------|-----------|
+| `agp` | Markdown template with Purpose, Variables, Codebase Structure, Instructions, Workflow, and Report sections |
 
 ## AHK v2 Reference
 

@@ -82,8 +82,10 @@ See [INSTALLS.md](INSTALLS.md) for full installation instructions.
 - [ ] Ollama installed (local LLM runtime)
 - [ ] OpenCode installed
 - [ ] GitHub Copilot CLI installed (`copilot --version`)
+- [ ] Codex CLI installed (`codex --version`)
 - [ ] uv installed (fast Python package manager)
 - [ ] LangFlow installed (AI workflow builder, venv at ~/.langflow)
+- [ ] btop4win installed (CLI system monitor)
 
 ## Install Tracking
 
@@ -136,8 +138,10 @@ See [INSTALLS.md](INSTALLS.md) for full installation instructions.
 - [ ] docling installed (document processing and parsing)
 - [ ] OpenCode installed
 - [x] GitHub Copilot CLI installed (v0.0.381)
+- [ ] Codex CLI installed
 - [x] uv installed (v0.9.26, via pipx)
 - [x] LangFlow installed (v1.7.2, venv at ~/.langflow)
+- [x] btop4win installed (v1.0.5, CLI system monitor)
 
 ## Hotkey Reference (AutoHotkey)
 

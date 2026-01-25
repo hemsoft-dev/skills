@@ -2,6 +2,9 @@
   "github.copilot.nextEditSuggestions.enabled": true,
   "security.workspace.trust.untrustedFiles": "open",
   "chat.tools.global.autoApprove": true,
+  "chat.tools.edits.autoApprove": {
+    "**/*": true
+  },
   "chat.agent.thinkingStyle": "collapsed",
   "chat.useAgentSkills": true,
   "chat.useNestedAgentsMdFiles": true,

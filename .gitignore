@@ -1,0 +1,56 @@
+# Secrets and encryption keys
+.secrets/
+.age/
+*.age
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# ChatGPT export binary files
+me/gpt-export/**/*.png
+me/gpt-export/**/*.jpg
+me/gpt-export/**/*.jpeg
+me/gpt-export/**/*.gif
+me/gpt-export/**/*.bmp
+me/gpt-export/**/*.webp
+me/gpt-export/**/*.svg
+me/gpt-export/**/*.ico
+me/gpt-export/**/*.pdf
+me/gpt-export/**/*.mp3
+me/gpt-export/**/*.mp4
+me/gpt-export/**/*.wav
+me/gpt-export/**/*.avi
+me/gpt-export/**/*.mov
+me/gpt-export/**/*.zip
+me/gpt-export/**/*.rar
+me/gpt-export/**/*.7z
+me/gpt-export/**/*.tar
+me/gpt-export/**/*.gz
+me/gpt-export/**/*.exe
+me/gpt-export/**/*.dll
+me/gpt-export/**/*.so
+me/gpt-export/**/*.dylib
+me/gpt-export/**/*.bin
+me/gpt-export/**/*.dat

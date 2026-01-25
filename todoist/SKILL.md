@@ -73,7 +73,7 @@ Use the provided PowerShell scripts for reliable Todoist interaction:
 Comprehensive overview with all task categories:
 
 ```powershell
-.\Get-TodoistSummary.ps1 -IncludeCompleted
+.\scripts\Get-TodoistSummary.ps1 -IncludeCompleted
 ```
 
 ### Get-TodoistCompleted.ps1
@@ -81,7 +81,7 @@ Comprehensive overview with all task categories:
 Completed tasks for a specific date:
 
 ```powershell
-.\Get-TodoistCompleted.ps1 -Date "2026-01-06" -Format List
+.\scripts\Get-TodoistCompleted.ps1 -Date "2026-01-06" -Format List
 ```
 
 ### Get-TodoistTasks.ps1
@@ -89,7 +89,7 @@ Completed tasks for a specific date:
 Active tasks with custom filters:
 
 ```powershell
-.\Get-TodoistTasks.ps1 -Filter "today | overdue" -Format List
+.\scripts\Get-TodoistTasks.ps1 -Filter "today | overdue" -Format List
 ```
 
 ### Get-TodoistUpdated.ps1
@@ -97,7 +97,7 @@ Active tasks with custom filters:
 Tasks with comments/updates today (shows progress logs):
 
 ```powershell
-.\Get-TodoistUpdated.ps1
+.\scripts\Get-TodoistUpdated.ps1
 ```
 
 ### Get-TodoistComments.ps1
@@ -105,11 +105,11 @@ Tasks with comments/updates today (shows progress logs):
 Get comments for specific tasks:
 
 ```powershell
-.\Get-TodoistComments.ps1 -TaskId 1234567890
-.\Get-TodoistComments.ps1 -ProjectId 2221463722
+.\scripts\Get-TodoistComments.ps1 -TaskId 1234567890
+.\scripts\Get-TodoistComments.ps1 -ProjectId 2221463722
 ```
 
-All scripts are located in the skill directory and support multiple output formats (Table, List, JSON, Raw).
+All scripts are located in the `scripts/` subdirectory and support multiple output formats (Table, List, JSON, Raw).
 
 ## MCP Tools (If Available)
 

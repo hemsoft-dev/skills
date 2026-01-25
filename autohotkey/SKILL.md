@@ -1,6 +1,6 @@
 ---
 name: autohotkey
-description: V1.0 - Expert in AutoHotkey v2 scripting for hotkeys, automation, GUIs, and Windows integration. Use for creating, editing, or troubleshooting AHK scripts.
+description: V1.1 - Expert in AutoHotkey v2 scripting for hotkeys, hotstrings (text expansion), automation, GUIs, and Windows integration. Use for creating, editing, or troubleshooting AHK scripts.
 ---
 
 # AutoHotkey Expert
@@ -80,6 +80,73 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 ```autohotkey
 ::btw::by the way  ; Hotstring
 ^+d:: Send(FormatTime(, "yyyy-MM-dd"))  ; Date stamp
+```
+
+### Hotstrings (Text Expansion)
+
+Hotstrings automatically replace typed text with expanded content. Type the trigger text followed by a space, tab, or Enter to activate.
+
+**Basic Syntax:**
+
+```autohotkey
+; Single-line hotstring
+::btw::by the way
+
+; Multi-line hotstring (using continuation section)
+::agp::
+(
+# Purpose
+qqq
+
+## Variables
+qqq
+
+## Codebase Structure
+qqq
+
+## Instructions
+qqq
+
+## Workflow
+qqq
+
+## Report
+qqq
+)
+```
+
+**Hotstring Options:**
+
+```autohotkey
+:*:btw::by the way        ; * = immediate (no ending character needed)
+:O:btw::by the way        ; O = omit ending character
+:C:btw::by the way        ; C = case-sensitive
+:R:btw::by the way        ; R = raw mode (no special character processing)
+:B0:btw::by the way       ; B0 = no backspace (don't delete trigger text)
+```
+
+**Common Use Cases:**
+
+```autohotkey
+; Date expansion
+::date:: Send(FormatTime(, "yyyy-MM-dd"))
+
+; Email signature
+::sig::
+(
+Best regards,
+Your Name
+)
+
+; Code snippets
+::tryc::
+(
+try {
+    
+} catch {
+    
+}
+)
 ```
 
 **Run PowerShell Hidden:**

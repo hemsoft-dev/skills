@@ -20,9 +20,9 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 
 | Level | Script | Scope |
 |-------|--------|-------|
-| **Minimal** | `Get-RepoSummary-Minimal.ps1` | Basic metadata + top 5 contributors |
-| **Normal** | `Get-RepoSummary-Normal.ps1` | Full statistics, top 10 contributors, activity trends |
-| **Maximum** | `Get-RepoSummary-Maximum.ps1` | Deep analysis with historical patterns, all contributors, detailed breakdowns |
+| **Minimal** | `scripts/Get-RepoSummary-Minimal.ps1` | Basic metadata + top 5 contributors |
+| **Normal** | `scripts/Get-RepoSummary-Normal.ps1` | Full statistics, top 10 contributors, activity trends |
+| **Maximum** | `scripts/Get-RepoSummary-Maximum.ps1` | Deep analysis with historical patterns, all contributors, detailed breakdowns |
 
 ## Instructions
 
@@ -33,17 +33,17 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 
 ## Data Collection Scripts
 
-Scripts location: `~/.claude/skills/repo-summarizer/`
+Scripts location: `~/.claude/skills/repo-summarizer/scripts/`
 
 ```powershell
 # Minimal - basic metadata + top 5 contributors
-.\Get-RepoSummary-Minimal.ps1 -Owner "owner" -Repo "repo"
+.\scripts\Get-RepoSummary-Minimal.ps1 -Owner "owner" -Repo "repo"
 
 # Normal - includes issues, PRs, recent activity
-.\Get-RepoSummary-Normal.ps1 -Owner "owner" -Repo "repo"
+.\scripts\Get-RepoSummary-Normal.ps1 -Owner "owner" -Repo "repo"
 
 # Maximum - deep analysis with patterns and trends
-.\Get-RepoSummary-Maximum.ps1 -Owner "owner" -Repo "repo"
+.\scripts\Get-RepoSummary-Maximum.ps1 -Owner "owner" -Repo "repo"
 ```
 
 All data is collected via GitHub CLI (`gh`) - no local clone required.

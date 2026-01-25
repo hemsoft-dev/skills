@@ -10,7 +10,7 @@ $accounts = @(
     @{ Name = "king-monday"; EID = "EI6725967592947712" }
 )
 
-$dataDir = Join-Path $PSScriptRoot "data"
+$dataDir = Join-Path $PSScriptRoot "..\data"
 if (-not (Test-Path $dataDir)) {
     New-Item -ItemType Directory -Path $dataDir -Force | Out-Null
 }
@@ -20,7 +20,7 @@ foreach ($account in $accounts) {
     $outputPath = Join-Path $dataDir "$($account.Name).json"
     
     try {
-        Write-Information "Fetching $($account.Name)..." -NoNewline
+        Write-Information "Fetching $($account.Name)..."
         $response = Invoke-RestMethod -Uri $url -Method Get
         $response | ConvertTo-Json -Depth 100 | Set-Content -Path $outputPath -Encoding UTF8
         Write-Information "[32m OK`e[0m"

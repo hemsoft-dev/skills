@@ -25,8 +25,14 @@ scoop install JetBrains-Mono GeistMono-NF Victor-Mono Iosevka-NF
 ### Install Dev Tools
 
 ```powershell
-scoop install cloc ffmpeg
+scoop install cloc ffmpeg btop
 ```
+
+**Installed tools:**
+
+- `cloc` - Count Lines of Code
+- `ffmpeg` - Media processing
+- `btop` - Beautiful CLI system monitor (btop4win)
 
 ### Install Python Packages
 
@@ -524,6 +530,42 @@ copilot -p "Generate password validator function" --silent
 copilot --allow-all
 ```
 
+### 23. Codex CLI
+
+OpenAI's open-source coding agent built in Rust that allows developers to read, change, and run code directly from the terminal.
+
+```powershell
+npm install -g @openai/codex
+```
+
+**Verify installation:**
+
+```powershell
+codex --version
+```
+
+**Features:**
+
+- Interactive terminal-based coding agent
+- Read, modify, and execute code from terminal
+- Uses OpenAI models (requires ChatGPT Plus/Pro/Business/Enterprise or API key)
+- Experimental Windows support with sandboxed filesystem access
+
+**Initial setup:**
+
+After installation, launch Codex and authenticate:
+
+```powershell
+# Launch interactive mode
+codex
+
+# Authenticate via browser (for ChatGPT plans)
+# OR set API key environment variable:
+$env:OPENAI_API_KEY="your-api-key-here"
+```
+
+**Note:** Native Windows support is experimental. For best performance, consider using WSL2.
+
 **Xeneon Edge 14.5" Specs:**
 
 - 2560x720 resolution (32:9 ultrawide), 60Hz, 5-point touchscreen
@@ -586,6 +628,7 @@ Pop-Location
 # Install npm packages
 Write-Host "Installing npm packages..." -ForegroundColor Cyan
 npm install -g @github/copilot
+npm install -g @openai/codex
 
 Write-Host "All apps installed!" -ForegroundColor Green
 ```

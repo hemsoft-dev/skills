@@ -1,8 +1,7 @@
-﻿[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification='User-facing script requires colored output')]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification='User-facing script requires colored output')]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingPlainTextForPassword', '', Justification='Simple tool with default credentials')]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseApprovedVerbs', '', Justification='Parse-* and Extract-* are clear names for private helper functions')]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification='Function names accurately describe collections being parsed')]
-param()
 <#
 .SYNOPSIS
     Imports Claude skills markdown files into Neo4j graph database.
@@ -182,14 +181,28 @@ function Invoke-CypherQuery {
         }
 
         if ($response.errors -and $response.errors.Count -gt 0) {
-            Write-Warning "Cypher error: $($response.errors[0].message)"
+            $error = $response.errors[0]
+            Write-Warning "❌ Cypher query error: $($error.message)"
+            if ($error.code) {
+                Write-Warning "   Error code: $($error.code)"
+            }
             return $null
         }
 
         return $response.results
     }
     catch {
-        Write-Warning "Failed to execute Cypher: $_"
+        $errorMsg = $_.Exception.Message
+        if ($errorMsg -match "Unable to connect") {
+            Write-Warning "❌ Cannot connect to Neo4j at $uri"
+            Write-Warning "   Ensure Neo4j container is running: docker ps --filter name=neo4j"
+            Write-Warning "   If stopped, start it: docker start neo4j"
+        } elseif ($errorMsg -match "401|Unauthorized") {
+            Write-Warning "❌ Authentication failed. Check username/password."
+            Write-Warning "   Default credentials: neo4j/password"
+        } else {
+            Write-Warning "❌ Failed to execute Cypher query: $errorMsg"
+        }
         return $null
     }
 }
@@ -198,6 +211,25 @@ function Invoke-CypherQuery {
 Write-Host "🚀 Starting Skills Import to Neo4j" -ForegroundColor Cyan
 Write-Host "Skills Path: $SkillsPath" -ForegroundColor Gray
 Write-Host "Neo4j URI: $Neo4jUri" -ForegroundColor Gray
+
+# Pre-flight check: Verify Neo4j is accessible
+Write-Host "`n🔍 Verifying Neo4j connection..." -ForegroundColor Cyan
+try {
+    $testQuery = "RETURN 1 AS test"
+    $result = Invoke-CypherQuery -Query $testQuery
+    if ($null -eq $result) {
+        Write-Host "❌ Cannot connect to Neo4j. Please check:" -ForegroundColor Red
+        Write-Host "   1. Docker Desktop is running: docker ps" -ForegroundColor Yellow
+        Write-Host "   2. Neo4j container is running: docker ps --filter name=neo4j" -ForegroundColor Yellow
+        Write-Host "   3. If stopped, start it: docker start neo4j" -ForegroundColor Yellow
+        exit 1
+    }
+    Write-Host "✅ Neo4j connection verified" -ForegroundColor Green
+} catch {
+    Write-Host "❌ Failed to verify Neo4j connection: $_" -ForegroundColor Red
+    Write-Host "   Ensure Neo4j container is running: docker start neo4j" -ForegroundColor Yellow
+    exit 1
+}
 
 # Step 1: Create constraints and indexes
 Write-Host "`n📋 Creating constraints and indexes..." -ForegroundColor Yellow
@@ -395,7 +427,12 @@ MERGE (s)-[:MENTIONS]->(k)
         Write-Host "  ✅ Skill '$name' imported successfully" -ForegroundColor Green
     }
     catch {
-        Write-Warning "Failed to import skill '$skillName': $_"
+        Write-Warning "❌ Failed to import skill '$skillName': $_"
+        Write-Warning "   File: $($file.FullName)"
+        if ($_.Exception.Message) {
+            Write-Warning "   Error: $($_.Exception.Message)" -ForegroundColor Yellow
+        }
+        # Continue with next skill instead of failing completely
     }
 }
 

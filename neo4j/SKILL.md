@@ -1,6 +1,6 @@
 ---
 name: neo4j
-description: V1.1 - Expert in Neo4j graph database installation, Docker configuration, graph modeling, Cypher queries, and data import for document knowledge graphs.
+description: V1.2 - Expert in Neo4j graph database installation, Docker configuration, graph modeling, Cypher queries, and data import for document knowledge graphs.
 compatibility: Requires Docker Desktop on Windows
 ---
 
@@ -16,6 +16,24 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 ## {HH:MM} - {Action Taken}
 {One-line summary of what was done}
 ```
+
+Note: If retrospective improvements were made, include them in the history entry.
+
+## ALWAYS: Retrospective Check
+
+Before completing, reflect on this interaction:
+
+1. Were new patterns or edge cases discovered?
+2. Could instructions be clearer?
+3. Do scripts need improvements or bug fixes?
+4. Should new capabilities be added?
+
+If improvements identified:
+
+- Present proposed changes with clear rationale
+- Wait for user approval before applying
+- Keep skill concise (remove/condense when adding if possible)
+- Version bump SKILL.md if changes applied
 
 ## Prerequisites
 
@@ -252,6 +270,78 @@ RETURN a.name, b.name
 ```
 
 ## Troubleshooting
+
+### Docker Desktop Not Running
+
+**Symptom**: Scripts fail with "failed to connect to the docker API" or "Docker Desktop is not running"
+
+**Solution**:
+
+```powershell
+# Check if Docker Desktop is running
+docker ps
+
+# If not running, start Docker Desktop
+Start-Process "C:\Program Files\Docker\Docker\Docker Desktop.exe"
+
+# Wait for Docker to fully start (may take 30-60 seconds)
+Start-Sleep -Seconds 30
+docker ps
+```
+
+**Prevention**: Always verify Docker Desktop is running before executing sync scripts.
+
+### Neo4j Container Not Running
+
+**Symptom**: Scripts fail with connection errors or "container not found"
+
+**Solution**:
+
+```powershell
+# Check container status
+docker ps -a --filter name=neo4j
+
+# If container exists but is stopped, start it
+docker start neo4j
+
+# If container doesn't exist, create it (see Installation section)
+docker run -d `
+  --name neo4j `
+  -p 7474:7474 -p 7687:7687 `
+  -e NEO4J_AUTH=neo4j/password `
+  -v neo4j_data:/data `
+  -v neo4j_logs:/logs `
+  neo4j:latest
+```
+
+**Prevention**: Use `Test-Neo4jEnvironment.ps1` script to validate environment before syncing.
+
+### Script Syntax Errors
+
+**Symptom**: Scripts fail with "Unexpected attribute 'CmdletBinding'" or parser errors
+
+**Common Cause**: Duplicate `param()` declarations in script file
+
+**Solution**: Check script for duplicate `param()` blocks:
+
+- One empty `param()` before comment block
+- Another `[CmdletBinding()] param(...)` after comment block
+
+Remove the duplicate empty `param()` declaration.
+
+**Prevention**: Scripts should have only one `param()` block after the comment block.
+
+### Non-Interactive Execution
+
+**Symptom**: Scripts fail with "PowerShell is in NonInteractive mode. Read and Prompt functionality is not available"
+
+**Solution**: Scripts now handle non-interactive mode automatically. If you need to force interactive mode:
+
+```powershell
+$PSDefaultParameterValues['*:Confirm'] = $true
+```
+
+**Note**: Sync scripts automatically detect non-interactive mode and skip confirmation prompts.
 
 ### Container Won't Start
 
@@ -494,6 +584,33 @@ MATCH (neo4j:Skill {name: 'neo4j'})
 MATCH (installs:Skill {name: 'installs'})
 CREATE (neo4j)-[:REFERENCES]->(installs)
 ```
+
+---
+
+## Environment Validation
+
+Before running sync or import operations, validate your Neo4j environment:
+
+```powershell
+cd "$env:USERPROFILE\.claude\skills\neo4j\scripts"
+.\Test-Neo4jEnvironment.ps1
+```
+
+**What it checks:**
+
+- Docker Desktop is running
+- Neo4j container exists and is running
+- Ports 7474 (HTTP) and 7687 (Bolt) are accessible
+- Neo4j is responding to queries
+- Optional: PowerShell script syntax validation
+
+**With script validation:**
+
+```powershell
+.\Test-Neo4jEnvironment.ps1 -ValidateScripts
+```
+
+The script will report any errors or warnings and provide actionable solutions.
 
 ---
 

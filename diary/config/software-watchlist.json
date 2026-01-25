@@ -1,0 +1,183 @@
+{
+  "_checking_notes": "IMPORTANT: WebFetch may return stale/cached content. For GitHub repos, use 'gh release list' first. For raw.githubusercontent.com URLs (like Claude Code), always verify with WebSearch if version seems outdated. Cross-reference suspicious results. ALWAYS keep the monitored_software array sorted alphabetically by name.",
+  "monitored_software": [
+    {
+      "name": ".NET SDK",
+      "changelog_url": "https://github.com/dotnet/core/releases",
+      "check_method": "github_releases",
+      "notes": "Use GitHub releases API",
+      "last_displayed_date": "2026-01-18",
+      "last_displayed_version": "v10.0.2"
+    },
+    {
+      "name": "7 Days to Die",
+      "changelog_url": "https://7daystodie.com/",
+      "check_method": "web",
+      "notes": "Official 7 Days to Die website with release notes",
+      "last_displayed_date": "2026-01-18",
+      "last_displayed_version": "v2.5"
+    },
+    {
+      "name": "Bun",
+      "changelog_url": "https://github.com/oven-sh/bun/releases",
+      "check_method": "github_releases",
+      "notes": "Use GitHub releases API - repo: oven-sh/bun",
+      "last_displayed_date": "2026-01-20",
+      "last_displayed_version": "bun-v1.3.6"
+    },
+    {
+      "name": "Claude Code",
+      "changelog_url": "https://github.com/anthropics/claude-code/releases",
+      "check_method": "github_releases",
+      "notes": "Use GitHub releases API - repo: anthropics/claude-code",
+      "last_displayed_date": "2026-01-23",
+      "last_displayed_version": "v2.1.19"
+    },
+    {
+      "name": "Copilot CLI",
+      "changelog_url": "https://github.com/github/gh-copilot/releases",
+      "check_method": "github_releases",
+      "notes": "GitHub Copilot CLI extension releases",
+      "last_displayed_date": "2026-01-18",
+      "last_displayed_version": "v1.2.0"
+    },
+    {
+      "name": "Copilot Studio",
+      "changelog_url": "https://learn.microsoft.com/en-us/microsoft-copilot-studio/whats-new",
+      "check_method": "web",
+      "notes": "Microsoft Copilot Studio what's new page - check monthly updates",
+      "last_displayed_date": "2026-01-18",
+      "last_displayed_version": "December 2025"
+    },
+    {
+      "name": "Cursor",
+      "changelog_url": "https://changelog.cursor.sh/",
+      "check_method": "web",
+      "notes": "Client-side rendered page - requires manual checking or Playwright",
+      "last_displayed_date": "2026-01-19",
+      "last_displayed_version": "CLI (Jan 16, 2026)"
+    },
+    {
+      "name": "Docker Desktop",
+      "changelog_url": "https://docs.docker.com/desktop/release-notes/",
+      "check_method": "web",
+      "notes": "Check Docker documentation (docker --version returns Engine version 29.x, not Desktop version 4.x)",
+      "last_displayed_date": "2026-01-19",
+      "last_displayed_version": "v4.57.0"
+    },
+    {
+      "name": "Gemini CLI",
+      "changelog_url": "https://github.com/google-gemini/gemini-cli/releases",
+      "check_method": "github_releases_prerelease",
+      "notes": "Use GitHub releases API - repo: google-gemini/gemini-cli (filter for preview releases, exclude nightly)",
+      "last_displayed_date": "2026-01-22",
+      "last_displayed_version": "v0.26.0-preview.3"
+    },
+    {
+      "name": "GitHub CLI",
+      "changelog_url": "https://github.com/cli/cli/releases",
+      "check_method": "github_releases",
+      "notes": "Use GitHub releases API",
+      "last_displayed_date": "2026-01-21",
+      "last_displayed_version": "v2.86.0"
+    },
+    {
+      "name": "GitHub Copilot Chat",
+      "changelog_url": "https://github.com/microsoft/vscode-copilot-chat/blob/main/CHANGELOG.md",
+      "check_method": "github_releases",
+      "notes": "GitHub Copilot extension for VS Code - use gh release list for most reliable version check",
+      "last_displayed_date": "2026-01-21",
+      "last_displayed_version": "v0.37.2026012201"
+    },
+    {
+      "name": "GitHub Web",
+      "changelog_url": "https://github.blog/changelog/feed/",
+      "check_method": "rss",
+      "notes": "Parse RSS feed for latest changelog entry",
+      "last_displayed_date": "2026-01-22",
+      "last_displayed_version": "Jan 22"
+    },
+    {
+      "name": "Goose CLI",
+      "changelog_url": "https://github.com/block/goose/releases",
+      "check_method": "github_releases",
+      "notes": "Goose AI agent CLI releases",
+      "last_displayed_date": "2026-01-23",
+      "last_displayed_version": "v1.21.1"
+    },
+    {
+      "name": "M365 Copilot",
+      "changelog_url": "https://learn.microsoft.com/en-us/copilot/microsoft-365/release-notes",
+      "check_method": "web",
+      "notes": "Microsoft 365 Copilot release notes across all platforms - updates multiple times per month",
+      "last_displayed_date": "2026-01-18",
+      "last_displayed_version": "January 13, 2026"
+    },
+    {
+      "name": "Microsoft Teams",
+      "changelog_url": "https://support.microsoft.com/en-us/office/what-s-new-in-microsoft-teams-d7092a6d-c896-424c-b362-a472d5f105de",
+      "check_method": "web",
+      "notes": "Official Microsoft Teams what's new page - monthly updates",
+      "last_displayed_date": "2026-01-18",
+      "last_displayed_version": "December 2025"
+    },
+    {
+      "name": "Neo4j",
+      "changelog_url": "https://github.com/neo4j/neo4j/releases",
+      "check_method": "github_releases",
+      "notes": "Neo4j database releases - default branch is release/5.26.0, feature branches by month (e.g., 2025-12). ⚠️ Use WebSearch to verify - gh release list returns old beta releases",
+      "last_displayed_date": "2026-01-18",
+      "last_displayed_version": "2025-12"
+    },
+    {
+      "name": "Node.js",
+      "changelog_url": "https://github.com/nodejs/node/releases",
+      "check_method": "github_releases",
+      "notes": "Use GitHub releases API",
+      "last_displayed_date": "2026-01-19",
+      "last_displayed_version": "v25.4.0"
+    },
+    {
+      "name": "PowerShell",
+      "changelog_url": "https://github.com/PowerShell/PowerShell/releases",
+      "check_method": "github_releases",
+      "notes": "Use GitHub releases API",
+      "last_displayed_date": "2026-01-18",
+      "last_displayed_version": "v7.6.0-preview.6"
+    },
+    {
+      "name": "Slack",
+      "changelog_url": "https://slack.com/release-notes/windows/rss",
+      "check_method": "rss",
+      "notes": "Parse RSS feed for latest Windows desktop release (format: 'Slack 4.47.69 (12/8/25)')",
+      "last_displayed_date": "2026-01-18",
+      "last_displayed_version": "v4.47.69"
+    },
+    {
+      "name": "VSCode",
+      "changelog_url": "https://github.com/microsoft/vscode/releases",
+      "check_method": "github_releases",
+      "notes": "Use GitHub releases API - repo: microsoft/vscode",
+      "last_displayed_date": "2026-01-20",
+      "last_displayed_version": "1.108.1"
+    },
+    {
+      "name": "VSCode Insiders",
+      "changelog_url": "https://code.visualstudio.com/updates/v1_109",
+      "check_method": "web",
+      "notes": "Check VSCode updates page for latest Insiders version (not available on GitHub releases)",
+      "last_displayed_date": "2026-01-18",
+      "last_displayed_version": "v1.109"
+    },
+    {
+      "name": "Windows Terminal",
+      "changelog_url": "https://github.com/microsoft/terminal/releases",
+      "check_method": "github_releases",
+      "notes": "Use GitHub releases API",
+      "last_displayed_date": "2026-01-23",
+      "last_displayed_version": "v1.24.10212.0"
+    }
+  ],
+  "check_interval_days": 7,
+  "last_check": null
+}

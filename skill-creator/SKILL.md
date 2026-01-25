@@ -1,6 +1,39 @@
 ---
 name: skill-creator
-description: V1.4 - Creates new Claude skills with optimized SKILL.md files following best practices for clarity and conciseness.
+description: V1.7 - Creates new Claude skills with optimized SKILL.md files following best practices. Uses hooks for history tracking and retrospectives (enabled by default). Includes explicit instructions for getting accurate timestamps.
+hooks:
+  PostToolUse:
+    - matcher: "Read|Write|Edit"
+      hooks:
+        - type: prompt
+          prompt: |
+            If a file was read, written, or edited in the skill-creator directory (path contains 'skill-creator'), verify that history logging occurred.
+            
+            Check if History/{YYYY-MM-DD}.md exists and contains an entry for this interaction with:
+            - Format: "## HH:MM - {Action Taken}"
+            - One-line summary
+            - Accurate timestamp (obtained via `Get-Date -Format "HH:mm"` command, never guessed)
+            
+            If history entry is missing or incomplete, provide specific feedback on what needs to be added.
+            If history entry exists and is properly formatted, acknowledge completion.
+  Stop:
+    - matcher: "*"
+      hooks:
+        - type: prompt
+          prompt: |
+            Before stopping, if skill-creator was used (check if any files in skill-creator directory were modified), verify that the interaction was logged:
+            
+            1. Check if History/{YYYY-MM-DD}.md exists in skill-creator directory
+            2. Verify it contains an entry with format "## HH:MM - {Action Taken}" where HH:MM was obtained via `Get-Date -Format "HH:mm"` (never guessed)
+            3. Ensure the entry includes a one-line summary of what was done
+            
+            If history entry is missing:
+            - Return {"decision": "block", "reason": "History entry missing. Please log this interaction to History/{YYYY-MM-DD}.md with format: ## HH:MM - {Action Taken}\n{One-line summary}\n\nCRITICAL: Get the current time using `Get-Date -Format \"HH:mm\"` command - never guess the timestamp."}
+            
+            If history entry exists:
+            - Return {"decision": "approve"}
+            
+            Include a systemMessage with details about the history entry status.
 ---
 
 # Skill Creator
@@ -19,16 +52,7 @@ Per the official spec at <https://agentskills.io/specification>, SKILL.md frontm
 | `compatibility`    | ❌ | Max 500 chars. Environment requirements             |
 | `metadata`         | ❌ | Key-value map for custom properties                 |
 | `allowed-tools`    | ❌ | Space-delimited pre-approved tools                 |
-
-## ALWAYS: Log This Interaction
-
-After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
-
-```markdown
-## {HH:MM} - {Action Taken}
-
-{One-line summary of what was done}
-```
+| `hooks`            | ❌ | Hook configuration for automated post-processing   |
 
 ## Skill Structure
 
@@ -36,7 +60,11 @@ Each skill requires:
 
 ```text
 .claude/skills/{skill-name}/
-└── SKILL.md
+├── SKILL.md
+├── scripts/              # Optional: PowerShell/Python scripts
+│   └── script-name.ps1
+└── History/              # Optional: Interaction logs
+    └── {YYYY-MM-DD}.md
 ```
 
 ## SKILL.md Format
@@ -54,7 +82,7 @@ description: V{major}.{minor} - {One sentence describing when to use this skill}
 {Concise instructions for the LLM}
 ```
 
-**With optional fields:**
+**With optional fields and hooks:**
 
 ```markdown
 ---
@@ -65,6 +93,19 @@ compatibility: Requires git, network access
 metadata:
   author: {author-name}
   version: "1.0"
+hooks:
+  PostToolUse:
+    - matcher: "Read|Write|Edit"
+      hooks:
+        - type: prompt
+          prompt: |
+            If a file was read, written, or edited in the {skill-name} directory...
+  Stop:
+    - matcher: "*"
+      hooks:
+        - type: prompt
+          prompt: |
+            Before stopping, verify history entry exists...
 ---
 ```
 
@@ -74,6 +115,7 @@ metadata:
 2. **Instructions** - Minimal, actionable guidance; avoid over-documentation
 3. **Placeholders** - Use `{VARIABLE}` for runtime values
 4. **Output Format** - Only specify if the skill produces structured output
+5. **Scripts Organization** - Keep all PowerShell/Python scripts in a `scripts/` subfolder (e.g., `{skill-name}/scripts/script-name.ps1`)
 
 ## Creation Workflow
 
@@ -101,33 +143,74 @@ Ask user for skill name and purpose.
 
 **Only ask if unclear**: If user explicitly mentions "repo", "repository", or "project-specific", use Option B. Otherwise, default to Option A (user folder).
 
-### Step 3: Enable History Tracking
+### Step 3: Enable History Tracking & Retrospectives via Hooks
 
 **Default: Enabled (unless user specifies otherwise)**
 
-History tracking logs all interactions to `History/{YYYY-MM-DD}.md`.
+History tracking and retrospectives are now handled via hooks in the SKILL.md frontmatter.
 
-**Only disable if**: User explicitly says "no history", "don't track", or "disable history".
+**Only disable if**: User explicitly says "no history", "don't track", "no retrospective", or "disable history/retrospective".
 
-**When enabled** (default), add this section after the title:
+**When enabled** (default), add this to the frontmatter after `description`:
 
-```markdown
-## ALWAYS: Log This Interaction
-
-After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
-
-\```markdown
-## {HH:MM} - {Action Taken}
-{One-line summary of what was done}
-\```
+```yaml
+hooks:
+  PostToolUse:
+    - matcher: "Read|Write|Edit"
+      hooks:
+        - type: prompt
+          prompt: |
+            If a file was read, written, or edited in the {skill-name} directory (path contains '{skill-name}'), verify that history logging occurred.
+            
+            Check if History/{YYYY-MM-DD}.md exists and contains an entry for this interaction with:
+            - Format: "## HH:MM - {Action Taken}"
+            - One-line summary
+            - Accurate timestamp (obtained via `Get-Date -Format "HH:mm"` command, never guessed)
+            
+            If history entry is missing or incomplete, provide specific feedback on what needs to be added.
+            If history entry exists and is properly formatted, acknowledge completion.
+  Stop:
+    - matcher: "*"
+      hooks:
+        - type: prompt
+          prompt: |
+            Before stopping, if {skill-name} was used (check if any files in {skill-name} directory were modified), verify that the interaction was logged:
+            
+            1. Check if History/{YYYY-MM-DD}.md exists in {skill-name} directory
+            2. Verify it contains an entry with format "## HH:MM - {Action Taken}" where HH:MM was obtained via `Get-Date -Format "HH:mm"` (never guessed)
+            3. Ensure the entry includes a one-line summary of what was done
+            4. If retrospectives are enabled, verify retrospective check was performed
+            
+            If history entry is missing:
+            - Return {"decision": "block", "reason": "History entry missing. Please log this interaction to History/{YYYY-MM-DD}.md with format: ## HH:MM - {Action Taken}\n{One-line summary}"}
+            
+            If history entry exists:
+            - Return {"decision": "approve"}
+            
+            Include a systemMessage with details about the history entry status.
 ```
+
+**Important**: Replace `{skill-name}` with the actual skill name throughout the hooks configuration.
 
 ### Step 4: Create Files
 
 1. Create directory at chosen location (default: user folder)
-2. Write SKILL.md with frontmatter and instructions
+2. Write SKILL.md with frontmatter (including hooks if enabled) and instructions
 3. Apply version prefix (V1.0)
-4. Create History/ directory and apply history tracking section (default: enabled)
+4. Create History/ directory if history tracking enabled (default: enabled)
+5. Create initial History/{YYYY-MM-DD}.md entry if history tracking enabled
+
+**CRITICAL: Getting Accurate Timestamps**
+
+When creating history entries, you MUST get the current time using PowerShell:
+
+```powershell
+Get-Date -Format "HH:mm"
+```
+
+This returns the current time in 24-hour format (e.g., "12:36", "23:53", "02:22").
+
+**Never guess or estimate the time** - always run this command to get the accurate current time before writing the history entry. The timestamp format is `## HH:MM - {Action Taken}` where HH:MM is the 24-hour time from the command above.
 
 ### Step 5: Confirm Creation
 
@@ -141,7 +224,10 @@ Before finalizing the skill, check the `skill-improver` skill for available impr
 |----------------------|----------------|---------------------------------------------|
 | Version prefix       | Always applied | Never (always V1.0 for new skills)          |
 | History Tracking     | Enabled        | Only if user says "no history" or similar   |
+| Retrospective        | Enabled        | Only if user says "no retrospective" or similar |
 | Location             | User folder    | Only if user says "repo" or "project-specific" |
+| History Tracking (hooks) | Enabled    | Only if user says "no history" or similar   |
+| Retrospectives (hooks)   | Enabled    | Only if user says "no retrospective" or similar |
 
 ## Anti-Patterns
 

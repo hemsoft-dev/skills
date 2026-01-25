@@ -1,11 +1,19 @@
 ---
 name: atlassian
-description: V1.3 - Search and manage JIRA tickets, Confluence docs, and Cortex Internal Developer Portal with proper field configuration and full Confluence API support.
+description: V1.4 - Search and manage JIRA tickets, Confluence docs, and Cortex Internal Developer Portal with proper field configuration and full Confluence API support. ALWAYS includes clickable links in results.
 ---
 
 # Atlassian
 
 Search JIRA and Confluence, create/modify JIRA tickets with proper team field configuration. Full Confluence API support for pages, spaces, attachments, and content management.
+
+## ⚠️ MANDATORY: Always Include Links
+
+**Every result MUST include clickable links.** When returning JIRA tickets, Confluence pages, or search results:
+
+- Include the full URL: `https://relias.atlassian.net/browse/TICKET-KEY` or `https://relias.atlassian.net/wiki/...`
+- Format as markdown links: `[Ticket Key](URL)` or `[Page Title](URL)`
+- Display links prominently in the output, not buried in tables
 
 ## ALWAYS: Log This Interaction
 
@@ -19,7 +27,8 @@ After completing the request, append to `History/{YYYY-MM-DD}.md`:
 
 ## General Rules
 
-- **Always provide convenience links** when returning JIRA/Confluence results
+- **🚨 CRITICAL: ALWAYS provide clickable links** for every JIRA ticket, Confluence page, or search result returned. Links must be included in the output, not just mentioned.
+- **Link format**: Use markdown links `[TICKET-KEY](https://relias.atlassian.net/browse/TICKET-KEY)` or `[Page Title](https://relias.atlassian.net/wiki/...)` for easy access
 - **Confluence search**: Prioritize recent documents—older docs are less relevant
 
 ## JIRA API Script
@@ -52,14 +61,17 @@ $body = @{ jql = $JQL; maxResults = $MaxResults; fields = @('key','summary','sta
 $response = Invoke-RestMethod -Uri "$baseUrl/rest/api/3/search/jql" -Headers $headers -Method Post -Body $body
 Write-Host "Found $($response.total) tickets:"
 $response.issues | ForEach-Object {
+    $url = "$baseUrl/browse/$($_.key)"
     [PSCustomObject]@{
         Key      = $_.key
         Summary  = $_.fields.summary
         Status   = $_.fields.status.name
         Priority = $_.fields.priority.name
-        URL      = "$baseUrl/browse/$($_.key)"
+        URL      = $url
     }
 } | Format-Table -AutoSize
+# ALWAYS output links separately for easy access:
+$response.issues | ForEach-Object { Write-Host "[$($_.key)] $($_.fields.summary) - $baseUrl/browse/$($_.key)" }
 ```
 
 ### Common JQL Queries
@@ -77,16 +89,16 @@ $response.issues | ForEach-Object {
 
 ```powershell
 # My open assigned tickets
-.\Get-JiraTickets.ps1
+.\scripts\Get-JiraTickets.ps1
 
 # Tickets I reported (not assigned)
-.\Get-JiraTickets.ps1 -JQL 'reporter = currentUser() AND resolution = Unresolved'
+.\scripts\Get-JiraTickets.ps1 -JQL 'reporter = currentUser() AND resolution = Unresolved'
 
 # My in-progress work
-.\Get-JiraTickets.ps1 -JQL 'assignee = currentUser() AND status = "In Progress"'
+.\scripts\Get-JiraTickets.ps1 -JQL 'assignee = currentUser() AND status = "In Progress"'
 
 # DevEx team tickets
-.\Get-JiraTickets.ps1 -JQL '"Team[Team]" = "Productivity Engineering - DevEx" AND resolution = Unresolved'
+.\scripts\Get-JiraTickets.ps1 -JQL '"Team[Team]" = "Productivity Engineering - DevEx" AND resolution = Unresolved'
 ```
 
 ## Confluence API Scripts
@@ -370,9 +382,9 @@ if ($ListAll) {
     $response.results | ForEach-Object {
         [PSCustomObject]@{
             Key         = $_.key
-  Search by title and year | `.\Search-Confluence.ps1 -Title "AI Chapter" -Year 2025` |
-| Count results only | `.\Search-Confluence.ps1 -Query "meeting notes" -CountOnly` |
-| Multiple criteria | `.\Search-Confluence.ps1 -Query "API" -Title "documentation" -Type "page" -Year 2025` |
+  Search by title and year | `.\scripts\Search-Confluence.ps1 -Title "AI Chapter" -Year 2025` |
+| Count results only | `.\scripts\Search-Confluence.ps1 -Query "meeting notes" -CountOnly` |
+| Multiple criteria | `.\scripts\Search-Confluence.ps1 -Query "API" -Title "documentation" -Type "page" -Year 2025` |
 |           Name        = $_.name
             Type        = $_.type
             Status      = $_.status
@@ -397,17 +409,17 @@ if ($ListAll) {
 
 | Operation | Command |
 |-----------|---------|
-| List pages in space | `.\Get-ConfluencePages.ps1 -SpaceKey "DEV"` |
-| Search by title | `.\Get-ConfluencePages.ps1 -Title "API Documentation"` |
-| Get page details | `.\Get-ConfluencePage.ps1 -PageId "123456"` |
-| Get page with body | `.\Get-ConfluencePage.ps1 -PageId "123456" -IncludeBody` |
-| Create page | `.\New-ConfluencePage.ps1 -SpaceKey "DEV" -Title "New Page" -Body "<p>Content</p>"` |
-| Create child page | `.\New-ConfluencePage.ps1 -SpaceKey "DEV" -Title "Child" -Body "<p>Content</p>" -ParentPageId "123456"` |
-| Update page | `.\Update-ConfluencePage.ps1 -PageId "123456" -Title "Updated" -Body "<p>New content</p>" -Version 5` |
-| Search content | `.\Search-Confluence.ps1 -Query "kubernetes"` |
-| Search in space | `.\Search-Confluence.ps1 -Query "deployment" -SpaceKey "DEV"` |
-| List all spaces | `.\Get-ConfluenceSpace.ps1 -ListAll` |
-| Get space details | `.\Get-ConfluenceSpace.ps1 -SpaceKey "DEV"` |
+| List pages in space | `.\scripts\Get-ConfluencePages.ps1 -SpaceKey "DEV"` |
+| Search by title | `.\scripts\Get-ConfluencePages.ps1 -Title "API Documentation"` |
+| Get page details | `.\scripts\Get-ConfluencePage.ps1 -PageId "123456"` |
+| Get page with body | `.\scripts\Get-ConfluencePage.ps1 -PageId "123456" -IncludeBody` |
+| Create page | `.\scripts\New-ConfluencePage.ps1 -SpaceKey "DEV" -Title "New Page" -Body "<p>Content</p>"` |
+| Create child page | `.\scripts\New-ConfluencePage.ps1 -SpaceKey "DEV" -Title "Child" -Body "<p>Content</p>" -ParentPageId "123456"` |
+| Update page | `.\scripts\Update-ConfluencePage.ps1 -PageId "123456" -Title "Updated" -Body "<p>New content</p>" -Version 5` |
+| Search content | `.\scripts\Search-Confluence.ps1 -Query "kubernetes"` |
+| Search in space | `.\scripts\Search-Confluence.ps1 -Query "deployment" -SpaceKey "DEV"` |
+| List all spaces | `.\scripts\Get-ConfluenceSpace.ps1 -ListAll` |
+| Get space details | `.\scripts\Get-ConfluenceSpace.ps1 -SpaceKey "DEV"` |
 
 ### Confluence Content Format
 

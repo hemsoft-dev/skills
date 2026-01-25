@@ -1,5 +1,5 @@
 ---
-name: Generate Image
+name: generate-image
 description: V1.5 - Generates images from text prompts using OpenRouter API with dedicated scripts for each model (Seedream, Nano Banana, Nano Banana Pro). Includes automatic credit balance tracking.
 ---
 

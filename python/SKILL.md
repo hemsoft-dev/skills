@@ -1,6 +1,6 @@
 ---
 name: python
-description: V1.0 - Expert in Python installation, virtual environments, package management, and troubleshooting on Windows.
+description: V1.1 - Expert in Python installation, virtual environments, package management, and troubleshooting on Windows. Skills must use isolated virtual environments - never install Python packages globally.
 ---
 
 # Python Expert
@@ -232,6 +232,23 @@ For permanent PATH changes, use System Properties > Environment Variables.
 
 ## Virtual Environments
 
+### ⚠️ CRITICAL: Skills Must Use Isolated Venvs
+
+**NEVER install Python packages globally when working with skills. ALWAYS use isolated virtual environments in the skill folder.**
+
+**For Skills:**
+
+- Create venv in the skill folder: `{skill-name}/venv/` or `{skill-name}/.venv/`
+- Install all dependencies in the skill's venv
+- Scripts should check for venv, create if missing, and use it automatically
+- This keeps skills isolated and prevents global Python pollution
+
+**For Regular Projects:**
+
+- Create venv in project root: `.venv/`
+- Activate before working
+- Install dependencies in venv only
+
 ### Create venv
 
 ```powershell
@@ -240,6 +257,9 @@ python -m venv .venv
 
 # Or with python launcher
 py -m venv .venv
+
+# For skills - create in skill folder
+py -m venv "$env:USERPROFILE\.claude\skills\{skill-name}\venv"
 ```
 
 ### Activate venv
@@ -250,6 +270,22 @@ py -m venv .venv
 
 # CMD
 .\.venv\Scripts\activate.bat
+
+# For skills (from skill folder)
+.\venv\Scripts\Activate.ps1
+```
+
+### Use venv Without Activation (Recommended for Scripts)
+
+```powershell
+# Run Python from venv directly (no activation needed)
+.\venv\Scripts\python.exe script.py
+
+# Run pip from venv directly
+.\venv\Scripts\python.exe -m pip install package
+
+# Check if venv exists
+if (Test-Path "venv\Scripts\python.exe") { ... }
 ```
 
 ### Deactivate
@@ -263,6 +299,29 @@ deactivate
 ```powershell
 Get-Command python | Select-Object Source
 # Should show path inside .venv
+```
+
+### Skill Script Pattern
+
+**PowerShell scripts in skills should use this pattern:**
+
+```powershell
+# Determine skill directory
+$skillDir = Split-Path -Parent $PSScriptRoot
+
+# Check/create venv
+$venvPath = Join-Path $skillDir "venv"
+if (-not (Test-Path "$venvPath\Scripts\python.exe")) {
+    Write-Information "Creating virtual environment..."
+    py -m venv $venvPath
+}
+
+# Use venv Python directly (no activation needed)
+$pythonExe = Join-Path $venvPath "Scripts\python.exe"
+& $pythonExe script.py
+
+# Install packages in venv
+& $pythonExe -m pip install package-name
 ```
 
 ## Package Management
@@ -353,14 +412,16 @@ py -0                 # List all installed versions
 ## Best Practices
 
 1. **Always use virtual environments** - Isolate project dependencies
-2. **Use requirements.txt** - Track dependencies
-3. **Use pipx for CLI tools** - Keep global namespace clean (black, ruff, pytest, etc.)
-4. **Pin versions in production** - Use exact versions in requirements.txt
-5. **Keep pip updated** - `python -m pip install --upgrade pip`
-6. **Research installation methods first** - Not all "Python" tools are Python packages
+2. **Skills MUST use isolated venvs** - Never install Python packages globally for skills
+3. **Use requirements.txt** - Track dependencies
+4. **Use pipx for CLI tools** - Keep global namespace clean (black, ruff, pytest, etc.)
+5. **Pin versions in production** - Use exact versions in requirements.txt
+6. **Keep pip updated** - `python -m pip install --upgrade pip`
+7. **Research installation methods first** - Not all "Python" tools are Python packages
    - Check official docs for recommended installation (Scoop, winget, official installers)
    - Verify it's actually a Python package before using pip/pipx
    - Example: Goose (block/goose) is a Rust CLI tool, NOT a Python package despite similar names
+8. **Scripts should auto-manage venvs** - Check for venv, create if missing, use it automatically
 
 ## Important Lessons
 

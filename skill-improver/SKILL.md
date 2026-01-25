@@ -1,6 +1,40 @@
 ---
 name: skill-improver
-description: V1.4 - Applies standardized improvements to skills. Use when modifying any skill.
+description: V1.8 - Applies standardized improvements to skills and proactively suggests missing opt-in features. Converts "ALWAYS:" sections to hooks. Use when modifying any skill.
+hooks:
+  PostToolUse:
+    - matcher: "Read|Write|Edit"
+      hooks:
+        - type: prompt
+          prompt: |
+            If a file was read, written, or edited in the skill-improver directory (path contains 'skill-improver'), verify that history logging occurred.
+            
+            Check if History/{YYYY-MM-DD}.md exists and contains an entry for this interaction with:
+            - Format: "## HH:MM - {Skill Name} - {Action Taken}"
+            - One-line summary
+            - Accurate timestamp
+            
+            If history entry is missing or incomplete, provide specific feedback on what needs to be added.
+            If history entry exists and is properly formatted, acknowledge completion.
+  Stop:
+    - matcher: "*"
+      hooks:
+        - type: prompt
+          prompt: |
+            Before stopping, if skill-improver was used (check if any files in skill-improver directory were modified), verify that the interaction was logged:
+            
+            1. Check if History/{YYYY-MM-DD}.md exists in skill-improver directory
+            2. Verify it contains an entry with format "## HH:MM - {Skill Name} - {Action Taken}"
+            3. Ensure the entry includes a one-line summary of what was done
+            4. Verify retrospective check was performed
+            
+            If history entry is missing:
+            - Return {"decision": "block", "reason": "History entry missing. Please log this interaction to History/{YYYY-MM-DD}.md"}
+            
+            If history entry exists:
+            - Return {"decision": "approve"}
+            
+            Include a systemMessage with details about the history entry status.
 ---
 
 # Skill Improver
@@ -19,6 +53,7 @@ Per the official spec at <https://agentskills.io/specification>, SKILL.md frontm
 | `compatibility`    | ❌ | Max 500 chars. Environment requirements             |
 | `metadata`         | ❌ | Key-value map for custom properties                 |
 | `allowed-tools`    | ❌ | Space-delimited pre-approved tools                 |
+| `hooks`            | ❌ | Hook configuration for automated post-processing   |
 
 **Example with optional fields:**
 
@@ -35,9 +70,114 @@ allowed-tools: Bash(git:*) Read
 ---
 ```
 
+## Converting Old-School Skills to Hooks
+
+When encountering skills with manual "ALWAYS:" sections, convert them to hooks:
+
+### Conversion Steps
+
+1. **Identify manual sections**:
+   - `## ALWAYS: Log This Interaction`
+   - `## ALWAYS: Retrospective Check`
+
+2. **Add hooks to frontmatter** (if not present):
+
+   ```yaml
+   hooks:
+     PostToolUse:
+       - matcher: "Read|Write|Edit"
+         hooks:
+           - type: prompt
+             prompt: |
+               If a file was read, written, or edited in the {skill-name} directory (path contains '{skill-name}'), verify that history logging occurred.
+               
+               Check if History/{YYYY-MM-DD}.md exists and contains an entry for this interaction with:
+               - Format: "## HH:MM - {Action Taken}"
+               - One-line summary
+               - Accurate timestamp
+               
+               If history entry is missing or incomplete, provide specific feedback on what needs to be added.
+               If history entry exists and is properly formatted, acknowledge completion.
+     Stop:
+       - matcher: "*"
+         hooks:
+           - type: prompt
+             prompt: |
+               Before stopping, if {skill-name} was used (check if any files in {skill-name} directory were modified), verify that the interaction was logged:
+               
+               1. Check if History/{YYYY-MM-DD}.md exists in {skill-name} directory
+               2. Verify it contains an entry with format "## HH:MM - {Action Taken}"
+               3. Ensure the entry includes a one-line summary of what was done
+               4. If retrospectives are enabled, verify retrospective check was performed
+               
+               If history entry is missing:
+               - Return {"decision": "block", "reason": "History entry missing. Please log this interaction to History/{YYYY-MM-DD}.md with format: ## HH:MM - {Action Taken}\n{One-line summary}"}
+               
+               If history entry exists:
+               - Return {"decision": "approve"}
+               
+               Include a systemMessage with details about the history entry status.
+   ```
+
+3. **Remove manual sections**: Delete `## ALWAYS: Log This Interaction` and `## ALWAYS: Retrospective Check` sections
+
+4. **Replace `{skill-name}`**: Update hooks configuration with actual skill name
+
+5. **Version bump**: Increment version (e.g., V1.3 → V1.4)
+
 ## When Modifying a Skill
 
-Apply all relevant improvements from the registry below.
+Follow this workflow:
+
+### Step 1: Check for Old-School Manual Instructions
+
+Before applying improvements, check if the skill uses outdated manual instructions:
+
+**History Tracking - Convert to Hooks**:
+
+- Search for `## ALWAYS: Log This Interaction` section
+- If found, this needs to be converted to hooks in frontmatter
+- Add to improvements: "Convert manual history tracking to hooks"
+
+**Retrospective - Convert to Hooks**:
+
+- Search for `## ALWAYS: Retrospective Check` section
+- If found, this needs to be converted to hooks in frontmatter
+- Add to improvements: "Convert manual retrospective to hooks"
+
+**If Hooks Missing** (for skills that should have them):
+
+- Check if frontmatter has `hooks` field
+- If missing and skill should track history, add to improvements: "Add hooks for history tracking"
+
+### Step 2: Apply Active Improvements
+
+Apply all active improvements from the registry below.
+
+### Step 3: Present Final Questions
+
+**CRITICAL:** End every interaction with a single, concise question table. Never scatter questions throughout multiple sections.
+
+**Format:**
+
+```markdown
+## Next Steps
+
+| # | Question | Options | Recommended |
+|---|----------|---------|-------------|
+| 1 | Add history tracking? | Yes / No | ✅ Yes |
+| 2 | Add retrospective? | Yes / No | ✅ Yes |
+| 3 | Condense verbose sections? | Yes / No / Show analysis first | ✅ Show analysis first |
+```
+
+**Rules:**
+
+- Combine ALL questions into ONE table at the end
+- Number questions sequentially
+- List all possible answers clearly
+- Mark recommended answer with ✅
+- Keep table concise (avoid long explanations in cells)
+- Put detailed context BEFORE the table, not in it
 
 ## Improvements Registry
 
@@ -46,6 +186,7 @@ Apply all relevant improvements from the registry below.
 | 2   | History Tracking           | Opt-in |
 | 3   | File Size Management       | Active |
 | 4   | Frontmatter Validation     | Active |
+| 5   | Retrospective              | Opt-in |
 
 ---
 
@@ -119,27 +260,66 @@ When a skill exceeds threshold:
 
 ---
 
-### 2. History Tracking
+### 2. History Tracking (via Hooks)
 
-**Rule**: Opt-in per skill. When enabled, every interaction MUST be logged.
+**Rule**: Opt-in per skill. When enabled, hooks automatically verify history logging.
 
 **Location**: `~/.claude/skills/{skill-name}/History/{YYYY-MM-DD}.md`
 
-**Placement**: Add immediately after the skill's intro paragraph (near top, not bottom).
+**Implementation**: Add hooks to frontmatter (not manual "ALWAYS:" sections):
 
-**To Enable**: Add this section to a skill's SKILL.md:
-
-```markdown
-## ALWAYS: Log This Interaction
-
-After completing the request, append to `History/{YYYY-MM-DD}.md`:
+```yaml
+hooks:
+  PostToolUse:
+    - matcher: "Read|Write|Edit"
+      hooks:
+        - type: prompt
+          prompt: |
+            If a file was read, written, or edited in the {skill-name} directory (path contains '{skill-name}'), verify that history logging occurred.
+            
+            Check if History/{YYYY-MM-DD}.md exists and contains an entry for this interaction with:
+            - Format: "## HH:MM - {Action Taken}"
+            - One-line summary
+            - Accurate timestamp
+            
+            If history entry is missing or incomplete, provide specific feedback on what needs to be added.
+            If history entry exists and is properly formatted, acknowledge completion.
+  Stop:
+    - matcher: "*"
+      hooks:
+        - type: prompt
+          prompt: |
+            Before stopping, if {skill-name} was used, verify history entry exists in History/{YYYY-MM-DD}.md with format "## HH:MM - {Action Taken}" and one-line summary.
 ```
 
-## {HH:MM} - {Action}
+**Migration**: When encountering `## ALWAYS: Log This Interaction` sections:
 
-{One-line summary of request and outcome}
+1. Remove the manual section
+2. Add hooks configuration to frontmatter
+3. Replace `{skill-name}` with actual skill name
+4. Create History/ directory if it doesn't exist
 
-```markdown
+---
+
+### 5. Retrospective (via Hooks)
+
+**Rule**: Opt-in per skill. When enabled, hooks automatically verify retrospective check occurred.
+
+**Implementation**: Retrospectives are verified in the Stop hook (same hook that checks history logging).
+
+The Stop hook includes step 4:
+
+```
+4. If retrospectives are enabled, verify retrospective check was performed
+```
+
+**Migration**: When encountering `## ALWAYS: Retrospective Check` sections:
+
+1. Remove the manual section
+2. Retrospective verification is handled by the Stop hook
+3. No separate section needed - hooks enforce retrospective checks
+
+**Note**: Retrospective checks still happen during skill execution, but hooks verify they occurred instead of relying on manual instructions.
 
 ---
 

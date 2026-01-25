@@ -1,6 +1,6 @@
 ---
 name: today
-description: V1.2 - Displays highlighted news, current date/time, weather conditions, and 3-day forecast with news headlines. Uses web search (not playwright) for news gathering.
+description: V1.3 - Displays highlighted news, current date/time, weather conditions, and 3-day forecast with news headlines. Uses web search (not playwright) for news gathering. Enforces source diversification (max 2 items per source, minimum 3-4 sources per category).
 ---
 
 # Today
@@ -28,13 +28,13 @@ Location: {city} | Temp: {temp}°F | News items: {count}
 Run the PowerShell script:
 
 ```powershell
-& "$env:USERPROFILE\.claude\skills\today\Get-Today.ps1"
+& "$env:USERPROFILE\.claude\skills\today\scripts\Get-Today.ps1"
 ```
 
 For a different location:
 
 ```powershell
-& "$env:USERPROFILE\.claude\skills\today\Get-Today.ps1" -Location "Seattle,WA"
+& "$env:USERPROFILE\.claude\skills\today\scripts\Get-Today.ps1" -Location "Seattle,WA"
 ```
 
 **Default location**: 28117 (Mooresville, NC)
@@ -66,6 +66,11 @@ REQUIREMENTS:
 4. No duplicates - if same story appears on multiple sources, pick the best one
 5. **ALWAYS use fetch_webpage tool or web search for news gathering** - NEVER use playwright
 6. If a tool is unavailable, skip to the next news source
+7. **CRITICAL - Source Diversification**: Ensure news is diversified across multiple sources:
+   - No single source should account for more than 2 items (maximum 30% of total items)
+   - When returning 5-7 items, include stories from at least 3-4 different sources
+   - If multiple stories are equally significant, prioritize the one from a less-represented source
+   - Actively check multiple sources before finalizing your selection to ensure diversity
 
 OUTPUT FORMAT (return EXACTLY this format, no other text):
 | # | Headline | Source | Link |
@@ -110,14 +115,15 @@ If a source is unavailable or has no fresh news, note at the end:
 
 **Sources:**
 
-1. The Verge AI (theverge.com/ai-artificial-intelligence)
-2. Ars Technica AI (arstechnica.com/ai)
-3. TechCrunch AI (techcrunch.com/category/artificial-intelligence)
-4. Wired AI (wired.com/tag/artificial-intelligence)
-5. MIT Technology Review (technologyreview.com)
-6. VentureBeat AI (venturebeat.com/ai)
-7. Crescendo AI News (crescendo.ai/news/latest-ai-news-and-updates)
-8. Hacker News top (news.ycombinator.com) - AI-related only
+1. Simon Willison's Weblog (simonwillison.net)
+2. The Verge AI (theverge.com/ai-artificial-intelligence)
+3. Ars Technica AI (arstechnica.com/ai)
+4. TechCrunch AI (techcrunch.com/category/artificial-intelligence)
+5. Wired AI (wired.com/tag/artificial-intelligence)
+6. MIT Technology Review (technologyreview.com)
+7. VentureBeat AI (venturebeat.com/ai)
+8. Crescendo AI News (crescendo.ai/news/latest-ai-news-and-updates)
+9. Hacker News top (news.ycombinator.com) - AI-related only
 
 **Focus areas:** Model releases, research breakthroughs, AI regulation, major funding, product launches, safety developments
 

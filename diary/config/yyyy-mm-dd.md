@@ -6,9 +6,9 @@
 
 {User to provide 1-2 sentence context}
 
-### 💬 Slack Highlights
+### 💬 Slack Activity
 
-- [User to provide 5 bullet points of interesting/important Slack messages from today]
+- [Comprehensive coverage of substantive Slack activity: PSAs, problems/solutions, decisions, announcements - aim for 8-12+ items]
 
 ---
 
@@ -54,8 +54,42 @@
 |---|----------|--------|
 | [Populate from news sources] |
 
+### 🇩🇰 Danish News
+
+| # | Headline | Source |
+|---|----------|--------|
+| [Populate from news sources] |
+
 ---
 *News gathered at {time}. Sources checked: {count}+. Items within last 24 hours only.*
+
+---
+
+## 📊 Daily Numbers
+
+- **Dow Jones**: {value} ({+/- value}, {+/- %}%) *(weekdays only)*
+- **S&P 500**: {value} ({+/- value}, {+/- %}%) *(weekdays only)*
+- **Relias Repo Count**: GitHub: {count} ({delta}), Bitbucket: {count} ({delta})
+
+---
+
+## 🔥 Top 5 Trending GitHub Repos
+
+| # | Repository | Description | Stars |
+|---|------------|-------------|-------|
+| 1 | [{owner}/{repo}](https://github.com/{owner}/{repo}) | {description} | ⭐ {actual_count} |
+| 2 | [{owner}/{repo}](https://github.com/{owner}/{repo}) | {description} | ⭐ {actual_count} |
+| 3 | [{owner}/{repo}](https://github.com/{owner}/{repo}) | {description} | ⭐ {actual_count} |
+| 4 | [{owner}/{repo}](https://github.com/{owner}/{repo}) | {description} | ⭐ {actual_count} |
+| 5 | [{owner}/{repo}](https://github.com/{owner}/{repo}) | {description} | ⭐ {actual_count} |
+
+---
+
+## 💻 Software Watchlist
+
+| Software | Version | Released | Highlights | Links |
+|----------|---------|----------|------------|-------|
+| [Populate with actual updates - zero updates indicates checking process failure] |
 
 ---
 
@@ -85,4 +119,4 @@
 
 ---
 
-*Entry created with diary skill V{version}*
+*Entry created with diary skill V2.15*

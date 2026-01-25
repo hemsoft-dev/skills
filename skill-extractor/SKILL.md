@@ -1,6 +1,40 @@
 ---
 name: skill-extractor
-description: V1.2 - Analyzes Markdown files to identify and extract reusable instruction sets into standalone skills.
+description: V1.4 - Analyzes Markdown files to identify and extract reusable instruction sets into standalone skills with hook-based history tracking and retrospectives.
+hooks:
+  PostToolUse:
+    - matcher: "Read|Write|Edit"
+      hooks:
+        - type: prompt
+          prompt: |
+            If a file was read, written, or edited in the skill-extractor directory (path contains 'skill-extractor'), verify that history logging occurred.
+            
+            Check if History/{YYYY-MM-DD}.md exists and contains an entry for this interaction with:
+            - Format: "## HH:MM - {Action Taken}"
+            - One-line summary
+            - Accurate timestamp
+            
+            If history entry is missing or incomplete, provide specific feedback on what needs to be added.
+            If history entry exists and is properly formatted, acknowledge completion.
+  Stop:
+    - matcher: "*"
+      hooks:
+        - type: prompt
+          prompt: |
+            Before stopping, if skill-extractor was used (check if any files in skill-extractor directory were modified), verify that the interaction was logged:
+            
+            1. Check if History/{YYYY-MM-DD}.md exists in skill-extractor directory
+            2. Verify it contains an entry with format "## HH:MM - {Action Taken}"
+            3. Ensure the entry includes a one-line summary of what was done
+            4. Verify retrospective check was performed
+            
+            If history entry is missing:
+            - Return {"decision": "block", "reason": "History entry missing. Please log this interaction to History/{YYYY-MM-DD}.md with format: ## HH:MM - {Action Taken}\n{One-line summary}"}
+            
+            If history entry exists:
+            - Return {"decision": "approve"}
+            
+            Include a systemMessage with details about the history entry status.
 ---
 
 # Skill Extractor
@@ -19,15 +53,7 @@ Per the official spec at <https://agentskills.io/specification>, SKILL.md frontm
 | `compatibility`    | ❌ | Max 500 chars. Environment requirements             |
 | `metadata`         | ❌ | Key-value map for custom properties                 |
 | `allowed-tools`    | ❌ | Space-delimited pre-approved tools                 |
-
-## ALWAYS: Log This Interaction
-
-After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
-
-```markdown
-## {HH:MM} - {Action Taken}
-{One-line summary of what was done}
-```
+| `hooks`            | ❌ | Hook configuration for automated post-processing   |
 
 ## Workflow
 
@@ -63,18 +89,30 @@ description: V1.0 - {One sentence describing when to use this skill}
 {Concise instructions for the LLM}
 ```
 
-**With optional fields (when applicable):**
+**With history tracking and retrospectives (hooks-based):**
 
-```markdown
+```yaml
 ---
 name: {skill-name}
 description: V1.0 - {Description of what + when to use}
-license: Apache-2.0
-compatibility: Requires specific tools or environment
-metadata:
-  author: {source-document}
+hooks:
+  PostToolUse:
+    - matcher: "Read|Write|Edit"
+      hooks:
+        - type: prompt
+          prompt: |
+            If a file was read, written, or edited in the {skill-name} directory (path contains '{skill-name}'), verify that history logging occurred.
+            Check if History/{YYYY-MM-DD}.md exists with format "## HH:MM - {Action Taken}" and one-line summary.
+  Stop:
+    - matcher: "*"
+      hooks:
+        - type: prompt
+          prompt: |
+            Before stopping, if {skill-name} was used, verify history entry exists in History/{YYYY-MM-DD}.md.
 ---
 ```
+
+**Important**: Replace `{skill-name}` with the actual skill name throughout the hooks configuration.
 
 ## Best Practices
 

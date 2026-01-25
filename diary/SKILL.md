@@ -1,11 +1,27 @@
 ---
 name: diary
-description: "V2.4 - Captures daily accomplishments, goals, and reflections with Todoist integration. Auto-includes weather, ALL news headlines (5-7 per category: US, World, AI), Slack highlights from 18 monitored channels, and watchlist updates. Supports meeting notes creation with auto-formatted markdown files. Filters out routine tasks tagged with @Regular Chores. Structured Work/Personal/Personal Reflections format with consistent subsections. Keeps entries high-level and summarized. Queries user for missing content. Omits Work section on Saturdays; Sundays only include Work → Tomorrow's Goals. NEVER removes files without user consent."
+description: "V2.16 - Captures daily accomplishments, goals, and reflections with Todoist integration. Auto-includes weather, ALL news headlines (5-7 per category: US, World, AI, Danish) with mandatory source diversification (max 2 per source, 3-4 sources minimum) and Simon Willison priority for AI News, comprehensive Slack highlights from 18 monitored channels (8-12+ highlights), watchlist updates, Daily Numbers (Dow Jones, S&P 500, Relias Repo Counts), trending GitHub repos, and Software Watchlist with 68% automation. Structured Work/Personal/Personal Reflections format. Omits Work section on Saturdays; Sundays only include Work → Tomorrow's Goals. NEVER removes files without user consent."
 ---
 
 # Diary
 
 Expert in daily journaling that integrates with Todoist to capture what you've accomplished and what your goals are. Automatically includes weather and news context from the today skill.
+
+## ALWAYS: Retrospective Check
+
+Before completing, reflect on this interaction:
+
+1. Were new patterns or edge cases discovered?
+2. Could instructions be clearer?
+3. Do scripts need improvements or bug fixes?
+4. Should new capabilities be added?
+
+If improvements identified:
+
+- Present proposed changes with clear rationale
+- Wait for user approval before applying
+- Keep skill concise (remove/condense when adding if possible)
+- Version bump SKILL.md if changes applied
 
 ## ⚠️ CRITICAL: File Management
 
@@ -19,27 +35,21 @@ Diary entries are valuable personal records. Before removing any `.md` files fro
 
 ## Creating New Entries
 
-When creating a new diary entry:
+**Quick Start:** Use `config/yyyy-mm-dd.md` template → Run `scripts/Get-Today.ps1` → Gather Todoist/Slack/News/Watchlist data → Save to `entries/{YYYY-MM-DD}.md`
 
-1. **Copy the template**: Use `yyyy-mm-dd.md` as the base template
-2. **Replace placeholders**: Fill in date-specific values (`{YYYY-MM-DD}`, `{Weekday}`, etc.)
-3. **Run weather script**: Execute `Get-Today.ps1` for current weather and forecast
-4. **Gather Todoist tasks**: Use `Get-TodoistCompleted.ps1` for completed tasks
-5. **Get Slack highlights**: Use the slack skill to retrieve 5 important messages
-6. **Fetch news**: Gather 5-7 headlines each for US, World, and AI news
-7. **Check watchlist**: Use watchlist skill for any updates
-8. **Save to**: `entries/{YYYY-MM-DD}.md`
-
-**Template location**: `~/.claude/skills/diary/yyyy-mm-dd.md`
+**Template location**: `~/.claude/skills/diary/config/yyyy-mm-dd.md`
 
 ## Entry Structure
 
-All diary entries follow the template at `yyyy-mm-dd.md`. Key sections:
+All diary entries follow the template at `config/yyyy-mm-dd.md`. Key sections:
 
 - **Today's Highlight**: Featured news article with user context
 - **Slack Highlights**: 5 bullet points from today's messages
 - **Weather**: Current conditions and 3-day forecast (from `Get-Today.ps1`)
-- **News Headlines**: 5-7 items each for US, World, AI (last 24 hours only)
+- **News Headlines**: 5-7 items each for US, World, AI, and Danish News (last 24 hours only)
+- **Daily Numbers**: Stock market data (weekdays) and Relias repo counts (GitHub and Bitbucket with day-over-day deltas)
+- **Top 5 Trending GitHub Repos**: Current trending repositories with actual star counts (use web search to get real data from <https://github.com/trending>)
+- **Software Watchlist**: Version updates for monitored software (last 7 days)
 - **Work**: Work Done, Tomorrow's Goals
 - **Personal**: Work Done, Tomorrow's Goals
 - **Personal Reflections**: Freeform thoughts
@@ -133,9 +143,30 @@ The today skill automatically launches 3 parallel sub-agents to gather:
 - World News headlines (last 24 hours)
 - AI News headlines (last 24 hours)
 
-**Step 3: Gather Slack Highlights**
+**🚨 CRITICAL: News Quality Requirements**
 
-Use the slack skill to retrieve today's most interesting messages from these channels:
+**Source Diversification (MANDATORY):**
+
+- **Maximum 2 items per source** (30% cap per source)
+- **Minimum 3-4 different sources** per category when returning 5-7 items
+- If multiple stories are equally significant, prioritize the one from a less-represented source
+- **Verify source distribution** before finalizing news selection
+
+**AI News Priority Sources:**
+
+- **ALWAYS check Simon Willison's Weblog (simonwillison.net)** - This is priority source #1 for AI News
+- If Simon Willison has relevant posts from the last 24 hours, they MUST be included
+- Then diversify across other sources: The Verge AI, Ars Technica AI, TechCrunch AI, Wired AI, MIT Technology Review, VentureBeat AI
+
+**Verification:**
+
+- Count items per source before including in diary
+- Reject any news selection that violates diversification rules
+- If Simon Willison is missing from AI News, explicitly check why and include if content exists
+
+**Step 3: Gather Slack Activity**
+
+Use the slack skill to retrieve comprehensive coverage of today's substantive activity from these channels:
 
 **Monitored Channels:**
 
@@ -159,21 +190,71 @@ Use the slack skill to retrieve today's most interesting messages from these cha
 - #sonarcloud-public
 
 **Method:**
-Use `Get-SlackChannelMessages.ps1` to check recent messages (10-15 per channel):
+**CRITICAL: Always filter by date when gathering daily highlights.** Use `Search-SlackMessages.ps1` with date filters:
 
 ```powershell
-# Example: Check dev-tribe for today's messages
-& "$env:USERPROFILE\.claude\skills\slack\scripts\Get-SlackChannelMessages.ps1" -Channel "dev-tribe" -Count 10 -MaxThreadReplies 0
+# Example: Check dev-tribe for messages on today's date ONLY
+# IMPORTANT: 'after' is EXCLUSIVE - to get messages FROM today, use yesterday as 'after' value
+$today = Get-Date -Format "yyyy-MM-dd"
+$yesterday = (Get-Date).AddDays(-1).ToString("yyyy-MM-dd")
+$tomorrow = (Get-Date).AddDays(1).ToString("yyyy-MM-dd")
+& "$env:USERPROFILE\.claude\skills\slack\scripts\Search-SlackMessages.ps1" -Query "in:#dev-tribe after:$yesterday before:$tomorrow -from:@email -from:@datadog" -Count 20 -OutputFormat List
 ```
 
-**Slack Highlight Criteria:**
+**⚠️ DATE FILTERING REQUIREMENT:**
 
-- Exclude routine/low-value messages (bot notifications, simple acks)
-- Prioritize: decisions made, action items, important announcements
-- Include channel name for context: `- **[#channel-name](link)**: Brief summary of message`
-- Aim for 5 highlights; if fewer than 5 interesting items, that's fine
-- Focus on messages that would be useful to remember later
-- Include direct links to messages when available
+- **CRITICAL**: `after:` is EXCLUSIVE - to get messages FROM Jan 16, use `after:2026-01-15` (the day before)
+- **CRITICAL**: `before:` is EXCLUSIVE - to get messages UP TO Jan 16, use `before:2026-01-17` (the day after)
+- **ALWAYS** use `after:(target-1day) before:(target+1day)` in search queries for daily highlights
+- **ALWAYS** verify message timestamps match the target date before including in diary
+- **NEVER** include messages from previous days, even if they appear in recent results
+- If `Get-SlackChannelMessages.ps1` is used, manually filter results by checking timestamps
+- If no messages found for the target date, note "No significant Slack activity" - don't include old messages
+
+**Slack Activity Criteria:**
+
+**IMPORTANT: Provide exhaustive coverage of substantive Slack activity across all monitored channels.**
+
+**Priority Content (in order):**
+
+1. **PSAs and FYI posts**: Public service announcements, general information, important notices (e.g., "Release branches merged", "Deployment starting", "New process announced")
+2. **Problems being addressed**: Solutions provided, troubleshooting resolutions, help given with outcomes
+3. **Problems being asked**: Technical issues raised, help requests, blockers identified
+4. **Decisions and action items**: Technical decisions made, architecture discussions, planning outcomes
+5. **Announcements**: Team changes, deployment notifications, process updates
+
+**What to INCLUDE:**
+
+- Technical discussions with substance (architecture decisions, implementation strategies)
+- Help requests AND their resolutions (not just the ask, but the solution)
+- PSAs and informational posts that provide context or awareness
+- Deployment notifications (starting, completed, verification)
+- Process changes or updates
+- Team coordination and planning
+
+**What to EXCLUDE:**
+
+- Bot notifications (email, datadog, pagerduty alerts)
+- Simple acknowledgments ("thanks", "sounds good")
+- Pleasantries without substance
+- Channel membership changes (unless significant)
+
+**Format:**
+
+- `- **[#channel-name](link)**: {Comprehensive summary that captures the problem/solution/information}`
+- **Read full thread context** to understand complete story, not just individual messages
+- Capture BOTH problem and solution when available
+- For PSAs, include the key information being communicated
+- For technical discussions, summarize the decision or conclusion reached
+
+**Coverage Goal:**
+
+- Aim for 8-12+ activity items per day (more if substantive activity warrants)
+- Cast a wide net across all monitored channels
+- Prioritize information value over message count
+- **Verify date**: Each message must match target date
+
+**Section Header:** Use "### 💬 Slack Activity" in diary entries
 
 **Step 4: Check Watchlist for Updates**
 
@@ -185,196 +266,95 @@ Use the watchlist skill to check for any updates on tracked items:
 - Format as: `- **{Item Name}**: {Brief summary of what changed/updated}`
 - If no watchlist items have updates today, omit this section entirely
 
-**Step 5: Include Full Output in Diary Entry**
+**Step 4.5: Gather Daily Numbers**
 
-Copy the complete output from the today skill into the diary entry, including:
+**Stock Market (weekdays only):** Dow Jones and S&P 500 closing prices with change/% change
 
-- Today's Highlight (top news story)
-- Slack Highlights (5 bullet points)
-- Watchlist Updates (items with changes/updates from today)
-- Weather section (current conditions + 3-day forecast)
-- News Headlines (all three categories with tables)
+**Source:** Use Google Finance (<https://www.google.com/finance/beta>) to fetch current market data. Fetch the page directly using mcp_web_fetch tool to get the most recent closing prices and percentage changes for:
 
-Copy the **complete, unfiltered output** from the today skill into the diary entry, including:
+- Dow Jones Industrial Average (DJI)
+- S&P 500 Index (SPX)
 
-- Today's Highlight (top news story)
-- Weather section (current conditions + 3-day forecast)
-- **News Headlines - ALL categories with ALL headlines** (typically 5-7 per category):
-  - 🇺🇸 US News (full table with all headlines)
-  - 🌍 World News (full table with all headlines)
-  - 🤖 AI News (full table with all headlines)
-- News gathering metadata footer
+Display format: "{Index Name}: {closing_price} ({point_change}, {percent_change}%)"
+Example: "Dow Jones: 49,384.01 (+306.78, +0.63%)"
 
-**CRITICAL:** Include **every single headline** returned by the today skill's sub-agents. Do not truncate, summarize, or filter the news tables. The diary entry should contain the complete news snapshot from that day.
+**Relias Repo Count (daily):**
 
-This provides valuable context for future reflection on what was happening in the world when you wrote each entry.
+- **Unified Script:** `& "$env:USERPROFILE\.claude\skills\diary\scripts\Get-ReliasRepoCounts.ps1"`
+  - Fetches both GitHub and Bitbucket repo counts
+  - Compares to yesterday's counts (stored in `config/repo-counts.json`)
+  - Displays deltas in parentheses: "GitHub: 175 (+2), Bitbucket: 562 (-1)"
+  - Updates tracking file with today's counts for tomorrow's comparison
+  - **Requires:** `BITBUCKET_USERNAME` and `BITBUCKET_API_KEY` environment variables
 
-**Note:** If the user provides a specific highlight article, use that instead of the top news story from today skill.
+**Format:** Weekdays include both market + repo counts; weekends/holidays only include repo counts. Display as "GitHub: {count} ({delta}), Bitbucket: {count} ({delta})" where delta shows change from yesterday (e.g., +2, -1, or 0)
+
+**Step 4.6: Check Software Watchlist**
+
+**🚨 CRITICAL: ACTUALLY CHECK FOR UPDATES FIRST!** Do not just read the JSON file and assume there are no updates. You MUST actively check for new versions using the appropriate method for each software:
+
+**Checking Methods (MUST execute before reading JSON):**
+
+1. **github_releases**: Run `gh release list --repo owner/repo --limit 5` to get latest releases
+2. **github_releases_prerelease**: Filter GitHub releases for preview/pre-release tags (excludes nightly for Gemini CLI)
+3. **rss**: Parse RSS feed to extract version from title or date (supports Slack version extraction)
+4. **web**: Use WebSearch for latest version (e.g., "Docker Desktop latest version January 2026")
+5. **web_scrape**: Fetch static HTML and parse with regex (only works for non-JS pages)
+6. **cli**: Execute the version command locally (e.g., `node --version`, `docker --version`)
+
+**Automated Script Support:** Use `Get-SoftwareUpdates.ps1` to check all items with github_releases, github_releases_prerelease, and rss methods (15/22 items = 68% automated)
+
+**QUALITY STANDARD:** Verify versions exist, read actual release notes, extract 3-7 specific changes (no generic "bug fixes/improvements"), handle special cases (CVEs for security, replacements for deprecations), be honest if vendor provides no details.
+
+**Configuration:** Load `config/software-watchlist.json` with `monitored_software` array (name, changelog_url, check_method, last_displayed_date, last_displayed_version)
+
+**IMPORTANT:** WebFetch may return stale content (especially `raw.githubusercontent.com`). For GitHub repos, use `gh release list` first. Verify suspicious versions with WebSearch. **NEVER use "Check manually"** - always extract real version data (semantic version, release date, or month identifier).
+
+**Incremental Tracking:**
+
+1. **First Run** (`last_displayed_version` is null): Show ALL software in alphabetical order, update tracking fields after rendering
+2. **Subsequent Runs**: Compare actual current versions against `last_displayed_version`, only show software with version changes, update tracking fields for displayed items
+3. **After determining updates**: Only THEN read the JSON to see what should be displayed based on tracking
+
+**🚨 ZERO UPDATES = ERROR CONDITION:** If you find ZERO software updates when checking all 22+ monitored items, this indicates a problem with the checking process itself, not that no software was updated. In this case:
+
+1. Run diagnostic script: `& "$env:USERPROFILE\.claude\skills\diary\scripts\Test-SoftwareWatchlist.ps1"`
+2. Report the issue: "⚠️ Software watchlist check returned zero updates, which indicates a checking process failure. Diagnostic results: [output]"
+3. Do NOT render "No software updates" - instead show the diagnostic information
+
+**Highlights:** 3-7 specific changes from release notes (NEVER generic "bug fixes/improvements"). Answer: "What can I do now that I couldn't before?"
+
+**Special Cases:**
+
+- **Security**: List CVE numbers (e.g., "CVE-2025-55132: permission model bypass")
+- **Deprecations**: State replacement (e.g., "Final release, use X instead")
+- **Vague vendor notes**: Acknowledge explicitly (e.g., "Slack provides no details")
+
+**Format:** `| [Software](url) | version | date | highlights | [Notes](release-url) |`
+
+After rendering, update JSON with new `last_displayed_date` and `last_displayed_version`. Maintain alphabetical order.
+
+**Step 5: Include Full Output**
+
+Copy **complete, unfiltered output** from today skill: Today's Highlight, Weather, ALL News Headlines (5-7 per category: US/World/AI), Slack Highlights, Watchlist Updates. Include every headline for future context. Use user-provided highlight if specified.
 
 ### 1. Meeting Notes Creation
 
-When user requests to save meeting notes (flexible phrasing):
+**Workflow:** Detect request → Generate slug filename (`entries/{YYYY-MM-DD}-{slug}.md`) → Confirm → Format content (markdown with header/date/footer) → Create file → Offer to update main diary → Offer to create Todoist tasks
 
-- "Add meeting notes for '{title}'"
-- "Create meeting notes for '{title}'"
-- "Meeting notes: '{title}'"
-- "Save meeting notes '{title}'"
+**Slug Examples:** "AI SyncUp" → `ai-syncup`, "Q1 Planning (Goals)" → `q1-planning-goals`
 
-**Workflow:**
-
-**Step 1: Detect Request**
-
-- Identify meeting notes request with flexible pattern matching
-- Extract meeting title from user's request
-- Extract content (the "lots of text" following the title)
-
-**Step 2: Generate Filename**
-
-- Convert title to slug format: lowercase, replace spaces/special chars with hyphens
-- Examples:
-  - `"AI Weekly SyncUp - Harbinger"` → `ai-weekly-syncup-harbinger`
-  - `"Q1 2026 Planning (Budget & Goals)"` → `q1-2026-planning-budget-goals`
-  - `"Team Retro #3 [Action Items]"` → `team-retro-3-action-items`
-- Format: `entries/{YYYY-MM-DD}-{slug}.md`
-
-**Step 3: Confirm with User**
-Ask for confirmation before creating the file:
-
-```
-I'll create a meeting notes file:
-- Title: {Original Title}
-- File: entries/{YYYY-MM-DD}-{slug}.md
-- Content: {X} lines of notes
-
-Proceed?
-```
-
-**Step 4: Format Content**
-
-- Assume raw text input
-- Format into clean markdown:
-  - Add level 1 header with meeting title and date
-  - Detect and format lists (bullet points, numbered items)
-  - Preserve paragraphs and spacing
-  - Detect and format common meeting sections (Attendees, Action Items, Decisions, etc.)
-  - Clean up excessive whitespace
-- Add footer: `*Meeting notes created with diary skill v1.7*`
-
-**Step 5: Create File**
-
-- Write to `entries/{YYYY-MM-DD}-{slug}.md`
-
-**Step 6: Provide Receipt**
-Confirm completion with details:
-
-```
-✅ Meeting notes saved!
-- File: entries/{YYYY-MM-DD}-{slug}.md
-- Title: {Original Title}
-- Date: {YYYY-MM-DD}
-- Size: {X} lines
-```
-
-**Step 7: Offer to Update Main Diary Entry**
-Ask if user wants to add a reference to the meeting in today's diary entry:
-
-```
-Would you like me to add an entry about this meeting to today's diary (entries/{YYYY-MM-DD}.md)?
-I'll add it to the Work Done section with a link to the meeting notes.
-```
-
-If confirmed:
-
-- Check if `entries/{YYYY-MM-DD}.md` exists
-- If it exists, add to appropriate section (Work Done or Personal Done based on context)
-- If it doesn't exist, offer to create a basic diary entry
-- Add a line like: `- Attended {Meeting Title} ([meeting notes](entries/{YYYY-MM-DD}-{slug}.md))`
-
-**Step 8: Offer to Create Todoist Tasks**
-If follow-up tasks are detected in the meeting notes, offer to add them:
-
-```
-I found {X} follow-up tasks in the meeting notes. Would you like me to add them to Todoist?
-```
-
-For each task:
-
-1. Show the task title and owner
-2. Ask: "Add this task? (y/n/skip all)"
-3. If yes, ask: "Due date? (today/tomorrow/monday/next week/custom date/no date)"
-4. Ask: "Which project? (Work/Personal/Other)"
-5. Query available Todoist projects via API if needed
-6. Ask: "Priority? (P1/P2/P3/P4/none)"
-7. Suggest appropriate labels based on task content:
-   - `@quick_win` for simple tasks
-   - `@high_impact` for important items
-   - `@needs_research` for investigation tasks
-   - `@blocked` for waiting/dependency items
-8. Create task via Todoist REST API
-9. Confirm creation with task ID and link
-
-**Example Meeting Note Format:**
-
-```markdown
-# AI Weekly SyncUp - Harbinger
-*2026-01-09*
-
-{Formatted content from user}
-
----
-*Meeting notes created with diary skill v1.7*
-```
+**Todoist Integration:** Detect action items → Ask to add each (due date, project, priority, labels) → Confirm with task ID
 
 ### 2. Daily Entry Creation Workflow
 
-When user wants to record today's diary entry, follow this process:
-
-**Step 0: Run Today Skill** *(NEW)*
-
-Execute the today skill to get weather and news context (see section 0 above).
-
-**Step 1: Pull Todoist Data**
-
-Use PowerShell scripts from todoist skill:
-
-- `Get-TodoistCompleted.ps1` - Completed tasks today
-- `Get-TodoistTasks.ps1` with filter `tomorrow` - Tomorrow's tasks
-- `Get-TodoistUpdated.ps1` - Tasks with description updates today
-
-**Step 2: Apply Filters**
-
-Load `exclusion.json` and filter out:
-
-- Tasks tagged with @Regular Chores
-- Tasks matching excludeTaskPatterns
-- Health/medication tasks
-- Exercise/self-care tasks
-- Submit timesheet tasks
-
-**Step 3: Categorize Tasks**
-
-- **Work**: Project ID 2221463722 and children
-- **Personal**: Project ID 2200472795 or other non-work projects
-
-**Step 4: Generate Initial Entry**
-
-Create diary entry starting with weather/news section from today skill, followed by all required sections populated from Todoist data.
-
-**Step 5: Query for Missing Content**
-
-For each section that's empty or sparse, ask user:
-
-- Work Done: "Anything else you accomplished at work today?"
-- Work Tomorrow's Goals: "Any work goals for tomorrow?"
-- Work Reflections: "Any work reflections? Proud of anything you built?"
-- Personal Work Done: "Did you accomplish anything personal today?"
-- Personal Tomorrow's Goals: "Any personal goals for tomorrow?"
-- Personal Reflections: "Any personal thoughts or learnings?"
-- Personal Reflections (top-level): "How are you feeling about today overall? Anything on your mind?"
-
-**Step 6: Save Entry**
-
-Write to `entries/{YYYY-MM-DD}.md` with proper formatting.
+1. **Run today skill** (weather/news)
+2. **Pull Todoist data** (`Get-TodoistCompleted.ps1`, `Get-TodoistTasks.ps1`, `Get-TodoistUpdated.ps1`)
+3. **Apply filters** (`exclusion.json`: @Regular Chores, health/exercise/timesheet tasks)
+4. **Categorize** (Work: 2221463722, Personal: 2200472795 or others)
+5. **Generate entry** with weather/news/Todoist data
+6. **Query for gaps** (work/personal done/goals/reflections)
+7. **Save** to `entries/{YYYY-MM-DD}.md`
 
 ### 3. Review Past Entries
 
@@ -385,147 +365,53 @@ When user wants to review previous entries:
 - Compare goals vs accomplishments over time
 - Identify trends in work/personal balance
 
-## Task Filtering Configuration
+## Todoist Integration
 
-**Location:** `{skill-directory}/exclusion.json`
-
-```json
-{
-  "excludeLabels": ["@Regular Chores"],
-  "excludeTaskPatterns": ["submit time sheet", "submit timesheet"],
-  "excludeRecurring": false
-}
-```
-
-**Filtering Rules:**
-
-- **excludeLabels**: Tasks with these labels are completely filtered out
-- **excludeTaskPatterns**: Task names matching these patterns (case-insensitive) are excluded
-- **excludeRecurring**: If true, automatically exclude all recurring tasks
-
-**Apply filters to BOTH:**
-
-1. Work Done sections (completed tasks)
-2. Tomorrow's Goals sections (upcoming tasks)
-
-**Hard-coded exclusions (always filter):**
-
-- Daily health routines (medications, supplements, exercise)
-- Basic self-care (sleep tracking, meals)
-- Recurring household chores
-- Submit timesheet tasks
-- Egg Inc game tasks (chores/entertainment, not work)
-
-## Task Categorization
-
-Tasks are categorized by project hierarchy:
+**Task Categorization:**
 
 - **Work**: Tasks under project "Work" (id: 2221463722) and its children
 - **Personal**: Tasks under "Home" (id: 2200472795) or other non-work projects
+- **CRITICAL:** Always verify project membership using project_id field - never assume based on content alone
 
-**CRITICAL:** Always verify project membership before categorizing. Use the project_id field from Todoist task data:
+**Task Filtering (`exclusion.json`):**
 
-- If project_id = 2221463722 (or child of Work) → Work section
-- If project_id = 2200472795 (Home) → Personal section
-- All other projects → Personal section
+- **excludeLabels**: Filter out tasks with these labels (e.g., "@Regular Chores")
+- **excludeTaskPatterns**: Case-insensitive pattern matching (e.g., "submit time sheet")
+- **Hard-coded exclusions**: Daily health routines, basic self-care, recurring chores, timesheet tasks, Egg Inc game tasks
+- **Apply filters to BOTH** Work Done and Tomorrow's Goals sections
 
-**Never assume** a task is work-related based on content alone. The project_id is the authoritative source.
+**Scripts:** `Get-TodoistCompleted.ps1`, `Get-TodoistTasks.ps1`, `Get-TodoistUpdated.ps1`, `Get-TodoistSummary.ps1`, `Get-TodoistComments.ps1`
 
-Use project parent_id to determine category.
+**Task Creation (Meeting Follow-ups):**
 
-## Todoist Task Creation (Meeting Follow-ups)
+- Projects: Work (2221463722), Home (2200472795)
+- Labels: Todo, Regular Chores, AI, AI Chapter, Event, Relias Assistant, Software Dev Chapter
+- Priority: 4=P1, 3=P2, 2=P3, 1=P4
+- Include labels in initial creation (not after), check for duplicates, never auto-retry
 
-When creating tasks from meeting notes:
+## Software Watchlist Configuration
 
-**Fetch Available Projects and Labels:**
+**File:** `config/software-watchlist.json` - See Step 4.6 for detailed checking procedures.
 
-```powershell
-$headers = @{ Authorization = "Bearer $env:TODOIST_API_TOKEN" }
-$projects = Invoke-RestMethod -Uri "https://api.todoist.com/rest/v2/projects" -Headers $headers
-$labels = Invoke-RestMethod -Uri "https://api.todoist.com/rest/v2/labels" -Headers $headers
-```
+**Adding Software:** Insert alphabetically with: `name`, `changelog_url`, `check_method`, `notes`, `last_displayed_date`, `last_displayed_version`
 
-**Known Projects:**
-
-- **Work** (id: 2221463722) - Main work project
-- **Home** (id: 2200472795) - Personal tasks
-- Query API for current project list and their IDs
-
-**Known Labels:**
-
-- `Todo` - Default task label (use this for meeting follow-ups)
-- `Regular Chores` - Routine maintenance (excluded from diary)
-- `AI` - AI-related tasks
-- `AI Chapter` - AI chapter work
-- `Event` - Event-related tasks
-- `Relias Assistant` - Relias Assistant work
-- `Software Dev Chapter` - Software development chapter
-
-Query available labels via API before suggesting:
-
-```powershell
-$labels = Invoke-RestMethod -Uri "https://api.todoist.com/rest/v2/labels" -Headers @{ Authorization = "Bearer $env:TODOIST_API_TOKEN" }
-$labels | ForEach-Object { $_.name }
-```
-
-**Create Task API Call:**
-
-```powershell
-# Load token from environment (may not be in $env: on fresh sessions)
-$env:TODOIST_API_TOKEN = [System.Environment]::GetEnvironmentVariable('TODOIST_API_TOKEN', 'User')
-
-$headers = @{ 
-    Authorization = "Bearer $env:TODOIST_API_TOKEN"
-    "Content-Type" = "application/json"
-}
-
-$body = @{
-    content = "Task title"
-    description = "Task description with owner and context"
-    project_id = "2221463722"  # Use appropriate project ID
-    due_string = "tomorrow"    # Or specific date: "2026-01-15"
-    priority = 3               # 4=P1, 3=P2, 2=P3, 1=P4
-    labels = @("Todo")         # MUST include labels in initial creation, not after
-} | ConvertTo-Json
-
-$task = Invoke-RestMethod -Uri "https://api.todoist.com/rest/v2/tasks" -Headers $headers -Method Post -Body $body
-
-Write-Host "✓ Created task: $($task.content) (ID: $($task.id))"
-Write-Host "  Labels: $($task.labels -join ', ')"
-Write-Host "  Link: https://todoist.com/app/task/$($task.id)"
-```
-
-**Important Best Practices:**
-
-1. **Include labels in initial creation** - Adding labels after creation doesn't work reliably
-2. **Never retry automatically** - Only retry if user explicitly requests it
-3. **Check for duplicates** - After creation, verify no duplicate tasks exist with same content
-4. **Load token properly** - Use `[System.Environment]::GetEnvironmentVariable('TODOIST_API_TOKEN', 'User')` if `$env:` is empty
-
-**Due Date Parsing:**
-
-- `today` → `"due_string": "today"`
-- `tomorrow` → `"due_string": "tomorrow"`
-- `monday` / `next week` → `"due_string": "monday"` / `"due_string": "next week"`
-- Custom date → `"due_string": "2026-01-15"` (YYYY-MM-DD format)
-- No date → Omit `due_string` field
-
-## Todoist Integration Scripts
-
-Use PowerShell scripts from todoist skill:
-
-- `Get-TodoistCompleted.ps1` - Get completed tasks for specific date
-- `Get-TodoistTasks.ps1` - Active tasks with filter queries
-- `Get-TodoistUpdated.ps1` - Tasks with description field updates
-- `Get-TodoistSummary.ps1` - Comprehensive task overview
-- `Get-TodoistComments.ps1` - Get comments for tasks/projects
+**Tracking:** First run shows all software; subsequent runs only show version changes. Update JSON after rendering.
 
 ## File Structure
 
 ```
 diary/
 ├── SKILL.md
-├── exclusion.json
+├── config/
+│   ├── yyyy-mm-dd.md (template)
+│   ├── exclusion.json
+│   ├── software-watchlist.json
+│   └── repo-counts.json (tracks daily repo counts for delta calculation)
+├── scripts/
+│   ├── Get-ReliasRepoCounts.ps1 (unified script for GitHub + Bitbucket with deltas)
+│   ├── Get-BitbucketRepoCount.ps1 (Bitbucket-only script)
+│   ├── Get-SoftwareUpdates.ps1 (automated update checker - 68% coverage)
+│   └── Test-SoftwareWatchlist.ps1 (diagnostic tool)
 └── entries/
     ├── 2026-01-06.md  (TEMPLATE REFERENCE - Daily diary)
     ├── 2026-01-07.md
@@ -535,8 +421,8 @@ diary/
 
 **Formats:**
 
-- Daily diary: `history/yyyy-mm-dd.md`
-- Meeting notes: `history/yyyy-mm-dd-{meeting-title-slug}.md`
+- Daily diary: `entries/yyyy-mm-dd.md`
+- Meeting notes: `entries/yyyy-mm-dd-{meeting-title-slug}.md`
 
 ## Example Entry (Template Reference)
 
@@ -552,33 +438,6 @@ See `entries/2026-01-11.md` for the canonical template showing:
 
 ## User Interaction Prompts
 
-**Initial prompt:**
-"Let's create today's diary entry. I'll gather weather, news, and your Todoist data."
+**Initial:** "Let's create today's diary entry. I'll gather weather, news, and your Todoist data."
 
-**For missing content:**
-
-- "Anything else you accomplished at work today?"
-- "Any work goals for tomorrow?"
-- "How do you feel about today's work? Proud of anything?"
-- "Did you accomplish anything personal today?"
-- "Any personal goals for tomorrow?"
-- "Any personal thoughts or learnings from today?"
-- "Overall, how are you feeling about today? Anything on your mind?"
-
-**Keep prompts conversational and natural - don't ask all at once, build the entry iteratively.**
-
-## ALWAYS: Log Skill Usage
-
-After creating a diary entry, log to todoist skill's `entries/{YYYY-MM-DD}.md`:
-
-```
-
-After creating meeting notes, log to todoist skill's `entries/{YYYY-MM-DD}.md`:
-
-```markdown
-## {HH:MM} - Created meeting notes
-Saved meeting notes: {meeting-title} → entries/{YYYY-MM-DD}-{slug}.md
-```markdown
-## {HH:MM} - Created diary entry
-Generated daily journal entry with Work/Personal/Personal Reflections structure
-```
+**For gaps:** Ask about work done/goals/reflections, personal done/goals/reflections, overall feelings. Keep conversational, build iteratively.

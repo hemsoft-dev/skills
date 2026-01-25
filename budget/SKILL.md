@@ -1,6 +1,6 @@
 ---
 name: budget
-description: V1.2 - Extracts and reports on bank/credit account statements with confirmed tracking for Subscriptions and Utility Bills.
+description: V1.3 - Extracts and reports on bank/credit account statements with confirmed tracking for Subscriptions and Utility Bills.
 triggers:
   - subscriptions
   - subs
@@ -35,6 +35,22 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 {One-line summary of what was done}
 ```
 
+## ALWAYS: Retrospective Check
+
+Before completing, reflect on this interaction:
+
+1. Were new patterns or edge cases discovered?
+2. Could instructions be clearer?
+3. Do scripts need improvements or bug fixes?
+4. Should new capabilities be added?
+
+If improvements identified:
+
+- Present proposed changes with clear rationale
+- Wait for user approval before applying
+- Keep skill concise (remove/condense when adding if possible)
+- Version bump SKILL.md if changes applied
+
 ## Quick Commands
 
 | User Says | Action |
@@ -47,7 +63,7 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 
 ### List Subscriptions (Most Common)
 
-**File**: `c:\Users\franz\.claude\skills\budget\tracking\confirmed-subscriptions.md`
+**File**: `c:\Users\User\.claude\skills\budget\tracking\confirmed-subscriptions.md`
 
 Just read this file and present it. No scripts needed. Summarize:
 
@@ -58,7 +74,7 @@ Just read this file and present it. No scripts needed. Summarize:
 
 ### List Utility Bills
 
-**File**: `c:\Users\franz\.claude\skills\budget\tracking\confirmed-utilities.md`
+**File**: `c:\Users\User\.claude\skills\budget\tracking\confirmed-utilities.md`
 
 Read this file to show confirmed utility providers, account numbers, and typical billing amounts.
 
@@ -75,7 +91,7 @@ Read this file to show confirmed utility providers, account numbers, and typical
 ### Watchlist Check Command
 
 ```powershell
-python "c:\Users\franz\.claude\skills\budget\scripts\search-pdfs.py" "CONDENAST"
+python "c:\Users\User\.claude\skills\budget\scripts\search-pdfs.py" "CONDENAST"
 ```
 
 If new CONDENAST charges found:
@@ -161,7 +177,7 @@ c:\Users\User\.claude\skills\budget\
 | --- | --- |
 | `extract-usaa.py` | Extract transactions from USAA PDFs using pdfplumber |
 | `search-pdfs.py` | Search raw PDFs for merchant names not found in CSVs |
-| `normalize-account.ps1` | Normalize with AI (batched - 1 call per account) |
+| `normalize-account.ps1` | Normalize with AI (batched - 1 call per account). **V2.0**: Processes all year folders dynamically with comprehensive validation |
 | `statement-report.ps1` | Generate combined budget report |
 | `subscriptions-report.ps1` | Generate subscription expense analysis |
 
@@ -170,26 +186,33 @@ c:\Users\User\.claude\skills\budget\
 ### Step 1: Extract from PDFs (per account)
 
 ```powershell
-cd "c:\Users\franz\.claude\skills\budget\scripts"
+cd "c:\Users\User\.claude\skills\budget\scripts"
 python extract-usaa.py "USAA Classic Checking"
 ```
 
 ### Step 2: Normalize with AI (1 premium request per account)
 
 ```powershell
-& "c:\Users\franz\.claude\skills\budget\scripts\normalize-account.ps1" -AccountName "USAA Classic Checking"
+& "c:\Users\User\.claude\skills\budget\scripts\normalize-account.ps1" -AccountName "USAA Classic Checking"
 ```
+
+**V2.0 Features:**
+
+- Automatically processes all year folders (2024, 2025, 2026, etc.)
+- Validates all required paths and files before processing
+- Provides detailed summary with years processed and transaction counts
+- Better error messages with troubleshooting hints
 
 ### Step 3: Generate Reports
 
 ```powershell
-& "c:\Users\franz\.claude\skills\budget\scripts\statement-report.ps1"
+& "c:\Users\User\.claude\skills\budget\scripts\statement-report.ps1"
 ```
 
 ### Step 4: Subscription Analysis
 
 ```powershell
-& "c:\Users\franz\.claude\skills\budget\scripts\subscriptions-report.ps1"
+& "c:\Users\User\.claude\skills\budget\scripts\subscriptions-report.ps1"
 ```
 
 When prompted, choose where to save the report:
@@ -201,7 +224,7 @@ When prompted, choose where to save the report:
 Or specify directly:
 
 ```powershell
-& "c:\Users\franz\.claude\skills\budget\scripts\subscriptions-report.ps1" -OutputPath "C:\Reports\subscriptions-report.md"
+& "c:\Users\User\.claude\skills\budget\scripts\subscriptions-report.ps1" -OutputPath "C:\Reports\subscriptions-report.md"
 ```
 
 ## Subscription Analysis Features
@@ -361,7 +384,7 @@ To add cancellation links for new services:
 
 ## Confirmed Subscriptions Tracking
 
-**File**: `c:\Users\franz\.claude\skills\budget\tracking\confirmed-subscriptions.md`
+**File**: `c:\Users\User\.claude\skills\budget\tracking\confirmed-subscriptions.md`
 
 Manual tracking of verified subscriptions with actual pricing and cancellation status.
 Cross-reference against automated report and maintain historical record.
@@ -390,7 +413,7 @@ Service names are linked to their management/cancellation pages when available.
 
 ## Confirmed Utilities Tracking
 
-**File**: `c:\Users\franz\.claude\skills\budget\tracking\confirmed-utilities.md`
+**File**: `c:\Users\User\.claude\skills\budget\tracking\confirmed-utilities.md`
 
 Manual tracking of verified utility bills with provider information, account numbers, and typical billing patterns.
 

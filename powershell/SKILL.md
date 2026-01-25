@@ -1,6 +1,6 @@
 ---
 name: powershell
-description: V1.3 - Expert in PowerShell scripting, PSScriptAnalyzer linting, Write-Information ANSI codes, profile management, PATH optimization, environment variables, and troubleshooting on Windows.
+description: V1.5 - Expert in PowerShell scripting, PSScriptAnalyzer linting, Write-Information ANSI codes, profile management, PATH optimization, CLI wrapper functions, and troubleshooting on Windows.
 ---
 
 # PowerShell Expert
@@ -15,6 +15,22 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 ## {HH:MM} - {Action Taken}
 {One-line summary of what was done}
 ```
+
+## ALWAYS: Retrospective Check
+
+Before completing, reflect on this interaction:
+
+1. Were new patterns or edge cases discovered?
+2. Could instructions be clearer?
+3. Do scripts need improvements or bug fixes?
+4. Should new capabilities be added?
+
+If improvements identified:
+
+- Present proposed changes with clear rationale
+- Wait for user approval before applying
+- Keep skill concise (remove/condense when adding if possible)
+- Version bump SKILL.md if changes applied
 
 ## PSScriptAnalyzer - PowerShell Linter
 
@@ -663,6 +679,50 @@ function myapp { & "C:\Path\To\myapp.exe" @args }
 New-Alias -Name k -Value kubectl
 ```
 
+### Creating CLI Wrapper Functions
+
+**Use Case**: Create shorthand commands for CLI tools with default arguments.
+
+**Benefits**:
+
+- Shorter commands for frequently used tools
+- Default arguments baked in
+- No need to add to PATH
+- Easy to modify and maintain
+
+**Pattern**:
+
+```powershell
+function shortname { toolname --default-args @args }
+```
+
+**Real-World Examples**:
+
+```powershell
+# Claude Code with auto-permissions
+function cc { claude --allow-dangerously-skip-permissions prompt @args }
+# Usage: cc write a hello world script
+
+# GitHub Copilot with free tier defaults
+function copilot-free { copilot --allow-all --model gpt-5-mini --silent --prompt @args }
+# Usage: copilot-free explain this code
+
+# Docker Compose shorthand
+function dc { docker-compose @args }
+# Usage: dc up -d
+
+# Git with default flags
+function gs { git status --short --branch @args }
+# Usage: gs
+```
+
+**Key Points**:
+
+- Use `@args` to properly splat/expand arguments (not `$args`)
+- `@args` passes arguments as separate parameters
+- `$args` would pass them as a single array parameter
+- Add to `profile.ps1` (CurrentUserAllHosts) for global availability
+
 ### Windows PATH Management
 
 **Core Concepts:**
@@ -837,14 +897,14 @@ $PSStyle.FileInfo.Directory = "`e[34m"
 
 ## Ready-to-Use Scripts
 
-This skill includes helper scripts in the skill directory:
+This skill includes helper scripts in the `scripts/` subdirectory:
 
 ### Analyze-Scripts.ps1
 
 Analyzes PowerShell scripts with PSScriptAnalyzer:
 
 ```powershell
-& "$env:USERPROFILE\.claude\skills\powershell\Analyze-Scripts.ps1" -Path . -Severity Error,Warning
+& "$env:USERPROFILE\.claude\skills\powershell\scripts\Analyze-Scripts.ps1" -Path . -Severity Error,Warning
 ```
 
 ### Fix-WriteInformation.ps1
@@ -853,10 +913,10 @@ Analyzes PowerShell scripts with PSScriptAnalyzer:
 
 ```powershell
 # Preview changes
-& "$env:USERPROFILE\.claude\skills\powershell\Fix-WriteInformation.ps1" -Path . -WhatIf
+& "$env:USERPROFILE\.claude\skills\powershell\scripts\Fix-WriteInformation.ps1" -Path . -WhatIf
 
 # Apply fixes
-& "$env:USERPROFILE\.claude\skills\powershell\Fix-WriteInformation.ps1" -Path .
+& "$env:USERPROFILE\.claude\skills\powershell\scripts\Fix-WriteInformation.ps1" -Path .
 ```
 
 **What it does:**

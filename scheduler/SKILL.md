@@ -105,5 +105,5 @@ Write-Host 'Done - press Enter'; Read-Host
 11. **ALWAYS List Schedule After Changes**: After creating, modifying, or deleting any scheduled task, **always** run the schedule listing script to confirm the change and show the user the full schedule:
 
 ```powershell
-& "c:\Users\User\.claude\skills\scheduler\Get-HemSoftSchedule.ps1"
+& "c:\Users\User\.claude\skills\scheduler\scripts\Get-HemSoftSchedule.ps1"
 ```

@@ -24,7 +24,7 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
    - This selection determines the SSH host alias used for the remote.
 
 2. **Execute Initialization Script**
-   - Run the `github-init.ps1` script located in the skill directory: `c:\Users\franz\.claude\skills\github-init\github-init.ps1`.
+   - Run the `github-init.ps1` script located in the scripts subdirectory: `c:\Users\franz\.claude\skills\github-init\scripts\github-init.ps1`.
    - Use the following parameters:
      - `RepoName`: The name of the repository.
      - `Owner`: The GitHub organization or username.

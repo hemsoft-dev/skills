@@ -91,18 +91,47 @@ When gathering daily Slack highlights (e.g., for diary entries), monitor these 1
 - Technical discussions with actionable insights
 - Project updates and milestones
 - Mentions of @fhemmer
-- Exclude: Bot notifications, simple acks, routine alerts
+- **Help provided**: When someone helped solve a problem or steered things in the right direction
+- **Thread context**: For threaded messages, read the FULL thread to understand the substance
+- Exclude: Bot notifications, simple acks, routine alerts, surface-level pleasantries
 
-**⚠️ CRITICAL: Activity Validation**
+**⚠️ CRITICAL: Capture Substance, Not Pleasantries**
 
-**There is ALWAYS Slack activity Monday through Friday (both days included).** If a search or query returns no results for a weekday:
+When summarizing Slack messages:
 
-1. **The query is wrong** - not the absence of activity
-2. Use `Get-SlackChannelMessages.ps1` directly instead of search
-3. Check multiple monitored channels - at least one will have activity
-4. Verify date range is correct (not searching future dates)
+- **Read full threads**: If a message is part of a thread, read the entire conversation to understand context
+- **Focus on value**: What help was provided? What problem was solved? What direction was given?
+- **Don't summarize trivial endings**: "Good luck" or "Thanks" at the end of a thread is not the highlight
+- **Example BAD**: "Franz wished someone good luck on a task"
+- **Example GOOD**: "Franz helped troubleshoot GitHub deploy key setup for Webscale integration"
 
-**If search returns empty, switch to direct channel retrieval immediately.**
+**Method for Gathering Daily Highlights:**
+
+```powershell
+# Use Search-SlackMessages.ps1 with date filters (RECOMMENDED)
+# IMPORTANT: 'after' is EXCLUSIVE - to get messages FROM Jan 16, use after:Jan 15
+$targetDate = "2026-01-16"
+$dayBefore = "2026-01-15"  # after: is exclusive, so use day before target
+$dayAfter = "2026-01-17"   # before: is exclusive, so use day after target
+& "$env:USERPROFILE\.claude\skills\slack\scripts\Search-SlackMessages.ps1" -Query "in:#dev-tribe after:$dayBefore before:$dayAfter -from:@email -from:@datadog" -Count 20 -OutputFormat List
+
+# If using Get-SlackChannelMessages.ps1, manually filter by timestamp
+& "$env:USERPROFILE\.claude\skills\slack\scripts\Get-SlackChannelMessages.ps1" -Channel "dev-tribe" -Count 20 -MaxThreadReplies 0
+# Then check each message's timestamp and only include messages from target date
+```
+
+**⚠️ CRITICAL: Date Validation**
+
+**ALWAYS verify message dates before including in reports.** When gathering daily highlights:
+
+1. **Use date-filtered search**: `Search-SlackMessages.ps1` with `after:(target-1day) before:(target+1day)`
+   - **IMPORTANT**: `after:` is EXCLUSIVE - to get messages FROM Jan 16, use `after:2026-01-15`
+   - **IMPORTANT**: `before:` is EXCLUSIVE - to get messages UP TO Jan 16, use `before:2026-01-17`
+2. **Check timestamps**: Verify each message's timestamp matches the target date
+3. **Filter out old messages**: If `Get-SlackChannelMessages.ps1` is used, manually filter by date
+4. **Accept empty results**: If no messages found for a specific date, that's valid - don't include old messages
+
+**Common mistake**: Using `after:YYYY-MM-DD` to get messages from that date. The `after` parameter is exclusive, not inclusive. Use the day before your target date.
 
 ---
 
