@@ -1,0 +1,355 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Recipe Schema",
+  "description": "Comprehensive recipe metadata schema for personal recipe collection",
+  "type": "object",
+  "required": ["name", "recipeIngredient", "recipeInstructions"],
+  "properties": {
+    "@type": {
+      "type": "string",
+      "const": "Recipe",
+      "description": "Schema.org type identifier"
+    },
+    "name": {
+      "type": "string",
+      "description": "Recipe name/title"
+    },
+    "description": {
+      "type": "string",
+      "description": "Recipe description or summary"
+    },
+    "image": {
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "URL or path to main recipe image"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Array of image URLs/paths (main image + step images)"
+        }
+      ],
+      "description": "Main recipe image(s)"
+    },
+    "author": {
+      "type": "string",
+      "description": "Recipe author name"
+    },
+    "source": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Source name (book, website, etc.)"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Source URL if applicable"
+        },
+        "page": {
+          "type": "string",
+          "description": "Page number or reference"
+        }
+      },
+      "description": "Source information"
+    },
+    "prepTime": {
+      "type": "string",
+      "pattern": "^PT(\\d+H)?(\\d+M)?$",
+      "description": "Preparation time in ISO 8601 duration format (e.g., PT15M, PT1H30M)"
+    },
+    "cookTime": {
+      "type": "string",
+      "pattern": "^PT(\\d+H)?(\\d+M)?$",
+      "description": "Cooking time in ISO 8601 duration format"
+    },
+    "totalTime": {
+      "type": "string",
+      "pattern": "^PT(\\d+H)?(\\d+M)?$",
+      "description": "Total time (prep + cook) in ISO 8601 duration format"
+    },
+    "recipeYield": {
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "Number of servings as string (e.g., '4 servings', '6-8')"
+        },
+        {
+          "type": "number",
+          "description": "Number of servings as number"
+        }
+      ],
+      "description": "Recipe yield/servings"
+    },
+    "recipeIngredient": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string",
+            "description": "Ingredient with quantity (e.g., '2 cups flour')"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "quantity": {
+                "type": "string",
+                "description": "Quantity (e.g., '2', '1/2', '1.5')"
+              },
+              "unit": {
+                "type": "string",
+                "description": "Unit of measurement (e.g., 'cups', 'tbsp', 'g')"
+              },
+              "ingredient": {
+                "type": "string",
+                "description": "Ingredient name"
+              },
+              "notes": {
+                "type": "string",
+                "description": "Optional notes about the ingredient"
+              }
+            },
+            "required": ["ingredient"]
+          }
+        ]
+      },
+      "description": "List of ingredients"
+    },
+    "recipeInstructions": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string",
+            "description": "Simple instruction text"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "@type": {
+                "type": "string",
+                "const": "HowToStep"
+              },
+              "name": {
+                "type": "string",
+                "description": "Short summary of the step"
+              },
+              "text": {
+                "type": "string",
+                "description": "Step instruction text"
+              },
+              "image": {
+                "type": "string",
+                "description": "URL or path to step image"
+              },
+              "url": {
+                "type": "string",
+                "description": "Fragment identifier linking to the step"
+              }
+            },
+            "required": ["text"]
+          }
+        ]
+      },
+      "description": "Cooking instructions as array of steps"
+    },
+    "recipeCuisine": {
+      "type": "string",
+      "description": "Cuisine type (e.g., 'Italian', 'Mexican', 'Thai')"
+    },
+    "recipeCategory": {
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "Single category"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Multiple categories"
+        }
+      ],
+      "description": "Recipe category (e.g., 'Main Course', 'Dessert', 'Appetizer', 'Breakfast')"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Tags for discovery (e.g., 'one-pot', 'weeknight', 'meal-prep', 'comfort-food')"
+    },
+    "difficulty": {
+      "type": "string",
+      "enum": ["Easy", "Medium", "Hard", "Expert"],
+      "description": "Difficulty level"
+    },
+    "suitableForDiet": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "VeganDiet",
+          "VegetarianDiet",
+          "GlutenFreeDiet",
+          "DiabeticDiet",
+          "HalalDiet",
+          "KosherDiet",
+          "LowCalorieDiet",
+          "LowFatDiet",
+          "LowLactoseDiet",
+          "LowSaltDiet"
+        ]
+      },
+      "description": "Dietary restrictions this recipe is suitable for"
+    },
+    "nutrition": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string",
+          "const": "NutritionInformation"
+        },
+        "calories": {
+          "type": "string",
+          "description": "Calories per serving"
+        },
+        "proteinContent": {
+          "type": "string",
+          "description": "Protein content (e.g., '10g')"
+        },
+        "fatContent": {
+          "type": "string",
+          "description": "Fat content"
+        },
+        "carbohydrateContent": {
+          "type": "string",
+          "description": "Carbohydrate content"
+        },
+        "fiberContent": {
+          "type": "string",
+          "description": "Fiber content"
+        },
+        "sugarContent": {
+          "type": "string",
+          "description": "Sugar content"
+        },
+        "sodiumContent": {
+          "type": "string",
+          "description": "Sodium content"
+        },
+        "cholesterolContent": {
+          "type": "string",
+          "description": "Cholesterol content"
+        }
+      },
+      "description": "Nutrition information"
+    },
+    "cookingMethod": {
+      "type": "string",
+      "description": "Cooking technique (e.g., 'Baking', 'Grilling', 'Slow Cooker')"
+    },
+    "keywords": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Keywords for searchability"
+    },
+    "ratings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "dateTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date and time when recipe was made and rated (ISO 8601 format: YYYY-MM-DDTHH:mm:ss)"
+          },
+          "rating": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 5,
+            "description": "Rating value: 1 = bad, 2 = poor, 3 = okay, 4 = good, 5 = great"
+          },
+          "notes": {
+            "type": "string",
+            "description": "Optional notes about this specific making/rating"
+          }
+        },
+        "required": ["dateTime", "rating"]
+      },
+      "description": "Array of date/time entries when recipe was made with corresponding ratings (1-5 stars)"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["want-to-try", "made", "liked", "favorite"],
+      "description": "Recipe status in collection"
+    },
+    "dateAdded": {
+      "type": "string",
+      "format": "date",
+      "description": "Date added to collection (YYYY-MM-DD)"
+    },
+    "dateModified": {
+      "type": "string",
+      "format": "date",
+      "description": "Date last modified (YYYY-MM-DD)"
+    },
+    "notes": {
+      "type": "string",
+      "description": "General notes about the recipe"
+    },
+    "variations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "description": "Description of the variation"
+          },
+          "ingredients": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Modified ingredients"
+          },
+          "instructions": {
+            "type": "string",
+            "description": "Modified instructions"
+          }
+        }
+      },
+      "description": "Recipe variations or modifications"
+    },
+    "equipment": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Required equipment (e.g., 'Stand Mixer', 'Dutch Oven')"
+    },
+    "cost": {
+      "type": "object",
+      "properties": {
+        "estimated": {
+          "type": "number",
+          "description": "Estimated cost"
+        },
+        "currency": {
+          "type": "string",
+          "default": "USD",
+          "description": "Currency code"
+        }
+      },
+      "description": "Estimated cost information"
+    }
+  }
+}

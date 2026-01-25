@@ -4,13 +4,52 @@ This document provides critical guidance for AI agents working in the Claude Ski
 
 ## Table of Contents
 
+- [Prompt History Logging](#prompt-history-logging)
 - [Quick Reference](#quick-reference)
+- [Web Search Guidelines](#web-search-guidelines)
 - [Pre-Commit Quality Checks](#pre-commit-quality-checks)
 - [Commit and Push Workflow](#commit-and-push-workflow)
 - [Commit Message Guidelines](#commit-message-guidelines)
 - [Repository Structure](#repository-structure)
 - [Skill Development](#skill-development)
 - [Troubleshooting](#troubleshooting)
+
+## Prompt History Logging
+
+### ⚠️ TOP PRIORITY - Every Meaningful Prompt
+
+**For every meaningful prompt invocation**, append to `PROMPT-HISTORY.md` in the root directory:
+
+```markdown
+YYYY-MM-DD - HH:MM - <Brief 1-2 sentence summary of the prompt>
+Result: <Brief 1-2 sentence summary of what was accomplished>
+```
+
+**What qualifies as meaningful**:
+
+- ✅ Feature requests or enhancements
+- ✅ Important bug fixes
+- ✅ Architecture or design decisions
+- ✅ Significant refactoring
+- ✅ New skill creation or major skill updates
+- ✅ Complex troubleshooting or investigations
+- ❌ Simple queries ("what time is it?", "ping")
+- ❌ Routine operations (reading files, checking status)
+- ❌ Trivial edits or formatting changes
+
+**Example entry**:
+
+```markdown
+2026-01-18 - 14:32 - Add Todoist integration to diary skill with task filtering
+Result: Successfully integrated Todoist API, added filtering for @Regular Chores tag, updated diary workflow to include completed tasks in daily entries.
+
+2026-01-18 - 09:15 - Fix Slack message pagination bug causing missed messages
+Result: Implemented cursor-based pagination, added retry logic for rate limits, verified with 500+ message channel.
+```
+
+**File location**: `c:\Users\User\.claude\skills\PROMPT-HISTORY.md`
+
+**When to log**: At the completion of meaningful work, before final commit/push.
 
 ## Quick Reference
 
@@ -38,10 +77,64 @@ git status
 
 ### Critical Rules
 
-1. **ALWAYS run linting before commit**
-2. **ALWAYS verify [clean state](#verifying-clean-state) after commit and push**
-3. **ALWAYS use conventional commit format**
-4. **NEVER commit/push without confirming clean state**
+1. **ALWAYS log meaningful prompts to [PROMPT-HISTORY.md](#prompt-history-logging)**
+2. **ALWAYS run linting before commit**
+3. **ALWAYS verify [clean state](#verifying-clean-state) after commit and push**
+4. **ALWAYS use conventional commit format**
+5. **ALWAYS provide clickable links when performing web searches** - See [Web Search Guidelines](#web-search-guidelines)
+6. **NEVER commit/push without confirming clean state**
+
+## Web Search Guidelines
+
+### ⚠️ CRITICAL REQUIREMENT - Always Provide Links
+
+**When performing web searches, you MUST include clickable links to all sources referenced.**
+
+### Requirements
+
+1. **Always include clickable URLs** - Every source mentioned must have a clickable link
+2. **Format links properly** - Use markdown link format: `[Link Text](URL)`
+3. **Include all relevant sources** - Don't summarize without providing access to original sources
+4. **Verify links are accessible** - Ensure URLs are complete and functional
+
+### Examples
+
+**✅ Good**:
+
+```markdown
+Found several highly-rated recipes:
+- [Angela's Awesome Chicken Enchiladas](https://www.allrecipes.com/recipe/83549/angelas-awesome-enchiladas/) - 4.8 stars, 3,216 reviews
+- [Gimme Some Oven Chicken Enchiladas](https://gimmesomeoven.com/best-chicken-enchiladas-ever) - Popular since 2009
+```
+
+**❌ Bad**:
+
+```markdown
+Found several highly-rated recipes:
+- Angela's Awesome Chicken Enchiladas - 4.8 stars, 3,216 reviews
+- Gimme Some Oven Chicken Enchiladas - Popular since 2009
+```
+
+### When This Applies
+
+- ✅ Web searches for recipes, articles, documentation
+- ✅ Researching tools, libraries, or services
+- ✅ Finding tutorials, guides, or reference materials
+- ✅ Looking up product information or reviews
+- ✅ Any web search where sources are referenced
+
+### Rationale
+
+Users need direct access to sources for:
+
+- Verification of information
+- Further reading
+- Original context
+- Credibility assessment
+- Bookmarking for later reference
+
+**This is a non-negotiable requirement** - web search results without clickable links are incomplete and violate
+repository standards.
 
 ## Pre-Commit Quality Checks
 
@@ -443,6 +536,7 @@ description: V1.2 - Brief description of skill
 
 Before completing any commit and push task:
 
+- [ ] [Prompt logged to PROMPT-HISTORY.md](#prompt-history-logging) (if meaningful)
 - [ ] Linters run successfully (PowerShell and Markdown)
 - [ ] All changes staged with `git add`
 - [ ] Commit message follows conventional format
