@@ -1,5 +1,13 @@
 [
   {
+    "Software": "Gemini CLI",
+    "OldVersion": "v0.26.0-preview.3",
+    "NewVersion": "v0.26.0-preview.4",
+    "ReleaseDate": "Jan 25 '26",
+    "ChangelogUrl": "https://github.com/google-gemini/gemini-cli/releases",
+    "CheckMethod": "github_releases_prerelease"
+  },
+  {
     "Software": "GitHub Copilot Chat",
     "OldVersion": "v0.37.2026012201",
     "NewVersion": "v0.37.2026012305",

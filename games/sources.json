@@ -1,0 +1,294 @@
+{
+  "newsSites": [
+    {
+      "name": "Polygon",
+      "url": "https://www.polygon.com/gaming",
+      "rss": "https://www.polygon.com/rss/index.xml",
+      "focus": "Gaming news, reviews, release dates, 2026 game releases",
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "GameSpot",
+      "url": "https://www.gamespot.com/news/",
+      "rss": "https://www.gamespot.com/feeds/news/",
+      "focus": "Video game news, reviews, upcoming releases, Game Pass announcements",
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "The Verge - Gaming",
+      "url": "https://www.theverge.com/games",
+      "rss": "https://www.theverge.com/games/rss/index.xml",
+      "focus": "Gaming news, reviews, industry interviews, hardware",
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "IGN",
+      "url": "https://www.ign.com/games",
+      "rss": "https://feeds.ign.com/ign/all",
+      "focus": "Game reviews, previews, news, release dates",
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "PC Gamer",
+      "url": "https://www.pcgamer.com/news/",
+      "rss": "https://www.pcgamer.com/rss/",
+      "focus": "PC gaming news, reviews, upcoming PC games",
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "Rock Paper Shotgun",
+      "url": "https://www.rockpapershotgun.com/",
+      "rss": "https://www.rockpapershotgun.com/feed",
+      "focus": "PC gaming, indie games, reviews, news",
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "Kotaku",
+      "url": "https://kotaku.com/",
+      "rss": "https://kotaku.com/rss",
+      "focus": "Gaming culture, news, reviews, industry coverage",
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "Eurogamer",
+      "url": "https://www.eurogamer.net/",
+      "rss": "https://www.eurogamer.net/feed",
+      "focus": "Gaming news, reviews, features",
+      "checkFrequency": "daily"
+    }
+  ],
+  "discoveryPlatforms": [
+    {
+      "name": "Steam - New Releases",
+      "url": "https://store.steampowered.com/explore/new/",
+      "focus": "Latest games added to Steam",
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "Steam - Upcoming Releases",
+      "url": "https://store.steampowered.com/explore/upcoming/",
+      "focus": "Games scheduled to launch soon",
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "Steam - Discovery Queue",
+      "url": "https://store.steampowered.com/app/",
+      "focus": "Personalized game recommendations",
+      "checkFrequency": "weekly",
+      "note": "Requires Steam account"
+    },
+    {
+      "name": "Steam - Trending",
+      "url": "https://store.steampowered.com/charts/",
+      "focus": "Currently trending and popular games",
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "Epic Games Store - New Releases",
+      "url": "https://store.epicgames.com/en-US/browse?sortBy=releaseDate&sortDir=DESC",
+      "focus": "New games on Epic Games Store",
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "Epic Games Store - Free Games",
+      "url": "https://store.epicgames.com/en-US/free-games",
+      "focus": "Weekly free game giveaways (every Thursday)",
+      "checkFrequency": "weekly"
+    },
+    {
+      "name": "Epic Games Store - Indie Games",
+      "url": "https://store.epicgames.com/en-US/c/indie-games?sortBy=releaseDate&sortDir=DESC",
+      "focus": "Indie game releases",
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "GOG - New Releases",
+      "url": "https://www.gog.com/games?sort=newest&page=1",
+      "focus": "New games on GOG",
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "itch.io - Newest Games",
+      "url": "https://itch.io/games/newest",
+      "focus": "Latest indie games, many free",
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "itch.io - Free Games",
+      "url": "https://itch.io/games/newest/free",
+      "focus": "Free indie games",
+      "checkFrequency": "daily"
+    }
+  ],
+  "redditCommunities": [
+    {
+      "name": "r/Games",
+      "url": "https://www.reddit.com/r/Games/",
+      "focus": "High-quality gaming discussions, news, reviews",
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "r/IndieGaming",
+      "url": "https://www.reddit.com/r/IndieGaming/",
+      "focus": "Indie game content, releases, discussions",
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "r/IndieGames",
+      "url": "https://www.reddit.com/r/IndieGames/",
+      "focus": "Indie game press releases, reviews, gameplay",
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "r/gamingsuggestions",
+      "url": "https://www.reddit.com/r/gamingsuggestions/",
+      "focus": "Game recommendations based on preferences",
+      "checkFrequency": "weekly"
+    },
+    {
+      "name": "r/ShouldIBuyThisGame",
+      "url": "https://www.reddit.com/r/ShouldIBuyThisGame/",
+      "focus": "Game purchase advice and reviews",
+      "checkFrequency": "weekly"
+    },
+    {
+      "name": "r/patientgamers",
+      "url": "https://www.reddit.com/r/patientgamers/",
+      "focus": "Discussion of older games, hidden gems",
+      "checkFrequency": "weekly"
+    },
+    {
+      "name": "r/SurvivalGaming",
+      "url": "https://www.reddit.com/r/SurvivalGaming/",
+      "focus": "Survival game discussions and recommendations",
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "r/BaseBuildingGames",
+      "url": "https://www.reddit.com/r/BaseBuildingGames/",
+      "focus": "Base building and crafting game discussions",
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "r/playmygame",
+      "url": "https://www.reddit.com/r/playmygame/",
+      "focus": "New game releases seeking feedback",
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "r/GamerNews",
+      "url": "https://www.reddit.com/r/GamerNews/",
+      "focus": "Curated gaming industry news",
+      "checkFrequency": "daily"
+    }
+  ],
+  "youtubeChannels": [
+    {
+      "name": "GameSpot",
+      "url": "https://www.youtube.com/@GameSpot",
+      "focus": "Game reviews, previews, news",
+      "checkFrequency": "weekly"
+    },
+    {
+      "name": "IGN",
+      "url": "https://www.youtube.com/@IGN",
+      "focus": "Game reviews, previews, trailers",
+      "checkFrequency": "weekly"
+    },
+    {
+      "name": "Gameranx",
+      "url": "https://www.youtube.com/@GameranxTV",
+      "focus": "Upcoming games, top 10 lists, news",
+      "checkFrequency": "weekly"
+    },
+    {
+      "name": "Skill Up",
+      "url": "https://www.youtube.com/@SkillUpYT",
+      "focus": "In-depth game reviews, recommendations",
+      "checkFrequency": "weekly"
+    },
+    {
+      "name": "ACG - Angry Centaur Gaming",
+      "url": "https://www.youtube.com/@ACG",
+      "focus": "Detailed game reviews, worth a buy series",
+      "checkFrequency": "weekly"
+    }
+  ],
+  "specializedSources": [
+    {
+      "name": "HowLongToBeat",
+      "url": "https://howlongtobeat.com/",
+      "focus": "Game length estimates, completion times",
+      "checkFrequency": "as-needed"
+    },
+    {
+      "name": "OpenCritic",
+      "url": "https://opencritic.com/",
+      "focus": "Aggregated game review scores",
+      "checkFrequency": "as-needed"
+    },
+    {
+      "name": "Metacritic - Games",
+      "url": "https://www.metacritic.com/browse/games/release-date/new-releases/all",
+      "focus": "Game review aggregator, new releases",
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "SteamDB",
+      "url": "https://steamdb.info/",
+      "focus": "Steam statistics, price tracking, new releases",
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "IsThereAnyDeal",
+      "url": "https://isthereanydeal.com/",
+      "focus": "Game price tracking, deals, wishlist management",
+      "checkFrequency": "weekly"
+    }
+  ],
+  "genreSpecific": [
+    {
+      "name": "Survival Game Database",
+      "url": "https://www.survivalgamingclub.com/",
+      "focus": "Survival game database and reviews",
+      "checkFrequency": "weekly"
+    },
+    {
+      "name": "Crafting Game Lists",
+      "url": "https://www.reddit.com/r/BaseBuildingGames/",
+      "focus": "Crafting and base building games",
+      "checkFrequency": "daily"
+    }
+  ],
+  "userPreferences": {
+    "likedGames": [
+      "Enshrouded",
+      "7D2D",
+      "New World",
+      "ESO",
+      "Raft",
+      "Kingdom Come Deliverance II",
+      "Once Human",
+      "Starfield",
+      "Valheim",
+      "The Witcher 3",
+      "Satisfactory",
+      "No Man's Sky"
+    ],
+    "preferredGenres": [
+      "Survival",
+      "Crafting",
+      "RPG",
+      "Open World",
+      "Base Building",
+      "Exploration",
+      "Multiplayer",
+      "Action RPG"
+    ],
+    "platforms": [
+      "PC",
+      "Steam",
+      "Epic Games Store"
+    ]
+  }
+}

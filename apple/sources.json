@@ -1,0 +1,262 @@
+{
+  "officialAppleSources": [
+    {
+      "name": "Apple Newsroom",
+      "url": "https://www.apple.com/newsroom/",
+      "rss": "https://www.apple.com/newsroom/rss-feed.rss",
+      "focus": "Official Apple announcements, press releases, product launches",
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "Apple Events",
+      "url": "https://www.apple.com/apple-events/",
+      "focus": "Apple keynote events, product announcements, WWDC",
+      "checkFrequency": "as-needed"
+    },
+    {
+      "name": "Apple Developer News",
+      "url": "https://developer.apple.com/news/",
+      "focus": "Developer updates, SDK releases, beta announcements",
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "Apple Beta Software Program",
+      "url": "https://beta.apple.com/",
+      "focus": "Public beta releases for macOS, iOS, iPadOS, watchOS",
+      "checkFrequency": "weekly"
+    },
+    {
+      "name": "Apple Support - Latest Updates",
+      "url": "https://support.apple.com/en-us/HT201222",
+      "focus": "Latest software updates and release notes",
+      "checkFrequency": "daily"
+    }
+  ],
+  "newsSites": [
+    {
+      "name": "MacRumors",
+      "url": "https://www.macrumors.com/",
+      "rss": "https://feeds.macrumors.com/MacRumors-All",
+      "focus": "Apple news, rumors, product releases, reviews",
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "9to5Mac",
+      "url": "https://9to5mac.com/",
+      "rss": "https://9to5mac.com/feed/",
+      "focus": "Apple news, reviews, tutorials, product coverage",
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "AppleInsider",
+      "url": "https://appleinsider.com/",
+      "rss": "https://appleinsider.com/rss/news/",
+      "focus": "Apple news, reviews, buying guides, rumors",
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "The Verge - Apple",
+      "url": "https://www.theverge.com/apple",
+      "rss": "https://www.theverge.com/apple/rss/index.xml",
+      "focus": "Apple news, reviews, product launches",
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "TechCrunch - Apple",
+      "url": "https://techcrunch.com/tag/apple/",
+      "rss": "https://techcrunch.com/tag/apple/feed/",
+      "focus": "Apple industry news, product announcements",
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "Ars Technica - Apple",
+      "url": "https://arstechnica.com/apple/",
+      "rss": "https://feeds.arstechnica.com/arstechnica/apple",
+      "focus": "In-depth Apple coverage, technical analysis",
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "Engadget - Apple",
+      "url": "https://www.engadget.com/apple/",
+      "rss": "https://www.engadget.com/rss.xml",
+      "focus": "Apple product reviews, news, hands-on coverage",
+      "checkFrequency": "daily"
+    }
+  ],
+  "redditCommunities": [
+    {
+      "name": "r/apple",
+      "url": "https://www.reddit.com/r/apple/",
+      "focus": "General Apple discussions, news, product releases",
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "r/macOS",
+      "url": "https://www.reddit.com/r/macOS/",
+      "focus": "macOS discussions, updates, troubleshooting, features",
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "r/iPhone",
+      "url": "https://www.reddit.com/r/iPhone/",
+      "focus": "iPhone news, reviews, discussions, iOS updates",
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "r/iPad",
+      "url": "https://www.reddit.com/r/iPad/",
+      "focus": "iPad news, reviews, iPadOS updates, accessories",
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "r/AppleWatch",
+      "url": "https://www.reddit.com/r/AppleWatch/",
+      "focus": "Apple Watch news, watchOS updates, reviews",
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "r/Mac",
+      "url": "https://www.reddit.com/r/Mac/",
+      "focus": "Mac hardware and software discussions, reviews",
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "r/applehelp",
+      "url": "https://www.reddit.com/r/applehelp/",
+      "focus": "Apple support discussions, troubleshooting",
+      "checkFrequency": "weekly"
+    },
+    {
+      "name": "r/appleswap",
+      "url": "https://www.reddit.com/r/appleswap/",
+      "focus": "Apple product buying/selling, market trends",
+      "checkFrequency": "weekly"
+    }
+  ],
+  "youtubeChannels": [
+    {
+      "name": "Apple",
+      "url": "https://www.youtube.com/@Apple",
+      "focus": "Official Apple product announcements, keynotes, ads",
+      "checkFrequency": "weekly"
+    },
+    {
+      "name": "Marques Brownlee (MKBHD)",
+      "url": "https://www.youtube.com/@mkbhd",
+      "focus": "Apple product reviews, tech analysis",
+      "checkFrequency": "weekly"
+    },
+    {
+      "name": "iJustine",
+      "url": "https://www.youtube.com/@ijustine",
+      "focus": "Apple product unboxings, reviews, tutorials",
+      "checkFrequency": "weekly"
+    },
+    {
+      "name": "Dave2D",
+      "url": "https://www.youtube.com/@Dave2D",
+      "focus": "Mac reviews, laptop comparisons, Apple hardware",
+      "checkFrequency": "weekly"
+    },
+    {
+      "name": "Rene Ritchie",
+      "url": "https://www.youtube.com/@reneritchie",
+      "focus": "In-depth Apple analysis, product deep dives",
+      "checkFrequency": "weekly"
+    }
+  ],
+  "specializedSources": [
+    {
+      "name": "Apple Developer Documentation",
+      "url": "https://developer.apple.com/documentation/",
+      "focus": "Official API documentation, framework updates, SDK releases",
+      "checkFrequency": "as-needed"
+    },
+    {
+      "name": "Apple System Status",
+      "url": "https://www.apple.com/support/systemstatus/",
+      "focus": "Apple service status, outages, maintenance",
+      "checkFrequency": "as-needed"
+    },
+    {
+      "name": "EveryMac",
+      "url": "https://everymac.com/",
+      "focus": "Comprehensive Mac specifications, release dates, compatibility",
+      "checkFrequency": "as-needed"
+    },
+    {
+      "name": "MacTracker",
+      "url": "https://mactracker.ca/",
+      "focus": "Complete Apple product database, specifications, release dates",
+      "checkFrequency": "as-needed"
+    },
+    {
+      "name": "Apple Releases (GitHub)",
+      "url": "https://github.com/colinhacks/apple-releases",
+      "focus": "Tracked list of Apple software releases with version numbers",
+      "checkFrequency": "daily"
+    }
+  ],
+  "categorySpecific": [
+    {
+      "name": "macOS Updates",
+      "sources": [
+        "Apple Newsroom",
+        "MacRumors",
+        "r/macOS",
+        "Apple Support - Latest Updates"
+      ],
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "iOS/iPadOS Updates",
+      "sources": [
+        "Apple Newsroom",
+        "9to5Mac",
+        "r/iPhone",
+        "r/iPad",
+        "Apple Support - Latest Updates"
+      ],
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "Hardware Announcements",
+      "sources": [
+        "Apple Events",
+        "Apple Newsroom",
+        "MacRumors",
+        "r/apple",
+        "r/Mac"
+      ],
+      "checkFrequency": "daily"
+    },
+    {
+      "name": "Developer Updates",
+      "sources": [
+        "Apple Developer News",
+        "Apple Developer Documentation",
+        "WWDC announcements"
+      ],
+      "checkFrequency": "daily"
+    }
+  ],
+  "userPreferences": {
+    "trackedProducts": [],
+    "areasOfInterest": [
+      "macOS",
+      "iOS",
+      "iPadOS",
+      "watchOS",
+      "Hardware",
+      "Software",
+      "Developer Tools",
+      "Ecosystem Integration"
+    ],
+    "preferredSources": [
+      "Official Apple sources",
+      "MacRumors",
+      "9to5Mac",
+      "r/apple"
+    ]
+  }
+}
