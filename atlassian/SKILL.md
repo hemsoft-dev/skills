@@ -1,6 +1,6 @@
 ---
 name: atlassian
-description: V1.4 - Search and manage JIRA tickets, Confluence docs, and Cortex Internal Developer Portal with proper field configuration and full Confluence API support. ALWAYS includes clickable links in results.
+description: V1.5 - Search and manage JIRA tickets, Confluence docs, and Cortex Internal Developer Portal with proper field configuration and full Confluence API support. ALWAYS includes clickable links in results.
 ---
 
 # Atlassian
@@ -14,6 +14,21 @@ Search JIRA and Confluence, create/modify JIRA tickets with proper team field co
 - Include the full URL: `https://relias.atlassian.net/browse/TICKET-KEY` or `https://relias.atlassian.net/wiki/...`
 - Format as markdown links: `[Ticket Key](URL)` or `[Page Title](URL)`
 - Display links prominently in the output, not buried in tables
+
+## Confluence Search Strategy
+
+**Always use the scripts in this skill** rather than writing inline API calls. Follow this order:
+
+1. **Title search first**: Use `title ~ "phrase"` for specific page names (most precise)
+2. **Text search for topics**: Use `text ~ "phrase"` when searching content broadly
+3. **Refine if too many results**: Add space filters (`-SpaceKey`) or combine title + text
+4. **CLI shortcut**: If `hs-cli-confluence-search` is installed, use `bun dev "phrase"` for quick searches
+
+**CQL Priority:**
+
+- Looking for a specific page? → `title ~ "Page Name"`
+- Looking for content about a topic? → `text ~ "topic"`
+- Too many results? → Add `-SpaceKey DEV` or `-Year 2025`
 
 ## ALWAYS: Log This Interaction
 

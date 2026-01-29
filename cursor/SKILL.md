@@ -1,6 +1,6 @@
 ---
 name: cursor
-description: V1.1 - Expert in Cursor IDE features, shortcuts, settings, Composer mode, chat, custom agents, MCP servers, and usage tracking. Use when working with Cursor IDE or needing help with Cursor-specific functionality.
+description: V1.2 - Expert in Cursor IDE features, shortcuts, settings, Composer mode, chat, custom agents, MCP servers, and usage tracking. Includes @ symbol context inclusion guide. Use when working with Cursor IDE or needing help with Cursor-specific functionality.
 ---
 
 # Cursor IDE Helper
@@ -67,6 +67,40 @@ One-on-one conversation with the AI assistant for questions, explanations, and s
 - Request code generation
 - Debug errors and issues
 - Single-file edits and suggestions
+
+### Context Inclusion with `@` Symbol
+
+Use the `@` symbol to explicitly include files, code, and other context in Chat or Composer (similar to `#` in GitHub Copilot):
+
+| Symbol | Purpose | Example |
+|--------|---------|---------|
+| `@Files` | Include specific files in context | `@Button.tsx` `@src/utils/helpers.ts` |
+| `@Folders` | Include entire folders | `@src/components/` `@lib/` |
+| `@Code` | Reference code symbols (functions, classes, variables) | `@fetchUser` `@UserClass` |
+| `@Docs` | Include documentation or web results | `@docs react hooks` |
+| `@Web` | Search web and include results | `@web latest typescript 5.4 features` |
+| `@Git` | Include git diff/changes | `@git` |
+| `@Codebase` | Semantic search across codebase | `@codebase authentication flow` |
+| `@Chat` | Reference previous chat messages | `@chat` |
+
+**Usage Examples:**
+
+```
+"Refactor @Button.tsx to use the pattern from @Card.tsx"
+
+"Explain how @fetchUser function works with @database/"
+
+"Update @codebase error handling to match @docs error boundaries"
+
+"What changed in @git that might affect @api/routes.ts?"
+```
+
+**Tips:**
+
+- Type `@` and start typing - autocomplete will suggest matches
+- Can combine multiple `@` references in one prompt
+- Files are auto-included based on cursor position, but `@` gives explicit control
+- `@Codebase` performs semantic search across entire project
 
 ### Inline Edit Mode
 
@@ -351,7 +385,7 @@ build/
 ### Using Chat
 
 1. **Ask focused questions** - One topic at a time
-2. **Reference code** - Use `@filename` to include files
+2. **Use `@` for context** - Explicitly include files (`@filename`), code symbols (`@function`), or search codebase (`@codebase`)
 3. **Provide examples** - Show what you're trying to achieve
 4. **Clarify context** - Mention framework, language version, etc.
 5. **Follow up** - Refine requests based on responses
@@ -440,13 +474,14 @@ Monitor:
 
 ## Tips & Tricks
 
-1. **Use @ mentions** - Reference files, functions, or variables in chat
+1. **Master `@` context** - Use `@Files`, `@Code`, `@Codebase`, `@Web`, `@Git`, `@Docs` for precise context control
 2. **Multi-cursor editing** - `Alt+Click` to add cursors, then use AI
 3. **Code selection** - Select code before using `Ctrl+K` for context
 4. **Command history** - Use arrow keys in chat to repeat previous prompts
 5. **Workspace context** - Open relevant files before using Composer
 6. **Incremental changes** - Make small, focused edits rather than large rewrites
 7. **Review mode** - Use diff view to review all Composer changes before accepting
+8. **Combine @ references** - Mix multiple `@` symbols in one prompt for rich context
 
 ## Resources
 

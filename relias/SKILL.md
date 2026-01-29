@@ -72,6 +72,57 @@ All HR-related documents are stored in the `HR/` subfolder as Markdown files con
 - Travel policies
 - Equipment and technology use
 
+### 7. IT Resources
+
+- **IT Help Desk**: <https://relias.atlassian.net/servicedesk/customer/portals>
+
+#### Active IT Requests
+
+**2026-01-28 - Slack Service Account Token Request**
+
+**Ticket Number**: ITHC-20764
+
+**Ticket URL**: <https://relias.atlassian.net/servicedesk/customer/portal/14/ITHC-20764?created=true>
+
+**Subject**: Request for Service Account with Slack User Token for Relias Assistant
+
+**Status**: Submitted
+
+**Request Details**:
+
+We need a Slack service account token for the Relias Assistant application that performs Slack message searches.
+
+**Current Issue**:
+
+The Slack search functionality currently uses a token created under my personal Slack credentials. This means the assistant can search and return messages from private channels I'm a member of. Since the assistant will be used by others, this creates a data exposure risk—users could potentially see messages from private channels they don't have access to.
+
+**What We Need**:
+
+A user token tied to a service account (e.g., <relias-assistant@relias.com> or similar) because Slack's Search API doesn't support bot tokens. This service account should:
+
+- Only be a member of public channels (or a curated list of approved channels)
+- Authenticate to a Slack App we control, generating an OAuth user token with search:read scope
+
+**Why It Must Be a User Token**:
+
+Due to Slack API limitations, the search.messages endpoint only accepts user tokens (xoxp-...)—bot tokens are explicitly rejected with a not_allowed_token_type error. Search results are always scoped to the authenticating user's channel membership, so we need a dedicated user account with controlled access rather than relying on an individual's credentials.
+
+**Reference**: <https://github.com/slackapi/bolt-python/issues/539>
+
+**2026-01-29 - [Subject to be added]**
+
+**Ticket Number**: ITHC-20802
+
+**Ticket URL**: <https://relias.atlassian.net/servicedesk/customer/portal/14/ITHC-20802?created=true>
+
+**Subject**: [To be filled in]
+
+**Status**: Submitted
+
+**Request Details**:
+
+[Details to be added]
+
 ### 4. Organizational Structure
 
 - Departments and teams

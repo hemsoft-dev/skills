@@ -1,0 +1,59 @@
+{
+  "last_updated": "2026-01-27",
+  "leaderboards": {
+    "overall": {
+      "last_displayed_date": "2026-01-27",
+      "last_displayed_rankings": [
+        { "rank": 1, "model": "Gemini-3-Pro", "elo": 1490 },
+        { "rank": 2, "model": "Grok-4.1-Thinking", "elo": 1477 },
+        { "rank": 3, "model": "Gemini-3-Flash", "elo": 1472 },
+        { "rank": 4, "model": "Claude-Opus-4-5-Thinking-32k", "elo": 1470 },
+        { "rank": 5, "model": "Claude-Opus-4-5", "elo": 1467 }
+      ]
+    },
+    "coding": {
+      "last_displayed_date": "2026-01-27",
+      "last_displayed_rankings": [
+        { "rank": 1, "model": "Claude-Opus-4-5-Thinking-32k", "elo": 1504 },
+        { "rank": 2, "model": "GPT-5.2-High", "elo": 1475 },
+        { "rank": 3, "model": "Claude-Opus-4-5", "elo": 1467 },
+        { "rank": 4, "model": "Gemini-3-Pro", "elo": 1462 },
+        { "rank": 5, "model": "Gemini-3-Flash", "elo": 1454 }
+      ]
+    },
+    "vision": {
+      "last_displayed_date": "2026-01-27",
+      "last_displayed_rankings": [
+        { "rank": 1, "model": "Gemini-3-Pro", "elo": 1300 },
+        { "rank": 2, "model": "Gemini-3-Flash", "elo": 1280 },
+        { "rank": 3, "model": "Gemini-3-Flash-Thinking-Minimal", "elo": 1254 },
+        { "rank": 4, "model": "GPT-5.1-High", "elo": 1249 },
+        { "rank": 5, "model": "Gemini-2.5-Pro", "elo": 1248 }
+      ]
+    }
+  },
+  "model_news": {
+    "last_displayed_date": "2026-01-27",
+    "last_displayed_models": [
+      "moonshotai/kimi-k2.5",
+      "stepfun-ai/step3"
+    ]
+  },
+  "openrouter_apps": {
+    "last_displayed_date": "2026-01-27",
+    "last_displayed_rankings": [
+      { "rank": 1, "app": "liteLLM", "description": "Open-source library to simplify LLM calls", "tokens": "66.9B" },
+      { "rank": 2, "app": "Kilo Code", "description": "AI coding agent for VS Code", "tokens": "59.8B" },
+      { "rank": 3, "app": "BLACKBOXAI", "description": "AI agent for builders", "tokens": "45.6B" },
+      { "rank": 4, "app": "Janitor AI", "description": "Character chat and creation", "tokens": "42.5B" },
+      { "rank": 5, "app": "Roo Code", "description": "A whole dev team of AI agents in your editor", "tokens": "34.9B" },
+      { "rank": 6, "app": "Cline", "description": "Autonomous coding agent right in your IDE", "tokens": "19.3B" }
+    ]
+  },
+  "sources": {
+    "leaderboard_url": "https://lmarena.ai/leaderboard",
+    "openrouter_api": "https://openrouter.ai/api/v1/models",
+    "openrouter_announcements": "https://openrouter.ai/announcements",
+    "openrouter_apps_rankings": "https://openrouter.ai/rankings/apps"
+  }
+}

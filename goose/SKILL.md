@@ -1,6 +1,6 @@
 ---
 name: goose
-description: V1.2 - Use a CLI AI tool called Goose to execute the prompt. Supports local Ollama models and cloud providers with MCP extensions.
+description: V1.3 - Use a CLI AI tool called Goose to execute the prompt. Supports local Ollama models and cloud providers with MCP extensions. Includes Windows update workarounds.
 ---
 
 # Goose
@@ -57,6 +57,45 @@ brew install --cask block-goose
 - Do NOT install via pip/pipx
 - The `goose-ai` package on PyPI is a different, broken project
 - Always use official installation methods above
+
+## Updating Goose
+
+### On Windows (Important!)
+
+**⚠️ Known Issue:** The built-in `goose update` command requires WSL (Windows Subsystem for Linux) and will fail if WSL is broken or not configured properly with the error:
+
+```
+WSL ERROR: CreateProcessCommon:800: execvpe(/bin/bash) failed: No such file or directory
+```
+
+**Workaround - Manual Update (Recommended):**
+
+```powershell
+# Download and install latest version manually
+$version = "v1.21.2"  # Check https://github.com/block/goose/releases for latest
+Invoke-WebRequest -Uri "https://github.com/block/goose/releases/download/$version/goose-x86_64-pc-windows-gnu.zip" -OutFile "$env:TEMP\goose.zip"
+Expand-Archive -Path "$env:TEMP\goose.zip" -DestinationPath "$env:TEMP\goose" -Force
+Copy-Item "$env:TEMP\goose\goose-package\*" -Destination "$env:USERPROFILE\.local\bin\" -Force
+Remove-Item "$env:TEMP\goose.zip","$env:TEMP\goose" -Recurse -Force
+goose --version
+```
+
+**Alternative - Fix WSL:**
+
+If you want `goose update` to work natively, ensure WSL is properly installed and configured:
+
+```powershell
+wsl --install
+wsl --set-default-version 2
+```
+
+### On macOS/Linux
+
+```bash
+goose update
+```
+
+Works natively without issues.
 
 ## Using Goose
 

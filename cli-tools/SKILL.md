@@ -1,9 +1,9 @@
 ---
 name: cli-tools
-description: V1.5 - Reference guide for CLI tools including installation, updates, version tracking, and usage with release notes reporting.
+description: V1.7 - Reference guide for CLI tools including installation, updates, version tracking, and usage with release notes reporting. Updated with Windows-specific update quirks.
 metadata:
   author: HemSoft Developments
-  version: "1.5"
+  version: "1.7"
 ---
 
 # CLI Tools
@@ -174,6 +174,146 @@ edit --version
 
 ---
 
+### glow - Glow Markdown Viewer/Editor
+
+**Category:** Text Editors
+
+**Description:** Lightweight CLI tool written in Go that renders Markdown files directly in the terminal with stylish formatting and syntax highlighting. Works with both local and remote Markdown files, useful for previewing documentation and README files.
+
+**Author:** Charm (charmbracelet)
+
+**Current Version:** 2.1.1 (as of 2026-01-28)
+
+**Installation:**
+
+Windows (Scoop):
+
+```powershell
+scoop install glow
+```
+
+Alternative (winget):
+
+```powershell
+winget install charmbracelet.Glow
+```
+
+**Update:**
+
+```powershell
+# Scoop
+scoop update glow
+
+# winget
+winget upgrade charmbracelet.Glow
+```
+
+**Version Check:**
+
+```bash
+# Check installed version
+glow --version
+
+# Check latest available version
+# Visit: https://github.com/charmbracelet/glow/releases
+```
+
+**Links:**
+
+- GitHub: <https://github.com/charmbracelet/glow>
+- Releases: <https://github.com/charmbracelet/glow/releases>
+
+**Usage:**
+
+```bash
+# View a local markdown file
+glow README.md
+
+# View a remote markdown file
+glow github.com/charmbracelet/glow
+
+# Edit mode (if supported)
+glow -p filename.md
+
+# Check version
+glow --version
+```
+
+**Note:** Excellent tool for viewing and editing Markdown files in the terminal with beautiful formatting. Supports both local files and remote URLs.
+
+---
+
+### nano - GNU Nano Text Editor
+
+**Category:** Text Editors
+
+**Description:** Simple, user-friendly command-line text editor. Excellent CLI editing tool with intuitive keyboard shortcuts and a clean interface. Perfect for quick edits and terminal-based file editing.
+
+**Author:** GNU Project
+
+**Current Version:** (version check needed - as of 2026-01-28)
+
+**Installation:**
+
+Windows (winget):
+
+```powershell
+winget install GNU.Nano
+```
+
+Alternative (Chocolatey):
+
+```powershell
+choco install nano -y
+```
+
+**Update:**
+
+```powershell
+# winget
+winget upgrade GNU.Nano
+
+# Chocolatey
+choco upgrade nano -y
+```
+
+**Version Check:**
+
+```bash
+# Check installed version
+nano --version
+
+# Check latest available version
+# Visit: https://www.nano-editor.org/download.php
+```
+
+**Links:**
+
+- Official Site: <https://www.nano-editor.org>
+- Windows Port: <https://github.com/lhmouse/nano-win>
+
+**Usage:**
+
+```bash
+# Open/create a file
+nano filename.txt
+
+# Edit existing file
+nano README.md
+
+# Essential shortcuts:
+# Ctrl+O - Save
+# Ctrl+X - Exit
+# Ctrl+K - Cut line
+# Ctrl+U - Paste
+# Ctrl+W - Search
+# Ctrl+G - Help
+```
+
+**Note:** Excellent CLI editing tool. Simple and intuitive interface perfect for terminal-based editing. Essential keyboard shortcuts displayed at bottom of screen.
+
+---
+
 ### gemini - Gemini CLI
 
 **Category:** AI
@@ -182,7 +322,7 @@ edit --version
 
 **Author:** Google
 
-**Current Version:** 0.24.4 (as of 2026-01-19)
+**Current Version:** 0.27.0-preview.0 (as of 2026-01-27)
 
 **Installation:**
 
@@ -193,8 +333,19 @@ npm install -g @google/gemini-cli
 **Update:**
 
 ```bash
+# Update to latest stable
 npm update -g @google/gemini-cli
+
+# Force latest version
+npm install -g @google/gemini-cli@latest
 ```
+
+**⚠️ Update Notes:**
+
+- ❌ **NO auto-update command** (unlike Bun's `bun upgrade`)
+- ❌ **NOT available in Scoop** or other Windows package managers
+- ✅ npm is the ONLY official distribution method
+- Requires manual `npm update` checks
 
 **Version Check:**
 
@@ -204,12 +355,16 @@ gemini --version
 
 # Check latest available version
 npm view @google/gemini-cli version
+
+# List installed package details
+npm list -g @google/gemini-cli
 ```
 
 **Links:**
 
 - npm: <https://www.npmjs.com/package/@google/gemini-cli>
 - GitHub: <https://github.com/google-gemini/gemini-cli>
+- Releases: <https://github.com/google-gemini/gemini-cli/releases>
 - Docs: <https://geminicli.com>
 
 **Usage:**
@@ -228,7 +383,7 @@ gemini --model gemini-2.5-flash "Your prompt here"
 gemini --version
 ```
 
-**Note:** First run prompts OAuth login via browser. Credentials are cached for future use. Uses free tier by default (see gemini skill for billing details).
+**Note:** First run prompts OAuth login via browser. Credentials are cached for future use. Uses free tier by default (see gemini skill for billing details). Preview releases available via `npm install -g @google/gemini-cli@latest --tag next`.
 
 ---
 
@@ -421,7 +576,7 @@ codex --version
 
 **Author:** Block (Square)
 
-**Current Version:** 1.20.1 (as of 2026-01-19)
+**Current Version:** 1.21.2 (as of 2026-01-27)
 
 **Installation:**
 
@@ -447,7 +602,28 @@ scoop install goose
 
 **Update:**
 
-Re-run the installation script to update to the latest version.
+```bash
+# macOS/Linux (native)
+goose update
+```
+
+```powershell
+# Windows (manual - WSL issues)
+$version = "v1.21.2"  # Check releases for latest
+Invoke-WebRequest -Uri "https://github.com/block/goose/releases/download/$version/goose-x86_64-pc-windows-gnu.zip" -OutFile "$env:TEMP\goose.zip"
+Expand-Archive -Path "$env:TEMP\goose.zip" -DestinationPath "$env:TEMP\goose" -Force
+Copy-Item "$env:TEMP\goose\goose-package\*" -Destination "$env:USERPROFILE\.local\bin\" -Force
+Remove-Item "$env:TEMP\goose.zip","$env:TEMP\goose" -Recurse -Force
+goose --version
+```
+
+**⚠️ Windows Update Issue:**
+
+- `goose update` requires WSL (Windows Subsystem for Linux)
+- Fails with `CreateProcessCommon:800: execvpe(/bin/bash) failed` if WSL broken
+- **Workaround:** Manual download from GitHub releases (see command above)
+- Asset name: `goose-x86_64-pc-windows-gnu.zip`
+- Contains `goose-package/` subdirectory with `goose.exe` + DLL dependencies
 
 **Version Check:**
 

@@ -23,11 +23,20 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
    - **Never proceed** without this information.
    - This selection determines the SSH host alias used for the remote.
 
-2. **Execute Initialization Script**
+2. **Owner Selection (CRITICAL)**
+   - Determine if the repo should be created under the **user account** or an **organization**.
+   - **Default**: Use the user account unless explicitly requested otherwise:
+     - Personal1 → `HemSoft` (user) or `fhemmer` (org)
+     - Personal2 → `franzhemmer` (user) or `fhemmer` (org)
+     - Work1 → `fhemmerrelias` (user) or `relias-engineering` (org)
+   - **User account repos**: Personal projects, experiments, individual ownership (e.g., `github.com/HemSoft/repo`)
+   - **Organization repos**: Team projects, official releases, shared ownership (e.g., `github.com/fhemmer/repo`)
+
+3. **Execute Initialization Script**
    - Run the `github-init.ps1` script located in the scripts subdirectory: `c:\Users\franz\.claude\skills\github-init\scripts\github-init.ps1`.
    - Use the following parameters:
      - `RepoName`: The name of the repository.
-     - `Owner`: The GitHub organization or username.
+     - `Owner`: The GitHub **username** (e.g., `HemSoft`) or **organization** (e.g., `fhemmer`).
      - `Profile`: "Personal1", "Personal2", or "Work1".
      - `Private`: (Optional) Default is `$true`.
    - **Report Success**: Always provide the user with the URL to the newly created repository.

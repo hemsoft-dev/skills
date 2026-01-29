@@ -1,6 +1,6 @@
 ---
 name: diary
-description: "V2.16 - Captures daily accomplishments, goals, and reflections with Todoist integration. Auto-includes weather, ALL news headlines (5-7 per category: US, World, AI, Danish) with mandatory source diversification (max 2 per source, 3-4 sources minimum) and Simon Willison priority for AI News, comprehensive Slack highlights from 18 monitored channels (8-12+ highlights), watchlist updates, Daily Numbers (Dow Jones, S&P 500, Relias Repo Counts), trending GitHub repos, and Software Watchlist with 68% automation. Structured Work/Personal/Personal Reflections format. Omits Work section on Saturdays; Sundays only include Work → Tomorrow's Goals. NEVER removes files without user consent."
+description: "V2.18 - Captures daily accomplishments, goals, and reflections with Todoist integration. Auto-includes weather, ALL news headlines (5-7 per category: US, World, AI, Danish) with mandatory source diversification (max 2 per source, 3-4 sources minimum) and Simon Willison priority for AI News, comprehensive Slack highlights from 18 monitored channels (8-12+ highlights), watchlist updates, Daily Numbers (Dow Jones, S&P 500, Relias Repo Counts), LLM Models (LMSYS Chatbot Arena leaderboard + OpenRouter new releases + Top OpenRouter Apps), trending GitHub repos, and Software Watchlist with 68% automation. Structured Work/Personal/Personal Reflections format. Omits Work section on Saturdays; Sundays only include Work → Tomorrow's Goals. NEVER removes files without user consent."
 ---
 
 # Diary
@@ -48,6 +48,7 @@ All diary entries follow the template at `config/yyyy-mm-dd.md`. Key sections:
 - **Weather**: Current conditions and 3-day forecast (from `Get-Today.ps1`)
 - **News Headlines**: 5-7 items each for US, World, AI, and Danish News (last 24 hours only)
 - **Daily Numbers**: Stock market data (weekdays) and Relias repo counts (GitHub and Bitbucket with day-over-day deltas)
+- **LLM Models**: LMSYS Chatbot Arena leaderboard (Overall/Coding/Vision top 5, only when rankings change), OpenRouter new model releases (last 7 days), and Top OpenRouter Apps by token usage (top 10, only when rankings change)
 - **Top 5 Trending GitHub Repos**: Current trending repositories with actual star counts (use web search to get real data from <https://github.com/trending>)
 - **Software Watchlist**: Version updates for monitored software (last 7 days)
 - **Work**: Work Done, Tomorrow's Goals
@@ -156,7 +157,7 @@ The today skill automatically launches 3 parallel sub-agents to gather:
 
 - **ALWAYS check Simon Willison's Weblog (simonwillison.net)** - This is priority source #1 for AI News
 - If Simon Willison has relevant posts from the last 24 hours, they MUST be included
-- Then diversify across other sources: The Verge AI, Ars Technica AI, TechCrunch AI, Wired AI, MIT Technology Review, VentureBeat AI
+- Then diversify across other sources: The Verge AI, Ars Technica AI, TechCrunch AI, Wired AI, MIT Technology Review, VentureBeat AI, Microsoft Developer Blog
 
 **Verification:**
 
@@ -352,9 +353,10 @@ Copy **complete, unfiltered output** from today skill: Today's Highlight, Weathe
 2. **Pull Todoist data** (`Get-TodoistCompleted.ps1`, `Get-TodoistTasks.ps1`, `Get-TodoistUpdated.ps1`)
 3. **Apply filters** (`exclusion.json`: @Regular Chores, health/exercise/timesheet tasks)
 4. **Categorize** (Work: 2221463722, Personal: 2200472795 or others)
-5. **Generate entry** with weather/news/Todoist data
-6. **Query for gaps** (work/personal done/goals/reflections)
-7. **Save** to `entries/{YYYY-MM-DD}.md`
+5. **Check LLM Models** (LMSYS leaderboard changes, OpenRouter new releases from last 7 days)
+6. **Generate entry** with weather/news/Todoist/LLM data
+7. **Query for gaps** (work/personal done/goals/reflections)
+8. **Save** to `entries/{YYYY-MM-DD}.md`
 
 ### 3. Review Past Entries
 
@@ -397,6 +399,161 @@ When user wants to review previous entries:
 
 **Tracking:** First run shows all software; subsequent runs only show version changes. Update JSON after rendering.
 
+## LLM Models Configuration
+
+**File:** `config/llm-leaderboard.json` - Tracks LMSYS Chatbot Arena rankings and new model releases
+
+### Leaderboard Tracking (LMSYS Chatbot Arena)
+
+**Source:** <https://lmarena.ai/leaderboard>
+
+**Categories to Track:**
+
+- Overall (Top 5)
+- Coding (Top 5)
+- Vision (Top 5)
+
+**Data Collection Method:**
+
+1. Use WebSearch to fetch current leaderboard: "LMSYS Chatbot Arena leaderboard January 2026"
+2. Parse results to extract top 5 models for each category with:
+   - Rank position
+   - Model name
+   - Elo score
+3. Compare against `last_displayed_rankings` in JSON config
+4. Calculate rank changes (↑/↓/−) and score deltas
+
+**Incremental Tracking:**
+
+1. **First Run** (`last_displayed_rankings` is empty): Display all three categories (Overall, Coding, Vision top 5)
+2. **Subsequent Runs**: Only display categories where rankings changed (rank position changes OR new models in top 5)
+3. **After rendering**: Update JSON with current rankings as `last_displayed_rankings` and set `last_displayed_date`
+
+**Format:**
+
+```markdown
+**Overall (Top 5)**
+
+| Rank | Model | Elo Score | Change |
+|------|-------|-----------|--------|
+| 1 | Gemini-3-Pro | 1490 | − |
+| 2 | Grok-4.1-Thinking | 1477 | ↑1 |
+| 3 | Gemini-3-Flash | 1472 | ↓1 |
+```
+
+**Change Indicators:**
+
+- `↑{n}` = Moved up n positions
+- `↓{n}` = Moved down n positions
+- `−` = No change
+- `NEW` = New entry to top 5
+
+### Model News (OpenRouter Releases)
+
+**Primary Source:** OpenRouter API and announcements
+
+- API: `https://openrouter.ai/api/v1/models`
+- Announcements: `https://openrouter.ai/announcements`
+- Models page: `https://openrouter.ai/models?fmt=table&order=newest`
+
+**Secondary Sources (if needed):**
+
+- HuggingFace model hub for notable open-source releases
+- Official vendor announcements (OpenAI, Anthropic, Google, Meta)
+
+**Time Range:** Last 7 days from today's date
+
+**Data Collection Method:**
+
+1. **PRIMARY - AI Model Trackers**:
+   - LLM Stats Updates: `https://llm-stats.com/llm-updates` (comprehensive release tracking)
+   - AI Timeline Recent: `https://www.aitimelines.club/recent` (last 24 hours updates)
+   - Cross-reference releases with OpenRouter availability
+2. **SECONDARY**: Visit OpenRouter models page: `https://openrouter.ai/models?fmt=table&order=newest`
+   - Check individual model pages for "Created" date
+   - Look for models created within last 7 days
+3. **TERTIARY**: Direct provider announcements
+   - OpenAI blog, Anthropic news, Google AI blog, xAI announcements
+   - HuggingFace model hub (huggingface.co/models)
+4. **FALLBACK**: OpenRouter announcements: `https://openrouter.ai/announcements`
+5. Extract models released in last 7 days with:
+   - Model name (full ID: provider/model)
+   - Provider/vendor
+   - Release date ("Created" date on model page)
+   - Context window size
+   - Pricing (input/output per 1M tokens)
+   - Model link (e.g., <https://openrouter.ai/moonshotai/kimi-k2.5>)
+6. Display ALL models from last 7 days (no limit)
+
+**CRITICAL:** Do NOT rely solely on announcements page - many models are added to OpenRouter without announcements. Always check the models page sorted by newest and verify "Created" dates on individual model pages.
+
+**Format:**
+
+```markdown
+| Model | Provider | Released | Context | Pricing | Link |
+|-------|----------|----------|---------|---------|------|
+| GPT-5.2-High | OpenAI | 2026-01-25 | 128K | $30/1M | [Announcement](url) |
+| Kimi K2.5 | Moonshot AI | 2026-01-27 | 1M | $2/1M | [Release](url) |
+```
+
+**Tracking:** Store `last_displayed_date` and `last_displayed_models` (array of model names) to avoid duplicates on subsequent runs within same 7-day window.
+
+### OpenRouter App Rankings
+
+**Source:** OpenRouter App Rankings page
+
+- URL: `https://openrouter.ai/rankings/apps`
+- Shows top public applications by total token usage
+
+**Data Collection Method:**
+
+1. Use WebSearch: "OpenRouter top apps rankings January 2026" or visit rankings page
+2. Extract top 10 apps with:
+   - Rank position
+   - App name
+   - Description/purpose
+   - Token count (e.g., "71.2B tokens")
+3. Compare against `last_displayed_rankings` in JSON config
+4. Calculate rank changes (↑/↓/−) and token deltas
+
+**Incremental Tracking:**
+
+1. **First Run** (`last_displayed_rankings` is empty): Display top 10 apps
+2. **Subsequent Runs**: Only display when rankings change (position changes OR new apps in top 10 OR significant token changes >10B)
+3. **After rendering**: Update JSON with current rankings as `last_displayed_rankings` and set `last_displayed_date`
+
+**Format:**
+
+```markdown
+### Top OpenRouter Apps (by Token Usage)
+
+| Rank | App | Description | Tokens | Change |
+|------|-----|-------------|--------|--------|
+| 1 | Kilo Code | AI coding agent for VS Code | 71.2B | − |
+| 2 | BLACKBOXAI | AI agent for builders | 51.7B | ↑1 |
+| 3 | liteLLM | Open-source LLM library | 46B | ↓1 |
+```
+
+**Change Indicators:**
+
+- `↑{n}` = Moved up n positions
+- `↓{n}` = Moved down n positions
+- `−` = No change in position
+- `NEW` = New entry to top 10
+- Token count changes shown in parentheses if >10B change
+
+**Notable Apps to Watch:**
+
+- Kilo Code: AI coding agent for VS Code
+- BLACKBOXAI: AI agent for builders
+- liteLLM: Open-source library to simplify LLM calls
+- Janitor AI: Character chat and creation
+- Cline: Autonomous coding agent for IDE
+- Agent Zero: Build autonomous AI agents
+- Claude Code: The AI for problem solvers
+
+**Section Omission:** If no leaderboard changes AND no new models in last 7 days AND no app ranking changes, omit entire LLM Models section from diary entry.
+
 ## File Structure
 
 ```
@@ -406,6 +563,7 @@ diary/
 │   ├── yyyy-mm-dd.md (template)
 │   ├── exclusion.json
 │   ├── software-watchlist.json
+│   ├── llm-leaderboard.json (tracks LMSYS rankings and model releases)
 │   └── repo-counts.json (tracks daily repo counts for delta calculation)
 ├── scripts/
 │   ├── Get-ReliasRepoCounts.ps1 (unified script for GitHub + Bitbucket with deltas)

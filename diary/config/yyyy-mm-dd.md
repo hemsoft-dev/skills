@@ -73,6 +73,48 @@
 
 ---
 
+## 🤖 LLM Models
+
+### LMSYS Chatbot Arena Leaderboard
+
+**Overall (Top 5)**
+
+| Rank | Model | Elo Score | Change |
+|------|-------|-----------|--------|
+| [Only shown when rankings change from last display] |
+
+**Coding (Top 5)**
+
+| Rank | Model | Elo Score | Change |
+|------|-------|-----------|--------|
+| [Only shown when rankings change from last display] |
+
+**Vision (Top 5)**
+
+| Rank | Model | Elo Score | Change |
+|------|-------|-----------|--------|
+| [Only shown when rankings change from last display] |
+
+*Leaderboard source: [LMSYS Chatbot Arena](https://lmarena.ai/leaderboard)*
+
+### New Model Releases (Last 7 Days)
+
+| Model | Provider | Released | Context | Pricing | Link |
+|-------|----------|----------|---------|---------|------|
+| [All models released in last 7 days from OpenRouter] |
+
+### Top OpenRouter Apps (by Token Usage)
+
+| Rank | App | Description | Tokens | Change |
+|------|-----|-------------|--------|--------|
+| [Only shown when rankings change from last display] |
+
+*Source: [OpenRouter App Rankings](https://openrouter.ai/rankings/apps)*
+
+*If no changes/releases: Section omitted from entry*
+
+---
+
 ## 🔥 Top 5 Trending GitHub Repos
 
 | # | Repository | Description | Stars |
@@ -119,4 +161,4 @@
 
 ---
 
-*Entry created with diary skill V2.15*
+*Entry created with diary skill V2.18*

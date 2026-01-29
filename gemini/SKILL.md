@@ -1,6 +1,6 @@
 ---
 name: gemini
-description: V1.2 - Interact with Google Gemini AI via CLI for prompts, code assistance, and chat sessions.
+description: V1.3 - Interact with Google Gemini AI via CLI for prompts, code assistance, and chat sessions. Installed via npm with update instructions.
 ---
 
 # Gemini CLI
@@ -31,6 +31,69 @@ If improvements identified:
 - Wait for user approval before applying
 - Keep skill concise (remove/condense when adding if possible)
 - Version bump SKILL.md if changes applied
+
+## Installation
+
+### Official Method: npm (Recommended)
+
+Gemini CLI is distributed as an npm package by Google:
+
+```powershell
+npm install -g @google/gemini-cli
+```
+
+**Installation Details:**
+
+- **Package name:** `@google/gemini-cli` (scoped package)
+- **CLI command:** `gemini`
+- **Location:** `%APPDATA%\npm\gemini.cmd` (Windows)
+- **Official channel:** npm registry
+
+**Important Notes:**
+
+- ✅ Use **npm** - official distribution channel from Google
+- ❌ **NOT available in Scoop** - no Windows package manager option
+- ❌ **NOT a standalone binary** - requires Node.js/npm
+- ⚠️ Requires Node.js installed first
+
+### Verify Installation
+
+```powershell
+gemini --version
+```
+
+## Updating Gemini CLI
+
+### Check Current Version
+
+```powershell
+gemini --version
+npm list -g @google/gemini-cli
+```
+
+### Update to Latest
+
+```powershell
+# Update to latest stable
+npm update -g @google/gemini-cli
+
+# Or explicitly install latest
+npm install -g @google/gemini-cli@latest
+```
+
+### Update to Preview/Pre-release
+
+```powershell
+# For preview releases (e.g., v0.27.0-preview.0)
+npm install -g @google/gemini-cli@latest --tag next
+```
+
+**Update Strategy:**
+
+- Gemini CLI releases preview versions frequently
+- Check [GitHub releases](https://github.com/google-gemini/gemini-cli/releases) for latest version
+- npm is the ONLY official update method
+- No auto-update command like Bun or other native CLIs
 
 ## Model Configuration
 

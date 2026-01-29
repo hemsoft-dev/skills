@@ -1,34 +1,42 @@
 [
   {
+    "Software": "Claude Code",
+    "OldVersion": "v2.1.21",
+    "NewVersion": "v2.1.23",
+    "ReleaseDate": "Jan 28 '26",
+    "ChangelogUrl": "https://github.com/anthropics/claude-code/releases",
+    "CheckMethod": "github_releases"
+  },
+  {
     "Software": "Gemini CLI",
-    "OldVersion": "v0.26.0-preview.3",
-    "NewVersion": "v0.26.0-preview.4",
-    "ReleaseDate": "Jan 25 '26",
+    "OldVersion": "v0.27.0-preview.0",
+    "NewVersion": "v0.27.0-preview.1",
+    "ReleaseDate": "Jan 28 '26",
     "ChangelogUrl": "https://github.com/google-gemini/gemini-cli/releases",
     "CheckMethod": "github_releases_prerelease"
   },
   {
     "Software": "GitHub Copilot Chat",
-    "OldVersion": "v0.37.2026012201",
-    "NewVersion": "v0.37.2026012305",
-    "ReleaseDate": "Jan 23 '26",
+    "OldVersion": "v0.37.2026012702",
+    "NewVersion": "v0.37.2026012901",
+    "ReleaseDate": "Jan 28 '26",
     "ChangelogUrl": "https://github.com/microsoft/vscode-copilot-chat/blob/main/CHANGELOG.md",
     "CheckMethod": "github_releases"
   },
   {
+    "Software": "GitHub Web",
+    "OldVersion": "Jan 26",
+    "NewVersion": "Jan 28",
+    "ReleaseDate": "Jan 28 '26",
+    "ChangelogUrl": "https://github.blog/changelog/feed/",
+    "CheckMethod": "rss"
+  },
+  {
     "Software": "Neo4j",
-    "OldVersion": "2025-12",
+    "OldVersion": "2026.01.0",
     "NewVersion": "3.3.0-beta01",
     "ReleaseDate": "Sep 15 '17",
     "ChangelogUrl": "https://github.com/neo4j/neo4j/releases",
-    "CheckMethod": "github_releases"
-  },
-  {
-    "Software": "VSCode",
-    "OldVersion": "1.108.1",
-    "NewVersion": "1.108.2",
-    "ReleaseDate": "Jan 23 '26",
-    "ChangelogUrl": "https://github.com/microsoft/vscode/releases",
     "CheckMethod": "github_releases"
   }
 ]

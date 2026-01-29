@@ -22,16 +22,16 @@
       "changelog_url": "https://github.com/oven-sh/bun/releases",
       "check_method": "github_releases",
       "notes": "Use GitHub releases API - repo: oven-sh/bun",
-      "last_displayed_date": "2026-01-20",
-      "last_displayed_version": "bun-v1.3.6"
+      "last_displayed_date": "2026-01-27",
+      "last_displayed_version": "bun-v1.3.7"
     },
     {
       "name": "Claude Code",
       "changelog_url": "https://github.com/anthropics/claude-code/releases",
       "check_method": "github_releases",
       "notes": "Use GitHub releases API - repo: anthropics/claude-code",
-      "last_displayed_date": "2026-01-23",
-      "last_displayed_version": "v2.1.19"
+      "last_displayed_date": "2026-01-27",
+      "last_displayed_version": "v2.1.21"
     },
     {
       "name": "Copilot CLI",
@@ -70,8 +70,8 @@
       "changelog_url": "https://github.com/google-gemini/gemini-cli/releases",
       "check_method": "github_releases_prerelease",
       "notes": "Use GitHub releases API - repo: google-gemini/gemini-cli (filter for preview releases, exclude nightly)",
-      "last_displayed_date": "2026-01-22",
-      "last_displayed_version": "v0.26.0-preview.3"
+      "last_displayed_date": "2026-01-27",
+      "last_displayed_version": "v0.27.0-preview.0"
     },
     {
       "name": "GitHub CLI",
@@ -86,24 +86,24 @@
       "changelog_url": "https://github.com/microsoft/vscode-copilot-chat/blob/main/CHANGELOG.md",
       "check_method": "github_releases",
       "notes": "GitHub Copilot extension for VS Code - use gh release list for most reliable version check",
-      "last_displayed_date": "2026-01-21",
-      "last_displayed_version": "v0.37.2026012201"
+      "last_displayed_date": "2026-01-27",
+      "last_displayed_version": "v0.37.2026012702"
     },
     {
       "name": "GitHub Web",
       "changelog_url": "https://github.blog/changelog/feed/",
       "check_method": "rss",
       "notes": "Parse RSS feed for latest changelog entry",
-      "last_displayed_date": "2026-01-22",
-      "last_displayed_version": "Jan 22"
+      "last_displayed_date": "2026-01-27",
+      "last_displayed_version": "Jan 26"
     },
     {
       "name": "Goose CLI",
       "changelog_url": "https://github.com/block/goose/releases",
       "check_method": "github_releases",
       "notes": "Goose AI agent CLI releases",
-      "last_displayed_date": "2026-01-23",
-      "last_displayed_version": "v1.21.1"
+      "last_displayed_date": "2026-01-27",
+      "last_displayed_version": "v1.21.2"
     },
     {
       "name": "M365 Copilot",
@@ -126,16 +126,16 @@
       "changelog_url": "https://github.com/neo4j/neo4j/releases",
       "check_method": "github_releases",
       "notes": "Neo4j database releases - default branch is release/5.26.0, feature branches by month (e.g., 2025-12). ⚠️ Use WebSearch to verify - gh release list returns old beta releases",
-      "last_displayed_date": "2026-01-18",
-      "last_displayed_version": "2025-12"
+      "last_displayed_date": "2026-01-27",
+      "last_displayed_version": "2026.01.0"
     },
     {
       "name": "Node.js",
       "changelog_url": "https://github.com/nodejs/node/releases",
       "check_method": "github_releases",
       "notes": "Use GitHub releases API",
-      "last_displayed_date": "2026-01-19",
-      "last_displayed_version": "v25.4.0"
+      "last_displayed_date": "2026-01-27",
+      "last_displayed_version": "v25.5.0"
     },
     {
       "name": "PowerShell",
@@ -158,8 +158,8 @@
       "changelog_url": "https://github.com/microsoft/vscode/releases",
       "check_method": "github_releases",
       "notes": "Use GitHub releases API - repo: microsoft/vscode",
-      "last_displayed_date": "2026-01-20",
-      "last_displayed_version": "1.108.1"
+      "last_displayed_date": "2026-01-27",
+      "last_displayed_version": "1.108.2"
     },
     {
       "name": "VSCode Insiders",

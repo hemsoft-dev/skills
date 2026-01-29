@@ -1,6 +1,6 @@
 ---
 name: ai-chapter
-description: V1.3 - Manages administrative tasks for AI Chapter meetings with Geo Rufino. Two-track meeting structure (AI Engineering Chapter on Confluence, AI Foundation Chapter on SharePoint) with weekly alternation.
+description: V1.4 - Manages administrative tasks for AI Chapter meetings with Geo Rufino. Two-track meeting structure (AI Engineering Chapter on Confluence, AI Foundation Chapter on SharePoint) with weekly alternation. Generates welcome messages for new members.
 ---
 
 # AI Chapter
@@ -80,12 +80,46 @@ If improvements identified:
 
 ## Core Functions
 
-### 1. Meeting Agenda Management
+### 1. Welcome Messages for New Members
+
+When asked to generate a welcome message for someone joining the AI Chapter, use this template:
+
+**Template:**
+
+```
+Hey {user} and welcome to Relias! We're excited to have you join the AI Chapter. 
+
+We have two different tracks:
+- **AI Foundation Chapter**: Beginner-friendly and accessible to all skill levels
+- **AI Engineering Chapter**: More technical discussions, but nothing too crazy 😊
+
+You're welcome to join both or just one—it's completely up to you! They each occur biweekly without overlap, which means there's an AI Chapter meeting every week that alternates between the two tracks.
+
+Just let me know which one(s) you're interested in, and I'll make sure you get added to the right meetings!
+```
+
+**Customization:**
+
+- Replace `{user}` with the person's name or @mention
+- Adjust tone if needed (more formal/casual)
+- Add specific details if the person has expressed interest in a particular track
+
+**Resource Links to Include:**
+
+When welcoming new members, you can reference these resources:
+
+- **AI Engineering Chapter Agenda**: [Confluence Page](https://relias.atlassian.net/wiki/spaces/AIPE/pages/5830213651/AI+Engineering+Chapter+Meeting+Notes+--+2026)
+- **AI Engineering Chapter Recordings**: [SharePoint Folder](https://reliaslearning.sharepoint.com/:f:/r/sites/ProductivityEngineering/Shared%20Documents/AI%20Engineering%20Chapter/Recordings?csf=1&web=1&e=RE3hax)
+- **AI Foundation Chapter Agenda**: [SharePoint Folder](https://reliaslearning.sharepoint.com/:f:/r/sites/ProductivityEngineering/Shared%20Documents/AI%20Foundation%20Chapter/Agendas?csf=1&web=1&e=wDmeoV)
+- **AI Foundation Chapter Recordings**: [SharePoint Folder](https://reliaslearning.sharepoint.com/:f:/r/sites/ProductivityEngineering/Shared%20Documents/AI%20Foundation%20Chapter/Recordings?csf=1&web=1&e=eAaC39)
+
+### 2. Meeting Agenda Management
 
 **AI Engineering Chapter (Confluence):**
 
 Use the `atlassian` skill to manage agendas in Confluence:
 
+- **Main Agenda Page**: [AI Engineering Chapter Meeting Notes -- 2026](https://relias.atlassian.net/wiki/spaces/AIPE/pages/5830213651/AI+Engineering+Chapter+Meeting+Notes+--+2026)
 - **Search for Agendas**: `Search-Confluence.ps1 -Query "AI Chapter" -Title "AI Chapter"`
 - **Space**: AI Initiatives (Productivity Engineering) - `AIPE`
 - **Title Format**: `AI Chapter 2026 -- Meeting notes {MM/DD/YY}`
@@ -95,13 +129,14 @@ Use the `atlassian` skill to manage agendas in Confluence:
 
 Use the `sharepoint` skill to access agendas on SharePoint:
 
+- **Agenda Folder**: [AI Foundation Chapter Agendas](https://reliaslearning.sharepoint.com/:f:/r/sites/ProductivityEngineering/Shared%20Documents/AI%20Foundation%20Chapter/Agendas?csf=1&web=1&e=wDmeoV)
 - **Location**: `https://reliaslearning.sharepoint.com/sites/ProductivityEngineering`
 - **Path**: `Shared Documents/AI Foundation Chapter/Agendas/`
 - **File Format**: `{YYYY-MM-DD}-Meeting-Notes.docx`
 - **Access**: Use SharePoint Web UI or `Get-PnPFile` to download documents
 - **ALWAYS provide direct SharePoint links** when referencing agendas
 
-### 2. Resource Tracking
+### 3. Resource Tracking
 
 Maintain `resources.md` file with all available resources:
 
@@ -135,7 +170,7 @@ Maintain `resources.md` file with all available resources:
 - Generate resource summaries for meetings
 - **ALWAYS include resource URLs** when referencing resources in output
 
-### 3. Meeting Notes & Administration
+### 4. Meeting Notes & Administration
 
 **Create Meeting Notes:**
 
@@ -164,7 +199,7 @@ Maintain `resources.md` file with all available resources:
 - Follow up on overdue items
 - Generate action item summaries
 
-### 4. SharePoint Document Access
+### 5. SharePoint Document Access
 
 **When to Use SharePoint Integration:**
 
@@ -192,9 +227,14 @@ Use the SharePoint skill's `Get-AIChapterDocuments.ps1` script for streamlined d
 - Folders: AI Engineering Chapter, AI Foundation Chapter, AI Quick Tutorials
 - Document library: Shared Documents
 
+**Direct Links to Recordings:**
+
+- **AI Engineering Chapter Recordings**: [SharePoint Folder](https://reliaslearning.sharepoint.com/:f:/r/sites/ProductivityEngineering/Shared%20Documents/AI%20Engineering%20Chapter/Recordings?csf=1&web=1&e=RE3hax)
+- **AI Foundation Chapter Recordings**: [SharePoint Folder](https://reliaslearning.sharepoint.com/:f:/r/sites/ProductivityEngineering/Shared%20Documents/AI%20Foundation%20Chapter/Recordings?csf=1&web=1&e=eAaC39)
+
 **Note:** The SharePoint skill handles authentication and connection management. Use it rather than duplicating SharePoint functionality in this skill.
 
-### 5. Integration with Atlassian Skill
+### 6. Integration with Atlassian Skill
 
 **When to Use Atlassian Integration:**
 

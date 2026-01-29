@@ -1,6 +1,6 @@
 ---
 name: today
-description: V1.3 - Displays highlighted news, current date/time, weather conditions, and 3-day forecast with news headlines. Uses web search (not playwright) for news gathering. Enforces source diversification (max 2 items per source, minimum 3-4 sources per category).
+description: V1.4 - Displays highlighted news, current date/time, weather conditions, and 3-day forecast with news headlines. Uses web search (not playwright) for news gathering. Enforces source diversification (max 2 items per source, minimum 3-4 sources per category).
 ---
 
 # Today
@@ -45,7 +45,7 @@ For a different location:
 
 ## Part 2: News (Sub-Agent Approach)
 
-Launch **3 parallel sub-agents** for US News, World News, and AI News.
+Launch **4 parallel sub-agents** for US News, World News, AI News, and Danish News.
 
 ### Sub-Agent Prompt Template
 
@@ -116,16 +116,32 @@ If a source is unavailable or has no fresh news, note at the end:
 **Sources:**
 
 1. Simon Willison's Weblog (simonwillison.net)
-2. The Verge AI (theverge.com/ai-artificial-intelligence)
-3. Ars Technica AI (arstechnica.com/ai)
-4. TechCrunch AI (techcrunch.com/category/artificial-intelligence)
-5. Wired AI (wired.com/tag/artificial-intelligence)
-6. MIT Technology Review (technologyreview.com)
-7. VentureBeat AI (venturebeat.com/ai)
-8. Crescendo AI News (crescendo.ai/news/latest-ai-news-and-updates)
-9. Hacker News top (news.ycombinator.com) - AI-related only
+2. The Innermost Loop (theinnermostloop.substack.com) - Dr. Alex Wissner-Gross
+3. The Verge AI (theverge.com/ai-artificial-intelligence)
+4. Ars Technica AI (arstechnica.com/ai)
+5. TechCrunch AI (techcrunch.com/category/artificial-intelligence)
+6. Wired AI (wired.com/tag/artificial-intelligence)
+7. MIT Technology Review (technologyreview.com)
+8. VentureBeat AI (venturebeat.com/ai)
+9. Crescendo AI News (crescendo.ai/news/latest-ai-news-and-updates)
+10. Microsoft Developer Blog (developer.microsoft.com/blog)
+11. Hacker News top (news.ycombinator.com) - AI-related only
 
 **Focus areas:** Model releases, research breakthroughs, AI regulation, major funding, product launches, safety developments
+
+### Category 4: Danish News
+
+**Sources:**
+
+1. Reuters Denmark/Europe (reuters.com/world/europe)
+2. The Local Denmark (thelocal.dk)
+3. CPH Post (cphpost.dk)
+4. Danish Ministry of Defence (fmn.dk/en/news)
+5. DR News (dr.dk/nyheder)
+6. Politiken (politiken.dk)
+7. Berlingske (berlingske.dk)
+
+**Focus areas:** Danish politics, Greenland affairs, Arctic defense, EU relations, domestic policy, economy
 
 ---
 
@@ -199,6 +215,17 @@ Present output in this EXACT format:
 | 6 | [Headline text](url) | Source |
 | 7 | [Headline text](url) | Source |
 
+### 🇩🇰 Danish News
+| # | Headline | Source |
+|---|----------|--------|
+| 1 | [Headline text](url) | Source |
+| 2 | [Headline text](url) | Source |
+| 3 | [Headline text](url) | Source |
+| 4 | [Headline text](url) | Source |
+| 5 | [Headline text](url) | Source |
+| 6 | [Headline text](url) | Source |
+| 7 | [Headline text](url) | Source |
+
 ---
 *News gathered at {time}. Sources checked: {count}. Items within last 24 hours only.*
 ```
@@ -224,5 +251,5 @@ Present output in this EXACT format:
 |-----------|---------|-------------|
 | `--hours` | 24 | How far back to search for news |
 | `--count` | 5-7 | Headlines per category |
-| `--category` | all | Specific category: `us`, `world`, `ai`, or `all` |
+| `--category` | all | Specific category: `us`, `world`, `ai`, `danish`, or `all` |
 | `-Location` | 28117 | ZIP code or city for weather |

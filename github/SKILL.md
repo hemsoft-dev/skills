@@ -44,6 +44,23 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 
 **Enterprise URL**: <https://github.com/enterprises/hemsoft-corp>
 
+## Default Owners by Profile
+
+**CRITICAL**: When creating new repositories, distinguish between **user accounts** and **organizations**:
+
+| Profile     | Username      | Default Owner (User) | Can Also Create In (Org)     | Example User Repo                          | Example Org Repo                           |
+|-------------|---------------|----------------------|------------------------------|--------------------------------------------|-----------------------------------------|
+| Personal #1 | HemSoft       | `HemSoft`            | `fhemmer`                    | `github.com/HemSoft/repo`                  | `github.com/fhemmer/repo`               |
+| Personal #2 | franzhemmer   | `franzhemmer`        | `fhemmer`                    | `github.com/franzhemmer/repo`              | `github.com/fhemmer/repo`               |
+| Work #1     | fhemmerrelias | `fhemmerrelias`      | `relias-engineering`         | `github.com/fhemmerrelias/repo`            | `github.com/relias-engineering/repo`    |
+
+**When to use user vs org:**
+
+- **User account** (`HemSoft`, `franzhemmer`, `fhemmerrelias`) - Personal projects, experiments, individual ownership
+- **Organization** (`fhemmer`, `relias-engineering`) - Team projects, official releases, shared ownership
+
+**Default behavior**: Unless explicitly specified, create repos under the **user account**, not the organization.
+
 ## Copilot Quota System
 
 ### Personal Quotas (Pro+ Plans)

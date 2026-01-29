@@ -79,6 +79,14 @@ Store and retrieve user information across these categories:
 - Learning goals
 - Side projects
 
+### Medical
+
+- Healthcare provider information
+- Doctor's website/patient portal
+- Medications, allergies
+- Medical history, conditions
+- Insurance information
+
 ## Usage
 
 When the user asks to:
@@ -99,6 +107,7 @@ You can create additional files in `me/` directory for detailed information:
 - `preferences.md` - User preferences
 - `technical.md` - Technical setup
 - `hobbies.md` - Interests and hobbies
+- `medical.md` - Medical information
 - `gpt-export/` - Complete ChatGPT conversation export (read-only, for reference and neo4j indexing)
   - Contains `conversations.json`, `chat.html`, and binary attachments
   - Binary files are excluded from git via `.gitignore`
@@ -125,5 +134,12 @@ You can create additional files in `me/` directory for detailed information:
 - Shell: PowerShell
 - Primary IDE: Cursor
 - Skills Directory: `C:\Users\User\.claude\skills`
+
+### Medical
+
+- Healthcare Provider: Novant Health
+- Patient Portal: <https://www.novantmychart.org/MyChart/Home>
+- Primary Care Physician: Stephanie Elkins, MD (Novant Health LKN Family Medicine)
+- Cardiologist: Kobina Wilmot, MD (Novant Health Heart and Vascular Institute - Mooresville)
 
 Add more details as needed during conversations.

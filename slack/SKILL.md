@@ -12,9 +12,9 @@ compatibility: Requires SLACK_TOKEN and SLACK_USER_TOKEN environment variables, 
 
 | Skill | Purpose |
 |-------|---------|
-| **[slack-search](../slack-search/SKILL.md)** | Message search, channel discovery, user lookup |
-| **[slack-files](../slack-files/SKILL.md)** | File uploads, downloads, temp folder management |
-| **[slack-advanced](../slack-advanced/SKILL.md)** | Reminders, bookmarks, pins, DMs, reactions, AI Agent |
+| **[slack-search](search/SKILL.md)** | Message search, channel discovery, user lookup |
+| **[slack-files](files/SKILL.md)** | File uploads, downloads, temp folder management |
+| **[slack-advanced](advanced/SKILL.md)** | Reminders, bookmarks, pins, DMs, reactions, AI Agent |
 
 ---
 
@@ -329,8 +329,8 @@ if ($r.ok) { "Valid: $($r.user) on $($r.team)" }
 ## Resources
 
 - **[block-kit-templates.md](block-kit-templates.md)** - Ready-to-use message templates
-- **[slack-search](../slack-search/SKILL.md)** - Search and discovery
-- **[slack-files](../slack-files/SKILL.md)** - File operations
-- **[slack-advanced](../slack-advanced/SKILL.md)** - Advanced features
+- **[slack-search](search/SKILL.md)** - Search and discovery
+- **[slack-files](files/SKILL.md)** - File operations
+- **[slack-advanced](advanced/SKILL.md)** - Advanced features
 - **Web API**: <https://docs.slack.dev/reference/methods>
 - **Block Kit Builder**: <https://app.slack.com/block-kit-builder>
