@@ -27,6 +27,24 @@ The data collection process is automated by:
 - **Output**: Raw commit metrics stored in `data/` directory
 - **Cache**: 24-hour retention of collected data
 
+### Author Filtering
+
+Commits are automatically filtered to only count your own work using author name recognition:
+
+**Known Author Patterns** (recognized as your commits):
+
+- `Franz Hemmer` (primary)
+- `HemSoft` (Personal Account #1)
+- `F. Hemmer` (variations)
+- `F Hemmer` (variations)
+- `Relias` (Work Account #1)
+
+**Suspicious Commit Handling**:
+
+- Commits with unrecognized author names are logged separately
+- Alert files are created in `alerts/` directory when suspicious commits are detected
+- Review alerts to either add the author to the known patterns or verify the commit belongs to you
+
 ### Data Sources
 
 1. **GitHub API via CLI** - Primary source for all repositories accessible via GitHub CLI

@@ -51,12 +51,13 @@ The skill queries two sources for comprehensive productivity tracking:
 
 ### Daily Lines of Code (LOC) Tracking
 
-Calculate the total lines of code committed in a single day:
+Calculate the total lines of code committed in a single day, filtered to your own commits:
 
 - **Calculation Method**: Net changes (additions minus deletions)
 - **File Scope**: Code files only (.js, .ts, .py, .cs, .ps1, .go, .rs, .java, etc.)
 - **Exclusions**: Generated code, node_modules, build artifacts, documentation, images, config files
 - **Time Window**: Calendar day (00:00 - 23:59 local time, or UTC if preferred)
+- **Author Filtering**: Only counts commits from recognized author identities (Franz Hemmer and variations)
 
 **Metrics Included in Daily Report**:
 
@@ -67,6 +68,7 @@ Calculate the total lines of code committed in a single day:
 - Issues closed
 - List of repositories touched
 - File types changed
+- Suspicious commits (unknown authors) logged separately for review
 
 ## Scripts
 

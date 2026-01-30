@@ -38,6 +38,28 @@ param(
     [string]$OutputDir = "$PSScriptRoot\..\data"
 )
 
+# Known author name patterns for your three GitHub accounts
+# These are used to filter commits to only your own work
+$KnownAuthors = @(
+    @{ pattern = "Franz Hemmer"; source = "primary" },
+    @{ pattern = "HemSoft"; source = "personal1" },
+    @{ pattern = "F. Hemmer"; source = "variations" },
+    @{ pattern = "F Hemmer"; source = "variations" },
+    @{ pattern = "Relias"; source = "work1" }
+)
+
+# Function to check if author matches known patterns
+function Test-KnownAuthor {
+    param([string]$AuthorName)
+    
+    foreach ($known in $KnownAuthors) {
+        if ($AuthorName -like "*$($known.pattern)*" -or $AuthorName -eq $known.pattern) {
+            return $true
+        }
+    }
+    return $false
+}
+
 # Set default times to current day if not specified
 $now = Get-Date
 $today = $now.Date
@@ -100,6 +122,7 @@ Write-Information "Loaded configuration with $($config.repositories.Count) repos
 
 # Collect commits
 $allCommits = @()
+$suspiciousCommits = @()
 $commitCount = 0
 $repositoriesScanned = 0
 
@@ -172,6 +195,22 @@ foreach ($repo in $config.repositories) {
                         continue
                     }
                     
+                    # Check if author matches known patterns
+                    $isKnownAuthor = Test-KnownAuthor -AuthorName $author
+                    if (-not $isKnownAuthor) {
+                        # Log suspicious commit for review
+                        $suspiciousCommits += @{
+                            repository = $repo.name
+                            hash = $hash.Substring(0, 7)
+                            author = $author
+                            subject = $subject
+                            date = $commitDate.ToString("yyyy-MM-dd HH:mm:ss")
+                            reason = "Unknown author name not matching known patterns"
+                        }
+                        Write-Information "  ⚠️ Suspicious commit in $($repo.name) by '$author': $subject" -InformationAction Continue
+                        continue
+                    }
+                    
                     # Process numstat lines (remaining lines after first 4)
                     $additions = 0
                     $deletions = 0
@@ -238,6 +277,8 @@ $outputData = @{
     repositoriesScanned = $repositoriesScanned
     commitsFound = $commitCount
     commits = $allCommits
+    suspiciousCommitsFound = @($suspiciousCommits).Count
+    suspiciousCommits = $suspiciousCommits
     summary = @{
         totalAdditions = ($allCommits | Measure-Object -Property additions -Sum).Sum
         totalDeletions = ($allCommits | Measure-Object -Property deletions -Sum).Sum
@@ -265,6 +306,33 @@ $outputFile = Join-Path $OutputDir "commits-$dateStr.json"
 
 # Write JSON output
 $outputData | ConvertTo-Json -Depth 5 | Out-File -FilePath $outputFile -Encoding UTF8 -Force
+
+# Log alerts if suspicious commits found
+if ($suspiciousCommits.Count -gt 0) {
+    $alertsDir = Join-Path $PSScriptRoot "\..\alerts"
+    if (-not (Test-Path -Path $alertsDir)) {
+        New-Item -ItemType Directory -Path $alertsDir -Force | Out-Null
+    }
+    
+    $alertFile = Join-Path $alertsDir "$dateStr.md"
+    $alertContent = "# ⚠️ Suspicious Commits Detected - $dateStr`n`n"
+    $alertContent += "Found **$($suspiciousCommits.Count)** commits with unrecognized author names.`n`n"
+    $alertContent += "## Suspicious Commits`n`n"
+    
+    foreach ($suspicious in $suspiciousCommits) {
+        $alertContent += "- **$($suspicious.repository)** [$($suspicious.hash)]()"
+        $alertContent += " - Author: **$($suspicious.author)**`n"
+        $alertContent += "  * Date: $($suspicious.date)`n"
+        $alertContent += "  * Subject: $($suspicious.subject)`n`n"
+    }
+    
+    $alertContent += "`n**Action Required**: Review these commits and either:`n"
+    $alertContent += "1. Add the author name to \`\`\`KnownAuthors\`\`\` array if it's one of your accounts`n"
+    $alertContent += "2. Remove the commits if they're not yours`n"
+    
+    $alertContent | Out-File -FilePath $alertFile -Encoding UTF8 -Force
+    Write-Information "⚠️ Suspicious commits logged: $alertFile" -InformationAction Continue
+}
 
 Write-Information "Data collection complete" -InformationAction Continue
 Write-Information "Total commits found: $commitCount" -InformationAction Continue
