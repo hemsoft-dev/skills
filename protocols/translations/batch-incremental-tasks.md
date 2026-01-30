@@ -48,6 +48,7 @@ Use your best judgment based on task complexity:
   - Instructions for continuation (so another agent can pick up where you left off)
 
 **Example structure**:
+
 ```markdown
 # Task: [Task Name]
 
@@ -101,9 +102,11 @@ When all items are complete:
 
 1. Update the tracking file to show "Status: Complete"
 2. **MANDATORY**: Offer to delete the temporary tracking file:
+
    ```
    Task complete! All [X] items processed. Would you like me to delete the temporary tracking file (temp-{task-name}-tasks.md)?
    ```
+
 3. Only delete if the user explicitly confirms
 
 ## Exceptions

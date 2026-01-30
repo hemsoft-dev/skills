@@ -77,6 +77,7 @@ Scan repository for version declarations:
 | **Generic** | `VERSION`, `VERSION.txt` | Plain version string |
 
 Also check:
+
 - UI version displays (search for version in `.tsx`, `.vue`, `.svelte` files)
 - Docker files (`Dockerfile`, `docker-compose.yml`)
 - CI/CD configs (`.github/workflows/*.yml`, `azure-pipelines.yml`)
@@ -114,7 +115,7 @@ Enter choice (1-4) or version number:
 
 ### 4. Update CHANGELOG.md
 
-**Enforce Keep a Changelog format** (https://keepachangelog.com):
+**Enforce Keep a Changelog format** (<https://keepachangelog.com>):
 
 ```markdown
 # Changelog
@@ -145,6 +146,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ```
 
 **Changelog sections** (use only what applies):
+
 - `Added` - New features
 - `Changed` - Changes in existing functionality
 - `Deprecated` - Soon-to-be removed features
