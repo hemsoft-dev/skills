@@ -86,6 +86,10 @@ Skills transform AI assistants from general helpers into domain experts. They en
 - What workflows could be automated?
 - What domain knowledge could be captured?
 
+## Brainstorming / Ideas
+
+- Considering showing this YouTube video to the crowd (or parts of it) - incredibly inspiring. Might save for a later session: <https://www.youtube.com/live/aKUZCxTdDDg?si=dFZmNWS5pvnHM-Xk>
+
 ## Success Metrics
 
 - Participants understand what skills are and why they matter

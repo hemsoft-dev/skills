@@ -72,6 +72,7 @@ Optional fields:
 - **Host**
 - **Skill Level** (100/200/300/400 per Microsoft system)
 - **Observations**
+- **Brainstorming/Ideas** - Capture random thoughts, ideas, or notes as they come up before the meeting. No processing required - just persist them in the meeting.md for reference.
 
 ### 3. Preparation Tasks Section
 
@@ -123,7 +124,15 @@ After generating the meeting.md, present questions in a numbered table format:
 When creating a meeting preparation, always:
 
 1. Create folder structure with `{YYYY-MM-DD-slug}/` format
-2. Generate meeting.md from template
+2. Generate meeting.md from template with Brainstorming/Ideas section
 3. Populate preparation tasks with research and resources
 4. Present readiness questions in numbered table format (see section 4)
 5. Update meeting.md based on user's responses (only numbers they disagree with)
+
+**Adding Ideas/Notes:**
+
+When user wants to add a brainstorming note or idea:
+
+- Simply append to the Brainstorming/Ideas section in meeting.md
+- No analysis or processing needed - just capture and persist
+- Use bullet points or numbered list format

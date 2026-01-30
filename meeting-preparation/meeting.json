@@ -37,6 +37,13 @@
       "type": "string",
       "description": "Optional observations or notes about the meeting"
     },
+    "brainstorming": {
+      "type": "array",
+      "description": "Random ideas, thoughts, or notes captured before the meeting",
+      "items": {
+        "type": "string"
+      }
+    },
     "preparationTasks": {
       "type": "array",
       "description": "List of preparation tasks",
