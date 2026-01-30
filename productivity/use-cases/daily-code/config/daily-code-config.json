@@ -1,0 +1,312 @@
+{
+  "metadata": {
+    "fileTypes": [
+      ".js",
+      ".ts",
+      ".py",
+      ".cs",
+      ".ps1",
+      ".go",
+      ".rs",
+      ".java",
+      ".cpp",
+      ".c",
+      ".rb",
+      ".php",
+      ".swift",
+      ".kt"
+    ],
+    "excludePatterns": [
+      "node_modules",
+      "dist",
+      "build",
+      ".git",
+      "*.min.js",
+      "*.min.css",
+      "generated",
+      "build",
+      "target"
+    ],
+    "description": "Configuration for daily-code productivity metrics"
+  },
+  "repositories": [
+    {
+      "source": "personal",
+      "path": "D:\\github\\HemSoft\\7d2d-mods",
+      "name": "7d2d-mods"
+    },
+    {
+      "source": "personal",
+      "path": "D:\\github\\HemSoft\\advent-of-code-2025",
+      "name": "advent-of-code-2025"
+    },
+    {
+      "source": "personal",
+      "path": "D:\\github\\HemSoft\\agents",
+      "name": "agents"
+    },
+    {
+      "source": "personal",
+      "path": "D:\\github\\HemSoft\\ai-conductor",
+      "name": "ai-conductor"
+    },
+    {
+      "source": "personal",
+      "path": "D:\\github\\HemSoft\\cli-tools",
+      "name": "cli-tools"
+    },
+    {
+      "source": "personal",
+      "path": "D:\\github\\HemSoft\\dashboard",
+      "name": "dashboard"
+    },
+    {
+      "source": "personal",
+      "path": "D:\\github\\HemSoft\\dashboard-tui",
+      "name": "dashboard-tui"
+    },
+    {
+      "source": "personal",
+      "path": "D:\\github\\HemSoft\\discord-mcp",
+      "name": "discord-mcp"
+    },
+    {
+      "source": "personal",
+      "path": "D:\\github\\HemSoft\\Egg-Inc-Tracker",
+      "name": "Egg-Inc-Tracker"
+    },
+    {
+      "source": "personal",
+      "path": "D:\\github\\HemSoft\\github-cli-sdk-demo",
+      "name": "github-cli-sdk-demo"
+    },
+    {
+      "source": "personal",
+      "path": "D:\\github\\HemSoft\\HemChat",
+      "name": "HemChat"
+    },
+    {
+      "source": "personal",
+      "path": "D:\\github\\HemSoft\\hemsoft-power-ai",
+      "name": "hemsoft-power-ai"
+    },
+    {
+      "source": "personal",
+      "path": "D:\\github\\HemSoft\\hs-cli-confluence-search",
+      "name": "hs-cli-confluence-search"
+    },
+    {
+      "source": "personal",
+      "path": "D:\\github\\HemSoft\\hs-cli-prs",
+      "name": "hs-cli-prs"
+    },
+    {
+      "source": "personal",
+      "path": "D:\\github\\HemSoft\\hs-cli-template",
+      "name": "hs-cli-template"
+    },
+    {
+      "source": "personal",
+      "path": "D:\\github\\HemSoft\\hs-conductor",
+      "name": "hs-conductor"
+    },
+    {
+      "source": "personal",
+      "path": "D:\\github\\HemSoft\\mcp-server-demo",
+      "name": "mcp-server-demo"
+    },
+    {
+      "source": "personal",
+      "path": "D:\\github\\HemSoft\\modern-web-stack-poc",
+      "name": "modern-web-stack-poc"
+    },
+    {
+      "source": "personal",
+      "path": "D:\\github\\HemSoft\\prs",
+      "name": "prs"
+    },
+    {
+      "source": "personal",
+      "path": "D:\\github\\HemSoft\\rag-poc",
+      "name": "rag-poc"
+    },
+    {
+      "source": "personal",
+      "path": "D:\\github\\HemSoft\\spam-removal-agent",
+      "name": "spam-removal-agent"
+    },
+    {
+      "source": "personal",
+      "path": "D:\\github\\HemSoft\\subtitle-translator",
+      "name": "subtitle-translator"
+    },
+    {
+      "source": "personal",
+      "path": "D:\\github\\HemSoft\\summarist",
+      "name": "summarist"
+    },
+    {
+      "source": "personal",
+      "path": "D:\\github\\HemSoft\\TabBlazor",
+      "name": "TabBlazor"
+    },
+    {
+      "source": "personal",
+      "path": "D:\\github\\HemSoft\\tickdown",
+      "name": "tickdown"
+    },
+    {
+      "source": "personal",
+      "path": "D:\\github\\HemSoft\\www",
+      "name": "www"
+    },
+    {
+      "source": "work",
+      "path": "D:\\github\\Relias\\.github-private",
+      "name": ".github-private"
+    },
+    {
+      "source": "work",
+      "path": "D:\\github\\Relias\\ai-quick-tutorials",
+      "name": "ai-quick-tutorials"
+    },
+    {
+      "source": "work",
+      "path": "D:\\github\\Relias\\ai-skills",
+      "name": "ai-skills"
+    },
+    {
+      "source": "work",
+      "path": "D:\\github\\Relias\\ai-tools",
+      "name": "ai-tools"
+    },
+    {
+      "source": "work",
+      "path": "D:\\github\\Relias\\best-practices",
+      "name": "best-practices"
+    },
+    {
+      "source": "work",
+      "path": "D:\\github\\Relias\\ChatClient-AI-POC",
+      "name": "ChatClient-AI-POC"
+    },
+    {
+      "source": "work",
+      "path": "D:\\github\\Relias\\configurator",
+      "name": "configurator"
+    },
+    {
+      "source": "work",
+      "path": "D:\\github\\Relias\\Confluence-POC",
+      "name": "Confluence-POC"
+    },
+    {
+      "source": "work",
+      "path": "D:\\github\\Relias\\content-engagement-service",
+      "name": "content-engagement-service"
+    },
+    {
+      "source": "work",
+      "path": "D:\\github\\Relias\\cortex-gitops",
+      "name": "cortex-gitops"
+    },
+    {
+      "source": "work",
+      "path": "D:\\github\\Relias\\developer-documentation",
+      "name": "developer-documentation"
+    },
+    {
+      "source": "work",
+      "path": "D:\\github\\Relias\\dotnet-cqrs-microservice-gitops",
+      "name": "dotnet-cqrs-microservice-gitops"
+    },
+    {
+      "source": "work",
+      "path": "D:\\github\\Relias\\entitlement-service",
+      "name": "entitlement-service"
+    },
+    {
+      "source": "work",
+      "path": "D:\\github\\Relias\\GitHub-Octokit-POC",
+      "name": "GitHub-Octokit-POC"
+    },
+    {
+      "source": "work",
+      "path": "D:\\github\\Relias\\github-relias-search",
+      "name": "github-relias-search"
+    },
+    {
+      "source": "work",
+      "path": "D:\\github\\Relias\\github-search",
+      "name": "github-search"
+    },
+    {
+      "source": "work",
+      "path": "D:\\github\\Relias\\golden-path",
+      "name": "golden-path"
+    },
+    {
+      "source": "work",
+      "path": "D:\\github\\Relias\\JIRA-POC",
+      "name": "JIRA-POC"
+    },
+    {
+      "source": "work",
+      "path": "D:\\github\\Relias\\legacy-release-tool",
+      "name": "legacy-release-tool"
+    },
+    {
+      "source": "work",
+      "path": "D:\\github\\Relias\\mcp-host-poc",
+      "name": "mcp-host-poc"
+    },
+    {
+      "source": "work",
+      "path": "D:\\github\\Relias\\pe-assistant",
+      "name": "pe-assistant"
+    },
+    {
+      "source": "work",
+      "path": "D:\\github\\Relias\\relias-assistant",
+      "name": "relias-assistant"
+    },
+    {
+      "source": "work",
+      "path": "D:\\github\\Relias\\rlms-website",
+      "name": "rlms-website"
+    },
+    {
+      "source": "work",
+      "path": "D:\\github\\Relias\\service-dashboard",
+      "name": "service-dashboard"
+    },
+    {
+      "source": "work",
+      "path": "D:\\github\\Relias\\specify-test",
+      "name": "specify-test"
+    },
+    {
+      "source": "work",
+      "path": "D:\\github\\Relias\\task-demo",
+      "name": "task-demo"
+    },
+    {
+      "source": "work",
+      "path": "D:\\github\\Relias\\utilities",
+      "name": "utilities"
+    },
+    {
+      "source": "work",
+      "path": "D:\\github\\Relias\\VectorStoreSearch-POC",
+      "name": "VectorStoreSearch-POC"
+    },
+    {
+      "source": "additional",
+      "path": "c:\\Users\\User\\.claude\\skills",
+      "name": "skills"
+    }
+  ],
+  "repositoryCount": 55,
+  "version": "1.0",
+  "lastUpdated": "2026-01-30T13:11:26.5496198-05:00"
+}

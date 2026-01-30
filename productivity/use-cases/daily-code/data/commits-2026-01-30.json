@@ -1,0 +1,81 @@
+{
+  "commits": [
+    {
+      "subject": "Show banner on all help and error output",
+      "netLOC": 324,
+      "repositoryName": "hs-cli-confluence-search",
+      "timestamp": "2026-01-30T03:17:24.0000000-05:00",
+      "time": "03:17:24",
+      "author": "Franz Hemmer",
+      "fullHash": "7ef3ce36d668150d3eea24b8d6f0e75d6cc09b2c",
+      "repositorySource": "personal",
+      "date": "2026-01-30",
+      "deletions": 100,
+      "hash": "7ef3ce3",
+      "additions": 424
+    },
+    {
+      "subject": "feat(scripts): enhance container app scripts with deployment time and image verification",
+      "netLOC": 306,
+      "repositoryName": "relias-assistant",
+      "timestamp": "2026-01-30T01:58:25.0000000-05:00",
+      "time": "01:58:25",
+      "author": "Franz Hemmer",
+      "fullHash": "2c5a85994dce06d2296c346a7e9f185020c3e9ea",
+      "repositorySource": "work",
+      "date": "2026-01-30",
+      "deletions": 9,
+      "hash": "2c5a859",
+      "additions": 315
+    },
+    {
+      "subject": "feat(screenshot): add Slack/Twitter filename prefixes and process latest screenshot",
+      "netLOC": -11005,
+      "repositoryName": "skills",
+      "timestamp": "2026-01-30T11:47:51.0000000-05:00",
+      "time": "11:47:51",
+      "author": "Franz Hemmer",
+      "fullHash": "047f684219adba259631673c33cabbeaf8765824",
+      "repositorySource": "additional",
+      "date": "2026-01-30",
+      "deletions": 13992,
+      "hash": "047f684",
+      "additions": 2987
+    }
+  ],
+  "queryStartTime": "2026-01-30T00:00:00.0000000-05:00",
+  "queryStartTimeLocal": "2026-01-30 00:00:00",
+  "commitsFound": 3,
+  "summary": {
+    "totalDeletions": 14101.0,
+    "totalNetLOC": -10375.0,
+    "totalAdditions": 3726.0,
+    "commitsByRepository": [
+      {
+        "repository": "hs-cli-confluence-search",
+        "additions": 424.0,
+        "netLOC": 324.0,
+        "deletions": 100.0,
+        "commits": 1
+      },
+      {
+        "repository": "relias-assistant",
+        "additions": 315.0,
+        "netLOC": 306.0,
+        "deletions": 9.0,
+        "commits": 1
+      },
+      {
+        "repository": "skills",
+        "additions": 2987.0,
+        "netLOC": -11005.0,
+        "deletions": 13992.0,
+        "commits": 1
+      }
+    ]
+  },
+  "queryEndTime": "2026-01-30T23:59:59.0000000-05:00",
+  "collectionTime": "2026-01-30T13:24:31.6770561-05:00",
+  "queryEndTimeLocal": "2026-01-30 23:59:59",
+  "repositoriesScanned": 55
+}
