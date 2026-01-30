@@ -1,6 +1,6 @@
 ---
 name: screenshot
-description: V2.0 - SnagIt screenshot library management. Import .snagx files with automatic WebP compression, AI-generated descriptions, smart filenames from window metadata, and superior OCR text extraction. Defaults to processing latest SnagIt capture when no action specified.
+description: V2.1 - SnagIt screenshot library management. Import .snagx files with automatic WebP compression, AI-generated descriptions, smart filenames from window metadata, and superior OCR text extraction. Twitter/X screenshots auto-prefixed with 'tweet-'. Slack screenshots auto-prefixed with 'slack-'. Defaults to processing latest SnagIt capture when no action specified.
 ---
 
 # Screenshot
@@ -129,6 +129,37 @@ Import directly from SnagIt library - no manual export needed:
 - Creates `.meta.json` sidecar file with description + OCR text
 - Cleans up temporary files
 - Stores in `skill-name/images/library/YYYY-MM-DD/`
+
+### Filename Conventions
+
+**Twitter/X Screenshots:**
+
+When importing screenshots from Twitter/X (identified by window titles like "Home", "Post", or Twitter-related content in OCR), prefix the filename with `tweet-` followed by a descriptive slug:
+
+- `tweet-spec-based-claude-code.webp` (instead of just `home.webp`)
+- `tweet-ai-announcement.webp`
+- `tweet-github-copilot-update.webp`
+
+**Detection criteria:**
+
+- Window title contains: "Home", "Post", "Twitter", "X.com"
+- OCR text contains Twitter UI elements (usernames starting with @, retweet/like counts)
+- URL in metadata contains `twitter.com` or `x.com`
+
+**Slack Screenshots:**
+
+When importing screenshots from Slack (identified by window titles containing channel names, DMs, or "Slack"), prefix the filename with `slack-` followed by a descriptive slug:
+
+- `slack-productivity-engineering-public.webp`
+- `slack-dm-bryan-halterman.webp`
+- `slack-general-channel.webp`
+
+**Detection criteria:**
+
+- Window title contains: "Slack", channel names with "|", DM patterns
+- AppName is "Slack" or browser with Slack-related window title
+
+**Other screenshots:** Use window name as-is, converted to kebab-case.
 
 **Manual Method (If Already Exported)**
 

@@ -73,6 +73,53 @@ if (Test-Path $metadataPath) {
         # Use window name for filename (e.g., "slack-dm-bryan-halterman")
         $safeName = $snagxMetadata.WindowName -replace '[^\w\s\-]', '' -replace '\s+', '-' -replace '--+', '-'
         $suggestedFilename = $safeName.ToLower().Substring(0, [Math]::Min(50, $safeName.Length))
+        
+        # Slack detection: prefix with "slack-" if it's a Slack screenshot
+        $isSlack = $false
+        if ($snagxMetadata.AppName -eq "Slack" -or 
+            $snagxMetadata.WindowName -like "*Slack*" -or
+            $snagxMetadata.WindowName -like "*|*") {  # Slack channels often have | separator
+            $isSlack = $true
+        }
+        
+        if ($isSlack) {
+            # Remove "Slack |" prefix and clean up channel/DM names
+            $cleanName = $snagxMetadata.WindowName -replace '^Slack\s*\|\s*', '' -replace '\s*\|.*$', ''
+            $safeName = $cleanName -replace '[^\w\s\-]', '' -replace '\s+', '-' -replace '--+', '-'
+            $suggestedFilename = "slack-" + $safeName.ToLower().Substring(0, [Math]::Min(45, $safeName.Length))
+            Write-Host "  Detected Slack screenshot - prefixing with 'slack-'" -ForegroundColor Yellow
+        }
+        else {
+            # Twitter/X detection: prefix with "tweet-" if it's a Twitter screenshot
+            $isTwitter = $false
+            $twitterIndicators = @("Home", "Post", "Twitter", "X.com", "/", "—", "X")
+            foreach ($indicator in $twitterIndicators) {
+                if ($snagxMetadata.WindowName -like "*$indicator*" -and 
+                    ($snagxMetadata.WindowName.Length -lt 20 -or $snagxMetadata.WindowName -match "^(Home|Post|X)\s")) {
+                    $isTwitter = $true
+                    break
+                }
+            }
+            
+            # Check AppName for browser + short WindowName = likely Twitter
+            if (-not $isTwitter -and $snagxMetadata.AppName -match "(Chrome|Edge|Firefox|Brave)" -and 
+                $snagxMetadata.WindowName.Length -lt 15) {
+                $isTwitter = $true
+            }
+            
+            if ($isTwitter) {
+                # Remove common twitter window names and generate meaningful slug
+                $cleanName = $snagxMetadata.WindowName -replace '^(Home|Post|X)\s*[—/\-]*\s*', ''
+                if ($cleanName.Length -lt 3) {
+                    # Default to generic if window name doesn't have content
+                    $suggestedFilename = "tweet-timeline"
+                } else {
+                    $safeName = $cleanName -replace '[^\w\s\-]', '' -replace '\s+', '-' -replace '--+', '-'
+                    $suggestedFilename = "tweet-" + $safeName.ToLower().Substring(0, [Math]::Min(45, $safeName.Length))
+                }
+                Write-Host "  Detected Twitter screenshot - prefixing with 'tweet-'" -ForegroundColor Yellow
+            }
+        }
     }
     elseif ($snagxMetadata.AppName) {
         $timestamp = Get-Date -Format "HHmm"
