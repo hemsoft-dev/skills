@@ -1,0 +1,15 @@
+{
+  "imported_time": "11:04:35",
+  "size_original": "1065x1480",
+  "source": "SnagIt",
+  "original_filename": "{685133B2-EF26-45D5-BB9B-6112236A4AA0}.backup.png",
+  "original_path": "C:\\Users\\User\\AppData\\Local\\Temp\\snagx-extract-537965191\\{685133B2-EF26-45D5-BB9B-6112236A4AA0}.backup.png",
+  "text_content": "Thread\nTrey Walters 42 minutes ago\nAny reason we would want to prevent feature or bug\nbranches from being deleted in rlms-legacy?\nimage.png\nrequests\n bug/* Write access Everybody\nDeleting this branch is not allowed Edit\nRewriting branch history is not\nallowed\nRemove\nMerge via pull\nEverybody\nrequests\n develop Write access Platform\nDeleting this branch is not allowed Edit\nRelease\nOwners\nRewriting branch history is not\nallowed\nRemove\nAdmins ONLY\nMerge via pull Platform\nCheck for at least 2 approvals\nRelease\nrequests\nOwners\nCheck for unresolved pull request\ntasks\nDivum\nAdmins ONLY Check the last commit for at least 1\nPlatform\nsuccessful build, no failed builds, and\nDev/Test\nno in progress builds\n feature/* Write access Everybody\nDeleting this branch is not allowed Edit\nMerge via pull Everybody\nRewriting branch history is not\nrequests\nallowed\nRemove\n3 replies\nFranz Hemmer 10 minutes ago\nIf there is one, its a pretty bad one since it prevents us\nfrom cleaning up\n1\nTrey Walters 9 minutes ago\nIf we can't think of one, any opposition to me removing\nthose restrictions?\nFranz Hemmer 9 minutes ago\nI'm all for it.\n1",
+  "tags": [],
+  "description": "The image shows a thread where Trey Walters initiated a discussion about preventing branch deletion in \"rlms-legacy,\" including a screenshot of configurations that restrict deleting or rewriting branch history based on name patterns and access controls. Following this, people reply and suggest removing those restrictions.",
+  "size_webp": "1024x1423",
+  "imported_date": "2026-01-30",
+  "snagit_library": "D:\\OneDrive\\Snagit",
+  "filename": "productivity-engineering-public-channel-relias-eng.webp",
+  "skill": "screenshot"
+}

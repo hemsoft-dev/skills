@@ -20,10 +20,16 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 
 ## Grab Latest Screenshot
 
-When the user says "grab the latest screenshot" or "get the latest screenshot", find the most recent .snagx file in the SnagIt library and process it:
+When the user says "grab the latest screenshot" or "get the latest screenshot", find the most recent .snagx file in the SnagIt library and import it to the screenshot skill's own image library:
+
+**Default behavior:**
+
+- **Destination:** `screenshot` skill (this skill's own `images/library/` folder)
+- **Tags:** Empty by default
+- **Auto-description:** Enabled (AI generates description + OCR)
 
 ```powershell
-# Find the latest .snagx file in SnagIt library
+# Find and import latest screenshot
 $latestSnagx = Get-ChildItem "D:\OneDrive\Snagit" -Filter "*.snagx" | 
     Sort-Object LastWriteTime -Descending | 
     Select-Object -First 1
@@ -32,24 +38,20 @@ if ($latestSnagx) {
     Write-Host "Latest screenshot: $($latestSnagx.Name)" -ForegroundColor Cyan
     Write-Host "Captured: $($latestSnagx.LastWriteTime)" -ForegroundColor Gray
     
-    # Ask user for destination skill and tags
-    # Then run import:
-    # & ~/.claude/skills/screenshot/scripts/Import-SnagItScreenshot-Auto.ps1 `
-    #     -SnagItFileName $latestSnagx.Name `
-    #     -DestinationSkill "skillname" `
-    #     -Tags @("tag1", "tag2")
+    # Import to screenshot skill's library by default
+    & ~/.claude/skills/screenshot/scripts/Import-SnagItScreenshot-Auto.ps1 `
+        -SnagItFileName $latestSnagx.Name `
+        -DestinationSkill "screenshot" `
+        -Tags @()
 } else {
     Write-Host "No .snagx files found in SnagIt library" -ForegroundColor Red
 }
 ```
 
-**Workflow:**
+**To import to a different skill, user must specify:**
 
-1. Find latest .snagx file by LastWriteTime
-2. Display filename and timestamp to user
-3. Ask user which skill to import to (required)
-4. Ask user for tags (optional)
-5. Run Import-SnagItScreenshot-Auto.ps1 with parameters
+- "grab the latest screenshot and import to [skillname]"
+- "get the latest screenshot for the [skillname] skill"
 
 ## SnagIt Integration
 
