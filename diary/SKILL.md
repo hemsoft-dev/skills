@@ -1,6 +1,6 @@
 ---
 name: diary
-description: "V2.19 - Captures daily accomplishments, goals, and reflections with Todoist integration. Auto-includes weather, ALL news headlines (5-7 per category: US, World, AI, Danish) with mandatory source diversification (max 2 per source, 3-4 sources minimum) and Simon Willison priority for AI News, comprehensive Slack highlights from 18 monitored channels (8-12+ highlights), watchlist updates, Daily Numbers (Dow Jones, S&P 500, Relias Repo Counts), LLM Models (LMSYS Chatbot Arena leaderboard + OpenRouter new releases + Top OpenRouter Apps), trending GitHub repos, and Software Watchlist with 68% automation. Structured Work/Personal/Personal Reflections format. Omits Work section on Saturdays; Sundays only include Work → Tomorrow's Goals. NEVER removes files without user consent."
+description: "V2.20 - Captures daily accomplishments, goals, and reflections with Todoist integration. Auto-includes weather, ALL news headlines (5-7 per category: US, World, AI, Danish) with mandatory source diversification (max 2 per source, 3-4 sources minimum) and Simon Willison priority for AI News, comprehensive Slack highlights from 18 monitored channels (8-12+ highlights), watchlist updates, Daily Numbers (Dow Jones, S&P 500, Relias Repo Counts), LLM Models (LMSYS Chatbot Arena leaderboard + OpenRouter new releases + Top OpenRouter Apps), trending GitHub repos, Software Watchlist with 68% automation, and screenshots taken today from screenshot skill library. Structured Work/Personal/Personal Reflections format. Omits Work section on Saturdays; Sundays only include Work → Tomorrow's Goals. NEVER removes files without user consent."
 ---
 
 # Diary
@@ -56,6 +56,7 @@ All diary entries follow the template at `config/yyyy-mm-dd.md`. Key sections:
 - **Work**: Work Done, Tomorrow's Goals
 - **Personal**: Work Done, Tomorrow's Goals
 - **Personal Reflections**: Freeform thoughts
+- **Screenshots taken today**: All screenshots captured today from the screenshot skill library with metadata summaries
 
 **CRITICAL:** If any section is empty after pulling data, explicitly ask the user:
 
@@ -341,6 +342,62 @@ After rendering, update JSON with new `last_displayed_date` and `last_displayed_
 
 Copy **complete, unfiltered output** from today skill: Today's Highlight, Weather, ALL News Headlines (5-7 per category: US/World/AI), Slack Highlights, Watchlist Updates. Include every headline for future context. Use user-provided highlight if specified.
 
+**Step 6: Gather Screenshots Taken Today**
+
+Use the screenshot skill to find all screenshots captured today from the screenshot skill's image library:
+
+```powershell
+# Get today's date folder
+$today = Get-Date -Format "yyyy-MM-dd"
+$screenshotLibrary = "$env:USERPROFILE\.claude\skills\screenshot\images\library\$today"
+
+if (Test-Path $screenshotLibrary) {
+    # Find all .webp files and their metadata
+    $screenshots = Get-ChildItem $screenshotLibrary -Filter "*.webp" | ForEach-Object {
+        $metaPath = "$($_.FullName).meta.json"
+        if (Test-Path $metaPath) {
+            $meta = Get-Content $metaPath | ConvertFrom-Json
+            [PSCustomObject]@{
+                Filename = $_.Name
+                RelativePath = "../../screenshot/images/library/$today/$($_.Name)"
+                Description = $meta.description
+                ImportedTime = $meta.imported_time
+                Tags = $meta.tags -join ", "
+                Size = $meta.size_webp
+            }
+        }
+    } | Sort-Object ImportedTime
+    
+    # Format for diary entry
+    if ($screenshots) {
+        Write-Output "### 📸 Screenshots taken today"
+        Write-Output ""
+        foreach ($shot in $screenshots) {
+            Write-Output "**$($shot.ImportedTime)** - $($shot.Description)"
+            Write-Output ""
+            Write-Output "![Screenshot]($($shot.RelativePath))"
+            if ($shot.Tags) {
+                Write-Output ""
+                Write-Output "*Tags: $($shot.Tags)*"
+            }
+            Write-Output ""
+        }
+    }
+} else {
+    # No screenshots today - omit section
+}
+```
+
+**Section Placement:** Add at the very end of the diary entry, after Personal Reflections
+
+**Format:**
+
+- List screenshots chronologically by imported_time
+- Show AI-generated description as caption
+- Embed image using relative path from diary entry to screenshot library
+- Include tags if present
+- Omit entire section if no screenshots were captured today
+
 ### 1. Meeting Notes Creation
 
 **Workflow:** Detect request → Generate slug filename (`entries/{YYYY-MM-DD}-{slug}.md`) → Confirm → Format content (markdown with header/date/footer) → Create file → Offer to update main diary → Offer to create Todoist tasks
@@ -356,9 +413,10 @@ Copy **complete, unfiltered output** from today skill: Today's Highlight, Weathe
 3. **Apply filters** (`exclusion.json`: @Regular Chores, health/exercise/timesheet tasks)
 4. **Categorize** (Work: 2221463722, Personal: 2200472795 or others)
 5. **Check LLM Models** (LMSYS leaderboard changes, OpenRouter new releases from last 7 days)
-6. **Generate entry** with weather/news/Todoist/LLM data
-7. **Query for gaps** (work/personal done/goals/reflections)
-8. **Save** to `entries/{YYYY-MM-DD}.md`
+6. **Gather screenshots** (find all screenshots from today in screenshot skill library)
+7. **Generate entry** with weather/news/Todoist/LLM/screenshots data
+8. **Query for gaps** (work/personal done/goals/reflections)
+9. **Save** to `entries/{YYYY-MM-DD}.md`
 
 ### 3. Review Past Entries
 
