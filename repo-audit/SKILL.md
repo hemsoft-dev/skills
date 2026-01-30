@@ -1,6 +1,6 @@
 ---
 name: repo-audit
-description: V1.1 - Audits repository for documentation/reality drift, stale artifacts, unused config, and cross-reference accuracy. Generates actionable report with Y/N recommendations.
+description: V1.2 - Audits repository for documentation/reality drift, stale artifacts, unused config, duplicate assets, workload conflicts, and cross-reference accuracy. Generates actionable report with Y/N recommendations.
 ---
 
 # Repo Audit 🔍
@@ -69,6 +69,26 @@ All three levels are checked in every audit.
 - Inconsistent naming (e.g., "template" vs "workload")
 - Old terminology in comments/docs after rename
 - Mixed conventions (camelCase vs snake_case inconsistently)
+
+### 6. Workload Definition Conflicts (YAML-based projects)
+
+- Duplicate workload IDs across different directories
+- Workload type mismatches (file location doesn't match declared type)
+  - e.g., `type: task` in `workloads/ad-hoc/` directory
+  - e.g., `type: ad-hoc` in `workloads/tasks/` directory
+- Missing required fields for workload type
+  - Ad-hoc requires `prompt` field
+  - Tasks require `steps` field
+  - Workflows require `steps` and dependency definitions
+- Orphaned workload files (defined but never used)
+
+### 7. Environment Configuration Issues
+
+- Placeholder values in `.env` not replaced (e.g., `your-event-key-here`, `test-signing-key`)
+- Environment variable comments not matching actual behavior (e.g., "Set to 0 for production" but code assumes 1 for dev)
+- Missing environment variable definitions that code depends on
+- `.env` variables with values that contradict documented behavior
+- Development config values left in files that should be production-ready
 
 ## Workflow
 
@@ -155,6 +175,11 @@ For each approved item:
 | Artifact | "Legacy" or "Deprecated" comments | Check if referenced anywhere |
 | Cross-ref | `[link](file.md)` in markdown | Verify file exists |
 | Terminology | Comment mentions feature name | Verify feature still exists with that name |
+| Workload | Same `id:` in multiple `.yaml` files | Check `workloads/*/` for duplicates |
+| Workload | YAML `type:` doesn't match directory | `type: task` in `workloads/ad-hoc/` |
+| Workload | Required field missing for type | `type: ad-hoc` without `prompt` field |
+| Config | Placeholder value in `.env` | Values like `your-event-key-here`, `test-` prefix |
+| Config | Comment says "Set to 0" but code expects 1 | `INNGEST_DEV=0` with comment "for production" |
 
 ## Output Format
 
