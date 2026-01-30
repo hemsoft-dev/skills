@@ -1,13 +1,13 @@
 ---
 name: screenshot
-description: V1.3 - Expert in taking screenshots of windows, full screens, or partial regions. Supports multi-monitor setups with proper DPI handling using python-mss. Automatically compresses to WebP for AI-optimized images.
+description: V2.0 - SnagIt screenshot library management. Import .snagx files with automatic WebP compression, AI-generated descriptions, smart filenames from window metadata, and superior OCR text extraction. Supports "grab latest screenshot" workflow to find and process the most recent SnagIt capture.
 ---
 
 # Screenshot
 
 **Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
-Capture screenshots of specific windows or full monitors with proper DPI scaling.
+Import and manage screenshots from your SnagIt library with automatic processing, AI descriptions, and OCR text extraction.
 
 ## ALWAYS: Log This Interaction
 
@@ -18,278 +18,259 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 {One-line summary of what was done}
 ```
 
-## Screenshot Storage
+## Grab Latest Screenshot
 
-All screenshots are saved to `$env:TEMP` (typically `C:\Users\User\AppData\Local\Temp`):
-
-- **Pattern**: `screenshot-*.png`, `screenshot-*.webp`
-- **Temporary**: Files persist until system cleanup or manual deletion
-- **Cleanup**: Use the cleanup command below to remove old screenshots
+When the user says "grab the latest screenshot" or "get the latest screenshot", find the most recent .snagx file in the SnagIt library and process it:
 
 ```powershell
-# Clean up all screenshots older than 7 days
-Get-ChildItem $env:TEMP | Where-Object { 
-  ($_.Name -like "screenshot-*" -or $_.Name -like "test*.webp" -or $_.Name -like "test*.jpg" -or $_.Name -like "monitor-index-*") -and 
-  $_.LastWriteTime -lt (Get-Date).AddDays(-7) 
-} | Remove-Item -Force
+# Find the latest .snagx file in SnagIt library
+$latestSnagx = Get-ChildItem "D:\OneDrive\Snagit" -Filter "*.snagx" | 
+    Sort-Object LastWriteTime -Descending | 
+    Select-Object -First 1
 
-# Or clean up ALL screenshots immediately
-Get-ChildItem $env:TEMP | Where-Object { 
-  $_.Name -like "screenshot-*" -or $_.Name -like "test*.webp" -or $_.Name -like "test*.jpg" -or $_.Name -like "monitor-index-*" 
-} | Remove-Item -Force
-```
-
-## Monitor Mapping
-
-The user has 3 monitors with the following mapping:
-
-| User's Monitor # | MSS Index | Usage            |
-|------------------|-----------|------------------|
-| Monitor 1        | 3         | User's Monitor 1 |
-| Monitor 2        | 1         | User's Monitor 2 |
-| Monitor 3        | 2         | User's Monitor 3 |
-
-**When the user says "Monitor 1"**, capture MSS index 3.
-**When the user says "Monitor 2"**, capture MSS index 1.
-**When the user says "Monitor 3"**, capture MSS index 2.
-
-## Capabilities
-
-### Full Screen Capture
-
-Capture entire monitors using python-mss and compress to WebP for AI:
-
-```powershell
-# Map user monitor number to MSS index
-$monitorMap = @{1=3; 2=1; 3=2}
-$mssIndex = $monitorMap[$userMonitorNumber]
-$timestamp = Get-Date -Format 'yyyyMMdd-HHmmss'
-
-# Capture to PNG first
-$pngPath = Join-Path $env:TEMP "screenshot-$timestamp.png"
-$script = @"
-import mss
-import sys
-screen_index = int(sys.argv[1])
-output_path = sys.argv[2]
-with mss.mss() as sct:
-    screenshot = sct.grab(sct.monitors[screen_index])
-    mss.tools.to_png(screenshot.rgb, screenshot.size, output=output_path)
-    print(f'{screenshot.width}x{screenshot.height}')
-"@
-$script | Out-File "$env:TEMP\capture.py" -Encoding UTF8
-py "$env:TEMP\capture.py" $mssIndex $pngPath
-
-# Compress to WebP (82% size reduction, excellent quality for AI)
-$webpPath = Join-Path $env:TEMP "screenshot-$timestamp.webp"
-ffmpeg -i $pngPath -vf "scale=1024:-1" -c:v libwebp -quality 85 $webpPath -y 2>&1 | Out-Null
-Remove-Item $pngPath -Force  # Clean up original PNG
-Write-Host "Screenshot saved: $webpPath" -ForegroundColor Green
-```
-
-### Partial Screen Capture
-
-Capture a specific region of a monitor and compress to WebP:
-
-```powershell
-# Example: Capture right 50% of Monitor 2 (MSS index 1)
-$monitorMap = @{1=3; 2=1; 3=2}
-$mssIndex = $monitorMap[$userMonitorNumber]
-$timestamp = Get-Date -Format "yyyyMMdd-HHmmss"
-$pngPath = Join-Path $env:TEMP "screenshot-partial-$timestamp.png"
-
-$script = @"
-import mss
-
-with mss.mss() as sct:
-    monitor = sct.monitors[$mssIndex]
+if ($latestSnagx) {
+    Write-Host "Latest screenshot: $($latestSnagx.Name)" -ForegroundColor Cyan
+    Write-Host "Captured: $($latestSnagx.LastWriteTime)" -ForegroundColor Gray
     
-    # Calculate region (example: right 50%)
-    width = monitor['width']
-    height = monitor['height']
-    left = monitor['left'] + (width // 2)  # Start from middle
-    top = monitor['top']
-    
-    # Create custom region
-    region = {
-        'left': left,
-        'top': top,
-        'width': width // 2,
-        'height': height
-    }
-    
-    # Capture the region
-    screenshot = sct.grab(region)
-    mss.tools.to_png(screenshot.rgb, screenshot.size, output='$($pngPath.Replace('\','\\'))')
-    print(f'Captured: {screenshot.width}x{screenshot.height}')
-"@
-
-$script | Out-File "$env:TEMP\capture-partial.py" -Encoding UTF8
-py "$env:TEMP\capture-partial.py"
-
-# Compress to WebP
-$webpPath = Join-Path $env:TEMP "screenshot-partial-$timestamp.webp"
-ffmpeg -i $pngPath -vf "scale=1024:-1" -c:v libwebp -quality 85 $webpPath -y 2>&1 | Out-Null
-Remove-Item $pngPath -Force
-Write-Host "Screenshot saved: $webpPath" -ForegroundColor Green
+    # Ask user for destination skill and tags
+    # Then run import:
+    # & ~/.claude/skills/screenshot/scripts/Import-SnagItScreenshot-Auto.ps1 `
+    #     -SnagItFileName $latestSnagx.Name `
+    #     -DestinationSkill "skillname" `
+    #     -Tags @("tag1", "tag2")
+} else {
+    Write-Host "No .snagx files found in SnagIt library" -ForegroundColor Red
+}
 ```
 
-**Common region calculations:**
+**Workflow:**
 
-- Left 50%: `left = monitor['left']`, `width = width // 2`
-- Right 50%: `left = monitor['left'] + (width // 2)`, `width = width // 2`
-- Top 50%: `top = monitor['top']`, `height = height // 2`
-- Bottom 50%: `top = monitor['top'] + (height // 2)`, `height = height // 2`
-- Center 50%: `left = monitor['left'] + (width // 4)`, `width = width // 2`,
-  `top = monitor['top'] + (height // 4)`, `height = height // 2`
-- Custom percentage: Multiply width/height by fraction (e.g., `0.33` for 33%)
+1. Find latest .snagx file by LastWriteTime
+2. Display filename and timestamp to user
+3. Ask user which skill to import to (required)
+4. Ask user for tags (optional)
+5. Run Import-SnagItScreenshot-Auto.ps1 with parameters
 
-### Window Capture
+## SnagIt Integration
 
-Capture specific windows by title using PowerShell:
+Import important screenshots from your SnagIt library into skills with automatic compression, AI-generated descriptions, and metadata tracking.
+
+### Quick Start
 
 ```powershell
-$script = @'
-param([string]$WindowTitle)
-Add-Type @"
-using System;
-using System.Runtime.InteropServices;
-public class Win32 {
-    [DllImport("user32.dll")]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    public static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
-    [DllImport("user32.dll")]
-    public static extern bool SetForegroundWindow(IntPtr hWnd);
-}
-public struct RECT {
-    public int Left; public int Top; public int Right; public int Bottom;
-}
-"@
-
-$process = Get-Process | Where-Object { 
-    $_.MainWindowTitle -ne "" -and $_.MainWindowTitle -like "*$WindowTitle*" 
-} | Select-Object -First 1
-
-if (-not $process) {
-    Write-Host "Window not found: $WindowTitle" -ForegroundColor Red
-    exit 1
-}
-
-$rect = New-Object RECT
-[Win32]::GetWindowRect($process.MainWindowHandle, [ref]$rect) | Out-Null
-[Win32]::SetForegroundWindow($process.MainWindowHandle) | Out-Null
-Start-Sleep -Milliseconds 200
-
-Add-Type -AssemblyName System.Windows.Forms,System.Drawing
-$width = $rect.Right - $rect.Left
-$height = $rect.Bottom - $rect.Top
-$bitmap = New-Object System.Drawing.Bitmap $width, $height
-$graphics = [System.Drawing.Graphics]::FromImage($bitmap)
-$point = New-Object System.Drawing.Point $rect.Left, $rect.Top
-$graphics.CopyFromScreen($point, [System.Drawing.Point]::Empty, (New-Object System.Drawing.Size $width, $height))
-
-$outputPath = Join-Path $env:TEMP "screenshot-$($process.ProcessName)-$(Get-Date -Format 'yyyyMMdd-HHmmss').png"
-$bitmap.Save($outputPath, [System.Drawing.Imaging.ImageFormat]::Png)
-$graphics.Dispose()
-$bitmap.Dispose()
-Write-Output $outputPath
-'@
-
-$scriptPath = Join-Path $env:TEMP "capture-window.ps1"
-$script | Set-Content $scriptPath
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File $scriptPath -WindowTitle "Slack"
+# Import screenshot with AI auto-description
+& ~/.claude/skills/screenshot/scripts/Import-SnagItScreenshot-Auto.ps1 `
+    -SnagItFileName "2026-01-30_09-56-49.snagx" `
+    -DestinationSkill "myskill" `
+    -Tags @("architecture")
 ```
 
-## Display Screenshots
+### SnagIt Library Location
 
-After capturing, use the display-image skill with zoom-to-fit:
+**Path:** `D:\OneDrive\Snagit`
+**Total files:** ~2,823 screenshots (.snagx format)
+
+### Import Workflow
+
+**Automated Method (Recommended)**
+
+Import directly from SnagIt library - no manual export needed:
 
 ```powershell
-& "C:\Program Files\GPSoftware\Directory Opus\d8viewer.exe" /fittopage $screenshotPath
+# Basic import with auto-description
+& ~/.claude/skills/screenshot/scripts/Import-SnagItScreenshot-Auto.ps1 `
+    -SnagItFileName "2026-01-30_09-56-49.snagx" `
+    -DestinationSkill "myskill" `
+    -Tags @("architecture", "critical")
+
+# With custom description (skip AI)
+& ~/.claude/skills/screenshot/scripts/Import-SnagItScreenshot-Auto.ps1 `
+    -SnagItFileName "workflow-diagram.snagx" `
+    -DestinationSkill "protocols" `
+    -Tags @("workflow") `
+    -CustomDescription "OAuth integration flow" `
+    -AutoDescription:$false
 ```
 
-## Default Compression
+**What this does:**
 
-All screenshots are automatically compressed to **WebP Q85 @ 1024px** for optimal AI vision quality:
+- Finds `.snagx` file in your SnagIt library (`D:\OneDrive\Snagit`)
+- Automatically extracts the PNG from the .snagx container
+- **Generates descriptive filename** from window name (e.g., `slack-dm-bryan-halterman.webp`)
+- Compresses to WebP (1024px wide, Q85)
+- Generates AI description using vision model (default: enabled)
+- **Extracts ALL visible text (OCR)** - better than SnagIt's runtime-only OCR
+- Creates `.meta.json` sidecar file with description + OCR text
+- Cleans up temporary files
+- Stores in `skill-name/images/library/YYYY-MM-DD/`
 
-- **Size reduction**: ~82% smaller than original PNG
-- **Quality**: Excellent for AI interpretation
-- **Token usage**: ~765 tokens vs 1400+ for original
+**Manual Method (If Already Exported)**
 
-### Alternative: Aggressive Compression
-
-For maximum compression (UI/layout analysis only):
+If you've already exported a PNG from SnagIt:
 
 ```powershell
-# WebP Q75 @ 512px (95% smaller, acceptable quality)
-ffmpeg -i $inputPath -vf "scale=512:-1" -c:v libwebp -quality 75 $outputPath -y 2>&1 | Out-Null
+& ~/.claude/skills/screenshot/scripts/Import-SnagItScreenshot.ps1 `
+    -ImagePath "C:\Temp\my-screenshot.png" `
+    -DestinationSkill "myskill" `
+    -Tags @("architecture") `
+    -AutoDescription
 ```
 
-### Keep Original PNG
+### Parameters
 
-To skip compression and keep full-resolution PNG, comment out the ffmpeg and Remove-Item lines in the capture scripts.
+**Import-SnagItScreenshot-Auto.ps1** (Automated from .snagx)
+
+| Parameter | Required | Default | Description |
+|-----------|----------|---------|-------------|
+| `-SnagItFileName` | Yes | - | Filename from SnagIt library (e.g., `2026-01-30_09-56-49.snagx`) |
+| `-DestinationSkill` | Yes | - | Skill name (folder name in skills directory) |
+| `-Tags` | No | `@()` | Array of tags for categorization |
+| `-AutoDescription` | No | `$true` | Generate AI description using vision model |
+| `-CustomDescription` | No | `""` | Provide custom description (sets `-AutoDescription:$false`) |
+
+**Import-SnagItScreenshot.ps1** (Manual from exported PNG)
+
+| Parameter | Required | Default | Description |
+|-----------|----------|---------|-------------|
+| `-ImagePath` | Yes | - | Path to exported PNG/JPG file |
+| `-DestinationSkill` | Yes | - | Skill name (folder name in skills directory) |
+| `-Tags` | No | `@()` | Array of tags for categorization |
+| `-AutoDescription` | No | `$false` | Generate AI description using vision model |
+| `-CustomDescription` | No | `""` | Provide your own description instead |
+
+### How .snagx Extraction Works
+
+SnagIt's `.snagx` files are ZIP containers with this structure:
+
+```
+2026-01-30_09-56-49.snagx
+├── {GUID}.png          ← Main captured image (we extract this)
+├── {GUID}.json         ← Edit history
+├── metadata.json       ← Capture metadata
+├── index.json          ← File index
+└── thumbnail.png       ← Preview thumbnail
+```
+
+The automated script extracts the main PNG, processes it, then cleans up temporary files.
+
+### Folder Structure
+
+```
+myskill/
+├── SKILL.md
+├── images/
+│   └── library/
+│       ├── 2026-01-30/
+│       │   ├── architecture-diagram.webp
+│       │   ├── architecture-diagram.webp.meta.json
+│       │   ├── workflow.webp
+│       │   └── workflow.webp.meta.json
+│       └── 2026-01-29/
+│           └── ...
+```
+
+### Metadata Format
+
+Each imported image gets a `.meta.json` sidecar file:
+
+```json
+{
+  "filename": "bryan-halterman-dm-relias-engineering-slack.webp",
+  "source": "SnagIt",
+  "snagit_library": "D:\\OneDrive\\Snagit",
+  "imported_date": "2026-01-30",
+  "imported_time": "14:32:15",
+  "description": "Discord conversation about console-output skill with GitHub CLI screenshot showing Pull Requests...",
+  "text_content": "Bryan Halterman 9:32 AM\\nToday\\nso I tried to make a console-output skill...\\n[Full OCR text of conversation and GitHub CLI table]",
+  "tags": ["architecture", "critical"],
+  "skill": "architect",
+  "size_webp": "1024x1036",
+  "size_original": "681x689",
+  "original_filename": "{DD100B78-3DB4-42E5-947C-2D82F87B2629}.png",
+  "original_path": "C:\\Temp\\extract\\{DD100B78-3DB4-42E5-947C-2D82F87B2629}.png"
+}
+```
+
+**Key fields:**
+
+- `description` - AI-generated summary of image content
+- `text_content` - Full OCR text extraction (all visible text)
+
+### Search Imported Screenshots
+
+List and search all imported screenshots across skills:
+
+```powershell
+# List all imported screenshots
+& ~/.claude/skills/screenshot/scripts/Get-ImportedScreenshots.ps1
+
+# Filter by skill
+& ~/.claude/skills/screenshot/scripts/Get-ImportedScreenshots.ps1 -Skill "architect"
+
+# Filter by tags
+& ~/.claude/skills/screenshot/scripts/Get-ImportedScreenshots.ps1 -Tags @("architecture", "critical")
+
+# Search by text in description/filename
+& ~/.claude/skills/screenshot/scripts/Get-ImportedScreenshots.ps1 -SearchText "workflow"
+
+# Show full file paths
+& ~/.claude/skills/screenshot/scripts/Get-ImportedScreenshots.ps1 -ShowPaths
+```
+
+### Referencing in SKILL.md
+
+After importing, add to your skill's SKILL.md:
+
+```markdown
+## Architecture Diagram
+
+![Architecture Overview](./images/library/2026-01-30/architecture-diagram.webp)
+
+**Description:** Three-tier system architecture showing frontend, API gateway, and database layers.
+```
+
+### Features
+
+✓ **Smart filenames** - Uses window name from SnagIt metadata (not GUIDs)  
+✓ **Deduplication** - Warns if filename already exists  
+✓ **Auto-compression** - Reduces to WebP Q85 @ 1024px (82% smaller)  
+✓ **AI descriptions** - Vision model analyzes and describes content  
+✓ **OCR text extraction** - Extracts ALL visible text (superior to SnagIt's runtime-only OCR)  
+✓ **Metadata tracking** - Full provenance from SnagIt library  
+✓ **Tag-based organization** - Categorize and search easily  
+✓ **Skill-based storage** - Images live with the skills they document  
+
+### OCR vs SnagIt Text Recognition
+
+| Feature | SnagIt OCR | Our Vision Model |
+|---------|------------|------------------|
+| Stored in `.snagx` | ❌ No (runtime only) | ✅ Yes (`.meta.json`) |
+| Table extraction | ⚠️ Limited | ✅ Excellent |
+| Context understanding | ❌ No | ✅ Generates description |
+| Searchable after import | ❌ No | ✅ Yes (`Get-ImportedScreenshots`) |
+| Requires manual extraction | ✅ Yes | ❌ Automatic |
+
+Our vision model extracts text automatically on import and stores it permanently in searchable metadata.  
+
+### Cost Optimization
+
+- **Vision API calls:** Only when using `-AutoDescription`
+- **Default model:** `google/gemini-2.0-flash-001` (~$0.0001 per image)
+- **Descriptions cached** in metadata JSON (one-time cost)
+- **Search is free** - Queries local JSON files only
 
 ## Dependencies
 
-- Python 3.x with `mss` package: `py -m pip install mss`
-- PowerShell (for window capture)
-- Directory Opus (for viewing)
-- FFmpeg (for compression): Available system-wide
+- **PowerShell** - For SnagIt file management and import workflows
+- **FFmpeg** - For WebP compression (available system-wide)
+- **OpenRouter API** - For AI vision descriptions and OCR text extraction
 
-## Examples
+## How Screenshots Are Taken
 
-**Capture Monitor 2 (Compressed):**
+All screenshots are captured using **SnagIt** software:
 
-```powershell
-# User's Monitor 2 = MSS Index 1
-$timestamp = Get-Date -Format 'yyyyMMdd-HHmmss'
-$pngPath = Join-Path $env:TEMP "screenshot-$timestamp.png"
-$script = @"
-import mss
-with mss.mss() as sct:
-    screenshot = sct.grab(sct.monitors[1])
-    mss.tools.to_png(screenshot.rgb, screenshot.size, output='$($pngPath.Replace('\','\\'))')
-"@
-$script | Out-File "$env:TEMP\cap.py" -Encoding UTF8
-py "$env:TEMP\cap.py"
+- Press `PrtScn` to capture full screen, region, or window
+- SnagIt saves to `D:\OneDrive\Snagit` as `.snagx` files
+- Use this skill to import and process captures into skill libraries
 
-# Compress
-$webpPath = Join-Path $env:TEMP "screenshot-$timestamp.webp"
-ffmpeg -i $pngPath -vf "scale=1024:-1" -c:v libwebp -quality 85 $webpPath -y 2>&1 | Out-Null
-Remove-Item $pngPath -Force
-```
-
-**Capture Right 50% of Monitor 2 (Compressed):**
-
-```powershell
-$timestamp = Get-Date -Format "yyyyMMdd-HHmmss"
-$pngPath = Join-Path $env:TEMP "screenshot-monitor2-right50-$timestamp.png"
-$script = @"
-import mss
-with mss.mss() as sct:
-    monitor = sct.monitors[1]
-    width = monitor['width']
-    height = monitor['height']
-    region = {
-        'left': monitor['left'] + (width // 2),
-        'top': monitor['top'],
-        'width': width // 2,
-        'height': height
-    }
-    screenshot = sct.grab(region)
-    mss.tools.to_png(screenshot.rgb, screenshot.size, output='$($pngPath.Replace('\','\\'))')
-"@
-$script | Out-File "$env:TEMP\cap.py" -Encoding UTF8
-py "$env:TEMP\cap.py"
-
-# Compress
-$webpPath = Join-Path $env:TEMP "screenshot-monitor2-right50-$timestamp.webp"
-ffmpeg -i $pngPath -vf "scale=1024:-1" -c:v libwebp -quality 85 $webpPath -y 2>&1 | Out-Null
-Remove-Item $pngPath -Force
-```
-
-**Capture Slack Window:**
-
-```powershell
-powershell.exe -NoProfile -File capture-window.ps1 -WindowTitle "Slack"
-```
+**SnagIt replaces all manual capture methods** - no python-mss, no PowerShell screen capture needed.
