@@ -1,6 +1,6 @@
 ---
 name: meeting-preparation
-description: V1.0 - Expert in helping prepare for meetings with structured templates, research, checklists, and readiness assessments.
+description: V1.1 - Expert in helping prepare for meetings with structured templates, research, checklists, and streamlined readiness assessments.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -90,7 +90,26 @@ Generate a preparation checklist table with:
 
 ### 4. Readiness Assessment
 
-Review the checklist and ask questions for any incomplete items (✗) to help user achieve full preparation.
+After generating the meeting.md, present questions in a numbered table format:
+
+- For yes/no questions: Capitalize the suggested answer (YES/no or yes/NO)
+- For multiple choice: Use A/B/C/D and capitalize the preferred option
+- User only responds with numbers they disagree with (silence = agreement)
+
+**Relevant questions to ask:**
+
+| # | Question | Suggested Response |
+|---|----------|-------------------|
+| 1 | Meeting time | A. 2:00 PM EST / b. 3:00 PM EST / c. Other |
+| 2 | Meeting duration | A. 60 minutes / b. 45 minutes / c. 90 minutes |
+| 3 | Co-presenting? | YES / no |
+
+**Do NOT ask these questions** (not relevant for user's workflow):
+
+- Screen sharing permissions (always available)
+- Backup plans for demos
+- Sample meetings for live demos
+- Access to test workspaces (Slack, GitHub, Confluence)
 
 ## Microsoft Skill Level Reference
 
@@ -103,9 +122,8 @@ Review the checklist and ask questions for any incomplete items (✗) to help us
 
 When creating a meeting preparation, always:
 
-1. Confirm meeting details with user
-2. Create folder structure
-3. Generate meeting.md from template
-4. Populate preparation tasks with research and resources
-5. Present checklist for review
-6. Ask questions for incomplete items
+1. Create folder structure with `{YYYY-MM-DD-slug}/` format
+2. Generate meeting.md from template
+3. Populate preparation tasks with research and resources
+4. Present readiness questions in numbered table format (see section 4)
+5. Update meeting.md based on user's responses (only numbers they disagree with)
