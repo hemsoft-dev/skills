@@ -1,6 +1,6 @@
 ---
 name: screenshot
-description: V2.0 - SnagIt screenshot library management. Import .snagx files with automatic WebP compression, AI-generated descriptions, smart filenames from window metadata, and superior OCR text extraction. Supports "grab latest screenshot" workflow to find and process the most recent SnagIt capture.
+description: V2.0 - SnagIt screenshot library management. Import .snagx files with automatic WebP compression, AI-generated descriptions, smart filenames from window metadata, and superior OCR text extraction. Defaults to processing latest SnagIt capture when no action specified.
 ---
 
 # Screenshot
@@ -8,6 +8,24 @@ description: V2.0 - SnagIt screenshot library management. Import .snagx files wi
 **Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Import and manage screenshots from your SnagIt library with automatic processing, AI descriptions, and OCR text extraction.
+
+## Default Behavior
+
+**When user activates this skill without specifying an action:**
+
+Automatically process the latest screenshot from SnagIt library (equivalent to "grab latest screenshot"):
+
+1. Find most recent .snagx file in `D:\OneDrive\Snagit`
+2. Import to screenshot skill's own `images/library/{date}/` folder
+3. Generate AI description and extract OCR text
+4. Save with smart filename from window metadata
+
+**User must explicitly request otherwise to:**
+
+- Import to a different skill: "import to [skillname]"
+- Add specific tags: "with tags [tag1, tag2]"
+- Search existing screenshots: "search screenshots"
+- List screenshots: "show screenshots"
 
 ## ALWAYS: Log This Interaction
 
@@ -20,7 +38,13 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 
 ## Grab Latest Screenshot
 
-When the user says "grab the latest screenshot" or "get the latest screenshot", find the most recent .snagx file in the SnagIt library and import it to the screenshot skill's own image library:
+**Triggered by:**
+
+- "grab the latest screenshot" or "get the latest screenshot"
+- **Using screenshot skill without specifying an action** (default behavior)
+- "process latest screenshot"
+
+Find the most recent .snagx file in the SnagIt library and import it to the screenshot skill's own image library:
 
 **Default behavior:**
 
