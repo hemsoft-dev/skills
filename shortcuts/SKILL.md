@@ -19,9 +19,11 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 ## Configuration
 
 - **Script Location**: `C:\Users\User\Documents\AutoHotkey.ahk`
-- **Startup Shortcut**: `%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\AutoHotkey.lnk` (points to script)
+- **Startup Shortcut**: `%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\AutoHotkey.lnk` (points directly to .ahk file - Windows Explorer handles the file association)
 - **AHK Version**: v2.0
 - **Scripts Folder**: `~\.claude\skills\shortcuts\scripts\`
+
+> **Important:** The startup shortcut must point directly to the `.ahk` file, NOT to the AutoHotkey executable with the script as an argument. Explorer handles the file association correctly and ensures proper environment inheritance.
 
 > **Important:** All supporting scripts (PowerShell, batch files, etc.) used by shortcuts must be placed in this skill's `scripts/` subfolder—not in Documents or other locations. This keeps related files together and makes the skill portable.
 
@@ -37,7 +39,7 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 | CTRL+SHIFT+G | `^+g` | Activate/launch Claude |
 | CTRL+SHIFT+N | `^+n` | Activate/launch Obsidian Notes |
 | CTRL+SHIFT+T | `^+t` | Activate/launch Todoist |
-| CTRL+SHIFT+C | `^+c` | Activate/launch Windows Terminal |
+| CTRL+SHIFT+C | `^+c` | Activate/launch WezTerm |
 | CTRL+SHIFT+V | `^+v` | Activate/launch VS Code Insiders |
 | CTRL+SHIFT+S | `^+s` | Activate/launch Cursor with Skills repo |
 | CTRL+ALT+P | `^!p` | Speak clipboard (TTS via edge-tts) |
@@ -50,7 +52,7 @@ Press `WIN+Space` to open GUI prompt, type code, press Enter.
 |------|--------|
 | `100` | Run `cm` PowerShell script (`f:\github\HemSoft\cli-tools\scripts\cm.ps1`, copies output to clipboard) |
 | `101` | Activate/launch VS Code Insiders |
-| `102` | Activate/launch Windows Terminal |
+| `102` | Activate/launch WezTerm |
 | `103` | Paint (mspaint) |
 
 ### Text Expansion Hotstrings
@@ -103,7 +105,7 @@ case "100":
 
 - **Add**: Edit `ExecuteCommand()` switch or add hotkey block
 - **Remove**: Delete the case/hotkey block
-- **Reload**: `Start-Process "C:\Users\franz\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\autostart.ahk"`
+- **Reload**: `explorer.exe "C:\Users\User\Documents\AutoHotkey.ahk"` (or press CTRL+SHIFT+R while AHK is running)
 
 ## System Hotkey Overrides (Registry)
 

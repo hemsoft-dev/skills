@@ -1,35 +1,51 @@
 [
   {
+    "Software": "Bun",
+    "OldVersion": "bun-v1.3.7",
+    "NewVersion": "bun-v1.3.8",
+    "ReleaseDate": "Jan 29 '26",
+    "ChangelogUrl": "https://github.com/oven-sh/bun/releases",
+    "CheckMethod": "github_releases"
+  },
+  {
     "Software": "Claude Code",
     "OldVersion": "v2.1.21",
-    "NewVersion": "v2.1.23",
-    "ReleaseDate": "Jan 28 '26",
+    "NewVersion": "v2.1.25",
+    "ReleaseDate": "Jan 29 '26",
     "ChangelogUrl": "https://github.com/anthropics/claude-code/releases",
     "CheckMethod": "github_releases"
   },
   {
     "Software": "Gemini CLI",
     "OldVersion": "v0.27.0-preview.0",
-    "NewVersion": "v0.27.0-preview.1",
-    "ReleaseDate": "Jan 28 '26",
+    "NewVersion": "v0.27.0-preview.3",
+    "ReleaseDate": "Jan 29 '26",
     "ChangelogUrl": "https://github.com/google-gemini/gemini-cli/releases",
     "CheckMethod": "github_releases_prerelease"
   },
   {
     "Software": "GitHub Copilot Chat",
     "OldVersion": "v0.37.2026012702",
-    "NewVersion": "v0.37.2026012901",
-    "ReleaseDate": "Jan 28 '26",
+    "NewVersion": "v0.37.2026012902",
+    "ReleaseDate": "Jan 29 '26",
     "ChangelogUrl": "https://github.com/microsoft/vscode-copilot-chat/blob/main/CHANGELOG.md",
     "CheckMethod": "github_releases"
   },
   {
     "Software": "GitHub Web",
     "OldVersion": "Jan 26",
-    "NewVersion": "Jan 28",
-    "ReleaseDate": "Jan 28 '26",
+    "NewVersion": "Jan 29",
+    "ReleaseDate": "Jan 29 '26",
     "ChangelogUrl": "https://github.blog/changelog/feed/",
     "CheckMethod": "rss"
+  },
+  {
+    "Software": "Goose CLI",
+    "OldVersion": "v1.21.2",
+    "NewVersion": "v1.22.0",
+    "ReleaseDate": "Jan 29 '26",
+    "ChangelogUrl": "https://github.com/block/goose/releases",
+    "CheckMethod": "github_releases"
   },
   {
     "Software": "Neo4j",

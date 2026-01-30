@@ -1,6 +1,6 @@
 ---
 name: simplisticate
-description: V1.0 - Identifies complexity in code and proposes targeted simplifications with risk assessment. Use when asked to simplify, clean up, or reduce complexity in a codebase.
+description: V1.1 - Identifies complexity in code and proposes targeted simplifications with risk assessment. Cross-references repo-audit for documentation/config hygiene.
 ---
 
 # Simplisticate Agent 🎯
@@ -120,6 +120,12 @@ Present options:
 3. ❌ Reject
 4. 🔍 Explore more
 ```
+
+## Related Skills
+
+After completing simplification work, consider:
+
+- **Repo Audit** — For documentation/reality drift, stale artifacts, unused config, and cross-reference accuracy. Run with: "audit this repo"
 
 ---
 
