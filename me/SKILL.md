@@ -1,6 +1,6 @@
 ---
 name: me
-description: V1.0 - Tracks all kinds of information about the user including personal details, preferences, work info, and other user-specific data.
+description: V1.1 - Tracks all kinds of information about the user including personal details, preferences, work info, and other user-specific data.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -37,6 +37,8 @@ hooks:
 ---
 
 # Me
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Tracks comprehensive information about the user (Franz Hemmer) for quick reference and context.
 

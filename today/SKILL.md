@@ -1,9 +1,11 @@
 ---
 name: today
-description: V1.4 - Displays highlighted news, current date/time, weather conditions, and 3-day forecast with news headlines. Uses web search (not playwright) for news gathering. Enforces source diversification (max 2 items per source, minimum 3-4 sources per category).
+description: V1.5 - Displays highlighted news, current date/time, weather conditions, and 3-day forecast with news headlines. Uses web search (not playwright) for news gathering. Enforces source diversification (max 2 items per source, minimum 3-4 sources per category).
 ---
 
 # Today
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Fetch and display the current date, time, weather, and news.
 

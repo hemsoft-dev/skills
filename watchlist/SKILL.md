@@ -1,9 +1,11 @@
 ---
 name: watchlist
-description: V1.0 - Tracks items you want to monitor with status and optional expiration dates.
+description: V1.1 - Tracks items you want to monitor with status and optional expiration dates.
 ---
 
 # Watchlist
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Manage a personal watchlist of items to keep an eye on.
 

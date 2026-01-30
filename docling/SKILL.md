@@ -1,12 +1,14 @@
 ---
 name: docling
-description: V1.0 - Expert in Docling document parsing, conversion, and processing for PDF, DOCX, PPTX, XLSX, HTML, images, and audio files with gen AI integration.
+description: V1.1 - Expert in Docling document parsing, conversion, and processing for PDF, DOCX, PPTX, XLSX, HTML, images, and audio files with gen AI integration.
 license: MIT
 dependencies: python>=3.12, docling==2.67.0, click<8.2
 compatibility: Windows, macOS, Linux. Requires Python 3.12+. Click must be <8.2 for CLI compatibility.
 ---
 
 # Docling
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Expert guidance for using Docling - an open-source document parsing and conversion toolkit by IBM Research, perfect for preparing documents for gen AI applications.
 

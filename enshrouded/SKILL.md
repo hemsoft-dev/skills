@@ -1,9 +1,11 @@
 ---
 name: enshrouded
-description: V1.0 - Expert in Enshrouded game mechanics, gameplay, progression, crafting systems, and community modding support.
+description: V1.1 - Expert in Enshrouded game mechanics, gameplay, progression, crafting systems, and community modding support.
 ---
 
 # Enshrouded
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Expert knowledge of the Enshrouded survival crafting game, including base building, combat, exploration, progression systems, and community mods.
 

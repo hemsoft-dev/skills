@@ -1,6 +1,6 @@
 ---
 name: games
-description: V1.3 - Tracks liked games and discovers new games matching user preferences by checking comprehensive gaming sources. Monitors news sites, discovery platforms, Reddit communities, and specialized sources for survival, crafting, RPG, and open-world games. ALWAYS includes clickable links and ratings (Metacritic, OpenCritic, Steam reviews) in game reports. Maintains a separate list of games to check out with comprehensive metadata.
+description: V1.4 - Tracks liked games and discovers new games matching user preferences by checking comprehensive gaming sources. Monitors news sites, discovery platforms, Reddit communities, and specialized sources for survival, crafting, RPG, and open-world games. ALWAYS includes clickable links and ratings (Metacritic, OpenCritic, Steam reviews) in game reports. Maintains a separate list of games to check out with comprehensive metadata.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -37,6 +37,8 @@ hooks:
 ---
 
 # Games Tracker
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Tracks your liked games and discovers new games matching your preferences by checking comprehensive gaming sources.
 

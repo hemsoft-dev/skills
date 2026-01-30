@@ -1,9 +1,11 @@
 ---
 name: bun-manager
-description: V1.1 - Expert in Bun runtime, package manager, bundler, and test runner. Use for all Bun-related tasks including installation, builds, and best practices.
+description: V1.2 - Expert in Bun runtime, package manager, bundler, and test runner. Use for all Bun-related tasks including installation, builds, and best practices.
 ---
 
 # Bun Manager
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Expert guidance for using Bun as an all-in-one toolkit for JavaScript and TypeScript development.
 

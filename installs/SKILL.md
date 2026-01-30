@@ -1,9 +1,11 @@
 ---
 name: installs
-description: V1.1 - Fresh Windows setup guide for installing and configuring essential apps, tools, and HemSoft development environment.
+description: V1.2 - Fresh Windows setup guide for installing and configuring essential apps, tools, and HemSoft development environment.
 ---
 
 # Windows Install
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Complete setup guide for a fresh Windows installation with HemSoft development environment.
 

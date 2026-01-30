@@ -1,9 +1,11 @@
 ---
 name: devcontainer-manager
-description: V1.1 - Expert in architecting and maintaining high-performance, multi-stack .devcontainer environments with support for Bun, Supabase (DinD), and GitHub Copilot Workspace.
+description: V1.2 - Expert in architecting and maintaining high-performance, multi-stack .devcontainer environments with support for Bun, Supabase (DinD), and GitHub Copilot Workspace.
 ---
 
 # Dev Container Manager
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Manage and optimize development containers for seamless local and cloud-based (GitHub Copilot Workspace) development.
 

@@ -1,6 +1,6 @@
 ---
 name: play-audio
-description: V2.0 - Plays audio files or converts text to speech using edge-tts (fast) or Qwen3-TTS VoiceDesign (high quality). Supports voice profiles for customizable TTS output.
+description: V2.1 - Plays audio files or converts text to speech using edge-tts (fast) or Qwen3-TTS VoiceDesign (high quality). Supports voice profiles for customizable TTS output.
 dependencies: edge-tts>=7.2.7, ffmpeg (for ffplay), qwen-tts (for high quality mode), Python 3.12+, PyTorch with CUDA support
 compatibility: Requires Windows PowerShell, ffplay (from ffmpeg), edge-tts for fast mode, and Qwen3-TTS VoiceDesign model for high quality mode.
 hooks:
@@ -39,6 +39,8 @@ hooks:
 ---
 
 # Play Audio
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Plays audio files or converts text to speech with two quality modes:
 

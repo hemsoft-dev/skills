@@ -1,9 +1,11 @@
 ---
 name: egg-inc
-description: V1.3 - Expert in Egg Inc mobile game mechanics, player tracking, spaceship missions, Truth Eggs/Path of Virtue, and progress calculations for King Friday, King Saturday, King Sunday, and King Monday accounts.
+description: V1.4 - Expert in Egg Inc mobile game mechanics, player tracking, spaceship missions, Truth Eggs/Path of Virtue, and progress calculations for King Friday, King Saturday, King Sunday, and King Monday accounts.
 ---
 
 # Egg Inc Expert
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Expert assistant for the mobile game Egg Inc by Auxbrain. Specializes in player tracking, progress calculations, prestige strategies, and game mechanics.
 

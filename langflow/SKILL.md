@@ -1,9 +1,11 @@
 ---
 name: langflow
-description: V1.0 - Visual platform for building AI agents and workflows. Use when creating, running, or managing LangFlow projects.
+description: V1.1 - Visual platform for building AI agents and workflows. Use when creating, running, or managing LangFlow projects.
 ---
 
 # LangFlow
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Visual low-code platform for building AI-powered agents and workflows with LangChain.
 

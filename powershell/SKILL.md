@@ -1,9 +1,11 @@
 ---
 name: powershell
-description: V1.5 - Expert in PowerShell scripting, PSScriptAnalyzer linting, Write-Information ANSI codes, profile management, PATH optimization, CLI wrapper functions, and troubleshooting on Windows.
+description: V1.6 - Expert in PowerShell scripting, PSScriptAnalyzer linting, Write-Information ANSI codes, profile management, PATH optimization, CLI wrapper functions, and troubleshooting on Windows.
 ---
 
 # PowerShell Expert
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Expert guidance for PowerShell scripting, code analysis, profiles, PATH management, and troubleshooting.
 

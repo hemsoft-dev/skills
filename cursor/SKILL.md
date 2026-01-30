@@ -1,9 +1,11 @@
 ---
 name: cursor
-description: V1.2 - Expert in Cursor IDE features, shortcuts, settings, Composer mode, chat, custom agents, MCP servers, and usage tracking. Includes @ symbol context inclusion guide. Use when working with Cursor IDE or needing help with Cursor-specific functionality.
+description: V1.3 - Expert in Cursor IDE features, shortcuts, settings, Composer mode, chat, custom agents, MCP servers, and usage tracking. Includes @ symbol context inclusion guide. Use when working with Cursor IDE or needing help with Cursor-specific functionality.
 ---
 
 # Cursor IDE Helper
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Expert guidance for using Cursor IDE - the AI-powered code editor. Provides help with features, shortcuts, settings, Composer mode, chat, and usage tracking.
 

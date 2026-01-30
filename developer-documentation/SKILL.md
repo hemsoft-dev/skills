@@ -1,9 +1,11 @@
 ---
 name: developer-documentation
-description: V1.0 - Expert in all software engineering standards, processes, and best practices at Relias, including onboarding, testing, CI/CD, security, and developer tooling.
+description: V1.1 - Expert in all software engineering standards, processes, and best practices at Relias, including onboarding, testing, CI/CD, security, and developer tooling.
 ---
 
 # Developer Documentation
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Expert guide to Relias software engineering practices. Full documentation sourced from the
 [relias-engineering/developer-documentation](https://github.com/relias-engineering/developer-documentation) repo.

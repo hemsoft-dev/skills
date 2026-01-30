@@ -1,9 +1,11 @@
 ---
 name: branding
-description: V1.1 - HemSoft Developments branding guidelines, design system, and shadcn/ui component library.
+description: V1.2 - HemSoft Developments branding guidelines, design system, and shadcn/ui component library.
 ---
 
 # Branding
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Expert in HemSoft Developments branding, visual identity, and front-end design standards.
 

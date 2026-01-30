@@ -3,8 +3,12 @@
 ```skill
 ---
 name: bun-scaffold
-description: V1.1 - Scaffolds production-ready TypeScript utilities with Bun, Biome linting, Vitest testing (90%+ coverage), pre-commit hooks, and GitHub integration.
+description: V1.2 - Scaffolds production-ready TypeScript utilities with Bun, Biome linting, Vitest testing (90%+ coverage), pre-commit hooks, and GitHub integration.
 ---
+
+# Bun Scaffold
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Expert guide for scaffolding production-quality CLI tools and utilities using TypeScript + Bun with strict quality gates.
 

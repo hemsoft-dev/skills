@@ -1,10 +1,12 @@
 ---
 name: slack-search
-description: V1.0 - Slack message search, channel discovery, and user lookup with advanced query syntax and PowerShell scripts.
+description: V1.1 - Slack message search, channel discovery, and user lookup with advanced query syntax and PowerShell scripts.
 compatibility: Requires SLACK_USER_TOKEN environment variable, PowerShell, network access
 ---
 
 # Slack Search
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Specialized skill for searching Slack messages, discovering channels, and looking up users.
 

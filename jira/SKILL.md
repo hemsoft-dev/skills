@@ -1,9 +1,11 @@
 ---
 name: jira
-description: V1.0 - Tracks JIRA epics for Productivity Engineering team at Relias.
+description: V1.1 - Tracks JIRA epics for Productivity Engineering team at Relias.
 ---
 
 # JIRA Epics Tracker
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Track active JIRA epics for Productivity Engineering team.
 

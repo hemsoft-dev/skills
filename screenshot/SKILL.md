@@ -1,9 +1,11 @@
 ---
 name: screenshot
-description: V1.2 - Expert in taking screenshots of windows, full screens, or partial regions. Supports multi-monitor setups with proper DPI handling using python-mss. Automatically compresses to WebP for AI-optimized images.
+description: V1.3 - Expert in taking screenshots of windows, full screens, or partial regions. Supports multi-monitor setups with proper DPI handling using python-mss. Automatically compresses to WebP for AI-optimized images.
 ---
 
 # Screenshot
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Capture screenshots of specific windows or full monitors with proper DPI scaling.
 

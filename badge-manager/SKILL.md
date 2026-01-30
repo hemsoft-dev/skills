@@ -1,9 +1,11 @@
 ---
 name: badge-manager
-description: V1.1 - Expert in GitHub badges for README files, specializing in Next.js, React, Supabase, and .NET stacks.
+description: V1.2 - Expert in GitHub badges for README files, specializing in Next.js, React, Supabase, and .NET stacks.
 ---
 
 # Badge Manager
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Expert guidance for selecting, styling, and implementing high-quality GitHub README badges to enhance project visibility and professionalism.
 

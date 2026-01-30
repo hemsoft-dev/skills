@@ -1,6 +1,6 @@
 ---
 name: skill-extractor
-description: V1.4 - Analyzes Markdown files to identify and extract reusable instruction sets into standalone skills with hook-based history tracking and retrospectives.
+description: V1.6 - Analyzes Markdown files to identify and extract reusable instruction sets into standalone skills with hook-based history tracking and retrospectives. Consults protocols skill for standardized execution patterns.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -39,6 +39,8 @@ hooks:
 
 # Skill Extractor
 
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
+
 Expert in identifying reusable instruction sets within existing Markdown files and extracting them into standalone skills.
 
 ## Agent Skills Specification - Frontmatter Reference
@@ -68,6 +70,7 @@ Per the official spec at <https://agentskills.io/specification>, SKILL.md frontm
      `azure-deployer`).
    - Provide a one-sentence description.
    - Draft the `SKILL.md` content following the standard format.
+   - If you need to ask clarifying questions, consult the `protocols` skill for standardized question format.
 4. **Create**: Upon user approval, create the skill directory and `SKILL.md`
    file in `c:\Users\franz\.claude\skills\{skill-name}/`.
 5. **Preserve**: Do NOT modify the original Markdown file unless explicitly
@@ -113,6 +116,15 @@ hooks:
 ```
 
 **Important**: Replace `{skill-name}` with the actual skill name throughout the hooks configuration.
+
+## Protocols Integration
+
+When encountering common patterns during skill extraction, consult the `protocols` skill for standardized execution instructions. The protocols skill contains detailed procedures for:
+
+- Asking clarifying questions
+- (More protocols will be added over time)
+
+This ensures consistency when proposing and creating extracted skills.
 
 ## Best Practices
 

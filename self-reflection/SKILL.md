@@ -1,9 +1,11 @@
 ---
 name: self-reflection
-description: V1.2 - Helps the agent troubleshoot difficult tasks and record lessons learned into persistent memory to prevent future hiccups.
+description: V1.3 - Helps the agent troubleshoot difficult tasks and record lessons learned into persistent memory to prevent future hiccups.
 ---
 
 # Self-Reflection
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Use this skill when a task was particularly difficult, required multiple retries, or resulted in unexpected behavior/errors. The goal is to analyze what went wrong and store actionable insights in persistent memory to avoid future mistakes and to self-improve.
 

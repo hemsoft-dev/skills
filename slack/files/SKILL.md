@@ -1,10 +1,12 @@
 ---
 name: slack-files
-description: V1.0 - Slack file uploads, downloads, and temp folder management with PowerShell scripts for cleanup and organization.
+description: V1.1 - Slack file uploads, downloads, and temp folder management with PowerShell scripts for cleanup and organization.
 compatibility: Requires SLACK_TOKEN environment variable, PowerShell, network access
 ---
 
 # Slack Files
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Specialized skill for Slack file operations including uploads, downloads, and temp folder management.
 

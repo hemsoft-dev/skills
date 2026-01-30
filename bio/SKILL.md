@@ -1,9 +1,11 @@
 ---
 name: bio
-description: V1.1 - Creates comprehensive biographies for any person using exhaustive research across multiple sources.
+description: V1.2 - Creates comprehensive biographies for any person using exhaustive research across multiple sources.
 ---
 
 # Biography Expert
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Generate thorough, well-researched biographies using the template in this skill folder.
 

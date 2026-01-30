@@ -1,11 +1,13 @@
 ---
 name: house-utilities
-description: V1.1 - Tracks utility services (electric, gas, water, internet, etc.) at 237 Rose St, Moresville, NC 28117 including account info, billing, service dates, outages, and municipal resources.
+description: V1.2 - Tracks utility services (electric, gas, water, internet, etc.) at 237 Rose St, Moresville, NC 28117 including account info, billing, service dates, outages, and municipal resources.
 metadata:
   address: "237 Rose St, Moresville, NC 28117"
 ---
 
 # House Utilities Tracker
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Manages all utility service accounts and information for the primary residence at 237 Rose St, Moresville, NC 28117.
 

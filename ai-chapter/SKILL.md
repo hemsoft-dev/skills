@@ -1,9 +1,11 @@
 ---
 name: ai-chapter
-description: V1.4 - Manages administrative tasks for AI Chapter meetings with Geo Rufino. Two-track meeting structure (AI Engineering Chapter on Confluence, AI Foundation Chapter on SharePoint) with weekly alternation. Generates welcome messages for new members.
+description: V1.5 - Manages administrative tasks for AI Chapter meetings with Geo Rufino. Two-track meeting structure (AI Engineering Chapter on Confluence, AI Foundation Chapter on SharePoint) with weekly alternation. Generates welcome messages for new members.
 ---
 
 # AI Chapter
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Manage administrative tasks, resources, and agendas for AI Chapter meetings hosted with Geo Rufino.
 

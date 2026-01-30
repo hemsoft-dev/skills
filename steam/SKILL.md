@@ -1,9 +1,11 @@
 ---
 name: steam
-description: V1.0 - Expert in Steam game locations, mod installation, library management, and common game paths on Windows.
+description: V1.1 - Expert in Steam game locations, mod installation, library management, and common game paths on Windows.
 ---
 
 # Steam
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Manage Steam installations, find game folders, and install mods on Windows.
 

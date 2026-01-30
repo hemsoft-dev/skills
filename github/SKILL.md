@@ -1,9 +1,11 @@
 ---
 name: github
-description: V1.9 - GitHub API operations including billing, usage statistics, Copilot metrics, SSH keys, releases/tags, account management, and unified PR checking for GitHub/Bitbucket via CLI Tools.
+description: V2.0 - GitHub API operations including billing, usage statistics, Copilot metrics, SSH keys, releases/tags, account management, and unified PR checking for GitHub/Bitbucket via CLI Tools.
 ---
 
 # GitHub API Skill
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 ## ALWAYS: Log This Interaction
 

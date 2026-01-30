@@ -1,9 +1,11 @@
 ---
 name: patreon
-description: V1.0 - Manage HemSoft Developments Patreon page, generate posts, track patrons/tiers, and interact with the Patreon API.
+description: V1.1 - Manage HemSoft Developments Patreon page, generate posts, track patrons/tiers, and interact with the Patreon API.
 ---
 
 # Patreon
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Manage the HemSoft Developments Patreon creator account.
 

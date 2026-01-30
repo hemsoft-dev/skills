@@ -1,9 +1,11 @@
 ---
 name: autohotkey
-description: V1.1 - Expert in AutoHotkey v2 scripting for hotkeys, hotstrings (text expansion), automation, GUIs, and Windows integration. Use for creating, editing, or troubleshooting AHK scripts.
+description: V1.2 - Expert in AutoHotkey v2 scripting for hotkeys, hotstrings (text expansion), automation, GUIs, and Windows integration. Use for creating, editing, or troubleshooting AHK scripts.
 ---
 
 # AutoHotkey Expert
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Expert-level guidance for AutoHotkey v2 scripting.
 

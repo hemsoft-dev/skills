@@ -1,9 +1,11 @@
 ---
 name: dopus
-description: V1.0 - Expert in Directory Opus file manager for Windows, covering configuration, scripting, button customization, toolbars, and advanced file operations.
+description: V1.1 - Expert in Directory Opus file manager for Windows, covering configuration, scripting, button customization, toolbars, and advanced file operations.
 ---
 
 # Directory Opus
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Expert in Directory Opus (DOpus), the advanced file manager for Windows.
 

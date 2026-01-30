@@ -1,6 +1,6 @@
 ---
 name: apple
-description: V1.0 - Expert in all things Apple including macOS, iOS, iPadOS, watchOS, hardware (Mac, iPhone, iPad, Apple Watch, AirPods), software releases, and ecosystem integration. Tracks new releases, updates, and announcements similar to the games skill. ALWAYS includes clickable links and release dates in reports.
+description: V1.1 - Expert in all things Apple including macOS, iOS, iPadOS, watchOS, hardware (Mac, iPhone, iPad, Apple Watch, AirPods), software releases, and ecosystem integration. Tracks new releases, updates, and announcements similar to the games skill. ALWAYS includes clickable links and release dates in reports.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -37,6 +37,8 @@ hooks:
 ---
 
 # Apple Expert
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 <!-- markdownlint-disable MD013 -->
 Expert in all things Apple including macOS, iOS, iPadOS, watchOS, hardware (Mac, iPhone, iPad, Apple Watch, AirPods), software releases, and ecosystem integration. Tracks new releases, updates, and announcements.

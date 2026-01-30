@@ -1,9 +1,11 @@
 ---
 name: stackprobe-scaffold
-description: V1.1 - Scaffolds a new project using the StackProbe stack (Next.js, shadcn/ui, Supabase, Vercel). Optimized for Bun and agentic workflows.
+description: V1.2 - Scaffolds a new project using the StackProbe stack (Next.js, shadcn/ui, Supabase, Vercel). Optimized for Bun and agentic workflows.
 ---
 
 # StackProbe Scaffold
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Expert guide for scaffolding a "StackProbe" project. This stack is optimized for speed, type safety, and AI integration.
 

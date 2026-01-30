@@ -1,9 +1,11 @@
 ---
 name: repo-summarizer
-description: V1.1 - Analyzes GitHub repositories with configurable effort levels (Minimal, Normal, Maximum) to generate fun facts.
+description: V1.2 - Analyzes GitHub repositories with configurable effort levels (Minimal, Normal, Maximum) to generate fun facts.
 ---
 
 # Repository Summarizer
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Analyze a GitHub repository and generate a fun facts report.
 

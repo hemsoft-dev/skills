@@ -1,9 +1,11 @@
 ---
 name: repo-audit
-description: V1.0 - Audits repository for documentation/reality drift, stale artifacts, unused config, and cross-reference accuracy. Generates actionable report with Y/N recommendations.
+description: V1.1 - Audits repository for documentation/reality drift, stale artifacts, unused config, and cross-reference accuracy. Generates actionable report with Y/N recommendations.
 ---
 
 # Repo Audit 🔍
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 > *"Trust, but verify."* — Ensure your repo reflects reality.
 

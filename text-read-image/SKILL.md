@@ -1,9 +1,11 @@
 ---
 name: text-read-image
-description: V1.1 - Extracts text from images using OpenRouter vision models. Use when you need to read text from screenshots, documents, or any image.
+description: V1.2 - Extracts text from images using OpenRouter vision models. Use when you need to read text from screenshots, documents, or any image.
 ---
 
 # Text Read Image
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Extract visible text from images using OpenRouter's vision-capable models.
 

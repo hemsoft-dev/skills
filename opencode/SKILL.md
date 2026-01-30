@@ -1,13 +1,15 @@
 ---
 name: opencode
-description: V1.1 - Executes AI prompts using OpenCode CLI with OpenRouter models for clean, configuration-free execution.
+description: V1.2 - Executes AI prompts using OpenCode CLI with OpenRouter models for clean, configuration-free execution.
 compatibility: Requires opencode CLI installed via winget and OPENROUTER_API_KEY environment variable
 metadata:
   author: skills-agent
-  version: "1.1"
+  version: "1.2"
 ---
 
 # OpenCode
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Executes AI prompts using the OpenCode CLI with OpenRouter models (Claude 3.5 Haiku by default). Uses OPENROUTER_API_KEY from environment for authentication.
 

@@ -1,6 +1,6 @@
 ---
 name: create-alias
-description: V1.0 - Creates PowerShell aliases in the global profile that work across all terminals. Supports both simple aliases and function-based aliases with arguments.
+description: V1.1 - Creates PowerShell aliases in the global profile that work across all terminals. Supports both simple aliases and function-based aliases with arguments.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -37,6 +37,8 @@ hooks:
 ---
 
 # Create Alias
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Creates PowerShell aliases in the global profile (`$PROFILE.CurrentUserAllHosts`) that work across all terminals (Windows Terminal, VS Code, PowerShell console, PowerShell 7).
 

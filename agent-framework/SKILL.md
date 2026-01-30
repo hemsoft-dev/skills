@@ -1,9 +1,11 @@
 ---
 name: agent-framework
-description: V1.0 - Expert in Microsoft Agent Framework for building AI agents and multi-agent workflows in C# and Python with Agent Framework Toolkit support.
+description: V1.1 - Expert in Microsoft Agent Framework for building AI agents and multi-agent workflows in C# and Python with Agent Framework Toolkit support.
 ---
 
 # Microsoft Agent Framework
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Expert in Microsoft's comprehensive framework for building, orchestrating, and deploying AI agents with multi-agent workflows in both .NET and Python.
 

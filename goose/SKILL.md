@@ -1,9 +1,11 @@
 ---
 name: goose
-description: V1.3 - Use a CLI AI tool called Goose to execute the prompt. Supports local Ollama models and cloud providers with MCP extensions. Includes Windows update workarounds.
+description: V1.4 - Use a CLI AI tool called Goose to execute the prompt. Supports local Ollama models and cloud providers with MCP extensions. Includes Windows update workarounds.
 ---
 
 # Goose
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Execute prompts using the Goose AI agent by Block (Square).
 

@@ -1,9 +1,11 @@
 ---
 name: gemini
-description: V1.3 - Interact with Google Gemini AI via CLI for prompts, code assistance, and chat sessions. Installed via npm with update instructions.
+description: V1.4 - Interact with Google Gemini AI via CLI for prompts, code assistance, and chat sessions. Installed via npm with update instructions.
 ---
 
 # Gemini CLI
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Execute prompts with Google Gemini AI via command line.
 

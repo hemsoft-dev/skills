@@ -1,6 +1,6 @@
 ---
 name: skill-creator
-description: V1.7 - Creates new Claude skills with optimized SKILL.md files following best practices. Uses hooks for history tracking and retrospectives (enabled by default). Includes explicit instructions for getting accurate timestamps.
+description: V1.9 - Creates new Claude skills with optimized SKILL.md files following best practices. Uses hooks for history tracking and retrospectives (enabled by default). Includes explicit instructions for getting accurate timestamps. Consults protocols skill for standardized execution patterns.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -37,6 +37,8 @@ hooks:
 ---
 
 # Skill Creator
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Create new skills in the user's `.claude/skills/` directory.
 
@@ -117,13 +119,22 @@ hooks:
 4. **Output Format** - Only specify if the skill produces structured output
 5. **Scripts Organization** - Keep all PowerShell/Python scripts in a `scripts/` subfolder (e.g., `{skill-name}/scripts/script-name.ps1`)
 
+## Protocols Integration
+
+When encountering common patterns during skill creation, consult the `protocols` skill for standardized execution instructions. The protocols skill contains detailed procedures for:
+
+- Asking clarifying questions
+- (More protocols will be added over time)
+
+Instead of duplicating detailed instructions, reference the appropriate protocol. This ensures consistency across all skills.
+
 ## Creation Workflow
 
 **CRITICAL: Always ask these questions BEFORE creating anything:**
 
 ### Step 1: Get Skill Details
 
-Ask user for skill name and purpose.
+Ask user for skill name and purpose. If you need to ask clarifying questions, consult the `protocols` skill for standardized question format.
 
 ### Step 2: Choose Location
 

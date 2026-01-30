@@ -1,9 +1,11 @@
 ---
 name: landing-page
-description: V1.1 - Expert at creating high-converting, visually stunning landing pages with animated hero sections, floating UI elements, and split-screen auth flows.
+description: V1.2 - Expert at creating high-converting, visually stunning landing pages with animated hero sections, floating UI elements, and split-screen auth flows.
 ---
 
 # Landing Page Expert
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Build memorable landing pages that convert visitors into users through bold visual design, purposeful animation, and clear value proposition.
 

@@ -1,11 +1,13 @@
 ---
 name: vercel-ai-sdk
-description: V1.0 - Expert in Vercel AI SDK for building AI-powered applications with Next.js, React, and TypeScript supporting multiple LLM providers.
+description: V1.1 - Expert in Vercel AI SDK for building AI-powered applications with Next.js, React, and TypeScript supporting multiple LLM providers.
 dependencies: bun or npm/pnpm, Next.js 14+, React 18+
 compatibility: Requires Node.js 18+ or Bun, supports Next.js App Router and Pages Router
 ---
 
 # Vercel AI SDK
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Expert in Vercel's AI SDK for building AI-powered applications with streaming, tool calling, and multi-provider support in TypeScript/JavaScript.
 

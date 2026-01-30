@@ -1,6 +1,6 @@
 ---
 name: meeting-preparation
-description: V1.1 - Expert in helping prepare for meetings with structured templates, research, checklists, and streamlined readiness assessments.
+description: V1.2 - Expert in helping prepare for meetings with structured templates, research, checklists, and streamlined readiness assessments.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -37,6 +37,8 @@ hooks:
 ---
 
 # Meeting Preparation
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Helps prepare for upcoming meetings with structured templates, research, and readiness assessments.
 

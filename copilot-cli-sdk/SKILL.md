@@ -1,6 +1,6 @@
 ---
 name: copilot-cli-sdk
-description: V1.0 - Expert in GitHub Copilot CLI SDK for integrating Copilot Agent into applications. Supports Node.js/TypeScript, Python, Go, and .NET with multi-turn conversations, tool execution, and full lifecycle control.
+description: V1.1 - Expert in GitHub Copilot CLI SDK for integrating Copilot Agent into applications. Supports Node.js/TypeScript, Python, Go, and .NET with multi-turn conversations, tool execution, and full lifecycle control.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -37,6 +37,8 @@ hooks:
 ---
 
 # GitHub Copilot CLI SDK
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Expert guidance for integrating GitHub Copilot Agent into applications using the GitHub Copilot CLI SDK. The SDK provides programmatic access to the same agentic execution loop that powers GitHub Copilot CLI.
 

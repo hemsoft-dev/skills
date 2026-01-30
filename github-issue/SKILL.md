@@ -1,9 +1,11 @@
 ---
 name: github-issue
-description: V1.1 - Creates well-structured GitHub Issues that serve as implementation specs with proper labels and escape-safe formatting.
+description: V1.2 - Creates well-structured GitHub Issues that serve as implementation specs with proper labels and escape-safe formatting.
 ---
 
 # GitHub Issue Creator
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Create GitHub Issues via `gh issue create` that serve as implementation specifications.
 

@@ -1,10 +1,12 @@
 ---
 name: slack-advanced
-description: V1.0 - Advanced Slack features including DMs, reminders, bookmarks, pins, reactions, user groups, emoji, DND status, and AI Agent capabilities.
+description: V1.1 - Advanced Slack features including DMs, reminders, bookmarks, pins, reactions, user groups, emoji, DND status, and AI Agent capabilities.
 compatibility: Requires SLACK_TOKEN environment variable, PowerShell, network access
 ---
 
 # Slack Advanced Features
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Specialized skill for advanced Slack operations including DMs, reminders, bookmarks, pins, reactions, and AI Agent capabilities.
 

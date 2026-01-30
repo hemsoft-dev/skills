@@ -1,9 +1,11 @@
 ---
 name: atlassian
-description: V1.5 - Search and manage JIRA tickets, Confluence docs, and Cortex Internal Developer Portal with proper field configuration and full Confluence API support. ALWAYS includes clickable links in results.
+description: V1.6 - Search and manage JIRA tickets, Confluence docs, and Cortex Internal Developer Portal with proper field configuration and full Confluence API support. ALWAYS includes clickable links in results.
 ---
 
 # Atlassian
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Search JIRA and Confluence, create/modify JIRA tickets with proper team field configuration. Full Confluence API support for pages, spaces, attachments, and content management.
 

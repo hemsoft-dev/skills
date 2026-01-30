@@ -1,9 +1,11 @@
 ---
 name: display-image
-description: V1.1 - Displays images using Directory Opus viewer with zoom-to-fit for visual verification. Use when you need to show screenshots, photos, or any image file to the user.
+description: V1.2 - Displays images using Directory Opus viewer with zoom-to-fit for visual verification. Use when you need to show screenshots, photos, or any image file to the user.
 ---
 
 # Display Image
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Display images using Directory Opus viewer for visual verification.
 

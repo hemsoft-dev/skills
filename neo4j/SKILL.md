@@ -1,10 +1,12 @@
 ---
 name: neo4j
-description: V1.2 - Expert in Neo4j graph database installation, Docker configuration, graph modeling, Cypher queries, and data import for document knowledge graphs.
+description: V1.3 - Expert in Neo4j graph database installation, Docker configuration, graph modeling, Cypher queries, and data import for document knowledge graphs.
 compatibility: Requires Docker Desktop on Windows
 ---
 
 # Neo4j
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Manage Neo4j graph database via Docker for local development and build knowledge graphs from documents.
 

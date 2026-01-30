@@ -1,6 +1,6 @@
 ---
 name: ask
-description: V1.1 - Unified AI CLI interface for Claude, Gemini, Copilot, and OpenCode with 22 model variants, clean output, and interactive model listing. Golden rule - defaults to cheapest/fastest model.
+description: V1.2 - Unified AI CLI interface for Claude, Gemini, Copilot, and OpenCode with 22 model variants, clean output, and interactive model listing. Golden rule - defaults to cheapest/fastest model.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -37,6 +37,8 @@ hooks:
 ---
 
 # Ask - Unified AI CLI Interface
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 A PowerShell function that provides a unified, simplified interface for **4 AI CLI tools** (Claude Code, Gemini CLI, GitHub Copilot CLI, and OpenCode) with **22 model variants**, clean output, and helpful model listings.
 

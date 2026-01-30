@@ -1,9 +1,11 @@
 ---
 name: markdown
-description: V1.0 - Expert in markdown linting with markdownlint-cli2, quality enforcement, and best practices for consistent documentation.
+description: V1.1 - Expert in markdown linting with markdownlint-cli2, quality enforcement, and best practices for consistent documentation.
 ---
 
 # Markdown Expert
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Expert guidance for markdown linting, quality enforcement, and documentation best practices.
 

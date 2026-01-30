@@ -1,6 +1,6 @@
 ---
 name: openweather
-description: V1.0 - Get current weather conditions using OpenWeather API by US city name or zip code. Provides temperature, conditions, humidity, wind, visibility, and other weather metrics. Requires OPENWEATHER_API_KEY environment variable.
+description: V1.1 - Get current weather conditions using OpenWeather API by US city name or zip code. Provides temperature, conditions, humidity, wind, visibility, and other weather metrics. Requires OPENWEATHER_API_KEY environment variable.
 compatibility: Requires OPENWEATHER_API_KEY environment variable and PowerShell with Invoke-RestMethod
 hooks:
   PostToolUse:
@@ -38,6 +38,8 @@ hooks:
 ---
 
 # OpenWeather API Integration
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Get current weather conditions using the OpenWeather API for US cities or zip codes.
 

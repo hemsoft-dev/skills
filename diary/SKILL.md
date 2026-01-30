@@ -1,9 +1,11 @@
 ---
 name: diary
-description: "V2.18 - Captures daily accomplishments, goals, and reflections with Todoist integration. Auto-includes weather, ALL news headlines (5-7 per category: US, World, AI, Danish) with mandatory source diversification (max 2 per source, 3-4 sources minimum) and Simon Willison priority for AI News, comprehensive Slack highlights from 18 monitored channels (8-12+ highlights), watchlist updates, Daily Numbers (Dow Jones, S&P 500, Relias Repo Counts), LLM Models (LMSYS Chatbot Arena leaderboard + OpenRouter new releases + Top OpenRouter Apps), trending GitHub repos, and Software Watchlist with 68% automation. Structured Work/Personal/Personal Reflections format. Omits Work section on Saturdays; Sundays only include Work → Tomorrow's Goals. NEVER removes files without user consent."
+description: "V2.19 - Captures daily accomplishments, goals, and reflections with Todoist integration. Auto-includes weather, ALL news headlines (5-7 per category: US, World, AI, Danish) with mandatory source diversification (max 2 per source, 3-4 sources minimum) and Simon Willison priority for AI News, comprehensive Slack highlights from 18 monitored channels (8-12+ highlights), watchlist updates, Daily Numbers (Dow Jones, S&P 500, Relias Repo Counts), LLM Models (LMSYS Chatbot Arena leaderboard + OpenRouter new releases + Top OpenRouter Apps), trending GitHub repos, and Software Watchlist with 68% automation. Structured Work/Personal/Personal Reflections format. Omits Work section on Saturdays; Sundays only include Work → Tomorrow's Goals. NEVER removes files without user consent."
 ---
 
 # Diary
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Expert in daily journaling that integrates with Todoist to capture what you've accomplished and what your goals are. Automatically includes weather and news context from the today skill.
 

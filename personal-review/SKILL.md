@@ -1,9 +1,11 @@
 ---
 name: personal-review
-description: V1.0 - Expert in drafting, analyzing, and improving quarterly and annual work performance reviews based on historical review patterns and achievements.
+description: V1.1 - Expert in drafting, analyzing, and improving quarterly and annual work performance reviews based on historical review patterns and achievements.
 ---
 
 # Personal Review Assistant
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Expert assistant for creating and refining work performance reviews (quarterly and annual).
 

@@ -1,6 +1,6 @@
 ---
 name: notes
-description: V1.0 - Manages and organizes personal notes with a structured folder system. Use when creating, organizing, searching, or managing notes across different categories and projects.
+description: V1.1 - Manages and organizes personal notes with a structured folder system. Use when creating, organizing, searching, or managing notes across different categories and projects.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -37,6 +37,8 @@ hooks:
 ---
 
 # Notes
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Manages and organizes personal notes with a structured folder system.
 

@@ -1,6 +1,6 @@
 ---
 name: skill-improver
-description: V1.8 - Applies standardized improvements to skills and proactively suggests missing opt-in features. Converts "ALWAYS:" sections to hooks. Use when modifying any skill.
+description: V2.0 - Applies standardized improvements to skills and proactively suggests missing opt-in features. Converts "ALWAYS:" sections to hooks. Checks for protocol reference opportunities. Use when modifying any skill.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -38,6 +38,8 @@ hooks:
 ---
 
 # Skill Improver
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Meta-skill for applying consistent improvements across all skills.
 
@@ -152,7 +154,12 @@ Before applying improvements, check if the skill uses outdated manual instructio
 
 ### Step 2: Apply Active Improvements
 
-Apply all active improvements from the registry below.
+Apply all active improvements from the registry below. This includes:
+
+1. Version Implementation (always)
+2. File Size Management (check if > 500 lines)
+3. Frontmatter Validation (validate against spec)
+4. Protocol References (check for opportunities to reference protocols skill)
 
 ### Step 3: Present Final Questions
 
@@ -187,6 +194,7 @@ Apply all active improvements from the registry below.
 | 3   | File Size Management       | Active |
 | 4   | Frontmatter Validation     | Active |
 | 5   | Retrospective              | Opt-in |
+| 6   | Protocol References        | Active |
 
 ---
 
@@ -356,3 +364,45 @@ The Stop hook includes step 4:
 
 - Add `compatibility: Requires git, docker` since skill uses these tools
 ```
+
+---
+
+### 6. Protocol References
+
+**Rule**: Check if skill contains detailed instructions that could be replaced with protocol references for better maintainability and consistency.
+
+**When to Check**:
+
+1. **During skill improvement** - Scan for common patterns that exist in protocols
+2. **When skill is verbose** - Look for opportunities to reduce duplication
+
+**Common Patterns to Check**:
+
+| Pattern in Skill | Protocol Available | Suggestion |
+| Detailed "ask clarifying questions" instructions | `protocols` → "Asking Clarifying Questions" | Replace with: "Consult `protocols` skill for how to ask clarifying questions" |
+| (Future protocols will be added) | Check protocols skill regularly | Update as new protocols become available |
+
+**Implementation**:
+
+1. Read the `protocols` skill to see available protocol entries
+2. Scan the skill being improved for patterns that match available protocols
+3. If found, suggest replacing detailed instructions with protocol reference
+
+**Example Suggestion**:
+
+```markdown
+💡 Protocol Reference Opportunity:
+
+Found detailed "asking questions" instructions in Step 2.
+
+Recommend replacing with:
+"Consult the `protocols` skill for standardized question format."
+
+This reduces duplication and ensures consistency across all skills.
+```
+
+**Benefits**:
+
+- **Consistency**: All skills use the same standardized procedures
+- **Maintainability**: Update once in protocols, applies everywhere
+- **Brevity**: Skills remain focused on their core purpose

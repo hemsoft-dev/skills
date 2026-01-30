@@ -1,12 +1,14 @@
 ---
 name: cli-tools
-description: V1.7 - Reference guide for CLI tools including installation, updates, version tracking, and usage with release notes reporting. Updated with Windows-specific update quirks.
+description: V1.8 - Reference guide for CLI tools including installation, updates, version tracking, and usage with release notes reporting. Updated with Windows-specific update quirks.
 metadata:
   author: HemSoft Developments
   version: "1.7"
 ---
 
 # CLI Tools
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Reference guide for command-line tools used in development workflows.
 

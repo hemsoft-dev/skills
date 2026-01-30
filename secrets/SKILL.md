@@ -1,9 +1,11 @@
 ---
 name: secrets
-description: V1.0 - Stores and retrieves sensitive environment variables and API keys from SECRETS.md for quick reference.
+description: V1.1 - Stores and retrieves sensitive environment variables and API keys from SECRETS.md for quick reference.
 ---
 
 # Secrets Manager
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Centralized storage for environment variables, API keys, and sensitive credentials.
 

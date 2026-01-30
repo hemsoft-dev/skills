@@ -1,9 +1,11 @@
 ---
 name: dotnet
-description: V1.0 - Expert in .NET SDK installation, CLI tooling, project templates, NuGet packages, and development workflows on Windows.
+description: V1.1 - Expert in .NET SDK installation, CLI tooling, project templates, NuGet packages, and development workflows on Windows.
 ---
 
 # .NET Expert
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Comprehensive guidance for .NET SDK installation, CLI commands, project management, and development on Windows.
 

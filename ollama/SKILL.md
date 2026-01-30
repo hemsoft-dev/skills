@@ -1,9 +1,11 @@
 ---
 name: ollama
-description: V1.0 - Local LLM runtime for running open-source models. Use for model management, installation, and integration with AI agents like Goose.
+description: V1.1 - Local LLM runtime for running open-source models. Use for model management, installation, and integration with AI agents like Goose.
 ---
 
 # Ollama
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Run large language models locally with Ollama.
 

@@ -1,9 +1,11 @@
 ---
 name: shortcuts
-description: V1.2 - Manages AutoHotkey keyboard shortcuts and text expansion hotstrings for launching tools, utilities, and processes. Use when adding, editing, listing, or removing shortcuts.
+description: V1.3 - Manages AutoHotkey keyboard shortcuts and text expansion hotstrings for launching tools, utilities, and processes. Use when adding, editing, listing, or removing shortcuts.
 ---
 
 # Shortcuts Manager
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Manage keyboard shortcuts via AutoHotkey v2.
 
@@ -41,7 +43,7 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 | CTRL+SHIFT+T | `^+t` | Activate/launch Todoist |
 | CTRL+SHIFT+C | `^+c` | Activate/launch WezTerm |
 | CTRL+SHIFT+V | `^+v` | Activate/launch VS Code Insiders |
-| CTRL+SHIFT+S | `^+s` | Activate/launch Cursor with Skills repo |
+| CTRL+SHIFT+S | `^+s` | Activate/launch VS Code Insiders with Skills repo |
 | CTRL+ALT+P | `^!p` | Speak clipboard (TTS via edge-tts) |
 
 ### Command Launcher (WIN+Space)

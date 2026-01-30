@@ -1,6 +1,6 @@
 ---
 name: claude-code
-description: V1.0 - Expert in Claude Code CLI tool by Anthropic. Use when working with Claude Code, managing installations, updates, configurations, or executing Claude-powered development workflows.
+description: V1.1 - Expert in Claude Code CLI tool by Anthropic. Use when working with Claude Code, managing installations, updates, configurations, or executing Claude-powered development workflows.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -37,6 +37,8 @@ hooks:
 ---
 
 # Claude Code
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Expert in Claude Code CLI tool by Anthropic for AI-powered development workflows.
 

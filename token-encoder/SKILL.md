@@ -1,9 +1,11 @@
 ---
 name: token-encoder
-description: V1.1 - When you, the LLM, need to transfer information in an optimized way, use Token-Oriented Object Notation (TOON) to reduce token usage by 30-60% compared to JSON.
+description: V1.2 - When you, the LLM, need to transfer information in an optimized way, use Token-Oriented Object Notation (TOON) to reduce token usage by 30-60% compared to JSON.
 ---
 
 # Token Encoder (TOON)
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Token-Oriented Object Notation (TOON) is a compact, human-readable encoding of the JSON data model designed specifically for one-way token optimization in LLM prompts. It combines YAML-like indentation for objects with CSV-style tabular layouts for uniform arrays to achieve maximum density.
 

@@ -1,9 +1,11 @@
 ---
 name: todoist
-description: V1.3 - Interact with Todoist API via PowerShell scripts to manage tasks, projects, labels, and track task updates/comments.
+description: V1.4 - Interact with Todoist API via PowerShell scripts to manage tasks, projects, labels, and track task updates/comments.
 ---
 
 # Todoist
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Manage Todoist tasks, projects, and labels via REST API v2.
 

@@ -1,9 +1,11 @@
 ---
 name: shopping
-description: V1.4 - Tracks shopping orders, purchases, wishlists, price monitoring, and automated re-ordering via Playwright MCP browser automation with persistent conversation history.
+description: V1.5 - Tracks shopping orders, purchases, wishlists, price monitoring, and automated re-ordering via Playwright MCP browser automation with persistent conversation history.
 ---
 
 # Shopping Tracker
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Track all shopping-related activities including orders, purchases, returns, wishlists, price monitoring, and automated re-ordering.
 

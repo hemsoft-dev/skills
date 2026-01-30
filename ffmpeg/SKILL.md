@@ -1,9 +1,11 @@
 ---
 name: ffmpeg
-description: V1.2 - Universal media processing toolkit with Appender workflow for concatenating video segments with smooth transitions. Use for transcoding, filtering, streaming, and format conversion.
+description: V1.3 - Universal media processing toolkit with Appender workflow for concatenating video segments with smooth transitions. Use for transcoding, filtering, streaming, and format conversion.
 ---
 
 # FFmpeg
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 FFmpeg is a universal media converter that reads, filters, and transcodes virtually any multimedia format.
 

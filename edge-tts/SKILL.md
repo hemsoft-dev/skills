@@ -1,6 +1,6 @@
 ---
 name: edge-tts
-description: V1.0 - Expert in edge-tts CLI tool and Python module for Microsoft Edge's text-to-speech service. Use for generating speech audio files, subtitles, voice selection, rate/volume/pitch adjustments, and Python integration.
+description: V1.1 - Expert in edge-tts CLI tool and Python module for Microsoft Edge's text-to-speech service. Use for generating speech audio files, subtitles, voice selection, rate/volume/pitch adjustments, and Python integration.
 dependencies: edge-tts>=7.2.7
 compatibility: Requires Python 3.7+ and network access. Windows, macOS, Linux supported.
 hooks:
@@ -39,6 +39,8 @@ hooks:
 ---
 
 # Edge-TTS
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Expert in Microsoft Edge's text-to-speech service via the `edge-tts` CLI tool and Python module. Provides high-quality neural TTS without requiring Microsoft Edge, Windows, or API keys.
 

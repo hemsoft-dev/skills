@@ -1,9 +1,11 @@
 ---
 name: 7d2d
-description: V1.5 - 7 Days to Die V2.5 mod development, compatibility, and best practices for XML, DLL, and Harmony mods.
+description: V1.6 - 7 Days to Die V2.5 mod development, compatibility, and best practices for XML, DLL, and Harmony mods.
 ---
 
 # 7 Days to Die V2.5 Mod Development
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Use this skill for creating, updating, or troubleshooting mods for 7 Days to Die version 2.5 (PC/Steam).
 

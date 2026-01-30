@@ -1,9 +1,11 @@
 ---
 name: pokemon
-description: V1.0 - Expert in all things Pokemon including games, trading cards, anime, characters, abilities, strategies, and lore. Use when discussing Pokemon topics or needing Pokemon-related knowledge.
+description: V1.1 - Expert in all things Pokemon including games, trading cards, anime, characters, abilities, strategies, and lore. Use when discussing Pokemon topics or needing Pokemon-related knowledge.
 ---
 
 # Pokemon Expert
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Expert knowledge resource for all Pokemon-related topics across games, trading card game, anime, characters, and franchise history.
 

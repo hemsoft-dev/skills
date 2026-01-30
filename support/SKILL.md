@@ -1,9 +1,11 @@
 ---
 name: support
-description: V1.0 - Tracks support incidents with read-only discovery and troubleshooting documentation.
+description: V1.1 - Tracks support incidents with read-only discovery and troubleshooting documentation.
 ---
 
 # Support Incident Tracker
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Track and document support incidents with structured markdown files.
 

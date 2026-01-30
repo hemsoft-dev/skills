@@ -1,9 +1,11 @@
 ---
 name: vercel
-description: V1.2 - Vercel CLI for deploying, managing, and developing Next.js and frontend applications on Vercel's platform.
+description: V1.3 - Vercel CLI for deploying, managing, and developing Next.js and frontend applications on Vercel's platform.
 ---
 
 # Vercel CLI
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Command-line interface for deploying and managing applications on Vercel.
 

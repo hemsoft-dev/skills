@@ -1,10 +1,12 @@
 ---
 name: slack
-description: V2.3 - Slack Web API for messaging, channels, search, and files. Primary entry point with links to specialized sub-skills for search, files, and advanced features.
+description: V2.4 - Slack Web API for messaging, channels, search, and files. Primary entry point with links to specialized sub-skills for search, files, and advanced features.
 compatibility: Requires SLACK_TOKEN and SLACK_USER_TOKEN environment variables, PowerShell, network access
 ---
 
 # Slack Web API
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 **Primary entry point** for Slack API operations. For specialized functionality, see the sub-skills below.
 

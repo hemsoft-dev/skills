@@ -1,9 +1,11 @@
 ---
 name: how-to-write-tests
-description: V1.1 - Expert guidance for writing perfect unit tests with Vitest and Testing Library, covering patterns, mocking, coverage, and common pitfalls.
+description: V1.2 - Expert guidance for writing perfect unit tests with Vitest and Testing Library, covering patterns, mocking, coverage, and common pitfalls.
 ---
 
 # How to Write Perfect Unit Tests
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 ## ALWAYS: Log This Interaction
 

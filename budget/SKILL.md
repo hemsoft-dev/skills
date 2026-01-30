@@ -1,6 +1,6 @@
 ---
 name: budget
-description: V1.3 - Extracts and reports on bank/credit account statements with confirmed tracking for Subscriptions and Utility Bills.
+description: V1.4 - Extracts and reports on bank/credit account statements with confirmed tracking for Subscriptions and Utility Bills.
 triggers:
   - subscriptions
   - subs
@@ -14,6 +14,8 @@ triggers:
 ---
 
 # Budget Statement Analyzer
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Extract transactions from bank statement PDFs, normalize with AI-assigned categories, and generate budget reports.
 

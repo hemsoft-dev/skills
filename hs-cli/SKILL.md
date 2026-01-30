@@ -1,6 +1,6 @@
 ---
 name: hs-cli
-description: HemSoft CLI - A framework for creating high fidelity CLI tools.
+description: V1.1 - HemSoft CLI - A framework for creating high fidelity CLI tools.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -37,6 +37,8 @@ hooks:
 ---
 
 # HemSoft CLI Expert
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 HemSoft CLI - A framework for creating high fidelity CLI tools.
 

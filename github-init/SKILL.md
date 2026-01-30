@@ -1,9 +1,11 @@
 ---
 name: github-init
-description: V1.1 - Initializes a new GitHub repository and local git history for a project using a deterministic PowerShell script.
+description: V1.2 - Initializes a new GitHub repository and local git history for a project using a deterministic PowerShell script.
 ---
 
 # GitHub Init
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Use this skill as the absolute first step in any project scaffolding to ensure history is tracked from the start. This skill uses a PowerShell script to ensure a deterministic outcome.
 

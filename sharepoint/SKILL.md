@@ -1,10 +1,12 @@
 ---
 name: sharepoint
-description: V1.1 - Access and manage SharePoint sites, lists, libraries, and files using PnP PowerShell. Supports Relias corporate SharePoint and other SharePoint Online sites. Includes streamlined scripts for AI Chapter document access.
+description: V1.2 - Access and manage SharePoint sites, lists, libraries, and files using PnP PowerShell. Supports Relias corporate SharePoint and other SharePoint Online sites. Includes streamlined scripts for AI Chapter document access.
 dependencies: PnP.PowerShell>=3.1.0
 ---
 
 # SharePoint
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Access and manage SharePoint sites, lists, libraries, and files using PnP PowerShell. Supports Relias corporate SharePoint and other SharePoint Online sites.
 

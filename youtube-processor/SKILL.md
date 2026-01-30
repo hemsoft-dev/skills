@@ -1,9 +1,11 @@
 ---
 name: youtube-processor
-description: V1.1 - Processes a YouTube URL by extracting metadata, downloading video, generating transcript, summary, audio summary, and HTML report.
+description: V1.2 - Processes a YouTube URL by extracting metadata, downloading video, generating transcript, summary, audio summary, and HTML report.
 ---
 
 # YouTube Processor
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 A comprehensive skill for processing YouTube videos into high-quality summaries and reports. This skill uses **Gemini 3 Flash Preview** for AI tasks and **PowerShell** for orchestration.
 

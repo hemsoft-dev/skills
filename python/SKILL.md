@@ -1,9 +1,11 @@
 ---
 name: python
-description: V1.1 - Expert in Python installation, virtual environments, package management, and troubleshooting on Windows. Skills must use isolated virtual environments - never install Python packages globally.
+description: V1.2 - Expert in Python installation, virtual environments, package management, and troubleshooting on Windows. Skills must use isolated virtual environments - never install Python packages globally.
 ---
 
 # Python Expert
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Expert guidance for Python installation, virtual environments, and development on Windows.
 

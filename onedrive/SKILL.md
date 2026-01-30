@@ -1,9 +1,11 @@
 ---
 name: onedrive
-description: V1.0 - Manages OneDrive folder locations, eliminates redundant sync folders, and ensures consistent syncing to a single primary location.
+description: V1.1 - Manages OneDrive folder locations, eliminates redundant sync folders, and ensures consistent syncing to a single primary location.
 ---
 
 # OneDrive Manager
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Expert in managing OneDrive installation, detecting redundant folders, and ensuring consistent syncing to your primary location.
 

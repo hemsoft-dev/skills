@@ -1,11 +1,11 @@
 ---
 name: qwen3-tts
-description: V1.0 - Expert in Qwen3-TTS text-to-speech model setup, PyTorch SDPA optimization for RTX 5090, and troubleshooting flash-attn alternatives on Windows.
+description: V1.1 - Expert in Qwen3-TTS text-to-speech model setup, PyTorch SDPA optimization for RTX 5090, and troubleshooting flash-attn alternatives on Windows.
 license: Apache-2.0
 compatibility: Requires Python 3.10-3.14, PyTorch 2.10.0+cu128, CUDA 12.8+, Windows 10+, NVIDIA GPU with CUDA support
 metadata:
   author: OpenCode
-  version: "1.0"
+  version: "1.1"
   conda_env: qwen3-tts
   pytorch_version: 2.10.0+cu128
 dependencies: python>=3.10, torch==2.10.0+cu128, torchaudio, qwen-tts>=0.0.5, accelerate, einops, gradio, librosa, onnxruntime, soundfile, sox, transformers
@@ -46,6 +46,8 @@ hooks:
 ---
 
 # Qwen3-TTS
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Expert knowledge for Qwen3-TTS text-to-speech model setup, PyTorch optimization, and troubleshooting on Windows with NVIDIA GPUs.
 

@@ -1,9 +1,11 @@
 ---
 name: teams
-description: V1.0 - Expert in Microsoft Teams API via Microsoft Graph for reading chats, sending messages, checking presence, and managing teams with delegated user tokens.
+description: V1.1 - Expert in Microsoft Teams API via Microsoft Graph for reading chats, sending messages, checking presence, and managing teams with delegated user tokens.
 ---
 
 # Microsoft Teams
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Interact with Microsoft Teams via Microsoft Graph API using delegated user tokens.
 

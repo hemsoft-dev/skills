@@ -1,9 +1,11 @@
 ---
 name: mail
-description: V1.1 - Query emails across Outlook, Gmail, and IMAP accounts. Supports today, unread, recent, search, and date-filtered queries.
+description: V1.2 - Query emails across Outlook, Gmail, and IMAP accounts. Supports today, unread, recent, search, and date-filtered queries.
 ---
 
 # Mail Skill
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Unified multi-account email access. Output uses TOON format (60-70% token savings). The encoding logic is powered by the [token-encoder](../token-encoder/SKILL.md) skill.
 

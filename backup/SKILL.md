@@ -1,9 +1,11 @@
 ---
 name: backup
-description: V1.0 - Backs up user profile folders, dev caches, and configurations to F:\OneDrive\User-Backup with incremental and full backup options.
+description: V1.1 - Backs up user profile folders, dev caches, and configurations to F:\OneDrive\User-Backup with incremental and full backup options.
 ---
 
 # Backup
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Back up important user data from `C:\Users\franz` to `F:\OneDrive\User-Backup`.
 

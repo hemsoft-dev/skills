@@ -1,6 +1,6 @@
 ---
 name: recipes
-description: V1.0 - Expert in recipes and recipe management. Stores and manages personal recipe collection with comprehensive metadata, beautiful markdown formatting, and image support. Use when the user wants to add, view, search, or manage recipes.
+description: V1.1 - Expert in recipes and recipe management. Stores and manages personal recipe collection with comprehensive metadata, beautiful markdown formatting, and image support. Use when the user wants to add, view, search, or manage recipes.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -37,6 +37,8 @@ hooks:
 ---
 
 # Recipes
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Expert in recipes and recipe management. Manages a personal recipe collection with comprehensive metadata, beautiful
 markdown formatting, and image support.

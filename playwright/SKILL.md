@@ -1,6 +1,6 @@
 ---
 name: playwright
-description: V1.2 - Expert in browser automation using Playwright MCP tools for web
+description: V1.3 - Expert in browser automation using Playwright MCP tools for web
   scraping, testing, and task automation. Optimized for context efficiency with headless
   mode, minimal screenshots, and snapshot-first workflows.
 compatibility: Requires Playwright MCP server (mcp_microsoft_pla_browser_* tools),
@@ -11,6 +11,8 @@ metadata:
 ---
 
 # Playwright Browser Automation Expert
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Executes browser automation tasks using the Playwright MCP server. Handles navigation, interaction, data extraction, and complex multi-step web workflows.
 

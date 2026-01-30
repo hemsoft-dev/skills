@@ -1,9 +1,11 @@
 ---
 name: llm-recommender
-description: V1.1 - Helps compare and recommend LLMs based on context limits, pricing, speed, and benchmark performance.
+description: V1.2 - Helps compare and recommend LLMs based on context limits, pricing, speed, and benchmark performance.
 ---
 
 # LLM Recommender
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Reference `LLMs.md` in this directory for model specifications. Help users select the best LLM for their use case.
 

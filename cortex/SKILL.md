@@ -5,6 +5,8 @@ description: Read-only access to Cortex Internal Developer Portal for querying t
 
 # Cortex Internal Developer Portal
 
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
+
 V1.5 - Read-only access to query teams, services, scorecards, and entities in Cortex IDP.
 
 **Note:** This deployed skill is read-only. Create/update operations are not available.

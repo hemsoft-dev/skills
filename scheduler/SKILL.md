@@ -1,9 +1,11 @@
 ---
 name: scheduler
-description: V1.1 - Expert in managing Windows Scheduled Tasks using PowerShell cmdlets (Get, Register, Unregister, Start, Stop).
+description: V1.2 - Expert in managing Windows Scheduled Tasks using PowerShell cmdlets (Get, Register, Unregister, Start, Stop).
 ---
 
 # Scheduler
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Manage Windows Task Scheduler tasks using the `ScheduledTasks` PowerShell module. This skill provides expertise in listing, creating, modifying, and removing scheduled tasks on a Windows system.
 

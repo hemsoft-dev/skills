@@ -1,9 +1,11 @@
 ---
 name: windows-optimizer
-description: V1.2 - Expert on Windows performance optimization, diagnostics, and troubleshooting for CPU, memory, disk, GPU, handle leaks, and startup management.
+description: V1.3 - Expert on Windows performance optimization, diagnostics, and troubleshooting for CPU, memory, disk, GPU, handle leaks, and startup management.
 ---
 
 # Windows Optimizer
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Diagnose and optimize Windows performance issues including slowdowns, stuttering, memory pressure, disk space, and resource leaks.
 

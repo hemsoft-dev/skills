@@ -1,6 +1,6 @@
 ---
 name: openrouter
-description: V1.0 - Check OpenRouter credit balance and API usage via the /api/v1/credits endpoint
+description: V1.1 - Check OpenRouter credit balance and API usage via the /api/v1/credits endpoint
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -37,6 +37,8 @@ hooks:
 ---
 
 # OpenRouter
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Check OpenRouter credit balance and API usage statistics.
 

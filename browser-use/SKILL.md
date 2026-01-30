@@ -1,6 +1,6 @@
 ---
 name: browser-use
-description: V1.4 - Expert in browser-use Python library for AI-powered browser automation. Use when you need to automate web tasks, fill forms, scrape websites, interact with web pages, or control browsers programmatically with AI agents. Automatically executes browser-use tasks via PowerShell scripts - no code required from user. Uses isolated virtual environment in skill folder - no global Python packages. Supports GEMINI_API_KEY mapping for Google provider compatibility.
+description: V1.5 - Expert in browser-use Python library for AI-powered browser automation. Use when you need to automate web tasks, fill forms, scrape websites, interact with web pages, or control browsers programmatically with AI agents. Automatically executes browser-use tasks via PowerShell scripts - no code required from user. Uses isolated virtual environment in skill folder - no global Python packages. Supports GEMINI_API_KEY mapping for Google provider compatibility.
 dependencies: python>=3.11, browser-use, playwright
 hooks:
   PostToolUse:
@@ -38,6 +38,8 @@ hooks:
 ---
 
 # Browser-Use
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Browser-use is a Python library that enables AI agents to control browsers for automation tasks. It uses Playwright under the hood and supports multiple LLM providers.
 

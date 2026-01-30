@@ -1,6 +1,6 @@
 ---
 name: test-hook-skill
-description: V1.0 - Test skill that demonstrates hook-based history logging instead of manual instructions.
+description: V1.1 - Test skill that demonstrates hook-based history logging instead of manual instructions.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -37,6 +37,8 @@ hooks:
 ---
 
 # Test Hook Skill
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 A simple test skill to demonstrate automated history logging via hooks defined in SKILL.md frontmatter.
 

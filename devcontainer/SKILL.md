@@ -1,6 +1,6 @@
 ---
 name: devcontainer
-description: V1.0 - Expert in devcontainer.json configuration, features, lifecycle management, best practices, and troubleshooting for building consistent development environments across all platforms.
+description: V1.1 - Expert in devcontainer.json configuration, features, lifecycle management, best practices, and troubleshooting for building consistent development environments across all platforms.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -37,6 +37,8 @@ hooks:
 ---
 
 # Dev Container Expert
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Configure, build, and troubleshoot development containers for consistent environments across all platforms.
 

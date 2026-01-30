@@ -1,9 +1,11 @@
 ---
 name: one-on-one
-description: V1.0 - Expert in managing one-on-one meetings including agendas, note-taking, action items, and follow-ups.
+description: V1.1 - Expert in managing one-on-one meetings including agendas, note-taking, action items, and follow-ups.
 ---
 
 # One-on-One
+
+**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Manage one-on-one meetings with structured note-taking, agenda tracking, and action item follow-up.
 
