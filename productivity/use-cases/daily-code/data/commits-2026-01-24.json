@@ -1,0 +1,69 @@
+{
+  "collectionTime": "2026-01-30T14:33:00.6314321-05:00",
+  "queryStartTime": "2026-01-24T00:00:00.0000000",
+  "summary": {
+    "totalNetLOC": 13400.0,
+    "totalAdditions": 13789.0,
+    "totalDeletions": 389.0,
+    "commitsByRepository": [
+      {
+        "deletions": 382.0,
+        "linesAffected": 7228.0,
+        "netLOC": 6464.0,
+        "additions": 6846.0,
+        "commits": 1,
+        "repository": "github-cli-sdk-demo"
+      },
+      {
+        "deletions": 7.0,
+        "linesAffected": 6950.0,
+        "netLOC": 6936.0,
+        "additions": 6943.0,
+        "commits": 1,
+        "repository": "hs-cli-template"
+      }
+    ],
+    "totalLinesAffected": 14178.0
+  },
+  "queryStartTimeLocal": "2026-01-24 00:00:00",
+  "commits": [
+    {
+      "timestamp": "2026-01-24T16:14:00.0000000-05:00",
+      "linesAffected": 7228,
+      "netLOC": 6464,
+      "repositorySource": "personal",
+      "subject": "docs: comprehensive update with ASCII logo and new features",
+      "author": "Franz Hemmer",
+      "deletions": 382,
+      "repositoryName": "github-cli-sdk-demo",
+      "gitignoreModified": false,
+      "hash": "aee6545",
+      "date": "2026-01-24",
+      "time": "16:14:00",
+      "additions": 6846,
+      "fullHash": "aee65452a898e4793d72e41624a8aeb4882186df"
+    },
+    {
+      "timestamp": "2026-01-24T23:42:18.0000000-05:00",
+      "linesAffected": 6950,
+      "netLOC": 6936,
+      "repositorySource": "personal",
+      "subject": "chore: update package-lock.json - remove peer dependencies flags",
+      "author": "Franz Hemmer",
+      "deletions": 7,
+      "repositoryName": "hs-cli-template",
+      "gitignoreModified": false,
+      "hash": "e4086ba",
+      "date": "2026-01-24",
+      "time": "23:42:18",
+      "additions": 6943,
+      "fullHash": "e4086ba91c34d3841cb02d99a4e70bcbb3f9f257"
+    }
+  ],
+  "suspiciousCommitsFound": 0,
+  "repositoriesScanned": 55,
+  "suspiciousCommits": [],
+  "commitsFound": 2,
+  "queryEndTime": "2026-01-24T23:59:59.0000000",
+  "queryEndTimeLocal": "2026-01-24 23:59:59"
+}

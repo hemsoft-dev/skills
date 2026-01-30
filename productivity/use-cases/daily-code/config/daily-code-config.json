@@ -301,7 +301,7 @@
       "name": "VectorStoreSearch-POC"
     },
     {
-      "source": "additional",
+      "source": "skills",
       "path": "c:\\Users\\User\\.claude\\skills",
       "name": "skills"
     }

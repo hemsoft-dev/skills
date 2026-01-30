@@ -1,83 +1,117 @@
 {
-  "suspiciousCommitsFound": 0,
-  "commits": [
-    {
-      "subject": "Show banner on all help and error output",
-      "netLOC": 324,
-      "repositoryName": "hs-cli-confluence-search",
-      "timestamp": "2026-01-30T03:17:24.0000000-05:00",
-      "time": "03:17:24",
-      "author": "Franz Hemmer",
-      "fullHash": "7ef3ce36d668150d3eea24b8d6f0e75d6cc09b2c",
-      "repositorySource": "personal",
-      "date": "2026-01-30",
-      "deletions": 100,
-      "hash": "7ef3ce3",
-      "additions": 424
-    },
-    {
-      "subject": "feat(scripts): enhance container app scripts with deployment time and image verification",
-      "netLOC": 306,
-      "repositoryName": "relias-assistant",
-      "timestamp": "2026-01-30T01:58:25.0000000-05:00",
-      "time": "01:58:25",
-      "author": "Franz Hemmer",
-      "fullHash": "2c5a85994dce06d2296c346a7e9f185020c3e9ea",
-      "repositorySource": "work",
-      "date": "2026-01-30",
-      "deletions": 9,
-      "hash": "2c5a859",
-      "additions": 315
-    },
-    {
-      "subject": "feat(logs): enable tracking of logs skill",
-      "netLOC": -9104,
-      "repositoryName": "skills",
-      "timestamp": "2026-01-30T13:53:41.0000000-05:00",
-      "time": "13:53:41",
-      "author": "Franz Hemmer",
-      "fullHash": "d2e1d8c94fc1070db7e7a8a9a4964052595be3ac",
-      "repositorySource": "additional",
-      "date": "2026-01-30",
-      "deletions": 14008,
-      "hash": "d2e1d8c",
-      "additions": 4904
-    }
-  ],
-  "queryStartTime": "2026-01-30T00:00:00.0000000-05:00",
-  "queryStartTimeLocal": "2026-01-30 00:00:00",
-  "commitsFound": 3,
+  "collectionTime": "2026-01-30T14:34:19.0757823-05:00",
+  "queryStartTime": "2026-01-30T00:00:00.0000000",
   "summary": {
-    "totalDeletions": 14117.0,
-    "totalNetLOC": -8474.0,
-    "totalAdditions": 5643.0,
+    "totalNetLOC": -7920.0,
+    "totalAdditions": 7825.0,
+    "totalDeletions": 15745.0,
     "commitsByRepository": [
       {
-        "repository": "hs-cli-confluence-search",
-        "additions": 424.0,
-        "netLOC": 324.0,
         "deletions": 100.0,
-        "commits": 1
+        "linesAffected": 524.0,
+        "netLOC": 324.0,
+        "additions": 424.0,
+        "commits": 1,
+        "repository": "hs-cli-confluence-search"
       },
       {
-        "repository": "relias-assistant",
-        "additions": 315.0,
-        "netLOC": 306.0,
+        "deletions": 1527.0,
+        "linesAffected": 3481.0,
+        "netLOC": 427.0,
+        "additions": 1954.0,
+        "commits": 1,
+        "repository": "hs-conductor"
+      },
+      {
         "deletions": 9.0,
-        "commits": 1
+        "linesAffected": 324.0,
+        "netLOC": 306.0,
+        "additions": 315.0,
+        "commits": 1,
+        "repository": "relias-assistant"
       },
       {
-        "repository": "skills",
-        "additions": 4904.0,
-        "netLOC": -9104.0,
-        "deletions": 14008.0,
-        "commits": 1
+        "deletions": 14109.0,
+        "linesAffected": 19241.0,
+        "netLOC": -8977.0,
+        "additions": 5132.0,
+        "commits": 1,
+        "repository": "skills"
       }
-    ]
+    ],
+    "totalLinesAffected": 23570.0
   },
-  "queryEndTime": "2026-01-30T23:59:59.0000000-05:00",
-  "collectionTime": "2026-01-30T14:00:02.3541975-05:00",
-  "queryEndTimeLocal": "2026-01-30 23:59:59",
+  "queryStartTimeLocal": "2026-01-30 00:00:00",
+  "commits": [
+    {
+      "timestamp": "2026-01-30T03:17:24.0000000-05:00",
+      "linesAffected": 524,
+      "netLOC": 324,
+      "repositorySource": "personal",
+      "subject": "Show banner on all help and error output",
+      "author": "Franz Hemmer",
+      "deletions": 100,
+      "repositoryName": "hs-cli-confluence-search",
+      "gitignoreModified": false,
+      "hash": "7ef3ce3",
+      "date": "2026-01-30",
+      "time": "03:17:24",
+      "additions": 424,
+      "fullHash": "7ef3ce36d668150d3eea24b8d6f0e75d6cc09b2c"
+    },
+    {
+      "timestamp": "2026-01-30T14:10:02.0000000-05:00",
+      "linesAffected": 3481,
+      "netLOC": 427,
+      "repositorySource": "personal",
+      "subject": "feat: Add pre-commit hooks with Husky, ESLint, Prettier, and Markdownlint",
+      "author": "Franz Hemmer",
+      "deletions": 1527,
+      "repositoryName": "hs-conductor",
+      "gitignoreModified": false,
+      "hash": "5522d2d",
+      "date": "2026-01-30",
+      "time": "14:10:02",
+      "additions": 1954,
+      "fullHash": "5522d2d212940bd7b05eac982b3a207941db2975"
+    },
+    {
+      "timestamp": "2026-01-30T01:58:25.0000000-05:00",
+      "linesAffected": 324,
+      "netLOC": 306,
+      "repositorySource": "work",
+      "subject": "feat(scripts): enhance container app scripts with deployment time and image verification",
+      "author": "Franz Hemmer",
+      "deletions": 9,
+      "repositoryName": "relias-assistant",
+      "gitignoreModified": false,
+      "hash": "2c5a859",
+      "date": "2026-01-30",
+      "time": "01:58:25",
+      "additions": 315,
+      "fullHash": "2c5a85994dce06d2296c346a7e9f185020c3e9ea"
+    },
+    {
+      "timestamp": "2026-01-30T14:00:55.0000000-05:00",
+      "linesAffected": 19241,
+      "netLOC": -8977,
+      "repositorySource": "skills",
+      "subject": "docs: log meaningful prompt - refactor productivity alerts to centralized alerts skill",
+      "author": "Franz Hemmer",
+      "deletions": 14109,
+      "repositoryName": "skills",
+      "gitignoreModified": false,
+      "hash": "612cb67",
+      "date": "2026-01-30",
+      "time": "14:00:55",
+      "additions": 5132,
+      "fullHash": "612cb6731f72dde7a8b6353fa1a2705dcebed0ae"
+    }
+  ],
+  "suspiciousCommitsFound": 0,
   "repositoriesScanned": 55,
-  "suspiciousCommits": []
+  "suspiciousCommits": [],
+  "commitsFound": 4,
+  "queryEndTime": "2026-01-30T23:59:59.0000000",
+  "queryEndTimeLocal": "2026-01-30 23:59:59"
 }

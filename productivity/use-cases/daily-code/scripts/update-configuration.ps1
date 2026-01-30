@@ -89,7 +89,7 @@ foreach ($repoPath in $AdditionalRepositories) {
             $repoInfo = @{
                 name = Split-Path -Leaf $repoPath
                 path = $repoPath
-                source = "additional"
+                source = "skills"
             }
             $repositories += $repoInfo
             Write-Information "Added additional repository: $(Split-Path -Leaf $repoPath)" -InformationAction Continue

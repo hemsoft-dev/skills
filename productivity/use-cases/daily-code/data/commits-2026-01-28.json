@@ -1,0 +1,69 @@
+{
+  "collectionTime": "2026-01-30T14:34:15.0642892-05:00",
+  "queryStartTime": "2026-01-28T00:00:00.0000000",
+  "summary": {
+    "totalNetLOC": 3255.0,
+    "totalAdditions": 10277.0,
+    "totalDeletions": 7022.0,
+    "commitsByRepository": [
+      {
+        "deletions": 4136.0,
+        "linesAffected": 11941.0,
+        "netLOC": 3669.0,
+        "additions": 7805.0,
+        "commits": 1,
+        "repository": "hs-cli-confluence-search"
+      },
+      {
+        "deletions": 2886.0,
+        "linesAffected": 5358.0,
+        "netLOC": -414.0,
+        "additions": 2472.0,
+        "commits": 1,
+        "repository": "relias-assistant"
+      }
+    ],
+    "totalLinesAffected": 17299.0
+  },
+  "queryStartTimeLocal": "2026-01-28 00:00:00",
+  "commits": [
+    {
+      "timestamp": "2026-01-28T06:28:49.0000000-05:00",
+      "linesAffected": 11941,
+      "netLOC": 3669,
+      "repositorySource": "personal",
+      "subject": "Add beautiful HemSoft banner with gradient styling and Confluence theming",
+      "author": "Franz Hemmer",
+      "deletions": 4136,
+      "repositoryName": "hs-cli-confluence-search",
+      "gitignoreModified": false,
+      "hash": "be7bf0f",
+      "date": "2026-01-28",
+      "time": "06:28:49",
+      "additions": 7805,
+      "fullHash": "be7bf0fe78fbc3e8dbdabfb638af1029af378964"
+    },
+    {
+      "timestamp": "2026-01-28T15:35:40.0000000-05:00",
+      "linesAffected": 5358,
+      "netLOC": -414,
+      "repositorySource": "work",
+      "subject": "feat: Add progressive phrase splitting + semantic re-ranking for Confluence search",
+      "author": "Franz Hemmer",
+      "deletions": 2886,
+      "repositoryName": "relias-assistant",
+      "gitignoreModified": false,
+      "hash": "085c95f",
+      "date": "2026-01-28",
+      "time": "15:35:40",
+      "additions": 2472,
+      "fullHash": "085c95f5cae3ac9020cf7946548a9ebc19103d16"
+    }
+  ],
+  "suspiciousCommitsFound": 0,
+  "repositoriesScanned": 55,
+  "suspiciousCommits": [],
+  "commitsFound": 2,
+  "queryEndTime": "2026-01-28T23:59:59.0000000",
+  "queryEndTimeLocal": "2026-01-28 23:59:59"
+}

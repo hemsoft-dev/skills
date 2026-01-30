@@ -48,12 +48,76 @@ $KnownAuthors = @(
     @{ pattern = "Relias"; source = "work1" }
 )
 
+# Repository-specific exclusion patterns (path-based, not extension-based)
+# Only applied to specific repositories
+$RepositoryExclusions = @{
+    "skills" = @(
+        "me/gpt-export/*",        # ChatGPT exports
+        "**/*.log",               # Log files
+        "**/*.tmp",               # Temporary files
+        "**/.vscode/*",           # VS Code cache
+        "**/.idea/*"              # IDE cache
+    )
+}
+
 # Function to check if author matches known patterns
 function Test-KnownAuthor {
     param([string]$AuthorName)
     
     foreach ($known in $KnownAuthors) {
         if ($AuthorName -like "*$($known.pattern)*" -or $AuthorName -eq $known.pattern) {
+            return $true
+        }
+    }
+    return $false
+}
+
+# Function to check if file should be excluded for a given repository
+function Test-FileExcluded {
+    param(
+        [string]$FilePath,
+        [string]$RepositoryName
+    )
+    
+    # Check if repository has exclusion rules
+    if (-not $RepositoryExclusions.ContainsKey($RepositoryName)) {
+        return $false
+    }
+    
+    $patterns = $RepositoryExclusions[$RepositoryName]
+    $filePath = $FilePath -replace '\\', '/'
+    
+    foreach ($pattern in $patterns) {
+        $pattern = $pattern -replace '\\', '/'
+        
+        # Simple glob pattern matching using -like operator
+        # Convert glob patterns to -like format
+        if ($pattern -eq "**/*.log" -and $filePath -match '\.log$') {
+            return $true
+        }
+        elseif ($pattern -eq "**/*.tmp" -and $filePath -match '\.tmp$') {
+            return $true
+        }
+        elseif ($pattern -match '^\*\*/') {
+            # Pattern like **/.vscode/* or **/.idea/*
+            $folder = $pattern -replace '\*\*/', ''
+            if ($filePath -like "*/$folder*") {
+                return $true
+            }
+        }
+        elseif ($filePath -like $pattern) {
+            return $true
+        }
+    }
+    return $false
+}
+
+# Function to check if a commit modifies .gitignore files
+function Test-GitignoreModified {
+    param([string[]]$FilePaths)
+    
+    foreach ($file in $FilePaths) {
+        if ($file -match '\.gitignore$') {
             return $true
         }
     }
@@ -214,25 +278,38 @@ foreach ($repo in $config.repositories) {
                     # Process numstat lines (remaining lines after first 4)
                     $additions = 0
                     $deletions = 0
+                    $filesProcessed = @()
                     
                     for ($i = 4; $i -lt $lines.Count; $i++) {
                         $statLine = $lines[$i]
                         
                         # Split on tab
                         $statParts = $statLine -split "`t"
-                        if ($statParts.Count -ge 2) {
+                        if ($statParts.Count -ge 3) {
                             $add = $statParts[0]
                             $del = $statParts[1]
+                            $filepath = $statParts[2]
                             
                             # Skip binary files (marked with -)
                             if ($add -ne "-" -and $del -ne "-" -and $add -match '^\d+$' -and $del -match '^\d+$') {
+                                # Check if file should be excluded for this repository
+                                if (Test-FileExcluded -FilePath $filepath -RepositoryName $repo.name) {
+                                    Write-Information "    [EXCLUDED] $filepath" -InformationAction Continue
+                                    continue
+                                }
+                                
                                 $additions += [int]$add
                                 $deletions += [int]$del
+                                $filesProcessed += $filepath
                             }
                         }
                     }
                     
+                    # Check if .gitignore was modified
+                    $gitignoreModified = Test-GitignoreModified -FilePaths $filesProcessed
+                    
                     # Create commit object
+                    $linesAffected = $additions + $deletions
                     $commitObj = @{
                         repositoryName = $repo.name
                         repositorySource = $repo.source
@@ -245,7 +322,9 @@ foreach ($repo in $config.repositories) {
                         subject = $subject
                         additions = $additions
                         deletions = $deletions
+                        linesAffected = $linesAffected
                         netLOC = $additions - $deletions
+                        gitignoreModified = $gitignoreModified
                     }
                     $allCommits += $commitObj
                     $commitCount++
@@ -282,6 +361,7 @@ $outputData = @{
     summary = @{
         totalAdditions = ($allCommits | Measure-Object -Property additions -Sum).Sum
         totalDeletions = ($allCommits | Measure-Object -Property deletions -Sum).Sum
+        totalLinesAffected = ($allCommits | Measure-Object -Property linesAffected -Sum).Sum
         totalNetLOC = ($allCommits | Measure-Object -Property netLOC -Sum).Sum
         commitsByRepository = @()
     }
@@ -295,6 +375,7 @@ foreach ($group in $repoGroups) {
         commits = $group.Count
         additions = ($group.Group | Measure-Object -Property additions -Sum).Sum
         deletions = ($group.Group | Measure-Object -Property deletions -Sum).Sum
+        linesAffected = ($group.Group | Measure-Object -Property linesAffected -Sum).Sum
         netLOC = ($group.Group | Measure-Object -Property netLOC -Sum).Sum
     }
     $outputData.summary.commitsByRepository += $repoSummary
@@ -366,6 +447,7 @@ if ($suspiciousCommits.Count -gt 0) {
 
 Write-Information "Data collection complete" -InformationAction Continue
 Write-Information "Total commits found: $commitCount" -InformationAction Continue
+Write-Information "Total lines affected: $($outputData.summary.totalLinesAffected)" -InformationAction Continue
 Write-Information "Total net LOC: $($outputData.summary.totalNetLOC)" -InformationAction Continue
 Write-Information "Output file: $outputFile" -InformationAction Continue
 Write-Output $outputData | ConvertTo-Json -Depth 3

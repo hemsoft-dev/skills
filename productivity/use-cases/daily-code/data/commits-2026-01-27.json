@@ -1,0 +1,45 @@
+{
+  "collectionTime": "2026-01-30T14:33:07.7469023-05:00",
+  "queryStartTime": "2026-01-27T00:00:00.0000000",
+  "summary": {
+    "totalNetLOC": 301.0,
+    "totalAdditions": 915.0,
+    "totalDeletions": 614.0,
+    "commitsByRepository": [
+      {
+        "deletions": 614.0,
+        "linesAffected": 1529.0,
+        "netLOC": 301.0,
+        "additions": 915.0,
+        "commits": 1,
+        "repository": "relias-assistant"
+      }
+    ],
+    "totalLinesAffected": 1529.0
+  },
+  "queryStartTimeLocal": "2026-01-27 00:00:00",
+  "commits": [
+    {
+      "timestamp": "2026-01-27T23:41:36.0000000-05:00",
+      "linesAffected": 1529,
+      "netLOC": 301,
+      "repositorySource": "work",
+      "subject": "feat: Update Application Insights skill documentation and add test prompts for Slack interactions",
+      "author": "Franz Hemmer",
+      "deletions": 614,
+      "repositoryName": "relias-assistant",
+      "gitignoreModified": false,
+      "hash": "10b7e59",
+      "date": "2026-01-27",
+      "time": "23:41:36",
+      "additions": 915,
+      "fullHash": "10b7e59c405663f3a1ea31b6bfe88414af95f1e1"
+    }
+  ],
+  "suspiciousCommitsFound": 0,
+  "repositoriesScanned": 55,
+  "suspiciousCommits": [],
+  "commitsFound": 1,
+  "queryEndTime": "2026-01-27T23:59:59.0000000",
+  "queryEndTimeLocal": "2026-01-27 23:59:59"
+}
