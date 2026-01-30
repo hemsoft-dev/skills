@@ -1,6 +1,6 @@
 ---
 name: alerts
-description: V1.0 - Alert management system for monitoring services and triggering notifications when issues are detected, organized by use case.
+description: V1.0 - Centralized alert registry for active and dismissed alerts across all skills. Manages alert state; does not trigger or monitor.
 license: Apache-2.0
 compatibility: Windows PowerShell 5.1+
 hooks:
@@ -42,39 +42,52 @@ Centralized, unified alert management system for all Claude skills. Provides a s
 
 ## Purpose
 
-The Alerts skill is the **unified attention system** for Claude:
+The Alerts skill is a **centralized registry** for alert state management:
 
-- Skills surface potential issues, anomalies, and items needing review
-- All alerts are coordinated through this central location
-- Conductor and other activity monitoring tools can query this directory to see what needs attention across all skills
-- No alert is more important than another - they all deserve visibility
+- Other skills identify issues and hand them to alerts skill for registration
+- Alerts skill stores them in active or dismissed folders
+- Conductor or other monitoring tools watch alerts/active/ and handle notifications (that's their job)
+- All alerts are equal priority; the registry just tracks state
 
 ## Structure
 
-Each skill that generates alerts creates its own subfolder containing configuration and alert history:
+All alerts are centrally organized by status with daily JSON files, while skill configurations remain organized by skill:
 
 ```
 ~/.claude/skills/alerts/
-├── hs-conductor/           # Alerts from Conductor skill (server monitoring)
-│   ├── config.json
-│   └── history.json
-├── productivity/           # Alerts from Productivity skill (suspicious commits, etc.)
-│   ├── config.json
-│   └── history.json
-├── {another-skill}/        # Alerts from any other skill
-│   ├── config.json
-│   └── history.json
-└── ...
+├── active/                          # Currently active alerts requiring attention
+│   ├── 2026-01-30.json             # All active alerts from all skills today
+│   ├── 2026-01-29.json             # Yesterday's active alerts
+│   └── ...
+├── dismissed/                       # Dismissed alerts (audit trail)
+│   ├── 2026-01-30.json             # All dismissed alerts from all skills today
+│   ├── 2026-01-29.json             # Yesterday's dismissed alerts
+│   └── ...
+├── productivity/                    # Skill configuration
+│   └── config.json                 # Define alert types this skill generates
+├── hs-conductor/                    # Skill configuration
+│   └── config.json                 # Define alert types this skill generates
+├── {another-skill}/                 # Skill configuration
+│   └── config.json
+└── SKILL.md
 ```
 
-**Key Point**: Each subfolder name is **the skill name**, not a use case. This allows Conductor and other tools to iterate through `alerts/*/` and know exactly which skill each alert came from.
+**Key Design**:
+
+- `active/` and `dismissed/` at root for unified visibility
+- Daily files (YYYY-MM-DD.json) prevent unbounded JSON growth
+- Skill folders contain only configuration
+- Each file is an array that can contain alerts from multiple skills
+- Easily query: check if `active/{today}.json` is empty to see if anything needs attention
 
 ## How to Add Alerts from Your Skill
 
 1. Create `~/.claude/skills/alerts/{skill-name}/` directory
 2. Add `config.json` describing what alerts this skill generates
-3. Write alerts to `history.json` in the standard format
-4. That's it - your skill's alerts are now visible to the entire ecosystem
+3. When an alert occurs, append it to the appropriate file:
+   - `~/.claude/skills/alerts/active/YYYY-MM-DD.json` for new active alerts
+   - `~/.claude/skills/alerts/dismissed/YYYY-MM-DD.json` when dismissing
+4. Use the date-based approach to keep files manageable
 
 ## Alert Configuration Format
 
@@ -101,8 +114,9 @@ Each skill has a `config.json` defining its alert conditions and channels:
   "alertChannels": [
     {
       "type": "file",
-      "location": "~/.claude/skills/alerts/{skill-name}/history.json",
-      "enabled": true
+      "location": "~/.claude/skills/alerts/active/YYYY-MM-DD.json",
+      "enabled": true,
+      "description": "Append active alerts here"
     }
   ]
 }
@@ -110,12 +124,15 @@ Each skill has a `config.json` defining its alert conditions and channels:
 
 ## Alert History Format
 
-Alerts are stored in `history.json` as a structured array:
+Alerts are stored in date-stamped JSON files (YYYY-MM-DD.json) in either `active/` or `dismissed/` folders as arrays:
+
+**Active Alert (in active/2026-01-30.json):**
 
 ```json
 [
   {
     "timestamp": "2026-01-30T12:22:45Z",
+    "status": "active",
     "level": "critical",
     "alertType": "server-down",
     "skillName": "hs-conductor",
@@ -125,24 +142,42 @@ Alerts are stored in `history.json` as a structured array:
       "port": 2900,
       "failureCount": 3,
       "lastCheck": "2026-01-30T12:22:40Z"
-    },
-    "status": "active"
-  },
-  {
-    "timestamp": "2026-01-30T12:25:10Z",
-    "level": "info",
-    "alertType": "recovered",
-    "skillName": "hs-conductor",
-    "title": "Backend Server Recovered",
-    "description": "Backend server is responding again",
-    "details": {
-      "port": 2900,
-      "recoveryTime": "2m 30s"
-    },
-    "status": "resolved"
+    }
   }
 ]
 ```
+
+**Dismissed Alert (in dismissed/2026-01-30.json):**
+
+```json
+[
+  {
+    "timestamp": "2026-01-30T14:19:44Z",
+    "status": "dismissed",
+    "dismissedAt": "2026-01-30T14:45:00Z",
+    "dismissalReason": "legitimate-author",
+    "dismissalNotes": "George DeCherney is a coworker at Relias",
+    "level": "warning",
+    "alertType": "suspicious-commit",
+    "skillName": "productivity",
+    "title": "Suspicious Commit Detected",
+    "description": "Unknown author detected in commit",
+    "details": {
+      "author": "George DeCherney",
+      "repository": "ai-skills",
+      "commit": "41af642"
+    }
+  }
+]
+```
+
+**Storage**:
+
+- `active/YYYY-MM-DD.json` - Array of currently active alerts (today's date)
+- `dismissed/YYYY-MM-DD.json` - Array of dismissed alerts (today's date)
+- New file created each day automatically
+- Each object in array includes `skillName` to identify which skill raised it
+- Archive old files after retention period (recommend 30-90 days)
 
 ## Alert Levels
 
@@ -150,29 +185,87 @@ Alerts are stored in `history.json` as a structured array:
 - **Warning**: Issues detected but not blocking (repeated failures, threshold exceeded)
 - **Info**: Informational alerts (recovery, status changes, audit events)
 
+## Dismissing Alerts
+
+When an alert has been reviewed and determined to not require action, dismiss it:
+
+**Steps:**
+
+1. **Review the alert** - Understand why it was triggered in `active/YYYY-MM-DD.json`
+
+2. **Add dismissal metadata and move** - Use PowerShell to move alert from active to dismissed:
+
+   ```powershell
+   $date = (Get-Date -Format "yyyy-MM-dd")
+   $alert = (Get-Content "~/.claude/skills/alerts/active/$date.json" | ConvertFrom-Json)[0]
+   
+   # Add dismissal info
+   $alert | Add-Member -NotePropertyName dismissedAt -NotePropertyValue (Get-Date -Format "o") -Force
+   $alert | Add-Member -NotePropertyName dismissalReason -NotePropertyValue "{reason}" -Force
+   $alert | Add-Member -NotePropertyName dismissalNotes -NotePropertyValue "{optional notes}" -Force
+   $alert.status = "dismissed"
+   
+   # Append to dismissed, remove from active
+   $alert | ConvertTo-Json | Out-File "~/.claude/skills/alerts/dismissed/$date.json" -Encoding UTF8 -Append
+   '[]' | Out-File "~/.claude/skills/alerts/active/$date.json" -Encoding UTF8
+   ```
+
+**Dismissal Reasons (suggested categories):**
+
+- `legitimate-author` - Unknown author is a valid contributor (update KnownAuthors list if needed)
+- `false-positive` - Alert triggered but no action needed
+- `false-alarm` - Condition resolved itself or was transient
+- `acknowledged` - Known issue, tracked separately
+- `duplicate` - Same issue already tracked elsewhere
+- `wontfix` - Decided not to address this condition
+
+**Benefits:**
+
+- `active/{today}.json` always contains only what needs attention
+- `dismissed/{date}.json` provides time-stamped audit trail
+- Easy to query: if `active/{today}.json` is empty/`[]`, all clear
+- Archive old files to manage storage
+
 ## For Conductor and Activity Monitors
 
-To query all alerts across all skills:
+To query all **active** alerts today across all skills:
 
 ```powershell
-# Get all active alerts
-Get-ChildItem ~/.claude/skills/alerts -Directory | ForEach-Object {
-    $skillName = $_.Name
-    $historyFile = Join-Path $_.FullName "history.json"
-    if (Test-Path $historyFile) {
-        Get-Content $historyFile | ConvertFrom-Json |
-            Where-Object { $_.status -eq "active" } |
-            Add-Member -NotePropertyName skill -NotePropertyValue $skillName -PassThru
+# Quick check: are there any active alerts today?
+$today = (Get-Date -Format "yyyy-MM-dd")
+$activeFile = "~/.claude/skills/alerts/active/$today.json"
+
+if ((Test-Path $activeFile) -and ((Get-Content $activeFile) -ne '[]')) {
+    Get-Content $activeFile | ConvertFrom-Json | ForEach-Object {
+        Write-Host "🚨 $($_.skillName): $($_.title) (Level: $($_.level))"
     }
+} else {
+    Write-Host "✓ No active alerts today"
 }
 ```
+
+To query **dismissed** alerts for audit trail:
+
+```powershell
+# Review what was dismissed in the last 7 days
+$dismissedDir = "~/.claude/skills/alerts/dismissed"
+Get-ChildItem $dismissedDir -Filter "*.json" -File | 
+    Sort-Object Name -Descending | 
+    Select-Object -First 7 |
+    ForEach-Object {
+        Get-Content $_.FullName | ConvertFrom-Json |
+            Add-Member -NotePropertyName date -NotePropertyValue $_.BaseName -PassThru
+    }
+```
+
+**Key advantage**: `active/{today}.json` is either empty (`[]`) or contains only what needs attention - no parsing needed!
 
 ## Best Practices
 
 - **Set meaningful alert levels** - Use Critical sparingly, reserve for true emergencies
 - **Include context** - Always populate the `details` object with relevant info for investigation
 - **Timestamp in ISO 8601 format** - Enables easy sorting and querying
-- **Update status field** - Mark alerts as `active`, `resolved`, or `investigating`
+- **Use folder location for state** - Active alerts in `active/`, dismissed in `dismissed/` folders
 - **Document your alert types** - Make it clear in config.json what conditions generate alerts
 - **Keep history pruned** - Remove resolved/old alerts periodically to prevent growth
 
@@ -180,23 +273,34 @@ Get-ChildItem ~/.claude/skills/alerts -Directory | ForEach-Object {
 
 When the Productivity skill detects suspicious commits:
 
-1. Create: `~/.claude/skills/alerts/productivity/config.json`
-2. Alert occurs → Append to: `~/.claude/skills/alerts/productivity/history.json`
+1. Create: `~/.claude/skills/alerts/productivity/config.json` (defines alert types)
+2. Alert occurs → Productivity constructs alert object and appends to: `~/.claude/skills/alerts/active/YYYY-MM-DD.json`
 
 ```json
-{
-  "timestamp": "2026-01-30T13:50:00Z",
-  "level": "warning",
-  "alertType": "suspicious-commit",
-  "skillName": "productivity",
-  "title": "Suspicious Commit Detected",
-  "description": "Unknown author detected in commit",
-  "details": {
-    "repository": "hs-cli-confluence-search",
-    "commit": "7ef3ce3",
-    "author": "Unknown Author Name",
-    "subject": "Show banner on all help and error output"
-  },
-  "status": "active"
-}
+[
+  {
+    "timestamp": "2026-01-30T13:50:00Z",
+    "status": "active",
+    "level": "warning",
+    "alertType": "suspicious-commit",
+    "skillName": "productivity",
+    "title": "Suspicious Commit Detected",
+    "description": "Unknown author detected in commit",
+    "details": {
+      "repository": "ai-skills",
+      "commit": "41af642",
+      "author": "George DeCherney",
+      "subject": "Add skill for comparing resume to linkedin profile..."
+    }
+  }
+]
 ```
+
+**Note:** The alerts skill is NOT responsible for:
+
+- Deciding whether to send notifications
+- Taking action on the alert
+- Monitoring for changes
+- Figuring out if it's a real problem
+
+It just registers what the other skill tells it.
