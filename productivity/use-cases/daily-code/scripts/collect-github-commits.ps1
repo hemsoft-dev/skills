@@ -307,31 +307,61 @@ $outputFile = Join-Path $OutputDir "commits-$dateStr.json"
 # Write JSON output
 $outputData | ConvertTo-Json -Depth 5 | Out-File -FilePath $outputFile -Encoding UTF8 -Force
 
-# Log alerts if suspicious commits found
+# Log alerts to alerts skill if suspicious commits found
 if ($suspiciousCommits.Count -gt 0) {
-    $alertsDir = Join-Path $PSScriptRoot "\..\alerts"
-    if (-not (Test-Path -Path $alertsDir)) {
-        New-Item -ItemType Directory -Path $alertsDir -Force | Out-Null
+    # Use centralized alerts directory
+    $alertsSkillDir = Resolve-Path -Path "$PSScriptRoot\..\..\..\..\alerts\productivity" -ErrorAction SilentlyContinue
+    if (-not $alertsSkillDir) {
+        $alertsSkillDir = Join-Path $env:USERPROFILE ".claude\skills\alerts\productivity"
     }
     
-    $alertFile = Join-Path $alertsDir "$dateStr.md"
-    $alertContent = "# ⚠️ Suspicious Commits Detected - $dateStr`n`n"
-    $alertContent += "Found **$($suspiciousCommits.Count)** commits with unrecognized author names.`n`n"
-    $alertContent += "## Suspicious Commits`n`n"
+    if (-not (Test-Path -Path $alertsSkillDir)) {
+        New-Item -ItemType Directory -Path $alertsSkillDir -Force | Out-Null
+    }
     
+    $historyFile = Join-Path $alertsSkillDir "history.json"
+    
+    # Read existing alerts or start with empty array
+    $alertHistory = @()
+    if (Test-Path -Path $historyFile) {
+        try {
+            $alertHistory = Get-Content -Path $historyFile -Raw | ConvertFrom-Json
+            if ($null -eq $alertHistory) {
+                $alertHistory = @()
+            }
+        }
+        catch {
+            Write-Warning "Could not parse existing alerts: $_"
+            $alertHistory = @()
+        }
+    }
+    
+    # Add new suspicious commit alerts in standardized format
+    $now = Get-Date -Format "o"
     foreach ($suspicious in $suspiciousCommits) {
-        $alertContent += "- **$($suspicious.repository)** [$($suspicious.hash)]()"
-        $alertContent += " - Author: **$($suspicious.author)**`n"
-        $alertContent += "  * Date: $($suspicious.date)`n"
-        $alertContent += "  * Subject: $($suspicious.subject)`n`n"
+        $alertEntry = @{
+            timestamp = $now
+            level = "warning"
+            alertType = "suspicious-commit"
+            skillName = "productivity"
+            title = "Suspicious Commit Detected"
+            description = "Unknown author detected in commit"
+            details = @{
+                repository = $suspicious.repository
+                commit = $suspicious.hash
+                author = $suspicious.author
+                subject = $suspicious.subject
+                date = $suspicious.date
+                reason = $suspicious.reason
+            }
+            status = "active"
+        }
+        $alertHistory += $alertEntry
     }
     
-    $alertContent += "`n**Action Required**: Review these commits and either:`n"
-    $alertContent += "1. Add the author name to \`\`\`KnownAuthors\`\`\` array if it's one of your accounts`n"
-    $alertContent += "2. Remove the commits if they're not yours`n"
-    
-    $alertContent | Out-File -FilePath $alertFile -Encoding UTF8 -Force
-    Write-Information "⚠️ Suspicious commits logged: $alertFile" -InformationAction Continue
+    # Write updated alert history
+    $alertHistory | ConvertTo-Json -Depth 5 | Out-File -FilePath $historyFile -Encoding UTF8 -Force
+    Write-Information "⚠️ $($suspiciousCommits.Count) suspicious commits logged to alerts skill" -InformationAction Continue
 }
 
 Write-Information "Data collection complete" -InformationAction Continue

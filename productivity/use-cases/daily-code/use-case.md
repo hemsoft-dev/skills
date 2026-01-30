@@ -41,9 +41,14 @@ Commits are automatically filtered to only count your own work using author name
 
 **Suspicious Commit Handling**:
 
-- Commits with unrecognized author names are logged separately
-- Alert files are created in `alerts/` directory when suspicious commits are detected
-- Review alerts to either add the author to the known patterns or verify the commit belongs to you
+- Commits with unrecognized author names are flagged as suspicious
+- Alerts are written to the centralized **Alerts skill** (`~/.claude/skills/alerts/productivity/history.json`)
+- Conductor and other activity monitors can query all alerts across all skills in one place
+- Review alerts to either:
+  1. Add the author to `KnownAuthors` array in `collect-github-commits.ps1` if it's one of your accounts
+  2. Verify the commit belongs to you
+
+See the [Alerts Skill documentation](../../alerts/SKILL.md) for querying and managing all skill alerts.
 
 ### Data Sources
 

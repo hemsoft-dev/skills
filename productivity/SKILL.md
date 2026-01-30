@@ -68,7 +68,7 @@ Calculate the total lines of code committed in a single day, filtered to your ow
 - Issues closed
 - List of repositories touched
 - File types changed
-- Suspicious commits (unknown authors) logged separately for review
+- Suspicious commits logged to Alerts skill for review
 
 ## Scripts
 

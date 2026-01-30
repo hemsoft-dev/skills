@@ -1,0 +1,28 @@
+{
+  "skillName": "productivity",
+  "description": "Personal productivity metrics tracking including daily lines of code, commits, and code quality checks",
+  "version": "1.0",
+  "alertTypes": [
+    {
+      "id": "suspicious-commit",
+      "name": "Suspicious Commit",
+      "level": "warning",
+      "description": "Commit detected from an unknown or unrecognized author name",
+      "details": "Suspicious commits indicate potential author name variations not yet recognized in the author filter. Review and add to known patterns if legitimate."
+    },
+    {
+      "id": "author-variation-found",
+      "name": "Author Variation Found",
+      "level": "info",
+      "description": "New author name variation detected and recognized after manual review",
+      "details": "Add new author pattern to KnownAuthors array in collect-github-commits.ps1"
+    }
+  ],
+  "alertChannels": [
+    {
+      "type": "file",
+      "location": "~/.claude/skills/alerts/productivity/history.json",
+      "enabled": true
+    }
+  ]
+}

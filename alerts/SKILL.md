@@ -38,103 +38,165 @@ hooks:
 
 # Alerts Skill
 
-Centralized alert management for monitoring critical services and infrastructure. Each use case defines what to monitor, thresholds for alerts, and actions to take.
+Centralized, unified alert management system for all Claude skills. Provides a single place to monitor and respond to issues, events, and items requiring attention across your entire skill ecosystem. Each skill that generates alerts contributes its own subfolder, with all alerts treated as equal priority.
+
+## Purpose
+
+The Alerts skill is the **unified attention system** for Claude:
+
+- Skills surface potential issues, anomalies, and items needing review
+- All alerts are coordinated through this central location
+- Conductor and other activity monitoring tools can query this directory to see what needs attention across all skills
+- No alert is more important than another - they all deserve visibility
 
 ## Structure
 
+Each skill that generates alerts creates its own subfolder containing configuration and alert history:
+
 ```
 ~/.claude/skills/alerts/
-├── hs-conductor/
-│   └── config.json
-└── {other-use-cases}/
-    └── config.json
+├── hs-conductor/           # Alerts from Conductor skill (server monitoring)
+│   ├── config.json
+│   └── history.json
+├── productivity/           # Alerts from Productivity skill (suspicious commits, etc.)
+│   ├── config.json
+│   └── history.json
+├── {another-skill}/        # Alerts from any other skill
+│   ├── config.json
+│   └── history.json
+└── ...
 ```
+
+**Key Point**: Each subfolder name is **the skill name**, not a use case. This allows Conductor and other tools to iterate through `alerts/*/` and know exactly which skill each alert came from.
+
+## How to Add Alerts from Your Skill
+
+1. Create `~/.claude/skills/alerts/{skill-name}/` directory
+2. Add `config.json` describing what alerts this skill generates
+3. Write alerts to `history.json` in the standard format
+4. That's it - your skill's alerts are now visible to the entire ecosystem
 
 ## Alert Configuration Format
 
-Each use case has a `config.json` defining:
+Each skill has a `config.json` defining its alert conditions and channels:
 
 ```json
 {
-  "name": "hs-conductor-server-monitor",
-  "description": "Monitors HemSoft Conductor backend services",
-  "monitors": [
+  "skillName": "hs-conductor",
+  "description": "Server monitoring and health checks for HemSoft Conductor services",
+  "alertTypes": [
     {
-      "id": "backend-server",
-      "name": "Backend Server",
-      "port": 2900,
-      "checkInterval": 60000,
-      "failureThreshold": 3,
-      "description": "Monitors backend server on port 2900"
+      "id": "server-down",
+      "name": "Server Down",
+      "level": "critical",
+      "description": "Backend server on port 2900 is not responding"
     },
     {
-      "id": "inngest-server",
-      "name": "Inngest Dev Server",
-      "port": 2901,
-      "checkInterval": 60000,
-      "failureThreshold": 3,
-      "description": "Monitors Inngest on port 2901"
+      "id": "unusual-activity",
+      "name": "Unusual Activity",
+      "level": "warning",
+      "description": "Unexpected process behavior or resource usage"
     }
   ],
   "alertChannels": [
     {
-      "type": "log",
-      "location": "~/.claude/skills/logs/hs-conductor/",
-      "enabled": true
-    },
-    {
       "type": "file",
-      "location": "~/.claude/skills/alerts/hs-conductor/alert-history.json",
+      "location": "~/.claude/skills/alerts/{skill-name}/history.json",
       "enabled": true
     }
-  ],
-  "actions": {
-    "onAlert": "restart_process",
-    "onRecovery": "log_recovery"
-  }
+  ]
 }
+```
+
+## Alert History Format
+
+Alerts are stored in `history.json` as a structured array:
+
+```json
+[
+  {
+    "timestamp": "2026-01-30T12:22:45Z",
+    "level": "critical",
+    "alertType": "server-down",
+    "skillName": "hs-conductor",
+    "title": "Backend Server Down",
+    "description": "Backend server (port 2900) failed health check",
+    "details": {
+      "port": 2900,
+      "failureCount": 3,
+      "lastCheck": "2026-01-30T12:22:40Z"
+    },
+    "status": "active"
+  },
+  {
+    "timestamp": "2026-01-30T12:25:10Z",
+    "level": "info",
+    "alertType": "recovered",
+    "skillName": "hs-conductor",
+    "title": "Backend Server Recovered",
+    "description": "Backend server is responding again",
+    "details": {
+      "port": 2900,
+      "recoveryTime": "2m 30s"
+    },
+    "status": "resolved"
+  }
+]
 ```
 
 ## Alert Levels
 
-- **Critical**: Service down, immediate action required
-- **Warning**: Repeated failures, potential issue
-- **Info**: Service recovered, informational alert
+- **Critical**: Immediate action required (service down, data corruption, security issue)
+- **Warning**: Issues detected but not blocking (repeated failures, threshold exceeded)
+- **Info**: Informational alerts (recovery, status changes, audit events)
 
-## Supported Alert Channels
+## For Conductor and Activity Monitors
 
-1. **log** - Write to logs skill
-2. **file** - Write to JSON alert history file
-3. **console** - Write to console (for development)
-4. **event-log** - Write to Windows Event Log
+To query all alerts across all skills:
 
-## Use Cases
-
-### hs-conductor-server-monitor
-
-**What to Monitor**:
-- Backend Server (port 2900)
-- Inngest Dev Server (port 2901)
-
-**Alert Conditions**:
-- Port not responding for 3 consecutive checks
-- Process exits with non-zero status code
-- Memory usage exceeds threshold (if applicable)
-- Port already in use (conflict detection)
-
-**Actions**:
-- Log the alert with full context
-- Attempt process restart (handled by windows-service)
-- Record alert history for trend analysis
-- Escalate after N repeated failures
-
-**Recovery Action**:
-- Log when service recovers
-- Clear failure counter
+```powershell
+# Get all active alerts
+Get-ChildItem ~/.claude/skills/alerts -Directory | ForEach-Object {
+    $skillName = $_.Name
+    $historyFile = Join-Path $_.FullName "history.json"
+    if (Test-Path $historyFile) {
+        Get-Content $historyFile | ConvertFrom-Json |
+            Where-Object { $_.status -eq "active" } |
+            Add-Member -NotePropertyName skill -NotePropertyValue $skillName -PassThru
+    }
+}
+```
 
 ## Best Practices
 
-- Set `failureThreshold >= 2` to avoid false positives
-- `checkInterval >= 30000` (30 seconds) for stability
-- Always include descriptive names and descriptions
-- Test alert channels before deployment
+- **Set meaningful alert levels** - Use Critical sparingly, reserve for true emergencies
+- **Include context** - Always populate the `details` object with relevant info for investigation
+- **Timestamp in ISO 8601 format** - Enables easy sorting and querying
+- **Update status field** - Mark alerts as `active`, `resolved`, or `investigating`
+- **Document your alert types** - Make it clear in config.json what conditions generate alerts
+- **Keep history pruned** - Remove resolved/old alerts periodically to prevent growth
+
+## Example: Adding Alerts from Productivity Skill
+
+When the Productivity skill detects suspicious commits:
+
+1. Create: `~/.claude/skills/alerts/productivity/config.json`
+2. Alert occurs → Append to: `~/.claude/skills/alerts/productivity/history.json`
+
+```json
+{
+  "timestamp": "2026-01-30T13:50:00Z",
+  "level": "warning",
+  "alertType": "suspicious-commit",
+  "skillName": "productivity",
+  "title": "Suspicious Commit Detected",
+  "description": "Unknown author detected in commit",
+  "details": {
+    "repository": "hs-cli-confluence-search",
+    "commit": "7ef3ce3",
+    "author": "Unknown Author Name",
+    "subject": "Show banner on all help and error output"
+  },
+  "status": "active"
+}
+```
