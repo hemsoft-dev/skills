@@ -62,12 +62,13 @@ Each video gets its own folder with all related files:
 
 ```
 youtube/
-├── {YYYY-MM-DD - video-title}/
-│   ├── README.md                    # Catalog entry with metadata
-│   ├── thumbnail.webp               # Video thumbnail
-│   ├── {base_filename}-metadata.json    # Raw metadata (if processed)
-│   ├── {base_filename}-summary.md       # AI summary (if processed)
-│   └── {base_filename}.en.vtt           # Transcript (if processed)
+├── catalog/
+│   └── {YYYY-MM-DD - video-title}/
+│       ├── README.md                    # Catalog entry with metadata
+│       ├── thumbnail.webp               # Video thumbnail
+│       ├── {base_filename}-metadata.json    # Raw metadata (if processed)
+│       ├── {base_filename}-summary.md       # AI summary (if processed)
+│       └── {base_filename}.en.vtt           # Transcript (if processed)
 ├── History/
 └── SKILL.md
 ```
@@ -114,7 +115,7 @@ Each video folder contains a `README.md` file with:
 For quickly cataloging a video you watched:
 
 1. Get current timestamp: `Get-Date -Format "yyyy-MM-dd HH:mm"`
-2. Create folder: `{YYYY-MM-DD - video-title-slug}/`
+2. Create folder: `catalog/{YYYY-MM-DD - video-title-slug}/`
 3. Download thumbnail: `ytd --write-thumbnail --skip-download --convert-thumbnails webp --output "{folder}/thumbnail.%(ext)s" {video-url}`
 4. Extract basic metadata: `ytd --dump-json --no-download {video-url}`
 5. Create `README.md` in the video folder with metadata
@@ -124,7 +125,7 @@ For quickly cataloging a video you watched:
 For detailed analysis with transcript and summary:
 
 1. Use the **youtube-processor** skill to process the video
-2. Output directory: `{YYYY-MM-DD - video-title}/` (directly in youtube folder)
+2. Output directory: `catalog/{YYYY-MM-DD - video-title}/` (inside catalog folder)
 3. The processor will create:
    - Metadata JSON
    - Transcript (.vtt)
@@ -135,7 +136,7 @@ For detailed analysis with transcript and summary:
 **To invoke youtube-processor**:
 
 ```powershell
-$outputDir = "c:\Users\User\.claude\skills\youtube\{YYYY-MM-DD - video-title}"
+$outputDir = "c:\Users\User\.claude\skills\youtube\catalog\{YYYY-MM-DD - video-title}"
 $url = "{video-url}"
 
 # Run all processing steps
@@ -193,7 +194,7 @@ When cataloging a video, collect:
 
 ### Quick Add
 
-Folder: `2026-01-31 - how-to-build-a-rest-api-with-nodejs/README.md`
+Folder: `catalog/2026-01-31 - how-to-build-a-rest-api-with-nodejs/README.md`
 
 ```markdown
 # How to Build a REST API with Node.js
@@ -228,7 +229,7 @@ Comprehensive tutorial covering Express setup, routing, middleware, and error ha
 
 ### Deep Processing
 
-Folder: `2026-01-31 - how-to-build-a-rest-api-with-nodejs/README.md`
+Folder: `catalog/2026-01-31 - how-to-build-a-rest-api-with-nodejs/README.md`
 
 ```markdown
 # How to Build a REST API with Node.js
