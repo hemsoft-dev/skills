@@ -1,6 +1,6 @@
 ---
 name: youtube-processor
-description: V1.5 - Processes a YouTube URL by extracting metadata, downloading video, generating transcript, summary, and audio summary.
+description: V1.6 - Processes a YouTube URL by extracting metadata, transcript, AI summary, and audio summary (no video download).
 ---
 
 # YouTube Processor
@@ -28,16 +28,13 @@ The primary command to run the entire pipeline for a single URL.
 # 1. Extract Metadata
 $metadata = & "c:\Users\User\.claude\skills\youtube-processor\scripts\Get-YouTubeMetadata.ps1" -Url "{URL}" -OutputDir "{OUTPUT_DIR}"
 
-# 2. Download Video & Audio
-& "c:\Users\User\.claude\skills\youtube-processor\scripts\Download-YouTubeVideo.ps1" -Url "{URL}" -OutputDir "{OUTPUT_DIR}" -BaseFilename $metadata.base_filename
+# 2. Get Transcript (YouTube or Whisper fallback)
+& "c:\Users\User\.claude\skills\youtube-processor\scripts\Get-YouTubeTranscript.ps1" -Url "{URL}" -OutputDir "{OUTPUT_DIR}" -BaseFilename $metadata.base_filename -VideoPath ""
 
-# 3. Get Transcript (YouTube or Whisper fallback)
-& "c:\Users\User\.claude\skills\youtube-processor\scripts\Get-YouTubeTranscript.ps1" -Url "{URL}" -OutputDir "{OUTPUT_DIR}" -BaseFilename $metadata.base_filename -VideoPath "{OUTPUT_DIR}/$($metadata.base_filename).webm"
-
-# 4. Create Markdown Summary
+# 3. Create Markdown Summary
 & "c:\Users\User\.claude\skills\youtube-processor\scripts\Create-YouTubeSummary.ps1" -TranscriptPath "{OUTPUT_DIR}/$($metadata.base_filename).en.vtt" -OutputDir "{OUTPUT_DIR}" -BaseFilename $metadata.base_filename -MetadataPath "{OUTPUT_DIR}/$($metadata.base_filename)-metadata.json"
 
-# 5. Create Audio Summary (edge-tts)
+# 4. Create Audio Summary (edge-tts)
 & "c:\Users\User\.claude\skills\youtube-processor\scripts\Create-YouTubeSummaryAudio.ps1" -SummaryPath "{OUTPUT_DIR}/$($metadata.base_filename)-summary.md" -OutputDir "{OUTPUT_DIR}" -BaseFilename $metadata.base_filename
 ```
 
@@ -48,7 +45,6 @@ All scripts are located in `c:\Users\User\.claude\skills\youtube-processor\scrip
 | Script | Purpose |
 | :--- | :--- |
 | `Get-YouTubeMetadata.ps1` | Extracts raw metadata via `ytd` and transforms it via Gemini into a structured JSON. |
-| `Download-YouTubeVideo.ps1` | Downloads the video (.webm) and extracts high-quality audio (.mp3). |
 | `Get-YouTubeTranscript.ps1` | Fetches YouTube subtitles or runs local Whisper AI if unavailable. |
 | `Create-YouTubeSummary.ps1` | Generates a structured Markdown summary using Gemini 3 Flash Preview. |
 | `Create-YouTubeSummaryAudio.ps1` | Converts the "Executive Summary" section to speech using `edge-tts`. |
