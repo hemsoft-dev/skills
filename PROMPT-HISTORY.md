@@ -30,3 +30,6 @@ Result: Reprocessed .NET AI Community Standup video (aKUZCxTdDDg) through youtub
 
 2026-01-31 - 01:46 - Add processed video to YouTube catalog and align documentation
 Result: Added processed .NET AI Community Standup video to youtube catalog with thumbnail, metadata, and AI summary link. Moved processed files from youtube-processor/output to youtube/processed directory. Updated youtube skill documentation to remove HTML generation references across all sections (catalog structure, workflows, examples) to align with youtube-processor V1.3. Auto-fixed markdown linting issues. Created history entry and committed all changes.
+
+2026-01-31 - 01:53 - Restructure YouTube catalog to one-video-one-folder
+Result: Completely reorganized youtube catalog from separate catalog/, processed/, and thumbnails/ directories to a unified one-video-one-folder structure. Each video now has its own folder ({YYYY-MM-DD - title}/) containing README.md (catalog entry), thumbnail.webp, and all processed files (metadata.json, summary.md, transcript.vtt). Updated SKILL.md V1.0 → V1.1 with comprehensive documentation updates including structure diagrams, workflow instructions, and examples. Removed old directory structure and committed all changes.
