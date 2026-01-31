@@ -49,6 +49,7 @@ Expert guidance for managing Windows Services on this PC. Handles service creati
 **Location**: `d:\github\HemSoft\hs-conductor`
 
 **Configuration**:
+
 - Task Name: `HemSoft-Conductor-Server`
 - Task Type: Scheduled Task (runs at startup, continuous)
 - Description: `Monitors and maintains hs-conductor backend services (Backend Server + Inngest)`
@@ -56,10 +57,12 @@ Expert guidance for managing Windows Services on this PC. Handles service creati
 - Run As: Current user (for access to PATH, Bun, npm, etc.)
 
 **What It Monitors**:
+
 1. Backend server (port 2900) - runs via `bun run --watch src/index.ts`
 2. Inngest dev server (port 2901) - runs via `npx inngest-cli@latest dev`
 
 **Behavior**:
+
 - Checks every 60 seconds if both services are running
 - Auto-restarts any crashed process immediately (after 2 consecutive failures)
 - Logs all events to `~/.claude/skills/logs/hs-conductor/`
@@ -73,32 +76,38 @@ Expert guidance for managing Windows Services on this PC. Handles service creati
 ## Common Operations
 
 ### Check Task Status
+
 ```powershell
 Get-ScheduledTask -TaskName "HemSoft-Conductor-Server" | Select TaskName, State, LastRunTime
 ```
 
 ### Start Task
+
 ```powershell
 Start-ScheduledTask -TaskName "HemSoft-Conductor-Server"
 ```
 
 ### Stop Task
+
 ```powershell
 Stop-ScheduledTask -TaskName "HemSoft-Conductor-Server"
 ```
 
 ### Restart Task (after code changes)
+
 ```powershell
 # From repo root (requires admin)
 .\update-service.ps1
 ```
 
 ### View Logs
+
 ```powershell
 Get-Content "c:\Users\User\.claude\skills\logs\hs-conductor\$(Get-Date -Format 'yyyy-MM-dd').json" | ConvertFrom-Json | Format-Table -AutoSize
 ```
 
 ### Open Task Scheduler GUI
+
 ```powershell
 taskschd.msc
 ```
@@ -110,18 +119,22 @@ Use `setup-service.ps1` script to register the Scheduled Task. Must be run with 
 ## Updating After Code Changes
 
 **TypeScript/JavaScript changes** (`src/**/*.ts`):
+
 - ✅ Automatically picked up by Bun's `--watch` mode
 - ✅ No restart needed
 
 **Monitoring script changes** (`~/.claude/skills/windows-service/scripts/hs-conductor-service-worker.ps1`):
+
 - ⚠️ Requires task restart
 - Run `.\update-service.ps1` (as admin)
 
 **Schedule file changes** (`data/schedules/*.json`):
+
 - ✅ Automatically picked up on next scheduler tick (within 60 seconds)
 - ✅ No restart needed
 
 **Workload file changes** (`workloads/**/*.yaml`):
+
 - ✅ Automatically picked up when workload is triggered
 - ✅ No restart needed
 
