@@ -30,6 +30,9 @@ temp/
 # Python virtual environments
 browser-use/venv/
 
+# YouTube processor output files
+youtube-processor/output/
+
 # ChatGPT export files (including large HTML/JSON exports)
 me/gpt-export/**/*.html
 me/gpt-export/**/*.json
