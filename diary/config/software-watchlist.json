@@ -30,8 +30,8 @@
       "changelog_url": "https://github.com/anthropics/claude-code/releases",
       "check_method": "github_releases",
       "notes": "Use GitHub releases API - repo: anthropics/claude-code",
-      "last_displayed_date": "2026-01-29",
-      "last_displayed_version": "v2.1.25"
+      "last_displayed_date": "2026-01-30",
+      "last_displayed_version": "v2.1.27"
     },
     {
       "name": "Copilot CLI",
@@ -86,24 +86,24 @@
       "changelog_url": "https://github.com/microsoft/vscode-copilot-chat/blob/main/CHANGELOG.md",
       "check_method": "github_releases",
       "notes": "GitHub Copilot extension for VS Code - use gh release list for most reliable version check",
-      "last_displayed_date": "2026-01-29",
-      "last_displayed_version": "v0.37.2026012902"
+      "last_displayed_date": "2026-01-30",
+      "last_displayed_version": "v0.37.2026013001"
     },
     {
       "name": "GitHub Web",
       "changelog_url": "https://github.blog/changelog/feed/",
       "check_method": "rss",
       "notes": "Parse RSS feed for latest changelog entry",
-      "last_displayed_date": "2026-01-29",
-      "last_displayed_version": "Jan 29"
+      "last_displayed_date": "2026-01-30",
+      "last_displayed_version": "Jan 30"
     },
     {
       "name": "Goose CLI",
       "changelog_url": "https://github.com/block/goose/releases",
       "check_method": "github_releases",
       "notes": "Goose AI agent CLI releases",
-      "last_displayed_date": "2026-01-29",
-      "last_displayed_version": "v1.22.0"
+      "last_displayed_date": "2026-01-30",
+      "last_displayed_version": "v1.22.1"
     },
     {
       "name": "M365 Copilot",
