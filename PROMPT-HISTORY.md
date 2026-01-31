@@ -33,3 +33,6 @@ Result: Added processed .NET AI Community Standup video to youtube catalog with 
 
 2026-01-31 - 01:53 - Restructure YouTube catalog to one-video-one-folder
 Result: Completely reorganized youtube catalog from separate catalog/, processed/, and thumbnails/ directories to a unified one-video-one-folder structure. Each video now has its own folder ({YYYY-MM-DD - title}/) containing README.md (catalog entry), thumbnail.webp, and all processed files (metadata.json, summary.md, transcript.vtt). Updated SKILL.md V1.0 → V1.1 with comprehensive documentation updates including structure diagrams, workflow instructions, and examples. Removed old directory structure and committed all changes.
+
+2026-01-31 - 01:55 - Move YouTube video folders under catalog/ directory
+Result: Moved video folders from youtube root to youtube/catalog/ subdirectory. Final structure is catalog/{YYYY-MM-DD - title}/ containing README.md, thumbnail.webp, and all processed files. Updated SKILL.md documentation throughout to reflect catalog/ folder in structure diagrams, workflow instructions, and examples.
