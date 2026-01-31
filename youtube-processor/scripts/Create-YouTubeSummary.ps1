@@ -29,7 +29,7 @@ The summary should include:
 4. Detailed notes or chapters if applicable.
 5. A conclusion or final thoughts.
 
-Use Markdown formatting with emojis to make it visually appealing.
+Use clean Markdown formatting for readability.
 
 Transcript:
 $transcript
@@ -51,7 +51,8 @@ if ($null -eq $summary -or $summary -eq "") {
     exit 1
 }
 
-$summary | Out-File -FilePath $summaryPath -Encoding utf8
+# Use proper UTF-8 encoding to preserve special characters
+[System.IO.File]::WriteAllText($summaryPath, $summary, [System.Text.UTF8Encoding]::new($false))
 Write-Information "Summary saved to $summaryPath"
 
 return $summaryPath
