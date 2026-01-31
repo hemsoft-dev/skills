@@ -27,3 +27,6 @@ Result: Ran collect-github-commits.ps1 to gather 2026-01-30 productivity data (4
 
 2026-01-31 - 01:43 - Reprocess YouTube video and remove HTML generation from workflow
 Result: Reprocessed .NET AI Community Standup video (aKUZCxTdDDg) through youtube-processor skill. Successfully extracted metadata, downloaded transcript, and generated markdown summary using Gemini 3 Flash Preview. Removed HTML generation step from workflow (updated SKILL.md V1.2 → V1.3), added output/ directory to .gitignore, fixed user path references, and created History tracking. Committed all changes with proper linting workflow.
+
+2026-01-31 - 01:46 - Add processed video to YouTube catalog and align documentation
+Result: Added processed .NET AI Community Standup video to youtube catalog with thumbnail, metadata, and AI summary link. Moved processed files from youtube-processor/output to youtube/processed directory. Updated youtube skill documentation to remove HTML generation references across all sections (catalog structure, workflows, examples) to align with youtube-processor V1.3. Auto-fixed markdown linting issues. Created history entry and committed all changes.
