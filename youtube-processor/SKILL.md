@@ -1,6 +1,6 @@
 ---
 name: youtube-processor
-description: V1.4 - Processes a YouTube URL by extracting metadata, downloading video, generating transcript, summary, and audio summary.
+description: V1.5 - Processes a YouTube URL by extracting metadata, downloading video, generating transcript, summary, and audio summary.
 ---
 
 # YouTube Processor

@@ -1,7 +1,7 @@
 {
   "id": "aKUZCxTdDDg",
   "title": ".NET AI Community Standup - Using the GitHub Copilot CLI and SDK for .NET dev",
-  "title_short": "dotnet-ai-community-standup-github-copilot-cli-sdk",
+  "title_short": "dotnet-ai-community-standup-using-github-copilot-cli-sdk",
   "url": "https://www.youtube.com/watch?v=aKUZCxTdDDg",
   "upload_date": "2026-01-28",
   "publishDate": "2026-01-28",
@@ -9,6 +9,7 @@
   "duration_formatted": "1:15:46",
   "channel": "dotnet",
   "channel_id": "UCvtT19MZW8dq5Wwfu6B0oxw",
+  "channel_url": "https://www.youtube.com/channel/UCvtT19MZW8dq5Wwfu6B0oxw",
   "uploader": "dotnet",
   "uploader_id": " @dotnet",
   "description": "Learn all about the GitHub Copilot SDK with Steve Sanderson!\n\nΓîÜ Chapters:\n00:00 Countdown\n02:25 Welcome\n03:40 Community Links\n06:50 On today's stream\n08:56 Using the GitHub Copilot CLI and SDK for .NET development\n10:27 AI-powered code editing\n11:20 Arrival of CLI multi-agent review\n13:00 Impact on productivity\n14:20 Demo 1 - adding a feature\n17:27 Prototyping\n20:32 What becomes harder\n21:32 Code review\n22:25 Demo 2 - code review\n23:42 Agents features overview\n28:10 Recent trends\n31:15 Fundamentals of coding agents\n32:14 Demo 3 - planning mode\n37:14 Composition\n37:50 Demo 4 - skills\n45:40 Feedback loop\n46:50 Demo 5 - feedback loop\n50:30 Q&A\n57:25 GitHub Copilot SDK intro\n58:25 Demo 6 - GitHub Copilot SDK\n01:14:30 Get started\n01:15:32 Wrap\n\n≡ƒöù Links:\nhttps://developer.microsoft.com/blog/bringing-work-context-to-your-code-in-github-copilot\nhttps://devblogs.microsoft.com/dotnet/dotnet-ai-essentials-the-core-building-blocks-explained/\nhttps://github.com/microsoft/agent-framework/pull/3395\n\n≡ƒÄÖ∩╕Å Featuring: Steve Sanderson, Jon Galloway, Bruno Capuano\n\n#dotnet #ai #copilot #githubcopilot",
@@ -16,9 +17,10 @@
     "Science & Technology"
   ],
   "tags": [],
-  "view_count": 5352,
-  "like_count": 184,
-  "base_filename": "2026-01-28 - dotnet-ai-community-standup-github-copilot-cli-sdk",
+  "view_count": 5403,
+  "like_count": 185,
+  "thumbnail": "https://i.ytimg.com/vi/aKUZCxTdDDg/maxresdefault.jpg",
+  "base_filename": "2026-01-28 - dotnet-ai-community-standup-using-github-copilot-cli-sdk",
   "date_downloaded": "2026-01-31",
   "has_transcript": true
 }

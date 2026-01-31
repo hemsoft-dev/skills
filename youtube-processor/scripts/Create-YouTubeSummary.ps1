@@ -44,7 +44,11 @@ Transcript:
 $transcript
 "@
 
+# Set console encoding to UTF-8 for proper character handling in pipeline
+$previousEncoding = [Console]::OutputEncoding
+[Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false)
 $geminiOutput = $prompt | gemini -m gemini-3-flash-preview -o json
+[Console]::OutputEncoding = $previousEncoding
 
 if ($null -eq $geminiOutput -or $geminiOutput -eq "") {
     Write-Error "Gemini failed to generate summary."

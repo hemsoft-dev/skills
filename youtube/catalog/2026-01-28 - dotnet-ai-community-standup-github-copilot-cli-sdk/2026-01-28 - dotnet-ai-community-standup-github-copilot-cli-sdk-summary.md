@@ -1,61 +1,44 @@
-# The Agentic Revolution: Mastering GitHub Copilot CLI & SDK for .NET
+# .NET AI Community Standup - Using the GitHub Copilot CLI and SDK for .NET dev
 
 ## Executive Summary
 
-In this .NET AI community standup, guest host John Galloway is joined by **Steve Sanderson** (the creator of Blazor) to dive deep into the rapidly evolving world of **agentic coding**. The session moves beyond simple AI autocomplete, showcasing how the new **GitHub Copilot CLI** and **SDK** are transforming software engineering into a high-velocity, high-level orchestration task. From shipping 200+ improvements in a single week to conducting parallel code reviews using a "council" of different AI models, this standup provides a blueprint for the future of development.
-
----
+In this .NET AI Community Standup, guest host John Galloway joins Steve Sanderson to explore the rapidly evolving landscape of AI-powered development tools. The session focuses heavily on the **GitHub Copilot CLI** and the new **Copilot SDK**, demonstrating how these tools are shifting the software engineering paradigm from manual coding to "agentic" workflows. Sanderson showcases several cutting-edge features including **Plan Mode**, **Multi-Agent Reviews**, and **Custom Skills**, arguing that these advancements allow developers to move faster, prototype more aggressively, and tackle complex tasks in languages they may not even speak fluently.
 
 ## Key Takeaways
 
-* **From Suggestions to Agents:** We are moving from a "wave" of AI autocomplete to "agent mode," where AI handles multi-step problem-solving, testing, and validation.
-* **Productivity Explosion:** Steve's small team (7-10 people) shipped over **200 items in a single week** by leveraging these agentic tools.
-* **The "Plan Mode" Strategy:** Effective agentic coding requires a shift in workflow - specifying a plan in Markdown first, refining it with the AI, and then letting the agent execute.
-* **Context Management via Skills:** "Skills" allow developers to provide agents with reusable context and specialized Python helpers without blowing up the context window.
-* **SDK-Powered Products:** The Copilot SDK allows developers to embed these same world-class agentic loops directly into their own .NET, Python, Node, or Go applications.
+* **The "Agentic" Shift:** Software development is moving from simple AI autocomplete to multi-step agents that can plan, implement, test, and iterate autonomously.
+* **Immediacy of CLIs:** Tools like the Copilot CLI are gaining popularity because they offer immediate productivity without being tethered to a specific IDE or source control system.
+* **Radical Productivity:** Sanderson reports that his small team (7–10 people) shipped over 200 items in a single week by leveraging these agentic tools.
+* **Fail Fast, Prototype Faster:** AI agents reduce the cost of prototyping from days to minutes, allowing teams to "learn by doing" rather than spending weeks in design meetings.
+* **The Copilot SDK:** Developers can now integrate the "smarts" of the GitHub Copilot agent—including its optimized prompts and tool-using capabilities—directly into their own .NET applications.
 
----
+## Detailed Notes
 
-## Detailed Notes & Chapters
+### The Evolution of Coding Agents
 
-### 1. The Shift in the Industry
+Steve Sanderson outlines two major waves of AI tools:
 
-* The software industry is at a historical turning point. Humans are no longer the only entities capable of creating working code.
-* **Wave 1:** IDE-based agents like Cursor and VS Code's "agent mode."
-* **Wave 2:** The arrival of CLI agents (Claude Code, Gemini CLI, Copilot CLI) which offer a sense of "immediacy" and are not tied to a specific IDE.
+1. **IDE-Based Agents:** Started with tools like Cursor and evolved into VS Code's "Agent Mode," moving beyond simple autocomplete to multi-step problem solving.
+2. **CLI-Based Agents:** The arrival of Claude Code, Gemini CLI, and GitHub Copilot CLI. These are praised for their "dopamine machine" effect—providing progress on a problem within seconds of a prompt.
 
-### 2. Live Demo: Implementing Features in Seconds
+### Feature Deep Dive
 
-* Steve demonstrates adding a `show models` command to a CLI tool.
-* The agent explores the codebase, identifies where to register flags, implements the logic, builds the project, and runs a test to verify it works - all in about 30 seconds.
-* **Lesson:** It's no longer about writing 6 lines of code; it's about knowing *where* those lines belong.
+* **Multi-Agent Reviews:** Sanderson demonstrates running a PR review using **Claude Opus, Haiku, and Gemini** in parallel. This "council of AIs" helps mitigate hallucinations. Each model has a personality: Gemini is often more critical/fussy, Haiku is lenient, and Opus is rigorous and focused on real issues.
+* **Plan Mode:** A recently shipped feature that forces the agent to write an interactive Markdown plan before writing any code. Developers can review, edit, and iterate on this plan, ensuring consensus before implementation begins.
+* **Custom Skills:** Skills are reusable sets of context (Markdown instructions and helper scripts). They allow the agent to discover how to perform specific tasks (like interacting with Slack or checking a build status) without blowing up the context window.
+* **Large Output Handling:** The tools now intelligently save large data blocks (like 96KB diffs) to disk and read them in chunks to avoid overwhelming the model's context window.
 
-### 3. Mastering "Plan Mode"
+### The Copilot SDK for .NET
 
-* **The Problem:** AI agents can be "lazy" or underspecify tasks if not guided.
-* **The Solution:** Use **Plan Mode**. The agent generates a Markdown plan, asks the user clarifying questions (e.g., "Should we enforce compatibility?"), and allows the user to refine the logic *before* implementation begins.
-* This shifts the developer's role to a higher level of design and validation.
+The new SDK allows .NET developers to instantiate a `CopilotClient` and create sessions that utilize the same optimized agent loop used in the CLI.
 
-### 4. Parallel Code Reviews: The "Council of AIs"
+* **Function Calling:** You can easily wrap standard C# methods into AI functions that the agent can invoke.
+* **Custom Workflows:** Sanderson demonstrates a tool that fetches a GitHub issue via URL and uses the agent's reasoning to provide an accurate implementation estimate (sizing).
 
-* Steve demonstrates reviewing a massive, complex PR (for a Doom game engine in .NET) by running three models in parallel: **Claude Opus, Claude Haiku, and Gemini**.
-* **Finding Disagreements:** Each model has a "personality." Gemini is often "fussier" and more critical, while Haiku is more lenient. Running them together helps catch hallucinations and provides a balanced review.
+### Changing the Developer Mindset
 
-### 5. Custom Skills & Automation
+Sanderson encourages developers to stop being "precious" about their code. Because the cost of production has dropped so significantly, it is now viable to implement a feature multiple times in different ways just to see which fits the system best. He also highlights the "liberation" of no longer needing to manually handle Git branching, merging, or writing PR descriptions—tasks the agents now handle fluently.
 
-* **Skills:** Reusable context files (`skill.md`) that teach the agent how to use specific tools (like Playwright for browser automation).
-* **Browser Automation Demo:** Steve uses a custom skill to tell the agent to "register a new user named Steve." The agent opens a browser, navigates the UI, and completes the form autonomously.
+## Conclusion
 
-### 6. The GitHub Copilot SDK
-
-* The same engine powering the CLI is now available as an SDK for **.NET, Python, Node, and Go**.
-* It allows developers to build "issue sizers" or automated workflow tools that can interact with GitHub, fetch web data, and use local project context.
-
----
-
-## Conclusion: Give it a Shot
-
-Steve's final call to action is simple: **Try doing something you wouldn't normally do.** Whether it's porting a library to a language you don't speak or implementing a "crazy" feature you've been putting off - give it to a CLI agent. The experience is "weirdly addictive" and provides a level of empowerment that is fundamentally changing what it means to be a software engineer.
-
----
-*Summary generated for the .NET AI Community Standup.*
+The session concludes with a strong call to action: **Give these tools a try on a task you wouldn't normally do.** Whether it's porting code to a language you don't know or prototyping a "crazy" feature you've been putting off, the current generation of coding agents provides an empowering moment for developers. While the landscape is changing fast—with many features shown being only weeks or days old—the shift toward high-level, agentic interaction with AI is clearly the future of the industry.
