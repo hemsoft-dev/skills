@@ -1,6 +1,6 @@
 ---
 name: youtube-processor
-description: V1.2 - Processes a YouTube URL by extracting metadata, downloading video, generating transcript, summary, audio summary, and HTML report.
+description: V1.3 - Processes a YouTube URL by extracting metadata, downloading video, generating transcript, summary, and audio summary.
 ---
 
 # YouTube Processor
@@ -26,27 +26,24 @@ The primary command to run the entire pipeline for a single URL.
 
 ```powershell
 # 1. Extract Metadata
-$metadata = & "c:\Users\franz\.claude\skills\youtube-processor\scripts\Get-YouTubeMetadata.ps1" -Url "{URL}" -OutputDir "{OUTPUT_DIR}"
+$metadata = & "c:\Users\User\.claude\skills\youtube-processor\scripts\Get-YouTubeMetadata.ps1" -Url "{URL}" -OutputDir "{OUTPUT_DIR}"
 
 # 2. Download Video & Audio
-& "c:\Users\franz\.claude\skills\youtube-processor\scripts\Download-YouTubeVideo.ps1" -Url "{URL}" -OutputDir "{OUTPUT_DIR}" -BaseFilename $metadata.base_filename
+& "c:\Users\User\.claude\skills\youtube-processor\scripts\Download-YouTubeVideo.ps1" -Url "{URL}" -OutputDir "{OUTPUT_DIR}" -BaseFilename $metadata.base_filename
 
 # 3. Get Transcript (YouTube or Whisper fallback)
-& "c:\Users\franz\.claude\skills\youtube-processor\scripts\Get-YouTubeTranscript.ps1" -Url "{URL}" -OutputDir "{OUTPUT_DIR}" -BaseFilename $metadata.base_filename -VideoPath "{OUTPUT_DIR}/$($metadata.base_filename).webm"
+& "c:\Users\User\.claude\skills\youtube-processor\scripts\Get-YouTubeTranscript.ps1" -Url "{URL}" -OutputDir "{OUTPUT_DIR}" -BaseFilename $metadata.base_filename -VideoPath "{OUTPUT_DIR}/$($metadata.base_filename).webm"
 
 # 4. Create Markdown Summary
-& "c:\Users\franz\.claude\skills\youtube-processor\scripts\Create-YouTubeSummary.ps1" -TranscriptPath "{OUTPUT_DIR}/$($metadata.base_filename).en.vtt" -MetadataPath "{OUTPUT_DIR}/$($metadata.base_filename)-metadata.json" -OutputDir "{OUTPUT_DIR}" -BaseFilename $metadata.base_filename
+& "c:\Users\User\.claude\skills\youtube-processor\scripts\Create-YouTubeSummary.ps1" -TranscriptPath "{OUTPUT_DIR}/$($metadata.base_filename).en.vtt" -OutputDir "{OUTPUT_DIR}" -BaseFilename $metadata.base_filename
 
 # 5. Create Audio Summary (edge-tts)
-& "c:\Users\franz\.claude\skills\youtube-processor\scripts\Create-YouTubeSummaryAudio.ps1" -SummaryPath "{OUTPUT_DIR}/$($metadata.base_filename).md" -OutputDir "{OUTPUT_DIR}" -BaseFilename $metadata.base_filename
-
-# 6. Create HTML Report
-& "c:\Users\franz\.claude\skills\youtube-processor\scripts\Create-YouTubeHtml.ps1" -SummaryPath "{OUTPUT_DIR}/$($metadata.base_filename).md" -MetadataPath "{OUTPUT_DIR}/$($metadata.base_filename)-metadata.json" -OutputDir "{OUTPUT_DIR}" -BaseFilename $metadata.base_filename
+& "c:\Users\User\.claude\skills\youtube-processor\scripts\Create-YouTubeSummaryAudio.ps1" -SummaryPath "{OUTPUT_DIR}/$($metadata.base_filename)-summary.md" -OutputDir "{OUTPUT_DIR}" -BaseFilename $metadata.base_filename
 ```
 
 ## Individual Step Scripts
 
-All scripts are located in `c:\Users\franz\.claude\skills\youtube-processor\scripts\`.
+All scripts are located in `c:\Users\User\.claude\skills\youtube-processor\scripts\`.
 
 | Script | Purpose |
 | :--- | :--- |
@@ -55,7 +52,6 @@ All scripts are located in `c:\Users\franz\.claude\skills\youtube-processor\scri
 | `Get-YouTubeTranscript.ps1` | Fetches YouTube subtitles or runs local Whisper AI if unavailable. |
 | `Create-YouTubeSummary.ps1` | Generates a structured Markdown summary using Gemini 3 Flash Preview. |
 | `Create-YouTubeSummaryAudio.ps1` | Converts the "Executive Summary" section to speech using `edge-tts`. |
-| `Create-YouTubeHtml.ps1` | Generates a styled, responsive HTML report with an embedded audio player. |
 
 ## Requirements
 
@@ -71,4 +67,3 @@ All scripts are located in `c:\Users\franz\.claude\skills\youtube-processor\scri
 2. **Transcription**: Prefers official YouTube subtitles. Falls back to local Whisper transcription if needed.
 3. **Summarization**: Uses a detailed prompt to ensure high-quality, technical summaries with timestamps.
 4. **Audio**: Uses the `en-US-AndrewNeural` voice by default for a professional sound.
-5. **HTML**: Produces a standalone file with a "crypto-dark-blue" theme and native audio controls.
