@@ -152,5 +152,110 @@
     "exitCode": 0,
     "details": "Inngest dev server started successfully on port 2901",
     "event": "inngest_server_started"
+  },
+  {
+    "timestamp": "2026-01-30T16:48:16.7122523-05:00",
+    "exitCode": 0,
+    "level": "info",
+    "details": "HemSoft Conductor Server monitoring service started",
+    "event": "service_started"
+  },
+  {
+    "timestamp": "2026-01-30T16:49:00.4298145-05:00",
+    "level": "info",
+    "exitCode": 0,
+    "details": "HemSoft Conductor Server monitoring service started",
+    "event": "service_started"
+  },
+  {
+    "level": "info",
+    "timestamp": "2026-01-30T16:51:34.687344-05:00",
+    "event": "service_started",
+    "details": "HemSoft Conductor Server monitoring service started",
+    "exitCode": 0
+  },
+  {
+    "timestamp": "2026-01-30T16:52:58.6402741-05:00",
+    "level": "info",
+    "event": "service_started",
+    "details": "HemSoft Conductor Server monitoring service started",
+    "exitCode": 0
+  },
+  {
+    "timestamp": "2026-01-30T16:52:58.7007418-05:00",
+    "level": "warn",
+    "event": "backend_server_check_failed",
+    "details": "Backend server not responding on port 2900 (failure 1)",
+    "exitCode": 0
+  },
+  {
+    "timestamp": "2026-01-30T16:52:58.7037799-05:00",
+    "level": "warn",
+    "event": "inngest_server_check_failed",
+    "details": "Inngest dev server not responding on port 2901 (failure 1)",
+    "exitCode": 0
+  },
+  {
+    "timestamp": "2026-01-30T16:53:58.7615614-05:00",
+    "level": "warn",
+    "event": "backend_server_check_failed",
+    "details": "Backend server not responding on port 2900 (failure 2)",
+    "exitCode": 0
+  },
+  {
+    "timestamp": "2026-01-30T16:53:58.7646043-05:00",
+    "level": "error",
+    "event": "backend_server_restarting",
+    "details": "Backend server failed 2 checks, attempting restart",
+    "exitCode": 0
+  },
+  {
+    "timestamp": "2026-01-30T16:53:58.8005289-05:00",
+    "level": "info",
+    "event": "starting_backend_server",
+    "details": "Launching backend server via 'bun run --watch src/index.ts'",
+    "exitCode": 0
+  },
+  {
+    "timestamp": "2026-01-30T16:54:00.8576105-05:00",
+    "level": "info",
+    "event": "backend_server_started",
+    "details": "Backend server started successfully on port 2900",
+    "exitCode": 0
+  },
+  {
+    "timestamp": "2026-01-30T16:54:00.8674288-05:00",
+    "level": "warn",
+    "event": "inngest_server_check_failed",
+    "details": "Inngest dev server not responding on port 2901 (failure 2)",
+    "exitCode": 0
+  },
+  {
+    "timestamp": "2026-01-30T16:54:00.8741482-05:00",
+    "level": "error",
+    "event": "inngest_server_restarting",
+    "details": "Inngest dev server failed 2 checks, attempting restart",
+    "exitCode": 0
+  },
+  {
+    "timestamp": "2026-01-30T16:54:00.9033089-05:00",
+    "level": "info",
+    "event": "starting_inngest_server",
+    "details": "Launching Inngest dev server via 'npx inngest-cli@latest dev'",
+    "exitCode": 0
+  },
+  {
+    "timestamp": "2026-01-30T16:54:03.9482056-05:00",
+    "level": "info",
+    "event": "inngest_server_started",
+    "details": "Inngest dev server started successfully on port 2901",
+    "exitCode": 0
+  },
+  {
+    "exitCode": 0,
+    "details": "HemSoft Conductor Server monitoring service started",
+    "timestamp": "2026-01-30T17:02:15.1583773-05:00",
+    "event": "service_started",
+    "level": "info"
   }
 ]
