@@ -82,6 +82,8 @@ Each video folder contains a `README.md` file with:
 
 **Cataloged**: {YYYY-MM-DD HH:MM}
 
+![Video Thumbnail](thumbnail.webp)
+
 ## Video Information
 
 - **URL**: {youtube-url}
@@ -101,7 +103,6 @@ Each video folder contains a `README.md` file with:
 - [AI Summary]({base_filename}-summary.md) - Detailed summary with chapters and key takeaways (if processed)
 - [Transcript]({base_filename}.en.vtt) - Full transcript (if processed)
 - [Metadata]({base_filename}-metadata.json) - Raw metadata (if processed)
-- [Thumbnail](thumbnail.webp) - Video thumbnail
 
 ## Key Takeaways
 
@@ -201,6 +202,8 @@ Folder: `catalog/2026-01-31 - how-to-build-a-rest-api-with-nodejs/README.md`
 
 **Cataloged**: 2026-01-31 15:23
 
+![Video Thumbnail](thumbnail.webp)
+
 ## Video Information
 
 - **URL**: <https://www.youtube.com/watch?v=fgTGADljAeg>
@@ -214,10 +217,6 @@ Folder: `catalog/2026-01-31 - how-to-build-a-rest-api-with-nodejs/README.md`
 ## Description
 
 Comprehensive tutorial covering Express setup, routing, middleware, and error handling.
-
-## Files
-
-- [Thumbnail](thumbnail.webp) - Video thumbnail
 
 ## Key Takeaways
 
@@ -235,6 +234,8 @@ Folder: `catalog/2026-01-31 - how-to-build-a-rest-api-with-nodejs/README.md`
 # How to Build a REST API with Node.js
 
 **Cataloged**: 2026-01-31 15:23
+
+![Video Thumbnail](thumbnail.webp)
 
 ## Video Information
 
@@ -255,7 +256,6 @@ Comprehensive tutorial covering Express setup, routing, middleware, and error ha
 - [AI Summary](2026-01-31%20-%20how-to-build-a-rest-api-with-nodejs-summary.md) - Detailed summary with chapters and key takeaways
 - [Transcript](2026-01-31%20-%20how-to-build-a-rest-api-with-nodejs.en.vtt) - Full transcript
 - [Metadata](2026-01-31%20-%20how-to-build-a-rest-api-with-nodejs-metadata.json) - Raw metadata
-- [Thumbnail](thumbnail.webp) - Video thumbnail
 
 ## Key Takeaways
 

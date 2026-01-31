@@ -2,6 +2,8 @@
 
 **Cataloged**: 2026-01-31 01:19
 
+![Video Thumbnail](thumbnail.webp)
+
 ## Video Information
 
 - **URL**: <https://youtu.be/aKUZCxTdDDg>
@@ -21,7 +23,6 @@
 - [AI Summary](2026-01-28%20-%20dotnet-ai-community-standup-github-copilot-cli-sdk-summary.md) - Detailed summary with chapters and key takeaways
 - [Transcript](2026-01-28%20-%20dotnet-ai-community-standup-github-copilot-cli-sdk.en.vtt) - Full transcript
 - [Metadata](2026-01-28%20-%20dotnet-ai-community-standup-github-copilot-cli-sdk-metadata.json) - Raw metadata
-- [Thumbnail](thumbnail.webp) - Video thumbnail
 
 ## Key Takeaways
 
