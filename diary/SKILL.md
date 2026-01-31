@@ -1,6 +1,6 @@
 ---
 name: diary
-description: "V2.20 - Captures daily accomplishments, goals, and reflections with Todoist integration. Auto-includes weather, ALL news headlines (5-7 per category: US, World, AI, Danish) with mandatory source diversification (max 2 per source, 3-4 sources minimum) and Simon Willison priority for AI News, comprehensive Slack highlights from 18 monitored channels (8-12+ highlights), watchlist updates, Daily Numbers (Dow Jones, S&P 500, Relias Repo Counts), LLM Models (LMSYS Chatbot Arena leaderboard + OpenRouter new releases + Top OpenRouter Apps), trending GitHub repos, Software Watchlist with 68% automation, and screenshots taken today from screenshot skill library. Structured Work/Personal/Personal Reflections format. Omits Work section on Saturdays; Sundays only include Work → Tomorrow's Goals. NEVER removes files without user consent."
+description: "V2.21 - Captures daily accomplishments, goals, and reflections with Todoist integration. Auto-includes weather, ALL news headlines (5-7 per category: US, World, AI, Danish) with mandatory source diversification (max 2 per source, 3-4 sources minimum) and Simon Willison priority for AI News, comprehensive Slack highlights from 18 monitored channels (8-12+ highlights), watchlist updates, Daily Numbers (Dow Jones, S&P 500, Relias Repo Counts), LLM Models (LMSYS Chatbot Arena leaderboard + OpenRouter new releases + Top OpenRouter Apps), trending GitHub repos, Software Watchlist with 68% automation, today's productivity metrics (LOC, commits, PRs, code reviews, issues), and screenshots taken today from screenshot skill library. Structured Work/Personal/Personal Reflections format. Omits Work section on Saturdays; Sundays only include Work → Tomorrow's Goals. NEVER removes files without user consent."
 ---
 
 # Diary
@@ -53,6 +53,7 @@ All diary entries follow the template at `config/yyyy-mm-dd.md`. Key sections:
 - **LLM Models**: LMSYS Chatbot Arena leaderboard (Overall/Coding/Vision top 5, only when rankings change), OpenRouter new model releases (last 7 days), and Top OpenRouter Apps by token usage (top 10, only when rankings change)
 - **Top 5 Trending GitHub Repos**: Current trending repositories with actual star counts (use web search to get real data from <https://github.com/trending>)
 - **Software Watchlist**: Version updates for monitored software (last 7 days)
+- **Today's Productivity**: Lines of code, commits, pull requests, code reviews, and issues closed (daily summary)
 - **Work**: Work Done, Tomorrow's Goals
 - **Personal**: Work Done, Tomorrow's Goals
 - **Personal Reflections**: Freeform thoughts
@@ -338,6 +339,59 @@ Example: "Dow Jones: 49,384.01 (+306.78, +0.63%)"
 
 After rendering, update JSON with new `last_displayed_date` and `last_displayed_version`. Maintain alphabetical order.
 
+**Step 4.7: Gather Today's Productivity Metrics**
+
+Use the productivity skill to collect coding activity metrics for today:
+
+**Metrics to Collect:**
+
+- **Total Lines of Code**: Net LOC (additions minus deletions) committed today
+- **Commits**: Number of commits made today
+- **Pull Requests**: Number opened and/or merged today
+- **Code Reviews**: Number of code reviews submitted today
+- **Issues Closed**: Number of issues resolved today
+- **Repositories**: List of repos touched today
+- **File Types**: Primary file types modified
+
+**Data Collection Method:**
+
+```powershell
+# Query GitHub API and local repositories for today's productivity
+& "$env:USERPROFILE\.claude\skills\productivity\scripts\Get-TodayProductivity.ps1"
+```
+
+This script:
+
+- Uses GitHub API for public/private repositories, PRs, code reviews, issues
+- Queries local git repositories for commit stats
+- Filters to author identity (Franz Hemmer and variations)
+- Excludes generated code, node_modules, build artifacts, documentation
+- Returns net LOC (additions - deletions) for code files only (.js, .ts, .py, .cs, .ps1, etc.)
+
+**Format:**
+
+```markdown
+### 💻 Today's Productivity
+
+| Metric | Count |
+|--------|-------|
+| Lines of Code | 1,247 |
+| Commits | 8 |
+| Pull Requests | 2 |
+| Code Reviews | 3 |
+| Issues Closed | 1 |
+
+**Repositories**: hemsoft-core, claude-skills
+**File Types**: .ts, .ps1, .md
+```
+
+**Section Placement**: Include after Software Watchlist section, before Work section
+
+**Omission Rules:**
+
+- If productivity data shows 0 across all metrics (no activity), omit section entirely
+- If data collection script fails, note "Productivity metrics unavailable today" with reason
+
 **Step 5: Include Full Output**
 
 Copy **complete, unfiltered output** from today skill: Today's Highlight, Weather, ALL News Headlines (5-7 per category: US/World/AI), Slack Highlights, Watchlist Updates. Include every headline for future context. Use user-provided highlight if specified.
@@ -413,10 +467,11 @@ if (Test-Path $screenshotLibrary) {
 3. **Apply filters** (`exclusion.json`: @Regular Chores, health/exercise/timesheet tasks)
 4. **Categorize** (Work: 2221463722, Personal: 2200472795 or others)
 5. **Check LLM Models** (LMSYS leaderboard changes, OpenRouter new releases from last 7 days)
-6. **Gather screenshots** (find all screenshots from today in screenshot skill library)
-7. **Generate entry** with weather/news/Todoist/LLM/screenshots data
-8. **Query for gaps** (work/personal done/goals/reflections)
-9. **Save** to `entries/{YYYY-MM-DD}.md`
+6. **Gather productivity metrics** (lines of code, commits, PRs, code reviews, issues closed)
+7. **Gather screenshots** (find all screenshots from today in screenshot skill library)
+8. **Generate entry** with weather/news/Todoist/LLM/productivity/screenshots data
+9. **Query for gaps** (work/personal done/goals/reflections)
+10. **Save** to `entries/{YYYY-MM-DD}.md`
 
 ### 3. Review Past Entries
 
