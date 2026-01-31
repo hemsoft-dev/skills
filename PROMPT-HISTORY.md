@@ -42,3 +42,5 @@ Result: Updated README.md to display thumbnail image inline below the title usin
 
 2026-01-31 - 02:06 - Clean up corrupted emoji/unicode in YouTube summary file
 Result: Removed all corrupted emoji and unicode characters from the AI-generated summary markdown file. Replaced garbled text (≡ƒÜÇ, ≡ƒô¥, ≡ƒÆí, ≡ƒôé, ΓÇö, etc.) with clean text, removed emoji from headings, and converted em dashes to regular dashes for better readability and compatibility.
+2026-01-31 - 02:11 - Fix emoji corruption in YouTube summary generation
+Result: Identified and fixed two root causes in Create-YouTubeSummary.ps1: (1) Removed emoji request from Gemini prompt (changed 'with emojis to make it visually appealing' to 'clean Markdown formatting'), (2) Replaced PowerShell Out-File with [System.IO.File]::WriteAllText() using proper UTF-8 encoding to prevent multi-byte character corruption. Prevents future emoji/unicode corruption in all AI-generated video summaries.
