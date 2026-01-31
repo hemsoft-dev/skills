@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>.NET AI Community Standup - Summary</title>
+    <style>
+        :root {
+            --bg-color: #0b0e14;
+            --surface-color: #161b22;
+            --surface-accent: #21262d;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --primary: #58a6ff;
+            --accent: #bc8cff;
+            --success: #3fb950;
+            --border-color: #30363d;
+            --header-gradient: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+            --crypto-blue: #1f6feb;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            padding-bottom: 4rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Header Styles */
+        header {
+            background: var(--header-gradient);
+            border-bottom: 1px solid var(--border-color);
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(31, 111, 235, 0.1) 0%, transparent 70%);
+            z-index: 0;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .channel-badge {
+            display: inline-block;
+            background: rgba(88, 166, 255, 0.1);
+            color: var(--primary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(88, 166, 255, 0.2);
+        }
+
+        h1 {
+            font-size: 2.25rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, #fff, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .meta-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .meta-item strong {
+            color: var(--text-primary);
+        }
+
+        /* Sections */
+        section {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-left: 4px solid var(--primary);
+            padding-left: 1rem;
+        }
+
+        p {
+            margin-bottom: 1.25rem;
+            color: #d1d9e0;
+        }
+
+        ul {
+            list-style: none;
+            margin-bottom: 1.25rem;
+        }
+
+        li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        li::before {
+            content: 'ΓåÆ';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* Takeaways Grid */
+        .takeaways-list li {
+            background: var(--surface-accent);
+            padding: 1rem 1rem 1rem 2.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Chapters Table */
+        .chapters-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .chapter-item {
+            background: var(--surface-accent);
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s, border-color 0.2s;
+            border: 1px solid transparent;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .chapter-item:hover {
+            transform: translateX(5px);
+            border-color: var(--primary);
+            background: rgba(31, 111, 235, 0.05);
+        }
+
+        .timestamp {
+            font-family: monospace;
+            color: var(--primary);
+            font-weight: bold;
+            background: rgba(88, 166, 255, 0.1);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        /* Links */
+        a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .external-links {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid var(--border-color);
+            margin: 2rem 0;
+        }
+
+        .tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            background: #238636;
+            color: white;
+            padding: 0.1rem 0.5rem;
+            border-radius: 10px;
+            margin-right: 0.5rem;
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 1.75rem; }
+            section { padding: 1.5rem; }
+            .meta-grid { flex-direction: column; gap: 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container header-content">
+        <span class="channel-badge">@dotnet ΓÇó Science & Technology</span>
+        <h1>.NET AI Community Standup - Using the GitHub Copilot CLI and SDK for .NET dev</h1>
+        <div class="meta-grid">
+            <div class="meta-item">≡ƒôà Published: <strong>Jan 28, 2026</strong></div>
+            <div class="meta-item">ΓÅ▒∩╕Å Duration: <strong>1:15:46</strong></div>
+            <div class="meta-item">≡ƒæü∩╕Å Views: <strong>5,352</strong></div>
+            <div class="meta-item">≡ƒæì Likes: <strong>184</strong></div>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+
+    <section id="summary">
+        <h2>≡ƒÜÇ The Agentic Revolution</h2>
+        <p>In this .NET AI community standup, guest host John Galloway is joined by <strong>Steve Sanderson</strong> (the creator of Blazor) to dive deep into the rapidly evolving world of <strong>agentic coding</strong>. The session moves beyond simple AI autocomplete, showcasing how the new <strong>GitHub Copilot CLI</strong> and <strong>SDK</strong> are transforming software engineering into a high-velocity, high-level orchestration task. From shipping 200+ improvements in a single week to conducting parallel code reviews using a "council" of different AI models, this standup provides a blueprint for the future of development.</p>
+    </section>
+
+    <section id="takeaways">
+        <h2>≡ƒÆí Key Takeaways</h2>
+        <ul class="takeaways-list">
+            <li><strong>From Suggestions to Agents:</strong> We are moving from a "wave" of AI autocomplete to "agent mode," where AI handles multi-step problem-solving, testing, and validation.</li>
+            <li><strong>Productivity Explosion:</strong> Steve's small team (7-10 people) shipped over <strong>200 items in a single week</strong> by leveraging these agentic tools.</li>
+            <li><strong>The "Plan Mode" Strategy:</strong> Effective agentic coding requires a shift in workflowΓÇöspecifying a plan in Markdown first, refining it with the AI, and then letting the agent execute.</li>
+            <li><strong>Context Management via Skills:</strong> "Skills" allow developers to provide agents with reusable context and specialized Python helpers without blowing up the context window.</li>
+            <li><strong>SDK-Powered Products:</strong> The Copilot SDK allows developers to embed these same world-class agentic loops directly into their own .NET, Python, Node, or Go applications.</li>
+        </ul>
+    </section>
+
+    <section id="chapters">
+        <h2>≡ƒôæ Video Chapters</h2>
+        <div class="chapters-container">
+            <a href="https://www.youtube.com/watch?v=aKUZCxTdDDg&t=0s" class="chapter-item" target="_blank">
+                <span>Countdown</span>
+                <span class="timestamp">00:00</span>
+            </a>
+            <a href="https://www.youtube.com/watch?v=aKUZCxTdDDg&t=145s" class="chapter-item" target="_blank">
+                <span>Welcome</span>
+                <span class="timestamp">02:25</span>
+            </a>
+            <a href="https://www.youtube.com/watch?v=aKUZCxTdDDg&t=220s" class="chapter-item" target="_blank">
+                <span>Community Links</span>
+                <span class="timestamp">03:40</span>
+            </a>
+            <a href="https://www.youtube.com/watch?v=aKUZCxTdDDg&t=410s" class="chapter-item" target="_blank">
+                <span>On today's stream</span>
+                <span class="timestamp">06:50</span>
+            </a>
+            <a href="https://www.youtube.com/watch?v=aKUZCxTdDDg&t=536s" class="chapter-item" target="_blank">
+                <span>GitHub Copilot CLI & SDK</span>
+                <span class="timestamp">08:56</span>
+            </a>
+            <a href="https://www.youtube.com/watch?v=aKUZCxTdDDg&t=627s" class="chapter-item" target="_blank">
+                <span>AI-powered code editing</span>
+                <span class="timestamp">10:27</span>
+            </a>
+            <a href="https://www.youtube.com/watch?v=aKUZCxTdDDg&t=680s" class="chapter-item" target="_blank">
+                <span>CLI multi-agent review</span>
+                <span class="timestamp">11:20</span>
+            </a>
+            <a href="https://www.youtube.com/watch?v=aKUZCxTdDDg&t=860s" class="chapter-item" target="_blank">
+                <span>Demo 1 - Adding a feature</span>
+                <span class="timestamp">14:20</span>
+            </a>
+            <a href="https://www.youtube.com/watch?v=aKUZCxTdDDg&t=1345s" class="chapter-item" target="_blank">
+                <span>Demo 2 - Code review</span>
+                
