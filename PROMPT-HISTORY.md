@@ -39,3 +39,6 @@ Result: Moved video folders from youtube root to youtube/catalog/ subdirectory. 
 
 2026-01-31 - 02:00 - Display thumbnail inline in YouTube README files
 Result: Updated README.md to display thumbnail image inline below the title using markdown image syntax (![Video Thumbnail](thumbnail.webp)). Removed thumbnail from Files section since it's now displayed directly in the document. Updated SKILL.md template and both Quick Add and Deep Processing examples to reflect this pattern.
+
+2026-01-31 - 02:06 - Clean up corrupted emoji/unicode in YouTube summary file
+Result: Removed all corrupted emoji and unicode characters from the AI-generated summary markdown file. Replaced garbled text (≡ƒÜÇ, ≡ƒô¥, ≡ƒÆí, ≡ƒôé, ΓÇö, etc.) with clean text, removed emoji from headings, and converted em dashes to regular dashes for better readability and compatibility.
