@@ -36,3 +36,6 @@ Result: Completely reorganized youtube catalog from separate catalog/, processed
 
 2026-01-31 - 01:55 - Move YouTube video folders under catalog/ directory
 Result: Moved video folders from youtube root to youtube/catalog/ subdirectory. Final structure is catalog/{YYYY-MM-DD - title}/ containing README.md, thumbnail.webp, and all processed files. Updated SKILL.md documentation throughout to reflect catalog/ folder in structure diagrams, workflow instructions, and examples.
+
+2026-01-31 - 02:00 - Display thumbnail inline in YouTube README files
+Result: Updated README.md to display thumbnail image inline below the title using markdown image syntax (![Video Thumbnail](thumbnail.webp)). Removed thumbnail from Files section since it's now displayed directly in the document. Updated SKILL.md template and both Quick Add and Deep Processing examples to reflect this pattern.
