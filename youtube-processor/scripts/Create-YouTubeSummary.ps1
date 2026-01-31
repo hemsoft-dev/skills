@@ -4,7 +4,9 @@
     [Parameter(Mandatory=$true)]
     [string]$OutputDir,
     [Parameter(Mandatory=$true)]
-    [string]$BaseFilename
+    [string]$BaseFilename,
+    [Parameter(Mandatory=$true)]
+    [string]$MetadataPath
 )
 
 $InformationPreference = 'Continue'
@@ -16,14 +18,21 @@ if (!(Test-Path $OutputDir)) {
 
 $summaryPath = Join-Path $OutputDir "$BaseFilename-summary.md"
 
+Write-Information "Reading metadata from $MetadataPath..."
+$metadata = Get-Content $MetadataPath -Raw | ConvertFrom-Json
+$videoTitle = $metadata.title
+
 Write-Information "Reading transcript from $TranscriptPath..."
 $transcript = Get-Content $TranscriptPath -Raw
 
 Write-Information "Generating summary using Gemini (gemini-3-flash-preview)..."
 $prompt = @"
 Create a comprehensive and engaging summary of the following YouTube transcript.
+
+Video Title: $videoTitle
+
 The summary should include:
-1. A catchy title.
+1. Use the video title above as the main heading (# Video Title).
 2. A high-level executive summary.
 3. Key takeaways or main points.
 4. Detailed notes or chapters if applicable.

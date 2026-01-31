@@ -1,6 +1,6 @@
 ---
 name: youtube-processor
-description: V1.3 - Processes a YouTube URL by extracting metadata, downloading video, generating transcript, summary, and audio summary.
+description: V1.4 - Processes a YouTube URL by extracting metadata, downloading video, generating transcript, summary, and audio summary.
 ---
 
 # YouTube Processor
@@ -35,7 +35,7 @@ $metadata = & "c:\Users\User\.claude\skills\youtube-processor\scripts\Get-YouTub
 & "c:\Users\User\.claude\skills\youtube-processor\scripts\Get-YouTubeTranscript.ps1" -Url "{URL}" -OutputDir "{OUTPUT_DIR}" -BaseFilename $metadata.base_filename -VideoPath "{OUTPUT_DIR}/$($metadata.base_filename).webm"
 
 # 4. Create Markdown Summary
-& "c:\Users\User\.claude\skills\youtube-processor\scripts\Create-YouTubeSummary.ps1" -TranscriptPath "{OUTPUT_DIR}/$($metadata.base_filename).en.vtt" -OutputDir "{OUTPUT_DIR}" -BaseFilename $metadata.base_filename
+& "c:\Users\User\.claude\skills\youtube-processor\scripts\Create-YouTubeSummary.ps1" -TranscriptPath "{OUTPUT_DIR}/$($metadata.base_filename).en.vtt" -OutputDir "{OUTPUT_DIR}" -BaseFilename $metadata.base_filename -MetadataPath "{OUTPUT_DIR}/$($metadata.base_filename)-metadata.json"
 
 # 5. Create Audio Summary (edge-tts)
 & "c:\Users\User\.claude\skills\youtube-processor\scripts\Create-YouTubeSummaryAudio.ps1" -SummaryPath "{OUTPUT_DIR}/$($metadata.base_filename)-summary.md" -OutputDir "{OUTPUT_DIR}" -BaseFilename $metadata.base_filename
