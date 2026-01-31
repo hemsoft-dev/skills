@@ -1,0 +1,19 @@
+{
+  "original_filename": "{31404744-A279-404B-BDA8-3F545F596EEB}.png",
+  "imported_date": "2026-01-31",
+  "original_path": "C:\\Users\\User\\AppData\\Local\\Temp\\snagx-extract-1052099634\\{31404744-A279-404B-BDA8-3F545F596EEB}.png",
+  "skill": "screenshot",
+  "tags": [
+    "azure",
+    "app-insights",
+    "grafana"
+  ],
+  "filename": "relias-assistant-metric.webp",
+  "size_webp": "1024x295",
+  "snagit_library": "D:\\OneDrive\\Snagit",
+  "source": "SnagIt",
+  "size_original": "1973x569",
+  "text_content": "Invocations\n\n30\n25\n20\n15\n10\n5\n0\n01/25 00:00\n01/26 00:00\n01/27 00:00\n01/28 00:00\n01/29 00:00\n01/30 00:00\n01/31 00:00\nCount",
+  "imported_time": "14:14:10",
+  "description": "The image shows a chart titled \"Invocations\" that plots the \"Count\" of invocations over time, from January 25th to January 31st. The green line displays how the number of invocations fluctuated throughout the week."
+}
