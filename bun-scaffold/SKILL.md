@@ -317,6 +317,6 @@ Don't include `"prepare": "husky"` in initial package.json. Add it AFTER install
 
 - **`bun-manager`**: For Bun CLI usage and configuration
 - **`github-init`**: For repository initialization patterns
-- **`how-to-write-tests`**: For testing best practices
+- **`testing-vitest-react`**: For testing best practices
 
 ```markdown

@@ -1,5 +1,5 @@
 ---
-name: how-to-write-tests
+name: testing-vitest-react
 description: V1.2 - Expert guidance for writing perfect unit tests with Vitest and Testing Library, covering patterns, mocking, coverage, and common pitfalls.
 ---
 
