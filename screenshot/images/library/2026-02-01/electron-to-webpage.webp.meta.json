@@ -1,0 +1,15 @@
+{
+  "snagit_library": "D:\\OneDrive\\Snagit",
+  "tags": [],
+  "skill": "screenshot",
+  "original_filename": "{0E249388-2DBD-409F-AEAF-6EFF12823BFB}.png",
+  "size_webp": "1024x297",
+  "imported_time": "02:51:47",
+  "description": "The image shows a text-based user interface displaying feedback on a \"light mode design\", with a comment suggesting confusion about the app being a webpage, followed by a reply clarifying it's an Electron app. The response details steps for switching to light mode to view improvements.",
+  "size_original": "1298x377",
+  "text_content": "FEEDBACK ON LIGHT MODE DESIGN\n口\nSince when did this become a web page? Jesus, you must be really confused.\n> Used 1 reference\n✓ Reviewed suggestion and acknowledged incorrect instruction\nYou're right, my bad - it's an Electron app, not a browser. The window should have hot-reloaded already. Just\nswitch to light mode in Settings → Appearance to see the improvements.",
+  "source": "SnagIt",
+  "filename": "electron-to-webpage.webp",
+  "original_path": "C:\\Users\\User\\AppData\\Local\\Temp\\snagx-extract-1343394845\\{0E249388-2DBD-409F-AEAF-6EFF12823BFB}.png",
+  "imported_date": "2026-02-01"
+}

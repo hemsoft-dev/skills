@@ -1,6 +1,6 @@
 ---
 name: todo
-description: V1.0 - Manages TODO.md file in repository root with status table and context sections for tracking project tasks, ideas, and plans
+description: V1.1 - Manages TODO.md file in repository root with status table and context sections for tracking project tasks, ideas, and plans
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -133,8 +133,9 @@ When updating:
 
 - **Always preserve the table at the top** - Never move or remove it
 - **Keep the table concise** - Use the elaboration sections for lengthy details
-- **Maintain chronological order** - Newest tasks at the bottom of the table
-- **Archive completed items** - Move ✅ items to a "## Completed" section periodically to keep the table focused
+- **Order by status** - Remaining items (📋, 🚧, ⏸️) at top, completed items (✅, ❌) at bottom
+- **Link to details** - If a remaining item has a detailed section below, make the Task column a markdown anchor link (e.g., `[Task Name](#task-name)`)
+- **Completed items are summary only** - Remove detailed specs for completed items; keep just a brief note in the Notes column with completion date
 - **Be specific** - Task descriptions should be actionable ("Add user authentication" not "Auth stuff")
 
 ## Example TODO.md
@@ -144,25 +145,48 @@ When updating:
 
 | Status | Priority | Task | Notes |
 |--------|----------|------|-------|
-| 🚧 | High | Implement authentication system | Using Next-Auth |
-| 📋 | High | Set up database schema | PostgreSQL with Prisma |
+| 🚧 | High | [Implement authentication system](#implement-authentication-system) | Using Next-Auth |
+| 📋 | High | [Set up database schema](#set-up-database-schema) | PostgreSQL with Prisma |
 | 📋 | Medium | Create landing page | Use shadcn/ui components |
-| ⏸️ | Low | Add dark mode support | Blocked: waiting on design |
+| ⏸️ | Low | [Add dark mode support](#add-dark-mode-support) | Blocked: waiting on design |
+| ✅ | High | Configure CI/CD pipeline | GitHub Actions (2026-01-15) |
+| ✅ | Medium | Set up linting | ESLint + Prettier (2026-01-10) |
 
-## Context
+## Progress
 
-This project is a web application for managing personal tasks. Built with Next.js, TypeScript, and Supabase.
+**Completed: 2 / 6** (33%)
 
-## Ideas
+---
 
-- Add calendar view for tasks
-- Integrate with Google Calendar
-- Mobile app using React Native
+## Remaining Items
 
-## Notes
+### Implement authentication system
 
-- Remember to update tests when adding new features
-- Keep dependencies up to date weekly
+**Location**: `src/auth/`
+
+**Problem**: Need secure user authentication with social login support.
+
+**Proposed Solution**: Use Next-Auth with GitHub and Google providers.
+
+---
+
+### Set up database schema
+
+**Location**: `prisma/schema.prisma`
+
+**Problem**: Need to define data models for users, projects, and tasks.
+
+**Proposed Solution**: Use Prisma ORM with PostgreSQL.
+
+---
+
+### Add dark mode support
+
+**Location**: `src/styles/`
+
+**Problem**: Users want dark mode option.
+
+**Status**: Blocked waiting on design team's color palette.
 ```
 
 ## Workflow
@@ -182,4 +206,10 @@ This project is a web application for managing personal tasks. Built with Next.j
 - Don't remove or restructure the table without user consent
 - Don't use inconsistent status icons
 - Don't add vague or non-actionable tasks
-- Don't let the table grow huge - suggest archiving completed items
+- Don't keep detailed specs for completed items - summarize in Notes column
+- Don't put completed items above remaining items in the table
+- Don't forget anchor links for items that have detailed sections
+
+## Reference Implementation
+
+See `d:\github\Relias\relias-assistant\TODO.md` for a real-world example of this format in use.
