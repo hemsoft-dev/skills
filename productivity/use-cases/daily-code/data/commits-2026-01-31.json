@@ -1,0 +1,117 @@
+{
+  "commitsFound": 4,
+  "commits": [
+    {
+      "hash": "5ec5511",
+      "netLOC": 1089,
+      "additions": 1170,
+      "fullHash": "5ec5511600ac8fab723fbbafe9d911985b53537e",
+      "date": "2026-01-31",
+      "author": "Franz Hemmer",
+      "deletions": 81,
+      "subject": "feat: add stale PRs/repos detection, logging, and improved error handling",
+      "repositoryName": "hs-cli-prs",
+      "time": "00:01:29",
+      "gitignoreModified": false,
+      "repositorySource": "personal",
+      "linesAffected": 1251,
+      "timestamp": "2026-01-31T00:01:29.0000000-05:00"
+    },
+    {
+      "hash": "16c2f20",
+      "netLOC": 984,
+      "additions": 1456,
+      "fullHash": "16c2f20809dedf95613e0b1c0e0215d26584b2fd",
+      "date": "2026-01-31",
+      "author": "Franz Hemmer",
+      "deletions": 472,
+      "subject": "docs: streamline setup flow and improve user guidance",
+      "repositoryName": "hs-conductor",
+      "time": "17:33:13",
+      "gitignoreModified": false,
+      "repositorySource": "personal",
+      "linesAffected": 1928,
+      "timestamp": "2026-01-31T17:33:13.0000000-05:00"
+    },
+    {
+      "hash": "bbeb250",
+      "netLOC": 4954,
+      "additions": 5575,
+      "fullHash": "bbeb250d05b081d59dc056061717282db9a3c3e4",
+      "date": "2026-01-31",
+      "author": "Franz Hemmer",
+      "deletions": 621,
+      "subject": "test: add service and logger tests with console formatting update",
+      "repositoryName": "relias-assistant",
+      "time": "19:11:17",
+      "gitignoreModified": false,
+      "repositorySource": "work",
+      "linesAffected": 6196,
+      "timestamp": "2026-01-31T19:11:17.0000000-05:00"
+    },
+    {
+      "hash": "6adba7a",
+      "netLOC": 16863,
+      "additions": 17156,
+      "fullHash": "6adba7a816fbcd3ff72c64bcb19af5a01fc0ddbb",
+      "date": "2026-01-31",
+      "author": "Franz Hemmer",
+      "deletions": 293,
+      "subject": "feat(screenshot): import weather winter storm warning screenshot",
+      "repositoryName": "skills",
+      "time": "15:41:07",
+      "gitignoreModified": false,
+      "repositorySource": "skills",
+      "linesAffected": 17449,
+      "timestamp": "2026-01-31T15:41:07.0000000-05:00"
+    }
+  ],
+  "collectionTime": "2026-01-31T19:21:11.9942437-05:00",
+  "queryStartTimeLocal": "2026-01-31 00:00:00",
+  "queryStartTime": "2026-01-31T00:00:00.0000000-05:00",
+  "suspiciousCommits": [],
+  "repositoriesScanned": 55,
+  "summary": {
+    "totalNetLOC": 23890.0,
+    "commitsByRepository": [
+      {
+        "repository": "hs-cli-prs",
+        "additions": 1170.0,
+        "linesAffected": 1251.0,
+        "netLOC": 1089.0,
+        "commits": 1,
+        "deletions": 81.0
+      },
+      {
+        "repository": "hs-conductor",
+        "additions": 1456.0,
+        "linesAffected": 1928.0,
+        "netLOC": 984.0,
+        "commits": 1,
+        "deletions": 472.0
+      },
+      {
+        "repository": "relias-assistant",
+        "additions": 5575.0,
+        "linesAffected": 6196.0,
+        "netLOC": 4954.0,
+        "commits": 1,
+        "deletions": 621.0
+      },
+      {
+        "repository": "skills",
+        "additions": 17156.0,
+        "linesAffected": 17449.0,
+        "netLOC": 16863.0,
+        "commits": 1,
+        "deletions": 293.0
+      }
+    ],
+    "totalAdditions": 25357.0,
+    "totalDeletions": 1467.0,
+    "totalLinesAffected": 26824.0
+  },
+  "queryEndTime": "2026-01-31T23:59:59.0000000-05:00",
+  "queryEndTimeLocal": "2026-01-31 23:59:59",
+  "suspiciousCommitsFound": 0
+}

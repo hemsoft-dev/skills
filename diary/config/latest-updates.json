@@ -1,34 +1,10 @@
 [
   {
-    "Software": "Claude Code",
-    "OldVersion": "v2.1.25",
-    "NewVersion": "v2.1.27",
-    "ReleaseDate": "Jan 30 '26",
-    "ChangelogUrl": "https://github.com/anthropics/claude-code/releases",
-    "CheckMethod": "github_releases"
-  },
-  {
     "Software": "GitHub Copilot Chat",
-    "OldVersion": "v0.37.2026012902",
-    "NewVersion": "v0.37.2026013001",
-    "ReleaseDate": "Jan 29 '26",
+    "OldVersion": "v0.37.2026013001",
+    "NewVersion": "v0.37.2026013101",
+    "ReleaseDate": "Jan 31 '26",
     "ChangelogUrl": "https://github.com/microsoft/vscode-copilot-chat/blob/main/CHANGELOG.md",
-    "CheckMethod": "github_releases"
-  },
-  {
-    "Software": "GitHub Web",
-    "OldVersion": "Jan 29",
-    "NewVersion": "Jan 30",
-    "ReleaseDate": "Jan 30 '26",
-    "ChangelogUrl": "https://github.blog/changelog/feed/",
-    "CheckMethod": "rss"
-  },
-  {
-    "Software": "Goose CLI",
-    "OldVersion": "v1.22.0",
-    "NewVersion": "v1.22.1",
-    "ReleaseDate": "Jan 30 '26",
-    "ChangelogUrl": "https://github.com/block/goose/releases",
     "CheckMethod": "github_releases"
   },
   {
