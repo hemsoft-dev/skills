@@ -1,0 +1,35 @@
+{
+  "commitsFound": 1,
+  "repository": "relias-assistant",
+  "queryEndTime": "2026-01-21T23:59:59.0000000",
+  "owner": "relias-engineering",
+  "source": "work",
+  "commits": [
+    {
+      "sha": "346babe837b18433c307804dd7dd89f317c3c00c",
+      "author": "Franz Hemmer",
+      "authorEmail": "franz_hemmer@hotmail.com",
+      "date": "2026-01-21T05:15:57Z",
+      "message": "Enhance Tavily web search with AI answers and raw content\n\n- Add SearchDepth, IncludeAnswer, and IncludeRawContent options to WebSearchOptions\n- Add RawContent property to WebSearchResult model\n- Update TavilySearchService to use configurable search options\n- Prepend AI-generated answer as first result when Tavily returns one\n- Update system prompt to prioritize web search for weather queries\n- Update tool description to explicitly mention weather support\n- Add test coverage for AI answer prepending and raw content\n- Update NuGet packages: Microsoft.Extensions.* to 10.0.2, Microsoft.Extensions.AI to 10.2.0\n- Update Microsoft.CodeAnalysis.NetAnalyzers to 10.0.102\n- Add PostTestMessage.ps1 and Test-ReliasAssistantSlack.ps1 test utilities\n- Fix run.ps1 to set ASPNETCORE_ENVIRONMENT=Development\n- Fix Directory.Build.targets to prefer system dotnet.exe",
+      "url": "https://github.com/relias-engineering/relias-assistant/commit/346babe837b18433c307804dd7dd89f317c3c00c",
+      "repository": "relias-assistant",
+      "owner": "relias-engineering",
+      "source": "work",
+      "additions": 802,
+      "deletions": 52,
+      "filesChanged": 17,
+      "netLOC": 750
+    }
+  ],
+  "queryEndTimeLocal": "2026-01-21 23:59:59",
+  "summary": {
+    "totalAdditions": 802.0,
+    "totalNetLOC": 750.0,
+    "totalDeletions": 52.0,
+    "totalLinesAffected": 854.0
+  },
+  "collectionTime": "2026-02-01T14:53:56.7309501-05:00",
+  "queryStartTime": "2026-01-21T00:00:00.0000000",
+  "queryStartTimeLocal": "2026-01-21 00:00:00",
+  "url": "https://github.com/relias-engineering/relias-assistant"
+}

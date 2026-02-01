@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>relias-assistant - Repository Analytics</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.05);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 5px;
+            font-size: 2.5em;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .subtitle {
+            text-align: center;
+            color: #aaa;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+        .metric-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.3) 0%, rgba(118, 75, 162, 0.3) 100%);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .metric-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+        .metric-label {
+            font-size: 0.85em;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+        .chart-wrapper {
+            background: rgba(255,255,255,0.03);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .chart-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #fff;
+            text-align: center;
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+        .contributor-section {
+            margin-top: 30px;
+        }
+        .contributor-section h2 {
+            color: #fff;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        .contributor-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+        }
+        .contributor-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .contributor-table th, .contributor-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .contributor-table th {
+            background: rgba(102, 126, 234, 0.3);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85em;
+            letter-spacing: 1px;
+        }
+        .contributor-table tr:hover {
+            background: rgba(255,255,255,0.05);
+        }
+        .additions { color: #28a745; }
+        .deletions { color: #dc3545; }
+        .insights {
+            background: rgba(255,255,255,0.03);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .insights h3 {
+            color: #fff;
+            margin-bottom: 15px;
+        }
+        .insights ul {
+            list-style: none;
+            padding: 0;
+        }
+        .insights li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            color: #ccc;
+        }
+        .insights li:last-child {
+            border-bottom: none;
+        }
+        .insights strong {
+            color: #fff;
+        }
+        .generated-info {
+            text-align: center;
+            color: #666;
+            font-size: 0.85em;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        @media (max-width: 1200px) {
+            .contributor-grid {
+                grid-template-columns: 1fr;
+            }
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 relias-assistant</h1>
+        <div class="subtitle">Repository Analytics | Jan 01, 2026 - Jan 31, 2026</div>
+
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-value">49</div>
+                <div class="metric-label">Total Commits</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">13,803</div>
+                <div class="metric-label">Net LOC</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">1</div>
+                <div class="metric-label">Contributors</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">10</div>
+                <div class="metric-label">Active Days</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">+24,940</div>
+                <div class="metric-label">Additions</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">-11,137</div>
+                <div class="metric-label">Deletions</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">1,380</div>
+                <div class="metric-label">Avg LOC/Day</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">31</div>
+                <div class="metric-label">Days Analyzed</div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-wrapper">
+                <div class="chart-title">📈 Daily Net Lines of Code</div>
+                <div class="chart-container">
+                    <canvas id="locChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-wrapper">
+                <div class="chart-title">📝 Daily Commits</div>
+                <div class="chart-container">
+                    <canvas id="commitsChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-wrapper">
+                <div class="chart-title">➕➖ Additions vs Deletions</div>
+                <div class="chart-container">
+                    <canvas id="addDelChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-wrapper">
+                <div class="chart-title">👥 Daily Contributors</div>
+                <div class="chart-container">
+                    <canvas id="contributorsChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="contributor-section">
+            <h2>👥 Contributor Breakdown</h2>
+            <div class="contributor-grid">
+                <div class="chart-wrapper">
+                    <table class="contributor-table">
+                        <thead>
+                            <tr>
+                                <th>Contributor</th>
+                                <th>Commits</th>
+                                <th>Share</th>
+                                <th>Additions</th>
+                                <th>Deletions</th>
+                                <th>Net LOC</th>
+                                <th>Files</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                    <tr>
+                        <td><strong>Franz Hemmer</strong></td>
+                        <td>49</td>
+                        <td>100%</td>
+                        <td class="additions">+24,940</td>
+                        <td class="deletions">-11,137</td>
+                        <td>13,803</td>
+                        <td>451</td>
+                    </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="chart-wrapper">
+                    <div class="chart-title">Commit Distribution</div>
+                    <div class="chart-container">
+                        <canvas id="pieChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="insights">
+            <h3>🔍 Key Insights</h3>
+            <ul>
+                <li><strong>Most Active Day:</strong> 2026-01-08 with 10 commits</li>
+                <li><strong>Top Contributor:</strong> Franz Hemmer with 49 commits (100% of total)</li>
+                <li><strong>Code Velocity:</strong> Average 1,380 net LOC per active day</li>
+                <li><strong>Activity Rate:</strong> 32.3% of days had commits (10/31)</li>
+                <li><strong>Code Churn:</strong> 24,940 additions, 11,137 deletions (2.24:1 ratio)</li>
+            </ul>
+        </div>
+
+        <div class="generated-info">
+            Generated on 2026-02-01 16:39:45 | Template: repo-analytics.html
+        </div>
+    </div>
+
+    <script>
+        const dates = ['Jan 01','Jan 02','Jan 03','Jan 04','Jan 05','Jan 06','Jan 07','Jan 08','Jan 09','Jan 10','Jan 11','Jan 12','Jan 13','Jan 14','Jan 15','Jan 16','Jan 17','Jan 18','Jan 19','Jan 20','Jan 21','Jan 22','Jan 23','Jan 24','Jan 25','Jan 26','Jan 27','Jan 28','Jan 29','Jan 30','Jan 31'];
+        const netLOC = [0,0,0,0,0,0,659,4662,0,0,0,3957,0,0,0,0,0,0,0,0,750,4266,0,1032,0,0,-162,49,-2333,923,0];
+        const commits = [0,0,0,0,0,0,4,10,0,0,0,3,0,0,0,0,0,0,0,0,1,9,0,1,0,0,2,6,5,8,0];
+        const contributors = [0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,1,0,0,1,1,1,1,0];
+        const additions = [0,0,0,0,0,0,1480,5232,0,0,0,4164,0,0,0,0,0,0,0,0,802,6942,0,1248,0,0,430,2957,704,981,0];
+        const deletions = [0,0,0,0,0,0,821,570,0,0,0,207,0,0,0,0,0,0,0,0,52,2676,0,216,0,0,592,2908,3037,58,0];
+
+        const contributorLabels = ['Franz Hemmer'];
+        const contributorCommits = [49];
+        const contributorColors = ['#007bff'];
+
+        Chart.defaults.color = '#aaa';
+        Chart.defaults.borderColor = 'rgba(255,255,255,0.1)';
+
+        // Net LOC Chart
+        new Chart(document.getElementById('locChart'), {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: 'Net LOC',
+                    data: netLOC,
+                    borderColor: '#007bff',
+                    backgroundColor: 'rgba(0, 123, 255, 0.2)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: {
+                        ticks: {
+                            callback: function(value) {
+                                return new Intl.NumberFormat().format(value);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Commits Chart
+        new Chart(document.getElementById('commitsChart'), {
+            type: 'bar',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: 'Commits',
+                    data: commits,
+                    backgroundColor: '#28a745',
+                    borderColor: '#28a745',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // Additions vs Deletions Chart
+        new Chart(document.getElementById('addDelChart'), {
+            type: 'bar',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: 'Additions',
+                    data: additions,
+                    backgroundColor: 'rgba(40, 167, 69, 0.8)',
+                    borderWidth: 0
+                }, {
+                    label: 'Deletions',
+                    data: deletions.map(d => -d),
+                    backgroundColor: 'rgba(220, 53, 69, 0.8)',
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: true, position: 'top' } },
+                scales: {
+                    x: { stacked: true },
+                    y: {
+                        stacked: true,
+                        ticks: {
+                            callback: function(value) {
+                                return new Intl.NumberFormat().format(Math.abs(value));
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Daily Contributors Chart
+        new Chart(document.getElementById('contributorsChart'), {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: 'Contributors',
+                    data: contributors,
+                    borderColor: '#ffc107',
+                    backgroundColor: 'rgba(255, 193, 7, 0.2)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, ticks: { stepSize: 1 } }
+                }
+            }
+        });
+
+        // Contributor Pie Chart
+        new Chart(document.getElementById('pieChart'), {
+            type: 'doughnut',
+            data: {
+                labels: contributorLabels,
+                datasets: [{
+                    data: contributorCommits,
+                    backgroundColor: contributorColors,
+                    borderWidth: 2,
+                    borderColor: 'rgba(0,0,0,0.3)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: { padding: 15 }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,17 @@
+{
+  "details": {
+    "repository": "ai-skills",
+    "commit": "c3f2191",
+    "subject": "RPLAT-13423 - feat(skill): update epic-activity-summary with pending PRs and 280-char summary",
+    "author": "Jeff Buda",
+    "date": "2026-01-30 19:11:11",
+    "reason": "Unknown author name not matching known patterns"
+  },
+  "title": "Suspicious Commit Detected",
+  "skillName": "productivity",
+  "level": "warning",
+  "timestamp": "2026-02-01T14:14:04.5099485-05:00",
+  "alertType": "suspicious-commit",
+  "status": "active",
+  "description": "Unknown author detected in commit"
+}

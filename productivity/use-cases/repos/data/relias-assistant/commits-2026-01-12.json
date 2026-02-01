@@ -1,0 +1,65 @@
+{
+  "commitsFound": 3,
+  "repository": "relias-assistant",
+  "queryEndTime": "2026-01-12T23:59:59.0000000",
+  "owner": "relias-engineering",
+  "source": "work",
+  "commits": [
+    {
+      "sha": "fc1ee11748f7c9252d17c2387c4f34e8cbb1b715",
+      "author": "Franz Hemmer",
+      "authorEmail": "franz_hemmer@hotmail.com",
+      "date": "2026-01-12T06:48:22Z",
+      "message": "Implement Phase 4: Tool Integration for Skills System\n\n- Add four AI tool methods to ReliasAssistantChatClient:\n  - InvokeSkillAsync: Execute skill operations with JSON parameters\n  - GetAvailableSkillsAsync: List all available skills\n  - GetSkillOperationsAsync: Get operations for a specific skill\n  - GetSkillInstructionsAsync: Retrieve skill SKILL.md content\n\n- Wire up DI in Program.cs:\n  - Add InitializeSkillServicesAsync method for skill service creation\n  - Create SkillDiscoveryService -> SkillCatalogService -> SkillInvocationService chain\n  - Update ServiceContainer with SkillInvocation property\n  - Pass skill service to CreateChatClient\n\n- Add logger extensions (EventIds 700-704) for skill tool operations\n\n- Add 18 unit tests in ChatClientSkillToolTests.cs covering:\n  - Service unavailable scenarios\n  - Parameter validation\n  - Success/failure/timeout cases\n  - Skill and operation discovery\n\n- Update SKILL-PLAN.md to v1.5.0 documenting Phase 4 completion\n\nAll 243 tests passing.",
+      "url": "https://github.com/relias-engineering/relias-assistant/commit/fc1ee11748f7c9252d17c2387c4f34e8cbb1b715",
+      "repository": "relias-assistant",
+      "owner": "relias-engineering",
+      "source": "work",
+      "additions": 904,
+      "deletions": 59,
+      "filesChanged": 6,
+      "netLOC": 845
+    },
+    {
+      "sha": "67853f1a5984671384b5038420717cadd58cfdf7",
+      "author": "Franz Hemmer",
+      "authorEmail": "franz_hemmer@hotmail.com",
+      "date": "2026-01-12T01:22:32Z",
+      "message": "Implement Phase 3: Skill Invocation Service\n\nAdd SkillInvocationService with full parameter mapping and context generation:\n\n- ISkillInvocationService interface with InvokeAsync, GetSkillInstructionsAsync,\n  GetSkillOperationsAsync, and GenerateSkillContextAsync methods\n- SkillInvocationService implementation with:\n  - Skill validation (existence, enabled state, operation lookup)\n  - PowerShell command building with proper argument escaping\n  - Timeout handling and execution result conversion\n  - AI context generation for enabled skills\n- SkillExecutionResult model with Success, Output, Error, ExitCode,\n  ExecutionTime, TimedOut properties and factory methods\n- SkillParameter model with ToPowerShellArgument() for parameter formatting\n- 8 new logger extension methods (EventIds 200-207) for invocation tracking\n- 13 unit tests covering success, failure, timeout, and parameter scenarios\n\nUpdate SKILL-PLAN.md to v1.4.0 marking Phase 3 complete with 225 tests passing",
+      "url": "https://github.com/relias-engineering/relias-assistant/commit/67853f1a5984671384b5038420717cadd58cfdf7",
+      "repository": "relias-assistant",
+      "owner": "relias-engineering",
+      "source": "work",
+      "additions": 1157,
+      "deletions": 66,
+      "filesChanged": 7,
+      "netLOC": 1091
+    },
+    {
+      "sha": "fd276bca154b5ceb751f4c1452cf7e9a505a445e",
+      "author": "Franz Hemmer",
+      "authorEmail": "franz_hemmer@hotmail.com",
+      "date": "2026-01-12T00:32:11Z",
+      "message": "Implement Phase 2 Skills Infrastructure\n\nAdd complete skill discovery, parsing, and catalog services:\n\n- Skill model classes (Skill, SkillMetadata, SkillScript, SkillAuthType, SkillPlatform)\n- SkillMetadataParser for YAML frontmatter extraction from SKILL.md files\n- ISkillDiscoveryService interface and implementation for scanning skill directories\n- SkillValidationResult for structural validation (SKILL.md required, scripts optional)\n- ISkillCatalogService interface and implementation for skill management\n- Skills configuration section in appsettings.json\n- SkillsLoggerExtensions for CA1848-compliant structured logging\n- 32 comprehensive unit tests (all passing)\n\nPhase 2 is now complete per SKILL-PLAN.md v1.3.0.",
+      "url": "https://github.com/relias-engineering/relias-assistant/commit/fd276bca154b5ceb751f4c1452cf7e9a505a445e",
+      "repository": "relias-assistant",
+      "owner": "relias-engineering",
+      "source": "work",
+      "additions": 2103,
+      "deletions": 82,
+      "filesChanged": 18,
+      "netLOC": 2021
+    }
+  ],
+  "queryEndTimeLocal": "2026-01-12 23:59:59",
+  "summary": {
+    "totalAdditions": 4164.0,
+    "totalNetLOC": 3957.0,
+    "totalDeletions": 207.0,
+    "totalLinesAffected": 4371.0
+  },
+  "collectionTime": "2026-02-01T14:53:46.9918945-05:00",
+  "queryStartTime": "2026-01-12T00:00:00.0000000",
+  "queryStartTimeLocal": "2026-01-12 00:00:00",
+  "url": "https://github.com/relias-engineering/relias-assistant"
+}

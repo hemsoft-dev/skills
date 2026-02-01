@@ -1,0 +1,35 @@
+{
+  "commitsFound": 1,
+  "repository": "relias-assistant",
+  "queryEndTime": "2026-01-24T23:59:59.0000000",
+  "owner": "relias-engineering",
+  "source": "work",
+  "commits": [
+    {
+      "sha": "daa70bea83f19eb229800d0779b346f8442fc55d",
+      "author": "Franz Hemmer",
+      "authorEmail": "franz_hemmer@hotmail.com",
+      "date": "2026-01-24T04:59:59Z",
+      "message": "fix: Slack skill now handles channel ID to name conversion\n\n- Added Convert-ChannelReferencesToNames function to Search-SlackMessages.ps1\n- Script now handles all channel reference variants:\n  - in:#C06F7RT6U6L (channel ID) -> converts via API lookup\n  - in:<#C06F7RT6U6L|productivity-engineering-public> -> extracts name\n  - in:<#C06F7RT6U6L> -> looks up name from API\n  - in:#productivity-engineering-public -> uses as-is\n- Added MaximumIterationsPerRequest = 5 to prevent infinite tool loops\n- Updated system-prompt.txt v1.11.0 with clearer Slack channel guidance\n- Added debug logging to SkillInvocationService for troubleshooting\n- Added test scripts for Slack token validation",
+      "url": "https://github.com/relias-engineering/relias-assistant/commit/daa70bea83f19eb229800d0779b346f8442fc55d",
+      "repository": "relias-assistant",
+      "owner": "relias-engineering",
+      "source": "work",
+      "additions": 1248,
+      "deletions": 216,
+      "filesChanged": 24,
+      "netLOC": 1032
+    }
+  ],
+  "queryEndTimeLocal": "2026-01-24 23:59:59",
+  "summary": {
+    "totalAdditions": 1248.0,
+    "totalNetLOC": 1032.0,
+    "totalDeletions": 216.0,
+    "totalLinesAffected": 1464.0
+  },
+  "collectionTime": "2026-02-01T14:54:03.4919191-05:00",
+  "queryStartTime": "2026-01-24T00:00:00.0000000",
+  "queryStartTimeLocal": "2026-01-24 00:00:00",
+  "url": "https://github.com/relias-engineering/relias-assistant"
+}

@@ -1,0 +1,50 @@
+{
+  "commitsFound": 2,
+  "repository": "relias-assistant",
+  "queryEndTime": "2026-01-27T23:59:59.0000000",
+  "owner": "relias-engineering",
+  "source": "work",
+  "commits": [
+    {
+      "sha": "254305221292137c9a1285aefafc7bdfb7af1e3d",
+      "author": "Franz Hemmer",
+      "authorEmail": "franz_hemmer@hotmail.com",
+      "date": "2026-01-27T08:39:36Z",
+      "message": "Add security test prompt for Slack private channel access",
+      "url": "https://github.com/relias-engineering/relias-assistant/commit/254305221292137c9a1285aefafc7bdfb7af1e3d",
+      "repository": "relias-assistant",
+      "owner": "relias-engineering",
+      "source": "work",
+      "additions": 3,
+      "deletions": 0,
+      "filesChanged": 1,
+      "netLOC": 3
+    },
+    {
+      "sha": "8a51816d773cf594305ff5af777a37b274affe92",
+      "author": "Franz Hemmer",
+      "authorEmail": "franz_hemmer@hotmail.com",
+      "date": "2026-01-27T07:20:02Z",
+      "message": "Improve Confluence search with AND-based token matching and recency scoring\n\n- Fix Confluence base URL missing /wiki path (was routing to JIRA)\n- Add 'order by lastmodified desc' to CQL queries for recency\n- Change broader search to AND logic (require ALL significant tokens)\n- Add recency bonus scoring (up to +15 points for recent pages)\n- Add fallback search strategies when AND is too restrictive\n- Update system prompt v1.13.0 with clear capabilities list\n- Update test to reflect new title-contains search behavior",
+      "url": "https://github.com/relias-engineering/relias-assistant/commit/8a51816d773cf594305ff5af777a37b274affe92",
+      "repository": "relias-assistant",
+      "owner": "relias-engineering",
+      "source": "work",
+      "additions": 427,
+      "deletions": 592,
+      "filesChanged": 21,
+      "netLOC": -165
+    }
+  ],
+  "queryEndTimeLocal": "2026-01-27 23:59:59",
+  "summary": {
+    "totalAdditions": 430.0,
+    "totalNetLOC": -162.0,
+    "totalDeletions": 592.0,
+    "totalLinesAffected": 1022.0
+  },
+  "collectionTime": "2026-02-01T14:54:07.1863701-05:00",
+  "queryStartTime": "2026-01-27T00:00:00.0000000",
+  "queryStartTimeLocal": "2026-01-27 00:00:00",
+  "url": "https://github.com/relias-engineering/relias-assistant"
+}

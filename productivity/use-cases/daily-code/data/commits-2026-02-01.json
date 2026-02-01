@@ -1,0 +1,141 @@
+{
+  "queryStartTime": "2026-02-01T00:00:00.0000000-05:00",
+  "collectionTime": "2026-02-01T14:22:13.1443245-05:00",
+  "summary": {
+    "totalNetLOC": 8046.0,
+    "totalDeletions": 3213.0,
+    "totalLinesAffected": 14472.0,
+    "totalAdditions": 11259.0,
+    "commitsByRepository": [
+      {
+        "linesAffected": 18.0,
+        "repository": "ai-skills",
+        "additions": 13.0,
+        "deletions": 5.0,
+        "commits": 1,
+        "netLOC": 8.0
+      },
+      {
+        "linesAffected": 4706.0,
+        "repository": "hs-buddy",
+        "additions": 3918.0,
+        "deletions": 788.0,
+        "commits": 1,
+        "netLOC": 3130.0
+      },
+      {
+        "linesAffected": 4378.0,
+        "repository": "hs-conductor",
+        "additions": 3606.0,
+        "deletions": 772.0,
+        "commits": 1,
+        "netLOC": 2834.0
+      },
+      {
+        "linesAffected": 5005.0,
+        "repository": "relias-assistant",
+        "additions": 3373.0,
+        "deletions": 1632.0,
+        "commits": 1,
+        "netLOC": 1741.0
+      },
+      {
+        "linesAffected": 365.0,
+        "repository": "skills",
+        "additions": 349.0,
+        "deletions": 16.0,
+        "commits": 1,
+        "netLOC": 333.0
+      }
+    ]
+  },
+  "queryStartTimeLocal": "2026-02-01 00:00:00",
+  "queryEndTimeLocal": "2026-02-01 23:59:59",
+  "queryEndTime": "2026-02-01T23:59:59.0000000-05:00",
+  "suspiciousCommitsFound": 0,
+  "suspiciousCommits": [],
+  "commitsFound": 5,
+  "repositoriesScanned": 56,
+  "commits": [
+    {
+      "fullHash": "47a50b0f49ebfc42beee63a77162cb50341de9a6",
+      "linesAffected": 4706,
+      "hash": "47a50b0",
+      "deletions": 788,
+      "date": "2026-02-01",
+      "subject": "feat: improve light theme, add org avatars, refine PR behavior",
+      "author": "Franz Hemmer",
+      "repositorySource": "personal",
+      "netLOC": 3130,
+      "timestamp": "2026-02-01T03:47:19.0000000-05:00",
+      "repositoryName": "hs-buddy",
+      "additions": 3918,
+      "gitignoreModified": false,
+      "time": "03:47:19"
+    },
+    {
+      "fullHash": "73f9d37a8a5749d0040b5879256d33772c79e42e",
+      "linesAffected": 4378,
+      "hash": "73f9d37",
+      "deletions": 772,
+      "date": "2026-02-01",
+      "subject": "Add Bun detection to all run scripts",
+      "author": "Franz Hemmer",
+      "repositorySource": "personal",
+      "netLOC": 2834,
+      "timestamp": "2026-02-01T12:46:33.0000000-05:00",
+      "repositoryName": "hs-conductor",
+      "additions": 3606,
+      "gitignoreModified": false,
+      "time": "12:46:33"
+    },
+    {
+      "fullHash": "e324ec58eacca8aab4e4a3ec391d6a2014fc6a1d",
+      "linesAffected": 18,
+      "hash": "e324ec5",
+      "deletions": 5,
+      "date": "2026-02-01",
+      "subject": "docs: use static image icon inline with title",
+      "author": "fhemmerrelias",
+      "repositorySource": "work",
+      "netLOC": 8,
+      "timestamp": "2026-02-01T00:09:49.0000000-05:00",
+      "repositoryName": "ai-skills",
+      "additions": 13,
+      "gitignoreModified": false,
+      "time": "00:09:49"
+    },
+    {
+      "fullHash": "7503c24f433f4caabc35be70a6f1e43279b589f2",
+      "linesAffected": 5005,
+      "hash": "7503c24",
+      "deletions": 1632,
+      "date": "2026-02-01",
+      "subject": "refactor(VectorStoreService): extract content extraction to dedicated class",
+      "author": "Franz Hemmer",
+      "repositorySource": "work",
+      "netLOC": 1741,
+      "timestamp": "2026-02-01T03:47:10.0000000-05:00",
+      "repositoryName": "relias-assistant",
+      "additions": 3373,
+      "gitignoreModified": false,
+      "time": "03:47:10"
+    },
+    {
+      "fullHash": "5071a128eadc91cfa6fae16c8ee94f900cb7a7ce",
+      "linesAffected": 365,
+      "hash": "5071a12",
+      "deletions": 16,
+      "date": "2026-02-01",
+      "subject": "chore: log commit-and-push work to PROMPT-HISTORY.md",
+      "author": "Franz Hemmer",
+      "repositorySource": "skills",
+      "netLOC": 333,
+      "timestamp": "2026-02-01T14:09:25.0000000-05:00",
+      "repositoryName": "skills",
+      "additions": 349,
+      "gitignoreModified": false,
+      "time": "14:09:25"
+    }
+  ]
+}
