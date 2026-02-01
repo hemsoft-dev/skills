@@ -111,10 +111,38 @@ if ($dataFiles.Count -eq 0) {
 Write-Host "📊 Analyzing $($dataFiles.Count) days of data for '$RepoName'..." -ForegroundColor Cyan
 Write-Host "📄 Using template: $Template" -ForegroundColor Cyan
 
+# Also look for issues/PRs data files
+$issuesPrsFiles = Get-ChildItem -Path $repoDataPath -Filter "issues-prs-*.json" -ErrorAction SilentlyContinue | Sort-Object Name
+
+# Apply date filters to issues/PRs files
+if ($StartDate -and $issuesPrsFiles) {
+    $startDt = [DateTime]::Parse($StartDate)
+    $issuesPrsFiles = $issuesPrsFiles | Where-Object {
+        $dateStr = $_.Name -replace 'issues-prs-(\d{4}-\d{2}-\d{2})\.json', '$1'
+        [DateTime]::Parse($dateStr) -ge $startDt
+    }
+}
+
+if ($EndDate -and $issuesPrsFiles) {
+    $endDt = [DateTime]::Parse($EndDate)
+    $issuesPrsFiles = $issuesPrsFiles | Where-Object {
+        $dateStr = $_.Name -replace 'issues-prs-(\d{4}-\d{2}-\d{2})\.json', '$1'
+        [DateTime]::Parse($dateStr) -le $endDt
+    }
+}
+
+if ($issuesPrsFiles -and $issuesPrsFiles.Count -gt 0) {
+    Write-Host "📋 Found $($issuesPrsFiles.Count) issues/PRs data file(s)" -ForegroundColor Cyan
+}
+
 # Collect data from all files
 $dailyData = @()
 $allCommits = @()
 $contributorStats = @{}
+$allPullRequests = @()
+$allIssues = @()
+$dailyPRData = @{}
+$dailyIssueData = @{}
 
 foreach ($file in $dataFiles) {
     try {
@@ -187,6 +215,62 @@ foreach ($file in $dataFiles) {
     }
 }
 
+# Process issues/PRs files
+if ($issuesPrsFiles -and $issuesPrsFiles.Count -gt 0) {
+    foreach ($file in $issuesPrsFiles) {
+        try {
+            $data = Get-Content $file.FullName | ConvertFrom-Json
+            
+            # Collect pull requests
+            if ($data.pullRequests) {
+                foreach ($pr in $data.pullRequests) {
+                    $allPullRequests += $pr
+                    
+                    # Track daily PR data
+                    $actionDate = $pr.actionDate
+                    if (-not $dailyPRData.ContainsKey($actionDate)) {
+                        $dailyPRData[$actionDate] = @{
+                            opened = 0
+                            merged = 0
+                            closed = 0
+                        }
+                    }
+                    
+                    switch ($pr.action) {
+                        "opened" { $dailyPRData[$actionDate].opened++ }
+                        "merged" { $dailyPRData[$actionDate].merged++ }
+                        "closed" { $dailyPRData[$actionDate].closed++ }
+                    }
+                }
+            }
+            
+            # Collect issues
+            if ($data.issues) {
+                foreach ($issue in $data.issues) {
+                    $allIssues += $issue
+                    
+                    # Track daily issue data
+                    $actionDate = $issue.actionDate
+                    if (-not $dailyIssueData.ContainsKey($actionDate)) {
+                        $dailyIssueData[$actionDate] = @{
+                            opened = 0
+                            closed = 0
+                        }
+                    }
+                    
+                    switch ($issue.action) {
+                        "opened" { $dailyIssueData[$actionDate].opened++ }
+                        "closed" { $dailyIssueData[$actionDate].closed++ }
+                    }
+                }
+            }
+        }
+        catch {
+            Write-Warning "Failed to process issues/PRs file $($file.Name): $($_.Exception.Message)"
+        }
+    }
+}
+
 if ($dailyData.Count -eq 0) {
     Write-Error "No valid data found to analyze."
     exit 1
@@ -225,6 +309,15 @@ $summary = [PSCustomObject]@{
     MostActiveDay   = ($dailyData | Sort-Object TotalCommits -Descending | Select-Object -First 1).Date.ToString("yyyy-MM-dd")
     TotalContributors = $contributors.Count
     TopContributor  = if ($contributors.Count -gt 0) { $contributors[0].Name } else { "N/A" }
+    # PR stats
+    TotalPRs        = $allPullRequests.Count
+    PRsOpened       = ($allPullRequests | Where-Object { $_.action -eq "opened" }).Count
+    PRsMerged       = ($allPullRequests | Where-Object { $_.action -eq "merged" }).Count
+    PRsClosed       = ($allPullRequests | Where-Object { $_.action -eq "closed" }).Count
+    # Issue stats
+    TotalIssues     = $allIssues.Count
+    IssuesOpened    = ($allIssues | Where-Object { $_.action -eq "opened" }).Count
+    IssuesClosed    = ($allIssues | Where-Object { $_.action -eq "closed" }).Count
 }
 
 # Display summary
@@ -239,6 +332,8 @@ Write-Host ("Total Deletions: {0:N0}" -f $summary.TotalDeletions)
 Write-Host ("Average Daily LOC (active days): {0:N0}" -f $summary.AverageDailyLOC)
 Write-Host ("Peak Day: {0} ({1:N0} commits)" -f $summary.MostActiveDay, ($dailyData | Sort-Object TotalCommits -Descending | Select-Object -First 1).TotalCommits)
 Write-Host ("Contributors: {0}" -f $summary.TotalContributors)
+Write-Host ("Pull Requests: {0} ({1} opened, {2} merged, {3} closed)" -f $summary.TotalPRs, $summary.PRsOpened, $summary.PRsMerged, $summary.PRsClosed)
+Write-Host ("Issues: {0} ({1} opened, {2} closed)" -f $summary.TotalIssues, $summary.IssuesOpened, $summary.IssuesClosed)
 
 # Display contributor breakdown
 Write-Host "`n👥 CONTRIBUTOR BREAKDOWN" -ForegroundColor Magenta
@@ -257,6 +352,43 @@ $commitsData = ($dailyData | ForEach-Object { $_.TotalCommits }) -join ','
 $contributorsData = ($dailyData | ForEach-Object { $_.Contributors }) -join ','
 $additionsData = ($dailyData | ForEach-Object { $_.TotalAdditions }) -join ','
 $deletionsData = ($dailyData | ForEach-Object { $_.TotalDeletions }) -join ','
+
+# Prepare PRs and Issues chart data (aligned with dates)
+$prsOpenedData = @()
+$prsMergedData = @()
+$prsClosedData = @()
+$issuesOpenedData = @()
+$issuesClosedData = @()
+
+foreach ($day in $dailyData) {
+    $dateKey = $day.Date.ToString("yyyy-MM-dd")
+    
+    # PR data for this date
+    if ($dailyPRData.ContainsKey($dateKey)) {
+        $prsOpenedData += $dailyPRData[$dateKey].opened
+        $prsMergedData += $dailyPRData[$dateKey].merged
+        $prsClosedData += $dailyPRData[$dateKey].closed
+    } else {
+        $prsOpenedData += 0
+        $prsMergedData += 0
+        $prsClosedData += 0
+    }
+    
+    # Issue data for this date
+    if ($dailyIssueData.ContainsKey($dateKey)) {
+        $issuesOpenedData += $dailyIssueData[$dateKey].opened
+        $issuesClosedData += $dailyIssueData[$dateKey].closed
+    } else {
+        $issuesOpenedData += 0
+        $issuesClosedData += 0
+    }
+}
+
+$prsOpenedDataStr = $prsOpenedData -join ','
+$prsMergedDataStr = $prsMergedData -join ','
+$prsClosedDataStr = $prsClosedData -join ','
+$issuesOpenedDataStr = $issuesOpenedData -join ','
+$issuesClosedDataStr = $issuesClosedData -join ','
 
 # Prepare contributor chart data
 $contributorLabels = ($contributors | ForEach-Object { "'$($_.Name)'" }) -join ','
@@ -329,6 +461,20 @@ $replacements = @{
     '{{CONTRIBUTOR_LABELS}}'    = $contributorLabels
     '{{CONTRIBUTOR_COMMITS}}'   = $contributorCommitsData
     '{{CONTRIBUTOR_COLORS}}'    = $contributorColorsData
+    # PR/Issue summary placeholders
+    '{{TOTAL_PRS}}'             = $summary.TotalPRs.ToString()
+    '{{PRS_OPENED}}'            = $summary.PRsOpened.ToString()
+    '{{PRS_MERGED}}'            = $summary.PRsMerged.ToString()
+    '{{PRS_CLOSED}}'            = $summary.PRsClosed.ToString()
+    '{{TOTAL_ISSUES}}'          = $summary.TotalIssues.ToString()
+    '{{ISSUES_OPENED}}'         = $summary.IssuesOpened.ToString()
+    '{{ISSUES_CLOSED}}'         = $summary.IssuesClosed.ToString()
+    # PR/Issue chart data placeholders
+    '{{PRS_OPENED_DATA}}'       = $prsOpenedDataStr
+    '{{PRS_MERGED_DATA}}'       = $prsMergedDataStr
+    '{{PRS_CLOSED_DATA}}'       = $prsClosedDataStr
+    '{{ISSUES_OPENED_DATA}}'    = $issuesOpenedDataStr
+    '{{ISSUES_CLOSED_DATA}}'    = $issuesClosedDataStr
 }
 
 foreach ($key in $replacements.Keys) {

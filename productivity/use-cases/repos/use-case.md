@@ -35,7 +35,7 @@ data/
 
 ## Data Collection
 
-Data is collected using the **GitHub CLI** (`gh`) to query commit information from remote repositories.
+Data is collected using the **GitHub CLI** (`gh`) to query commit, pull request, and issue information from remote repositories.
 
 ### Collection Method
 
@@ -45,12 +45,17 @@ Unlike the daily-code use case which scans local repositories, this use case:
 2. Includes ALL commits (not filtered by author)
 3. Supports repositories you may not have cloned locally
 4. Tracks both organization and personal repositories
+5. Collects pull request and issue activity for comprehensive tracking
 
-### Collection Script
+### Collection Scripts
 
 - **Script**: `scripts/collect-repo-commits.ps1`
 - **Purpose**: Query monitored GitHub repositories for commit data
-- **Output**: Raw commit data stored in `data/` directory
+- **Output**: Raw commit data stored in `data/<repo-name>/commits-YYYY-MM-DD.json`
+
+- **Script**: `scripts/collect-repo-issues-prs.ps1`
+- **Purpose**: Query monitored GitHub repositories for issues and pull requests
+- **Output**: Issues/PR data stored in `data/<repo-name>/issues-prs-YYYY-MM-DD.json`
 
 ## Configuration
 
@@ -88,7 +93,7 @@ Repository configuration is stored in:
 
 ## Metrics Collected
 
-For each commit in monitored repositories:
+### Commit Data (per commit)
 
 - Commit SHA (short and full)
 - Author name and email
@@ -97,6 +102,26 @@ For each commit in monitored repositories:
 - Files changed count
 - Additions and deletions
 - Pull request association (if applicable)
+
+### Pull Request Data
+
+- PR number and title
+- Author
+- State (open/closed/merged)
+- Action type (opened/merged/closed)
+- Action date
+- Additions, deletions, changed files
+- URL
+
+### Issue Data
+
+- Issue number and title
+- Author
+- State (open/closed)
+- Action type (opened/closed)
+- Action date
+- Labels
+- URL
 
 ## Output
 
@@ -123,10 +148,11 @@ Generate visual analytics for any repository with contributor breakdowns:
 
 ### Dashboard Features
 
-- **Summary Metrics**: Total commits, net LOC, contributors, active days, additions/deletions
-- **Time Series Charts**: Daily LOC trend, daily commits, additions vs deletions, daily contributors
+- **Summary Metrics**: Total commits, net LOC, contributors, active days, additions/deletions, pull requests, issues
+- **Time Series Charts**: Daily LOC trend, daily commits, additions vs deletions, daily contributors, PR activity, issue activity
 - **Contributor Analysis**: Table with per-contributor stats, commit distribution pie chart
-- **Key Insights**: Most active day, top contributor, code velocity, activity rate, code churn ratio
+- **Key Insights**: Most active day, top contributor, code velocity, activity rate, code churn ratio, PR/issue summaries
+- **SVG Icons**: Modern iconography for all metrics and sections
 
 ## Common Commands
 
@@ -144,6 +170,15 @@ Generate visual analytics for any repository with contributor breakdowns:
 
 # Collect entire month for a repo (one day at a time)
 1..31 | % { $d = "2026-01-{0:D2}" -f $_; .\scripts\collect-repo-commits.ps1 -StartDate $d -EndDate $d -RepoName "relias-assistant" }
+
+# Collect issues and PRs for all monitored repos (last 7 days)
+.\scripts\collect-repo-issues-prs.ps1
+
+# Collect issues and PRs for a specific date range
+.\scripts\collect-repo-issues-prs.ps1 -StartDate "2026-01-01" -EndDate "2026-01-31"
+
+# Collect issues and PRs for a specific repository
+.\scripts\collect-repo-issues-prs.ps1 -RepoName "relias-assistant"
 ```
 
 ### Report Generation
