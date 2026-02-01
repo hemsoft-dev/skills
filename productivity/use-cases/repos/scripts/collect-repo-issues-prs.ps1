@@ -282,54 +282,52 @@ foreach ($repo in $reposToProcess) {
             New-Item -ItemType Directory -Path $repoDataDir -Force | Out-Null
         }
         
-        # Group by date for easier reporting
+        # Group by actionDate and save separate files per day
         $prsByDate = $pullRequests | Group-Object -Property actionDate
         $issuesByDate = $issues | Group-Object -Property actionDate
         
-        $outputData = @{
-            collectionTime = (Get-Date).ToString("o")
-            queryStartTime = $startDateTime.ToString("o")
-            queryEndTime = $endDateTime.AddDays(1).AddSeconds(-1).ToString("o")
-            queryStartTimeLocal = $startDateTime.ToString("yyyy-MM-dd HH:mm:ss")
-            queryEndTimeLocal = $endDateTime.AddDays(1).AddSeconds(-1).ToString("yyyy-MM-dd HH:mm:ss")
-            repository = $repoName
-            owner = $owner
-            url = $repo.url
-            source = $repo.source
-            summary = @{
-                totalPRs = $pullRequests.Count
-                prsOpened = ($pullRequests | Where-Object { $_.action -eq "opened" }).Count
-                prsMerged = ($pullRequests | Where-Object { $_.action -eq "merged" }).Count
-                prsClosed = ($pullRequests | Where-Object { $_.action -eq "closed" }).Count
-                totalIssues = $issues.Count
-                issuesOpened = ($issues | Where-Object { $_.action -eq "opened" }).Count
-                issuesClosed = ($issues | Where-Object { $_.action -eq "closed" }).Count
+        # Get all unique dates from both PRs and issues
+        $allDates = @()
+        $allDates += $prsByDate | ForEach-Object { $_.Name }
+        $allDates += $issuesByDate | ForEach-Object { $_.Name }
+        $allDates = $allDates | Sort-Object -Unique
+        
+        # Save a file for each date that has activity
+        foreach ($date in $allDates) {
+            $dayPRs = ($prsByDate | Where-Object { $_.Name -eq $date }).Group
+            $dayIssues = ($issuesByDate | Where-Object { $_.Name -eq $date }).Group
+            
+            if (-not $dayPRs) { $dayPRs = @() }
+            if (-not $dayIssues) { $dayIssues = @() }
+            
+            $outputData = @{
+                collectionTime = (Get-Date).ToString("o")
+                date = $date
+                repository = $repoName
+                owner = $owner
+                url = $repo.url
+                source = $repo.source
+                summary = @{
+                    totalPRs = $dayPRs.Count
+                    prsOpened = ($dayPRs | Where-Object { $_.action -eq "opened" }).Count
+                    prsMerged = ($dayPRs | Where-Object { $_.action -eq "merged" }).Count
+                    prsClosed = ($dayPRs | Where-Object { $_.action -eq "closed" }).Count
+                    totalIssues = $dayIssues.Count
+                    issuesOpened = ($dayIssues | Where-Object { $_.action -eq "opened" }).Count
+                    issuesClosed = ($dayIssues | Where-Object { $_.action -eq "closed" }).Count
+                }
+                pullRequests = $dayPRs
+                issues = $dayIssues
             }
-            pullRequests = $pullRequests
-            issues = $issues
-            dailyPRs = @{}
-            dailyIssues = @{}
+            
+            $outputFile = Join-Path $repoDataDir "issues-prs-$date.json"
+            $outputData | ConvertTo-Json -Depth 10 | Out-File -FilePath $outputFile -Encoding UTF8 -Force
+            Write-Information "  Saved: $outputFile" -InformationAction Continue
         }
         
-        # Build daily breakdown
-        foreach ($group in $prsByDate) {
-            $outputData.dailyPRs[$group.Name] = @{
-                opened = ($group.Group | Where-Object { $_.action -eq "opened" }).Count
-                merged = ($group.Group | Where-Object { $_.action -eq "merged" }).Count
-                closed = ($group.Group | Where-Object { $_.action -eq "closed" }).Count
-            }
+        if ($allDates.Count -eq 0) {
+            Write-Information "  No PR or issue activity found in date range" -InformationAction Continue
         }
-        
-        foreach ($group in $issuesByDate) {
-            $outputData.dailyIssues[$group.Name] = @{
-                opened = ($group.Group | Where-Object { $_.action -eq "opened" }).Count
-                closed = ($group.Group | Where-Object { $_.action -eq "closed" }).Count
-            }
-        }
-        
-        $outputFile = Join-Path $repoDataDir "issues-prs-$($startDateTime.ToString('yyyy-MM-dd')).json"
-        $outputData | ConvertTo-Json -Depth 10 | Out-File -FilePath $outputFile -Encoding UTF8 -Force
-        Write-Information "  Saved: $outputFile" -InformationAction Continue
     }
     catch {
         Write-Warning "Error querying $fullRepo : $_"
@@ -339,4 +337,4 @@ foreach ($repo in $reposToProcess) {
 
 Write-Information "" -InformationAction Continue
 Write-Information "=== Collection Complete ===" -InformationAction Continue
-Write-Information "Data saved to: $OutputDir/<repo-name>/issues-prs-YYYY-MM-DD.json" -InformationAction Continue
+Write-Information "Data saved to: $OutputDir/<repo-name>/issues-prs-YYYY-MM-DD.json (one file per day with activity)" -InformationAction Continue
