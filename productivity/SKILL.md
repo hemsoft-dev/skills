@@ -40,6 +40,13 @@ hooks:
 
 Tracks personal productivity metrics with deep insights into coding activity, collaboration, and issue resolution. Currently supports daily lines of code (LOC) tracking as the primary use case, with extensibility for additional metrics.
 
+## Related Skills
+
+- **[GitHub Skill](../github/SKILL.md)** - Account structure, organizations, authentication. MUST consult for:
+  - Which `gh` account to use (`fhemmerrelias` for work, `HemSoft` for personal)
+  - Organization names (`relias-engineering`, `fhemmer`, etc.)
+  - SSH key aliases and token scopes
+
 ## Data Collection
 
 The skill queries two sources for comprehensive productivity tracking:

@@ -1,0 +1,33 @@
+{
+  "metadata": {
+    "description": "Repositories monitored for commit activity tracking",
+    "lastUpdated": "2026-02-01T14:45:00-05:00",
+    "version": "1.1",
+    "notes": [
+      "See github skill for account structure: ~/.claude/skills/github/SKILL.md",
+      "Work repos (relias-engineering) require fhemmerrelias account",
+      "Personal repos (HemSoft, fhemmer) require HemSoft account"
+    ]
+  },
+  "accounts": {
+    "work": {
+      "ghUsername": "fhemmerrelias",
+      "organizations": ["relias-engineering"]
+    },
+    "personal": {
+      "ghUsername": "HemSoft",
+      "organizations": ["fhemmer", "HemSoft"]
+    }
+  },
+  "repositories": [
+    {
+      "name": "relias-assistant",
+      "owner": "relias-engineering",
+      "url": "https://github.com/relias-engineering/relias-assistant",
+      "source": "work",
+      "account": "fhemmerrelias",
+      "description": "Relias AI Assistant - company-wide AI assistant project",
+      "enabled": true
+    }
+  ]
+}
