@@ -24,6 +24,25 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 {One-line summary of what was done}
 ```
 
+## Branding & Design Assets (assets/)
+
+All company branding, logos, and design assets are stored in the `/assets` folder:
+
+**Current Assets**:
+
+- `relias-logo.png` - Relias organization official logo from GitHub (34 KB, PNG format)
+  - Source: <https://github.com/relias-engineering>
+  - Avatar URL: <https://avatars.githubusercontent.com/u/135147856?v=4>
+  - Used for: Official company branding, documentation, presentations
+
+This folder is the central location for all Relias design assets and can be expanded with:
+
+- Brand guidelines and color palettes
+- Official icon sets
+- Approved templates
+- Marketing assets
+- Internal design resources
+
 ## Knowledge Base Structure
 
 ### HR Documents (HR/)
