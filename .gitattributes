@@ -1,0 +1,15 @@
+# Git attributes for skills repository
+# See: https://git-scm.com/docs/gitattributes
+
+# =============================================================================
+# Linguist overrides - exclude from GitHub language statistics
+# =============================================================================
+
+# Generated output files (HTML reports, text summaries)
+productivity/use-cases/repos/output/** linguist-generated
+
+# Collected data files (commits, issues, LOC snapshots)
+productivity/use-cases/repos/data/** linguist-generated
+
+# Demo/test files
+productivity/use-cases/repos/templates/demo-*.html linguist-generated
