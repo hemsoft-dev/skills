@@ -16,8 +16,9 @@ This session aims to showcase the transformative power of AI skills by starting 
 
 1. **Clean slate demonstration** - Start with fresh VS Code
 2. **Skill Creator** - The gateway skill that enables everything else
-3. **Meeting Prep** - Practical example everyone can relate to
-4. **Advanced Skills** - Show what's possible with more complex integrations
+3. **Tempo (timesheet) demo** - Show automatic timesheet registrations using the `tempo` skill
+4. **Meeting Prep** - Practical example everyone can relate to
+5. **Advanced Skills** - Show what's possible with more complex integrations
 
 ## Preparation Tasks
 
@@ -25,6 +26,7 @@ This session aims to showcase the transformative power of AI skills by starting 
 |------|--------|-----------|-------|
 | Set up clean VS Code environment | ✗ | [VS Code Download](https://code.visualstudio.com/) | Fresh install to demonstrate "from scratch" experience |
 | Prepare skill-creator demonstration | ✗ | [Agent Skills Spec](https://agentskills.io/specification) | Show how to create first skill, explain frontmatter and structure |
+| Prepare Tempo skill timesheet automation demo | ✗ | [Tempo skill](../tempo/SKILL.md) | Showcase automatic timesheet registrations (demo: register 30m to "AI Chapter prep") |
 | Create meeting-prep skill live demo | ✗ | [Microsoft Skill Levels](https://learn.microsoft.com/en-us/archive/blogs/ieitpro/microsofts-standard-level-definitions-100-to-400) | Walk through creating the meeting-preparation skill as live example |
 | Prepare Slack search skill showcase | ✗ | [Slack Web API](https://api.slack.com/web) | Demonstrate searching channels, DMs, retrieving messages with context |
 | Prepare GitHub PR creation demo | ✗ | [GitHub REST API](https://docs.github.com/en/rest) | Show creating issues, pull requests, managing repos programmatically |
@@ -65,6 +67,13 @@ Skills transform AI assistants from general helpers into domain experts. They en
 2. Explain version prefixes, descriptions
 3. Show history tracking with hooks
 4. Demonstrate using skill-creator to make another skill
+
+### Part 2.5: Tempo (5 minutes)
+
+1. Introduce the timesheet problem and Tempo skill value proposition
+2. Show the Tempo skill's automated timesheet registration flow (create entry from a task)
+3. Live demo: register 30 minutes to "AI Chapter prep" and show entry posted to Tempo
+4. Link to implementation and further resources: [Tempo skill](../tempo/SKILL.md)
 
 ### Part 3: Meeting Prep (10 minutes)
 

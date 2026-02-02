@@ -1,333 +1,128 @@
+```skill
 ---
 name: screenshot
-description: V2.1 - SnagIt screenshot library management. Import .snagx files with automatic WebP compression, AI-generated descriptions, smart filenames from window metadata, and superior OCR text extraction. Twitter/X screenshots auto-prefixed with 'tweet-'. Slack screenshots auto-prefixed with 'slack-'. Defaults to processing latest SnagIt capture when no action specified.
+description: V2.2 - Import screenshots from SnagIt library with automatic WebP compression, AI descriptions, and OCR text extraction.
 ---
 
 # Screenshot
 
-**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
-
-Import and manage screenshots from your SnagIt library with automatic processing, AI descriptions, and OCR text extraction.
+Import screenshots from SnagIt into skill image libraries.
 
 ## Default Behavior
 
-**When user activates this skill without specifying an action:**
+When user activates this skill without specifying an action:
 
-Automatically process the latest screenshot from SnagIt library (equivalent to "grab latest screenshot"):
+1. Look for latest .snagx file in `D:\OneDrive\Snagit`
+2. **If none found**: Report "No SnagIt captures found" and stop (do not search other locations)
+3. **If found**: Process it with Script 1
 
-1. Find most recent .snagx file in `D:\OneDrive\Snagit`
-2. Import to screenshot skill's own `images/library/{date}/` folder
-3. Generate AI description and extract OCR text
-4. Save with smart filename from window metadata
+## Scripts (Execute in Order)
 
-**User must explicitly request otherwise to:**
+| # | Script | Purpose | When to Use |
+|---|--------|---------|-------------|
+| 1 | `1-Extract-SnagX.ps1` | Extract PNG from .snagx, detect app/window, call script 2 | **Always start here** for .snagx files |
+| 2 | `2-Process-Image.ps1` | Compress to WebP, generate AI description, extract OCR text, save metadata | Called automatically by script 1 |
+| 3 | `3-Search-Library.ps1` | Search existing screenshots by skill, tags, or text | Only for searching |
 
-- Import to a different skill: "import to [skillname]"
-- Add specific tags: "with tags [tag1, tag2]"
-- Search existing screenshots: "search screenshots"
-- List screenshots: "show screenshots"
+## Workflow: Import Latest Screenshot
 
-## ALWAYS: Log This Interaction
+Execute these steps in order:
 
-After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
-
-```markdown
-## {HH:MM} - {Action Taken}
-{One-line summary of what was done}
-```
-
-## Grab Latest Screenshot
-
-**Triggered by:**
-
-- "grab the latest screenshot" or "get the latest screenshot"
-- **Using screenshot skill without specifying an action** (default behavior)
-- "process latest screenshot"
-
-Find the most recent .snagx file in the SnagIt library and import it to the screenshot skill's own image library:
-
-**Default behavior:**
-
-- **Destination:** `screenshot` skill (this skill's own `images/library/` folder)
-- **Tags:** Empty by default
-- **Auto-description:** Enabled (AI generates description + OCR)
+### Step 1: Find Latest .snagx File
 
 ```powershell
-# Find and import latest screenshot
 $latestSnagx = Get-ChildItem "D:\OneDrive\Snagit" -Filter "*.snagx" | 
     Sort-Object LastWriteTime -Descending | 
     Select-Object -First 1
-
-if ($latestSnagx) {
-    Write-Host "Latest screenshot: $($latestSnagx.Name)" -ForegroundColor Cyan
-    Write-Host "Captured: $($latestSnagx.LastWriteTime)" -ForegroundColor Gray
-    
-    # Import to screenshot skill's library by default
-    & ~/.claude/skills/screenshot/scripts/Import-SnagItScreenshot-Auto.ps1 `
-        -SnagItFileName $latestSnagx.Name `
-        -DestinationSkill "screenshot" `
-        -Tags @()
-} else {
-    Write-Host "No .snagx files found in SnagIt library" -ForegroundColor Red
-}
+Write-Host "Found: $($latestSnagx.Name) - Captured: $($latestSnagx.LastWriteTime)"
 ```
 
-**To import to a different skill, user must specify:**
-
-- "grab the latest screenshot and import to [skillname]"
-- "get the latest screenshot for the [skillname] skill"
-
-## SnagIt Integration
-
-Import important screenshots from your SnagIt library into skills with automatic compression, AI-generated descriptions, and metadata tracking.
-
-### Quick Start
+### Step 2: Run Script 1-Extract-SnagX.ps1
 
 ```powershell
-# Import screenshot with AI auto-description
-& ~/.claude/skills/screenshot/scripts/Import-SnagItScreenshot-Auto.ps1 `
-    -SnagItFileName "2026-01-30_09-56-49.snagx" `
-    -DestinationSkill "myskill" `
-    -Tags @("architecture")
+& ~/.claude/skills/screenshot/scripts/1-Extract-SnagX.ps1 `
+    -SnagItFileName $latestSnagx.Name `
+    -DestinationSkill "screenshot" `
+    -Tags @()
 ```
 
-### SnagIt Library Location
-
-**Path:** `D:\OneDrive\Snagit`
-**Total files:** ~2,823 screenshots (.snagx format)
-
-### Import Workflow
-
-**Automated Method (Recommended)**
-
-Import directly from SnagIt library - no manual export needed:
-
-```powershell
-# Basic import with auto-description
-& ~/.claude/skills/screenshot/scripts/Import-SnagItScreenshot-Auto.ps1 `
-    -SnagItFileName "2026-01-30_09-56-49.snagx" `
-    -DestinationSkill "myskill" `
-    -Tags @("architecture", "critical")
-
-# With custom description (skip AI)
-& ~/.claude/skills/screenshot/scripts/Import-SnagItScreenshot-Auto.ps1 `
-    -SnagItFileName "workflow-diagram.snagx" `
-    -DestinationSkill "protocols" `
-    -Tags @("workflow") `
-    -CustomDescription "OAuth integration flow" `
-    -AutoDescription:$false
-```
-
-**What this does:**
-
-- Finds `.snagx` file in your SnagIt library (`D:\OneDrive\Snagit`)
-- Automatically extracts the PNG from the .snagx container
-- **Generates descriptive filename** from window name (e.g., `slack-dm-bryan-halterman.webp`)
-- Compresses to WebP (1024px wide, Q85)
-- Generates AI description using vision model (default: enabled)
-- **Extracts ALL visible text (OCR)** - better than SnagIt's runtime-only OCR
-- Creates `.meta.json` sidecar file with description + OCR text
-- Cleans up temporary files
-- Stores in `skill-name/images/library/YYYY-MM-DD/`
-
-### Filename Conventions
-
-**Twitter/X Screenshots:**
-
-When importing screenshots from Twitter/X (identified by window titles like "Home", "Post", or Twitter-related content in OCR), prefix the filename with `tweet-` followed by a descriptive slug:
-
-- `tweet-spec-based-claude-code.webp` (instead of just `home.webp`)
-- `tweet-ai-announcement.webp`
-- `tweet-github-copilot-update.webp`
-
-**Detection criteria:**
-
-- Window title contains: "Home", "Post", "Twitter", "X.com"
-- OCR text contains Twitter UI elements (usernames starting with @, retweet/like counts)
-- URL in metadata contains `twitter.com` or `x.com`
-
-**Slack Screenshots:**
-
-When importing screenshots from Slack (identified by window titles containing channel names, DMs, or "Slack"), prefix the filename with `slack-` followed by a descriptive slug:
-
-- `slack-productivity-engineering-public.webp`
-- `slack-dm-bryan-halterman.webp`
-- `slack-general-channel.webp`
-
-**Detection criteria:**
-
-- Window title contains: "Slack", channel names with "|", DM patterns
-- AppName is "Slack" or browser with Slack-related window title
-
-**Other screenshots:** Use window name as-is, converted to kebab-case.
-
-**Manual Method (If Already Exported)**
-
-If you've already exported a PNG from SnagIt:
-
-```powershell
-& ~/.claude/skills/screenshot/scripts/Import-SnagItScreenshot.ps1 `
-    -ImagePath "C:\Temp\my-screenshot.png" `
-    -DestinationSkill "myskill" `
-    -Tags @("architecture") `
-    -AutoDescription
-```
-
-### Parameters
-
-**Import-SnagItScreenshot-Auto.ps1** (Automated from .snagx)
+**Parameters:**
 
 | Parameter | Required | Default | Description |
 |-----------|----------|---------|-------------|
-| `-SnagItFileName` | Yes | - | Filename from SnagIt library (e.g., `2026-01-30_09-56-49.snagx`) |
-| `-DestinationSkill` | Yes | - | Skill name (folder name in skills directory) |
-| `-Tags` | No | `@()` | Array of tags for categorization |
-| `-AutoDescription` | No | `$true` | Generate AI description using vision model |
-| `-CustomDescription` | No | `""` | Provide custom description (sets `-AutoDescription:$false`) |
+| `-SnagItFileName` | Yes | - | Filename from SnagIt library |
+| `-DestinationSkill` | Yes | - | Target skill name |
+| `-Tags` | No | `@()` | Array of tags |
+| `-AutoDescription` | No | `$true` | Generate AI description |
+| `-CustomDescription` | No | `""` | Skip AI, use this description |
 
-**Import-SnagItScreenshot.ps1** (Manual from exported PNG)
+### Step 3: Verify Output
 
-| Parameter | Required | Default | Description |
-|-----------|----------|---------|-------------|
-| `-ImagePath` | Yes | - | Path to exported PNG/JPG file |
-| `-DestinationSkill` | Yes | - | Skill name (folder name in skills directory) |
-| `-Tags` | No | `@()` | Array of tags for categorization |
-| `-AutoDescription` | No | `$false` | Generate AI description using vision model |
-| `-CustomDescription` | No | `""` | Provide your own description instead |
+Check `{skill}/images/library/{date}/` for:
 
-### How .snagx Extraction Works
+- `{filename}.webp` - Compressed image
+- `{filename}.webp.meta.json` - Description + OCR text + metadata
 
-SnagIt's `.snagx` files are ZIP containers with this structure:
+## Workflow: Search Existing Screenshots
 
-```
-2026-01-30_09-56-49.snagx
-├── {GUID}.png          ← Main captured image (we extract this)
-├── {GUID}.json         ← Edit history
-├── metadata.json       ← Capture metadata
-├── index.json          ← File index
-└── thumbnail.png       ← Preview thumbnail
+```powershell
+# All screenshots
+& ~/.claude/skills/screenshot/scripts/3-Search-Library.ps1
+
+# Filter by skill
+& ~/.claude/skills/screenshot/scripts/3-Search-Library.ps1 -Skill "architect"
+
+# Search by text
+& ~/.claude/skills/screenshot/scripts/3-Search-Library.ps1 -SearchText "workflow"
 ```
 
-The automated script extracts the main PNG, processes it, then cleans up temporary files.
+## Filename Conventions
 
-### Folder Structure
+Script 1 auto-detects source and prefixes filenames:
+
+| Source | Detection | Prefix | Example |
+|--------|-----------|--------|---------|
+| Slack | AppName="Slack" or window contains "\|" | `slack-` | `slack-dm-bryan.webp` |
+| Twitter/X | Short window title + browser app | `tweet-` | `tweet-timeline.webp` |
+| Other | - | None | `vscode-editor.webp` |
+
+## Output Structure
 
 ```
-myskill/
-├── SKILL.md
-├── images/
-│   └── library/
-│       ├── 2026-01-30/
-│       │   ├── architecture-diagram.webp
-│       │   ├── architecture-diagram.webp.meta.json
-│       │   ├── workflow.webp
-│       │   └── workflow.webp.meta.json
-│       └── 2026-01-29/
-│           └── ...
+{skill}/
+└── images/
+    └── library/
+        └── 2026-02-02/
+            ├── slack-channel-name.webp
+            └── slack-channel-name.webp.meta.json
 ```
 
-### Metadata Format
-
-Each imported image gets a `.meta.json` sidecar file:
+## Metadata Format
 
 ```json
 {
-  "filename": "bryan-halterman-dm-relias-engineering-slack.webp",
+  "filename": "slack-channel-name.webp",
   "source": "SnagIt",
-  "snagit_library": "D:\\OneDrive\\Snagit",
-  "imported_date": "2026-01-30",
-  "imported_time": "14:32:15",
-  "description": "Discord conversation about console-output skill with GitHub CLI screenshot showing Pull Requests...",
-  "text_content": "Bryan Halterman 9:32 AM\\nToday\\nso I tried to make a console-output skill...\\n[Full OCR text of conversation and GitHub CLI table]",
-  "tags": ["architecture", "critical"],
-  "skill": "architect",
-  "size_webp": "1024x1036",
-  "size_original": "681x689",
-  "original_filename": "{DD100B78-3DB4-42E5-947C-2D82F87B2629}.png",
-  "original_path": "C:\\Temp\\extract\\{DD100B78-3DB4-42E5-947C-2D82F87B2629}.png"
+  "imported_date": "2026-02-02",
+  "description": "AI-generated description of image content",
+  "text_content": "Full OCR text extraction",
+  "tags": ["tag1", "tag2"],
+  "skill": "screenshot"
 }
 ```
 
-**Key fields:**
-
-- `description` - AI-generated summary of image content
-- `text_content` - Full OCR text extraction (all visible text)
-
-### Search Imported Screenshots
-
-List and search all imported screenshots across skills:
-
-```powershell
-# List all imported screenshots
-& ~/.claude/skills/screenshot/scripts/Get-ImportedScreenshots.ps1
-
-# Filter by skill
-& ~/.claude/skills/screenshot/scripts/Get-ImportedScreenshots.ps1 -Skill "architect"
-
-# Filter by tags
-& ~/.claude/skills/screenshot/scripts/Get-ImportedScreenshots.ps1 -Tags @("architecture", "critical")
-
-# Search by text in description/filename
-& ~/.claude/skills/screenshot/scripts/Get-ImportedScreenshots.ps1 -SearchText "workflow"
-
-# Show full file paths
-& ~/.claude/skills/screenshot/scripts/Get-ImportedScreenshots.ps1 -ShowPaths
-```
-
-### Referencing in SKILL.md
-
-After importing, add to your skill's SKILL.md:
-
-```markdown
-## Architecture Diagram
-
-![Architecture Overview](./images/library/2026-01-30/architecture-diagram.webp)
-
-**Description:** Three-tier system architecture showing frontend, API gateway, and database layers.
-```
-
-### Features
-
-✓ **Smart filenames** - Uses window name from SnagIt metadata (not GUIDs)  
-✓ **Deduplication** - Warns if filename already exists  
-✓ **Auto-compression** - Reduces to WebP Q85 @ 1024px (82% smaller)  
-✓ **AI descriptions** - Vision model analyzes and describes content  
-✓ **OCR text extraction** - Extracts ALL visible text (superior to SnagIt's runtime-only OCR)  
-✓ **Metadata tracking** - Full provenance from SnagIt library  
-✓ **Tag-based organization** - Categorize and search easily  
-✓ **Skill-based storage** - Images live with the skills they document  
-
-### OCR vs SnagIt Text Recognition
-
-| Feature | SnagIt OCR | Our Vision Model |
-|---------|------------|------------------|
-| Stored in `.snagx` | ❌ No (runtime only) | ✅ Yes (`.meta.json`) |
-| Table extraction | ⚠️ Limited | ✅ Excellent |
-| Context understanding | ❌ No | ✅ Generates description |
-| Searchable after import | ❌ No | ✅ Yes (`Get-ImportedScreenshots`) |
-| Requires manual extraction | ✅ Yes | ❌ Automatic |
-
-Our vision model extracts text automatically on import and stores it permanently in searchable metadata.  
-
-### Cost Optimization
-
-- **Vision API calls:** Only when using `-AutoDescription`
-- **Default model:** `google/gemini-2.0-flash-001` (~$0.0001 per image)
-- **Descriptions cached** in metadata JSON (one-time cost)
-- **Search is free** - Queries local JSON files only
-
 ## Dependencies
 
-- **PowerShell** - For SnagIt file management and import workflows
-- **FFmpeg** - For WebP compression (available system-wide)
-- **OpenRouter API** - For AI vision descriptions and OCR text extraction
+- **FFmpeg** - WebP compression
+- **text-read-image skill** - AI description and OCR
 
-## How Screenshots Are Taken
+## ALWAYS: Log This Interaction
 
-All screenshots are captured using **SnagIt** software:
+After completing work, append to `History/{YYYY-MM-DD}.md`:
 
-- Press `PrtScn` to capture full screen, region, or window
-- SnagIt saves to `D:\OneDrive\Snagit` as `.snagx` files
-- Use this skill to import and process captures into skill libraries
+```markdown
+## {HH:MM} - {Action Taken}
+{One-line summary}
+```
 
-**SnagIt replaces all manual capture methods** - no python-mss, no PowerShell screen capture needed.
+```

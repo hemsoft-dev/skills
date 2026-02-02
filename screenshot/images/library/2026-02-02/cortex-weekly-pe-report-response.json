@@ -1,0 +1,15 @@
+{
+  "size_webp": "1024x1068",
+  "source": "SnagIt",
+  "size_original": "1055x1100",
+  "imported_time": "08:40:19",
+  "text_content": "Franz Hemmer 13 minutes ago\n@RAE (Relias Asistant for Engineering) Good morning.\n3 replies\n\nRAE (Relias Asistant for Engineering) APP 13 minutes ago\nGood morning! How can I assist you today?\nFranz Hemmer 12 minutes ago\nCortex recommendations\nBased on your Scorecards and Initiatives, here's what we\nrecommend you tackle this week.\n•\tYou have 1 rule left for Golden Path to achieve Gold in\nService Maturity.\n\nCan you help me figure out which rule it is?\nRAE (Relias Asistant for Engineering) APP 12 minutes ago\nThe rule you have left to achieve Gold status in the Service\nMaturity scorecard for the Golden Path is:\n-\tRule: git.lastCommit().freshness <= duration(\"P1M\")\nCurrent Status: Failed (You need the last commit to be less\nthan or equal to 1 month old)\nYou currently have a score of 17 out of 18, which...\nSee more",
+  "tags": [],
+  "snagit_library": "D:\\OneDrive\\Snagit",
+  "skill": "screenshot",
+  "imported_date": "2026-02-02",
+  "original_filename": "{A5487144-078B-4590-AF11-14D804B55996}.png",
+  "filename": "cortex-weekly-pe-report-response.webp",
+  "original_path": "C:\\Users\\User\\AppData\\Local\\Temp\\snagx-extract-1587896534\\{A5487144-078B-4590-AF11-14D804B55996}.png",
+  "description": "The image depicts a chat interface where \"Franz Hemmer\" interacts with \"RAE (Relias Assistant for Engineering),\" an AI assistant, to identify and understand a remaining rule required to achieve \"Gold Status\" in a \"Service Maturity\" scorecard. The assistant then explains the rule, which involves ensuring the last commit is less than or equal to one month old, and its current failed status."
+}

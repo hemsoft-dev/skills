@@ -57,3 +57,9 @@ Result: Successfully staged and committed 9 files/changes including: new verbiag
 
 2026-02-01 - 15:30 - Create repos use case for repository-level commit tracking with template-based HTML reports
 Result: Built complete repos use case under productivity skill for tracking GitHub repository commits across team contributors. Created collect-repo-commits.ps1 with GitHub CLI integration and auto-account switching (HemSoft/fhemmerrelias). Built generate-repo-report.ps1 with template-based HTML generation using {{PLACEHOLDER}} tokens. Created repo-analytics.html template with dark theme dashboard showing 4 charts (LOC, commits, add/del, contributors), contributor breakdown table, and doughnut chart. Added January 2026 data collection for relias-assistant (49 commits, +13,803 net LOC). Template approach enables design iteration without modifying PowerShell logic.
+
+2026-02-02 - 08:40 - Import latest SnagIt capture into screenshot skill
+Result: Imported D:\OneDrive\Snagit\2026-02-02_08-35-23.snagx → images/library/2026-02-02/slack-pe-bot-test-channel-relias-engineering-slack.webp (AI description + OCR).
+
+2026-02-02 - 08:55 - Harden Confluence search script to accept raw CQL and tolerate missing dates
+Result: Patched `atlassian/scripts/Search-Confluence.ps1` — added `[switch]$RawCql`, safer CQL construction (heuristic + explicit raw mode), robust API error handling, and null-safe `version.when` parsing. Verified script loads and no longer crashes on missing dates; recommended reload of user shell so system-level `ATLASSIAN_API_TOKEN` is available for live searches.

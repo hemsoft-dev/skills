@@ -4,6 +4,7 @@ This document provides critical guidance for AI agents working in the Claude Ski
 
 ## Table of Contents
 
+- [Skill Simplicity Principle](#skill-simplicity-principle)
 - [Prompt History Logging](#prompt-history-logging)
 - [Quick Reference](#quick-reference)
 - [Web Search Guidelines](#web-search-guidelines)
@@ -13,6 +14,49 @@ This document provides critical guidance for AI agents working in the Claude Ski
 - [Repository Structure](#repository-structure)
 - [Skill Development](#skill-development)
 - [Troubleshooting](#troubleshooting)
+
+## Skill Simplicity Principle
+
+### ⚠️ DESIGN FOR LESSER MODELS
+
+Skills must be written so that **any model** can execute them without confusion. Follow these rules:
+
+**1. Number Scripts in Execution Order**
+
+If scripts must run in sequence, name them with numeric prefixes:
+
+- `1-Extract-Data.ps1` → `2-Process-Data.ps1` → `3-Save-Results.ps1`
+
+**2. Use Tables Over Prose**
+
+Replace paragraphs with:
+
+- Decision tables (When to use which script)
+- Parameter tables (Required/Optional/Default)
+- Output tables (What gets created where)
+
+**3. One Workflow = One Numbered List**
+
+Complex workflows must be broken into numbered steps:
+
+```markdown
+### Step 1: Find the file
+### Step 2: Run script 1
+### Step 3: Verify output
+```
+
+**4. Remove Ambiguity**
+
+- ❌ "You can use either script depending on..."
+- ✅ "Always start with script 1. Script 2 is called automatically."
+
+**5. No Duplicate Instructions**
+
+If a script does something, don't repeat the logic as inline code in SKILL.md. Reference the script.
+
+**6. Default Behavior Must Be Explicit**
+
+First section should state: "When user activates this skill without specifying an action, do X."
 
 ## Prompt History Logging
 
@@ -82,7 +126,8 @@ git status
 3. **ALWAYS verify [clean state](#verifying-clean-state) after commit and push**
 4. **ALWAYS use conventional commit format**
 5. **ALWAYS provide clickable links when performing web searches** - See [Web Search Guidelines](#web-search-guidelines)
-6. **NEVER commit/push without confirming clean state**
+6. **ALWAYS follow [Skill Simplicity Principle](#skill-simplicity-principle)** when creating/editing skills
+7. **NEVER commit/push without confirming clean state**
 
 ## Web Search Guidelines
 

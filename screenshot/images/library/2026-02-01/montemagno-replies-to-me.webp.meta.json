@@ -1,0 +1,15 @@
+{
+  "source": "SnagIt",
+  "size_original": "1281x846",
+  "imported_time": "20:56:12",
+  "skill": "screenshot",
+  "original_path": "C:\\Users\\User\\AppData\\Local\\Temp\\snagx-extract-101422621\\{80AB97FF-E712-43B8-8D57-770378FFE021}.png",
+  "imported_date": "2026-02-01",
+  "tags": [],
+  "text_content": "Franz Hemmer @franzhemmer · 7h\nTwo things, I wish Copilot would allow >128K context sizes since the\nmodels support it but Copilots infrastructure does not. Second, we need a\n\"Continue in new prompt...\" type feature badly instead of having to\nmanually do that now.\n\nLove the new context usage indicator though!\n1\n1\n30\n\nJames Montemagno @JamesMontemagno · 3h\nsubagents handle a bunch of context things, but heard i know the team is\nlooking at this already.\n\nThe continue in new prompt... what does that look like? when do you use\nthat?\n1\n8",
+  "filename": "montemagno-replies-to-me.webp",
+  "original_filename": "{80AB97FF-E712-43B8-8D57-770378FFE021}.png",
+  "snagit_library": "D:\\OneDrive\\Snagit",
+  "description": "The image shows two Twitter posts in a dark theme. The first post expresses a desire for Microsoft Copilot to support larger context sizes and a \"Continue in new prompt\" feature, while the second post discusses subagents handling context and asks for clarification on the \"continue in new prompt\" feature.",
+  "size_webp": "1024x676"
+}

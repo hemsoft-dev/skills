@@ -1,5 +1,13 @@
 [
   {
+    "Software": "Claude Code",
+    "OldVersion": "v2.1.27",
+    "NewVersion": "v2.1.29",
+    "ReleaseDate": "Jan 31 '26",
+    "ChangelogUrl": "https://github.com/anthropics/claude-code/releases",
+    "CheckMethod": "github_releases"
+  },
+  {
     "Software": "GitHub Copilot Chat",
     "OldVersion": "v0.37.2026013001",
     "NewVersion": "v0.37.2026013101",

@@ -73,6 +73,7 @@ If user explicitly requests write operations, require confirmation and document 
   - Which `gh` account to use (`fhemmerrelias` for work, `HemSoft` for personal)
   - Organization names (`relias-engineering`, `fhemmer`, etc.)
   - SSH key aliases and token scopes
+- **[Productivity Publisher Skill](../productivity-publisher/SKILL.md)** - Publishes monthly HTML reports to participating repos' `.relias-metrics/` folders via PRs
 
 ## Data Collection
 

@@ -132,10 +132,10 @@ if (Test-Path $metadataPath) {
     }
 }
 
-# Call the main import script
-$importScript = Join-Path $PSScriptRoot "Import-SnagItScreenshot.ps1"
+# Call the process script
+$importScript = Join-Path $PSScriptRoot "2-Process-Image.ps1"
 if (-not (Test-Path $importScript)) {
-    Write-Host "ERROR: Import script not found: $importScript" -ForegroundColor Red
+    Write-Host "ERROR: Process script not found: $importScript" -ForegroundColor Red
     Remove-Item $extractDir -Recurse -Force -ErrorAction SilentlyContinue
     exit 1
 }

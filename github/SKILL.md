@@ -165,6 +165,16 @@ Check for open PRs you created and PRs awaiting your review:
 & "c:\Users\User\.claude\skills\github\scripts\Get-MyPRs.ps1"
 ```
 
+### Check Issues in hemsoft/skills
+
+View open issues in the Claude Skills repository:
+
+```powershell
+& "c:\Users\User\.claude\skills\github\scripts\view-skill-repo-issue.ps1"
+```
+
+This script automatically switches to the HemSoft account and displays all open issues in `hemsoft/skills`.
+
 ### Required Token Scopes
 
 For full enterprise visibility, ensure the GitHub token has these scopes:
