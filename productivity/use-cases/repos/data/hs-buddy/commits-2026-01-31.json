@@ -1,0 +1,80 @@
+{
+  "url": "https://github.com/HemSoft/hs-buddy",
+  "commitsFound": 4,
+  "source": "personal",
+  "summary": {
+    "totalNetLOC": 475.0,
+    "totalAdditions": 668.0,
+    "totalDeletions": 193.0,
+    "totalLinesAffected": 861.0
+  },
+  "commits": [
+    {
+      "sha": "bd395983c5ba1d3d0075cbc06a3a81efa76fcbd2",
+      "author": "Franz Hemmer",
+      "authorEmail": "franz_hemmer@hotmail.com",
+      "date": "2026-01-31T05:48:07Z",
+      "message": "feat: implement custom title bar with zoom scaling\n\n- Create custom HTML title bar component that scales with zoom\n- Remove native Electron menu and window frame\n- Add frameless window with custom drag region\n- Implement window controls (minimize, maximize, close) via IPC\n- Add beautiful HemSoft branding with golden gradient text\n- Menu dropdowns with VSCode-style dark theme\n- Zoom keyboard shortcuts (Ctrl+Num+, Ctrl+Num-, Ctrl+Num0)\n- Window controls positioned at top-right\n\nBenefits:\n- Title bar now scales with zoom level (part of web content)\n- Consistent cross-platform appearance\n- Modern, polished UI matching reference app\n- Better integration with app theme",
+      "url": "https://github.com/HemSoft/hs-buddy/commit/bd395983c5ba1d3d0075cbc06a3a81efa76fcbd2",
+      "repository": "hs-buddy",
+      "owner": "HemSoft",
+      "source": "personal",
+      "additions": 400,
+      "deletions": 139,
+      "filesChanged": 5,
+      "netLOC": 261
+    },
+    {
+      "sha": "7f4ee0a47a539d17b61c0c6be3de70c3839b4142",
+      "author": "Franz Hemmer",
+      "authorEmail": "franz_hemmer@hotmail.com",
+      "date": "2026-01-31T05:25:31Z",
+      "message": "feat: implement tree view navigation\n\n- Create TreeView component with expandable/collapsible groups\n- Add tree structure for Pull Requests, Skills, Tasks, and Insights\n- VSCode-style dark theme with proper hover and selection states\n- Chevron icons for expand/collapse functionality\n- Icon support using lucide-react\n- Tree preserves expansion state\n- Matches hs-conductor visual style\n\nInitial tree structure:\n- Pull Requests (My PRs, Needs Review, Recently Merged)\n- Skills (Browse Skills, Recently Used, Favorites)\n- Tasks (Today, Upcoming, Projects)\n- Insights (Productivity, Activity)",
+      "url": "https://github.com/HemSoft/hs-buddy/commit/7f4ee0a47a539d17b61c0c6be3de70c3839b4142",
+      "repository": "hs-buddy",
+      "owner": "HemSoft",
+      "source": "personal",
+      "additions": 188,
+      "deletions": 39,
+      "filesChanged": 4,
+      "netLOC": 149
+    },
+    {
+      "sha": "5b419e117ff24ec311d68dc7c536d37928b33ad4",
+      "author": "Franz Hemmer",
+      "authorEmail": "franz_hemmer@hotmail.com",
+      "date": "2026-01-31T05:06:13Z",
+      "message": "feat: add zoom persistence and disable DevTools auto-open\n\n- Remove automatic DevTools opening in development mode\n- Persist zoom level across app restarts in userData/zoom-config.json\n- Track current zoom factor in memory for smooth updates\n- Apply saved zoom level on window load\n- Window position and size already persisted via electron-window-state\n\nChanges:\n- Zoom level saved to: app.getPath('userData')/zoom-config.json\n- Zoom persists between sessions (range: 0.5x to 3.0x)\n- DevTools now only opens via menu or keyboard shortcut",
+      "url": "https://github.com/HemSoft/hs-buddy/commit/5b419e117ff24ec311d68dc7c536d37928b33ad4",
+      "repository": "hs-buddy",
+      "owner": "HemSoft",
+      "source": "personal",
+      "additions": 53,
+      "deletions": 12,
+      "filesChanged": 1,
+      "netLOC": 41
+    },
+    {
+      "sha": "70f688330edf5296e1a0f5eb934f066e2af2d578",
+      "author": "Franz Hemmer",
+      "authorEmail": "franz_hemmer@hotmail.com",
+      "date": "2026-01-31T05:02:27Z",
+      "message": "feat: add zoom controls to View menu\n\n- Implement Zoom In (Ctrl/Cmd + numpad +)\n- Implement Zoom Out (Ctrl/Cmd + numpad -)\n- Implement Reset Zoom (Ctrl/Cmd + numpad 0)\n- Zoom range: 0.5x to 3.0x in 0.1 increments\n- Matches hs-conductor reference implementation",
+      "url": "https://github.com/HemSoft/hs-buddy/commit/70f688330edf5296e1a0f5eb934f066e2af2d578",
+      "repository": "hs-buddy",
+      "owner": "HemSoft",
+      "source": "personal",
+      "additions": 27,
+      "deletions": 3,
+      "filesChanged": 1,
+      "netLOC": 24
+    }
+  ],
+  "owner": "HemSoft",
+  "queryStartTime": "2026-01-31T00:00:00.0000000",
+  "queryStartTimeLocal": "2026-01-31 00:00:00",
+  "queryEndTime": "2026-01-31T23:59:59.0000000",
+  "collectionTime": "2026-02-01T18:13:50.4423083-05:00",
+  "queryEndTimeLocal": "2026-01-31 23:59:59",
+  "repository": "hs-buddy"
+}

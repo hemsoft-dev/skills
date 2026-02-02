@@ -1,0 +1,50 @@
+{
+  "url": "https://github.com/relias-engineering/rlms-website",
+  "commitsFound": 2,
+  "source": "work",
+  "summary": {
+    "totalNetLOC": 102.0,
+    "totalAdditions": 288.0,
+    "totalDeletions": 186.0,
+    "totalLinesAffected": 474.0
+  },
+  "commits": [
+    {
+      "sha": "acfc896ea223b4f4b9641b4037f1a58080b3d5e1",
+      "author": "cicd",
+      "authorEmail": "noreply@relias.com",
+      "date": "2026-01-24T05:15:19Z",
+      "message": "[skip ci] xi18n automation affectedBase: 45c3732b2dd65b21132e1620827f372ccf8a890e affectedHead: e32c296fd8ec3e5652390addc78823073d9cb041",
+      "url": "https://github.com/relias-engineering/rlms-website/commit/acfc896ea223b4f4b9641b4037f1a58080b3d5e1",
+      "repository": "rlms-website",
+      "owner": "relias-engineering",
+      "source": "work",
+      "additions": 285,
+      "deletions": 184,
+      "filesChanged": 5,
+      "netLOC": 101
+    },
+    {
+      "sha": "a239b951325261934c0e3006341c04388f7fcc2c",
+      "author": "Narender Dubbaka",
+      "authorEmail": "n.dubbaka@relias.com",
+      "date": "2026-01-24T00:56:31Z",
+      "message": "Merge branch 'develop' into feature/RPLAT-14265",
+      "url": "https://github.com/relias-engineering/rlms-website/commit/a239b951325261934c0e3006341c04388f7fcc2c",
+      "repository": "rlms-website",
+      "owner": "relias-engineering",
+      "source": "work",
+      "additions": 3,
+      "deletions": 2,
+      "filesChanged": 1,
+      "netLOC": 1
+    }
+  ],
+  "owner": "relias-engineering",
+  "queryStartTime": "2026-01-24T00:00:00.0000000",
+  "queryStartTimeLocal": "2026-01-24 00:00:00",
+  "queryEndTime": "2026-01-24T23:59:59.0000000",
+  "collectionTime": "2026-02-01T17:11:30.7013699-05:00",
+  "queryEndTimeLocal": "2026-01-24 23:59:59",
+  "repository": "rlms-website"
+}

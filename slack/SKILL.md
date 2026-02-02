@@ -1,6 +1,6 @@
 ---
 name: slack
-description: V2.4 - Slack Web API for messaging, channels, search, and files. Primary entry point with links to specialized sub-skills for search, files, and advanced features.
+description: V2.5 - Slack Web API for messaging, channels, search, and files. Primary entry point with links to specialized sub-skills for search, files, and advanced features.
 compatibility: Requires SLACK_TOKEN and SLACK_USER_TOKEN environment variables, PowerShell, network access
 ---
 
@@ -305,11 +305,41 @@ Post with approval workflow:
 .\scripts\Send-SlackMessage.ps1 -Channel "#pe-bot-test" -Text "Test message"
 ```
 
+### Request-SlackPRReview.ps1
+
+Post PR review requests (handles backtick escaping correctly):
+
+```powershell
+$prs = @(
+    @{ Number = 18; Title = "Part 1"; Url = "https://github.com/org/repo/pull/18" }
+    @{ Number = 20; Title = "Part 2"; Url = "https://github.com/org/repo/pull/20" }
+)
+.\scripts\Request-SlackPRReview.ps1 -Channel "C09LB1CM1BK" -RepoName "relias-assistant" -PRs $prs
+```
+
 **For search, files, and advanced features, see the sub-skills listed at the top.**
 
 ---
 
 ## Troubleshooting
+
+**🚨 CRITICAL: Backtick Escape Issue in PowerShell**
+
+**NEVER use backticks for code formatting in PowerShell strings!**
+
+PowerShell interprets backticks as escape sequences:
+
+- `` `r `` = carriage return (breaks "relias" → "elias")
+- `` `n `` = newline
+- `` `t `` = tab
+
+**BAD:** `"PRs for \`relias-assistant\`"` → "PRs for elias-assistant"
+
+**GOOD:** `"PRs for *relias-assistant*"` (use bold instead)
+
+Use `Request-SlackPRReview.ps1` for PR review requests - it handles this correctly.
+
+---
 
 **"missing_scope" error:** Use correct token (bot for posting, user for searching)
 

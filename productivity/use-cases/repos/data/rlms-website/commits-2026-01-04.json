@@ -1,0 +1,65 @@
+{
+  "url": "https://github.com/relias-engineering/rlms-website",
+  "commitsFound": 3,
+  "source": "work",
+  "summary": {
+    "totalNetLOC": -111.0,
+    "totalAdditions": 86.0,
+    "totalDeletions": 197.0,
+    "totalLinesAffected": 283.0
+  },
+  "commits": [
+    {
+      "sha": "7520fcc71b4802c5a992350cb4c69e883167d312",
+      "author": "cicd",
+      "authorEmail": "noreply@relias.com",
+      "date": "2026-01-04T05:10:14Z",
+      "message": "[skip ci] xi18n automation affectedBase: 7960ea24dddbbc2247f20c6e3515853edb2fa65c affectedHead: 6bd2d4560f1ca6f9ffd86b11bab52b2f0370f8f9",
+      "url": "https://github.com/relias-engineering/rlms-website/commit/7520fcc71b4802c5a992350cb4c69e883167d312",
+      "repository": "rlms-website",
+      "owner": "relias-engineering",
+      "source": "work",
+      "additions": 28,
+      "deletions": 6,
+      "filesChanged": 2,
+      "netLOC": 22
+    },
+    {
+      "sha": "948dd62d74824cf346308c622be32d1ed5164bf6",
+      "author": "Scott Burnette",
+      "authorEmail": "scburnette@relias.com",
+      "date": "2026-01-04T04:34:12Z",
+      "message": "disable remove content button",
+      "url": "https://github.com/relias-engineering/rlms-website/commit/948dd62d74824cf346308c622be32d1ed5164bf6",
+      "repository": "rlms-website",
+      "owner": "relias-engineering",
+      "source": "work",
+      "additions": 5,
+      "deletions": 1,
+      "filesChanged": 1,
+      "netLOC": 4
+    },
+    {
+      "sha": "f0b38e2f3a4c3f96077c1704ed7f44a4c222f3b1",
+      "author": "Scott Burnette",
+      "authorEmail": "scburnette@relias.com",
+      "date": "2026-01-04T04:18:43Z",
+      "message": "refactor",
+      "url": "https://github.com/relias-engineering/rlms-website/commit/f0b38e2f3a4c3f96077c1704ed7f44a4c222f3b1",
+      "repository": "rlms-website",
+      "owner": "relias-engineering",
+      "source": "work",
+      "additions": 53,
+      "deletions": 190,
+      "filesChanged": 6,
+      "netLOC": -137
+    }
+  ],
+  "owner": "relias-engineering",
+  "queryStartTime": "2026-01-04T00:00:00.0000000",
+  "queryStartTimeLocal": "2026-01-04 00:00:00",
+  "queryEndTime": "2026-01-04T23:59:59.0000000",
+  "collectionTime": "2026-02-01T17:06:49.1978595-05:00",
+  "queryEndTimeLocal": "2026-01-04 23:59:59",
+  "repository": "rlms-website"
+}

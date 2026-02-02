@@ -40,6 +40,33 @@ hooks:
 
 Tracks personal productivity metrics with deep insights into coding activity, collaboration, and issue resolution. Currently supports daily lines of code (LOC) tracking as the primary use case, with extensibility for additional metrics.
 
+## ⚠️ CRITICAL: Local Clone Policy (READ-ONLY)
+
+**NEVER commit, push, or modify files in the local clone directories.**
+
+For performance reasons, repositories are cloned to persistent local directories rather than temporary locations. These clones are used for:
+
+- LOC snapshot calculations (checking out historical states)
+- Code analysis operations
+- Git history queries
+
+### Local Clone Directories
+
+| Organization | Local Path |
+|--------------|------------|
+| HemSoft / fhemmer (personal) | `D:\github\temp\hemsoft` |
+| relias-engineering (work) | `D:\github\temp\relias` |
+
+### Rules
+
+1. **ALWAYS read-only** - Never stage, commit, or push changes
+2. **Pull only** - `git fetch` and `git checkout` are safe operations
+3. **No working changes** - Never leave uncommitted changes in these repos
+4. **Disposable state** - If corrupted, delete and re-clone
+5. **Never switch branches for work** - These are for analysis only
+
+If user explicitly requests write operations, require confirmation and document the exception.
+
 ## Related Skills
 
 - **[GitHub Skill](../github/SKILL.md)** - Account structure, organizations, authentication. MUST consult for:

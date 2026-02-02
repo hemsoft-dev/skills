@@ -1,0 +1,50 @@
+{
+  "url": "https://github.com/relias-engineering/rlms-website",
+  "commitsFound": 2,
+  "source": "work",
+  "summary": {
+    "totalNetLOC": 394.0,
+    "totalAdditions": 490.0,
+    "totalDeletions": 96.0,
+    "totalLinesAffected": 586.0
+  },
+  "commits": [
+    {
+      "sha": "9c9a41639f9d49623e82e6b7ce08d7c7641e5dc4",
+      "author": "cicd",
+      "authorEmail": "noreply@relias.com",
+      "date": "2026-01-10T05:15:14Z",
+      "message": "[skip ci] xi18n automation affectedBase: a73bdadf0afe05f810b916e2a3a583f7dd6c64d7 affectedHead: c2a9590507826b94207e3dddbd657813b7ba5385",
+      "url": "https://github.com/relias-engineering/rlms-website/commit/9c9a41639f9d49623e82e6b7ce08d7c7641e5dc4",
+      "repository": "rlms-website",
+      "owner": "relias-engineering",
+      "source": "work",
+      "additions": 485,
+      "deletions": 92,
+      "filesChanged": 5,
+      "netLOC": 393
+    },
+    {
+      "sha": "f33b0dd430c747292cfef89fe7bd4c570e56573d",
+      "author": "Tatiana Chebotareva",
+      "authorEmail": "tchebotareva@relias.com",
+      "date": "2026-01-09T18:22:19Z",
+      "message": "RPLAT-825 skipping CM user group test that is failing in org with new user groups",
+      "url": "https://github.com/relias-engineering/rlms-website/commit/f33b0dd430c747292cfef89fe7bd4c570e56573d",
+      "repository": "rlms-website",
+      "owner": "relias-engineering",
+      "source": "work",
+      "additions": 5,
+      "deletions": 4,
+      "filesChanged": 2,
+      "netLOC": 1
+    }
+  ],
+  "owner": "relias-engineering",
+  "queryStartTime": "2026-01-10T00:00:00.0000000",
+  "queryStartTimeLocal": "2026-01-10 00:00:00",
+  "queryEndTime": "2026-01-10T23:59:59.0000000",
+  "collectionTime": "2026-02-01T17:08:00.7986363-05:00",
+  "queryEndTimeLocal": "2026-01-10 23:59:59",
+  "repository": "rlms-website"
+}

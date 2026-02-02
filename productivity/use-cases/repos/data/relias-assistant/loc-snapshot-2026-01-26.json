@@ -1,0 +1,186 @@
+{
+  "snapshotDate": "2026-01-26",
+  "collectionTime": "2026-02-01T17:43:29.8032935-05:00",
+  "repository": "relias-assistant",
+  "commitSha": "254305221292137c9a1285aefafc7bdfb7af1e3d",
+  "commitDate": "2026-01-27 03:39:36 -0500",
+  "commitMessage": "Add security test prompt for Slack private chan...",
+  "summary": {
+    "totalFiles": 239,
+    "blankLines": 6384,
+    "commentLines": 5404,
+    "codeLines": 29524
+  },
+  "topLanguages": [
+    {
+      "language": "C#",
+      "files": 114,
+      "blank": 2804,
+      "comment": 4223,
+      "code": 12384
+    },
+    {
+      "language": "Markdown",
+      "files": 42,
+      "blank": 2402,
+      "comment": 3,
+      "code": 6249
+    },
+    {
+      "language": "JSON",
+      "files": 22,
+      "blank": 0,
+      "comment": 0,
+      "code": 5881
+    },
+    {
+      "language": "PowerShell",
+      "files": 41,
+      "blank": 1039,
+      "comment": 1117,
+      "code": 4031
+    },
+    {
+      "language": "YAML",
+      "files": 2,
+      "blank": 14,
+      "comment": 4,
+      "code": 239
+    },
+    {
+      "language": "MSBuild script",
+      "files": 6,
+      "blank": 28,
+      "comment": 8,
+      "code": 186
+    },
+    {
+      "language": "Text",
+      "files": 2,
+      "blank": 36,
+      "comment": 0,
+      "code": 153
+    },
+    {
+      "language": "XML",
+      "files": 4,
+      "blank": 16,
+      "comment": 18,
+      "code": 124
+    },
+    {
+      "language": "Visual Studio Solution",
+      "files": 1,
+      "blank": 1,
+      "comment": 1,
+      "code": 102
+    },
+    {
+      "language": "INI",
+      "files": 1,
+      "blank": 16,
+      "comment": 0,
+      "code": 93
+    },
+    {
+      "language": "Dockerfile",
+      "files": 1,
+      "blank": 14,
+      "comment": 20,
+      "code": 46
+    },
+    {
+      "language": "Bourne Shell",
+      "files": 3,
+      "blank": 14,
+      "comment": 10,
+      "code": 36
+    }
+  ],
+  "allLanguages": [
+    {
+      "language": "C#",
+      "files": 114,
+      "blank": 2804,
+      "comment": 4223,
+      "code": 12384
+    },
+    {
+      "language": "Markdown",
+      "files": 42,
+      "blank": 2402,
+      "comment": 3,
+      "code": 6249
+    },
+    {
+      "language": "JSON",
+      "files": 22,
+      "blank": 0,
+      "comment": 0,
+      "code": 5881
+    },
+    {
+      "language": "PowerShell",
+      "files": 41,
+      "blank": 1039,
+      "comment": 1117,
+      "code": 4031
+    },
+    {
+      "language": "YAML",
+      "files": 2,
+      "blank": 14,
+      "comment": 4,
+      "code": 239
+    },
+    {
+      "language": "MSBuild script",
+      "files": 6,
+      "blank": 28,
+      "comment": 8,
+      "code": 186
+    },
+    {
+      "language": "Text",
+      "files": 2,
+      "blank": 36,
+      "comment": 0,
+      "code": 153
+    },
+    {
+      "language": "XML",
+      "files": 4,
+      "blank": 16,
+      "comment": 18,
+      "code": 124
+    },
+    {
+      "language": "Visual Studio Solution",
+      "files": 1,
+      "blank": 1,
+      "comment": 1,
+      "code": 102
+    },
+    {
+      "language": "INI",
+      "files": 1,
+      "blank": 16,
+      "comment": 0,
+      "code": 93
+    },
+    {
+      "language": "Dockerfile",
+      "files": 1,
+      "blank": 14,
+      "comment": 20,
+      "code": 46
+    },
+    {
+      "language": "Bourne Shell",
+      "files": 3,
+      "blank": 14,
+      "comment": 10,
+      "code": 36
+    }
+  ]
+}

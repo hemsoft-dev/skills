@@ -1,0 +1,242 @@
+{
+  "snapshotDate": "2026-01-11",
+  "collectionTime": "2026-02-01T17:46:53.2806385-05:00",
+  "repository": "rlms-website",
+  "commitSha": "e53bff1face9ac8eee5c1e316a4f14352cfaa44c",
+  "commitDate": "2026-01-12 16:54:15 -0500",
+  "commitMessage": "removed the logouts",
+  "summary": {
+    "totalFiles": 11153,
+    "blankLines": 100935,
+    "commentLines": 24391,
+    "codeLines": 1648890
+  },
+  "topLanguages": [
+    {
+      "language": "TypeScript",
+      "files": 7138,
+      "blank": 86976,
+      "comment": 22402,
+      "code": 775161
+    },
+    {
+      "language": "XML",
+      "files": 132,
+      "blank": 408,
+      "comment": 10,
+      "code": 660624
+    },
+    {
+      "language": "HTML",
+      "files": 1039,
+      "blank": 1756,
+      "comment": 483,
+      "code": 78199
+    },
+    {
+      "language": "JSON",
+      "files": 983,
+      "blank": 12,
+      "comment": 0,
+      "code": 72707
+    },
+    {
+      "language": "SCSS",
+      "files": 912,
+      "blank": 8884,
+      "comment": 702,
+      "code": 47671
+    },
+    {
+      "language": "Markdown",
+      "files": 339,
+      "blank": 2069,
+      "comment": 5,
+      "code": 5168
+    },
+    {
+      "language": "YAML",
+      "files": 95,
+      "blank": 634,
+      "comment": 571,
+      "code": 4446
+    },
+    {
+      "language": "SVG",
+      "files": 456,
+      "blank": 3,
+      "comment": 0,
+      "code": 3415
+    },
+    {
+      "language": "JavaScript",
+      "files": 46,
+      "blank": 153,
+      "comment": 195,
+      "code": 1287
+    },
+    {
+      "language": "PowerShell",
+      "files": 3,
+      "blank": 14,
+      "comment": 5,
+      "code": 59
+    },
+    {
+      "language": "Text",
+      "files": 4,
+      "blank": 1,
+      "comment": 0,
+      "code": 49
+    },
+    {
+      "language": "Bourne Shell",
+      "files": 1,
+      "blank": 12,
+      "comment": 10,
+      "code": 34
+    },
+    {
+      "language": "Visual Studio Solution",
+      "files": 1,
+      "blank": 1,
+      "comment": 1,
+      "code": 28
+    },
+    {
+      "language": "C#",
+      "files": 1,
+      "blank": 4,
+      "comment": 0,
+      "code": 18
+    },
+    {
+      "language": "INI",
+      "files": 1,
+      "blank": 2,
+      "comment": 0,
+      "code": 11
+    }
+  ],
+  "allLanguages": [
+    {
+      "language": "TypeScript",
+      "files": 7138,
+      "blank": 86976,
+      "comment": 22402,
+      "code": 775161
+    },
+    {
+      "language": "XML",
+      "files": 132,
+      "blank": 408,
+      "comment": 10,
+      "code": 660624
+    },
+    {
+      "language": "HTML",
+      "files": 1039,
+      "blank": 1756,
+      "comment": 483,
+      "code": 78199
+    },
+    {
+      "language": "JSON",
+      "files": 983,
+      "blank": 12,
+      "comment": 0,
+      "code": 72707
+    },
+    {
+      "language": "SCSS",
+      "files": 912,
+      "blank": 8884,
+      "comment": 702,
+      "code": 47671
+    },
+    {
+      "language": "Markdown",
+      "files": 339,
+      "blank": 2069,
+      "comment": 5,
+      "code": 5168
+    },
+    {
+      "language": "YAML",
+      "files": 95,
+      "blank": 634,
+      "comment": 571,
+      "code": 4446
+    },
+    {
+      "language": "SVG",
+      "files": 456,
+      "blank": 3,
+      "comment": 0,
+      "code": 3415
+    },
+    {
+      "language": "JavaScript",
+      "files": 46,
+      "blank": 153,
+      "comment": 195,
+      "code": 1287
+    },
+    {
+      "language": "PowerShell",
+      "files": 3,
+      "blank": 14,
+      "comment": 5,
+      "code": 59
+    },
+    {
+      "language": "Text",
+      "files": 4,
+      "blank": 1,
+      "comment": 0,
+      "code": 49
+    },
+    {
+      "language": "Bourne Shell",
+      "files": 1,
+      "blank": 12,
+      "comment": 10,
+      "code": 34
+    },
+    {
+      "language": "Visual Studio Solution",
+      "files": 1,
+      "blank": 1,
+      "comment": 1,
+      "code": 28
+    },
+    {
+      "language": "C#",
+      "files": 1,
+      "blank": 4,
+      "comment": 0,
+      "code": 18
+    },
+    {
+      "language": "INI",
+      "files": 1,
+      "blank": 2,
+      "comment": 0,
+      "code": 11
+    },
+    {
+      "language": "MSBuild script",
+      "files": 1,
+      "blank": 3,
+      "comment": 0,
+      "code": 11
+    },
+    {
+      "language": "Properties",
+      "files": 1,
+      "blank": 3,
+      "comment": 7,
+      "code": 2
+    }
+  ]
+}

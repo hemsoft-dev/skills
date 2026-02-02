@@ -135,6 +135,30 @@ if ($issuesPrsFiles -and $issuesPrsFiles.Count -gt 0) {
     Write-Host "📋 Found $($issuesPrsFiles.Count) issues/PRs data file(s)" -ForegroundColor Cyan
 }
 
+# Also look for LOC snapshot files
+$locSnapshotFiles = Get-ChildItem -Path $repoDataPath -Filter "loc-snapshot-*.json" -ErrorAction SilentlyContinue | Sort-Object Name
+
+# Apply date filters to LOC snapshot files
+if ($StartDate -and $locSnapshotFiles) {
+    $startDt = [DateTime]::Parse($StartDate)
+    $locSnapshotFiles = $locSnapshotFiles | Where-Object {
+        $dateStr = $_.Name -replace 'loc-snapshot-(\d{4}-\d{2}-\d{2})\.json', '$1'
+        [DateTime]::Parse($dateStr) -ge $startDt
+    }
+}
+
+if ($EndDate -and $locSnapshotFiles) {
+    $endDt = [DateTime]::Parse($EndDate)
+    $locSnapshotFiles = $locSnapshotFiles | Where-Object {
+        $dateStr = $_.Name -replace 'loc-snapshot-(\d{4}-\d{2}-\d{2})\.json', '$1'
+        [DateTime]::Parse($dateStr) -le $endDt
+    }
+}
+
+if ($locSnapshotFiles -and $locSnapshotFiles.Count -gt 0) {
+    Write-Host "📈 Found $($locSnapshotFiles.Count) LOC snapshot file(s)" -ForegroundColor Cyan
+}
+
 # Collect data from all files
 $dailyData = @()
 $allCommits = @()
@@ -143,6 +167,7 @@ $allPullRequests = @()
 $allIssues = @()
 $dailyPRData = @{}
 $dailyIssueData = @{}
+$locSnapshots = @{}
 
 foreach ($file in $dataFiles) {
     try {
@@ -271,6 +296,28 @@ if ($issuesPrsFiles -and $issuesPrsFiles.Count -gt 0) {
     }
 }
 
+# Process LOC snapshot files
+if ($locSnapshotFiles -and $locSnapshotFiles.Count -gt 0) {
+    foreach ($file in $locSnapshotFiles) {
+        try {
+            $data = Get-Content $file.FullName | ConvertFrom-Json
+            $dateStr = $file.Name -replace 'loc-snapshot-(\d{4}-\d{2}-\d{2})\.json', '$1'
+            
+            $locSnapshots[$dateStr] = @{
+                codeLines = $data.summary.codeLines
+                totalFiles = $data.summary.totalFiles
+                blankLines = $data.summary.blankLines
+                commentLines = $data.summary.commentLines
+                commitSha = $data.commitSha
+                allLanguages = $data.allLanguages
+            }
+        }
+        catch {
+            Write-Warning "Failed to process LOC snapshot $($file.Name): $($_.Exception.Message)"
+        }
+    }
+}
+
 if ($dailyData.Count -eq 0) {
     Write-Error "No valid data found to analyze."
     exit 1
@@ -295,6 +342,20 @@ $contributors = $contributorStats.GetEnumerator() | ForEach-Object {
 } | Sort-Object Commits -Descending
 
 # Calculate summary statistics
+$locSnapshotsSorted = $locSnapshots.GetEnumerator() | Sort-Object Name
+$startLocSnapshot = if ($locSnapshotsSorted.Count -gt 0) { $locSnapshotsSorted | Select-Object -First 1 } else { $null }
+$endLocSnapshot = if ($locSnapshotsSorted.Count -gt 0) { $locSnapshotsSorted | Select-Object -Last 1 } else { $null }
+$startLoc = if ($startLocSnapshot) { $startLocSnapshot.Value.codeLines } else { 0 }
+$endLoc = if ($endLocSnapshot) { $endLocSnapshot.Value.codeLines } else { 0 }
+$startFiles = if ($startLocSnapshot) { $startLocSnapshot.Value.totalFiles } else { 0 }
+$endFiles = if ($endLocSnapshot) { $endLocSnapshot.Value.totalFiles } else { 0 }
+$locGrowthPct = if ($startLoc -gt 0) { [Math]::Round((($endLoc - $startLoc) / $startLoc) * 100, 1) } else { 0 }
+$totalAddDel = ($dailyData | Measure-Object -Property TotalAdditions -Sum).Sum + ($dailyData | Measure-Object -Property TotalDeletions -Sum).Sum
+$churnRate = if ($endLoc -gt 0) { [Math]::Round(($totalAddDel / $endLoc) * 100, 1) } else { 0 }
+$totalCommitsCalc = ($dailyData | Measure-Object -Property TotalCommits -Sum).Sum
+$locPerCommit = if ($totalCommitsCalc -gt 0) { [Math]::Round(($dailyData | Measure-Object -Property NetLOC -Sum).Sum / $totalCommitsCalc, 0) } else { 0 }
+$codeDensity = if ($endFiles -gt 0) { [Math]::Round($endLoc / $endFiles, 0) } else { 0 }
+
 $summary = [PSCustomObject]@{
     Repository      = $RepoName
     TotalDays       = $dailyData.Count
@@ -318,6 +379,14 @@ $summary = [PSCustomObject]@{
     TotalIssues     = $allIssues.Count
     IssuesOpened    = ($allIssues | Where-Object { $_.action -eq "opened" }).Count
     IssuesClosed    = ($allIssues | Where-Object { $_.action -eq "closed" }).Count
+    # LOC snapshot stats
+    TotalLOC        = $endLoc
+    TotalFiles      = $endFiles
+    LOCGrowthPct    = $locGrowthPct
+    ChurnRate       = $churnRate
+    LOCPerCommit    = $locPerCommit
+    CodeDensity     = $codeDensity
+    HasLocSnapshots = ($locSnapshots.Count -gt 0)
 }
 
 # Display summary
@@ -332,6 +401,12 @@ Write-Host ("Total Deletions: {0:N0}" -f $summary.TotalDeletions)
 Write-Host ("Average Daily LOC (active days): {0:N0}" -f $summary.AverageDailyLOC)
 Write-Host ("Peak Day: {0} ({1:N0} commits)" -f $summary.MostActiveDay, ($dailyData | Sort-Object TotalCommits -Descending | Select-Object -First 1).TotalCommits)
 Write-Host ("Contributors: {0}" -f $summary.TotalContributors)
+if ($summary.HasLocSnapshots) {
+    Write-Host ("Total LOC: {0:N0} ({1:N0} files)" -f $summary.TotalLOC, $summary.TotalFiles)
+    Write-Host ("LOC Growth: {0}%" -f $summary.LOCGrowthPct)
+    Write-Host ("Churn Rate: {0}%" -f $summary.ChurnRate)
+    Write-Host ("LOC/Commit: {0:N0}" -f $summary.LOCPerCommit)
+}
 Write-Host ("Pull Requests: {0} ({1} opened, {2} merged, {3} closed)" -f $summary.TotalPRs, $summary.PRsOpened, $summary.PRsMerged, $summary.PRsClosed)
 Write-Host ("Issues: {0} ({1} opened, {2} closed)" -f $summary.TotalIssues, $summary.IssuesOpened, $summary.IssuesClosed)
 
@@ -390,6 +465,26 @@ $prsClosedDataStr = $prsClosedData -join ','
 $issuesOpenedDataStr = $issuesOpenedData -join ','
 $issuesClosedDataStr = $issuesClosedData -join ','
 
+# Prepare LOC snapshot chart data (aligned with dates)
+$totalLocData = @()
+$totalFilesData = @()
+
+foreach ($day in $dailyData) {
+    $dateKey = $day.Date.ToString("yyyy-MM-dd")
+    
+    if ($locSnapshots.ContainsKey($dateKey)) {
+        $totalLocData += $locSnapshots[$dateKey].codeLines
+        $totalFilesData += $locSnapshots[$dateKey].totalFiles
+    } else {
+        # Fill with null/0 if no snapshot for this date
+        $totalLocData += "null"
+        $totalFilesData += "null"
+    }
+}
+
+$totalLocDataStr = $totalLocData -join ','
+$totalFilesDataStr = $totalFilesData -join ','
+
 # Prepare contributor chart data
 $contributorLabels = ($contributors | ForEach-Object { "'$($_.Name)'" }) -join ','
 $contributorCommitsData = ($contributors | ForEach-Object { $_.Commits }) -join ','
@@ -420,6 +515,25 @@ $contributorTableRows = ($contributors | ForEach-Object {
                     </tr>
 "@
 }) -join "`n"
+
+# Build language distribution table rows from the last LOC snapshot
+$languageTableRows = ""
+if ($summary.HasLocSnapshots -and $endLocSnapshot -and $endLocSnapshot.Value.allLanguages) {
+    $totalCodeLines = $endLocSnapshot.Value.codeLines
+    $languageTableRows = ($endLocSnapshot.Value.allLanguages | ForEach-Object {
+        $pct = if ($totalCodeLines -gt 0) { [Math]::Round(($_.code / $totalCodeLines) * 100, 1) } else { 0 }
+        @"
+                        <tr>
+                            <td><strong>$($_.language)</strong></td>
+                            <td>$($_.files.ToString("N0"))</td>
+                            <td>$($_.code.ToString("N0"))</td>
+                            <td>$($_.comment.ToString("N0"))</td>
+                            <td>$($_.blank.ToString("N0"))</td>
+                            <td>$($pct)%</td>
+                        </tr>
+"@
+    }) -join "`n"
+}
 
 # Calculate derived values
 $mostActiveDayCommits = ($dailyData | Sort-Object TotalCommits -Descending | Select-Object -First 1).TotalCommits
@@ -452,6 +566,7 @@ $replacements = @{
     '{{CHURN_RATIO}}'           = $churnRatio.ToString()
     '{{GENERATED_DATE}}'        = (Get-Date -Format 'yyyy-MM-dd HH:mm:ss')
     '{{CONTRIBUTOR_TABLE_ROWS}}' = $contributorTableRows
+    '{{LANGUAGE_TABLE_ROWS}}'   = $languageTableRows
     '{{DATE_LABELS}}'           = $dateLabels
     '{{NET_LOC_DATA}}'          = $netLOCData
     '{{COMMITS_DATA}}'          = $commitsData
@@ -475,6 +590,16 @@ $replacements = @{
     '{{PRS_CLOSED_DATA}}'       = $prsClosedDataStr
     '{{ISSUES_OPENED_DATA}}'    = $issuesOpenedDataStr
     '{{ISSUES_CLOSED_DATA}}'    = $issuesClosedDataStr
+    # LOC snapshot placeholders
+    '{{TOTAL_LOC}}'             = if ($summary.HasLocSnapshots) { $summary.TotalLOC.ToString("N0") } else { "N/A" }
+    '{{TOTAL_FILES}}'           = if ($summary.HasLocSnapshots) { $summary.TotalFiles.ToString("N0") } else { "N/A" }
+    '{{LOC_GROWTH_PCT}}'        = if ($summary.HasLocSnapshots) { $summary.LOCGrowthPct.ToString() } else { "0" }
+    '{{LOC_GROWTH_CLASS}}'      = if ($summary.LOCGrowthPct -ge 0) { "metric-positive" } else { "metric-negative" }
+    '{{CHURN_RATE}}'            = if ($summary.HasLocSnapshots) { $summary.ChurnRate.ToString() } else { "0" }
+    '{{LOC_PER_COMMIT}}'        = if ($summary.HasLocSnapshots) { $summary.LOCPerCommit.ToString("N0") } else { "N/A" }
+    '{{CODE_DENSITY}}'          = if ($summary.HasLocSnapshots) { $summary.CodeDensity.ToString("N0") } else { "N/A" }
+    '{{TOTAL_LOC_DATA}}'        = $totalLocDataStr
+    '{{TOTAL_FILES_DATA}}'      = $totalFilesDataStr
 }
 
 foreach ($key in $replacements.Keys) {
