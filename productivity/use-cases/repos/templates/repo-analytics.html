@@ -1,61 +1,176 @@
 <!DOCTYPE html>
-<html>
+<html data-theme="dark">
 <head>
     <title>{{REPO_NAME}} - Repository Analytics</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        * { box-sizing: border-box; }
+        :root {
+            /* Dark Theme - HemSoft Gold on Black */
+            --bg-primary: #000000;
+            --bg-secondary: #1a1a1a;
+            --bg-tertiary: #2a2a2a;
+            --text-primary: #ffffff;
+            --text-secondary: #aaaaaa;
+            --text-tertiary: #666666;
+            --accent-primary: #d4af37;
+            --accent-secondary: #f4d03f;
+            --accent-tertiary: #c5a028;
+            --border-primary: rgba(212, 175, 55, 0.2);
+            --border-secondary: rgba(255, 255, 255, 0.1);
+            --card-bg: rgba(212, 175, 55, 0.05);
+            --card-border: rgba(212, 175, 55, 0.15);
+            --shadow-color: rgba(0, 0, 0, 0.5);
+            --chart-grid: rgba(255, 255, 255, 0.1);
+            --chart-text: #aaaaaa;
+        }
+
+        [data-theme="light"] {
+            /* Light Theme - Clean Professional */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-tertiary: #e9ecef;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-tertiary: #94a3b8;
+            --accent-primary: #b8860b;
+            --accent-secondary: #daa520;
+            --accent-tertiary: #8b6914;
+            --border-primary: rgba(184, 134, 11, 0.3);
+            --border-secondary: #e2e8f0;
+            --card-bg: rgba(184, 134, 11, 0.03);
+            --card-border: rgba(184, 134, 11, 0.15);
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --chart-grid: rgba(0, 0, 0, 0.1);
+            --chart-text: #475569;
+        }
+
+        * { 
+            box-sizing: border-box;
+            transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 20px;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            background: var(--bg-primary);
             min-height: 100vh;
-            color: #fff;
+            color: var(--text-primary);
         }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            border: 2px solid var(--border-primary);
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: var(--accent-primary);
+            z-index: 1000;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            transition: all 200ms ease;
+        }
+
+        .theme-toggle:hover {
+            background: var(--accent-primary);
+            color: var(--bg-primary);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px var(--shadow-color);
+        }
+
+        .theme-toggle svg {
+            width: 18px;
+            height: 18px;
+        }
+
         .container {
             max-width: 1800px;
             margin: 0 auto;
-            background: rgba(255,255,255,0.05);
+            background: var(--bg-secondary);
             padding: 30px;
             border-radius: 15px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px var(--shadow-color);
+            border: 1px solid var(--border-secondary);
         }
+
         h1 {
             text-align: center;
             margin-bottom: 5px;
-            font-size: 2.5em;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-size: 2em;
+            color: var(--accent-primary);
+            text-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
         }
+
         .subtitle {
             text-align: center;
-            color: #aaa;
+            color: var(--text-secondary);
             margin-bottom: 30px;
-            font-size: 1.1em;
+            font-size: 0.95em;
         }
+
         .metrics-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             gap: 15px;
             margin: 30px 0;
         }
+
         .metric-card {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.3) 0%, rgba(118, 75, 162, 0.3) 100%);
+            background: var(--card-bg);
             padding: 20px;
             border-radius: 10px;
             text-align: center;
-            border: 1px solid rgba(255,255,255,0.1);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: 1px solid var(--card-border);
+            transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
             cursor: help;
+            position: relative;
         }
+        
         .metric-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px var(--shadow-color);
+            border-color: var(--accent-primary);
         }
+
+        .metric-card .tooltip {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 14px 18px;
+            border-radius: 8px;
+            font-size: 0.95em;
+            line-height: 1.5;
+            white-space: normal;
+            width: max-content;
+            max-width: 300px;
+            border: 1px solid var(--border-primary);
+            box-shadow: 0 8px 24px var(--shadow-color);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 200ms ease, visibility 200ms ease;
+            z-index: 100;
+            pointer-events: none;
+            font-weight: 400;
+        }
+
+        .metric-card .tooltip::after {
+            display: none;
+        }
+
+        .metric-card:hover .tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+
         .metric-icon {
             width: 40px;
             height: 40px;
@@ -63,39 +178,47 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(255,255,255,0.1);
+            background: var(--accent-primary);
+            opacity: 0.15;
             border-radius: 50%;
-            color: #a78bfa;
+            color: var(--accent-primary);
         }
+        
         .metric-icon svg {
             width: 22px;
             height: 22px;
         }
+        
         .metric-positive .metric-icon {
             background: rgba(40, 167, 69, 0.2);
             color: #28a745;
         }
+        
         .metric-negative .metric-icon {
             background: rgba(220, 53, 69, 0.2);
             color: #dc3545;
         }
+        
         .metric-pr .metric-icon {
-            background: rgba(138, 43, 226, 0.2);
-            color: #a855f7;
+            background: rgba(184, 134, 11, 0.2);
+            color: var(--accent-primary);
         }
+        
         .metric-issue .metric-icon {
             background: rgba(251, 191, 36, 0.2);
             color: #fbbf24;
         }
+        
         .metric-value {
-            font-size: 1.8em;
+            font-size: 1.5em;
             font-weight: bold;
-            color: #fff;
+            color: var(--text-primary);
             margin-bottom: 5px;
         }
+        
         .metric-label {
-            font-size: 0.85em;
-            color: #aaa;
+            font-size: 0.75em;
+            color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 1px;
         }
@@ -105,36 +228,42 @@
             gap: 25px;
             margin: 30px 0;
         }
+        
         .chart-wrapper {
-            background: rgba(255,255,255,0.03);
+            background: var(--card-bg);
             padding: 20px;
             border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid var(--card-border);
         }
+        
         .chart-title {
-            font-size: 1.2em;
+            font-size: 1em;
             font-weight: bold;
             margin-bottom: 15px;
-            color: #fff;
+            color: var(--text-primary);
             text-align: center;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
         }
+        
         .chart-icon {
             width: 20px;
             height: 20px;
-            color: #a78bfa;
+            color: var(--accent-primary);
             flex-shrink: 0;
         }
+        
         .chart-icon-secondary {
             color: #dc3545;
             margin-left: -4px;
         }
+        
         .chart-icon.pr-icon {
-            color: #a855f7;
+            color: var(--accent-primary);
         }
+        
         .chart-icon.issue-icon {
             color: #fbbf24;
         }
@@ -142,98 +271,118 @@
             position: relative;
             height: 300px;
         }
+        
         .contributor-section {
             margin-top: 30px;
         }
+        
         .contributor-section h2 {
-            color: #fff;
+            color: var(--text-primary);
             margin-bottom: 20px;
-            font-size: 1.5em;
+            font-size: 1.3em;
             display: flex;
             align-items: center;
             gap: 10px;
         }
+        
         .section-icon {
             width: 24px;
             height: 24px;
-            color: #a78bfa;
+            color: var(--accent-primary);
         }
+        
         .contributor-grid {
             display: grid;
             grid-template-columns: 2fr 1fr;
             gap: 25px;
         }
+        
         .contributor-table {
             width: 100%;
             border-collapse: collapse;
-            background: rgba(255,255,255,0.03);
+            background: var(--card-bg);
             border-radius: 10px;
             overflow: hidden;
         }
+        
         .contributor-table th, .contributor-table td {
             padding: 12px 15px;
             text-align: left;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid var(--border-secondary);
         }
+        
         .contributor-table th {
-            background: rgba(102, 126, 234, 0.3);
+            background: var(--accent-primary);
+            color: var(--bg-primary);
             font-weight: 600;
             text-transform: uppercase;
             font-size: 0.85em;
             letter-spacing: 1px;
         }
+        
         .contributor-table tr:hover {
-            background: rgba(255,255,255,0.05);
+            background: var(--bg-tertiary);
         }
         .language-table-wrapper {
             overflow-x: auto;
         }
+        
         .language-table td:not(:first-child) {
             text-align: right;
             font-family: 'Courier New', monospace;
         }
+        
         .language-table th:not(:first-child) {
             text-align: right;
         }
+        
         .additions { color: #28a745; }
         .deletions { color: #dc3545; }
+        
         .insights {
-            background: rgba(255,255,255,0.03);
+            background: var(--card-bg);
             padding: 20px;
             border-radius: 10px;
             margin-top: 30px;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid var(--card-border);
         }
+        
         .insights h3 {
-            color: #fff;
+            color: var(--text-primary);
             margin-bottom: 15px;
             display: flex;
             align-items: center;
             gap: 10px;
         }
+        
         .insights ul {
             list-style: none;
             padding: 0;
         }
+        
         .insights li {
             padding: 10px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            color: #ccc;
+            border-bottom: 1px solid var(--border-secondary);
+            color: var(--text-secondary);
         }
+        
         .insights li:last-child {
             border-bottom: none;
         }
+        
         .insights strong {
-            color: #fff;
+            color: var(--text-primary);
         }
+        
         .generated-info {
             text-align: center;
-            color: #666;
+            color: var(--text-tertiary);
             font-size: 0.85em;
             margin-top: 30px;
             padding-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.1);
+            border-top: 1px solid var(--border-secondary);
         }
+        
         @media (max-width: 1200px) {
             .contributor-grid {
                 grid-template-columns: 1fr;
@@ -245,12 +394,30 @@
     </style>
 </head>
 <body>
+    <button class="theme-toggle" onclick="toggleTheme()">
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="moon-icon" style="display:none;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+        <span class="theme-text">Light Mode</span>
+    </button>
     <div class="container">
         <h1><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 1em; height: 1em; vertical-align: -0.1em; margin-right: 0.3em;"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>{{REPO_NAME}}</h1>
         <div class="subtitle">Repository Analytics | {{DATE_RANGE}}</div>
 
         <div class="metrics-grid">
-            <div class="metric-card" title="Total lines of code in the repository (excluding blanks and comments). This is the actual codebase size as measured by cloc.">
+            <div class="metric-card">
+                <div class="tooltip">Total lines of code in the repository (excluding blanks and comments). This is the actual codebase size as measured by cloc.</div>
                 <div class="metric-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
@@ -263,7 +430,8 @@
                 <div class="metric-value">{{TOTAL_LOC}}</div>
                 <div class="metric-label">Total LOC</div>
             </div>
-            <div class="metric-card {{LOC_GROWTH_CLASS}}" title="Percentage change in total lines of code from the start to end of this period. Positive = codebase grew, Negative = codebase shrank.">
+            <div class="metric-card {{LOC_GROWTH_CLASS}}">
+                <div class="tooltip">Percentage change in total lines of code from the start to end of this period. Positive = codebase grew, Negative = codebase shrank.</div>
                 <div class="metric-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
@@ -273,7 +441,8 @@
                 <div class="metric-value">{{LOC_GROWTH_PCT}}%</div>
                 <div class="metric-label">LOC Growth</div>
             </div>
-            <div class="metric-card" title="Total number of git commits made during this period across all contributors.">
+            <div class="metric-card">
+                <div class="tooltip">Total number of git commits made during this period across all contributors.</div>
                 <div class="metric-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="4"></circle>
@@ -284,7 +453,8 @@
                 <div class="metric-value">{{TOTAL_COMMITS}}</div>
                 <div class="metric-label">Total Commits</div>
             </div>
-            <div class="metric-card" title="Net lines of code change during this period (additions minus deletions). This is the delta, not the total.">
+            <div class="metric-card">
+                <div class="tooltip">Net lines of code change during this period (additions minus deletions). This is the delta, not the total.</div>
                 <div class="metric-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <polyline points="4 17 10 11 4 5"></polyline>
@@ -294,7 +464,8 @@
                 <div class="metric-value">{{TOTAL_NET_LOC}}</div>
                 <div class="metric-label">Net LOC (Period)</div>
             </div>
-            <div class="metric-card" title="Number of unique contributors (commit authors) who made at least one commit during this period.">
+            <div class="metric-card">
+                <div class="tooltip">Number of unique contributors (commit authors) who made at least one commit during this period.</div>
                 <div class="metric-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
@@ -306,7 +477,8 @@
                 <div class="metric-value">{{TOTAL_CONTRIBUTORS}}</div>
                 <div class="metric-label">Contributors</div>
             </div>
-            <div class="metric-card" title="Number of days with at least one commit. Higher ratio to total days indicates consistent development activity.">
+            <div class="metric-card">
+                <div class="tooltip">Number of days with at least one commit. Higher ratio to total days indicates consistent development activity.</div>
                 <div class="metric-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
@@ -318,7 +490,8 @@
                 <div class="metric-value">{{ACTIVE_DAYS}}</div>
                 <div class="metric-label">Active Days</div>
             </div>
-            <div class="metric-card metric-positive" title="Total lines of code added during this period. Includes new code, refactored code, and moved code.">
+            <div class="metric-card metric-positive">
+                <div class="tooltip">Total lines of code added during this period. Includes new code, refactored code, and moved code.</div>
                 <div class="metric-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -328,7 +501,8 @@
                 <div class="metric-value">+{{TOTAL_ADDITIONS}}</div>
                 <div class="metric-label">Additions</div>
             </div>
-            <div class="metric-card metric-negative" title="Total lines of code removed during this period. Includes deleted code, refactored code, and moved code.">
+            <div class="metric-card metric-negative">
+                <div class="tooltip">Total lines of code removed during this period. Includes deleted code, refactored code, and moved code.</div>
                 <div class="metric-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -337,7 +511,8 @@
                 <div class="metric-value">-{{TOTAL_DELETIONS}}</div>
                 <div class="metric-label">Deletions</div>
             </div>
-            <div class="metric-card" title="Code churn rate: (Additions + Deletions) / Total LOC × 100. Higher rates indicate more refactoring or volatile code. Rates over 100% mean more code was touched than exists.">
+            <div class="metric-card">
+                <div class="tooltip">Code churn rate: (Additions + Deletions) / Total LOC × 100. Higher rates indicate more refactoring or volatile code. Rates over 100% mean more code was touched than exists.</div>
                 <div class="metric-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
@@ -346,7 +521,8 @@
                 <div class="metric-value">{{CHURN_RATE}}%</div>
                 <div class="metric-label">Churn Rate</div>
             </div>
-            <div class="metric-card" title="Average net lines of code per commit. Higher values may indicate larger, less granular commits. Lower values suggest smaller, more focused commits.">
+            <div class="metric-card">
+                <div class="tooltip">Average net lines of code per commit. Higher values may indicate larger, less granular commits. Lower values suggest smaller, more focused commits.</div>
                 <div class="metric-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 20V10"></path>
@@ -357,7 +533,8 @@
                 <div class="metric-value">{{LOC_PER_COMMIT}}</div>
                 <div class="metric-label">LOC/Commit</div>
             </div>
-            <div class="metric-card" title="Total number of source code files in the repository (all languages combined).">
+            <div class="metric-card">
+                <div class="tooltip">Total number of source code files in the repository (all languages combined).</div>
                 <div class="metric-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
@@ -367,7 +544,8 @@
                 <div class="metric-value">{{TOTAL_FILES}}</div>
                 <div class="metric-label">Total Files</div>
             </div>
-            <div class="metric-card metric-pr" title="Total pull request activity during this period. Includes PRs opened, merged, and closed without merge.">
+            <div class="metric-card metric-pr">
+                <div class="tooltip">Total pull request activity during this period. Includes PRs opened, merged, and closed without merge.</div>
                 <div class="metric-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="18" cy="18" r="3"></circle>
@@ -379,7 +557,8 @@
                 <div class="metric-value">{{TOTAL_PRS}}</div>
                 <div class="metric-label">Pull Requests</div>
             </div>
-            <div class="metric-card metric-issue" title="Total issue activity during this period. Includes issues opened and closed.">
+            <div class="metric-card metric-issue">
+                <div class="tooltip">Total issue activity during this period. Includes issues opened and closed.</div>
                 <div class="metric-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="10"></circle>
@@ -560,6 +739,24 @@
 
         Chart.defaults.color = '#aaa';
         Chart.defaults.borderColor = 'rgba(255,255,255,0.1)';
+
+        // Theme-aware chart configuration
+        function getChartColors() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            return {
+                gridColor: theme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+                textColor: theme === 'dark' ? '#aaaaaa' : '#475569',
+                goldPrimary: theme === 'dark' ? '#d4af37' : '#b8860b'
+            };
+        }
+
+        function updateChartDefaults() {
+            const colors = getChartColors();
+            Chart.defaults.color = colors.textColor;
+            Chart.defaults.borderColor = colors.gridColor;
+        }
+
+        updateChartDefaults();
 
         // Total LOC Over Time Chart
         new Chart(document.getElementById('totalLocChart'), {
@@ -826,6 +1023,51 @@
                 }
             }
         });
+
+        // Theme Toggle Functionality
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            // Update button text and icons
+            const themeText = document.querySelector('.theme-text');
+            const sunIcon = document.querySelector('.sun-icon');
+            const moonIcon = document.querySelector('.moon-icon');
+            
+            if (newTheme === 'light') {
+                themeText.textContent = 'Dark Mode';
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'block';
+            } else {
+                themeText.textContent = 'Light Mode';
+                sunIcon.style.display = 'block';
+                moonIcon.style.display = 'none';
+            }
+            
+            // Update chart defaults
+            updateChartDefaults();
+        }
+
+        // Initialize theme from localStorage
+        (function() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            const html = document.documentElement;
+            html.setAttribute('data-theme', savedTheme);
+            
+            const themeText = document.querySelector('.theme-text');
+            const sunIcon = document.querySelector('.sun-icon');
+            const moonIcon = document.querySelector('.moon-icon');
+            
+            if (savedTheme === 'light') {
+                themeText.textContent = 'Dark Mode';
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'block';
+            }
+        })();
     </script>
 </body>
 </html>

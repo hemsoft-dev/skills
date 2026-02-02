@@ -1,0 +1,38 @@
+{
+  "pullRequests": [
+    {
+      "number": 161,
+      "title": "RPLAT-12205 reduce redundant notifications",
+      "author": "zclarkrelias",
+      "state": "closed",
+      "action": "merged",
+      "actionDate": "2026-01-05",
+      "actionDateTime": "2026-01-05T15:46:49.0000000",
+      "createdAt": "2025-12-23T15:22:38Z",
+      "mergedAt": "2026-01-05T15:46:49Z",
+      "closedAt": "2026-01-05T15:46:49Z",
+      "url": "https://github.com/relias-engineering/policy-manager/pull/161",
+      "additions": null,
+      "deletions": null,
+      "changedFiles": null,
+      "repository": "policy-manager",
+      "owner": "relias-engineering"
+    }
+  ],
+  "collectionTime": "2026-02-02T12:29:08.5792464-05:00",
+  "url": "https://github.com/relias-engineering/policy-manager",
+  "repository": "policy-manager",
+  "summary": {
+    "prsClosed": 0,
+    "totalPRs": 1,
+    "prsOpened": 0,
+    "prsMerged": 1,
+    "issuesClosed": 0,
+    "totalIssues": 0,
+    "issuesOpened": 0
+  },
+  "owner": "relias-engineering",
+  "date": "2026-01-05",
+  "issues": [],
+  "source": "work"
+}

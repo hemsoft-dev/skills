@@ -108,7 +108,7 @@ if ($dataFiles.Count -eq 0) {
     exit 1
 }
 
-Write-Host "📊 Analyzing $($dataFiles.Count) days of data for '$RepoName'..." -ForegroundColor Cyan
+Write-Host "📊 Analyzing $($dataFiles.Count) commit file(s) for '$RepoName'..." -ForegroundColor Cyan
 Write-Host "📄 Using template: $Template" -ForegroundColor Cyan
 
 # Also look for issues/PRs data files
@@ -160,7 +160,6 @@ if ($locSnapshotFiles -and $locSnapshotFiles.Count -gt 0) {
 }
 
 # Collect data from all files
-$dailyData = @()
 $allCommits = @()
 $contributorStats = @{}
 $allPullRequests = @()
@@ -169,27 +168,10 @@ $dailyPRData = @{}
 $dailyIssueData = @{}
 $locSnapshots = @{}
 
+# First pass: collect all commits from all files
 foreach ($file in $dataFiles) {
     try {
         $data = Get-Content $file.FullName | ConvertFrom-Json
-
-        # Extract date from filename
-        $dateStr = $file.Name -replace 'commits-(\d{4}-\d{2}-\d{2})\.json', '$1'
-        $fileDate = [DateTime]::Parse($dateStr)
-
-        $commitCount = if ($data.commits) { $data.commits.Count } else { 0 }
-
-        $dayData = [PSCustomObject]@{
-            Date           = $fileDate
-            NetLOC         = if ($data.summary.totalNetLOC) { $data.summary.totalNetLOC } else { 0 }
-            TotalCommits   = $commitCount
-            TotalAdditions = if ($data.summary.totalAdditions) { $data.summary.totalAdditions } else { 0 }
-            TotalDeletions = if ($data.summary.totalDeletions) { $data.summary.totalDeletions } else { 0 }
-            LinesAffected  = if ($data.summary.totalLinesAffected) { $data.summary.totalLinesAffected } else { 0 }
-            Contributors   = if ($data.commits) { ($data.commits | Select-Object -Property author -Unique).Count } else { 0 }
-        }
-
-        $dailyData += $dayData
 
         # Collect individual commits and track contributors
         if ($data.commits) {
@@ -238,6 +220,30 @@ foreach ($file in $dataFiles) {
     catch {
         Write-Warning "Failed to process $($file.Name): $($_.Exception.Message)"
     }
+}
+
+# Build dailyData from actual commit dates (not from file names)
+$dailyData = @()
+if ($allCommits.Count -gt 0) {
+    # Group commits by date (date part only, no time)
+    $groupedByDate = $allCommits | Group-Object { $_.Date.Date.ToString("yyyy-MM-dd") }
+    
+    foreach ($dateGroup in $groupedByDate) {
+        $dayCommits = $dateGroup.Group
+        $dayData = [PSCustomObject]@{
+            Date           = [DateTime]::Parse($dateGroup.Name)
+            NetLOC         = ($dayCommits | Measure-Object -Property NetLOC -Sum).Sum
+            TotalCommits   = $dayCommits.Count
+            TotalAdditions = ($dayCommits | Measure-Object -Property Additions -Sum).Sum
+            TotalDeletions = ($dayCommits | Measure-Object -Property Deletions -Sum).Sum
+            LinesAffected  = ($dayCommits | Measure-Object -Property Additions -Sum).Sum + ($dayCommits | Measure-Object -Property Deletions -Sum).Sum
+            Contributors   = ($dayCommits | Select-Object -Property Author -Unique).Count
+        }
+        $dailyData += $dayData
+    }
+    
+    # Sort by date
+    $dailyData = $dailyData | Sort-Object Date
 }
 
 # Process issues/PRs files

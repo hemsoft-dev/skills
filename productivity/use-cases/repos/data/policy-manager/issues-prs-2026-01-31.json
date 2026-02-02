@@ -1,0 +1,38 @@
+{
+  "pullRequests": [
+    {
+      "number": 172,
+      "title": "RPLAT-13424: Migrate attestation assignment notifications to Service Bus",
+      "author": "nmalhotra29",
+      "state": "open",
+      "action": "opened",
+      "actionDate": "2026-01-31",
+      "actionDateTime": "2026-01-31T07:50:54.0000000",
+      "createdAt": "2026-01-31T07:50:54Z",
+      "mergedAt": null,
+      "closedAt": null,
+      "url": "https://github.com/relias-engineering/policy-manager/pull/172",
+      "additions": null,
+      "deletions": null,
+      "changedFiles": null,
+      "repository": "policy-manager",
+      "owner": "relias-engineering"
+    }
+  ],
+  "collectionTime": "2026-02-02T12:29:08.5886227-05:00",
+  "url": "https://github.com/relias-engineering/policy-manager",
+  "repository": "policy-manager",
+  "summary": {
+    "prsClosed": 0,
+    "totalPRs": 1,
+    "prsOpened": 1,
+    "prsMerged": 0,
+    "issuesClosed": 0,
+    "totalIssues": 0,
+    "issuesOpened": 0
+  },
+  "owner": "relias-engineering",
+  "date": "2026-01-31",
+  "issues": [],
+  "source": "work"
+}

@@ -1,61 +1,176 @@
 <!DOCTYPE html>
-<html>
+<html data-theme="dark">
 <head>
     <title>rlms-website - Repository Analytics</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        * { box-sizing: border-box; }
+        :root {
+            /* Dark Theme - HemSoft Gold on Black */
+            --bg-primary: #000000;
+            --bg-secondary: #1a1a1a;
+            --bg-tertiary: #2a2a2a;
+            --text-primary: #ffffff;
+            --text-secondary: #aaaaaa;
+            --text-tertiary: #666666;
+            --accent-primary: #d4af37;
+            --accent-secondary: #f4d03f;
+            --accent-tertiary: #c5a028;
+            --border-primary: rgba(212, 175, 55, 0.2);
+            --border-secondary: rgba(255, 255, 255, 0.1);
+            --card-bg: rgba(212, 175, 55, 0.05);
+            --card-border: rgba(212, 175, 55, 0.15);
+            --shadow-color: rgba(0, 0, 0, 0.5);
+            --chart-grid: rgba(255, 255, 255, 0.1);
+            --chart-text: #aaaaaa;
+        }
+
+        [data-theme="light"] {
+            /* Light Theme - Clean Professional */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-tertiary: #e9ecef;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-tertiary: #94a3b8;
+            --accent-primary: #b8860b;
+            --accent-secondary: #daa520;
+            --accent-tertiary: #8b6914;
+            --border-primary: rgba(184, 134, 11, 0.3);
+            --border-secondary: #e2e8f0;
+            --card-bg: rgba(184, 134, 11, 0.03);
+            --card-border: rgba(184, 134, 11, 0.15);
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --chart-grid: rgba(0, 0, 0, 0.1);
+            --chart-text: #475569;
+        }
+
+        * { 
+            box-sizing: border-box;
+            transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 20px;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            background: var(--bg-primary);
             min-height: 100vh;
-            color: #fff;
+            color: var(--text-primary);
         }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            border: 2px solid var(--border-primary);
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: var(--accent-primary);
+            z-index: 1000;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            transition: all 200ms ease;
+        }
+
+        .theme-toggle:hover {
+            background: var(--accent-primary);
+            color: var(--bg-primary);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px var(--shadow-color);
+        }
+
+        .theme-toggle svg {
+            width: 18px;
+            height: 18px;
+        }
+
         .container {
             max-width: 1800px;
             margin: 0 auto;
-            background: rgba(255,255,255,0.05);
+            background: var(--bg-secondary);
             padding: 30px;
             border-radius: 15px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px var(--shadow-color);
+            border: 1px solid var(--border-secondary);
         }
+
         h1 {
             text-align: center;
             margin-bottom: 5px;
-            font-size: 2.5em;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-size: 2em;
+            color: var(--accent-primary);
+            text-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
         }
+
         .subtitle {
             text-align: center;
-            color: #aaa;
+            color: var(--text-secondary);
             margin-bottom: 30px;
-            font-size: 1.1em;
+            font-size: 0.95em;
         }
+
         .metrics-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             gap: 15px;
             margin: 30px 0;
         }
+
         .metric-card {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.3) 0%, rgba(118, 75, 162, 0.3) 100%);
+            background: var(--card-bg);
             padding: 20px;
             border-radius: 10px;
             text-align: center;
-            border: 1px solid rgba(255,255,255,0.1);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: 1px solid var(--card-border);
+            transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
             cursor: help;
+            position: relative;
         }
+        
         .metric-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px var(--shadow-color);
+            border-color: var(--accent-primary);
         }
+
+        .metric-card .tooltip {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 14px 18px;
+            border-radius: 8px;
+            font-size: 0.95em;
+            line-height: 1.5;
+            white-space: normal;
+            width: max-content;
+            max-width: 300px;
+            border: 1px solid var(--border-primary);
+            box-shadow: 0 8px 24px var(--shadow-color);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 200ms ease, visibility 200ms ease;
+            z-index: 100;
+            pointer-events: none;
+            font-weight: 400;
+        }
+
+        .metric-card .tooltip::after {
+            display: none;
+        }
+
+        .metric-card:hover .tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+
         .metric-icon {
             width: 40px;
             height: 40px;
@@ -63,39 +178,47 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(255,255,255,0.1);
+            background: var(--accent-primary);
+            opacity: 0.15;
             border-radius: 50%;
-            color: #a78bfa;
+            color: var(--accent-primary);
         }
+        
         .metric-icon svg {
             width: 22px;
             height: 22px;
         }
+        
         .metric-positive .metric-icon {
             background: rgba(40, 167, 69, 0.2);
             color: #28a745;
         }
+        
         .metric-negative .metric-icon {
             background: rgba(220, 53, 69, 0.2);
             color: #dc3545;
         }
+        
         .metric-pr .metric-icon {
-            background: rgba(138, 43, 226, 0.2);
-            color: #a855f7;
+            background: rgba(184, 134, 11, 0.2);
+            color: var(--accent-primary);
         }
+        
         .metric-issue .metric-icon {
             background: rgba(251, 191, 36, 0.2);
             color: #fbbf24;
         }
+        
         .metric-value {
-            font-size: 1.8em;
+            font-size: 1.5em;
             font-weight: bold;
-            color: #fff;
+            color: var(--text-primary);
             margin-bottom: 5px;
         }
+        
         .metric-label {
-            font-size: 0.85em;
-            color: #aaa;
+            font-size: 0.75em;
+            color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 1px;
         }
@@ -105,36 +228,42 @@
             gap: 25px;
             margin: 30px 0;
         }
+        
         .chart-wrapper {
-            background: rgba(255,255,255,0.03);
+            background: var(--card-bg);
             padding: 20px;
             border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid var(--card-border);
         }
+        
         .chart-title {
-            font-size: 1.2em;
+            font-size: 1em;
             font-weight: bold;
             margin-bottom: 15px;
-            color: #fff;
+            color: var(--text-primary);
             text-align: center;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
         }
+        
         .chart-icon {
             width: 20px;
             height: 20px;
-            color: #a78bfa;
+            color: var(--accent-primary);
             flex-shrink: 0;
         }
+        
         .chart-icon-secondary {
             color: #dc3545;
             margin-left: -4px;
         }
+        
         .chart-icon.pr-icon {
-            color: #a855f7;
+            color: var(--accent-primary);
         }
+        
         .chart-icon.issue-icon {
             color: #fbbf24;
         }
@@ -142,98 +271,118 @@
             position: relative;
             height: 300px;
         }
+        
         .contributor-section {
             margin-top: 30px;
         }
+        
         .contributor-section h2 {
-            color: #fff;
+            color: var(--text-primary);
             margin-bottom: 20px;
-            font-size: 1.5em;
+            font-size: 1.3em;
             display: flex;
             align-items: center;
             gap: 10px;
         }
+        
         .section-icon {
             width: 24px;
             height: 24px;
-            color: #a78bfa;
+            color: var(--accent-primary);
         }
+        
         .contributor-grid {
             display: grid;
             grid-template-columns: 2fr 1fr;
             gap: 25px;
         }
+        
         .contributor-table {
             width: 100%;
             border-collapse: collapse;
-            background: rgba(255,255,255,0.03);
+            background: var(--card-bg);
             border-radius: 10px;
             overflow: hidden;
         }
+        
         .contributor-table th, .contributor-table td {
             padding: 12px 15px;
             text-align: left;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid var(--border-secondary);
         }
+        
         .contributor-table th {
-            background: rgba(102, 126, 234, 0.3);
+            background: var(--accent-primary);
+            color: var(--bg-primary);
             font-weight: 600;
             text-transform: uppercase;
             font-size: 0.85em;
             letter-spacing: 1px;
         }
+        
         .contributor-table tr:hover {
-            background: rgba(255,255,255,0.05);
+            background: var(--bg-tertiary);
         }
         .language-table-wrapper {
             overflow-x: auto;
         }
+        
         .language-table td:not(:first-child) {
             text-align: right;
             font-family: 'Courier New', monospace;
         }
+        
         .language-table th:not(:first-child) {
             text-align: right;
         }
+        
         .additions { color: #28a745; }
         .deletions { color: #dc3545; }
+        
         .insights {
-            background: rgba(255,255,255,0.03);
+            background: var(--card-bg);
             padding: 20px;
             border-radius: 10px;
             margin-top: 30px;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid var(--card-border);
         }
+        
         .insights h3 {
-            color: #fff;
+            color: var(--text-primary);
             margin-bottom: 15px;
             display: flex;
             align-items: center;
             gap: 10px;
         }
+        
         .insights ul {
             list-style: none;
             padding: 0;
         }
+        
         .insights li {
             padding: 10px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            color: #ccc;
+            border-bottom: 1px solid var(--border-secondary);
+            color: var(--text-secondary);
         }
+        
         .insights li:last-child {
             border-bottom: none;
         }
+        
         .insights strong {
-            color: #fff;
+            color: var(--text-primary);
         }
+        
         .generated-info {
             text-align: center;
-            color: #666;
+            color: var(--text-tertiary);
             font-size: 0.85em;
             margin-top: 30px;
             padding-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.1);
+            border-top: 1px solid var(--border-secondary);
         }
+        
         @media (max-width: 1200px) {
             .contributor-grid {
                 grid-template-columns: 1fr;
@@ -245,12 +394,30 @@
     </style>
 </head>
 <body>
+    <button class="theme-toggle" onclick="toggleTheme()">
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="moon-icon" style="display:none;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+        <span class="theme-text">Light Mode</span>
+    </button>
     <div class="container">
-        <h1>📊 rlms-website</h1>
+        <h1><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 1em; height: 1em; vertical-align: -0.1em; margin-right: 0.3em;"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>rlms-website</h1>
         <div class="subtitle">Repository Analytics | Jan 01, 2026 - Jan 31, 2026</div>
 
         <div class="metrics-grid">
-            <div class="metric-card" title="Total lines of code in the repository (excluding blanks and comments). This is the actual codebase size as measured by cloc.">
+            <div class="metric-card">
+                <div class="tooltip">Total lines of code in the repository (excluding blanks and comments). This is the actual codebase size as measured by cloc.</div>
                 <div class="metric-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
@@ -263,7 +430,8 @@
                 <div class="metric-value">1,681,940</div>
                 <div class="metric-label">Total LOC</div>
             </div>
-            <div class="metric-card metric-positive" title="Percentage change in total lines of code from the start to end of this period. Positive = codebase grew, Negative = codebase shrank.">
+            <div class="metric-card metric-positive">
+                <div class="tooltip">Percentage change in total lines of code from the start to end of this period. Positive = codebase grew, Negative = codebase shrank.</div>
                 <div class="metric-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
@@ -273,7 +441,8 @@
                 <div class="metric-value">2.5%</div>
                 <div class="metric-label">LOC Growth</div>
             </div>
-            <div class="metric-card" title="Total number of git commits made during this period across all contributors.">
+            <div class="metric-card">
+                <div class="tooltip">Total number of git commits made during this period across all contributors.</div>
                 <div class="metric-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="4"></circle>
@@ -284,7 +453,8 @@
                 <div class="metric-value">930</div>
                 <div class="metric-label">Total Commits</div>
             </div>
-            <div class="metric-card" title="Net lines of code change during this period (additions minus deletions). This is the delta, not the total.">
+            <div class="metric-card">
+                <div class="tooltip">Net lines of code change during this period (additions minus deletions). This is the delta, not the total.</div>
                 <div class="metric-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <polyline points="4 17 10 11 4 5"></polyline>
@@ -294,7 +464,8 @@
                 <div class="metric-value">558,725</div>
                 <div class="metric-label">Net LOC (Period)</div>
             </div>
-            <div class="metric-card" title="Number of unique contributors (commit authors) who made at least one commit during this period.">
+            <div class="metric-card">
+                <div class="tooltip">Number of unique contributors (commit authors) who made at least one commit during this period.</div>
                 <div class="metric-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
@@ -306,7 +477,8 @@
                 <div class="metric-value">115</div>
                 <div class="metric-label">Contributors</div>
             </div>
-            <div class="metric-card" title="Number of days with at least one commit. Higher ratio to total days indicates consistent development activity.">
+            <div class="metric-card">
+                <div class="tooltip">Number of days with at least one commit. Higher ratio to total days indicates consistent development activity.</div>
                 <div class="metric-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
@@ -318,7 +490,8 @@
                 <div class="metric-value">28</div>
                 <div class="metric-label">Active Days</div>
             </div>
-            <div class="metric-card metric-positive" title="Total lines of code added during this period. Includes new code, refactored code, and moved code.">
+            <div class="metric-card metric-positive">
+                <div class="tooltip">Total lines of code added during this period. Includes new code, refactored code, and moved code.</div>
                 <div class="metric-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -328,7 +501,8 @@
                 <div class="metric-value">+990,733</div>
                 <div class="metric-label">Additions</div>
             </div>
-            <div class="metric-card metric-negative" title="Total lines of code removed during this period. Includes deleted code, refactored code, and moved code.">
+            <div class="metric-card metric-negative">
+                <div class="tooltip">Total lines of code removed during this period. Includes deleted code, refactored code, and moved code.</div>
                 <div class="metric-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -337,7 +511,8 @@
                 <div class="metric-value">-432,008</div>
                 <div class="metric-label">Deletions</div>
             </div>
-            <div class="metric-card" title="Code churn rate: (Additions + Deletions) / Total LOC × 100. Higher rates indicate more refactoring or volatile code. Rates over 100% mean more code was touched than exists.">
+            <div class="metric-card">
+                <div class="tooltip">Code churn rate: (Additions + Deletions) / Total LOC × 100. Higher rates indicate more refactoring or volatile code. Rates over 100% mean more code was touched than exists.</div>
                 <div class="metric-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
@@ -346,7 +521,8 @@
                 <div class="metric-value">84.6%</div>
                 <div class="metric-label">Churn Rate</div>
             </div>
-            <div class="metric-card" title="Average net lines of code per commit. Higher values may indicate larger, less granular commits. Lower values suggest smaller, more focused commits.">
+            <div class="metric-card">
+                <div class="tooltip">Average net lines of code per commit. Higher values may indicate larger, less granular commits. Lower values suggest smaller, more focused commits.</div>
                 <div class="metric-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 20V10"></path>
@@ -357,7 +533,8 @@
                 <div class="metric-value">601</div>
                 <div class="metric-label">LOC/Commit</div>
             </div>
-            <div class="metric-card" title="Total number of source code files in the repository (all languages combined).">
+            <div class="metric-card">
+                <div class="tooltip">Total number of source code files in the repository (all languages combined).</div>
                 <div class="metric-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
@@ -367,7 +544,8 @@
                 <div class="metric-value">11,285</div>
                 <div class="metric-label">Total Files</div>
             </div>
-            <div class="metric-card metric-pr" title="Total pull request activity during this period. Includes PRs opened, merged, and closed without merge.">
+            <div class="metric-card metric-pr">
+                <div class="tooltip">Total pull request activity during this period. Includes PRs opened, merged, and closed without merge.</div>
                 <div class="metric-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="18" cy="18" r="3"></circle>
@@ -379,7 +557,8 @@
                 <div class="metric-value">292</div>
                 <div class="metric-label">Pull Requests</div>
             </div>
-            <div class="metric-card metric-issue" title="Total issue activity during this period. Includes issues opened and closed.">
+            <div class="metric-card metric-issue">
+                <div class="tooltip">Total issue activity during this period. Includes issues opened and closed.</div>
                 <div class="metric-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="10"></circle>
@@ -543,15 +722,6 @@
                         <td>56</td>
                     </tr>
                     <tr>
-                        <td><strong>Avnish Yadav</strong></td>
-                        <td>25</td>
-                        <td>2.7%</td>
-                        <td class="additions">+17,779</td>
-                        <td class="deletions">-6,071</td>
-                        <td>11,708</td>
-                        <td>543</td>
-                    </tr>
-                    <tr>
                         <td><strong>Tatiana Chebotareva</strong></td>
                         <td>25</td>
                         <td>2.7%</td>
@@ -561,13 +731,13 @@
                         <td>755</td>
                     </tr>
                     <tr>
-                        <td><strong>Suhail Jain</strong></td>
-                        <td>24</td>
-                        <td>2.6%</td>
-                        <td class="additions">+72,309</td>
-                        <td class="deletions">-28,932</td>
-                        <td>43,377</td>
-                        <td>769</td>
+                        <td><strong>Avnish Yadav</strong></td>
+                        <td>25</td>
+                        <td>2.7%</td>
+                        <td class="additions">+17,779</td>
+                        <td class="deletions">-6,071</td>
+                        <td>11,708</td>
+                        <td>543</td>
                     </tr>
                     <tr>
                         <td><strong>India Evans</strong></td>
@@ -577,6 +747,15 @@
                         <td class="deletions">-14,912</td>
                         <td>17,186</td>
                         <td>511</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Suhail Jain</strong></td>
+                        <td>24</td>
+                        <td>2.6%</td>
+                        <td class="additions">+72,309</td>
+                        <td class="deletions">-28,932</td>
+                        <td>43,377</td>
+                        <td>769</td>
                     </tr>
                     <tr>
                         <td><strong>radhika-pathak201</strong></td>
@@ -660,6 +839,15 @@
                         <td>29</td>
                     </tr>
                     <tr>
+                        <td><strong>s.surve@relias.com</strong></td>
+                        <td>11</td>
+                        <td>1.2%</td>
+                        <td class="additions">+2,342</td>
+                        <td class="deletions">-939</td>
+                        <td>1,403</td>
+                        <td>102</td>
+                    </tr>
+                    <tr>
                         <td><strong>Charlette Bauer</strong></td>
                         <td>11</td>
                         <td>1.2%</td>
@@ -678,31 +866,13 @@
                         <td>581</td>
                     </tr>
                     <tr>
-                        <td><strong>s.surve@relias.com</strong></td>
-                        <td>11</td>
-                        <td>1.2%</td>
-                        <td class="additions">+2,342</td>
-                        <td class="deletions">-939</td>
-                        <td>1,403</td>
-                        <td>102</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Stephen</strong></td>
+                        <td><strong>Rahul Chopra</strong></td>
                         <td>10</td>
                         <td>1.1%</td>
-                        <td class="additions">+782</td>
-                        <td class="deletions">-308</td>
-                        <td>474</td>
-                        <td>59</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Gowtham Buggala</strong></td>
-                        <td>10</td>
-                        <td>1.1%</td>
-                        <td class="additions">+1,840</td>
-                        <td class="deletions">-544</td>
-                        <td>1,296</td>
-                        <td>41</td>
+                        <td class="additions">+1,738</td>
+                        <td class="deletions">-275</td>
+                        <td>1,463</td>
+                        <td>56</td>
                     </tr>
                     <tr>
                         <td><strong>tshakhmaykina</strong></td>
@@ -723,13 +893,31 @@
                         <td>364</td>
                     </tr>
                     <tr>
-                        <td><strong>Rahul Chopra</strong></td>
+                        <td><strong>Gowtham Buggala</strong></td>
                         <td>10</td>
                         <td>1.1%</td>
-                        <td class="additions">+1,738</td>
-                        <td class="deletions">-275</td>
-                        <td>1,463</td>
-                        <td>56</td>
+                        <td class="additions">+1,840</td>
+                        <td class="deletions">-544</td>
+                        <td>1,296</td>
+                        <td>41</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Stephen</strong></td>
+                        <td>10</td>
+                        <td>1.1%</td>
+                        <td class="additions">+782</td>
+                        <td class="deletions">-308</td>
+                        <td>474</td>
+                        <td>59</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Krishna Sharma</strong></td>
+                        <td>8</td>
+                        <td>0.9%</td>
+                        <td class="additions">+180</td>
+                        <td class="deletions">-22</td>
+                        <td>158</td>
+                        <td>18</td>
                     </tr>
                     <tr>
                         <td><strong>Yogiraj Yelpale</strong></td>
@@ -759,13 +947,13 @@
                         <td>644</td>
                     </tr>
                     <tr>
-                        <td><strong>Krishna Sharma</strong></td>
-                        <td>8</td>
-                        <td>0.9%</td>
-                        <td class="additions">+180</td>
-                        <td class="deletions">-22</td>
-                        <td>158</td>
-                        <td>18</td>
+                        <td><strong>sswami07</strong></td>
+                        <td>7</td>
+                        <td>0.8%</td>
+                        <td class="additions">+606</td>
+                        <td class="deletions">-187</td>
+                        <td>419</td>
+                        <td>36</td>
                     </tr>
                     <tr>
                         <td><strong>Isaac Mahler</strong></td>
@@ -777,24 +965,6 @@
                         <td>7</td>
                     </tr>
                     <tr>
-                        <td><strong>Karthika Menon</strong></td>
-                        <td>7</td>
-                        <td>0.8%</td>
-                        <td class="additions">+109,239</td>
-                        <td class="deletions">-42,412</td>
-                        <td>66,827</td>
-                        <td>306</td>
-                    </tr>
-                    <tr>
-                        <td><strong>sswami07</strong></td>
-                        <td>7</td>
-                        <td>0.8%</td>
-                        <td class="additions">+606</td>
-                        <td class="deletions">-187</td>
-                        <td>419</td>
-                        <td>36</td>
-                    </tr>
-                    <tr>
                         <td><strong>Matt Howard</strong></td>
                         <td>7</td>
                         <td>0.8%</td>
@@ -804,31 +974,13 @@
                         <td>310</td>
                     </tr>
                     <tr>
-                        <td><strong>Haoming Gao</strong></td>
-                        <td>6</td>
-                        <td>0.6%</td>
-                        <td class="additions">+511</td>
-                        <td class="deletions">-99</td>
-                        <td>412</td>
-                        <td>26</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Madhusudhan reddy Kolipaka</strong></td>
-                        <td>6</td>
-                        <td>0.6%</td>
-                        <td class="additions">+69</td>
-                        <td class="deletions">-50</td>
-                        <td>19</td>
-                        <td>13</td>
-                    </tr>
-                    <tr>
-                        <td><strong>chopra-rahul</strong></td>
-                        <td>6</td>
-                        <td>0.6%</td>
-                        <td class="additions">+1,525</td>
-                        <td class="deletions">-60</td>
-                        <td>1,465</td>
-                        <td>24</td>
+                        <td><strong>Karthika Menon</strong></td>
+                        <td>7</td>
+                        <td>0.8%</td>
+                        <td class="additions">+109,239</td>
+                        <td class="deletions">-42,412</td>
+                        <td>66,827</td>
+                        <td>306</td>
                     </tr>
                     <tr>
                         <td><strong>KalpanaKulkarni1297</strong></td>
@@ -840,6 +992,33 @@
                         <td>30</td>
                     </tr>
                     <tr>
+                        <td><strong>chopra-rahul</strong></td>
+                        <td>6</td>
+                        <td>0.6%</td>
+                        <td class="additions">+1,525</td>
+                        <td class="deletions">-60</td>
+                        <td>1,465</td>
+                        <td>24</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Madhusudhan reddy Kolipaka</strong></td>
+                        <td>6</td>
+                        <td>0.6%</td>
+                        <td class="additions">+69</td>
+                        <td class="deletions">-50</td>
+                        <td>19</td>
+                        <td>13</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Haoming Gao</strong></td>
+                        <td>6</td>
+                        <td>0.6%</td>
+                        <td class="additions">+511</td>
+                        <td class="deletions">-99</td>
+                        <td>412</td>
+                        <td>26</td>
+                    </tr>
+                    <tr>
                         <td><strong>Jian Zhang</strong></td>
                         <td>5</td>
                         <td>0.5%</td>
@@ -849,13 +1028,13 @@
                         <td>8</td>
                     </tr>
                     <tr>
-                        <td><strong>mayur234-dev</strong></td>
+                        <td><strong>Prashant-Kalbande844</strong></td>
                         <td>5</td>
                         <td>0.5%</td>
-                        <td class="additions">+1,765</td>
-                        <td class="deletions">-433</td>
-                        <td>1,332</td>
-                        <td>37</td>
+                        <td class="additions">+37,783</td>
+                        <td class="deletions">-14,885</td>
+                        <td>22,898</td>
+                        <td>319</td>
                     </tr>
                     <tr>
                         <td><strong>R-ZBroskey</strong></td>
@@ -876,22 +1055,31 @@
                         <td>23</td>
                     </tr>
                     <tr>
-                        <td><strong>Prashant-Kalbande844</strong></td>
+                        <td><strong>mayur234-dev</strong></td>
                         <td>5</td>
                         <td>0.5%</td>
-                        <td class="additions">+37,783</td>
-                        <td class="deletions">-14,885</td>
-                        <td>22,898</td>
-                        <td>319</td>
+                        <td class="additions">+1,765</td>
+                        <td class="deletions">-433</td>
+                        <td>1,332</td>
+                        <td>37</td>
                     </tr>
                     <tr>
-                        <td><strong>Krisharma123</strong></td>
+                        <td><strong>Revati Nikumbh</strong></td>
                         <td>4</td>
                         <td>0.4%</td>
-                        <td class="additions">+204</td>
-                        <td class="deletions">-16</td>
-                        <td>188</td>
-                        <td>13</td>
+                        <td class="additions">+455</td>
+                        <td class="deletions">-66</td>
+                        <td>389</td>
+                        <td>16</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ashwini Wani</strong></td>
+                        <td>4</td>
+                        <td>0.4%</td>
+                        <td class="additions">+172</td>
+                        <td class="deletions">-19</td>
+                        <td>153</td>
+                        <td>6</td>
                     </tr>
                     <tr>
                         <td><strong>Moumit Dutta</strong></td>
@@ -903,12 +1091,21 @@
                         <td>6</td>
                     </tr>
                     <tr>
-                        <td><strong>Revati Nikumbh</strong></td>
+                        <td><strong>Krisharma123</strong></td>
                         <td>4</td>
                         <td>0.4%</td>
-                        <td class="additions">+455</td>
-                        <td class="deletions">-66</td>
-                        <td>389</td>
+                        <td class="additions">+204</td>
+                        <td class="deletions">-16</td>
+                        <td>188</td>
+                        <td>13</td>
+                    </tr>
+                    <tr>
+                        <td><strong>sbadiger29</strong></td>
+                        <td>4</td>
+                        <td>0.4%</td>
+                        <td class="additions">+1,374</td>
+                        <td class="deletions">-70</td>
+                        <td>1,304</td>
                         <td>16</td>
                     </tr>
                     <tr>
@@ -930,22 +1127,13 @@
                         <td>26</td>
                     </tr>
                     <tr>
-                        <td><strong>Ashwini Wani</strong></td>
-                        <td>4</td>
-                        <td>0.4%</td>
-                        <td class="additions">+172</td>
-                        <td class="deletions">-19</td>
-                        <td>153</td>
-                        <td>6</td>
-                    </tr>
-                    <tr>
-                        <td><strong>sbadiger29</strong></td>
-                        <td>4</td>
-                        <td>0.4%</td>
-                        <td class="additions">+1,374</td>
-                        <td class="deletions">-70</td>
-                        <td>1,304</td>
-                        <td>16</td>
+                        <td><strong>Jayati</strong></td>
+                        <td>3</td>
+                        <td>0.3%</td>
+                        <td class="additions">+173</td>
+                        <td class="deletions">-65</td>
+                        <td>108</td>
+                        <td>7</td>
                     </tr>
                     <tr>
                         <td><strong>SadafNoorRehamani</strong></td>
@@ -957,40 +1145,13 @@
                         <td>9</td>
                     </tr>
                     <tr>
-                        <td><strong>arpitha-belli</strong></td>
+                        <td><strong>m.chavan@relias.com</strong></td>
                         <td>3</td>
                         <td>0.3%</td>
-                        <td class="additions">+645</td>
-                        <td class="deletions">-35</td>
-                        <td>610</td>
-                        <td>30</td>
-                    </tr>
-                    <tr>
-                        <td><strong>kamal-machchh-hg</strong></td>
-                        <td>3</td>
-                        <td>0.3%</td>
-                        <td class="additions">+411</td>
-                        <td class="deletions">-18</td>
-                        <td>393</td>
-                        <td>14</td>
-                    </tr>
-                    <tr>
-                        <td><strong>uharanina</strong></td>
-                        <td>3</td>
-                        <td>0.3%</td>
-                        <td class="additions">+112</td>
-                        <td class="deletions">-27</td>
-                        <td>85</td>
-                        <td>10</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Roman Khatian</strong></td>
-                        <td>3</td>
-                        <td>0.3%</td>
-                        <td class="additions">+9</td>
-                        <td class="deletions">-7</td>
-                        <td>2</td>
-                        <td>5</td>
+                        <td class="additions">+106</td>
+                        <td class="deletions">-87</td>
+                        <td>19</td>
+                        <td>7</td>
                     </tr>
                     <tr>
                         <td><strong>Jignesh Jinjariya</strong></td>
@@ -1002,6 +1163,33 @@
                         <td>7</td>
                     </tr>
                     <tr>
+                        <td><strong>Roman Khatian</strong></td>
+                        <td>3</td>
+                        <td>0.3%</td>
+                        <td class="additions">+9</td>
+                        <td class="deletions">-7</td>
+                        <td>2</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td><strong>arpitha-belli</strong></td>
+                        <td>3</td>
+                        <td>0.3%</td>
+                        <td class="additions">+645</td>
+                        <td class="deletions">-35</td>
+                        <td>610</td>
+                        <td>30</td>
+                    </tr>
+                    <tr>
+                        <td><strong>uharanina</strong></td>
+                        <td>3</td>
+                        <td>0.3%</td>
+                        <td class="additions">+112</td>
+                        <td class="deletions">-27</td>
+                        <td>85</td>
+                        <td>10</td>
+                    </tr>
+                    <tr>
                         <td><strong>NilamGadade7677</strong></td>
                         <td>3</td>
                         <td>0.3%</td>
@@ -1011,49 +1199,22 @@
                         <td>4</td>
                     </tr>
                     <tr>
-                        <td><strong>m.chavan@relias.com</strong></td>
+                        <td><strong>kamal-machchh-hg</strong></td>
                         <td>3</td>
                         <td>0.3%</td>
-                        <td class="additions">+106</td>
-                        <td class="deletions">-87</td>
-                        <td>19</td>
-                        <td>7</td>
+                        <td class="additions">+411</td>
+                        <td class="deletions">-18</td>
+                        <td>393</td>
+                        <td>14</td>
                     </tr>
                     <tr>
-                        <td><strong>Jayati</strong></td>
-                        <td>3</td>
-                        <td>0.3%</td>
-                        <td class="additions">+173</td>
-                        <td class="deletions">-65</td>
-                        <td>108</td>
-                        <td>7</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Kris Smith</strong></td>
+                        <td><strong>Ethan Bell</strong></td>
                         <td>2</td>
                         <td>0.2%</td>
-                        <td class="additions">+30</td>
-                        <td class="deletions">-84</td>
-                        <td>-54</td>
-                        <td>4</td>
-                    </tr>
-                    <tr>
-                        <td><strong>JJinjariya</strong></td>
-                        <td>2</td>
-                        <td>0.2%</td>
-                        <td class="additions">+167</td>
-                        <td class="deletions">-267</td>
-                        <td>-100</td>
-                        <td>8</td>
-                    </tr>
-                    <tr>
-                        <td><strong>SuhailJain0012</strong></td>
-                        <td>2</td>
-                        <td>0.2%</td>
-                        <td class="additions">+13,117</td>
-                        <td class="deletions">-5,175</td>
-                        <td>7,942</td>
-                        <td>309</td>
+                        <td class="additions">+2,829</td>
+                        <td class="deletions">-1,219</td>
+                        <td>1,610</td>
+                        <td>117</td>
                     </tr>
                     <tr>
                         <td><strong>Zach Broskey</strong></td>
@@ -1065,6 +1226,24 @@
                         <td>9</td>
                     </tr>
                     <tr>
+                        <td><strong>Kris Smith</strong></td>
+                        <td>2</td>
+                        <td>0.2%</td>
+                        <td class="additions">+30</td>
+                        <td class="deletions">-84</td>
+                        <td>-54</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td><strong>hsundararajan</strong></td>
+                        <td>2</td>
+                        <td>0.2%</td>
+                        <td class="additions">+34</td>
+                        <td class="deletions">-9</td>
+                        <td>25</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
                         <td><strong>Gage Stroud</strong></td>
                         <td>2</td>
                         <td>0.2%</td>
@@ -1072,6 +1251,15 @@
                         <td class="deletions">-315</td>
                         <td>-287</td>
                         <td>8</td>
+                    </tr>
+                    <tr>
+                        <td><strong>india-e</strong></td>
+                        <td>2</td>
+                        <td>0.2%</td>
+                        <td class="additions">+1,585</td>
+                        <td class="deletions">-501</td>
+                        <td>1,084</td>
+                        <td>153</td>
                     </tr>
                     <tr>
                         <td><strong>Ulada Haranina</strong></td>
@@ -1092,24 +1280,6 @@
                         <td>11</td>
                     </tr>
                     <tr>
-                        <td><strong>hsundararajan</strong></td>
-                        <td>2</td>
-                        <td>0.2%</td>
-                        <td class="additions">+34</td>
-                        <td class="deletions">-9</td>
-                        <td>25</td>
-                        <td>2</td>
-                    </tr>
-                    <tr>
-                        <td><strong>rutuja-relias</strong></td>
-                        <td>2</td>
-                        <td>0.2%</td>
-                        <td class="additions">+106</td>
-                        <td class="deletions">-95</td>
-                        <td>11</td>
-                        <td>16</td>
-                    </tr>
-                    <tr>
                         <td><strong>Shelly Foxworth-Hill</strong></td>
                         <td>2</td>
                         <td>0.2%</td>
@@ -1117,51 +1287,6 @@
                         <td class="deletions">-16</td>
                         <td>14</td>
                         <td>7</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Tatiana Shakhmaykina</strong></td>
-                        <td>2</td>
-                        <td>0.2%</td>
-                        <td class="additions">+242</td>
-                        <td class="deletions">-4</td>
-                        <td>238</td>
-                        <td>5</td>
-                    </tr>
-                    <tr>
-                        <td><strong>india-e</strong></td>
-                        <td>2</td>
-                        <td>0.2%</td>
-                        <td class="additions">+1,585</td>
-                        <td class="deletions">-501</td>
-                        <td>1,084</td>
-                        <td>153</td>
-                    </tr>
-                    <tr>
-                        <td><strong>MKMondalRelias</strong></td>
-                        <td>2</td>
-                        <td>0.2%</td>
-                        <td class="additions">+952</td>
-                        <td class="deletions">-9</td>
-                        <td>943</td>
-                        <td>8</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Ethan Bell</strong></td>
-                        <td>2</td>
-                        <td>0.2%</td>
-                        <td class="additions">+2,829</td>
-                        <td class="deletions">-1,219</td>
-                        <td>1,610</td>
-                        <td>117</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Austin Gilmore</strong></td>
-                        <td>2</td>
-                        <td>0.2%</td>
-                        <td class="additions">+6,810</td>
-                        <td class="deletions">-2,502</td>
-                        <td>4,308</td>
-                        <td>179</td>
                     </tr>
                     <tr>
                         <td><strong>irahul-singh</strong></td>
@@ -1173,94 +1298,58 @@
                         <td>15</td>
                     </tr>
                     <tr>
-                        <td><strong>Benji Temamme</strong></td>
-                        <td>1</td>
-                        <td>0.1%</td>
-                        <td class="additions">+1,171</td>
-                        <td class="deletions">-389</td>
-                        <td>782</td>
-                        <td>15</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Vritti Gautam</strong></td>
-                        <td>1</td>
-                        <td>0.1%</td>
-                        <td class="additions">+52</td>
-                        <td class="deletions">-26</td>
-                        <td>26</td>
+                        <td><strong>rutuja-relias</strong></td>
+                        <td>2</td>
+                        <td>0.2%</td>
+                        <td class="additions">+106</td>
+                        <td class="deletions">-95</td>
                         <td>11</td>
+                        <td>16</td>
                     </tr>
                     <tr>
-                        <td><strong>Michael McNeill</strong></td>
-                        <td>1</td>
-                        <td>0.1%</td>
-                        <td class="additions">+10</td>
-                        <td class="deletions">-58</td>
-                        <td>-48</td>
+                        <td><strong>Tatiana Shakhmaykina</strong></td>
+                        <td>2</td>
+                        <td>0.2%</td>
+                        <td class="additions">+242</td>
+                        <td class="deletions">-4</td>
+                        <td>238</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td><strong>MKMondalRelias</strong></td>
+                        <td>2</td>
+                        <td>0.2%</td>
+                        <td class="additions">+952</td>
+                        <td class="deletions">-9</td>
+                        <td>943</td>
                         <td>8</td>
                     </tr>
                     <tr>
-                        <td><strong>yogiraj-yelpale08</strong></td>
-                        <td>1</td>
-                        <td>0.1%</td>
-                        <td class="additions">+297</td>
-                        <td class="deletions">-0</td>
-                        <td>297</td>
-                        <td>10</td>
-                    </tr>
-                    <tr>
-                        <td><strong>shraddha-mergu</strong></td>
-                        <td>1</td>
-                        <td>0.1%</td>
-                        <td class="additions">+91</td>
-                        <td class="deletions">-12</td>
-                        <td>79</td>
-                        <td>6</td>
-                    </tr>
-                    <tr>
-                        <td><strong>HemaSundararajan</strong></td>
-                        <td>1</td>
-                        <td>0.1%</td>
-                        <td class="additions">+34</td>
-                        <td class="deletions">-9</td>
-                        <td>25</td>
-                        <td>1</td>
-                    </tr>
-                    <tr>
-                        <td><strong>ashwinikulkarni-avengers</strong></td>
-                        <td>1</td>
-                        <td>0.1%</td>
-                        <td class="additions">+26</td>
-                        <td class="deletions">-0</td>
-                        <td>26</td>
-                        <td>1</td>
-                    </tr>
-                    <tr>
-                        <td><strong>sPomeroyRelias</strong></td>
-                        <td>1</td>
-                        <td>0.1%</td>
-                        <td class="additions">+39</td>
-                        <td class="deletions">-1</td>
-                        <td>38</td>
-                        <td>3</td>
-                    </tr>
-                    <tr>
-                        <td><strong>austingilmore-relias</strong></td>
-                        <td>1</td>
-                        <td>0.1%</td>
-                        <td class="additions">+2</td>
-                        <td class="deletions">-2</td>
-                        <td>0</td>
+                        <td><strong>SuhailJain0012</strong></td>
                         <td>2</td>
+                        <td>0.2%</td>
+                        <td class="additions">+13,117</td>
+                        <td class="deletions">-5,175</td>
+                        <td>7,942</td>
+                        <td>309</td>
                     </tr>
                     <tr>
-                        <td><strong>bkurunkar-relias</strong></td>
-                        <td>1</td>
-                        <td>0.1%</td>
-                        <td class="additions">+1,677</td>
-                        <td class="deletions">-21</td>
-                        <td>1,656</td>
-                        <td>92</td>
+                        <td><strong>Austin Gilmore</strong></td>
+                        <td>2</td>
+                        <td>0.2%</td>
+                        <td class="additions">+6,810</td>
+                        <td class="deletions">-2,502</td>
+                        <td>4,308</td>
+                        <td>179</td>
+                    </tr>
+                    <tr>
+                        <td><strong>JJinjariya</strong></td>
+                        <td>2</td>
+                        <td>0.2%</td>
+                        <td class="additions">+167</td>
+                        <td class="deletions">-267</td>
+                        <td>-100</td>
+                        <td>8</td>
                     </tr>
                     <tr>
                         <td><strong>Furkan Karabulut</strong></td>
@@ -1272,76 +1361,31 @@
                         <td>5</td>
                     </tr>
                     <tr>
-                        <td><strong>awani-relias</strong></td>
+                        <td><strong>sPomeroyRelias</strong></td>
                         <td>1</td>
                         <td>0.1%</td>
-                        <td class="additions">+163</td>
-                        <td class="deletions">-11</td>
-                        <td>152</td>
+                        <td class="additions">+39</td>
+                        <td class="deletions">-1</td>
+                        <td>38</td>
                         <td>3</td>
                     </tr>
                     <tr>
-                        <td><strong>relias-asurti</strong></td>
+                        <td><strong>shraddha-mergu</strong></td>
                         <td>1</td>
                         <td>0.1%</td>
-                        <td class="additions">+1,076</td>
-                        <td class="deletions">-130</td>
-                        <td>946</td>
-                        <td>14</td>
+                        <td class="additions">+91</td>
+                        <td class="deletions">-12</td>
+                        <td>79</td>
+                        <td>6</td>
                     </tr>
                     <tr>
-                        <td><strong>Adrian Edelen</strong></td>
+                        <td><strong>ashwinikulkarni-avengers</strong></td>
                         <td>1</td>
                         <td>0.1%</td>
-                        <td class="additions">+32</td>
-                        <td class="deletions">-15</td>
-                        <td>17</td>
-                        <td>4</td>
-                    </tr>
-                    <tr>
-                        <td><strong>cmooreAtRelias</strong></td>
+                        <td class="additions">+26</td>
+                        <td class="deletions">-0</td>
+                        <td>26</td>
                         <td>1</td>
-                        <td>0.1%</td>
-                        <td class="additions">+224</td>
-                        <td class="deletions">-49</td>
-                        <td>175</td>
-                        <td>5</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Cilusani Aparna</strong></td>
-                        <td>1</td>
-                        <td>0.1%</td>
-                        <td class="additions">+17</td>
-                        <td class="deletions">-23</td>
-                        <td>-6</td>
-                        <td>15</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Terrence Meikle</strong></td>
-                        <td>1</td>
-                        <td>0.1%</td>
-                        <td class="additions">+96</td>
-                        <td class="deletions">-62</td>
-                        <td>34</td>
-                        <td>15</td>
-                    </tr>
-                    <tr>
-                        <td><strong>nmalhotra29</strong></td>
-                        <td>1</td>
-                        <td>0.1%</td>
-                        <td class="additions">+259</td>
-                        <td class="deletions">-21</td>
-                        <td>238</td>
-                        <td>8</td>
-                    </tr>
-                    <tr>
-                        <td><strong>AnushwetaBalsaraf</strong></td>
-                        <td>1</td>
-                        <td>0.1%</td>
-                        <td class="additions">+496</td>
-                        <td class="deletions">-76</td>
-                        <td>420</td>
-                        <td>24</td>
                     </tr>
                     <tr>
                         <td><strong>Grayson Gould</strong></td>
@@ -1353,15 +1397,6 @@
                         <td>1</td>
                     </tr>
                     <tr>
-                        <td><strong>Lakshmi narayanan Ramachandran</strong></td>
-                        <td>1</td>
-                        <td>0.1%</td>
-                        <td class="additions">+44</td>
-                        <td class="deletions">-4</td>
-                        <td>40</td>
-                        <td>3</td>
-                    </tr>
-                    <tr>
                         <td><strong>Anushweta Balsaraf</strong></td>
                         <td>1</td>
                         <td>0.1%</td>
@@ -1371,12 +1406,93 @@
                         <td>2</td>
                     </tr>
                     <tr>
-                        <td><strong>s-krishnamoorthi</strong></td>
+                        <td><strong>Adrian Edelen</strong></td>
                         <td>1</td>
                         <td>0.1%</td>
-                        <td class="additions">+149</td>
-                        <td class="deletions">-5</td>
-                        <td>144</td>
+                        <td class="additions">+32</td>
+                        <td class="deletions">-15</td>
+                        <td>17</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Clark Bonham</strong></td>
+                        <td>1</td>
+                        <td>0.1%</td>
+                        <td class="additions">+23,612</td>
+                        <td class="deletions">-9,458</td>
+                        <td>14,154</td>
+                        <td>91</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Vritti Gautam</strong></td>
+                        <td>1</td>
+                        <td>0.1%</td>
+                        <td class="additions">+52</td>
+                        <td class="deletions">-26</td>
+                        <td>26</td>
+                        <td>11</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Nathan Seith</strong></td>
+                        <td>1</td>
+                        <td>0.1%</td>
+                        <td class="additions">+147</td>
+                        <td class="deletions">-188</td>
+                        <td>-41</td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <td><strong>bkurunkar-relias</strong></td>
+                        <td>1</td>
+                        <td>0.1%</td>
+                        <td class="additions">+1,677</td>
+                        <td class="deletions">-21</td>
+                        <td>1,656</td>
+                        <td>92</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Brianna Neuhoff</strong></td>
+                        <td>1</td>
+                        <td>0.1%</td>
+                        <td class="additions">+291</td>
+                        <td class="deletions">-130</td>
+                        <td>161</td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <td><strong>awani-relias</strong></td>
+                        <td>1</td>
+                        <td>0.1%</td>
+                        <td class="additions">+163</td>
+                        <td class="deletions">-11</td>
+                        <td>152</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td><strong>moumit-dutta</strong></td>
+                        <td>1</td>
+                        <td>0.1%</td>
+                        <td class="additions">+110</td>
+                        <td class="deletions">-1</td>
+                        <td>109</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td><strong>nmalhotra29</strong></td>
+                        <td>1</td>
+                        <td>0.1%</td>
+                        <td class="additions">+259</td>
+                        <td class="deletions">-21</td>
+                        <td>238</td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Lakshmi narayanan Ramachandran</strong></td>
+                        <td>1</td>
+                        <td>0.1%</td>
+                        <td class="additions">+44</td>
+                        <td class="deletions">-4</td>
+                        <td>40</td>
                         <td>3</td>
                     </tr>
                     <tr>
@@ -1389,31 +1505,13 @@
                         <td>4</td>
                     </tr>
                     <tr>
-                        <td><strong>Michelle Allison</strong></td>
+                        <td><strong>Michael McNeill</strong></td>
                         <td>1</td>
                         <td>0.1%</td>
-                        <td class="additions">+5</td>
-                        <td class="deletions">-4</td>
-                        <td>1</td>
-                        <td>2</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Nathan Seith</strong></td>
-                        <td>1</td>
-                        <td>0.1%</td>
-                        <td class="additions">+147</td>
-                        <td class="deletions">-188</td>
-                        <td>-41</td>
+                        <td class="additions">+10</td>
+                        <td class="deletions">-58</td>
+                        <td>-48</td>
                         <td>8</td>
-                    </tr>
-                    <tr>
-                        <td><strong>ruchitakotharirelias</strong></td>
-                        <td>1</td>
-                        <td>0.1%</td>
-                        <td class="additions">+186</td>
-                        <td class="deletions">-0</td>
-                        <td>186</td>
-                        <td>5</td>
                     </tr>
                     <tr>
                         <td><strong>SSurve160</strong></td>
@@ -1425,49 +1523,22 @@
                         <td>4</td>
                     </tr>
                     <tr>
-                        <td><strong>Brianna Neuhoff</strong></td>
+                        <td><strong>relias-asurti</strong></td>
                         <td>1</td>
                         <td>0.1%</td>
-                        <td class="additions">+291</td>
+                        <td class="additions">+1,076</td>
                         <td class="deletions">-130</td>
-                        <td>161</td>
-                        <td>8</td>
+                        <td>946</td>
+                        <td>14</td>
                     </tr>
                     <tr>
-                        <td><strong>kkapale-dev</strong></td>
+                        <td><strong>Michelle Allison</strong></td>
                         <td>1</td>
                         <td>0.1%</td>
-                        <td class="additions">+2</td>
-                        <td class="deletions">-2</td>
-                        <td>0</td>
-                        <td>2</td>
-                    </tr>
-                    <tr>
-                        <td><strong>asofi-relias</strong></td>
-                        <td>1</td>
-                        <td>0.1%</td>
-                        <td class="additions">+23</td>
+                        <td class="additions">+5</td>
                         <td class="deletions">-4</td>
-                        <td>19</td>
-                        <td>4</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Madhu Kolipaka</strong></td>
                         <td>1</td>
-                        <td>0.1%</td>
-                        <td class="additions">+37</td>
-                        <td class="deletions">-18</td>
-                        <td>19</td>
-                        <td>5</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Stephen DeLuca</strong></td>
-                        <td>1</td>
-                        <td>0.1%</td>
-                        <td class="additions">+510</td>
-                        <td class="deletions">-36</td>
-                        <td>474</td>
-                        <td>16</td>
+                        <td>2</td>
                     </tr>
                     <tr>
                         <td><strong>Trey Walters</strong></td>
@@ -1479,6 +1550,15 @@
                         <td>1</td>
                     </tr>
                     <tr>
+                        <td><strong>Cilusani Aparna</strong></td>
+                        <td>1</td>
+                        <td>0.1%</td>
+                        <td class="additions">+17</td>
+                        <td class="deletions">-23</td>
+                        <td>-6</td>
+                        <td>15</td>
+                    </tr>
+                    <tr>
                         <td><strong>ajaypatil-Hg</strong></td>
                         <td>1</td>
                         <td>0.1%</td>
@@ -1488,13 +1568,112 @@
                         <td>1</td>
                     </tr>
                     <tr>
-                        <td><strong>Clark Bonham</strong></td>
+                        <td><strong>asofi-relias</strong></td>
                         <td>1</td>
                         <td>0.1%</td>
-                        <td class="additions">+23,612</td>
-                        <td class="deletions">-9,458</td>
-                        <td>14,154</td>
-                        <td>91</td>
+                        <td class="additions">+23</td>
+                        <td class="deletions">-4</td>
+                        <td>19</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td><strong>kkapale-dev</strong></td>
+                        <td>1</td>
+                        <td>0.1%</td>
+                        <td class="additions">+2</td>
+                        <td class="deletions">-2</td>
+                        <td>0</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td><strong>austingilmore-relias</strong></td>
+                        <td>1</td>
+                        <td>0.1%</td>
+                        <td class="additions">+2</td>
+                        <td class="deletions">-2</td>
+                        <td>0</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td><strong>HemaSundararajan</strong></td>
+                        <td>1</td>
+                        <td>0.1%</td>
+                        <td class="additions">+34</td>
+                        <td class="deletions">-9</td>
+                        <td>25</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Madhu Kolipaka</strong></td>
+                        <td>1</td>
+                        <td>0.1%</td>
+                        <td class="additions">+37</td>
+                        <td class="deletions">-18</td>
+                        <td>19</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ruchitakotharirelias</strong></td>
+                        <td>1</td>
+                        <td>0.1%</td>
+                        <td class="additions">+186</td>
+                        <td class="deletions">-0</td>
+                        <td>186</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td><strong>AnushwetaBalsaraf</strong></td>
+                        <td>1</td>
+                        <td>0.1%</td>
+                        <td class="additions">+496</td>
+                        <td class="deletions">-76</td>
+                        <td>420</td>
+                        <td>24</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Stephen DeLuca</strong></td>
+                        <td>1</td>
+                        <td>0.1%</td>
+                        <td class="additions">+510</td>
+                        <td class="deletions">-36</td>
+                        <td>474</td>
+                        <td>16</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Terrence Meikle</strong></td>
+                        <td>1</td>
+                        <td>0.1%</td>
+                        <td class="additions">+96</td>
+                        <td class="deletions">-62</td>
+                        <td>34</td>
+                        <td>15</td>
+                    </tr>
+                    <tr>
+                        <td><strong>s-krishnamoorthi</strong></td>
+                        <td>1</td>
+                        <td>0.1%</td>
+                        <td class="additions">+149</td>
+                        <td class="deletions">-5</td>
+                        <td>144</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td><strong>yogiraj-yelpale08</strong></td>
+                        <td>1</td>
+                        <td>0.1%</td>
+                        <td class="additions">+297</td>
+                        <td class="deletions">-0</td>
+                        <td>297</td>
+                        <td>10</td>
+                    </tr>
+                    <tr>
+                        <td><strong>cmooreAtRelias</strong></td>
+                        <td>1</td>
+                        <td>0.1%</td>
+                        <td class="additions">+224</td>
+                        <td class="deletions">-49</td>
+                        <td>175</td>
+                        <td>5</td>
                     </tr>
                     <tr>
                         <td><strong>SanketMemane</strong></td>
@@ -1506,13 +1685,13 @@
                         <td>2</td>
                     </tr>
                     <tr>
-                        <td><strong>moumit-dutta</strong></td>
+                        <td><strong>Benji Temamme</strong></td>
                         <td>1</td>
                         <td>0.1%</td>
-                        <td class="additions">+110</td>
-                        <td class="deletions">-1</td>
-                        <td>109</td>
-                        <td>4</td>
+                        <td class="additions">+1,171</td>
+                        <td class="deletions">-389</td>
+                        <td>782</td>
+                        <td>15</td>
                     </tr>
                         </tbody>
                     </table>
@@ -1704,7 +1883,7 @@
         </div>
 
         <div class="generated-info">
-            Generated on 2026-02-01 18:10:41 | Template: repo-analytics.html
+            Generated on 2026-02-02 11:53:20 | Template: repo-analytics.html
         </div>
     </div>
 
@@ -1723,12 +1902,30 @@
         const totalLoc = [1640461,1640570,1640592,1637791,1640137,1641800,1647790,1648890,1641857,1641857,1648890,1650174,1650848,1653958,1653836,1641792,1641792,1642273,1650961,1655478,1658461,1661029,1661070,1661070,1641951,1662587,1677704,1661391,1678011,1678572,1681940];
         const totalFiles = [11131,11131,11131,11128,11129,11135,11146,11153,11136,11136,11153,11157,11161,11176,11178,11136,11136,11137,11162,11209,11221,11234,11234,11234,11138,11217,11213,11235,11226,11225,11285];
 
-        const contributorLabels = ['Integrations-relias','Scott Burnette','sbadiger','Mahmuda Hamid','SuhasGangarde','Tyler Deal','vgautamRelias','Avnish Yadav','Tatiana Chebotareva','Suhail Jain','India Evans','radhika-pathak201','cicd','Narender Dubbaka','Sadaf Noor','Shashank Swami','Shraddha Mergu','Alex Holt','Dereje Dessalegne','Rutuja Nikam','Charlette Bauer','Moumit Mondal','s.surve@relias.com','Stephen','Gowtham Buggala','tshakhmaykina','Ashishkumar Surti','Rahul Chopra','Yogiraj Yelpale','AYadavRelias','Shaoping Zhu','Krishna Sharma','Isaac Mahler','Karthika Menon','sswami07','Matt Howard','Haoming Gao','Madhusudhan reddy Kolipaka','chopra-rahul','KalpanaKulkarni1297','Jian Zhang','mayur234-dev','R-ZBroskey','Zachary Shaffer','Prashant-Kalbande844','Krisharma123','Moumit Dutta','Revati Nikumbh','Lindsey Adams','Sam Hensley','Ashwini Wani','sbadiger29','SadafNoorRehamani','arpitha-belli','kamal-machchh-hg','uharanina','Roman Khatian','Jignesh Jinjariya','NilamGadade7677','m.chavan@relias.com','Jayati','Kris Smith','JJinjariya','SuhailJain0012','Zach Broskey','Gage Stroud','Ulada Haranina','Prashant Kalbande','hsundararajan','rutuja-relias','Shelly Foxworth-Hill','Tatiana Shakhmaykina','india-e','MKMondalRelias','Ethan Bell','Austin Gilmore','irahul-singh','Benji Temamme','Vritti Gautam','Michael McNeill','yogiraj-yelpale08','shraddha-mergu','HemaSundararajan','ashwinikulkarni-avengers','sPomeroyRelias','austingilmore-relias','bkurunkar-relias','Furkan Karabulut','awani-relias','relias-asurti','Adrian Edelen','cmooreAtRelias','Cilusani Aparna','Terrence Meikle','nmalhotra29','AnushwetaBalsaraf','Grayson Gould','Lakshmi narayanan Ramachandran','Anushweta Balsaraf','s-krishnamoorthi','sfoxworth-hill-relias','Michelle Allison','Nathan Seith','ruchitakotharirelias','SSurve160','Brianna Neuhoff','kkapale-dev','asofi-relias','Madhu Kolipaka','Stephen DeLuca','Trey Walters','ajaypatil-Hg','Clark Bonham','SanketMemane','moumit-dutta'];
+        const contributorLabels = ['Integrations-relias','Scott Burnette','sbadiger','Mahmuda Hamid','SuhasGangarde','Tyler Deal','vgautamRelias','Tatiana Chebotareva','Avnish Yadav','India Evans','Suhail Jain','radhika-pathak201','cicd','Narender Dubbaka','Sadaf Noor','Shashank Swami','Shraddha Mergu','Alex Holt','Dereje Dessalegne','Rutuja Nikam','s.surve@relias.com','Charlette Bauer','Moumit Mondal','Rahul Chopra','tshakhmaykina','Ashishkumar Surti','Gowtham Buggala','Stephen','Krishna Sharma','Yogiraj Yelpale','AYadavRelias','Shaoping Zhu','sswami07','Isaac Mahler','Matt Howard','Karthika Menon','KalpanaKulkarni1297','chopra-rahul','Madhusudhan reddy Kolipaka','Haoming Gao','Jian Zhang','Prashant-Kalbande844','R-ZBroskey','Zachary Shaffer','mayur234-dev','Revati Nikumbh','Ashwini Wani','Moumit Dutta','Krisharma123','sbadiger29','Lindsey Adams','Sam Hensley','Jayati','SadafNoorRehamani','m.chavan@relias.com','Jignesh Jinjariya','Roman Khatian','arpitha-belli','uharanina','NilamGadade7677','kamal-machchh-hg','Ethan Bell','Zach Broskey','Kris Smith','hsundararajan','Gage Stroud','india-e','Ulada Haranina','Prashant Kalbande','Shelly Foxworth-Hill','irahul-singh','rutuja-relias','Tatiana Shakhmaykina','MKMondalRelias','SuhailJain0012','Austin Gilmore','JJinjariya','Furkan Karabulut','sPomeroyRelias','shraddha-mergu','ashwinikulkarni-avengers','Grayson Gould','Anushweta Balsaraf','Adrian Edelen','Clark Bonham','Vritti Gautam','Nathan Seith','bkurunkar-relias','Brianna Neuhoff','awani-relias','moumit-dutta','nmalhotra29','Lakshmi narayanan Ramachandran','sfoxworth-hill-relias','Michael McNeill','SSurve160','relias-asurti','Michelle Allison','Trey Walters','Cilusani Aparna','ajaypatil-Hg','asofi-relias','kkapale-dev','austingilmore-relias','HemaSundararajan','Madhu Kolipaka','ruchitakotharirelias','AnushwetaBalsaraf','Stephen DeLuca','Terrence Meikle','s-krishnamoorthi','yogiraj-yelpale08','cmooreAtRelias','SanketMemane','Benji Temamme'];
         const contributorCommits = [92,66,46,41,35,35,29,25,25,24,24,24,23,22,20,19,18,17,16,12,11,11,11,10,10,10,10,10,8,8,8,8,7,7,7,7,6,6,6,6,5,5,5,5,5,4,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];
         const contributorColors = ['#007bff','#28a745','#ffc107','#dc3545','#6f42c1','#17a2b8','#fd7e14','#20c997','#e83e8c','#6c757d','#007bff','#28a745','#ffc107','#dc3545','#6f42c1','#17a2b8','#fd7e14','#20c997','#e83e8c','#6c757d','#007bff','#28a745','#ffc107','#dc3545','#6f42c1','#17a2b8','#fd7e14','#20c997','#e83e8c','#6c757d','#007bff','#28a745','#ffc107','#dc3545','#6f42c1','#17a2b8','#fd7e14','#20c997','#e83e8c','#6c757d','#007bff','#28a745','#ffc107','#dc3545','#6f42c1','#17a2b8','#fd7e14','#20c997','#e83e8c','#6c757d','#007bff','#28a745','#ffc107','#dc3545','#6f42c1','#17a2b8','#fd7e14','#20c997','#e83e8c','#6c757d','#007bff','#28a745','#ffc107','#dc3545','#6f42c1','#17a2b8','#fd7e14','#20c997','#e83e8c','#6c757d','#007bff','#28a745','#ffc107','#dc3545','#6f42c1','#17a2b8','#fd7e14','#20c997','#e83e8c','#6c757d','#007bff','#28a745','#ffc107','#dc3545','#6f42c1','#17a2b8','#fd7e14','#20c997','#e83e8c','#6c757d','#007bff','#28a745','#ffc107','#dc3545','#6f42c1','#17a2b8','#fd7e14','#20c997','#e83e8c','#6c757d','#007bff','#28a745','#ffc107','#dc3545','#6f42c1','#17a2b8','#fd7e14','#20c997','#e83e8c','#6c757d','#007bff','#28a745','#ffc107','#dc3545','#6f42c1'];
 
         Chart.defaults.color = '#aaa';
         Chart.defaults.borderColor = 'rgba(255,255,255,0.1)';
+
+        // Theme-aware chart configuration
+        function getChartColors() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            return {
+                gridColor: theme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+                textColor: theme === 'dark' ? '#aaaaaa' : '#475569',
+                goldPrimary: theme === 'dark' ? '#d4af37' : '#b8860b'
+            };
+        }
+
+        function updateChartDefaults() {
+            const colors = getChartColors();
+            Chart.defaults.color = colors.textColor;
+            Chart.defaults.borderColor = colors.gridColor;
+        }
+
+        updateChartDefaults();
 
         // Total LOC Over Time Chart
         new Chart(document.getElementById('totalLocChart'), {
@@ -1995,6 +2192,51 @@
                 }
             }
         });
+
+        // Theme Toggle Functionality
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            // Update button text and icons
+            const themeText = document.querySelector('.theme-text');
+            const sunIcon = document.querySelector('.sun-icon');
+            const moonIcon = document.querySelector('.moon-icon');
+            
+            if (newTheme === 'light') {
+                themeText.textContent = 'Dark Mode';
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'block';
+            } else {
+                themeText.textContent = 'Light Mode';
+                sunIcon.style.display = 'block';
+                moonIcon.style.display = 'none';
+            }
+            
+            // Update chart defaults
+            updateChartDefaults();
+        }
+
+        // Initialize theme from localStorage
+        (function() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            const html = document.documentElement;
+            html.setAttribute('data-theme', savedTheme);
+            
+            const themeText = document.querySelector('.theme-text');
+            const sunIcon = document.querySelector('.sun-icon');
+            const moonIcon = document.querySelector('.moon-icon');
+            
+            if (savedTheme === 'light') {
+                themeText.textContent = 'Dark Mode';
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'block';
+            }
+        })();
     </script>
 </body>
 </html>

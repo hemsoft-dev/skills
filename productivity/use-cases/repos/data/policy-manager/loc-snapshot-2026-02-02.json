@@ -1,0 +1,186 @@
+{
+  "snapshotDate": "2026-02-02",
+  "collectionTime": "2026-02-02T12:00:44.3673163-05:00",
+  "repository": "policy-manager",
+  "commitSha": "80f7e7d95ec1f528da4f5395ef8062337c3641a5",
+  "commitDate": "2026-02-02 11:54:03 -0500",
+  "commitMessage": "fix(consumer): handle ForbiddenException in Pol...",
+  "summary": {
+    "totalFiles": 474,
+    "blankLines": 8300,
+    "commentLines": 4065,
+    "codeLines": 45487
+  },
+  "topLanguages": [
+    {
+      "language": "C#",
+      "files": 347,
+      "blank": 6572,
+      "comment": 3712,
+      "code": 31443
+    },
+    {
+      "language": "JSON",
+      "files": 31,
+      "blank": 1,
+      "comment": 0,
+      "code": 5717
+    },
+    {
+      "language": "Markdown",
+      "files": 13,
+      "blank": 1313,
+      "comment": 0,
+      "code": 4707
+    },
+    {
+      "language": "PowerShell",
+      "files": 5,
+      "blank": 223,
+      "comment": 235,
+      "code": 1132
+    },
+    {
+      "language": "YAML",
+      "files": 28,
+      "blank": 74,
+      "comment": 21,
+      "code": 1017
+    },
+    {
+      "language": "MSBuild script",
+      "files": 15,
+      "blank": 10,
+      "comment": 0,
+      "code": 583
+    },
+    {
+      "language": "Cucumber",
+      "files": 20,
+      "blank": 51,
+      "comment": 7,
+      "code": 542
+    },
+    {
+      "language": "XML",
+      "files": 8,
+      "blank": 12,
+      "comment": 51,
+      "code": 117
+    },
+    {
+      "language": "Visual Studio Solution",
+      "files": 1,
+      "blank": 0,
+      "comment": 1,
+      "code": 113
+    },
+    {
+      "language": "Dockerfile",
+      "files": 3,
+      "blank": 25,
+      "comment": 15,
+      "code": 62
+    },
+    {
+      "language": "C# Designer",
+      "files": 1,
+      "blank": 7,
+      "comment": 23,
+      "code": 41
+    },
+    {
+      "language": "Text",
+      "files": 2,
+      "blank": 12,
+      "comment": 0,
+      "code": 13
+    }
+  ],
+  "allLanguages": [
+    {
+      "language": "C#",
+      "files": 347,
+      "blank": 6572,
+      "comment": 3712,
+      "code": 31443
+    },
+    {
+      "language": "JSON",
+      "files": 31,
+      "blank": 1,
+      "comment": 0,
+      "code": 5717
+    },
+    {
+      "language": "Markdown",
+      "files": 13,
+      "blank": 1313,
+      "comment": 0,
+      "code": 4707
+    },
+    {
+      "language": "PowerShell",
+      "files": 5,
+      "blank": 223,
+      "comment": 235,
+      "code": 1132
+    },
+    {
+      "language": "YAML",
+      "files": 28,
+      "blank": 74,
+      "comment": 21,
+      "code": 1017
+    },
+    {
+      "language": "MSBuild script",
+      "files": 15,
+      "blank": 10,
+      "comment": 0,
+      "code": 583
+    },
+    {
+      "language": "Cucumber",
+      "files": 20,
+      "blank": 51,
+      "comment": 7,
+      "code": 542
+    },
+    {
+      "language": "XML",
+      "files": 8,
+      "blank": 12,
+      "comment": 51,
+      "code": 117
+    },
+    {
+      "language": "Visual Studio Solution",
+      "files": 1,
+      "blank": 0,
+      "comment": 1,
+      "code": 113
+    },
+    {
+      "language": "Dockerfile",
+      "files": 3,
+      "blank": 25,
+      "comment": 15,
+      "code": 62
+    },
+    {
+      "language": "C# Designer",
+      "files": 1,
+      "blank": 7,
+      "comment": 23,
+      "code": 41
+    },
+    {
+      "language": "Text",
+      "files": 2,
+      "blank": 12,
+      "comment": 0,
+      "code": 13
+    }
+  ]
+}

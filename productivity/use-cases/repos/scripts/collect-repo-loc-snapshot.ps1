@@ -16,8 +16,14 @@
 .PARAMETER RepoName
     Name of the repository (must exist in repo-config.json with localPath)
 
+.PARAMETER Branch
+    Branch to track (default: main). Falls back to master if main doesn't exist.
+
 .EXAMPLE
     .\collect-repo-loc-snapshot.ps1 -StartDate "2026-01-01" -EndDate "2026-01-31" -RepoName "relias-assistant"
+
+.EXAMPLE
+    .\collect-repo-loc-snapshot.ps1 -StartDate "2026-01-01" -EndDate "2026-01-31" -RepoName "policy-manager" -Branch "develop"
 #>
 
 param(
@@ -28,7 +34,10 @@ param(
     [string]$EndDate,
     
     [Parameter(Mandatory = $true)]
-    [string]$RepoName
+    [string]$RepoName,
+    
+    [Parameter(Mandatory = $false)]
+    [string]$Branch = "main"
 )
 
 $ErrorActionPreference = "Stop"
@@ -82,6 +91,21 @@ try {
     Write-Host "Fetching latest changes..." -ForegroundColor Gray
     git fetch --all --quiet 2>$null
     
+    # Determine target branch (check if specified branch exists, fallback to master)
+    $targetBranch = "origin/$Branch"
+    $branchExists = git rev-parse --verify $targetBranch 2>$null
+    if (-not $branchExists) {
+        $targetBranch = "origin/master"
+        $masterExists = git rev-parse --verify $targetBranch 2>$null
+        if (-not $masterExists) {
+            Write-Error "Neither 'origin/$Branch' nor 'origin/master' branch found"
+            exit 1
+        }
+        Write-Host "Branch '$Branch' not found, using 'master'" -ForegroundColor Yellow
+    } else {
+        Write-Host "Tracking branch: $Branch" -ForegroundColor Gray
+    }
+    
     # Parse date range
     $start = [DateTime]::ParseExact($StartDate, "yyyy-MM-dd", $null)
     $end = [DateTime]::ParseExact($EndDate, "yyyy-MM-dd", $null)
@@ -94,9 +118,9 @@ try {
         $dateStr = $currentDate.ToString("yyyy-MM-dd")
         $outputFile = Join-Path $dataDir "loc-snapshot-$dateStr.json"
         
-        # Find the last commit before end of this date (23:59:59)
+        # Find the last commit before end of this date (23:59:59) on the specified branch only
         $beforeDate = $currentDate.AddDays(1).ToString("yyyy-MM-dd")
-        $lastCommit = git log --before="$beforeDate" --format="%H" -n 1 --all 2>$null
+        $lastCommit = git log --before="$beforeDate" --format="%H" -n 1 $targetBranch 2>$null
         
         if (-not $lastCommit) {
             Write-Host "  $dateStr - No commits found before this date, skipping" -ForegroundColor DarkGray
