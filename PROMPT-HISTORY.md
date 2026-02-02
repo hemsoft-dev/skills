@@ -63,3 +63,5 @@ Result: Imported D:\OneDrive\Snagit\2026-02-02_08-35-23.snagx → images/library
 
 2026-02-02 - 08:55 - Harden Confluence search script to accept raw CQL and tolerate missing dates
 Result: Patched `atlassian/scripts/Search-Confluence.ps1` — added `[switch]$RawCql`, safer CQL construction (heuristic + explicit raw mode), robust API error handling, and null-safe `version.when` parsing. Verified script loads and no longer crashes on missing dates; recommended reload of user shell so system-level `ATLASSIAN_API_TOKEN` is available for live searches.
+2026-02-02 - 12:43 - Productivity skill: dark/light theme, commit date grouping fix, LOC branch tracking fix, policy-manager onboarding
+Result: Added HemSoft gold-on-black theme with toggle, fixed report generator to group commits by actual dates (not file names), fixed LOC snapshots to track main branch only (prevents feature branch spikes), onboarded policy-manager repo with January 2026 data.
