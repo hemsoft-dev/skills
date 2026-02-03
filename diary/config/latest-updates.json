@@ -8,11 +8,27 @@
     "CheckMethod": "github_releases"
   },
   {
+    "Software": "Gemini CLI",
+    "OldVersion": "v0.27.0-preview.3",
+    "NewVersion": "v0.27.0-preview.4",
+    "ReleaseDate": "Feb 02 '26",
+    "ChangelogUrl": "https://github.com/google-gemini/gemini-cli/releases",
+    "CheckMethod": "github_releases_prerelease"
+  },
+  {
     "Software": "GitHub Copilot Chat",
     "OldVersion": "v0.37.2026013001",
     "NewVersion": "v0.37.2026013101",
     "ReleaseDate": "Jan 31 '26",
     "ChangelogUrl": "https://github.com/microsoft/vscode-copilot-chat/blob/main/CHANGELOG.md",
+    "CheckMethod": "github_releases"
+  },
+  {
+    "Software": "Goose CLI",
+    "OldVersion": "v1.22.1",
+    "NewVersion": "v1.22.2",
+    "ReleaseDate": "Feb 02 '26",
+    "ChangelogUrl": "https://github.com/block/goose/releases",
     "CheckMethod": "github_releases"
   },
   {

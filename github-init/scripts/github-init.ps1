@@ -13,7 +13,8 @@ if (!(Get-Command gh -ErrorAction SilentlyContinue)) { throw "GitHub CLI (gh) is
 # 2. Create GitHub Repository
 $visibility = if ($Private) { "--private" } else { "--public" }
 Write-Information "Creating repository $Owner/$RepoName..."
-gh repo create "$Owner/$RepoName" $visibility --confirm
+# Note: --confirm is deprecated, passing 'y' as argument skips confirmation
+gh repo create "$Owner/$RepoName" $visibility y
 
 # 3. Initialize Local Repository
 if (Test-Path .git) {

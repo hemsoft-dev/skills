@@ -1,6 +1,6 @@
 ---
 name: shortcuts
-description: V1.3 - Manages AutoHotkey keyboard shortcuts and text expansion hotstrings for launching tools, utilities, and processes. Use when adding, editing, listing, or removing shortcuts.
+description: V1.5 - Manages AutoHotkey keyboard shortcuts and text expansion hotstrings for launching tools, utilities, and processes. Use when adding, editing, listing, or removing shortcuts.
 ---
 
 # Shortcuts Manager
@@ -41,10 +41,15 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 | CTRL+SHIFT+G | `^+g` | Activate/launch Claude |
 | CTRL+SHIFT+N | `^+n` | Activate/launch Obsidian Notes |
 | CTRL+SHIFT+T | `^+t` | Activate/launch Todoist |
+| CTRL+SHIFT+X | `^+x` | Activate/launch X (Twitter) |
 | CTRL+SHIFT+C | `^+c` | Activate/launch WezTerm |
 | CTRL+SHIFT+V | `^+v` | Activate/launch VS Code Insiders |
 | CTRL+SHIFT+S | `^+s` | Activate/launch VS Code Insiders with Skills repo |
 | CTRL+ALT+P | `^!p` | Speak clipboard (TTS via edge-tts) |
+| CTRL+ALT+LEFT | `^!Left` | Move to previous Windows Desktop |
+| CTRL+ALT+RIGHT | `^!Right` | Move to next Windows Desktop |
+| CTRL+ALT+NUMPAD-ENTER | `^!NumpadEnter` | Windows Desktop Overview (Task View) |
+| CTRL+ALT+NUMPAD0-9 | `^!Numpad0` - `^!Numpad9` | Switch directly to Desktop 1-10 |
 
 ### Command Launcher (WIN+Space)
 

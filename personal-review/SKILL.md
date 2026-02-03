@@ -161,3 +161,9 @@ Use STAR method for each major accomplishment:
 - ✅ Logical flow from past → present → future
 - ✅ Appropriate length (not too brief, not exhaustive)
 - ✅ Proofread for clarity and typos
+
+## Resources
+
+| Resource | Link |
+|----------|------|
+| TalentGuard (Relias) | [relias.talentguard.com](https://relias.talentguard.com/Pages/HomePageAPI.aspx?menu=Home&ApplyStartTab=true) |

@@ -47,3 +47,25 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 
 - Requires GitHub CLI (`gh`) to be installed and authenticated.
 - SSH keys must be configured in `~/.ssh/config` with appropriate aliases (`github-personal1`, `github-personal2`, `github-work1`).
+
+## Important: GitHub CLI Auth Switching
+
+The `gh` CLI can have multiple accounts authenticated, but only one is **active** at a time. Before creating a repo, ensure the correct account is active:
+
+```powershell
+# Check current auth status
+gh auth status
+
+# Switch to the account matching your profile
+gh auth switch --user HemSoft       # For Personal1
+gh auth switch --user franzhemmer   # For Personal2
+gh auth switch --user fhemmerrelias # For Work1
+```
+
+**The script does NOT auto-switch auth** - you must do this manually before running if the wrong account is active.
+
+## Known Repositories
+
+| Repo | Profile | Owner | Visibility | Path | Purpose |
+|------|---------|-------|------------|------|---------|
+| `public-skills` | Personal1 | HemSoft | Public | `D:\github\HemSoft\public-skills` | Public agent skills for skills.sh ecosystem |
