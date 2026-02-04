@@ -1,13 +1,14 @@
+````skill
 ---
-name: copilot-cli-sdk
-description: V1.1 - Expert in GitHub Copilot CLI SDK for integrating Copilot Agent into applications. Supports Node.js/TypeScript, Python, Go, and .NET with multi-turn conversations, tool execution, and full lifecycle control.
+name: copilot-sdk
+description: V1.2 - Expert in GitHub Copilot SDK for integrating Copilot Agent into applications. Supports Node.js/TypeScript, Python, Go, and .NET with multi-turn conversations, tool execution, and full lifecycle control.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
       hooks:
         - type: prompt
           prompt: |
-            If a file was read, written, or edited in the copilot-cli-sdk directory (path contains 'copilot-cli-sdk'), verify that history logging occurred.
+            If a file was read, written, or edited in the copilot-sdk directory (path contains 'copilot-sdk'), verify that history logging occurred.
             
             Check if History/{YYYY-MM-DD}.md exists and contains an entry for this interaction with:
             - Format: "## HH:MM - {Action Taken}"
@@ -21,9 +22,9 @@ hooks:
       hooks:
         - type: prompt
           prompt: |
-            Before stopping, if copilot-cli-sdk was used (check if any files in copilot-cli-sdk directory were modified), verify that the interaction was logged:
+            Before stopping, if copilot-sdk was used (check if any files in copilot-sdk directory were modified), verify that the interaction was logged:
             
-            1. Check if History/{YYYY-MM-DD}.md exists in copilot-cli-sdk directory
+            1. Check if History/{YYYY-MM-DD}.md exists in copilot-sdk directory
             2. Verify it contains an entry with format "## HH:MM - {Action Taken}"
             3. Ensure the entry includes a one-line summary of what was done
             
@@ -48,7 +49,7 @@ The GitHub Copilot SDK is currently in **Technical Preview** and provides langua
 
 - **Node.js/TypeScript**: `@github/copilot-sdk`
 - **Python**: `github-copilot-sdk` (also available as `copilot` on PyPI)
-- **Go**: `github.com/github/copilot-cli-sdk-go`
+- **Go**: `github.com/github/copilot-sdk-go`
 - **.NET**: `GitHub.Copilot.SDK`
 
 ## Key Features
@@ -111,7 +112,7 @@ pip install copilot
 ### Go
 
 ```bash
-go get github.com/github/copilot-cli-sdk-go
+go get github.com/github/copilot-sdk-go
 ```
 
 ### .NET
@@ -187,7 +188,7 @@ asyncio.run(main())
 
 ```go
 import (
-    "github.com/github/copilot-cli-sdk-go/copilot"
+    "github.com/github/copilot-sdk-go/copilot"
 )
 
 client := copilot.NewClient()
@@ -447,3 +448,4 @@ try {
 - **Custom Agents**: Specialized agent configurations for specific tasks
 - **Skills**: Enhancements for specialized task performance
 - **Hooks**: Execute custom commands at key points during execution
+````
