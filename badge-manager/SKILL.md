@@ -1,6 +1,6 @@
 ---
 name: badge-manager
-description: V1.2 - Expert in GitHub badges for README files, specializing in Next.js, React, Supabase, and .NET stacks.
+description: V1.3 - Expert in GitHub badges for README files, specializing in Next.js, React, Supabase, .NET, and React/TypeScript stacks.
 ---
 
 # Badge Manager
@@ -49,6 +49,7 @@ After completing the request, append to `History/{YYYY-MM-DD}.md`:
 ### Project Metrics (flat/flat-square)
 
 - **NuGet Version**: `https://img.shields.io/nuget/v/{PACKAGE}?style=flat-square&color=004880`
+- **NPM Downloads**: `https://img.shields.io/npm/dm/{PACKAGE}`
 - **Build Status**: `https://img.shields.io/github/actions/workflow/status/{USER}/{REPO}/{WORKFLOW}.yml?branch=main`
 - **Vercel Deployment (via GitHub API)**: `https://img.shields.io/github/deployments/{USER}/{REPO}/production?label=vercel&logo=vercel&logoColor=white` (Uses GitHub's deployment status API - most accurate for Vercel)
 - **Vercel Deployment (via Vercel API)**: `https://img.shields.io/vercel/deployments/{USER}/{REPO}?logo=vercel&style=flat-square` (Requires Vercel project ID, less common)
@@ -59,10 +60,13 @@ After completing the request, append to `History/{YYYY-MM-DD}.md`:
 
 - **GitHub Stars**: `https://img.shields.io/github/stars/{USER}/{REPO}?style=social`
 - **GitHub Forks**: `https://img.shields.io/github/forks/{USER}/{REPO}?style=social`
+- **Discord**: `https://img.shields.io/discord/{SERVER_ID}?color={COLOR}&label={LABEL}&logo=discord&logoColor={LOGOCOLOR}`
+- **Twitter Follow**: `https://img.shields.io/twitter/follow/{USERNAME}.svg?label=follow+@{USERNAME}&style=social&logo=twitter`
 
 ### Specialty Badges
 
 - **Vercel Deploy Button**: `[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url={REPO_URL})`
+- **PRs Welcome**: `https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat`
 
 ## Implementation Best Practices
 

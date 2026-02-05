@@ -13,6 +13,7 @@ Manual tracking of subscription status and pricing.
 | [Discord Nitro](https://discord.com/settings/subscriptions) | $104.21 | Annual | Active | October 8, 2026 | USAA Spending Checking | — |
 | [Discord Bot MEE6](https://mee6.xyz/dashboard) | $83.88 | Annual | Cancelled | July 6, 2026 | Chase Credit Card | Cancelled as of December 2025 |
 | [Disney Plus](https://www.disneyplus.com/account) | $35.99 | Monthly | Cancelled | — | — | Cancelled as of December 2025 |
+| [Excalidraw+](https://plus.excalidraw.com/) | $72.00 | Annual | Active | Feb 4, 2027 | — | Started Feb 4, 2026 |
 | [Egg Inc (King Friday)](https://appleid.apple.com/account/subscriptions) | $7.99 | Monthly | Active | January 22, 2026 | — | — |
 | [Egg Inc (King Monday)](https://appleid.apple.com/account/subscriptions) | $7.99 | Monthly | Active | January 12, 2026 | — | — |
 | [Egg Inc (King Saturday)](https://appleid.apple.com/account/subscriptions) | $7.99 | Monthly | Active | January 14, 2026 | — | — |

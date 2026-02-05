@@ -10,6 +10,9 @@ Result: Created new section in AGENTS.md with clear guidelines for logging meani
 2026-01-30 - 10:00 - Revert Ctrl+Shift+S shortcut from Cursor to VS Code Insiders with Skills repo
 Result: Successfully updated AutoHotkey script, documentation, and history logging. Committed and pushed changes despite pre-existing linting issues.
 
+2026-02-05 - 03:11 - Use badge-manager skill to learn badges from excalidraw repo and update skill
+Result: Analyzed excalidraw README badges, added NPM downloads, Discord, Twitter follow, and PRs welcome badges to badge-manager curated templates. Updated version to V1.3 and expanded specialization to include React/TypeScript stacks.
+
 2026-01-30 - 11:48 - Process latest screenshot and commit changes with Slack/Twitter filename prefixes
 Result: Successfully imported Slack screenshot from angular-hotline channel, created ask-user-questions skill for spec-based development, added automatic prefix detection for Slack (slack-) and Twitter (tweet-) screenshots, fixed Markdown linting issues, and committed/pushed all changes.
 2026-01-30 - 13:23 - Fix Productivity skill commit data collection script parsing
@@ -65,3 +68,18 @@ Result: Imported D:\OneDrive\Snagit\2026-02-02_08-35-23.snagx → images/library
 Result: Patched `atlassian/scripts/Search-Confluence.ps1` — added `[switch]$RawCql`, safer CQL construction (heuristic + explicit raw mode), robust API error handling, and null-safe `version.when` parsing. Verified script loads and no longer crashes on missing dates; recommended reload of user shell so system-level `ATLASSIAN_API_TOKEN` is available for live searches.
 2026-02-02 - 12:43 - Productivity skill: dark/light theme, commit date grouping fix, LOC branch tracking fix, policy-manager onboarding
 Result: Added HemSoft gold-on-black theme with toggle, fixed report generator to group commits by actual dates (not file names), fixed LOC snapshots to track main branch only (prevents feature branch spikes), onboarded policy-manager repo with January 2026 data.
+
+2026-02-04 - 12:04 - Scaffold today's diary entry using diary skill
+Result: Created comprehensive diary entry for February 4, 2026 with weather (Mooresville: 41°F, rain), news headlines (US/World/AI/Danish with source diversification), Slack highlights (12 items from dev-ex-private, dev-tribe, courses, systems-management), daily numbers (GitHub: 179 (-1), Bitbucket: 562 (0)), software watchlist updates (6 updates: Claude Code, Gemini CLI, GitHub Copilot Chat, GitHub Web, Node.js), trending GitHub repos, and Todoist integration.
+
+2026-02-04 - 13:21 - Add global VS Code alias in PowerShell profile
+Result: Added a CurrentUserAllHosts profile function named code that launches VS Code from the installed Code.exe path.
+
+2026-02-04 - 21:47 - Add Excalidraw+ annual subscription
+Result: Recorded Excalidraw+ ($72/year) starting 2026-02-04 in confirmed subscriptions.
+
+2026-02-05 - 01:22 - Keep LLM models section when unchanged
+Result: Updated diary skill to repeat yesterday's LLM Models section when there are no changes, instead of omitting it.
+
+2026-02-05 - 01:32 - Update Copilot Chat watchlist source
+Result: Updated diary skill guidance to use the VS Code updates page for Copilot Chat and record both main and full version strings; corrected the 2026-02-04 diary entry accordingly.

@@ -1,6 +1,6 @@
 ---
 name: diary
-description: "V2.21 - Captures daily accomplishments, goals, and reflections with Todoist integration. Auto-includes weather, ALL news headlines (5-7 per category: US, World, AI, Danish) with mandatory source diversification (max 2 per source, 3-4 sources minimum) and Simon Willison priority for AI News, comprehensive Slack highlights from 18 monitored channels (8-12+ highlights), watchlist updates, Daily Numbers (Dow Jones, S&P 500, Relias Repo Counts), LLM Models (LMSYS Chatbot Arena leaderboard + OpenRouter new releases + Top OpenRouter Apps), trending GitHub repos, Software Watchlist with 68% automation, today's productivity metrics (LOC, commits, PRs, code reviews, issues), and screenshots taken today from screenshot skill library. Structured Work/Personal/Personal Reflections format. Omits Work section on Saturdays; Sundays only include Work → Tomorrow's Goals. NEVER removes files without user consent."
+description: "V2.24 - Captures daily accomplishments, goals, and reflections with Todoist integration. Auto-includes weather, ALL news headlines (5-7 per category: US, World, AI, Danish) with mandatory source diversification (max 2 per source, 3-4 sources minimum) and Simon Willison priority for AI News, comprehensive Slack highlights from 18 monitored channels (8-12+ highlights), watchlist updates, Daily Numbers (Dow Jones, S&P 500, Relias Repo Counts), LLM Models (LMSYS Chatbot Arena leaderboard + OpenRouter new releases + Top OpenRouter Apps), trending GitHub repos, Software Watchlist with 68% automation and improved GitHub Copilot Chat handling (extracts 5-15 highlights from VS Code updates page across all major sections), today's productivity metrics (LOC, commits, PRs, code reviews, issues), and screenshots taken today from screenshot skill library. Structured Work/Personal/Personal Reflections format. Omits Work section on Saturdays; Sundays only include Work → Tomorrow's Goals. NEVER removes files without user consent."
 ---
 
 # Diary
@@ -50,7 +50,7 @@ All diary entries follow the template at `config/yyyy-mm-dd.md`. Key sections:
 - **Weather**: Current conditions and 3-day forecast (from `Get-Today.ps1`)
 - **News Headlines**: 5-7 items each for US, World, AI, and Danish News (last 24 hours only)
 - **Daily Numbers**: Stock market data (weekdays) and Relias repo counts (GitHub and Bitbucket with day-over-day deltas)
-- **LLM Models**: LMSYS Chatbot Arena leaderboard (Overall/Coding/Vision top 5, only when rankings change), OpenRouter new model releases (last 7 days), and Top OpenRouter Apps by token usage (top 10, only when rankings change)
+- **LLM Models**: LMSYS Chatbot Arena leaderboard (Overall/Coding/Vision top 5), OpenRouter new model releases (last 7 days), and Top OpenRouter Apps by token usage (top 10). If there are no changes, repeat yesterday's LLM Models section.
 - **Top 5 Trending GitHub Repos**: Current trending repositories with actual star counts (use web search to get real data from <https://github.com/trending>)
 - **Software Watchlist**: Version updates for monitored software (last 7 days)
 - **Today's Productivity**: Lines of code, commits, pull requests, code reviews, and issues closed (daily summary)
@@ -327,13 +327,42 @@ Example: "Dow Jones: 49,384.01 (+306.78, +0.63%)"
 2. Report the issue: "⚠️ Software watchlist check returned zero updates, which indicates a checking process failure. Diagnostic results: [output]"
 3. Do NOT render "No software updates" - instead show the diagnostic information
 
-**Highlights:** 3-7 specific changes from release notes (NEVER generic "bug fixes/improvements"). Answer: "What can I do now that I couldn't before?"
+**🚨 CRITICAL: Highlights Must Be Free Text**
+
+**NEVER use generic placeholders like:**
+
+- ❌ "Latest release"
+- ❌ "Preview release"
+- ❌ "Beta release"
+- ❌ "Bug fixes and improvements"
+- ❌ "New features"
+
+**ALWAYS fetch and read the actual release notes**, then extract 3-7 specific, actionable changes:
+
+- ✅ "Added dark mode support for sidebar"
+- ✅ "Fixed memory leak in file watcher (issue #1234)"
+- ✅ "New /explain command for code analysis"
+- ✅ "Performance: 40% faster file indexing"
+
+**Process:**
+
+1. Visit the changelog/release notes URL
+2. Read the actual content
+3. Extract specific features, fixes, or improvements
+4. Answer: "What can I do now that I couldn't before?"
 
 **Special Cases:**
 
 - **Security**: List CVE numbers (e.g., "CVE-2025-55132: permission model bypass")
 - **Deprecations**: State replacement (e.g., "Final release, use X instead")
-- **Vague vendor notes**: Acknowledge explicitly (e.g., "Slack provides no details")
+- **Vague vendor notes**: Acknowledge explicitly (e.g., "Slack provides no details beyond version bump")
+- **GitHub Copilot Chat**: Use the VS Code updates page format (e.g., <https://code.visualstudio.com/updates/v1_109>) as the source of truth. **CRITICAL: GitHub Copilot Chat releases are MAJOR VS Code releases with extensive features across multiple categories.** You MUST:
+  1. Fetch the VS Code updates page using fetch_webpage tool
+  2. Extract highlights from ALL major sections: Chat UX, Agent Session Management, Agent Customization, Agent Extensibility, Agent Optimizations, Agent Security and Trust, Terminal enhancements, Coding and editor, Workbench and productivity, Extensions and API
+  3. Prioritize the most impactful user-facing features (5-15 highlights)
+  4. Capture both the main version (1.109) and full extension version (e.g., v0.37.2026020406)
+  5. **NEVER rely solely on GitHub releases** - they only show extension-specific changes, not the comprehensive VS Code feature updates
+  6. Examples of quality highlights: "Anthropic thinking tokens with detailed/compact styles", "Mermaid diagram rendering with pan/zoom", "Plan agent with 4-phase workflow", "parallel subagents execution", "Agent Skills generally available", "Claude Agent support (preview)", "terminal sandboxing", "integrated browser with DevTools"
 
 **Format:** `| [Software](url) | version | date | highlights | [Notes](release-url) |`
 
@@ -466,7 +495,7 @@ if (Test-Path $screenshotLibrary) {
 2. **Pull Todoist data** (`Get-TodoistCompleted.ps1`, `Get-TodoistTasks.ps1`, `Get-TodoistUpdated.ps1`)
 3. **Apply filters** (`exclusion.json`: @Regular Chores, health/exercise/timesheet tasks)
 4. **Categorize** (Work: 2221463722, Personal: 2200472795 or others)
-5. **Check LLM Models** (LMSYS leaderboard changes, OpenRouter new releases from last 7 days)
+5. **Check LLM Models** (LMSYS leaderboard changes, OpenRouter new releases from last 7 days; if no changes, carry forward yesterday's LLM Models section)
 6. **Gather productivity metrics** (lines of code, commits, PRs, code reviews, issues closed)
 7. **Gather screenshots** (find all screenshots from today in screenshot skill library)
 8. **Generate entry** with weather/news/Todoist/LLM/productivity/screenshots data
@@ -667,7 +696,7 @@ When user wants to review previous entries:
 - Agent Zero: Build autonomous AI agents
 - Claude Code: The AI for problem solvers
 
-**Section Omission:** If no leaderboard changes AND no new models in last 7 days AND no app ranking changes, omit entire LLM Models section from diary entry.
+**Section Omission:** Do not omit the LLM Models section. If no leaderboard changes AND no new models in last 7 days AND no app ranking changes, copy yesterday's LLM Models section verbatim into today's entry.
 
 ## File Structure
 
