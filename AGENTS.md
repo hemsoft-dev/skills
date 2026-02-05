@@ -413,9 +413,7 @@ BREAKING CHANGE: API now requires OAuth tokens instead of API keys.
 | `.PSScriptAnalyzerSettings.psd1` | PowerShell linting configuration |
 | `Install-GitHooks.ps1` | Pre-commit hook installer |
 | `AGENTS.md` | This file - Agent guidelines |
-| `TODO.md` | Repository tasks and improvements |
-| `claude-skills-architecture.html` | Architecture documentation |
-| `$PROFILE` | PowerShell profile configuration |
+| `PROMPT-HISTORY.md` | Log of meaningful prompt interactions |
 
 ### Skill Structure
 
