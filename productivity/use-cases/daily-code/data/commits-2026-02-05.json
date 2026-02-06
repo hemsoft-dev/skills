@@ -1,0 +1,54 @@
+{
+  "summary": {
+    "totalLinesAffected": 826.0,
+    "commitsByRepository": [
+      {
+        "netLOC": 742.0,
+        "linesAffected": 826.0,
+        "repository": "skills",
+        "deletions": 42.0,
+        "additions": 784.0,
+        "commits": 1
+      }
+    ],
+    "totalNetLOC": 742.0,
+    "totalAdditions": 784.0,
+    "totalDeletions": 42.0
+  },
+  "repositoriesScanned": 56,
+  "collectionTime": "2026-02-05T22:14:01.0545074-05:00",
+  "suspiciousCommits": [
+    {
+      "date": "2026-02-05 13:13:22",
+      "subject": "PE-1129 Refactor task-runner.sh to improve unit test execution; skip integration tests and streamline test project detection",
+      "repository": "ai-skills",
+      "author": "Nick Peterson",
+      "hash": "2acc227",
+      "reason": "Unknown author name not matching known patterns"
+    }
+  ],
+  "queryEndTime": "2026-02-05T23:59:59.0000000",
+  "queryEndTimeLocal": "2026-02-05 23:59:59",
+  "queryStartTime": "2026-02-05T00:00:00.0000000",
+  "queryStartTimeLocal": "2026-02-05 00:00:00",
+  "commitsFound": 1,
+  "commits": [
+    {
+      "linesAffected": 826,
+      "date": "2026-02-05",
+      "fullHash": "865959fc9d801b7d52610160e73f11a11070801b",
+      "subject": "docs(agents): remove references to non-existent TODO.md and architecture.html",
+      "hash": "865959f",
+      "author": "Franz Hemmer",
+      "repositorySource": "skills",
+      "additions": 784,
+      "gitignoreModified": false,
+      "netLOC": 742,
+      "timestamp": "2026-02-05T14:41:56.0000000-05:00",
+      "time": "14:41:56",
+      "deletions": 42,
+      "repositoryName": "skills"
+    }
+  ],
+  "suspiciousCommitsFound": 1
+}

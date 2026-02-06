@@ -310,7 +310,7 @@
     {
       "name": "skills",
       "source": "skills",
-      "path": "c:\\Users\\User\\.claude\\skills"
+      "path": "c:\\Users\\User\\.agents\\skills"
     }
   ],
   "version": "1.0"
