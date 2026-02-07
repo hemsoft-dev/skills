@@ -1,6 +1,6 @@
 ---
 name: slack
-description: V2.5 - Slack Web API for messaging, channels, search, and files. Primary entry point with links to specialized sub-skills for search, files, and advanced features.
+description: V2.6 - Slack Web API for messaging, channels, search, and files. Primary entry point with links to specialized sub-skills for search, files, and advanced features. CRITICAL: All PowerShell scripts require 6>&1 stream redirection.
 compatibility: Requires SLACK_TOKEN and SLACK_USER_TOKEN environment variables, PowerShell, network access
 ---
 
@@ -17,6 +17,30 @@ compatibility: Requires SLACK_TOKEN and SLACK_USER_TOKEN environment variables, 
 | **[slack-search](search/SKILL.md)** | Message search, channel discovery, user lookup |
 | **[slack-files](files/SKILL.md)** | File uploads, downloads, temp folder management |
 | **[slack-advanced](advanced/SKILL.md)** | Reminders, bookmarks, pins, DMs, reactions, AI Agent |
+
+---
+
+## ⚠️ CRITICAL: PowerShell Script Output
+
+**ALL Slack PowerShell scripts use `Write-Information` for output.**
+
+When calling scripts, you MUST redirect the Information stream (6) to stdout (1) to see results:
+
+```powershell
+# CORRECT - Redirects Information stream
+& "$env:USERPROFILE\.claude\skills\slack\scripts\Search-SlackMessages.ps1" -Query "in:#dev-tribe" -Count 5 6>&1
+
+# WRONG - Output will not be visible
+& "$env:USERPROFILE\.claude\skills\slack\scripts\Search-SlackMessages.ps1" -Query "in:#dev-tribe" -Count 5
+```
+
+**Why this matters:**
+
+- Scripts run successfully but appear to produce no output without `6>&1`
+- This is NOT a script failure - it's a PowerShell stream handling requirement
+- Without redirection, you'll think the script failed when it actually worked perfectly
+
+**Always use `6>&1` when calling any script in this skill.**
 
 ---
 
@@ -115,10 +139,11 @@ When summarizing Slack messages:
 $targetDate = "2026-01-16"
 $dayBefore = "2026-01-15"  # after: is exclusive, so use day before target
 $dayAfter = "2026-01-17"   # before: is exclusive, so use day after target
-& "$env:USERPROFILE\.claude\skills\slack\scripts\Search-SlackMessages.ps1" -Query "in:#dev-tribe after:$dayBefore before:$dayAfter -from:@email -from:@datadog" -Count 20 -OutputFormat List
+# CRITICAL: Scripts use Write-Information - redirect stream 6 to stdout with 6>&1
+& "$env:USERPROFILE\.claude\skills\slack\scripts\Search-SlackMessages.ps1" -Query "in:#dev-tribe after:$dayBefore before:$dayAfter -from:@email -from:@datadog" -Count 20 -OutputFormat List 6>&1
 
 # If using Get-SlackChannelMessages.ps1, manually filter by timestamp
-& "$env:USERPROFILE\.claude\skills\slack\scripts\Get-SlackChannelMessages.ps1" -Channel "dev-tribe" -Count 20 -MaxThreadReplies 0
+& "$env:USERPROFILE\.claude\skills\slack\scripts\Get-SlackChannelMessages.ps1" -Channel "dev-tribe" -Count 20 -MaxThreadReplies 0 6>&1
 # Then check each message's timestamp and only include messages from target date
 ```
 
@@ -222,7 +247,8 @@ Invoke-RestMethod -Uri "https://slack.com/api/chat.postMessage" -Headers $header
 **PRIMARY TOOL** for retrieving messages:
 
 ```powershell
-.\scripts\Get-SlackChannelMessages.ps1 -Channel "dev-tribe" -Count 10 -MaxThreadReplies 0
+# Remember to redirect Information stream (6>&1)
+.\scripts\Get-SlackChannelMessages.ps1 -Channel "dev-tribe" -Count 10 -MaxThreadReplies 0 6>&1
 ```
 
 ### List Channels

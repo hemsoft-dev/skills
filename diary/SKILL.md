@@ -1,6 +1,6 @@
 ---
 name: diary
-description: "V2.24 - Captures daily accomplishments, goals, and reflections with Todoist integration. Auto-includes weather, ALL news headlines (5-7 per category: US, World, AI, Danish) with mandatory source diversification (max 2 per source, 3-4 sources minimum) and Simon Willison priority for AI News, comprehensive Slack highlights from 18 monitored channels (8-12+ highlights), watchlist updates, Daily Numbers (Dow Jones, S&P 500, Relias Repo Counts), LLM Models (LMSYS Chatbot Arena leaderboard + OpenRouter new releases + Top OpenRouter Apps), trending GitHub repos, Software Watchlist with 68% automation and improved GitHub Copilot Chat handling (extracts 5-15 highlights from VS Code updates page across all major sections), today's productivity metrics (LOC, commits, PRs, code reviews, issues), and screenshots taken today from screenshot skill library. Structured Work/Personal/Personal Reflections format. Omits Work section on Saturdays; Sundays only include Work → Tomorrow's Goals. NEVER removes files without user consent."
+description: "V2.25 - Captures daily accomplishments, goals, and reflections with Todoist integration. Auto-includes weather, ALL news headlines (5-7 per category: US, World, AI, Danish) with mandatory source diversification (max 2 per source, 3-4 sources minimum) and Simon Willison priority for AI News, comprehensive Slack highlights from 18 monitored channels (8-12+ highlights), watchlist updates, Daily Numbers (Dow Jones, S&P 500, Relias Repo Counts), LLM Models (LMSYS Chatbot Arena leaderboard + OpenRouter new releases + Top OpenRouter Apps), trending GitHub repos, Software Watchlist with 68% automation and improved GitHub Copilot Chat handling (extracts 5-15 highlights from VS Code updates page across all major sections), today's productivity metrics (LOC, commits, PRs, code reviews, issues), and screenshots taken today from screenshot skill library. Structured Work/Personal/Personal Reflections format. Omits Work section on Saturdays; Sundays only include Work → Tomorrow's Goals. NEVER removes files without user consent."
 ---
 
 # Diary
@@ -203,7 +203,7 @@ Use the slack skill to retrieve comprehensive coverage of today's substantive ac
 $today = Get-Date -Format "yyyy-MM-dd"
 $yesterday = (Get-Date).AddDays(-1).ToString("yyyy-MM-dd")
 $tomorrow = (Get-Date).AddDays(1).ToString("yyyy-MM-dd")
-& "$env:USERPROFILE\.claude\skills\slack\scripts\Search-SlackMessages.ps1" -Query "in:#dev-tribe after:$yesterday before:$tomorrow -from:@email -from:@datadog" -Count 20 -OutputFormat List
+& "$env:USERPROFILE\.claude\skills\slack\scripts\Search-SlackMessages.ps1" -Query "in:#dev-tribe after:$yesterday before:$tomorrow -from:@email -from:@datadog" -Count 20 -OutputFormat List 6>&1
 ```
 
 **⚠️ DATE FILTERING REQUIREMENT:**

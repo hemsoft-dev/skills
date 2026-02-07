@@ -1,6 +1,6 @@
 ---
 name: slack-search
-description: V1.1 - Slack message search, channel discovery, and user lookup with advanced query syntax and PowerShell scripts.
+description: V1.2 - Slack message search, channel discovery, and user lookup with advanced query syntax and PowerShell scripts. CRITICAL: All scripts require 6>&1 stream redirection.
 compatibility: Requires SLACK_USER_TOKEN environment variable, PowerShell, network access
 ---
 
@@ -11,6 +11,24 @@ compatibility: Requires SLACK_USER_TOKEN environment variable, PowerShell, netwo
 Specialized skill for searching Slack messages, discovering channels, and looking up users.
 
 **Parent skill:** [slack](../SKILL.md)
+
+---
+
+## ⚠️ CRITICAL: PowerShell Script Output
+
+**ALL scripts in this skill use `Write-Information` for output.**
+
+You MUST redirect the Information stream (6) to stdout (1) when calling scripts:
+
+```powershell
+# CORRECT
+.\scripts\Search-SlackMessages.ps1 -Query "in:#dev-tribe" -Count 5 6>&1
+
+# WRONG - No visible output
+.\scripts\Search-SlackMessages.ps1 -Query "in:#dev-tribe" -Count 5
+```
+
+**Always append `6>&1` to script calls in this skill.**
 
 ---
 
@@ -173,20 +191,20 @@ $r.members | Where-Object { $_.is_bot -eq $true } | Select-Object id, name, real
 Search Slack messages with advanced filtering:
 
 ```powershell
-# Basic search
-.\scripts\Search-SlackMessages.ps1 -Query "deployment" -Count 10
+# Basic search (REMEMBER: 6>&1 redirects Information stream)
+.\scripts\Search-SlackMessages.ps1 -Query "deployment" -Count 10 6>&1
 
 # Channel-specific search
-.\scripts\Search-SlackMessages.ps1 -Query "in:#dev-portal after:2024-12-01" -Count 20
+.\scripts\Search-SlackMessages.ps1 -Query "in:#dev-portal after:2024-12-01" -Count 20 6>&1
 
 # User-specific search
-.\scripts\Search-SlackMessages.ps1 -Query "from:@fhemmer Cortex" -Count 15
+.\scripts\Search-SlackMessages.ps1 -Query "from:@fhemmer Cortex" -Count 15 6>&1
 
 # Table output format
-.\scripts\Search-SlackMessages.ps1 -Query "support ticket" -OutputFormat Table
+.\scripts\Search-SlackMessages.ps1 -Query "support ticket" -OutputFormat Table 6>&1
 
 # JSON output for parsing
-.\scripts\Search-SlackMessages.ps1 -Query "error" -Count 5 -OutputFormat JSON
+.\scripts\Search-SlackMessages.ps1 -Query "error" -Count 5 -OutputFormat JSON 6>&1
 ```
 
 **Parameters:**
@@ -202,17 +220,17 @@ Search Slack messages with advanced filtering:
 Get comprehensive overview of Slack activity:
 
 ```powershell
-# Get today's briefing (default)
-.\scripts\Get-SlackDailyBriefing.ps1
+# Get today's briefing (default) - REMEMBER: 6>&1
+.\scripts\Get-SlackDailyBriefing.ps1 6>&1
 
 # Get briefing for the last 3 days with detailed output
-.\scripts\Get-SlackDailyBriefing.ps1 -DaysBack 3 -OutputFormat Detailed
+.\scripts\Get-SlackDailyBriefing.ps1 -DaysBack 3 -OutputFormat Detailed 6>&1
 
 # Focus on specific channels
-.\scripts\Get-SlackDailyBriefing.ps1 -Channels @("relias-engineering", "dev-tribe")
+.\scripts\Get-SlackDailyBriefing.ps1 -Channels @("relias-engineering", "dev-tribe") 6>&1
 
 # Get JSON output for parsing
-.\scripts\Get-SlackDailyBriefing.ps1 -DaysBack 1 -OutputFormat JSON
+.\scripts\Get-SlackDailyBriefing.ps1 -DaysBack 1 -OutputFormat JSON 6>&1
 ```
 
 **Features:**

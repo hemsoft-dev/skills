@@ -2,40 +2,40 @@
   {
     "Software": "Claude Code",
     "OldVersion": "v2.1.29",
-    "NewVersion": "v2.1.32",
-    "ReleaseDate": "Feb 05 '26",
+    "NewVersion": "v2.1.34",
+    "ReleaseDate": "Feb 06 '26",
     "ChangelogUrl": "https://github.com/anthropics/claude-code/releases",
     "CheckMethod": "github_releases"
   },
   {
     "Software": "Gemini CLI",
     "OldVersion": "v0.27.0-preview.4",
-    "NewVersion": "v0.28.0-preview.2",
-    "ReleaseDate": "Feb 05 '26",
+    "NewVersion": "v0.28.0-preview.5",
+    "ReleaseDate": "Feb 06 '26",
     "ChangelogUrl": "https://github.com/google-gemini/gemini-cli/releases",
     "CheckMethod": "github_releases_prerelease"
   },
   {
     "Software": "GitHub Copilot Chat",
     "OldVersion": "v0.37.2026013101",
-    "NewVersion": "v0.38.2026020506",
-    "ReleaseDate": "Feb 05 '26",
+    "NewVersion": "v0.38.2026020604",
+    "ReleaseDate": "Feb 06 '26",
     "ChangelogUrl": "https://github.com/microsoft/vscode-copilot-chat/blob/main/CHANGELOG.md",
     "CheckMethod": "github_releases"
   },
   {
     "Software": "GitHub Web",
     "OldVersion": "Jan 30",
-    "NewVersion": "Feb 05",
-    "ReleaseDate": "Feb 05 '26",
+    "NewVersion": "Feb 06",
+    "ReleaseDate": "Feb 06 '26",
     "ChangelogUrl": "https://github.blog/changelog/feed/",
     "CheckMethod": "rss"
   },
   {
     "Software": "Goose CLI",
     "OldVersion": "v1.22.2",
-    "NewVersion": "v1.23.0",
-    "ReleaseDate": "Feb 04 '26",
+    "NewVersion": "v1.23.2",
+    "ReleaseDate": "Feb 06 '26",
     "ChangelogUrl": "https://github.com/block/goose/releases",
     "CheckMethod": "github_releases"
   },
