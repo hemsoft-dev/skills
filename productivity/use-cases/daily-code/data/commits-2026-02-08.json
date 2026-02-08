@@ -1,0 +1,45 @@
+{
+  "queryStartTime": "2026-02-08T00:00:00.0000000-05:00",
+  "queryEndTimeLocal": "2026-02-08 23:59:59",
+  "suspiciousCommitsFound": 0,
+  "suspiciousCommits": [],
+  "queryEndTime": "2026-02-08T23:59:59.0000000-05:00",
+  "commitsFound": 1,
+  "repositoriesScanned": 56,
+  "summary": {
+    "totalAdditions": 1418.0,
+    "totalLinesAffected": 1465.0,
+    "totalDeletions": 47.0,
+    "commitsByRepository": [
+      {
+        "repository": "hs-buddy",
+        "netLOC": 1371.0,
+        "deletions": 47.0,
+        "additions": 1418.0,
+        "linesAffected": 1465.0,
+        "commits": 1
+      }
+    ],
+    "totalNetLOC": 1371.0
+  },
+  "queryStartTimeLocal": "2026-02-08 00:00:00",
+  "collectionTime": "2026-02-08T00:48:21.0062145-05:00",
+  "commits": [
+    {
+      "repositorySource": "personal",
+      "date": "2026-02-08",
+      "author": "Franz Hemmer",
+      "subject": "feat: add repo detail panel with rich card-based view",
+      "additions": 1418,
+      "deletions": 47,
+      "netLOC": 1371,
+      "gitignoreModified": false,
+      "fullHash": "cc888ab431542f3bf2f0b3bc7ba81a9a6f6bd9aa",
+      "time": "00:24:58",
+      "repositoryName": "hs-buddy",
+      "linesAffected": 1465,
+      "timestamp": "2026-02-08T00:24:58.0000000-05:00",
+      "hash": "cc888ab"
+    }
+  ]
+}
