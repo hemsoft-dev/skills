@@ -1,6 +1,6 @@
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification='User-facing script requires colored output')]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingPlainTextForPassword', '', Justification='Simple tool with default credentials')]
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseApprovedVerbs', '', Justification='Parse-* and Extract-* are clear names for private helper functions')]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseApprovedVerbs', '', Justification='Parse-*and Extract-* are clear names for private helper functions')]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification='Function names accurately describe collections being parsed')]
 <#
 .SYNOPSIS
@@ -11,7 +11,7 @@
     content structure, and creates nodes and relationships in Neo4j.
 
 .PARAMETER SkillsPath
-    Path to the skills directory. Defaults to $env:USERPROFILE\.claude\skills
+    Path to the skills directory. Defaults to $env:USERPROFILE\.agents\skills
 
 .PARAMETER Neo4jUri
     Neo4j Bolt connection URI. Defaults to bolt://localhost:7687
@@ -27,17 +27,18 @@
 
 .EXAMPLE
     .\Import-SkillsToNeo4j.ps1 -SkillsPath "C:\custom\skills" -Password "mypassword"
-#>
+# >
 
 [CmdletBinding()]
 param(
-    [string]$SkillsPath = "$env:USERPROFILE\.claude\skills",
+    [string]$SkillsPath = "$env:USERPROFILE\.agents\skills",
     [string]$Neo4jUri = "bolt://localhost:7687",
     [string]$Username = "neo4j",
     [string]$Password = "password"
 )
 
 # Function to parse frontmatter YAML
+
 function Parse-Frontmatter {
     param([string]$Content)
 
@@ -60,6 +61,7 @@ function Parse-Frontmatter {
 }
 
 # Function to extract markdown sections
+
 function Parse-Sections {
     param([string]$Content)
 
@@ -103,6 +105,7 @@ function Parse-Sections {
 }
 
 # Function to extract code blocks
+
 function Parse-CodeBlocks {
     param([string]$Content)
 
@@ -129,6 +132,7 @@ function Parse-CodeBlocks {
 }
 
 # Function to extract keywords from content
+
 function Extract-Keywords {
     param([string]$Content, [string]$Description)
 
@@ -156,6 +160,7 @@ function Extract-Keywords {
 }
 
 # Function to execute Cypher query
+
 function Invoke-CypherQuery {
     param(
         [string]$Query,
@@ -208,11 +213,13 @@ function Invoke-CypherQuery {
 }
 
 # Main script
+
 Write-Host "🚀 Starting Skills Import to Neo4j" -ForegroundColor Cyan
 Write-Host "Skills Path: $SkillsPath" -ForegroundColor Gray
 Write-Host "Neo4j URI: $Neo4jUri" -ForegroundColor Gray
 
 # Pre-flight check: Verify Neo4j is accessible
+
 Write-Host "`n🔍 Verifying Neo4j connection..." -ForegroundColor Cyan
 try {
     $testQuery = "RETURN 1 AS test"
@@ -232,6 +239,7 @@ try {
 }
 
 # Step 1: Create constraints and indexes
+
 Write-Host "`n📋 Creating constraints and indexes..." -ForegroundColor Yellow
 
 $constraints = @(
@@ -260,11 +268,13 @@ foreach ($index in $indexes) {
 Write-Host "✅ Constraints and indexes created" -ForegroundColor Green
 
 # Step 2: Find all SKILL.md files
+
 Write-Host "`n🔍 Finding SKILL.md files..." -ForegroundColor Yellow
 $skillFiles = Get-ChildItem -Path $SkillsPath -Recurse -Filter "SKILL.md" | Where-Object { $_.DirectoryName -notmatch '\\(node_modules|\.git|History)\\' }
 Write-Host "Found $($skillFiles.Count) skills" -ForegroundColor Green
 
 # Step 3: Import each skill
+
 $skillCount = 0
 foreach ($file in $skillFiles) {
     $skillCount++
@@ -290,17 +300,17 @@ foreach ($file in $skillFiles) {
         $skillQuery = @"
 MERGE (s:Skill {name: `$name})
 ON CREATE SET
-    s.description = `$description,
+    s.description =`$description,
     s.version = `$version,
     s.path = `$path,
     s.created = datetime(),
     s.modified = datetime()
 ON MATCH SET
-    s.description = `$description,
+    s.description =`$description,
     s.version = `$version,
     s.modified = datetime()
 "@
-        if ($license) { $skillQuery += "`nSET s.license = `$license" }
+        if ($license) { $skillQuery += "`nSET s.license =`$license" }
         if ($compatibility) { $skillQuery += "`nSET s.compatibility = `$compatibility" }
 
         $params = @{
@@ -319,7 +329,7 @@ ON MATCH SET
         $fileQuery = @"
 MERGE (f:MarkdownFile {path: `$path})
 ON CREATE SET
-    f.filename = `$filename,
+    f.filename =`$filename,
     f.type = 'SKILL',
     f.created = datetime(),
     f.modified = datetime(),
@@ -327,7 +337,7 @@ ON CREATE SET
     f.lineCount = `$lineCount
 ON MATCH SET
     f.modified = datetime(),
-    f.size = `$size,
+    f.size =`$size,
     f.lineCount = `$lineCount
 "@
 
@@ -343,7 +353,7 @@ ON MATCH SET
         # Link Skill to File
         $linkQuery = @"
 MATCH (s:Skill {name: `$name})
-MATCH (f:MarkdownFile {path: `$path})
+MATCH (f:MarkdownFile {path:`$path})
 MERGE (s)-[:HAS_FILE]->(f)
 "@
 
@@ -358,10 +368,10 @@ MERGE (s)-[:HAS_FILE]->(f)
             $sectionQuery = @"
 MATCH (f:MarkdownFile {path: `$filePath})
 CREATE (s:Section {
-    heading: `$heading,
+    heading:`$heading,
     level: `$level,
     content: `$content,
-    order: `$order
+    order:`$order
 })
 CREATE (f)-[:HAS_SECTION]->(s)
 "@
@@ -385,7 +395,7 @@ CREATE (f)-[:HAS_SECTION]->(s)
             $codeQuery = @"
 MATCH (f:MarkdownFile {path: `$filePath})
 CREATE (c:CodeBlock {
-    language: `$language,
+    language:`$language,
     code: `$code,
     order: `$order
 })
@@ -409,7 +419,7 @@ CREATE (f)-[:HAS_CODE]->(c)
         foreach ($keyword in $keywords) {
             $keywordQuery = @"
 MERGE (k:Keyword {term: `$term})
-ON CREATE SET k.category = `$category
+ON CREATE SET k.category =`$category
 WITH k
 MATCH (s:Skill {name: `$skillName})
 MERGE (s)-[:MENTIONS]->(k)
@@ -437,6 +447,6 @@ MERGE (s)-[:MENTIONS]->(k)
 }
 
 Write-Host "`n🎉 Import complete! Imported $skillCount skills" -ForegroundColor Green
-Write-Host "`n🌐 Open Neo4j Browser: http://localhost:7474" -ForegroundColor Cyan
+Write-Host "`n🌐 Open Neo4j Browser: <http://localhost:7474>" -ForegroundColor Cyan
 Write-Host "   Username: neo4j" -ForegroundColor Gray
 Write-Host "   Password: password" -ForegroundColor Gray

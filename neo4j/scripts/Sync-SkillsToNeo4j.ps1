@@ -16,12 +16,12 @@
 
 .EXAMPLE
     .\Sync-SkillsToNeo4j.ps1 -Force
-#>
+# >
 
 [CmdletBinding()]
 param(
     [switch]$Force,
-    [string]$SkillsPath = "$env:USERPROFILE\.claude\skills",
+    [string]$SkillsPath = "$env:USERPROFILE\.agents\skills",
     [string]$Neo4jUri = "bolt://localhost:7687",
     [string]$Username = "neo4j",
     [string]$Password = "password"
@@ -30,9 +30,11 @@ param(
 $syncFile = "$env:USERPROFILE\.neo4j\last-sync.txt"
 
 # Pre-flight checks
+
 Write-Host "🔍 Pre-flight checks..." -ForegroundColor Cyan
 
 # Check Docker Desktop is running
+
 try {
     $null = docker ps 2>&1 | Out-Null
     if ($LASTEXITCODE -ne 0) {
@@ -47,6 +49,7 @@ try {
 }
 
 # Check Neo4j container exists
+
 $container = docker ps -a --filter name=neo4j --format "{{.Names}}" 2>&1
 if ($LASTEXITCODE -ne 0 -or -not $container) {
     Write-Host "❌ Neo4j container not found. Run 'docker run...' to create it first." -ForegroundColor Red
@@ -55,6 +58,7 @@ if ($LASTEXITCODE -ne 0 -or -not $container) {
 }
 
 # Check Neo4j container is running
+
 $running = docker ps --filter name=neo4j --format "{{.Names}}" 2>&1
 if (-not $running) {
     Write-Host "⚠️  Neo4j container is stopped. Attempting to start..." -ForegroundColor Yellow
@@ -68,6 +72,7 @@ if (-not $running) {
 }
 
 # Check ports are accessible
+
 $port7474 = Test-NetConnection -ComputerName localhost -Port 7474 -WarningAction SilentlyContinue -InformationLevel Quiet
 $port7687 = Test-NetConnection -ComputerName localhost -Port 7687 -WarningAction SilentlyContinue -InformationLevel Quiet
 
@@ -81,6 +86,7 @@ if (-not $port7687) {
 Write-Host "✅ Pre-flight checks passed" -ForegroundColor Green
 
 # Get last sync time
+
 $lastSync = if ((Test-Path $syncFile) -and -not $Force) {
     Get-Content $syncFile | Get-Date
 } else {
@@ -91,6 +97,7 @@ Write-Host "🔄 Neo4j Skills Sync" -ForegroundColor Cyan
 Write-Host "Last sync: $lastSync" -ForegroundColor Gray
 
 # Find modified SKILL.md files
+
 $modifiedSkills = Get-ChildItem -Path $SkillsPath -Recurse -Filter "SKILL.md" |
     Where-Object {
         $_.DirectoryName -notmatch '\\(node_modules|\.git|History)\\' -and
@@ -108,6 +115,7 @@ foreach ($file in $modifiedSkills) {
 }
 
 # Ask for confirmation (skip in non-interactive mode)
+
 try {
     $response = Read-Host "`nSync these skills to Neo4j? (y/n)"
     if ($response -ne 'y') {
@@ -119,10 +127,12 @@ try {
 }
 
 # Run full import (it's idempotent with MERGE)
+
 Write-Host "`n🚀 Running sync..." -ForegroundColor Cyan
 & "$PSScriptRoot\Import-SkillsToNeo4j.ps1" -SkillsPath $SkillsPath -Username $Username -Password $Password
 
 # Update sync timestamp
+
 $syncDir = Split-Path -Path $syncFile -Parent
 if (-not (Test-Path $syncDir)) {
     New-Item -ItemType Directory -Path $syncDir -Force | Out-Null

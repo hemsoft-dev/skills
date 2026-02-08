@@ -11,19 +11,21 @@ param()
 
 .EXAMPLE
     .\Setup-ProfileAlias.ps1
-#>
+# >
 
 $syncScript = "$env:USERPROFILE\.claude\skills\neo4j\scripts\Sync-SkillsToNeo4j.ps1"
 
 Write-Host "🔧 Adding Sync-Skills alias to PowerShell profile" -ForegroundColor Cyan
 
 # Create profile if it doesn't exist
+
 if (-not (Test-Path $PROFILE)) {
     Write-Host "Creating PowerShell profile..." -ForegroundColor Yellow
     New-Item -Path $PROFILE -ItemType File -Force | Out-Null
 }
 
 # Check if alias already exists
+
 $profileContent = Get-Content $PROFILE -Raw -ErrorAction SilentlyContinue
 if ($profileContent -match 'function Sync-Skills') {
     Write-Host "⚠️  Sync-Skills function already exists in profile" -ForegroundColor Yellow
@@ -38,11 +40,14 @@ if ($profileContent -match 'function Sync-Skills') {
 }
 
 # Add the function
+
 $functionCode = @"
 
-##---------------------------------------
+## ---------------------------------------
+
 ## Neo4j Skills Sync Alias
-##---------------------------------------
+
+## ---------------------------------------
 function Sync-Skills {
     <#
     .SYNOPSIS
@@ -56,12 +61,13 @@ Add-Content -Path $PROFILE -Value $functionCode
 
 Write-Host "✅ Alias added to PowerShell profile" -ForegroundColor Green
 Write-Host "`nReload your profile:" -ForegroundColor White
-Write-Host "  . `$PROFILE" -ForegroundColor Cyan
+Write-Host "  .`$PROFILE" -ForegroundColor Cyan
 Write-Host "`nThen use:" -ForegroundColor White
 Write-Host "  Sync-Skills" -ForegroundColor Cyan
 Write-Host "`nProfile location: $PROFILE" -ForegroundColor Gray
 
 # Offer to reload now
+
 $response = Read-Host "`nReload profile now? (y/n)"
 if ($response -eq 'y') {
     . $PROFILE

@@ -17,7 +17,7 @@ param()
 
 .EXAMPLE
     .\Setup-ScheduledSync.ps1 -Time "2pm"
-#>
+# >
 
 [CmdletBinding()]
 param(
@@ -31,6 +31,7 @@ Write-Host "🔧 Setting up scheduled task for Neo4j sync" -ForegroundColor Cyan
 Write-Host "Schedule: Daily at $Time" -ForegroundColor Gray
 
 # Check for admin privileges
+
 $isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 
 if (-not $isAdmin) {
@@ -40,6 +41,7 @@ if (-not $isAdmin) {
 }
 
 # Remove existing task if it exists
+
 $existingTask = Get-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue
 if ($existingTask) {
     Write-Host "Removing existing task..." -ForegroundColor Yellow
@@ -47,6 +49,7 @@ if ($existingTask) {
 }
 
 # Create the scheduled task
+
 $action = New-ScheduledTaskAction `
     -Execute 'pwsh.exe' `
     -Argument "-NoProfile -WindowStyle Hidden -File `"$syncScript`""
@@ -54,21 +57,21 @@ $action = New-ScheduledTaskAction `
 $trigger = New-ScheduledTaskTrigger -Daily -At $Time
 
 $settings = New-ScheduledTaskSettingsSet `
-    -AllowStartIfOnBatteries `
+-AllowStartIfOnBatteries `
     -DontStopIfGoingOnBatteries `
-    -StartWhenAvailable `
+-StartWhenAvailable `
     -RunOnlyIfNetworkAvailable
 
 $principal = New-ScheduledTaskPrincipal `
     -UserId $env:USERNAME `
-    -LogonType S4U `
+-LogonType S4U `
     -RunLevel Limited
 
 Register-ScheduledTask `
-    -TaskName $taskName `
+-TaskName $taskName `
     -Action $action `
     -Trigger $trigger `
-    -Settings $settings `
+-Settings $settings `
     -Principal $principal `
     -Description "Automatically sync Claude skills to Neo4j graph database" | Out-Null
 

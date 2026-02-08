@@ -1,79 +1,79 @@
 {
   "snapshotDate": "2026-01-31",
-  "collectionTime": "2026-02-01T17:53:08.3186430-05:00",
+  "collectionTime": "2026-02-08T16:25:33.0002043-05:00",
   "repository": "rlms-website",
-  "commitSha": "d827fc6c278b34debe7d7bf4fcade0c6fd2f48e9",
-  "commitDate": "2026-02-02 00:44:23 +0530",
-  "commitMessage": "RPLAT-14545- Add Filter for Skill Evaluation mo...",
+  "commitSha": "88180aa4c2772b7a142c791d9b8c12cc05ae1e0d",
+  "commitDate": "2026-01-21 09:00:57 -0500",
+  "commitMessage": "Merge branch 'release/2026.01.22'",
   "summary": {
-    "totalFiles": 11285,
-    "blankLines": 103482,
-    "commentLines": 25042,
-    "codeLines": 1681940
+    "totalFiles": 11018,
+    "blankLines": 100354,
+    "commentLines": 24327,
+    "codeLines": 987292
   },
   "topLanguages": [
     {
       "language": "TypeScript",
-      "files": 7187,
-      "blank": 89303,
-      "comment": 22996,
-      "code": 786683
-    },
-    {
-      "language": "XML",
-      "files": 148,
-      "blank": 408,
-      "comment": 10,
-      "code": 677587
+      "files": 7132,
+      "blank": 86801,
+      "comment": 22338,
+      "code": 774131
     },
     {
       "language": "HTML",
-      "files": 1054,
-      "blank": 1789,
-      "comment": 484,
-      "code": 79585
+      "files": 1039,
+      "blank": 1758,
+      "comment": 483,
+      "code": 78175
     },
     {
       "language": "JSON",
-      "files": 1017,
-      "blank": 11,
+      "files": 982,
+      "blank": 12,
       "comment": 0,
-      "code": 74874
+      "code": 72682
     },
     {
       "language": "SCSS",
-      "files": 921,
-      "blank": 8997,
-      "comment": 709,
-      "code": 48337
+      "files": 912,
+      "blank": 8884,
+      "comment": 702,
+      "code": 47668
     },
     {
       "language": "Markdown",
-      "files": 344,
-      "blank": 2097,
+      "files": 339,
+      "blank": 2069,
       "comment": 5,
-      "code": 5213
+      "code": 5173
     },
     {
       "language": "YAML",
-      "files": 97,
-      "blank": 681,
-      "comment": 620,
-      "code": 4729
+      "files": 95,
+      "blank": 634,
+      "comment": 571,
+      "code": 4445
     },
     {
       "language": "SVG",
-      "files": 458,
+      "files": 456,
       "blank": 3,
       "comment": 0,
-      "code": 3435
+      "code": 3415
     },
     {
       "language": "JavaScript",
       "files": 46,
       "blank": 153,
       "comment": 195,
-      "code": 1285
+      "code": 1287
+    },
+    {
+      "language": "XML",
+      "files": 4,
+      "blank": 0,
+      "comment": 10,
+      "code": 104
     },
     {
       "language": "PowerShell",
@@ -121,66 +121,66 @@
   "allLanguages": [
     {
       "language": "TypeScript",
-      "files": 7187,
-      "blank": 89303,
-      "comment": 22996,
-      "code": 786683
-    },
-    {
-      "language": "XML",
-      "files": 148,
-      "blank": 408,
-      "comment": 10,
-      "code": 677587
+      "files": 7132,
+      "blank": 86801,
+      "comment": 22338,
+      "code": 774131
     },
     {
       "language": "HTML",
-      "files": 1054,
-      "blank": 1789,
-      "comment": 484,
-      "code": 79585
+      "files": 1039,
+      "blank": 1758,
+      "comment": 483,
+      "code": 78175
     },
     {
       "language": "JSON",
-      "files": 1017,
-      "blank": 11,
+      "files": 982,
+      "blank": 12,
       "comment": 0,
-      "code": 74874
+      "code": 72682
     },
     {
       "language": "SCSS",
-      "files": 921,
-      "blank": 8997,
-      "comment": 709,
-      "code": 48337
+      "files": 912,
+      "blank": 8884,
+      "comment": 702,
+      "code": 47668
     },
     {
       "language": "Markdown",
-      "files": 344,
-      "blank": 2097,
+      "files": 339,
+      "blank": 2069,
       "comment": 5,
-      "code": 5213
+      "code": 5173
     },
     {
       "language": "YAML",
-      "files": 97,
-      "blank": 681,
-      "comment": 620,
-      "code": 4729
+      "files": 95,
+      "blank": 634,
+      "comment": 571,
+      "code": 4445
     },
     {
       "language": "SVG",
-      "files": 458,
+      "files": 456,
       "blank": 3,
       "comment": 0,
-      "code": 3435
+      "code": 3415
     },
     {
       "language": "JavaScript",
       "files": 46,
       "blank": 153,
       "comment": 195,
-      "code": 1285
+      "code": 1287
+    },
+    {
+      "language": "XML",
+      "files": 4,
+      "blank": 0,
+      "comment": 10,
+      "code": 104
     },
     {
       "language": "PowerShell",

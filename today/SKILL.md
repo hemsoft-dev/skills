@@ -5,10 +5,6 @@ description: V1.5 - Displays highlighted news, current date/time, weather condit
 
 # Today
 
-**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
-
-Fetch and display the current date, time, weather, and news.
-
 ## ALWAYS: Log This Interaction
 
 After completing work using this skill, append to `~/.claude/skills/today/History/{YYYY-MM-DD}.md`:
@@ -255,3 +251,13 @@ Present output in this EXACT format:
 | `--count` | 5-7 | Headlines per category |
 | `--category` | all | Specific category: `us`, `world`, `ai`, `danish`, or `all` |
 | `-Location` | 28117 | ZIP code or city for weather |
+
+## Output
+
+Create a beautiful report in the output folder ot the today skill. Use the file format:
+
+YYYY-MM-DD.md
+
+Example:
+
+C:\Users\User\.agents\skills\today\Output\2026-02-16.md

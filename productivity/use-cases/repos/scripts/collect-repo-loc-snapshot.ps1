@@ -140,7 +140,8 @@ try {
         git checkout --quiet $lastCommit 2>$null
         
         # Run cloc with JSON output
-        $clocOutput = & cloc . --json --quiet 2>$null | ConvertFrom-Json
+        # Exclude .xlf files (auto-generated i18n translation files - not authored code)
+        $clocOutput = & cloc . --json --quiet --exclude-ext=xlf 2>$null | ConvertFrom-Json
         
         if (-not $clocOutput) {
             Write-Host " cloc failed" -ForegroundColor Red

@@ -25,11 +25,12 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 
 ## Franz's GitHub Accounts
 
-| Account     | Type        | Email                      | Username      | Plan                                                  |
-|-------------|-------------|----------------------------|---------------|-------------------------------------------------------|
-| Personal #1 | HemSoft     | <franz_hemmer@hotmail.com> | HemSoft       | Copilot Pro+ (1500 req/mo) + Business (fhemmer org)   |
-| Personal #2 | franzhemmer | <fphemmer@gmail.com>       | franzhemmer   | Copilot Business (fhemmer org)                        |
-| Work #1     | Relias      | <fhemmer@relias.com>       | fhemmerrelias | Copilot Pro+ (1500 req/mo)                            |
+| Account     | Type        | Email                         | Username        | Plan                                                  |
+|-------------|-------------|-------------------------------|-----------------|-------------------------------------------------------|
+| Personal #1 | HemSoft     | <franz_hemmer@hotmail.com>    | HemSoft         | Copilot Pro+ (1500 req/mo) + Business (fhemmer org)   |
+| Personal #2 | franzhemmer | <fphemmer@gmail.com>          | franzhemmer     | Copilot Business (fhemmer org)                        |
+| Work #1     | Relias      | <fhemmer@relias.com>          | fhemmerrelias   | Copilot Pro+ (1500 req/mo)                            |
+| Work #2     | Relias      | <fhemmer2relias@hemmer.us>    | fhemmer2-relias | TBD                                                   |
 
 ## Franz's Organizations
 
@@ -50,11 +51,12 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 
 **CRITICAL**: When creating new repositories, distinguish between **user accounts** and **organizations**:
 
-| Profile     | Username      | Default Owner (User) | Can Also Create In (Org)     | Example User Repo                          | Example Org Repo                           |
-|-------------|---------------|----------------------|------------------------------|--------------------------------------------|-----------------------------------------|
-| Personal #1 | HemSoft       | `HemSoft`            | `fhemmer`                    | `github.com/HemSoft/repo`                  | `github.com/fhemmer/repo`               |
-| Personal #2 | franzhemmer   | `franzhemmer`        | `fhemmer`                    | `github.com/franzhemmer/repo`              | `github.com/fhemmer/repo`               |
-| Work #1     | fhemmerrelias | `fhemmerrelias`      | `relias-engineering`         | `github.com/fhemmerrelias/repo`            | `github.com/relias-engineering/repo`    |
+| Profile     | Username        | Default Owner (User) | Can Also Create In (Org)     | Example User Repo                          | Example Org Repo                           |
+|-------------|-----------------|----------------------|------------------------------|--------------------------------------------|-----------------------------------------|
+| Personal #1 | HemSoft         | `HemSoft`            | `fhemmer`                    | `github.com/HemSoft/repo`                  | `github.com/fhemmer/repo`               |
+| Personal #2 | franzhemmer     | `franzhemmer`        | `fhemmer`                    | `github.com/franzhemmer/repo`              | `github.com/fhemmer/repo`               |
+| Work #1     | fhemmerrelias   | `fhemmerrelias`      | `relias-engineering`         | `github.com/fhemmerrelias/repo`            | `github.com/relias-engineering/repo`    |
+| Work #2     | fhemmer2-relias | `fhemmer2-relias`    | `relias-engineering`         | `github.com/fhemmer2-relias/repo`          | `github.com/relias-engineering/repo`    |
 
 **When to use user vs org:**
 
@@ -190,6 +192,7 @@ gh auth refresh -h github.com -s read:enterprise,manage_billing:enterprise,read:
 | Personal #1 | github-personal1 | ~/.ssh/id_ed25519_github_home2026_personal1     |
 | Personal #2 | github-personal2 | ~/.ssh/id_ed25519_github_home2026_personal2     |
 | Work #1     | github-work1     | ~/.ssh/id_ed25519_github_home2026_work1         |
+| Work #2     | github-work2     | ~/.ssh/id_ed25519_github_home2026_work2         |
 
 SSH config location: `~/.ssh/config`
 
@@ -216,15 +219,37 @@ Host github-work1
     User git
     IdentityFile ~/.ssh/id_ed25519_github_home2026_work1
     IdentitiesOnly yes
+
+# Relias (Work #2) - fhemmer2relias@hemmer.us / fhemmer2-relias
+Host github-work2
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/id_ed25519_github_home2026_work2
+    IdentitiesOnly yes
 ```
 
 ### Usage Examples
 
-Clone using alias: `git clone git@github-personal1:fhemmer/dashboard.git`
+**Clone using alias:**
 
-Set remote: `git remote set-url origin git@github-personal1:fhemmer/dashboard.git`
+```bash
+git clone git@github-personal1:fhemmer/dashboard.git
+git clone git@github-work2:fhemmer2-relias/repo.git
+```
 
-Test connection: `ssh -T git@github-personal1`
+**Set remote:**
+
+```bash
+git remote set-url origin git@github-personal1:fhemmer/dashboard.git
+git remote set-url origin git@github-work2:fhemmer2-relias/repo.git
+```
+
+**Test connection:**
+
+```bash
+ssh -T git@github-personal1
+ssh -T git@github-work2
+```
 
 ## Transferring Repos to fhemmer Org
 

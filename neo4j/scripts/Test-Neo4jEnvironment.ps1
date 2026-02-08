@@ -15,7 +15,7 @@
 
 .EXAMPLE
     .\Test-Neo4jEnvironment.ps1 -ValidateScripts
-#>
+# >
 
 [CmdletBinding()]
 param(
@@ -29,6 +29,7 @@ Write-Host "🔍 Neo4j Environment Validation" -ForegroundColor Cyan
 Write-Host ""
 
 # Check 1: Docker Desktop Status
+
 Write-Host "1. Checking Docker Desktop..." -ForegroundColor Yellow
 try {
     $null = docker ps 2>&1 | Out-Null
@@ -45,12 +46,13 @@ try {
 }
 
 # Check 2: Neo4j Container Exists
+
 Write-Host "2. Checking Neo4j container..." -ForegroundColor Yellow
 try {
     $container = docker ps -a --filter name=neo4j --format "{{.Names}}" 2>&1
     if ($container -and $container -eq "neo4j") {
         Write-Host "   ✅ Neo4j container exists" -ForegroundColor Green
-        
+
         # Check if running
         $running = docker ps --filter name=neo4j --format "{{.Names}}" 2>&1
         if ($running -eq "neo4j") {
@@ -71,9 +73,11 @@ try {
 }
 
 # Check 3: Port Availability
+
 Write-Host "3. Checking port availability..." -ForegroundColor Yellow
 
 # Check port 7474 (HTTP)
+
 try {
     $port7474 = Test-NetConnection -ComputerName localhost -Port 7474 -WarningAction SilentlyContinue -InformationLevel Quiet
     if ($port7474) {
@@ -89,6 +93,7 @@ try {
 }
 
 # Check port 7687 (Bolt)
+
 try {
     $port7687 = Test-NetConnection -ComputerName localhost -Port 7687 -WarningAction SilentlyContinue -InformationLevel Quiet
     if ($port7687) {
@@ -104,11 +109,12 @@ try {
 }
 
 # Check 4: Neo4j Connectivity
+
 Write-Host "4. Testing Neo4j connectivity..." -ForegroundColor Yellow
 try {
     $uri = "http://localhost:7474/db/neo4j/tx/commit"
     $auth = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("neo4j:password"))
-    
+
     $body = @{
         statements = @(
             @{
@@ -149,9 +155,10 @@ try {
 }
 
 # Check 5: Script Syntax Validation (optional)
+
 if ($ValidateScripts) {
     Write-Host "5. Validating script syntax..." -ForegroundColor Yellow
-    
+
     $scripts = @(
         "$PSScriptRoot\Import-SkillsToNeo4j.ps1",
         "$PSScriptRoot\Sync-SkillsToNeo4j.ps1"
@@ -175,6 +182,7 @@ if ($ValidateScripts) {
 }
 
 # Summary
+
 Write-Host ""
 Write-Host "📊 Validation Summary" -ForegroundColor Cyan
 

@@ -57,6 +57,12 @@ Unlike the daily-code use case which scans local repositories, this use case:
 - **Purpose**: Query monitored GitHub repositories for issues and pull requests
 - **Output**: Issues/PR data stored in `data/<repo-name>/issues-prs-YYYY-MM-DD.json`
 
+- **Script**: `scripts/collect-repo-loc-snapshot.ps1`
+- **Purpose**: Creates daily LOC snapshots by checking out historical commits and running cloc
+- **Output**: LOC snapshot data stored in `data/<repo-name>/loc-snapshot-YYYY-MM-DD.json`
+- **Exclusions**: Automatically excludes `.xlf` files (auto-generated i18n/translation files)
+- **Note**: Requires repository to be cloned locally (see `localPath` in config)
+
 ## Configuration
 
 Repository configuration is stored in:
