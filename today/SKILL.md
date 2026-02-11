@@ -254,10 +254,16 @@ Present output in this EXACT format:
 
 ## Output
 
-Create a beautiful report in the output folder ot the today skill. Use the file format:
+**Pattern**: All today reports are automatically saved to `output/YYYY-MM-DD.md` for diary integration.
 
-YYYY-MM-DD.md
+The output file contains:
 
-Example:
+- Today's Highlight (user-selected featured news with context)
+- Weather section (location, current conditions, 3-day forecast)
+- News Headlines (US, World, AI, Danish) - 5-7 each from last 24h
 
-C:\Users\User\.agents\skills\today\Output\2026-02-16.md
+**File Format**: `output/YYYY-MM-DD.md`
+
+**Example Path**: `C:\Users\User\.agents\skills\today\output\2026-02-11.md`
+
+**Integration**: The diary skill consumes this output file to build daily diary entries.

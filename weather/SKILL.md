@@ -528,6 +528,34 @@ Structure responses clearly with ALL required timestamps:
 
 **Update frequency**: For active severe weather, check for updates every few hours using official observation stations
 
+## Daily Output Files
+
+**Pattern**: All weather reports are automatically saved to `output/YYYY-MM-DD.md` for diary integration.
+
+### Generating Daily Weather Report
+
+Run the script to generate today's weather report:
+
+```powershell
+& "$env:USERPROFILE\.agents\skills\weather\scripts\Get-DailyWeather.ps1"
+```
+
+This automatically generates a report in `output/YYYY-MM-DD.md` containing:
+
+- Location header with date/day/time
+- Current weather conditions table
+- 3-day forecast table
+
+**Parameters**:
+
+- `-Location`: ZIP code (default: 28117)
+
+**Output**: The script always saves to `output/YYYY-MM-DD.md` and displays the formatted weather to console.
+
+**Integration with Diary Skill**:
+
+The weather skill outputs are consumed by the diary skill for daily entries. The standardized `output/YYYY-MM-DD.md` format ensures consistent data structure across all contributing skills.
+
 ## When to Use This Skill
 
 Use this skill when the user asks about:
