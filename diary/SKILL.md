@@ -1,13 +1,13 @@
 ---
 name: diary
-description: "V2.25 - Captures daily accomplishments, goals, and reflections with Todoist integration. Auto-includes weather, ALL news headlines (5-7 per category: US, World, AI, Danish) with mandatory source diversification (max 2 per source, 3-4 sources minimum) and Simon Willison priority for AI News, comprehensive Slack highlights from 18 monitored channels (8-12+ highlights), watchlist updates, Daily Numbers (Dow Jones, S&P 500, Relias Repo Counts), LLM Models (LMSYS Chatbot Arena leaderboard + OpenRouter new releases + Top OpenRouter Apps), trending GitHub repos, Software Watchlist with 68% automation and improved GitHub Copilot Chat handling (extracts 5-15 highlights from VS Code updates page across all major sections), today's productivity metrics (LOC, commits, PRs, code reviews, issues), and screenshots taken today from screenshot skill library. Structured Work/Personal/Personal Reflections format. Omits Work section on Saturdays; Sundays only include Work → Tomorrow's Goals. NEVER removes files without user consent."
+description: "V2.27 - Captures daily accomplishments, goals, and reflections with Todoist integration. Consumes weather from weather skill output and news from news skill output (no inline gathering). Comprehensive Slack highlights from 18 monitored channels (8-12+ highlights), watchlist updates, Daily Numbers (Dow Jones, S&P 500, Relias Repo Counts), LLM Models (LMSYS Chatbot Arena leaderboard + OpenRouter new releases + Top OpenRouter Apps), trending GitHub repos, Software Watchlist with 68% automation and improved GitHub Copilot Chat handling (extracts 5-15 highlights from VS Code updates page across all major sections), today's productivity metrics (LOC, commits, PRs, code reviews, issues), and screenshots taken today from screenshot skill library. Structured Work/Personal/Personal Reflections format. Omits Work section on Saturdays; Sundays only include Work → Tomorrow's Goals. NEVER removes files without user consent."
 ---
 
 # Diary
 
 **Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
-Expert in daily journaling that integrates with Todoist to capture what you've accomplished and what your goals are. Automatically includes weather and news context from the today skill.
+Expert in daily journaling that integrates with Todoist to capture what you've accomplished and what your goals are. Consumes weather and news from their respective skill output files — no inline gathering needed.
 
 ## ALWAYS: Retrospective Check
 
@@ -47,8 +47,8 @@ All diary entries follow the template at `config/yyyy-mm-dd.md`. Key sections:
 
 - **Today's Highlight**: Featured news article with user context
 - **Slack Highlights**: 5 bullet points from today's messages
-- **Weather**: Current conditions and 3-day forecast (from `Get-Today.ps1`)
-- **News Headlines**: 5-7 items each for US, World, AI, and Danish News (last 24 hours only)
+- **Weather**: Current conditions and 3-day forecast (from weather skill output: `~/.agents/skills/weather/output/YYYY-MM-DD.md`)
+- **News Headlines**: US, World, AI, and Danish News (from news skill output: `~/.agents/skills/news/output/YYYY-MM-DD.md`)
 - **Daily Numbers**: Stock market data (weekdays) and Relias repo counts (GitHub and Bitbucket with day-over-day deltas)
 - **LLM Models**: LMSYS Chatbot Arena leaderboard (Overall/Coding/Vision top 5), OpenRouter new model releases (last 7 days), and Top OpenRouter Apps by token usage (top 10). If there are no changes, repeat yesterday's LLM Models section.
 - **Top 5 Trending GitHub Repos**: Current trending repositories with actual star counts (use web search to get real data from <https://github.com/trending>)
@@ -126,138 +126,72 @@ if ($dayOfWeek -eq 6) {
 
 ## Core Functions
 
-### 0. Weather and News Integration (today skill)
+### 0. Weather and News Integration (from skill outputs)
 
-**ALWAYS run the today skill first** to gather weather and news context.
+**ALWAYS read weather and news from their respective skill output files first.**
 
-**Step 1: Execute Today Skill**
+**Step 1: Read Weather Output**
 
-Run the PowerShell script from the today skill:
-
-```powershell
-& "$env:USERPROFILE\.claude\skills\today\Get-Today.ps1"
-```
-
-This fetches current date, time, weather, and 3-day forecast.
-
-**Step 2: Launch News Sub-Agents**
-
-The today skill automatically launches 3 parallel sub-agents to gather:
-
-- US News headlines (last 24 hours)
-- World News headlines (last 24 hours)
-- AI News headlines (last 24 hours)
-
-**🚨 CRITICAL: News Quality Requirements**
-
-**Source Diversification (MANDATORY):**
-
-- **Maximum 2 items per source** (30% cap per source)
-- **Minimum 3-4 different sources** per category when returning 5-7 items
-- If multiple stories are equally significant, prioritize the one from a less-represented source
-- **Verify source distribution** before finalizing news selection
-
-**AI News Priority Sources:**
-
-- **ALWAYS check Simon Willison's Weblog (simonwillison.net)** - This is priority source #1 for AI News
-- If Simon Willison has relevant posts from the last 24 hours, they MUST be included
-- Then diversify across other sources: The Verge AI, Ars Technica AI, TechCrunch AI, Wired AI, MIT Technology Review, VentureBeat AI, Microsoft Developer Blog
-
-**Verification:**
-
-- Count items per source before including in diary
-- Reject any news selection that violates diversification rules
-- If Simon Willison is missing from AI News, explicitly check why and include if content exists
-
-**Step 3: Gather Slack Activity**
-
-Use the slack skill to retrieve comprehensive coverage of today's substantive activity from these channels:
-
-**Monitored Channels:**
-
-- All DMs
-- #ai-chapter
-- #dev-ex-private
-- #prod-eng-devex-private
-- #productivity-engineering-private
-- #productivity-engineering-public
-- #relias-cortex-external
-- #dev-tribe
-- #next-deployment
-- #swatteam
-- #systems-mangement
-- #architecture
-- #dev-env-help
-- #platform
-- #product-engineering
-- #relias-engineering
-- #software-quality
-- #sonarcloud-public
-
-**Method:**
-**CRITICAL: Always filter by date when gathering daily highlights.** Use `Search-SlackMessages.ps1` with date filters:
+Read the weather skill's output file for today's date:
 
 ```powershell
-# Example: Check dev-tribe for messages on today's date ONLY
-# IMPORTANT: 'after' is EXCLUSIVE - to get messages FROM today, use yesterday as 'after' value
 $today = Get-Date -Format "yyyy-MM-dd"
-$yesterday = (Get-Date).AddDays(-1).ToString("yyyy-MM-dd")
-$tomorrow = (Get-Date).AddDays(1).ToString("yyyy-MM-dd")
-& "$env:USERPROFILE\.claude\skills\slack\scripts\Search-SlackMessages.ps1" -Query "in:#dev-tribe after:$yesterday before:$tomorrow -from:@email -from:@datadog" -Count 20 -OutputFormat List 6>&1
+$weatherFile = "$env:USERPROFILE\.agents\skills\weather\output\$today.md"
+if (Test-Path $weatherFile) {
+    $weatherContent = Get-Content $weatherFile -Raw
+} else {
+    Write-Warning "Weather output not found for $today. Run the weather skill first: & `"$env:USERPROFILE\.agents\skills\weather\scripts\Get-DailyWeather.ps1`""
+}
 ```
 
-**⚠️ DATE FILTERING REQUIREMENT:**
+Copy the weather content directly into the diary entry. The weather skill produces a standardized markdown block with location header, current conditions table, and 3-day forecast table.
 
-- **CRITICAL**: `after:` is EXCLUSIVE - to get messages FROM Jan 16, use `after:2026-01-15` (the day before)
-- **CRITICAL**: `before:` is EXCLUSIVE - to get messages UP TO Jan 16, use `before:2026-01-17` (the day after)
-- **ALWAYS** use `after:(target-1day) before:(target+1day)` in search queries for daily highlights
-- **ALWAYS** verify message timestamps match the target date before including in diary
-- **NEVER** include messages from previous days, even if they appear in recent results
-- If `Get-SlackChannelMessages.ps1` is used, manually filter results by checking timestamps
-- If no messages found for the target date, note "No significant Slack activity" - don't include old messages
+If the file doesn't exist, prompt the user: "Weather output not found for today. Would you like me to run the weather skill first?"
 
-**Slack Activity Criteria:**
+**Step 2: Read News Output**
 
-**IMPORTANT: Provide exhaustive coverage of substantive Slack activity across all monitored channels.**
+Read the news skill's output file for today's date:
 
-**Priority Content (in order):**
+```powershell
+$today = Get-Date -Format "yyyy-MM-dd"
+$newsFile = "$env:USERPROFILE\.agents\skills\news\output\$today.md"
+if (Test-Path $newsFile) {
+    $newsContent = Get-Content $newsFile -Raw
+} else {
+    Write-Warning "News output not found for $today. Run the news skill first: & `"$env:USERPROFILE\.agents\skills\news\scripts\Get-AllNews.ps1`""
+}
+```
 
-1. **PSAs and FYI posts**: Public service announcements, general information, important notices (e.g., "Release branches merged", "Deployment starting", "New process announced")
-2. **Problems being addressed**: Solutions provided, troubleshooting resolutions, help given with outcomes
-3. **Problems being asked**: Technical issues raised, help requests, blockers identified
-4. **Decisions and action items**: Technical decisions made, architecture discussions, planning outcomes
-5. **Announcements**: Team changes, deployment notifications, process updates
+Copy the news content directly into the diary entry's News Headlines section. The news skill enforces source diversification and quality rules internally — no additional validation is needed here.
 
-**What to INCLUDE:**
+If the file doesn't exist, prompt the user: "News output not found for today. Would you like me to run the news skill first?"
 
-- Technical discussions with substance (architecture decisions, implementation strategies)
-- Help requests AND their resolutions (not just the ask, but the solution)
-- PSAs and informational posts that provide context or awareness
-- Deployment notifications (starting, completed, verification)
-- Process changes or updates
-- Team coordination and planning
+**Step 3: Read Slack Briefing Output**
 
-**What to EXCLUDE:**
+Read the Slack briefing output file for today's date:
 
-- Bot notifications (email, datadog, pagerduty alerts)
-- Simple acknowledgments ("thanks", "sounds good")
-- Pleasantries without substance
-- Channel membership changes (unless significant)
+```powershell
+$today = Get-Date -Format "yyyy-MM-dd"
+$slackFile = "$env:USERPROFILE\.agents\skills\slack\output\$today-slack-briefing.md"
+if (Test-Path $slackFile) {
+    $slackContent = Get-Content $slackFile -Raw
+} else {
+    Write-Warning "Slack briefing not found for $today. Run: & `"$env:USERPROFILE\.agents\skills\slack\scripts\Get-SlackDailyBriefing.ps1`" -OutputFormat Detailed 6>&1"
+}
+```
 
-**Format:**
+If the file doesn't exist, prompt the user: "Slack briefing not found for today. Would you like me to run it?"
 
-- `- **[#channel-name](link)**: {Comprehensive summary that captures the problem/solution/information}`
-- **Read full thread context** to understand complete story, not just individual messages
+**Using the briefing output in the diary:**
+
+The raw briefing provides message previews per channel. When composing the diary's Slack Activity section, **curate and summarize** the raw data:
+
+- Aim for 8-12+ curated activity items
+- Combine related messages into coherent summaries
 - Capture BOTH problem and solution when available
-- For PSAs, include the key information being communicated
-- For technical discussions, summarize the decision or conclusion reached
-
-**Coverage Goal:**
-
-- Aim for 8-12+ activity items per day (more if substantive activity warrants)
-- Cast a wide net across all monitored channels
-- Prioritize information value over message count
-- **Verify date**: Each message must match target date
+- Format: `- **[#channel-name](link)**: {Comprehensive summary}`
+- Omit bot noise, simple acks, and pleasantries
+- If the briefing shows no substantive activity, note "No significant Slack activity"
 
 **Section Header:** Use "### 💬 Slack Activity" in diary entries
 
@@ -273,24 +207,49 @@ Use the watchlist skill to check for any updates on tracked items:
 
 **Step 4.5: Gather Daily Numbers**
 
-**Stock Market (weekdays only):** Dow Jones and S&P 500 closing prices with change/% change
+Both sub-sections use cached output files. Check for the cached file first; only run the script if the file is missing.
 
-**Source:** Use Google Finance (<https://www.google.com/finance/beta>) to fetch current market data. Fetch the page directly using mcp_web_fetch tool to get the most recent closing prices and percentage changes for:
+**Stock Market (Dow Jones + S&P 500):**
 
-- Dow Jones Industrial Average (DJI)
-- S&P 500 Index (SPX)
+**Source:** Alpha Vantage API (`GLOBAL_QUOTE` endpoint) via `Get-DailyFinancialNumbers.ps1`
+**Requires:** `ALPHA_VANTAGE_API_KEY` environment variable (free key, 25 requests/day)
+**Note:** Alpha Vantage only supports equities/ETFs, so the script uses ETF proxies: DIA (Dow Jones ETF) and SPY (S&P 500 ETF). Prices reflect the ETF share price, not the raw index value.
 
-Display format: "{Index Name}: {closing_price} ({point_change}, {percent_change}%)"
-Example: "Dow Jones: 49,384.01 (+306.78, +0.63%)"
+```powershell
+$today = Get-Date -Format "yyyy-MM-dd"
+$marketFile = "$env:USERPROFILE\.agents\skills\diary\output\$today-daily-financial-numbers.txt"
+if (Test-Path $marketFile) {
+    $marketContent = Get-Content $marketFile -Raw
+} else {
+    # Output file not found — run the script to generate it
+    $marketContent = & "$env:USERPROFILE\.agents\skills\diary\scripts\Get-DailyFinancialNumbers.ps1"
+}
+```
+
+- Fetches Dow Jones (DIA ETF) and S&P 500 (SPY ETF) closing prices, daily change, and percent change
+- Outputs to `output/YYYY-MM-DD-daily-financial-numbers.txt` automatically
+- On weekends/holidays, returns last trading day data with a note: "Trading day: YYYY-MM-DD"
+- Display format: `"Dow Jones: 49,384.01 (+306.78, +0.63%)"`
 
 **Relias Repo Count (daily):**
 
-- **Unified Script:** `& "$env:USERPROFILE\.claude\skills\diary\scripts\Get-ReliasRepoCounts.ps1"`
-  - Fetches both GitHub and Bitbucket repo counts
-  - Compares to yesterday's counts (stored in `config/repo-counts.json`)
-  - Displays deltas in parentheses: "GitHub: 175 (+2), Bitbucket: 562 (-1)"
-  - Updates tracking file with today's counts for tomorrow's comparison
-  - **Requires:** `BITBUCKET_USERNAME` and `BITBUCKET_API_KEY` environment variables
+```powershell
+$today = Get-Date -Format "yyyy-MM-dd"
+$repoCountFile = "$env:USERPROFILE\.agents\skills\diary\output\$today-relias-repo-counts.txt"
+if (Test-Path $repoCountFile) {
+    $repoCountContent = Get-Content $repoCountFile -Raw
+} else {
+    # Output file not found — run the script to generate it
+    $repoCountContent = & "$env:USERPROFILE\.agents\skills\diary\scripts\Get-ReliasRepoCounts.ps1"
+}
+```
+
+- The script outputs to `output/YYYY-MM-DD-relias-repo-counts.txt` automatically
+- Fetches both GitHub and Bitbucket repo counts
+- Compares to yesterday's counts (stored in `config/repo-counts.json`)
+- Displays deltas in parentheses: "GitHub: 175 (+2), Bitbucket: 562 (-1)"
+- Updates tracking file with today's counts for tomorrow's comparison
+- **Requires:** `BITBUCKET_USERNAME` and `BITBUCKET_API_KEY` environment variables
 
 **Format:** Weekdays include both market + repo counts; weekends/holidays only include repo counts. Display as "GitHub: {count} ({delta}), Bitbucket: {count} ({delta})" where delta shows change from yesterday (e.g., +2, -1, or 0)
 
@@ -423,7 +382,7 @@ This script:
 
 **Step 5: Include Full Output**
 
-Copy **complete, unfiltered output** from today skill: Today's Highlight, Weather, ALL News Headlines (5-7 per category: US/World/AI), Slack Highlights, Watchlist Updates. Include every headline for future context. Use user-provided highlight if specified.
+Copy **complete, unfiltered output** from weather and news skill output files, plus Slack Highlights and Watchlist Updates gathered above. Include every headline for future context. Use user-provided highlight if specified.
 
 **Step 6: Gather Screenshots Taken Today**
 
@@ -491,7 +450,7 @@ if (Test-Path $screenshotLibrary) {
 
 ### 2. Daily Entry Creation Workflow
 
-1. **Run today skill** (weather/news)
+1. **Read weather/news output files** (weather skill `output/YYYY-MM-DD.md`, news skill `output/YYYY-MM-DD.md`)
 2. **Pull Todoist data** (`Get-TodoistCompleted.ps1`, `Get-TodoistTasks.ps1`, `Get-TodoistUpdated.ps1`)
 3. **Apply filters** (`exclusion.json`: @Regular Chores, health/exercise/timesheet tasks)
 4. **Categorize** (Work: 2221463722, Personal: 2200472795 or others)
@@ -709,8 +668,12 @@ diary/
 │   ├── software-watchlist.json
 │   ├── llm-leaderboard.json (tracks LMSYS rankings and model releases)
 │   └── repo-counts.json (tracks daily repo counts for delta calculation)
+├── output/
+│   ├── YYYY-MM-DD-daily-financial-numbers.txt (cached stock market data from Alpha Vantage)
+│   └── YYYY-MM-DD-relias-repo-counts.txt (cached daily repo count output)
 ├── scripts/
-│   ├── Get-ReliasRepoCounts.ps1 (unified script for GitHub + Bitbucket with deltas)
+│   ├── Get-DailyFinancialNumbers.ps1 (Dow Jones + S&P 500 via Alpha Vantage API, writes to output/)
+│   ├── Get-ReliasRepoCounts.ps1 (unified script for GitHub + Bitbucket with deltas, writes to output/)
 │   ├── Get-BitbucketRepoCount.ps1 (Bitbucket-only script)
 │   ├── Get-SoftwareUpdates.ps1 (automated update checker - 68% coverage)
 │   └── Test-SoftwareWatchlist.ps1 (diagnostic tool)
@@ -730,7 +693,7 @@ diary/
 
 See `entries/2026-01-11.md` for the canonical template showing:
 
-- Full weather and news integration from today skill
+- Full weather and news integration from skill output files
 - Proper section structure and hierarchy
 - Appropriate level of detail (high-level, not granular)
 - Balance of accomplishments and concerns

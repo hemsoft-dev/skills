@@ -26,8 +26,8 @@
   {
     "Software": "GitHub Copilot Chat",
     "OldVersion": "v0.38.2026020704",
-    "NewVersion": "v0.37.4",
-    "ReleaseDate": "Feb 10 '26",
+    "NewVersion": "v0.38.2026021105",
+    "ReleaseDate": "Feb 11 '26",
     "ChangelogUrl": "https://github.com/microsoft/vscode-copilot-chat/blob/main/CHANGELOG.md",
     "CheckMethod": "github_releases"
   },

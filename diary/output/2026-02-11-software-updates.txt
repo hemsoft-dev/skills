@@ -1,0 +1,8 @@
+.NET SDK: v10.0.2 -> v11.0.0-preview.1 (Released: Feb 10 '26)
+Claude Code: v2.1.37 -> v2.1.39 (Released: Feb 10 '26)
+Gemini CLI: v0.28.0-preview.5 -> v0.29.0-preview.0 (Released: Feb 10 '26)
+GitHub Copilot Chat: v0.38.2026020704 -> v0.38.2026021105 (Released: Feb 11 '26)
+GitHub Web: Feb 07 -> Feb 10 (Released: Feb 10 '26)
+Neo4j: 2026.01.0 -> 3.3.0-beta01 (Released: Sep 15 '17)
+Node.js: v25.6.0 -> v25.6.1 (Released: Feb 10 '26)
+VSCode: 1.109.0 -> 1.109.2 (Released: Feb 10 '26)

@@ -1,22 +1,12 @@
 ---
 name: repo-audit
 description: V1.2 - Audits repository for documentation/reality drift, stale artifacts, unused config, duplicate assets, workload conflicts, and cross-reference accuracy. Generates actionable report with Y/N recommendations.
+compatibility: No external dependencies. Knowledge-based skill for repository analysis.
 ---
 
 # Repo Audit 🔍
 
-**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
-
 > *"Trust, but verify."* — Ensure your repo reflects reality.
-
-## ALWAYS: Log This Interaction
-
-After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
-
-```markdown
-## {HH:MM} - {Action Taken}
-{One-line summary of what was done}
-```
 
 ## Core Philosophy
 
@@ -105,7 +95,7 @@ Analyze:
 
 Present findings in table format:
 
-```
+```text
 ## Repo Audit Report
 
 | # | Category | Finding | Risk | Recommendation | Action |
@@ -134,7 +124,7 @@ Present findings in table format:
 
 After presenting report, ask:
 
-```
+```text
 Enter numbers to SKIP (e.g., "3,5") or press Enter to apply all recommended:
 ```
 
@@ -153,17 +143,12 @@ For each approved item:
 
 ### 6. Summary
 
-```
+```text
 ## Audit Complete
 
 ✅ Applied: 4 changes
 ⏭️ Skipped: 1 item (#3 - user declined)
 📋 Total findings: 5
-
----
-
-💡 **Related Skill**: For code-level simplification (dead code, complexity, patterns), 
-   try the **Simplisticate** skill: "simplify this codebase"
 ```
 
 ## Example Findings
@@ -199,12 +184,6 @@ For each approved item:
 
 Enter numbers to SKIP (e.g., "3,5") or press Enter to apply all recommended:
 ```
-
-## Related Skills
-
-After completing a repo-audit, consider:
-
-- **Simplisticate** — For code-level complexity reduction (long methods, deep nesting, dead code patterns)
 
 ---
 

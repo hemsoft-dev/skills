@@ -68,11 +68,23 @@ param(
 
     [Parameter(Mandatory = $false)]
     [string[]]$Channels = @(
-        "relias-engineering",
+        "ai-chapter",
+        "dev-ex-private",
+        "prod-eng-devex-private",
+        "productivity-engineering-private",
         "productivity-engineering-public",
-        "systems-management",
-        "platform-deployment",
-        "dev-tribe"
+        "relias-cortex-external",
+        "dev-tribe",
+        "next-deployment",
+        "swatteam",
+        "systems-mangement",
+        "architecture",
+        "dev-env-help",
+        "platform",
+        "product-engineering",
+        "relias-engineering",
+        "software-quality",
+        "sonarcloud-public"
     ),
 
     [Parameter(Mandatory = $false)]
@@ -486,7 +498,7 @@ if ($activeDeployChannel -and $activeDeployChannel -notin $channelsToCheck) {
 }
 
 foreach ($channel in $channelsToCheck) {
-    $channelQuery = "in:#$channel after:$startDate"
+    $channelQuery = "in:#$channel after:$startDate -from:@email -from:@datadog -from:@pagerduty"
     $channelResults = Invoke-SlackSearch -Query $channelQuery -Count $MaxMessagesPerChannel
     
     if ($channelResults -and $channelResults.messages.total -gt 0) {
@@ -552,6 +564,87 @@ if ($briefingData.ActionItems.Count -gt 0 -and $OutputFormat -ne 'JSON') {
         }
     }
 }
+
+#endregion
+
+#region Output File Generation
+
+# Always generate markdown output file for diary integration
+$outputDir = Join-Path $PSScriptRoot ".." "output"
+if (-not (Test-Path $outputDir)) {
+    New-Item -ItemType Directory -Path $outputDir -Force | Out-Null
+}
+$outputFile = Join-Path $outputDir "$todayStr-slack-briefing.md"
+
+$mdLines = @()
+$mdLines += "### \ud83d\udcac Slack Briefing"
+$mdLines += ""
+$mdLines += "*Generated: $(Get-Date -Format 'yyyy-MM-dd HH:mm') | Date range: $startDate to $todayStr | User: @$Username*"
+$mdLines += ""
+
+# Mentions section
+if ($briefingData.Mentions.Count -gt 0) {
+    $mdLines += "#### \ud83d\udd14 Direct @Mentions ($($briefingData.Mentions.Count))"
+    $mdLines += ""
+    foreach ($m in $briefingData.Mentions) {
+        $mdLines += "- **[$($m.Timestamp)] #$($m.Channel)** - @$($m.From): $($m.Text)"
+    }
+    $mdLines += ""
+}
+
+# DMs section
+if ($briefingData.DirectMessages.Count -gt 0) {
+    $mdLines += "#### \ud83d\udcac Direct Messages ($($briefingData.DirectMessages.Count))"
+    $mdLines += ""
+    foreach ($dm in $briefingData.DirectMessages) {
+        $mdLines += "- **[$($dm.Timestamp)]** @$($dm.From): $($dm.Text)"
+    }
+    $mdLines += ""
+}
+
+# Announcements section
+if ($briefingData.Announcements.Count -gt 0) {
+    $mdLines += "#### \ud83d\udce2 Announcements ($($briefingData.Announcements.Count))"
+    $mdLines += ""
+    foreach ($ann in $briefingData.Announcements) {
+        $mdLines += "- **[$($ann.Timestamp)] #$($ann.Channel)** - @$($ann.From): $($ann.Text)"
+    }
+    $mdLines += ""
+}
+
+# Channel Activity section
+$activeChannels = $briefingData.ChannelActivity.GetEnumerator() | Where-Object { $_.Value.TotalMessages -gt 0 } | Sort-Object { $_.Value.TotalMessages } -Descending
+if ($activeChannels) {
+    $mdLines += "#### \ud83d\udcc1 Channel Activity"
+    $mdLines += ""
+    foreach ($ch in $activeChannels) {
+        $mdLines += "**#$($ch.Key)** ($($ch.Value.TotalMessages) messages)"
+        $mdLines += ""
+        foreach ($msg in $ch.Value.RecentMessages) {
+            $mdLines += "- [$($msg.Timestamp)] @$($msg.From): $($msg.Text)"
+        }
+        $mdLines += ""
+    }
+}
+
+# Action Items section
+if ($briefingData.ActionItems.Count -gt 0) {
+    $mdLines += "#### \u26a1 Potential Action Items ($($briefingData.ActionItems.Count))"
+    $mdLines += ""
+    foreach ($item in $briefingData.ActionItems) {
+        $link = if ($item.Link) { " ([link]($($item.Link)))" } else { "" }
+        $mdLines += "- **@$($item.From) in #$($item.Channel)**: $($item.Text)$link"
+    }
+    $mdLines += ""
+}
+
+# Summary footer
+$totalChannelMsgs = ($briefingData.ChannelActivity.Values | ForEach-Object { $_.TotalMessages } | Measure-Object -Sum).Sum
+$mdLines += "---"
+$mdLines += "*Mentions: $($briefingData.Mentions.Count) | DMs: $($briefingData.DirectMessages.Count) | Announcements: $($briefingData.Announcements.Count) | Channel Messages: $totalChannelMsgs (across $($briefingData.ChannelActivity.Count) channels) | Action Items: $($briefingData.ActionItems.Count)*"
+
+$mdLines -join "`n" | Set-Content -Path $outputFile -Encoding UTF8
+Write-Information "[32m`nOutput saved to: $outputFile`e[0m"
 
 #endregion
 

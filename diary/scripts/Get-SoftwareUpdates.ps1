@@ -336,8 +336,8 @@ if ($results.UpdatesFound.Count -gt 0) {
 
 if ($results.Errors.Count -gt 0) {
     Write-Information "`e[1;31m=== Errors ===`e[0m"
-    foreach ($error in $results.Errors) {
-        Write-Information "  `e[1m$($error.Software)`e[0m: $($error.Error)"
+    foreach ($err in $results.Errors) {
+        Write-Information "  `e[1m$($err.Software)`e[0m: $($err.Error)"
     }
     Write-Information ""
 }
@@ -349,6 +349,34 @@ if ($UpdateTracking -and $results.UpdatesFound.Count -gt 0) {
 }
 
 # Exit with status code
+# Save output to diary output folder
+$outputDir = Join-Path $PSScriptRoot '..' 'output'
+if (-not (Test-Path $outputDir)) {
+    New-Item -ItemType Directory -Path $outputDir -Force | Out-Null
+}
+$today = Get-Date -Format 'yyyy-MM-dd'
+$outputFile = Join-Path $outputDir "$today-software-updates.txt"
+
+$outputLines = @()
+if ($results.UpdatesFound.Count -gt 0) {
+    foreach ($update in $results.UpdatesFound) {
+        $line = "$($update.Software): $($update.OldVersion) -> $($update.NewVersion)"
+        if ($update.ReleaseDate) { $line += " (Released: $($update.ReleaseDate))" }
+        $outputLines += $line
+    }
+} else {
+    $outputLines += "No updates found"
+}
+if ($results.Errors.Count -gt 0) {
+    $outputLines += ""
+    $outputLines += "Errors: $($results.Errors.Count)"
+    foreach ($err in $results.Errors) {
+        $outputLines += "  $($err.Software): $($err.Error)"
+    }
+}
+($outputLines -join "`n") | Set-Content $outputFile -Encoding UTF8
+Write-Information "Output saved to: $outputFile" -InformationAction Continue
+
 if ($results.UpdatesFound.Count -eq 0 -and $Method -eq 'all') {
     Write-Information "`e[1;31m⚠ WARNING: Zero updates found for all software. This is unusual.`e[0m"
     exit 1

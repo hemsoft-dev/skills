@@ -24,6 +24,7 @@ Clarify responsibilities between contributing skills to eliminate duplication an
 - ✅ **weather** - `output/2026-02-10.md` (implemented)
 - ✅ **today** - Already has `output/` folder
 - ✅ **news** - `output/2026-02-11.md` (4 RSS-based scripts, no LLM required)
+- ✅ **slack** - `output/YYYY-MM-DD-slack-briefing.md` (18 channels, DMs, mentions, announcements)
 - 🔲 **Other contributors** - To be determined
 
 ---
@@ -37,18 +38,18 @@ Clarify responsibilities between contributing skills to eliminate duplication an
 | 1 | ✅ Establish output/YYYY-MM-DD.md pattern | weather | ✅ |
 | 2 | ✅ Verify today skill follows output pattern | today | ✅ |
 | 3 | ✅ Verify weather skill only handles weather data | weather | ✅ |
-| 4 | Remove any news gathering logic from diary skill | diary | 🔲 |
-| 5 | Verify diary skill properly consumes today skill output | diary | 🔲 |
-| 6 | Document Slack Activity data collection (18 channels, date-filtered) | diary | 🔲 |
-| 7 | Document Watchlist Updates integration | diary | 🔲 |
-| 8 | Document Daily Numbers (stocks + repo counts) | diary | 🔲 |
-| 9 | Document LLM Models (3 subsections: leaderboard, releases, apps) | diary | 🔲 |
-| 10 | Document GitHub Trending Repos integration | diary | 🔲 |
-| 11 | Document Software Watchlist (22+ items, version tracking) | diary | 🔲 |
-| 12 | Document Today's Productivity metrics | diary | 🔲 |
-| 13 | Document Todoist Integration (completed/upcoming/filtered) | diary | 🔲 |
-| 14 | Document Screenshots integration from screenshot skill | diary | 🔲 |
-| 15 | Verify Today's Highlight is user-provided (not auto-selected) | diary | 🔲 |
+| 4 | Remove any news gathering logic from diary skill | diary | ✅ |
+| 5 | Diary consumes weather + news output files directly | diary | ✅ |
+| 6 | Document Slack Activity data collection (18 channels, date-filtered) | diary | ✅ |
+| 7 | Document Watchlist Updates integration | diary | ✅ |
+| 8 | Document Daily Numbers (stocks + repo counts) | diary | ✅ |
+| 9 | Document LLM Models (3 subsections: leaderboard, releases, apps) | diary | ✅ |
+| 10 | Document GitHub Trending Repos integration | diary | ✅ |
+| 11 | Document Software Watchlist (22+ items, version tracking) | diary | ✅ |
+| 12 | Document Today's Productivity metrics | diary | ✅ |
+| 13 | Document Todoist Integration (completed/upcoming/filtered) | diary | ✅ |
+| 14 | Document Screenshots integration from screenshot skill | diary | ✅ |
+| 15 | Verify Today's Highlight is user-provided (not auto-selected) | diary | ✅ |
 | 16 | Test complete workflow: weather → today → diary with all sections | all | 🔲 |
 | 17 | Update SKILL.md files with finalized responsibilities | all | 🔲 |
 
@@ -81,9 +82,8 @@ Clarify responsibilities between contributing skills to eliminate duplication an
 - Watchlist Updates
 - Daily Numbers (stocks + repos)
 - news skill runs 4 scripts → outputs to news/output/YYYY-MM-DD.md
-- weather skill runs → outputs to weather/output/YYYY-MM-DD.md  
-- today skill aggregates weather + news + highlight → outputs to today/output/YYYY-MM-DD.md
-- diary skill consumes today/output/YYYY-MM-DD.md for final diary entry
+- weather skill runs → outputs to weather/output/YYYY-MM-DD.md
+- diary skill reads both output files directly (no intermediary)
 - No duplication of effort, clear separation of concerns
 - Today's Productivity
 - Todoist Integration
@@ -93,9 +93,10 @@ Clarify responsibilities between contributing skills to eliminate duplication an
 
 ### Integration Point
 
-- diary skill ALWAYS runs today skill first
-- diary skill consumes today skill output (weather + news)
-- No duplication of effort
+- diary skill reads `weather/output/YYYY-MM-DD.md` for weather data
+- diary skill reads `news/output/YYYY-MM-DD.md` for news data
+- If output files don't exist, diary prompts user to run the respective skill first
+- No duplication of effort — weather and news skills own data collection, diary only consumes
 
 ---
 

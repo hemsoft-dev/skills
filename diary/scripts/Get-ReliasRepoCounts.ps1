@@ -149,5 +149,15 @@ if ($null -ne $todayGitHub -and $null -ne $todayBitbucket) {
     }
 }
 
+# Write output to diary output folder
+$today = Get-Date -Format "yyyy-MM-dd"
+$outputDir = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Path) "..\output"
+if (-not (Test-Path $outputDir)) {
+    New-Item -ItemType Directory -Path $outputDir -Force | Out-Null
+}
+$outputFile = Join-Path $outputDir "$today-relias-repo-counts.txt"
+$output | Set-Content $outputFile -Encoding UTF8
+Write-Information "Output saved to: $outputFile" -InformationAction Continue
+
 # Output formatted string
 Write-Output $output

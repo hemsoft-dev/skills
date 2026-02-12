@@ -188,8 +188,8 @@ if ($RunActualChecks) {
     if ($checkResults.Errors.Count -gt 0) {
         Write-Information ""
         Write-Information "`e[1;31m=== Errors ===`e[0m"
-        foreach ($error in $checkResults.Errors) {
-            Write-Information "  `e[1m$($error.Software)`e[0m: $($error.Error)"
+        foreach ($err in $checkResults.Errors) {
+            Write-Information "  `e[1m$($err.Software)`e[0m: $($err.Error)"
         }
     }
 }
@@ -208,5 +208,31 @@ if ($stats.CheckedOverWeek -gt 10) {
 } else {
     Write-Information "`e[1;32m✓ Watchlist appears healthy.`e[0m Recent checks detected for multiple items."
 }
+
+# Save output to diary output folder
+$outputDir = Join-Path $PSScriptRoot '..' 'output'
+if (-not (Test-Path $outputDir)) {
+    New-Item -ItemType Directory -Path $outputDir -Force | Out-Null
+}
+$today = Get-Date -Format 'yyyy-MM-dd'
+$outputFile = Join-Path $outputDir "$today-software-watchlist-test.txt"
+
+$outputLines = @(
+    "Software Watchlist Diagnostic"
+    "Total monitored: $totalCount"
+    "Checked today: $($stats.CheckedToday)"
+    "Checked within 7 days: $($stats.CheckedWithinWeek)"
+    "Not checked in >7 days: $($stats.CheckedOverWeek)"
+    "Never checked: $($stats.NeverChecked)"
+)
+if ($stats.StaleItems.Count -gt 0) {
+    $outputLines += ""
+    $outputLines += "Stale items:"
+    foreach ($item in $stats.StaleItems | Sort-Object DaysSince -Descending) {
+        $outputLines += "  $($item.Name): $($item.Version) ($($item.DaysSince) days ago)"
+    }
+}
+($outputLines -join "`n") | Set-Content $outputFile -Encoding UTF8
+Write-Information "Output saved to: $outputFile" -InformationAction Continue
 
 Write-Information ""

@@ -84,6 +84,17 @@ try {
         $nextUrl = $response.next
     }
 
+    # Save to output file
+    $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+    $outputDir = Join-Path $scriptDir "..\output"
+    if (-not (Test-Path $outputDir)) {
+        New-Item -ItemType Directory -Path $outputDir -Force | Out-Null
+    }
+    $today = Get-Date -Format "yyyy-MM-dd"
+    $outputFile = Join-Path $outputDir "$today-bitbucket-repocount.txt"
+    $repoCount | Set-Content $outputFile -Encoding UTF8
+    Write-Information "Output saved to: $outputFile" -InformationAction Continue
+
     Write-Output $repoCount
 }
 catch {
