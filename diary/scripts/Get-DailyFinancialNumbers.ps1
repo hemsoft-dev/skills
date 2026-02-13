@@ -2,50 +2,25 @@
 
 <#
 .SYNOPSIS
-    Gets Dow Jones and S&P 500 market data from Alpha Vantage API.
+    Gets Dow Jones and S&P 500 market data from Yahoo Finance.
 
 .DESCRIPTION
     Retrieves the latest closing prices, daily change, and percent change for
-    the Dow Jones Industrial Average and S&P 500 using their ETF proxies
-    (DIA and SPY) via the Alpha Vantage GLOBAL_QUOTE endpoint. Alpha Vantage
-    only supports equities/ETFs, not raw index symbols.
+    the Dow Jones Industrial Average (^DJI) and S&P 500 (^GSPC) using the
+    Yahoo Finance chart API. Returns actual index values, not ETF proxies.
     Outputs a formatted text file to the diary output folder for caching.
-
-    Requires the ALPHA_VANTAGE_API_KEY environment variable to be set.
-
-.PARAMETER ApiKey
-    Alpha Vantage API key. Defaults to $env:ALPHA_VANTAGE_API_KEY.
 
 .EXAMPLE
     Get-DailyFinancialNumbers
 
-.EXAMPLE
-    Get-DailyFinancialNumbers -ApiKey "your-api-key"
-
 .NOTES
-    Alpha Vantage free tier allows 25 requests/day — this script uses 2.
+    Uses Yahoo Finance v8 chart API which supports index symbols directly.
+    No API key required.
     Weekends/holidays will return the most recent trading day's data;
     the script notes when data isn't from today.
 #>
 [CmdletBinding()]
-param(
-    [Parameter(Mandatory = $false)]
-    [string]$ApiKey
-)
-
-if (-not $ApiKey) {
-    $ApiKey = $env:ALPHA_VANTAGE_API_KEY
-}
-
-# Fall back to Machine-level environment variable if not in process scope
-if (-not $ApiKey) {
-    $ApiKey = [System.Environment]::GetEnvironmentVariable("ALPHA_VANTAGE_API_KEY", "Machine")
-}
-
-if (-not $ApiKey) {
-    Write-Error "ALPHA_VANTAGE_API_KEY environment variable is not set. Get a free key at https://www.alphavantage.co/support/#api-key"
-    exit 1
-}
+param()
 
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $outputDir = Join-Path $scriptDir "..\output"
@@ -56,78 +31,78 @@ if (-not (Test-Path $outputDir)) {
 $today = Get-Date -Format "yyyy-MM-dd"
 $outputFile = Join-Path $outputDir "$today-daily-financial-numbers.txt"
 
-# Alpha Vantage GLOBAL_QUOTE only supports equities/ETFs, not index symbols.
-# Use ETF proxies: DIA tracks Dow Jones, SPY tracks S&P 500.
+# Use actual index symbols via Yahoo Finance chart API
 $symbols = @(
-    @{ Ticker = "DIA"; Name = "Dow Jones (DIA)" }
-    @{ Ticker = "SPY"; Name = "S&P 500 (SPY)" }
+    @{ Ticker = "%5EDJI"; Name = "Dow Jones" }
+    @{ Ticker = "%5EGSPC"; Name = "S&P 500" }
 )
+
+$headers = @{
+    "User-Agent" = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+}
 
 $results = @()
 $tradingDay = $null
-$isFirstRequest = $true
 
 foreach ($sym in $symbols) {
-    # Alpha Vantage free tier: max 1 request per second — wait between calls
-    if (-not $isFirstRequest) {
-        Start-Sleep -Seconds 2
-    }
-    $isFirstRequest = $false
-
-    $url = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=$($sym.Ticker)&apikey=$ApiKey"
+    $url = "https://query1.finance.yahoo.com/v8/finance/chart/$($sym.Ticker)?interval=1d&range=5d"
 
     try {
-        $response = Invoke-RestMethod -Uri $url -ErrorAction Stop
-        $quote = $response.'Global Quote'
+        $response = Invoke-RestMethod -Uri $url -Headers $headers -ErrorAction Stop
+        $chart = $response.chart.result[0]
+        $meta = $chart.meta
+        $quotes = $chart.indicators.quote[0]
 
-        # If rate-limited, wait and retry once
-        if ((-not $quote -or -not $quote.'05. price') -and ($response.Information -or $response.Note)) {
-            Write-Information "Rate limited on $($sym.Ticker), retrying in 3 seconds..." -InformationAction Continue
-            Start-Sleep -Seconds 3
-            $response = Invoke-RestMethod -Uri $url -ErrorAction Stop
-            $quote = $response.'Global Quote'
-        }
-
-        if (-not $quote -or -not $quote.'05. price') {
-            # Alpha Vantage may return a note about rate limiting
-            if ($response.Note) {
-                Write-Warning "Alpha Vantage rate limit hit: $($response.Note)"
-            }
-            elseif ($response.Information) {
-                Write-Warning "Alpha Vantage: $($response.Information)"
-            }
-            else {
-                Write-Warning "No data returned for $($sym.Ticker)"
-            }
+        if (-not $meta -or -not $meta.regularMarketPrice) {
+            Write-Warning "No data returned for $($sym.Name)"
             $results += "$($sym.Name): unavailable"
             continue
         }
 
-        $price = [decimal]$quote.'05. price'
-        $change = [decimal]$quote.'09. change'
-        $changePct = $quote.'10. change percent' -replace '%', ''
-        $changePct = [decimal]$changePct
-        $latestDay = $quote.'07. latest trading day'
+        $currentPrice = [decimal]$meta.regularMarketPrice
 
-        if (-not $tradingDay) {
-            $tradingDay = $latestDay
+        # Get previous trading day's close for change calculation
+        $closes = $quotes.close
+        $timestamps = $chart.timestamp
+
+        # Find most recent complete trading day close (second-to-last entry)
+        $prevClose = $null
+        if ($closes.Count -ge 2) {
+            $prevClose = [decimal]$closes[$closes.Count - 2]
+        }
+
+        # Determine trading day from the last timestamp
+        if ($timestamps -and $timestamps.Count -gt 0) {
+            $lastTimestamp = $timestamps[$timestamps.Count - 1]
+            $tradingDate = [DateTimeOffset]::FromUnixTimeSeconds($lastTimestamp).DateTime.ToString("yyyy-MM-dd")
+            if (-not $tradingDay) {
+                $tradingDay = $tradingDate
+            }
         }
 
         # Format price with commas and 2 decimal places
-        $priceFormatted = $price.ToString("N2")
+        $priceFormatted = $currentPrice.ToString("N2")
 
-        # Format change with sign
-        $changeSign = if ($change -ge 0) { "+" } else { "" }
-        $changeFormatted = "$changeSign$($change.ToString("N2"))"
+        if ($prevClose -and $prevClose -gt 0) {
+            $change = $currentPrice - $prevClose
+            $changePct = ($change / $prevClose) * 100
 
-        # Format percent with sign
-        $pctSign = if ($changePct -ge 0) { "+" } else { "" }
-        $pctFormatted = "$pctSign$($changePct.ToString("N2"))%"
+            # Format change with sign
+            $changeSign = if ($change -ge 0) { "+" } else { "" }
+            $changeFormatted = "$changeSign$($change.ToString("N2"))"
 
-        $results += "$($sym.Name): $priceFormatted ($changeFormatted, $pctFormatted)"
+            # Format percent with sign
+            $pctSign = if ($changePct -ge 0) { "+" } else { "" }
+            $pctFormatted = "$pctSign$([math]::Round($changePct, 2).ToString("N2"))%"
+
+            $results += "$($sym.Name): $priceFormatted ($changeFormatted, $pctFormatted)"
+        }
+        else {
+            $results += "$($sym.Name): $priceFormatted"
+        }
     }
     catch {
-        Write-Error "Failed to fetch $($sym.Ticker): $_"
+        Write-Error "Failed to fetch $($sym.Name): $_"
         $results += "$($sym.Name): error"
     }
 }
