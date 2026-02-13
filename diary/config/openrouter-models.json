@@ -1,5 +1,4 @@
 {
-  "last_updated": "2026-02-11",
   "total_models": 342,
   "model_ids": [
     "ai21/jamba-large-1.7",
@@ -131,6 +130,7 @@
     "minimax/minimax-m2",
     "minimax/minimax-m2-her",
     "minimax/minimax-m2.1",
+    "minimax/minimax-m2.5",
     "mistralai/codestral-2508",
     "mistralai/devstral-2512",
     "mistralai/devstral-medium",
@@ -157,7 +157,6 @@
     "mistralai/mistral-small-creative",
     "mistralai/mixtral-8x22b-instruct",
     "mistralai/mixtral-8x7b-instruct",
-    "mistralai/pixtral-12b",
     "mistralai/pixtral-large-2411",
     "mistralai/voxtral-small-24b-2507",
     "moonshotai/kimi-k2",
@@ -344,5 +343,6 @@
     "z-ai/glm-4.7",
     "z-ai/glm-4.7-flash",
     "z-ai/glm-5"
-  ]
+  ],
+  "last_updated": "2026-02-12"
 }

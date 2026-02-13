@@ -42,8 +42,18 @@ $headers = @{
 }
 
 try {
-    # Get all active tasks
-    $tasks = Invoke-RestMethod -Uri "https://api.todoist.com/rest/v2/tasks" -Headers $headers
+    # Get all active tasks with cursor-based pagination
+    $tasks = @()
+    $cursor = $null
+    $baseUri = "https://api.todoist.com/api/v1/tasks"
+    do {
+        $uri = "${baseUri}?limit=200"
+        if ($cursor) { $uri += "&cursor=$([uri]::EscapeDataString($cursor))" }
+
+        $response = Invoke-RestMethod -Uri $uri -Headers $headers -Method Get
+        if ($response.results) { $tasks += @($response.results) }
+        $cursor = $response.next_cursor
+    } while ($cursor)
     
     # Date pattern to search for: "2026-01-06 - Tuesday - "
     $dateStr = $Date.ToString('yyyy-MM-dd')
@@ -76,8 +86,7 @@ try {
         'List' {
             Write-Information "[36m`n=== UPDATED TASKS ($($Date.ToString('yyyy-MM-dd'))) ===`e[0m"
             foreach ($task in $updatedTasks) {
-                Write-Information "[32m$("`n• " -NoNewline)`e[0m"
-                Write-Information "[97m$($task.Content)`e[0m"
+                Write-Information "`e[32m`n• `e[97m$($task.Content)`e[0m"
                 foreach ($log in $task.LogEntries) {
                     Write-Information "[90m  $log`e[0m"
                 }

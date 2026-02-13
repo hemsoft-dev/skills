@@ -163,13 +163,27 @@ foreach ($item in $software) {
             'rss' {
                 try {
                     Write-Verbose "  Fetching RSS feed from $($item.changelog_url)"
-                    $rssText = curl -s $item.changelog_url
+                    $rssText = curl -s $item.changelog_url 2>&1
                     
                     if ($rssText) {
-                        # Parse as XML
-                        [xml]$rss = $rssText
+                        # If curl returned an array, join it
+                        if ($rssText -is [array]) {
+                            $rssText = $rssText -join "`n"
+                        }
                         
-                        if ($rss.rss.channel.item) {
+                        # Try to parse as XML - some feeds may return HTML or malformed XML
+                        try {
+                            [xml]$rss = $rssText
+                        } catch {
+                            Write-Information "  `e[1;33m⚠ RSS feed is not valid XML (may be HTML or Atom): $($_.Exception.Message)`e[0m"
+                            $results.Errors += [PSCustomObject]@{
+                                Software = $item.name
+                                Error = "RSS XML parse failed: $($_.Exception.Message)"
+                            }
+                            continue
+                        }
+                        
+                        if ($rss.rss -and $rss.rss.channel -and $rss.rss.channel.item) {
                             $latestItem = $rss.rss.channel.item[0]
                             $title = $latestItem.title
                             

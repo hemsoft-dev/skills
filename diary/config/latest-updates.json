@@ -1,66 +1,8 @@
-[
-  {
-    "Software": ".NET SDK",
-    "OldVersion": "v10.0.2",
-    "NewVersion": "v11.0.0-preview.1",
-    "ReleaseDate": "Feb 10 '26",
-    "ChangelogUrl": "https://github.com/dotnet/core/releases",
-    "CheckMethod": "github_releases"
-  },
-  {
-    "Software": "Claude Code",
-    "OldVersion": "v2.1.37",
-    "NewVersion": "v2.1.39",
-    "ReleaseDate": "Feb 10 '26",
-    "ChangelogUrl": "https://github.com/anthropics/claude-code/releases",
-    "CheckMethod": "github_releases"
-  },
-  {
-    "Software": "Gemini CLI",
-    "OldVersion": "v0.28.0-preview.5",
-    "NewVersion": "v0.29.0-preview.0",
-    "ReleaseDate": "Feb 10 '26",
-    "ChangelogUrl": "https://github.com/google-gemini/gemini-cli/releases",
-    "CheckMethod": "github_releases_prerelease"
-  },
-  {
-    "Software": "GitHub Copilot Chat",
-    "OldVersion": "v0.38.2026020704",
-    "NewVersion": "v0.38.2026021105",
-    "ReleaseDate": "Feb 11 '26",
-    "ChangelogUrl": "https://github.com/microsoft/vscode-copilot-chat/blob/main/CHANGELOG.md",
-    "CheckMethod": "github_releases"
-  },
-  {
-    "Software": "GitHub Web",
-    "OldVersion": "Feb 07",
-    "NewVersion": "Feb 10",
-    "ReleaseDate": "Feb 10 '26",
-    "ChangelogUrl": "https://github.blog/changelog/feed/",
-    "CheckMethod": "rss"
-  },
-  {
-    "Software": "Neo4j",
-    "OldVersion": "2026.01.0",
-    "NewVersion": "3.3.0-beta01",
-    "ReleaseDate": "Sep 15 '17",
-    "ChangelogUrl": "https://github.com/neo4j/neo4j/releases",
-    "CheckMethod": "github_releases"
-  },
-  {
-    "Software": "Node.js",
-    "OldVersion": "v25.6.0",
-    "NewVersion": "v25.6.1",
-    "ReleaseDate": "Feb 10 '26",
-    "ChangelogUrl": "https://github.com/nodejs/node/releases",
-    "CheckMethod": "github_releases"
-  },
-  {
-    "Software": "VSCode",
-    "OldVersion": "1.109.0",
-    "NewVersion": "1.109.2",
-    "ReleaseDate": "Feb 10 '26",
-    "ChangelogUrl": "https://github.com/microsoft/vscode/releases",
-    "CheckMethod": "github_releases"
-  }
-]
+{
+  "Software": "GitHub Web",
+  "OldVersion": "Feb 07",
+  "NewVersion": "Feb 11",
+  "ReleaseDate": "Feb 11 '26",
+  "ChangelogUrl": "https://github.blog/changelog/feed/",
+  "CheckMethod": "rss"
+}

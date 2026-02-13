@@ -40,8 +40,19 @@ $headers = @{
 }
 
 try {
-    $uri = "https://api.todoist.com/rest/v2/tasks?filter=$([uri]::EscapeDataString($Filter))"
-    $tasks = Invoke-RestMethod -Uri $uri -Headers $headers
+    $baseUri = "https://api.todoist.com/api/v1/tasks/filter"
+
+    # Fetch tasks with cursor-based pagination
+    $tasks = @()
+    $cursor = $null
+    do {
+        $uri = "${baseUri}?query=$([uri]::EscapeDataString($Filter))&limit=200"
+        if ($cursor) { $uri += "&cursor=$([uri]::EscapeDataString($cursor))" }
+
+        $response = Invoke-RestMethod -Uri $uri -Headers $headers -Method Get
+        if ($response.results) { $tasks += @($response.results) }
+        $cursor = $response.next_cursor
+    } while ($cursor)
 
     if (-not $tasks -or $tasks.Count -eq 0) {
         Write-Information "[33mNo tasks found for filter: $Filter`e[0m"

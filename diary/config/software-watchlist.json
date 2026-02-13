@@ -123,9 +123,9 @@
     },
     {
       "name": "Neo4j",
-      "changelog_url": "https://github.com/neo4j/neo4j/releases",
-      "check_method": "github_releases",
-      "notes": "Neo4j database releases - default branch is release/5.26.0, feature branches by month (e.g., 2025-12). ⚠️ Use WebSearch to verify - gh release list returns old beta releases",
+      "changelog_url": "https://neo4j.com/release-notes/",
+      "check_method": "web",
+      "notes": "Neo4j database releases — gh release list returns stale beta releases from 2017. Use web check instead.",
       "last_displayed_date": "2026-01-27",
       "last_displayed_version": "2026.01.0"
     },

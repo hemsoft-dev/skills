@@ -40,21 +40,23 @@ $headers = @{
 }
 
 try {
-    # Use Sync API to get completed tasks
-    $body = @{
-        since = $Date.ToString('yyyy-MM-ddT00:00:00')
-        limit = 200
-    } | ConvertTo-Json
+    $since = $Date.ToString('yyyy-MM-ddT00:00:00Z')
+    $until = $Date.AddDays(1).ToString('yyyy-MM-ddT00:00:00Z')
+    $baseUri = "https://api.todoist.com/api/v1/tasks/completed/by_completion_date"
 
-    $response = Invoke-RestMethod `
-        -Uri "https://api.todoist.com/sync/v9/completed/get_all" `
-        -Headers $headers `
-        -Method Post `
-        -Body $body `
-        -ContentType "application/json"
+    # Fetch all completed tasks with cursor-based pagination
+    $completedItems = @()
+    $cursor = $null
+    do {
+        $uri = "${baseUri}?since=$([uri]::EscapeDataString($since))&until=$([uri]::EscapeDataString($until))&limit=200"
+        if ($cursor) { $uri += "&cursor=$([uri]::EscapeDataString($cursor))" }
 
-    # Filter to only tasks completed on the specified date
-    $completed = $response.items | Where-Object {
+        $response = Invoke-RestMethod -Uri $uri -Headers $headers -Method Get
+        if ($response.items) { $completedItems += @($response.items) }
+        $cursor = $response.next_cursor
+    } while ($cursor)
+    # The API already filters by completion date range, but double-check
+    $completed = $completedItems | Where-Object {
         if ($_.completed_at) {
             $completedDate = [DateTime]::Parse($_.completed_at)
             $completedDate.Date -eq $Date.Date
