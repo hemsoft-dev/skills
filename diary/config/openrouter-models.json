@@ -1,5 +1,6 @@
 {
-  "total_models": 342,
+  "last_updated": "2026-02-14",
+  "total_models": 340,
   "model_ids": [
     "ai21/jamba-large-1.7",
     "aion-labs/aion-1.0",
@@ -276,6 +277,7 @@
     "qwen/qwen3-30b-a3b-instruct-2507",
     "qwen/qwen3-30b-a3b-thinking-2507",
     "qwen/qwen3-32b",
+    "qwen/qwen3-4b",
     "qwen/qwen3-4b:free",
     "qwen/qwen3-8b",
     "qwen/qwen3-coder",
@@ -315,11 +317,8 @@
     "thedrummer/skyfall-36b-v2",
     "thedrummer/unslopnemo-12b",
     "tngtech/deepseek-r1t-chimera",
-    "tngtech/deepseek-r1t-chimera:free",
     "tngtech/deepseek-r1t2-chimera",
-    "tngtech/deepseek-r1t2-chimera:free",
     "tngtech/tng-r1t-chimera",
-    "tngtech/tng-r1t-chimera:free",
     "undi95/remm-slerp-l2-13b",
     "upstage/solar-pro-3:free",
     "writer/palmyra-x5",
@@ -343,6 +342,5 @@
     "z-ai/glm-4.7",
     "z-ai/glm-4.7-flash",
     "z-ai/glm-5"
-  ],
-  "last_updated": "2026-02-12"
+  ]
 }

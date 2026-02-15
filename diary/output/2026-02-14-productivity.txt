@@ -1,0 +1,10 @@
+### 💻 Today's Productivity
+
+| Metric | Count |
+|--------|-------|
+| Lines of Code | 0 |
+| Commits | 0 |
+| Pull Requests | 0 |
+| Code Reviews | 0 |
+| Issues Closed | 0 |
+

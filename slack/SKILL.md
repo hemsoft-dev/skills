@@ -1,6 +1,6 @@
 ---
 name: slack
-description: V2.6 - Slack Web API for messaging, channels, search, and files. Primary entry point with links to specialized sub-skills for search, files, and advanced features. CRITICAL: All PowerShell scripts require 6>&1 stream redirection.
+description: V2.7 - Slack Web API for messaging, channels, search, and files. Primary entry point with links to specialized sub-skills for search, files, and advanced features. CRITICAL: All PowerShell scripts require 6>&1 stream redirection.
 compatibility: Requires SLACK_TOKEN and SLACK_USER_TOKEN environment variables, PowerShell, network access
 ---
 
@@ -348,6 +348,69 @@ $prs = @(
 ---
 
 ## Troubleshooting
+
+## Slack Skill Bot App Manifest (Reference)
+
+Use this as the canonical manifest snapshot for the current Slack Skill Bot configuration.
+
+```yaml
+display_information:
+    name: Slack Skill Bot
+    description: Slack Skill Bot
+    background_color: "#2e313b"
+features:
+    app_home:
+        home_tab_enabled: true
+        messages_tab_enabled: false
+        messages_tab_read_only_enabled: false
+    bot_user:
+        display_name: Slack Skill Bot
+        always_online: true
+oauth_config:
+    scopes:
+        user:
+            - channels:read
+            - search:read
+            - users.profile:read
+            - users:read
+            - users:read.email
+            - files:read
+        bot:
+            - channels:history
+            - channels:join
+            - channels:read
+            - chat:write
+            - chat:write.customize
+            - chat:write.public
+            - files:read
+            - files:write
+            - reactions:read
+            - reactions:write
+            - users:read
+            - im:write
+            - im:history
+            - im:read
+            - assistant:write
+            - app_mentions:read
+            - users:read.email
+            - users.profile:read
+            - team:read
+            - pins:read
+            - pins:write
+            - bookmarks:read
+            - bookmarks:write
+            - reminders:read
+            - reminders:write
+            - usergroups:read
+            - emoji:read
+            - dnd:read
+settings:
+    interactivity:
+        is_enabled: true
+    org_deploy_enabled: false
+    socket_mode_enabled: true
+    token_rotation_enabled: false
+```
 
 **🚨 CRITICAL: Backtick Escape Issue in PowerShell**
 
