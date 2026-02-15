@@ -118,11 +118,30 @@ if ($ghAuth -and $ghAuth -notmatch "not logged") {
 }
 
 # Query local git repositories
-$LocalRepoPaths = @(
+$LocalRepoPaths = [System.Collections.Generic.List[string]]::new()
+
+@(
     "D:\github\temp\hemsoft",
     "D:\github\temp\relias",
     "D:\github"
-)
+) | ForEach-Object {
+    if (-not [string]::IsNullOrWhiteSpace($_) -and -not $LocalRepoPaths.Contains($_)) {
+        $LocalRepoPaths.Add($_)
+    }
+}
+
+# Include the current working repository root when available
+try {
+    $currentRepoRoot = git rev-parse --show-toplevel 2>$null
+    if ($LASTEXITCODE -eq 0 -and -not [string]::IsNullOrWhiteSpace($currentRepoRoot)) {
+        $currentRepoRoot = $currentRepoRoot.Trim()
+        if (-not $LocalRepoPaths.Contains($currentRepoRoot)) {
+            $LocalRepoPaths.Add($currentRepoRoot)
+        }
+    }
+} catch {
+    Write-Verbose "Not currently in a git repository."
+}
 
 foreach ($basePath in $LocalRepoPaths) {
     if (-not (Test-Path $basePath)) { continue }
