@@ -11,7 +11,7 @@ Generate images from text descriptions using OpenRouter's image generation model
 
 ## Quick Start - Use Dedicated Scripts
 
-Each model has its own dedicated script in `~/.claude/skills/generate-image/scripts/`:
+Each model has its own dedicated script in `$env:USERPROFILE\.agents\skills\generate-image\scripts\`:
 
 | Model | Script | Cost | Best For |
 |-------|--------|------|----------|
@@ -23,16 +23,16 @@ Each model has its own dedicated script in `~/.claude/skills/generate-image/scri
 
 ```powershell
 # Seedream 4.5 (fast, cheap)
-& ~/.claude/skills/generate-image/scripts/generate-seedream.ps1 -Prompt "Your prompt" -OutputPath "D:\image.png"
+& $env:USERPROFILE\.agents\skills\generate-image\scripts\generate-seedream.ps1 -Prompt "Your prompt" -OutputPath "D:\image.png"
 
 # Nano Banana (Google Gemini 2.5 Flash)
-& ~/.claude/skills/generate-image/scripts/generate-nanobanana.ps1 -Prompt "Your prompt" -OutputPath "D:\image.png"
+& $env:USERPROFILE\.agents\skills\generate-image\scripts\generate-nanobanana.ps1 -Prompt "Your prompt" -OutputPath "D:\image.png"
 
 # Nano Banana Pro (Google Gemini 3 Pro - highest quality)
-& ~/.claude/skills/generate-image/scripts/generate-nananapro.ps1 -Prompt "Your prompt" -OutputPath "D:\image.png"
+& $env:USERPROFILE\.agents\skills\generate-image\scripts\generate-nananapro.ps1 -Prompt "Your prompt" -OutputPath "D:\image.png"
 
 # With Directory Opus preview (add -Preview to any script)
-& ~/.claude/skills/generate-image/scripts/generate-seedream.ps1 -Prompt "Your prompt" -OutputPath "D:\image.png" -Preview
+& $env:USERPROFILE\.agents\skills\generate-image\scripts\generate-seedream.ps1 -Prompt "Your prompt" -OutputPath "D:\image.png" -Preview
 ```
 
 ### Parameters (All Scripts)
@@ -168,7 +168,7 @@ Remaining: $28.36
 **Manual Balance Check:**
 
 ```powershell
-& ~/.claude/skills/generate-image/scripts/Get-OpenRouterBalance.ps1
+& $env:USERPROFILE\.agents\skills\generate-image\scripts\Get-OpenRouterBalance.ps1
 ```
 
 This helps track spending and avoid unexpected charges. The balance check uses OpenRouter's `/api/v1/credits` endpoint.

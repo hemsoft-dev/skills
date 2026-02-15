@@ -95,7 +95,7 @@ if ($msg.images -and $msg.images.Count -gt 0) {
     if ($imgUrl -match '^data:image/[^;]+;base64,(.+)$') {
         [IO.File]::WriteAllBytes($OutputPath, [Convert]::FromBase64String($matches[1]))
         $size = [math]::Round((Get-Item $OutputPath).Length / 1024)
-        Write-Information "[32m✓ Saved: $OutputPath (${size}KB)`e[0m"
+        Write-Information "[32m✓ Saved: $OutputPath ($($size)KB)`e[0m"
         if ($Preview) { Open-ImagePreview -ImagePath $OutputPath }
         
         # Display credit balance
@@ -111,7 +111,7 @@ if ($msg.images -and $msg.images.Count -gt 0) {
 if ($msg.content -and $msg.content -match 'data:image/[^;]+;base64,([A-Za-z0-9+/=]+)') {
     [IO.File]::WriteAllBytes($OutputPath, [Convert]::FromBase64String($matches[1]))
     $size = [math]::Round((Get-Item $OutputPath).Length / 1024)
-    Write-Information "[32m✓ Saved: $OutputPath (${size}KB)`e[0m"
+    Write-Information "[32m✓ Saved: $OutputPath ($($size)KB)`e[0m"
     if ($Preview) { Open-ImagePreview -ImagePath $OutputPath }
     
     # Display credit balance
