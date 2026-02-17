@@ -134,3 +134,6 @@ Result: Patched script to perform admin-only stop/reset actions and instruct One
 
 2026-02-17 - 13:16 - Cleanup transcript summary for DevEx Refinement entry.
 Result: Refactored diary/entries/2026-02-17-DevEx-Refinement.md into a clear meeting summary with key themes and follow-up actions, then validated with markdownlint (0 errors).
+
+2026-02-17 - 17:08 - Convert 2026 USAA Classic Checking statement to CSV and add JIRA REST API scripts
+Result: Extracted 19 transactions from 20260214_BANK_USAA CLASSIC CHECKING_0456.pdf to CSV; added extract_single.py for single-file extraction; upgraded jira skill to V2.0 with Get-JiraTicket.ps1, Search-JiraTickets.ps1, and Get-JiraTicketComments.ps1 scripts.
