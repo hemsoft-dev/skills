@@ -1,6 +1,6 @@
 {
-  "last_updated": "2026-02-14",
-  "total_models": 340,
+  "total_models": 343,
+  "last_updated": "2026-02-17",
   "model_ids": [
     "ai21/jamba-large-1.7",
     "aion-labs/aion-1.0",
@@ -34,6 +34,7 @@
     "anthropic/claude-opus-4.6",
     "anthropic/claude-sonnet-4",
     "anthropic/claude-sonnet-4.5",
+    "anthropic/claude-sonnet-4.6",
     "arcee-ai/coder-large",
     "arcee-ai/maestro-reasoning",
     "arcee-ai/spotlight",
@@ -299,6 +300,8 @@
     "qwen/qwen3-vl-32b-instruct",
     "qwen/qwen3-vl-8b-instruct",
     "qwen/qwen3-vl-8b-thinking",
+    "qwen/qwen3.5-397b-a17b",
+    "qwen/qwen3.5-plus-02-15",
     "qwen/qwq-32b",
     "raifle/sorcererlm-8x22b",
     "relace/relace-apply-3",

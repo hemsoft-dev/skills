@@ -6,8 +6,8 @@
       "changelog_url": "https://github.com/dotnet/core/releases",
       "check_method": "github_releases",
       "notes": "Use GitHub releases API",
-      "last_displayed_date": "2026-01-18",
-      "last_displayed_version": "v10.0.2"
+      "last_displayed_date": "2026-02-17",
+      "last_displayed_version": "v11.0.0-preview.1"
     },
     {
       "name": "7 Days to Die",
@@ -30,8 +30,8 @@
       "changelog_url": "https://github.com/anthropics/claude-code/releases",
       "check_method": "github_releases",
       "notes": "Use GitHub releases API - repo: anthropics/claude-code",
-      "last_displayed_date": "2026-02-08",
-      "last_displayed_version": "v2.1.37"
+      "last_displayed_date": "2026-02-18",
+      "last_displayed_version": "v2.1.47"
     },
     {
       "name": "Copilot CLI",
@@ -70,40 +70,40 @@
       "changelog_url": "https://github.com/google-gemini/gemini-cli/releases",
       "check_method": "github_releases_prerelease",
       "notes": "Use GitHub releases API - repo: google-gemini/gemini-cli (filter for preview releases, exclude nightly)",
-      "last_displayed_date": "2026-02-08",
-      "last_displayed_version": "v0.28.0-preview.5"
+      "last_displayed_date": "2026-02-18",
+      "last_displayed_version": "v0.30.0-preview.1"
     },
     {
       "name": "GitHub CLI",
       "changelog_url": "https://github.com/cli/cli/releases",
       "check_method": "github_releases",
       "notes": "Use GitHub releases API",
-      "last_displayed_date": "2026-01-21",
-      "last_displayed_version": "v2.86.0"
+      "last_displayed_date": "2026-02-18",
+      "last_displayed_version": "v2.87.0"
     },
     {
       "name": "GitHub Copilot Chat",
       "changelog_url": "https://github.com/microsoft/vscode-copilot-chat/blob/main/CHANGELOG.md",
       "check_method": "github_releases",
       "notes": "GitHub Copilot extension for VS Code - use gh release list for most reliable version check",
-      "last_displayed_date": "2026-02-08",
-      "last_displayed_version": "v0.38.2026020704"
+      "last_displayed_date": "2026-02-18",
+      "last_displayed_version": "v0.38.2026021802"
     },
     {
       "name": "GitHub Web",
       "changelog_url": "https://github.blog/changelog/feed/",
       "check_method": "rss",
       "notes": "Parse RSS feed for latest changelog entry",
-      "last_displayed_date": "2026-02-08",
-      "last_displayed_version": "Feb 07"
+      "last_displayed_date": "2026-02-18",
+      "last_displayed_version": "Feb 18"
     },
     {
       "name": "Goose CLI",
       "changelog_url": "https://github.com/block/goose/releases",
       "check_method": "github_releases",
       "notes": "Goose AI agent CLI releases",
-      "last_displayed_date": "2026-02-08",
-      "last_displayed_version": "v1.23.2"
+      "last_displayed_date": "2026-02-18",
+      "last_displayed_version": "v1.25.0"
     },
     {
       "name": "M365 Copilot",
@@ -134,8 +134,8 @@
       "changelog_url": "https://github.com/nodejs/node/releases",
       "check_method": "github_releases",
       "notes": "Use GitHub releases API",
-      "last_displayed_date": "2026-02-08",
-      "last_displayed_version": "v25.6.0"
+      "last_displayed_date": "2026-02-17",
+      "last_displayed_version": "v25.6.1"
     },
     {
       "name": "PowerShell",
@@ -150,16 +150,16 @@
       "changelog_url": "https://slack.com/release-notes/windows/rss",
       "check_method": "rss",
       "notes": "Parse RSS feed for latest Windows desktop release (format: 'Slack 4.47.69 (12/8/25)')",
-      "last_displayed_date": "2026-01-18",
-      "last_displayed_version": "v4.47.69"
+      "last_displayed_date": "2026-02-18",
+      "last_displayed_version": "v4.48.94"
     },
     {
       "name": "VSCode",
       "changelog_url": "https://github.com/microsoft/vscode/releases",
       "check_method": "github_releases",
       "notes": "Use GitHub releases API - repo: microsoft/vscode",
-      "last_displayed_date": "2026-02-08",
-      "last_displayed_version": "1.109.0"
+      "last_displayed_date": "2026-02-17",
+      "last_displayed_version": "1.109.2"
     },
     {
       "name": "VSCode Insiders",
