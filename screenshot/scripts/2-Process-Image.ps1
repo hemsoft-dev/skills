@@ -29,7 +29,7 @@ if (-not (Test-Path $ImagePath)) {
 }
 
 # Validate skill exists
-$skillPath = "C:\Users\User\.claude\skills\$DestinationSkill"
+$skillPath = "$env:USERPROFILE\.agents\skills\$DestinationSkill"
 if (-not (Test-Path $skillPath)) {
     Write-Host "ERROR: Skill not found: $DestinationSkill" -ForegroundColor Red
     exit 1
@@ -60,14 +60,15 @@ if ($SuggestedFilename) {
 $webpName = "$cleanName.webp"
 $webpPath = Join-Path $libraryPath $webpName
 
-# Check if already imported (deduplication)
+# Auto-deduplicate: if file exists, add numeric suffix instead of overwriting
 if (Test-Path $webpPath) {
-    Write-Host "WARNING: This image appears to already be imported: $webpName" -ForegroundColor Yellow
-    $response = Read-Host "Continue anyway? (y/n)"
-    if ($response -ne 'y') {
-        Write-Host "Import cancelled." -ForegroundColor Gray
-        exit 0
-    }
+    $counter = 2
+    do {
+        $webpName = "$cleanName-$counter.webp"
+        $webpPath = Join-Path $libraryPath $webpName
+        $counter++
+    } while (Test-Path $webpPath)
+    Write-Host "  Auto-renamed to avoid collision: $webpName" -ForegroundColor Yellow
 }
 
 # Copy and compress to WebP
@@ -105,7 +106,7 @@ $textContent = ""
 
 if ($AutoDescription) {
     Write-Host "Generating AI description and extracting text..." -ForegroundColor Gray
-    $descScriptPath = "C:\Users\User\.claude\skills\text-read-image\scripts\read-text.ps1"
+    $descScriptPath = "$env:USERPROFILE\.agents\skills\text-read-image\scripts\read-text.ps1"
     
     if (Test-Path $descScriptPath) {
         # Generate description

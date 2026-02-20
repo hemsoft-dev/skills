@@ -162,7 +162,7 @@ if (Test-Path $newsFile) {
 }
 ```
 
-Copy the news content directly into the diary entry's News Headlines section. The news skill enforces source diversification and quality rules internally — no additional validation is needed here.
+**⚠️ CRITICAL: Copy the news content VERBATIM — do NOT paraphrase, summarize, or rewrite headlines. Do NOT strip URLs. Every headline must remain a clickable markdown link exactly as it appears in the output file.** The news skill enforces source diversification and quality rules internally — no additional validation is needed here.
 
 If the file doesn't exist, prompt the user: "News output not found for today. Would you like me to run the news skill first?"
 

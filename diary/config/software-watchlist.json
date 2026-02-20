@@ -30,8 +30,8 @@
       "changelog_url": "https://github.com/anthropics/claude-code/releases",
       "check_method": "github_releases",
       "notes": "Use GitHub releases API - repo: anthropics/claude-code",
-      "last_displayed_date": "2026-02-18",
-      "last_displayed_version": "v2.1.47"
+      "last_displayed_date": "2026-02-19",
+      "last_displayed_version": "v2.1.49"
     },
     {
       "name": "Copilot CLI",
@@ -70,8 +70,8 @@
       "changelog_url": "https://github.com/google-gemini/gemini-cli/releases",
       "check_method": "github_releases_prerelease",
       "notes": "Use GitHub releases API - repo: google-gemini/gemini-cli (filter for preview releases, exclude nightly)",
-      "last_displayed_date": "2026-02-18",
-      "last_displayed_version": "v0.30.0-preview.1"
+      "last_displayed_date": "2026-02-19",
+      "last_displayed_version": "v0.30.0-preview.3"
     },
     {
       "name": "GitHub CLI",
@@ -86,16 +86,16 @@
       "changelog_url": "https://github.com/microsoft/vscode-copilot-chat/blob/main/CHANGELOG.md",
       "check_method": "github_releases",
       "notes": "GitHub Copilot extension for VS Code - use gh release list for most reliable version check",
-      "last_displayed_date": "2026-02-18",
-      "last_displayed_version": "v0.38.2026021802"
+      "last_displayed_date": "2026-02-19",
+      "last_displayed_version": "v0.37.7"
     },
     {
       "name": "GitHub Web",
       "changelog_url": "https://github.blog/changelog/feed/",
       "check_method": "rss",
       "notes": "Parse RSS feed for latest changelog entry",
-      "last_displayed_date": "2026-02-18",
-      "last_displayed_version": "Feb 18"
+      "last_displayed_date": "2026-02-19",
+      "last_displayed_version": "Feb 19"
     },
     {
       "name": "Goose CLI",
@@ -142,24 +142,24 @@
       "changelog_url": "https://github.com/PowerShell/PowerShell/releases",
       "check_method": "github_releases",
       "notes": "Use GitHub releases API",
-      "last_displayed_date": "2026-01-18",
-      "last_displayed_version": "v7.6.0-preview.6"
+      "last_displayed_date": "2026-02-19",
+      "last_displayed_version": "v7.6.0-rc.1"
     },
     {
       "name": "Slack",
       "changelog_url": "https://slack.com/release-notes/windows/rss",
       "check_method": "rss",
       "notes": "Parse RSS feed for latest Windows desktop release (format: 'Slack 4.47.69 (12/8/25)')",
-      "last_displayed_date": "2026-02-18",
-      "last_displayed_version": "v4.48.94"
+      "last_displayed_date": "2026-02-19",
+      "last_displayed_version": "v4.48.95"
     },
     {
       "name": "VSCode",
       "changelog_url": "https://github.com/microsoft/vscode/releases",
       "check_method": "github_releases",
       "notes": "Use GitHub releases API - repo: microsoft/vscode",
-      "last_displayed_date": "2026-02-17",
-      "last_displayed_version": "1.109.2"
+      "last_displayed_date": "2026-02-19",
+      "last_displayed_version": "1.109.5"
     },
     {
       "name": "VSCode Insiders",
