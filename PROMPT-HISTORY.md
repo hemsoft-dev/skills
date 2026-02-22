@@ -4,6 +4,20 @@ This file tracks meaningful prompts and their outcomes for the Claude Skills rep
 
 ---
 
+2026-02-22 - 00:12 - Scaffold diary entry for 2026-02-21 with cached weather/news/slack and refreshed LLM/software updates
+Result: Created diary/entries/2026-02-21.md with Saturday structure, Slack summary, weather, news, daily numbers, LLM models, trending repos, and software watchlist updates; updated llm-leaderboard.json and software-watchlist.json.
+
+2026-02-21 - 00:00 - Create PE-1157 epic and first child ticket, then persist creation/linking knowledge in JIRA and Atlassian skills
+Result: Created and configured [PE-1157](https://relias.atlassian.net/browse/PE-1157) and child [PE-1158](https://relias.atlassian.net/browse/PE-1158), validated team field format and linkage behavior, and updated `jira/SKILL.md` and `atlassian/SKILL.md` with the new tracked epic/ticket knowledge and verified creation patterns.
+
+2026-02-21 - 00:00 - Add reusable script for creating child tickets under an epic
+Result: Updated `atlassian/SKILL.md` to include a reusable PowerShell script (`Create-ChildTicket.ps1`) with required team/squad fields, parent-to-epic fallback behavior, and JQL verification guidance.
+
+2026-02-21 - 00:00 - Add reusable child-ticket script to JIRA skill
+Result: Updated `jira/SKILL.md` (V2.3) with a reusable `Create-ChildTicket.ps1` template including parent-link + Epic Link fallback, required routing fields, and JQL verification guidance; logged update in `jira/History/2026-02-21.md`.
+
+---
+
 2026-02-19 - 22:08 - Fix screenshot skill dedup + embed screenshots in diary; fix news links
 Result: Fixed 2-Process-Image.ps1 to auto-increment filenames (status.webp → status-2.webp etc) instead of prompting overwrite; fixed hardcoded .claude path to .agents. Re-imported 3 Wispr Flow screenshots with AI descriptions. Added Screenshots section to diary entry. Fixed diary/SKILL.md to require verbatim news copy (no paraphrasing/stripping URLs). Replaced diary news sections with full linked headlines from news output.
 

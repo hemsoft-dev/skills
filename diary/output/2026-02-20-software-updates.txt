@@ -1,0 +1,1 @@
+GitHub Copilot Chat: v0.37.7 -> v0.38.2026022001 (Released: Feb 19 '26)

@@ -1,58 +1,34 @@
 [
   {
     "Software": "Claude Code",
-    "OldVersion": "v2.1.47",
-    "NewVersion": "v2.1.49",
-    "ReleaseDate": "Feb 19 '26",
+    "OldVersion": "v2.1.49",
+    "NewVersion": "v2.1.50",
+    "ReleaseDate": "Feb 20 '26",
     "ChangelogUrl": "https://github.com/anthropics/claude-code/releases",
     "CheckMethod": "github_releases"
   },
   {
-    "Software": "Gemini CLI",
-    "OldVersion": "v0.30.0-preview.1",
-    "NewVersion": "v0.30.0-preview.3",
-    "ReleaseDate": "Feb 19 '26",
-    "ChangelogUrl": "https://github.com/google-gemini/gemini-cli/releases",
-    "CheckMethod": "github_releases_prerelease"
+    "Software": "GitHub CLI",
+    "OldVersion": "v2.87.0",
+    "NewVersion": "v2.87.2",
+    "ReleaseDate": "Feb 20 '26",
+    "ChangelogUrl": "https://github.com/cli/cli/releases",
+    "CheckMethod": "github_releases"
   },
   {
     "Software": "GitHub Copilot Chat",
-    "OldVersion": "v0.38.2026021802",
-    "NewVersion": "v0.37.7",
-    "ReleaseDate": "Feb 19 '26",
+    "OldVersion": "v0.38.2026022001",
+    "NewVersion": "v0.37.8",
+    "ReleaseDate": "Feb 20 '26",
     "ChangelogUrl": "https://github.com/microsoft/vscode-copilot-chat/blob/main/CHANGELOG.md",
     "CheckMethod": "github_releases"
   },
   {
     "Software": "GitHub Web",
-    "OldVersion": "Feb 18",
-    "NewVersion": "Feb 19",
-    "ReleaseDate": "Feb 19 '26",
+    "OldVersion": "Feb 19",
+    "NewVersion": "Feb 20",
+    "ReleaseDate": "Feb 20 '26",
     "ChangelogUrl": "https://github.blog/changelog/feed/",
     "CheckMethod": "rss"
-  },
-  {
-    "Software": "PowerShell",
-    "OldVersion": "v7.6.0-preview.6",
-    "NewVersion": "v7.6.0-rc.1",
-    "ReleaseDate": "Feb 19 '26",
-    "ChangelogUrl": "https://github.com/PowerShell/PowerShell/releases",
-    "CheckMethod": "github_releases"
-  },
-  {
-    "Software": "Slack",
-    "OldVersion": "v4.48.94",
-    "NewVersion": "v4.48.95",
-    "ReleaseDate": "Feb 19 '26",
-    "ChangelogUrl": "https://slack.com/release-notes/windows/rss",
-    "CheckMethod": "rss"
-  },
-  {
-    "Software": "VSCode",
-    "OldVersion": "1.109.2",
-    "NewVersion": "1.109.5",
-    "ReleaseDate": "Feb 19 '26",
-    "ChangelogUrl": "https://github.com/microsoft/vscode/releases",
-    "CheckMethod": "github_releases"
   }
 ]

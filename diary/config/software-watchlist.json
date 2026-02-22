@@ -30,8 +30,8 @@
       "changelog_url": "https://github.com/anthropics/claude-code/releases",
       "check_method": "github_releases",
       "notes": "Use GitHub releases API - repo: anthropics/claude-code",
-      "last_displayed_date": "2026-02-19",
-      "last_displayed_version": "v2.1.49"
+      "last_displayed_date": "2026-02-21",
+      "last_displayed_version": "v2.1.50"
     },
     {
       "name": "Copilot CLI",
@@ -78,24 +78,24 @@
       "changelog_url": "https://github.com/cli/cli/releases",
       "check_method": "github_releases",
       "notes": "Use GitHub releases API",
-      "last_displayed_date": "2026-02-18",
-      "last_displayed_version": "v2.87.0"
+      "last_displayed_date": "2026-02-21",
+      "last_displayed_version": "v2.87.2"
     },
     {
       "name": "GitHub Copilot Chat",
       "changelog_url": "https://github.com/microsoft/vscode-copilot-chat/blob/main/CHANGELOG.md",
       "check_method": "github_releases",
       "notes": "GitHub Copilot extension for VS Code - use gh release list for most reliable version check",
-      "last_displayed_date": "2026-02-19",
-      "last_displayed_version": "v0.37.7"
+      "last_displayed_date": "2026-02-21",
+      "last_displayed_version": "v0.37.8"
     },
     {
       "name": "GitHub Web",
       "changelog_url": "https://github.blog/changelog/feed/",
       "check_method": "rss",
       "notes": "Parse RSS feed for latest changelog entry",
-      "last_displayed_date": "2026-02-19",
-      "last_displayed_version": "Feb 19"
+      "last_displayed_date": "2026-02-21",
+      "last_displayed_version": "Feb 20"
     },
     {
       "name": "Goose CLI",

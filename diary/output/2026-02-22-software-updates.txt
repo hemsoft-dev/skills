@@ -1,0 +1,4 @@
+Claude Code: v2.1.49 -> v2.1.50 (Released: Feb 20 '26)
+GitHub CLI: v2.87.0 -> v2.87.2 (Released: Feb 20 '26)
+GitHub Copilot Chat: v0.38.2026022001 -> v0.37.8 (Released: Feb 20 '26)
+GitHub Web: Feb 19 -> Feb 20 (Released: Feb 20 '26)

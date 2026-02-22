@@ -1,6 +1,6 @@
 ---
 name: atlassian
-description: V1.6 - Search and manage JIRA tickets, Confluence docs, and Cortex Internal Developer Portal with proper field configuration and full Confluence API support. ALWAYS includes clickable links in results.
+description: V1.8 - Search and manage JIRA tickets, Confluence docs, and Cortex Internal Developer Portal with proper field configuration and full Confluence API support. ALWAYS includes clickable links in results.
 ---
 
 # Atlassian
@@ -518,15 +518,125 @@ Ask for:
 3. Assignee?
 4. Title and description?
 
+### Ticket Linking to an Epic (Validated Pattern)
+
+When creating the first ticket under an epic (example: PE-1158 under PE-1157):
+
+- Prefer `parent = @{ key = "PE-xxxx" }` for linkage when creating the issue.
+- If parent linkage fails in your project configuration, retry with epic link field `customfield_10014 = "PE-xxxx"`.
+- Keep team routing fields on create:
+  - `customfield_15700` as plain string UUID
+  - `customfield_15201` as object with `id`
+
+### Verification Fallback
+
+In some cases, creating an issue succeeds but immediate `GET /issue/{key}` may return "Issue does not exist or you do not have permission to see it." If this happens, verify with JQL search instead:
+
+- `key = NEW-KEY OR parent = PE-xxxx OR 'Epic Link' = PE-xxxx`
+
+This confirms creation and linkage even when direct fetch is temporarily blocked.
+
+### Recent Confirmed Example
+
+- Epic: [PE-1157](https://relias.atlassian.net/browse/PE-1157) — Epic: Set It Free Loop - Pilot
+- Child Ticket: [PE-1158](https://relias.atlassian.net/browse/PE-1158) — SFL -- Team Forming and Brainstorming
+
+### Reusable Script: Create Child Ticket Under Epic
+
+```powershell
+# Create-ChildTicket.ps1
+param(
+    [Parameter(Mandatory)]
+    [string]$EpicKey,
+    [Parameter(Mandatory)]
+    [string]$Summary,
+    [string]$DescriptionText = "",
+    [ValidateSet("Task","Story")]
+    [string]$IssueType = "Task",
+    [string]$AssigneeAccountId = "557058:7e5734b3-5967-46f8-a20c-977376190266"
+)
+
+$baseUrl = "https://relias.atlassian.net"
+$email = $env:ATLASSIAN_EMAIL
+$token = $env:ATLASSIAN_API_TOKEN
+
+if (-not $email -or -not $token) {
+    throw "Set ATLASSIAN_EMAIL and ATLASSIAN_API_TOKEN environment variables"
+}
+
+$auth = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("${email}:${token}"))
+$headers = @{ Authorization = "Basic $auth"; "Content-Type" = "application/json"; Accept = "application/json" }
+
+$description = @{
+    version = 1
+    type = "doc"
+    content = @(
+        @{
+            type = "paragraph"
+            content = @(@{ type = "text"; text = $DescriptionText })
+        }
+    )
+}
+
+$fields = @{
+    project           = @{ key = "PE" }
+    summary           = $Summary
+    issuetype         = @{ name = $IssueType }
+    description       = $description
+    assignee          = @{ accountId = $AssigneeAccountId }
+    priority          = @{ name = "Unclassified" }
+    customfield_15700 = "ab77423c-95e2-4bd8-96ca-6dfc081d2996"
+    customfield_15201 = @{ id = "21834" }
+    parent            = @{ key = $EpicKey }
+}
+
+$payload = @{ fields = $fields } | ConvertTo-Json -Depth 20
+
+try {
+    $created = Invoke-RestMethod -Uri "$baseUrl/rest/api/3/issue" -Headers $headers -Method Post -Body $payload
+}
+catch {
+    # Fallback for projects/workflows that still require Epic Link field
+    $fields.Remove("parent") | Out-Null
+    $fields["customfield_10014"] = $EpicKey
+    $payload = @{ fields = $fields } | ConvertTo-Json -Depth 20
+    $created = Invoke-RestMethod -Uri "$baseUrl/rest/api/3/issue" -Headers $headers -Method Post -Body $payload
+}
+
+Write-Host "Created: $($created.key)"
+Write-Host "URL: $baseUrl/browse/$($created.key)"
+
+# Verification fallback via JQL (works even when immediate GET issue is blocked)
+$verifyBody = @{
+    jql = "key = $($created.key) OR parent = $EpicKey OR 'Epic Link' = $EpicKey"
+    maxResults = 20
+    fields = @("key","summary","status","parent")
+} | ConvertTo-Json
+
+$verify = Invoke-RestMethod -Uri "$baseUrl/rest/api/3/search/jql" -Headers $headers -Method Post -Body $verifyBody
+$verify.issues | ForEach-Object {
+    $parentKey = if ($_.fields.parent) { $_.fields.parent.key } else { "" }
+    Write-Host "$($_.key) | $($_.fields.summary) | $($_.fields.status.name) | parent=$parentKey"
+}
+```
+
+Example:
+
+```powershell
+.\Create-ChildTicket.ps1 -EpicKey "PE-1157" -Summary "SFL -- Team Forming and Brainstorming" -DescriptionText "Initial pilot ticket for Set It Free Loop (SFL) focused on team forming and brainstorming."
+```
+
 ### CRITICAL: Team Fields (Required for Board Visibility)
 
 **Always set these fields after creating a ticket:**
 
-| Field | Value |
-|-------|-------|
-| `customfield_13400` (Team Group) | `{"name": "Productivity Engineering"}` |
-| `customfield_15700` (Team) | `ab77423c-95e2-4bd8-96ca-6dfc081d2996` |
-| `customfield_15201` (Squad) | `{"id": "21834"}` |
+| Field | Value | Format |
+|-------|-------|--------|
+| `customfield_13400` (Team Group) | `{"name": "Productivity Engineering"}` | Object |
+| `customfield_15700` (Team) | `ab77423c-95e2-4bd8-96ca-6dfc081d2996` | **Plain string** (NOT `@{id=...}`) |
+| `customfield_15201` (Squad) | `{"id": "21834"}` | Object |
+
+> ⚠️ **Verified**: `customfield_15700` must be set as a plain string UUID — wrapping it in `@{ id = "..." }` returns a "Team id not valid" error.
 
 Without these fields, tickets will NOT appear on the team board or backlog.
 
