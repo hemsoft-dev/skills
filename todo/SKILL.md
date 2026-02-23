@@ -131,12 +131,14 @@ When updating:
 
 ### Guidelines
 
+- **No fluff above the table** - The file starts with a `# Project TODO` heading and goes straight into the table. No ASCII diagrams, prose intros, or decorative content above the table.
 - **Always preserve the table at the top** - Never move or remove it
 - **Keep the table concise** - Use the elaboration sections for lengthy details
-- **Order by status** - Remaining items (📋, 🚧, ⏸️) at top, completed items (✅, ❌) at bottom
+- **Order by status** - ALL remaining items (📋, 🚧, ⏸️) at top, ALL completed items (✅, ❌) at bottom. Never mix them.
 - **Link to details** - If a remaining item has a detailed section below, make the Task column a markdown anchor link (e.g., `[Task Name](#task-name)`)
-- **Completed items are summary only** - Remove detailed specs for completed items; keep just a brief note in the Notes column with completion date
+- **Completed items are summary only** - Max one line in the Notes column: completion date + brief summary. No detailed sections below for completed items — that documentation is irrelevant once done.
 - **Be specific** - Task descriptions should be actionable ("Add user authentication" not "Auth stuff")
+- **Format compliance check** - When opening a TODO.md, verify it meets these rules. If it doesn't, ask the user for permission to rearrange before making changes.
 
 ## Example TODO.md
 
@@ -209,6 +211,7 @@ When updating:
 - Don't keep detailed specs for completed items - summarize in Notes column
 - Don't put completed items above remaining items in the table
 - Don't forget anchor links for items that have detailed sections
+- Don't add ASCII art, diagrams, or prose above the table - go straight from heading to table
 
 ## Reference Implementation
 

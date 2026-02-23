@@ -1,107 +1,86 @@
-# TODO: Diary Skill Streamlining
+# Skills TODO
 
-## Goal
+| Status | Priority | Task | Notes |
+|--------|----------|------|-------|
+| 📋 | High | [Test complete diary workflow](#test-complete-diary-workflow) | weather → today → diary, all sections |
+| 📋 | Medium | [Update contributing skill documentation](#update-contributing-skill-documentation) | All contributing skills |
+| 📋 | Medium | [Create ElevenLabs voice skill](#create-elevenlabs-voice-skill) | For use with OpenClaw |
+| 📋 | Medium | [Add WorkIQ integration to today and diary skills](#add-workiq-integration) | Surface WorkIQ data in daily briefing and diary entry |
+| ✅ | High | Establish output/YYYY-MM-DD.md pattern | weather skill (2026-02-10) |
+| ✅ | High | Verify today skill follows output pattern | today skill confirmed (2026-02-10) |
+| ✅ | High | Verify weather skill only handles weather data | weather skill confirmed (2026-02-10) |
+| ✅ | High | Remove news gathering logic from diary skill | diary skill updated (2026-02-11) |
+| ✅ | High | Diary consumes weather + news output files directly | diary skill updated (2026-02-11) |
+| ✅ | Medium | Document Slack Activity data collection | 18 channels, date-filtered (2026-02-11) |
+| ✅ | Medium | Document Watchlist Updates integration | diary skill updated (2026-02-11) |
+| ✅ | Medium | Document Daily Numbers (stocks + repo counts) | diary skill updated (2026-02-11) |
+| ✅ | Medium | Document LLM Models (3 subsections) | leaderboard, releases, apps (2026-02-11) |
+| ✅ | Medium | Document GitHub Trending Repos integration | diary skill updated (2026-02-11) |
+| ✅ | Medium | Document Software Watchlist | 22+ items, version tracking (2026-02-11) |
+| ✅ | Medium | Document Today's Productivity metrics | diary skill updated (2026-02-11) |
+| ✅ | Medium | Document Todoist Integration | completed/upcoming/filtered (2026-02-11) |
+| ✅ | Medium | Document Screenshots integration | screenshot skill library (2026-02-11) |
+| ✅ | Medium | Verify Today's Highlight is user-provided | confirmed not auto-selected (2026-02-11) |
 
-Clarify responsibilities between contributing skills to eliminate duplication and streamline daily diary creation.
+## Progress
 
-## 🎯 New Architecture Pattern
-
-**Standard Output Format**: All skills that contribute data to the diary MUST save their output to:
-
-```
-~/.agents/skills/{skill-name}/output/YYYY-MM-DD.md
-```
-
-**Benefits**:
-
-- Single source of truth for each day's data
-- Easy to review what was collected before compiling diary
-- Reusable output if diary needs regeneration
-- Clear separation of concerns
-
-**Skills Following This Pattern**:
-
-- ✅ **weather** - `output/2026-02-10.md` (implemented)
-- ✅ **today** - Already has `output/` folder
-- ✅ **news** - `output/2026-02-11.md` (4 RSS-based scripts, no LLM required)
-- ✅ **slack** - `output/YYYY-MM-DD-slack-briefing.md` (18 channels, DMs, mentions, announcements)
-- 🔲 **Other contributors** - To be determined
-
----
-
-## Tasks
-
-### Status: 🔲 Not Started | ⏳ In Progress | ✅ Done
-
-| # | Task | Owner | Status |
-|---|------|-------|--------|
-| 1 | ✅ Establish output/YYYY-MM-DD.md pattern | weather | ✅ |
-| 2 | ✅ Verify today skill follows output pattern | today | ✅ |
-| 3 | ✅ Verify weather skill only handles weather data | weather | ✅ |
-| 4 | Remove any news gathering logic from diary skill | diary | ✅ |
-| 5 | Diary consumes weather + news output files directly | diary | ✅ |
-| 6 | Document Slack Activity data collection (18 channels, date-filtered) | diary | ✅ |
-| 7 | Document Watchlist Updates integration | diary | ✅ |
-| 8 | Document Daily Numbers (stocks + repo counts) | diary | ✅ |
-| 9 | Document LLM Models (3 subsections: leaderboard, releases, apps) | diary | ✅ |
-| 10 | Document GitHub Trending Repos integration | diary | ✅ |
-| 11 | Document Software Watchlist (22+ items, version tracking) | diary | ✅ |
-| 12 | Document Today's Productivity metrics | diary | ✅ |
-| 13 | Document Todoist Integration (completed/upcoming/filtered) | diary | ✅ |
-| 14 | Document Screenshots integration from screenshot skill | diary | ✅ |
-| 15 | Verify Today's Highlight is user-provided (not auto-selected) | diary | ✅ |
-| 16 | Test complete workflow: weather → today → diary with all sections | all | 🔲 |
-| 17 | Update SKILL.md files with finalized responsibilities | all | 🔲 |
+**Completed: 15 / 19** (79%)
 
 ---
 
-## Responsibility Matrix
+## Remaining Items
 
-### weather skill OWNS
+### Test complete diary workflow
 
-- Weather data only (location, current conditions, 3-day forecast)
-- Delegates to today skill's Get-Today.ps1 script
+**Goal**: End-to-end test confirming all sections populate correctly in a single diary run.
 
-### news skill OWNS
+**Steps**:
 
-- News headlines (US, World, AI, Danish) - 5-7 each, last 24h
-- Source diversification enforcement (max 2 per source, 3-4 sources min)
-- RSS feed parsing without LLM overhead
-- 4 independent scripts: Get-USNews.ps1, Get-WorldNews.ps1, Get-AINews.ps1, Get-DanishNews.ps1
-
-### today skill OWNS
-
-- Today's Highlight (user-selected featured news with context)
-- Aggregates weather + news into single daily report
-- Final formatting and presentation
-
-### diary skill OWNS
-
-- Today's Highlight (user-provided)
-- Slack Activity (18 channels)
-- Watchlist Updates
-- Daily Numbers (stocks + repos)
-- news skill runs 4 scripts → outputs to news/output/YYYY-MM-DD.md
-- weather skill runs → outputs to weather/output/YYYY-MM-DD.md
-- diary skill reads both output files directly (no intermediary)
-- No duplication of effort, clear separation of concerns
-- Today's Productivity
-- Todoist Integration
-- Work/Personal sections
-- Personal Reflections
-- Screenshots
-
-### Integration Point
-
-- diary skill reads `weather/output/YYYY-MM-DD.md` for weather data
-- diary skill reads `news/output/YYYY-MM-DD.md` for news data
-- If output files don't exist, diary prompts user to run the respective skill first
-- No duplication of effort — weather and news skills own data collection, diary only consumes
+1. Run weather skill → verify `weather/output/YYYY-MM-DD.md`
+2. Run news skill → verify `news/output/YYYY-MM-DD.md`
+3. Run Slack briefing → verify `slack/output/YYYY-MM-DD-slack-briefing.md`
+4. Run all diary scripts (financial, repos, LLM, software)
+5. Scaffold diary entry and confirm all sections present with real data
 
 ---
 
-## Notes
+### Update contributing skill documentation
 
-- All data collection must respect date filtering (last 24h for news, last 7d for software/models)
-- Source diversification: max 2 items per source, min 3-4 sources per category
-- Slack requires date-filtered queries (after:(target-1day) before:(target+1day))
+**Goal**: Finalize documented responsibilities for all skills involved in the diary workflow.
+
+**Skills to update**: `weather`, `news`, `today`, `diary`, `slack`
+
+**Each should clearly state**: what it owns, what it outputs, and what it does NOT do.
+
+---
+
+### Create ElevenLabs voice skill
+
+**Goal**: Build a new skill that integrates with ElevenLabs TTS API for high-quality voice synthesis, usable via OpenClaw.
+
+**Proposed capabilities**:
+
+- Text-to-speech via ElevenLabs API (voice selection, stability, similarity settings)
+- Voice cloning support
+- Output to audio file (MP3/WAV)
+- OpenClaw integration for voice responses
+
+**Reference**: `play-audio` and `edge-tts` skills for patterns to follow.
+
+---
+
+### Add WorkIQ integration
+
+**Goal**: Surface WorkIQ data in both the `today` skill daily briefing and the `diary` skill entry.
+
+**Proposed sections**:
+
+- **Today skill**: Include WorkIQ activity summary in daily output
+- **Diary skill**: Add WorkIQ section alongside productivity metrics (commits, LOC, PRs)
+
+**Steps**:
+
+1. Research WorkIQ API/data access
+2. Write PowerShell script to fetch WorkIQ data
+3. Add to today skill output template
+4. Add to diary entry template and scaffolding prompt

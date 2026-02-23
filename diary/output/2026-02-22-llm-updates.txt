@@ -11,18 +11,6 @@ New models (last 7 days):
   qwen/qwen3.5-397b-a17b — Qwen: Qwen3.5 397B A17B [2026-02-16]
     Context: 262K | Pricing: $0.15/$1.00 per 1M | Modality: text+image+video->text
 
-Added since last run:
-  + google/gemini-3.1-pro-preview
-
-Removed since last run:
-  - google/gemini-2.5-flash-preview-09-2025
-  - nousresearch/deephermes-3-mistral-24b-preview
-  - openai/chatgpt-4o-latest
-  - openrouter/aurora-alpha
-  - qwen/qwen3-4b
-  - tngtech/deepseek-r1t-chimera
-  - tngtech/tng-r1t-chimera
-
 Manual checks required:
   LMSYS Leaderboard: https://lmarena.ai/leaderboard
   OpenRouter Apps: https://openrouter.ai/rankings/apps
