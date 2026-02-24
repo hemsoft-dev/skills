@@ -13,3 +13,5 @@ productivity/use-cases/repos/data/** linguist-generated
 
 # Demo/test files
 productivity/use-cases/repos/templates/demo-*.html linguist-generated
+
+.github/workflows/*.lock.yml linguist-generated=true merge=ours
