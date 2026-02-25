@@ -4,7 +4,10 @@ This file tracks meaningful prompts and their outcomes for the Claude Skills rep
 
 ---
 
-2026-02-22 - 00:12 - Scaffold diary entry for 2026-02-21 with cached weather/news/slack and refreshed LLM/software updates
+2026-02-24 - 20:40 - Install GitHub Agentic Workflows (gh-aw) extension in this repo
+Result: gh-aw v0.47.1 was already installed. Ran `gh aw init` which created .github/agents/agentic-workflows.agent.md, .github/workflows/copilot-setup-steps.yml, and updated .gitattributes for .lock.yml files.
+
+2026-02-22 - 00:12- Scaffold diary entry for 2026-02-21 with cached weather/news/slack and refreshed LLM/software updates
 Result: Created diary/entries/2026-02-21.md with Saturday structure, Slack summary, weather, news, daily numbers, LLM models, trending repos, and software watchlist updates; updated llm-leaderboard.json and software-watchlist.json.
 
 2026-02-21 - 00:00 - Create PE-1157 epic and first child ticket, then persist creation/linking knowledge in JIRA and Atlassian skills
@@ -169,3 +172,5 @@ Result: Refactored diary/entries/2026-02-17-DevEx-Refinement.md into a clear mee
 
 2026-02-17 - 17:08 - Convert 2026 USAA Classic Checking statement to CSV and add JIRA REST API scripts
 Result: Extracted 19 transactions from 20260214_BANK_USAA CLASSIC CHECKING_0456.pdf to CSV; added extract_single.py for single-file extraction; upgraded jira skill to V2.0 with Get-JiraTicket.ps1, Search-JiraTickets.ps1, and Get-JiraTicketComments.ps1 scripts.
+
+2026-02-24 - 18:22 - Used workiq skill to search for Slack token password from Relias helpdesk (ITHC-20764); WorkIQ located email but refused to display credentials due to security policy
