@@ -144,11 +144,12 @@ def extract_transactions(pdf_path):
 
 def main():
     if len(sys.argv) < 2:
-        print("Usage: python extract-usaa.py 'Account Folder Name'")
+        print("Usage: python extract-usaa.py 'Account Folder Name' [year]")
         sys.exit(1)
     
     account_name = sys.argv[1]
-    account_path = STATEMENTS_ROOT / account_name / "2025"
+    year = sys.argv[2] if len(sys.argv) > 2 else str(datetime.now().year)
+    account_path = STATEMENTS_ROOT / account_name / year
     
     if not account_path.exists():
         print(f"Error: Path not found: {account_path}")

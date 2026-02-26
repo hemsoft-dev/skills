@@ -3,8 +3,11 @@
     Normalizes bank statement CSVs with AI categorization
 
 .DESCRIPTION
-    Processes all CSV files across all year folders for a given account and 
+    Processes new CSV files across all year folders for a given account and 
     categorizes transactions using Claude Sonnet via copilot CLI tool.
+    
+    Skips source files whose YYYY-MM.csv output already exists (incremental).
+    Use -Force to reprocess everything.
     
     Creates normalized monthly CSV files (YYYY-MM.csv) with format:
     Date,Account,Category,Description,Amount
@@ -26,17 +29,24 @@
     - category-choices.txt in statements root directory
     - CSV files in {AccountName}/YYYY/ folders (year subfolders)
     
+.PARAMETER Force
+    Re-process all months even if normalized output already exists.
+    By default, skips any source file whose YYYY-MM.csv already exists in the account root.
+
 .NOTES
-    Version: 2.0
+    Version: 2.1
     - Processes all year folders dynamically (2024, 2025, 2026, etc.)
     - Validates all required paths and files before processing
     - Single batched AI call per account reduces costs
     - Output files created in account root (not year folders)
+    - Incremental mode: skips already-normalized months by default
 #>
 
 param(
     [Parameter(Mandatory=$true)]
-    [string]$AccountName
+    [string]$AccountName,
+
+    [switch]$Force
 )
 
 $InformationPreference = 'Continue'
@@ -107,11 +117,25 @@ foreach ($YearFolder in $YearFolders) {
     Write-Information "`e[36m  [$($YearFolder.Name)] Loading $($Files.Count) source files...`e[0m"
     
     foreach ($File in $Files) {
-        $Lines = Get-Content $File.FullName | Select-Object -Skip 1  # Skip header
-        if ($Lines.Count -gt 0) {
-            $AllLines += $Lines
-            $FileCount++
-            Write-Information "    $($File.Name): $($Lines.Count) lines"
+        # Incremental skip: derive YYYY-MM from filename prefix (e.g. 20260220... -> 2026-02)
+        $skipped = $false
+        if (-not $Force) {
+            if ($File.Name -match '^(\d{4})(\d{2})') {
+                $monthKey = "$($Matches[1])-$($Matches[2])"
+                $normalizedOut = "$AccountRoot\$monthKey.csv"
+                if ((Test-Path $normalizedOut) -and ((Get-Item $normalizedOut).LastWriteTime -ge $File.LastWriteTime)) {
+                    Write-Information "    $($File.Name): skipped ($(Split-Path $normalizedOut -Leaf) already up to date)"
+                    $skipped = $true
+                }
+            }
+        }
+        if (-not $skipped) {
+            $Lines = Get-Content $File.FullName | Select-Object -Skip 1  # Skip header
+            if ($Lines.Count -gt 0) {
+                $AllLines += $Lines
+                $FileCount++
+                Write-Information "    $($File.Name): $($Lines.Count) lines"
+            }
         }
     }
 }
@@ -120,7 +144,7 @@ $TotalInput = $AllLines.Count
 Write-Information "`e[36m[$AccountName] $TotalInput total transactions from $FileCount files`e[0m"
 
 if ($TotalInput -eq 0) {
-    Write-Information "`e[33mNo transactions found to process`e[0m"
+    Write-Information "`e[32mAll months already normalized. Use -Force to reprocess.`e[0m"
     exit 0
 }
 
