@@ -1,34 +1,50 @@
 [
   {
     "Software": "Claude Code",
-    "OldVersion": "v2.1.49",
-    "NewVersion": "v2.1.50",
-    "ReleaseDate": "Feb 20 '26",
+    "OldVersion": "v2.1.50",
+    "NewVersion": "v2.1.55",
+    "ReleaseDate": "Feb 24 '26",
     "ChangelogUrl": "https://github.com/anthropics/claude-code/releases",
     "CheckMethod": "github_releases"
   },
   {
+    "Software": "Gemini CLI",
+    "OldVersion": "v0.30.0-preview.3",
+    "NewVersion": "v0.31.0-preview.0",
+    "ReleaseDate": "Feb 24 '26",
+    "ChangelogUrl": "https://github.com/google-gemini/gemini-cli/releases",
+    "CheckMethod": "github_releases_prerelease"
+  },
+  {
     "Software": "GitHub CLI",
-    "OldVersion": "v2.87.0",
-    "NewVersion": "v2.87.2",
-    "ReleaseDate": "Feb 20 '26",
+    "OldVersion": "v2.87.2",
+    "NewVersion": "v2.87.3",
+    "ReleaseDate": "Feb 23 '26",
     "ChangelogUrl": "https://github.com/cli/cli/releases",
     "CheckMethod": "github_releases"
   },
   {
     "Software": "GitHub Copilot Chat",
-    "OldVersion": "v0.38.2026022001",
-    "NewVersion": "v0.37.8",
-    "ReleaseDate": "Feb 20 '26",
+    "OldVersion": "v0.37.8",
+    "NewVersion": "v0.38.2026022403",
+    "ReleaseDate": "Feb 24 '26",
     "ChangelogUrl": "https://github.com/microsoft/vscode-copilot-chat/blob/main/CHANGELOG.md",
     "CheckMethod": "github_releases"
   },
   {
     "Software": "GitHub Web",
-    "OldVersion": "Feb 19",
-    "NewVersion": "Feb 20",
-    "ReleaseDate": "Feb 20 '26",
+    "OldVersion": "Feb 20",
+    "NewVersion": "Feb 24",
+    "ReleaseDate": "Feb 24 '26",
     "ChangelogUrl": "https://github.blog/changelog/feed/",
     "CheckMethod": "rss"
+  },
+  {
+    "Software": "Node.js",
+    "OldVersion": "v25.6.1",
+    "NewVersion": "v25.7.0",
+    "ReleaseDate": "Feb 24 '26",
+    "ChangelogUrl": "https://github.com/nodejs/node/releases",
+    "CheckMethod": "github_releases"
   }
 ]
