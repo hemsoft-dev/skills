@@ -1,33 +1,41 @@
 [
   {
+    "Software": "Bun",
+    "OldVersion": "bun-v1.3.9",
+    "NewVersion": "bun-v1.3.10",
+    "ReleaseDate": "Feb 26 '26",
+    "ChangelogUrl": "https://github.com/oven-sh/bun/releases",
+    "CheckMethod": "github_releases"
+  },
+  {
     "Software": "Claude Code",
-    "OldVersion": "v2.1.55",
-    "NewVersion": "v2.1.59",
-    "ReleaseDate": "Feb 25 '26",
+    "OldVersion": "v2.1.59",
+    "NewVersion": "v2.1.61",
+    "ReleaseDate": "Feb 26 '26",
     "ChangelogUrl": "https://github.com/anthropics/claude-code/releases",
     "CheckMethod": "github_releases"
   },
   {
     "Software": "GitHub Copilot Chat",
-    "OldVersion": "v0.38.2026022403",
-    "NewVersion": "v0.38.2026022506",
-    "ReleaseDate": "Feb 25 '26",
+    "OldVersion": "v0.38.2026022506",
+    "NewVersion": "v0.37.9",
+    "ReleaseDate": "Feb 26 '26",
     "ChangelogUrl": "https://github.com/microsoft/vscode-copilot-chat/blob/main/CHANGELOG.md",
     "CheckMethod": "github_releases"
   },
   {
     "Software": "GitHub Web",
-    "OldVersion": "Feb 24",
-    "NewVersion": "Feb 25",
-    "ReleaseDate": "Feb 25 '26",
+    "OldVersion": "Feb 25",
+    "NewVersion": "Feb 26",
+    "ReleaseDate": "Feb 26 '26",
     "ChangelogUrl": "https://github.blog/changelog/feed/",
     "CheckMethod": "rss"
   },
   {
     "Software": "Goose CLI",
-    "OldVersion": "v1.25.0",
-    "NewVersion": "v1.25.1",
-    "ReleaseDate": "Feb 25 '26",
+    "OldVersion": "v1.25.1",
+    "NewVersion": "v1.26.0",
+    "ReleaseDate": "Feb 26 '26",
     "ChangelogUrl": "https://github.com/block/goose/releases",
     "CheckMethod": "github_releases"
   }
