@@ -1,10 +1,10 @@
 {
-  "total_models": 337,
-  "last_updated": "2026-02-22",
+  "last_updated": "2026-02-25",
   "model_ids": [
     "ai21/jamba-large-1.7",
     "aion-labs/aion-1.0",
     "aion-labs/aion-1.0-mini",
+    "aion-labs/aion-2.0",
     "aion-labs/aion-rp-llama-3.1-8b",
     "alfredpros/codellama-7b-instruct-solidity",
     "alibaba/tongyi-deepresearch-30b-a3b",
@@ -61,7 +61,6 @@
     "deepseek/deepseek-chat-v3.1",
     "deepseek/deepseek-r1",
     "deepseek/deepseek-r1-0528",
-    "deepseek/deepseek-r1-0528:free",
     "deepseek/deepseek-r1-distill-llama-70b",
     "deepseek/deepseek-r1-distill-qwen-32b",
     "deepseek/deepseek-v3.1-terminus",
@@ -84,6 +83,7 @@
     "google/gemini-3-pro-image-preview",
     "google/gemini-3-pro-preview",
     "google/gemini-3.1-pro-preview",
+    "google/gemini-3.1-pro-preview-customtools",
     "google/gemma-2-27b-it",
     "google/gemma-2-9b-it",
     "google/gemma-3-12b-it",
@@ -102,6 +102,7 @@
     "inflection/inflection-3-pi",
     "inflection/inflection-3-productivity",
     "kwaipilot/kat-coder-pro",
+    "liquid/lfm-2-24b-a2b",
     "liquid/lfm-2.2-6b",
     "liquid/lfm-2.5-1.2b-instruct:free",
     "liquid/lfm-2.5-1.2b-thinking:free",
@@ -178,7 +179,6 @@
     "nousresearch/hermes-4-405b",
     "nousresearch/hermes-4-70b",
     "nvidia/llama-3.1-nemotron-70b-instruct",
-    "nvidia/llama-3.1-nemotron-ultra-253b-v1",
     "nvidia/llama-3.3-nemotron-super-49b-v1.5",
     "nvidia/nemotron-3-nano-30b-a3b",
     "nvidia/nemotron-3-nano-30b-a3b:free",
@@ -225,6 +225,7 @@
     "openai/gpt-5.2-chat",
     "openai/gpt-5.2-codex",
     "openai/gpt-5.2-pro",
+    "openai/gpt-5.3-codex",
     "openai/gpt-audio",
     "openai/gpt-audio-mini",
     "openai/gpt-oss-120b",
@@ -296,7 +297,11 @@
     "qwen/qwen3-vl-32b-instruct",
     "qwen/qwen3-vl-8b-instruct",
     "qwen/qwen3-vl-8b-thinking",
+    "qwen/qwen3.5-122b-a10b",
+    "qwen/qwen3.5-27b",
+    "qwen/qwen3.5-35b-a3b",
     "qwen/qwen3.5-397b-a17b",
+    "qwen/qwen3.5-flash-02-23",
     "qwen/qwen3.5-plus-02-15",
     "qwen/qwq-32b",
     "raifle/sorcererlm-8x22b",
@@ -339,5 +344,6 @@
     "z-ai/glm-4.7",
     "z-ai/glm-4.7-flash",
     "z-ai/glm-5"
-  ]
+  ],
+  "total_models": 343
 }

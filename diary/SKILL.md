@@ -230,6 +230,7 @@ if (Test-Path $marketFile) {
 - Outputs to `output/YYYY-MM-DD-daily-financial-numbers.txt` automatically
 - On weekends/holidays, returns last trading day data with a note: "Trading day: YYYY-MM-DD"
 - Display format: `"Dow Jones: 49,384.01 (+306.78, +0.63%)"`
+- **Market Commentary:** After displaying the Dow and S&P numbers, add a brief 1-2 sentence italicized commentary (*Markets closed...*) summarizing the day's market tone — direction, magnitude, and any notable driver (e.g., Fed news, earnings, macro events). Keep it concise and factual.
 
 **Relias Repo Count (daily):**
 
