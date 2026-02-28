@@ -123,7 +123,9 @@ $LocalRepoPaths = [System.Collections.Generic.List[string]]::new()
 @(
     "D:\github\temp\hemsoft",
     "D:\github\temp\relias",
-    "D:\github"
+    "D:\github",
+    "D:\github\Relias",
+    "C:\Users\User\.agents\skills"
 ) | ForEach-Object {
     if (-not [string]::IsNullOrWhiteSpace($_) -and -not $LocalRepoPaths.Contains($_)) {
         $LocalRepoPaths.Add($_)
