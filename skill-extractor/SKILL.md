@@ -1,6 +1,6 @@
 ---
 name: skill-extractor
-description: V1.6 - Analyzes Markdown files to identify and extract reusable instruction sets into standalone skills with hook-based history tracking and retrospectives. Consults protocols skill for standardized execution patterns.
+description: V1.7 - Analyzes Markdown files to identify and extract reusable instruction sets into standalone skills with hook-based history tracking and retrospectives. Consults protocols skill for standardized execution patterns.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -69,6 +69,8 @@ Per the official spec at <https://agentskills.io/specification>, SKILL.md frontm
    - Suggest a concise, kebab-case skill name (e.g., `sql-helper`,
      `azure-deployer`).
    - Provide a one-sentence description.
+   - If the extracted skill has multiple commands or modes, use the
+     **Commands-First Description Format**: `"V1.0 - Commands: Cmd1, Cmd2. Description..."`.
    - Draft the `SKILL.md` content following the standard format.
    - If you need to ask clarifying questions, consult the `protocols` skill for standardized question format.
 4. **Create**: Upon user approval, create the skill directory and `SKILL.md`
@@ -91,6 +93,20 @@ description: V1.0 - {One sentence describing when to use this skill}
 
 {Concise instructions for the LLM}
 ```
+
+**With commands/modes (when a skill has distinct capabilities):**
+
+```yaml
+---
+name: {skill-name}
+description: "V1.0 - Commands: {Cmd1}, {Cmd2}, {Cmd3}. {Description of what + when to use}"
+---
+```
+
+The `Commands:` prefix lists the skill's modes/capabilities upfront so they are
+immediately visible when the user types `/{skill-name}` in the chat prompt.
+Only add `Commands:` when the extracted skill genuinely has multiple distinct
+modes or entry points — simple single-purpose skills should omit it.
 
 **With history tracking and retrospectives (hooks-based):**
 

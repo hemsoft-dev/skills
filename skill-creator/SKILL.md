@@ -1,6 +1,6 @@
 ---
 name: skill-creator
-description: V1.9 - Creates new Claude skills with optimized SKILL.md files following best practices. Uses hooks for history tracking and retrospectives (enabled by default). Includes explicit instructions for getting accurate timestamps. Consults protocols skill for standardized execution patterns.
+description: V1.10 - Creates new Claude skills with optimized SKILL.md files following best practices. Uses hooks for history tracking and retrospectives (enabled by default). Includes explicit instructions for getting accurate timestamps. Consults protocols skill for standardized execution patterns.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -84,6 +84,20 @@ description: V{major}.{minor} - {One sentence describing when to use this skill}
 {Concise instructions for the LLM}
 ```
 
+**With commands/modes (when a skill has distinct capabilities):**
+
+```markdown
+---
+name: {skill-name}
+description: "V{major}.{minor} - Commands: {Cmd1}, {Cmd2}, {Cmd3}. {Description of what + when to use}"
+---
+```
+
+The `Commands:` prefix lists the skill's modes/capabilities upfront so they are
+immediately visible when the user types `/{skill-name}` in the chat prompt.
+Only add `Commands:` when the skill genuinely has multiple distinct modes or
+entry points — simple single-purpose skills should omit it.
+
 **With optional fields and hooks:**
 
 ```markdown
@@ -114,10 +128,11 @@ hooks:
 ## Best Practices
 
 1. **Description** - Single sentence that helps the LLM decide if this skill applies
-2. **Instructions** - Minimal, actionable guidance; avoid over-documentation
-3. **Placeholders** - Use `{VARIABLE}` for runtime values
-4. **Output Format** - Only specify if the skill produces structured output
-5. **Scripts Organization** - Keep all PowerShell/Python scripts in a `scripts/` subfolder (e.g., `{skill-name}/scripts/script-name.ps1`)
+2. **Commands prefix** - If the skill has multiple commands or modes, list them at the start of the description: `Commands: Cmd1, Cmd2, Cmd3.` This makes capabilities visible when the user types `/{skill-name}` in the chat prompt
+3. **Instructions** - Minimal, actionable guidance; avoid over-documentation
+4. **Placeholders** - Use `{VARIABLE}` for runtime values
+5. **Output Format** - Only specify if the skill produces structured output
+6. **Scripts Organization** - Keep all PowerShell/Python scripts in a `scripts/` subfolder (e.g., `{skill-name}/scripts/script-name.ps1`)
 
 ## Protocols Integration
 

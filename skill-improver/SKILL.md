@@ -1,6 +1,6 @@
 ---
 name: skill-improver
-description: V2.0 - Applies standardized improvements to skills and proactively suggests missing opt-in features. Converts "ALWAYS:" sections to hooks. Checks for protocol reference opportunities. Use when modifying any skill.
+description: V2.1 - Applies standardized improvements to skills and proactively suggests missing opt-in features. Converts "ALWAYS:" sections to hooks. Checks for protocol reference opportunities. Checks for commands-first description format. Use when modifying any skill.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -195,6 +195,42 @@ Apply all active improvements from the registry below. This includes:
 | 4   | Frontmatter Validation     | Active |
 | 5   | Retrospective              | Opt-in |
 | 6   | Protocol References        | Active |
+| 7   | Commands-First Description | Active |
+
+## Commands-First Description Format
+
+When a skill has multiple distinct commands, modes, or entry points, the
+description should list them upfront using a `Commands:` prefix:
+
+```
+V{version} - Commands: {Cmd1}, {Cmd2}, {Cmd3}. {Rest of description}
+```
+
+This makes the skill's capabilities immediately visible when the user types
+`/{skill-name}` in the chat prompt.
+
+**When to apply:**
+
+- The skill has 2+ distinct operations, modes, or entry points
+- The commands are user-facing (things the user would ask for by name)
+
+**When NOT to apply:**
+
+- Single-purpose skills with one clear function
+- Skills where the description already conveys the scope clearly
+
+**Example:**
+
+```yaml
+# Before
+description: V1.0 - Expert in pipeline debugging, auditing, and status reporting.
+
+# After
+description: "V1.0 - Commands: Debug, Audit, Status, Report. Expert in pipeline debugging, auditing, and status reporting."
+```
+
+When checking a skill, if it has multiple sections that function as distinct
+modes/commands, suggest adding the `Commands:` prefix as an improvement.
 
 ---
 
