@@ -2,10 +2,10 @@
 
 | Status | Priority | Task | Notes |
 |--------|----------|------|-------|
-| ✅ | High | [Test complete diary workflow](#test-complete-diary-workflow) | All 10 scripts (010-100) tested individually (2026-03-01) |
 | 📋 | Medium | [Update contributing skill documentation](#update-contributing-skill-documentation) | All contributing skills |
 | 📋 | Medium | [Create ElevenLabs voice skill](#create-elevenlabs-voice-skill) | For use with OpenClaw |
-| ✅ | Medium | [Add WorkIQ integration to today and diary skills](#add-workiq-integration) | 100-work.ps1 uses WorkIQ for meetings + emails (2026-03-01) |
+| ✅ | High | Test complete diary workflow | All 10 scripts (010-100) tested individually (2026-03-01) |
+| ✅ | Medium | Add WorkIQ integration to today and diary skills | 100-work.ps1 uses WorkIQ for meetings + emails (2026-03-01) |
 | ✅ | High | Establish output/YYYY-MM-DD.md pattern | weather skill (2026-02-10) |
 | ✅ | High | Verify today skill follows output pattern | today skill confirmed (2026-02-10) |
 | ✅ | High | Verify weather skill only handles weather data | weather skill confirmed (2026-02-10) |
@@ -24,25 +24,11 @@
 
 ## Progress
 
-**Completed: 15 / 19** (79%)
+**Completed: 17 / 19** (89%)
 
 ---
 
 ## Remaining Items
-
-### Test complete diary workflow
-
-**Goal**: End-to-end test confirming all sections populate correctly in a single diary run.
-
-**Steps**:
-
-1. Run weather skill → verify `weather/output/YYYY-MM-DD.md`
-2. Run news skill → verify `news/output/YYYY-MM-DD.md`
-3. Run Slack briefing → verify `slack/output/YYYY-MM-DD-slack-briefing.md`
-4. Run all diary scripts (financial, repos, LLM, software)
-5. Scaffold diary entry and confirm all sections present with real data
-
----
 
 ### Update contributing skill documentation
 
@@ -66,21 +52,3 @@
 - OpenClaw integration for voice responses
 
 **Reference**: `play-audio` and `edge-tts` skills for patterns to follow.
-
----
-
-### Add WorkIQ integration
-
-**Goal**: Surface WorkIQ data in both the `today` skill daily briefing and the `diary` skill entry.
-
-**Proposed sections**:
-
-- **Today skill**: Include WorkIQ activity summary in daily output
-- **Diary skill**: Add WorkIQ section alongside productivity metrics (commits, LOC, PRs)
-
-**Steps**:
-
-1. Research WorkIQ API/data access
-2. Write PowerShell script to fetch WorkIQ data
-3. Add to today skill output template
-4. Add to diary entry template and scaffolding prompt
