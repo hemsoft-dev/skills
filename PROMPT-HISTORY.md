@@ -4,6 +4,9 @@ This file tracks meaningful prompts and their outcomes for the Claude Skills rep
 
 ---
 
+2026-02-28 - 23:03 - Create red-green-tdd skill for AI-assisted Red/Green Test-Driven Development
+Result: Created new skill V1.0 as a generic, stack-agnostic expert in Red/Green TDD. Covers workflow phases (RED/GREEN/REFACTOR), critical rules, anti-patterns, language examples (Python, TypeScript, C#, Go), agentic integration guidance, and common task patterns (new feature, bug fix, refactoring, legacy code). Inspired by Simon Willison's Agentic Engineering Patterns guide.
+
 2026-02-25 - Budget skill: organize new statements, fix incremental normalize script
 Result: Moved Chase CC Feb and USAA Spending Checking Feb statements to correct account folders. Fixed extract-usaa.py to accept a year parameter (was hardcoded to 2025). Fixed normalize-account.ps1 to skip already-normalized months by default (added -Force flag), preventing wasteful full re-processing on every run. All three accounts extracted and normalized through Feb 2026.
 
