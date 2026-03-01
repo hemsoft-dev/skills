@@ -1,7 +1,0 @@
-Claude Code: v2.1.45 -> v2.1.47 (Released: Feb 18 '26)
-Gemini CLI: v0.29.0-preview.5 -> v0.30.0-preview.1 (Released: Feb 18 '26)
-GitHub CLI: v2.86.0 -> v2.87.0 (Released: Feb 18 '26)
-GitHub Copilot Chat: v0.38.2026021702 -> v0.38.2026021802 (Released: Feb 18 '26)
-GitHub Web: Feb 17 -> Feb 18 (Released: Feb 18 '26)
-Goose CLI: v1.24.0 -> v1.25.0 (Released: Feb 18 '26)
-Slack: v4.48.92 -> v4.48.94 (Released: Feb 18 '26)

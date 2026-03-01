@@ -2,163 +2,171 @@
 
 ## 🎯 Today's Highlight
 
-**[User to provide]**
+**{title}**
 
-{User to provide 1-2 sentence context}
-
-### 💬 Slack Activity
-
-- [Comprehensive coverage of substantive Slack activity: PSAs, problems/solutions, decisions, announcements - aim for 8-12+ items]
+{1-2 sentence context from user}
 
 ---
 
-### 📍 {City}, {Country}
+## 💬 Slack Activity
+
+| # | Channel | Summary |
+|---|---------|---------|
+| {8-12+ substantive items: PSAs, decisions, announcements, problems/solutions} |||
+
+---
+
+## 🌤️ Weather
+
+<!-- Script: TBD | Source: OpenWeather API -->
+
+### 📍 Mooresville, NC
 
 | 📅 Date | 📆 Day | 🕐 Time |
 |---------|--------|---------|
-| {YYYY-MM-DD} | {Weekday} | {H:MM AM/PM} {Timezone} |
+| {YYYY-MM-DD} | {Weekday} | {H:MM AM/PM} Eastern |
 
-### Current Weather
+**Current Conditions**
 
-| 🌡️ Temp | 🤔 Feels Like | {Icon} Condition | 💨 Wind | 💧 Humidity |
-|---------|---------------|------------------|---------|-------------|
+| 🌡️ Temp | 🤔 Feels Like | ☁️ Condition | 💨 Wind | 💧 Humidity |
+|---------|---------------|-------------|---------|-------------|
 | {temp}°F | {feels}°F | {condition} | {wind} mph | {humidity}% |
 
-### 3-Day Forecast
+**3-Day Forecast**
 
-| Day | Icon | Condition | Low | High | Wind |
-|-----|------|-----------|-----|------|------|
-| {Weekday} (Today) | {icon} | {condition} | {low}°F | {high}°F | {wind} mph |
-| {Weekday} | {icon} | {condition} | {low}°F | {high}°F | {wind} mph |
-| {Weekday} | {icon} | {condition} | {low}°F | {high}°F | {wind} mph |
+| Day | Condition | Low | High | Wind |
+|-----|-----------|-----|------|------|
+| {Today} | {condition} | {low}°F | {high}°F | {wind} mph |
+| {Tomorrow} | {condition} | {low}°F | {high}°F | {wind} mph |
+| {Day After} | {condition} | {low}°F | {high}°F | {wind} mph |
 
 ---
 
 ## 📰 News Headlines ({Month Day, Year})
 
+<!-- Script: TBD | Source: Web scraping -->
+
 ### 🇺🇸 US News
 
 | # | Headline | Source |
 |---|----------|--------|
-| [Populate from news sources] |
+| {5-8 headlines} |||
 
 ### 🌍 World News
 
 | # | Headline | Source |
 |---|----------|--------|
-| [Populate from news sources] |
+| {5-8 headlines} |||
 
 ### 🤖 AI News
 
 | # | Headline | Source |
 |---|----------|--------|
-| [Populate from news sources] |
+| {5-8 headlines} |||
 
 ### 🇩🇰 Danish News
 
 | # | Headline | Source |
 |---|----------|--------|
-| [Populate from news sources] |
-
----
-*News gathered at {time}. Sources checked: {count}+. Items within last 24 hours only.*
+| {3-5 headlines} |||
 
 ---
 
 ## 📊 Daily Numbers
 
-- **Dow Jones**: {value} ({+/- value}, {+/- %}%) *(weekdays only)*
-- **S&P 500**: {value} ({+/- value}, {+/- %}%) *(weekdays only)*
-- **Relias Repo Count**: GitHub: {count} ({delta}), Bitbucket: {count} ({delta})
+<!-- Script: TBD | Sources: GitHub API, Bitbucket API -->
+
+| Metric | Value | Delta |
+|--------|-------|-------|
+| Relias GitHub Repos | {count} | {+/- n} |
+| Relias Bitbucket Repos | {count} | {+/- n} |
 
 ---
 
 ## 🤖 LLM Models
 
+<!-- Script: TBD | Sources: LMSYS, OpenRouter API -->
+
 ### LMSYS Chatbot Arena Leaderboard
+
+*Only shown when rankings change from previous entry.*
 
 **Overall (Top 5)**
 
 | Rank | Model | Elo Score | Change |
 |------|-------|-----------|--------|
-| [Only shown when rankings change from last display] |
+| 1 | | | |
 
 **Coding (Top 5)**
 
 | Rank | Model | Elo Score | Change |
 |------|-------|-----------|--------|
-| [Only shown when rankings change from last display] |
+| 1 | | | |
 
 **Vision (Top 5)**
 
 | Rank | Model | Elo Score | Change |
 |------|-------|-----------|--------|
-| [Only shown when rankings change from last display] |
+| 1 | | | |
 
-*Leaderboard source: [LMSYS Chatbot Arena](https://lmarena.ai/leaderboard)*
+*Source: [LMSYS Chatbot Arena](https://lmarena.ai/leaderboard)*
 
 ### New Model Releases (Last 7 Days)
 
 | Model | Provider | Released | Context | Pricing | Link |
 |-------|----------|----------|---------|---------|------|
-| [All models released in last 7 days from OpenRouter] |
+| {from OpenRouter API} ||||||
 
 ### Top OpenRouter Apps (by Token Usage)
 
+*Only shown when rankings change from previous entry.*
+
 | Rank | App | Description | Tokens | Change |
 |------|-----|-------------|--------|--------|
-| [Only shown when rankings change from last display] |
+| 1 | | | | |
 
-*Source: [OpenRouter App Rankings](https://openrouter.ai/rankings/apps)*
-
-*If no changes/releases: Section omitted from entry*
+*Source: [OpenRouter Rankings](https://openrouter.ai/rankings/apps)*
 
 ---
 
 ## 🔥 Top 5 Trending GitHub Repos
 
+<!-- Script: TBD | Source: GitHub Trending -->
+
 | # | Repository | Description | Stars |
 |---|------------|-------------|-------|
-| 1 | [{owner}/{repo}](https://github.com/{owner}/{repo}) | {description} | ⭐ {actual_count} |
-| 2 | [{owner}/{repo}](https://github.com/{owner}/{repo}) | {description} | ⭐ {actual_count} |
-| 3 | [{owner}/{repo}](https://github.com/{owner}/{repo}) | {description} | ⭐ {actual_count} |
-| 4 | [{owner}/{repo}](https://github.com/{owner}/{repo}) | {description} | ⭐ {actual_count} |
-| 5 | [{owner}/{repo}](https://github.com/{owner}/{repo}) | {description} | ⭐ {actual_count} |
+| 1 | [{owner}/{repo}](https://github.com/{owner}/{repo}) | {description} | ⭐ {count} |
+| 2 | | | |
+| 3 | | | |
+| 4 | | | |
+| 5 | | | |
 
 ---
 
 ## 💻 Software Watchlist
 
+<!-- Script: TBD | Source: config/software-watchlist.json + GitHub Releases API -->
+
 | Software | Version | Released | Highlights | Links |
 |----------|---------|----------|------------|-------|
-| [Populate with actual updates - zero updates indicates checking process failure] |
+| {from watchlist — zero updates = checking failure} |||||
 
 ---
 
-## Work
+## 🏠 Personal
 
-### Work Done
+### Done Today
 
-- [User to provide accomplishments]
-
-### Tomorrow's Goals
-
-- [User to provide goals for tomorrow]
-
-## Personal
-
-### Work Done
-
-- [User to provide personal accomplishments]
+- {user to provide}
 
 ### Tomorrow's Goals
 
-- [User to provide personal goals]
+- {user to provide}
 
-## Personal Reflections
+### 💭 Reflections
 
-[User to provide reflections]
+{user to provide}
 
 ---
 
-*Entry created with diary skill V2.27*
+*Entry created with diary skill V1.0*

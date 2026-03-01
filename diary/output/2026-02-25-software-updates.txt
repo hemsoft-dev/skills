@@ -1,4 +1,0 @@
-Claude Code: v2.1.55 -> v2.1.59 (Released: Feb 25 '26)
-GitHub Copilot Chat: v0.38.2026022403 -> v0.38.2026022506 (Released: Feb 25 '26)
-GitHub Web: Feb 24 -> Feb 25 (Released: Feb 25 '26)
-Goose CLI: v1.25.0 -> v1.25.1 (Released: Feb 25 '26)

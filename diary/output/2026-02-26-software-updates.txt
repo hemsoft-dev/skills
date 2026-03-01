@@ -1,5 +1,0 @@
-Bun: bun-v1.3.9 -> bun-v1.3.10 (Released: Feb 26 '26)
-Claude Code: v2.1.59 -> v2.1.61 (Released: Feb 26 '26)
-GitHub Copilot Chat: v0.38.2026022506 -> v0.37.9 (Released: Feb 26 '26)
-GitHub Web: Feb 25 -> Feb 26 (Released: Feb 26 '26)
-Goose CLI: v1.25.1 -> v1.26.0 (Released: Feb 26 '26)

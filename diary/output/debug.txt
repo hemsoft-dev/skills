@@ -1,3 +1,0 @@
-Commits found: 2
-65130c1e0e1c2b15ea865bfe65b808b7654fb3ad|Franz Hemmer|franz_hemmer@hotmail.com|2026-02-11|feat(diary,slack): add output caching scripts and document all diary sections
-7eebe5c6ee9fdbfbfe892c43db5c356417a94975|Franz Hemmer|franz_hemmer@hotmail.com|2026-02-11|feat(news): add news skill with RSS-based headline fetching
