@@ -2,10 +2,10 @@
 
 | Status | Priority | Task | Notes |
 |--------|----------|------|-------|
-| 📋 | High | [Test complete diary workflow](#test-complete-diary-workflow) | weather → today → diary, all sections |
+| ✅ | High | [Test complete diary workflow](#test-complete-diary-workflow) | All 10 scripts (010-100) tested individually (2026-03-01) |
 | 📋 | Medium | [Update contributing skill documentation](#update-contributing-skill-documentation) | All contributing skills |
 | 📋 | Medium | [Create ElevenLabs voice skill](#create-elevenlabs-voice-skill) | For use with OpenClaw |
-| 📋 | Medium | [Add WorkIQ integration to today and diary skills](#add-workiq-integration) | Surface WorkIQ data in daily briefing and diary entry |
+| ✅ | Medium | [Add WorkIQ integration to today and diary skills](#add-workiq-integration) | 100-work.ps1 uses WorkIQ for meetings + emails (2026-03-01) |
 | ✅ | High | Establish output/YYYY-MM-DD.md pattern | weather skill (2026-02-10) |
 | ✅ | High | Verify today skill follows output pattern | today skill confirmed (2026-02-10) |
 | ✅ | High | Verify weather skill only handles weather data | weather skill confirmed (2026-02-10) |
