@@ -1,0 +1,46 @@
+[
+  {
+    "name": "Claude Code",
+    "repo": "anthropics/claude-code",
+    "type": "github",
+    "includePrerelease": false
+  },
+  {
+    "name": "Gemini CLI",
+    "repo": "google-gemini/gemini-cli",
+    "type": "github",
+    "includePrerelease": true,
+    "excludePattern": "nightly"
+  },
+  {
+    "name": "GitHub CLI",
+    "repo": "cli/cli",
+    "type": "github",
+    "includePrerelease": false
+  },
+  {
+    "name": "GitHub Copilot Chat",
+    "repo": "microsoft/vscode-copilot-chat",
+    "type": "github",
+    "includePrerelease": true,
+    "changelogUrl": "https://github.com/microsoft/vscode-copilot-chat/blob/main/CHANGELOG.md"
+  },
+  {
+    "name": "GitHub Web",
+    "type": "rss",
+    "feedUrl": "https://github.blog/changelog/feed/",
+    "changelogUrl": "https://github.blog/changelog/"
+  },
+  {
+    "name": "Goose CLI",
+    "repo": "block/goose",
+    "type": "github",
+    "includePrerelease": false
+  },
+  {
+    "name": "Node.js",
+    "repo": "nodejs/node",
+    "type": "github",
+    "includePrerelease": false
+  }
+]

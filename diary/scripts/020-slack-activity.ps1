@@ -102,11 +102,11 @@ try {
         $curated = $bulletLines -join "`n"
     }
 
-    # Validate we got something useful (at least 3 bullet points)
+    # Validate we got something useful (at least 1 bullet point)
     if ($curated) {
         $bulletCount = ([regex]::Matches($curated, '^\s*-\s', 'Multiline')).Count
-        if ($bulletCount -lt 3) {
-            Write-Information "`e[1;33mLLM output too short ($bulletCount bullets). Falling back to raw briefing.`e[0m"
+        if ($bulletCount -lt 1) {
+            Write-Information "`e[1;33mLLM output empty (0 bullets). Falling back to raw briefing.`e[0m"
             $curated = $null
         }
     }
@@ -127,21 +127,17 @@ else {
     Write-Information "`e[1;33mUsing raw Slack briefing as fallback.`e[0m"
 }
 
-# Replace the placeholder in the diary entry
+# Replace the Slack Activity section content in the diary entry
 $entry = Get-Content $EntryPath -Raw
 
-$placeholder = @"
-| # | Channel | Summary |
-|---|---------|---------|
-| {8-12+ substantive items: PSAs, decisions, announcements, problems/solutions} |||
-"@
-
-if ($entry.Contains($placeholder)) {
-    $entry = $entry.Replace($placeholder, $slackContent)
+# Match the section between "## 💬 Slack Activity" (or "### 💬 Slack Activity") header and the next "---" divider
+$sectionPattern = '(#{2,3}\s+💬\s+Slack Activity\s*\r?\n)\s*\r?\n([\s\S]*?)(\r?\n---)'
+if ($entry -match $sectionPattern) {
+    $entry = $entry -replace $sectionPattern, "`${1}`n$slackContent`n`${3}"
     $utf8NoBom = [System.Text.UTF8Encoding]::new($false)
     [System.IO.File]::WriteAllText($EntryPath, $entry, $utf8NoBom)
     Write-Information "`e[1;32mSlack activity injected into diary entry.`e[0m"
 }
 else {
-    Write-Information "`e[1;33mSlack placeholder not found in entry. Section may already be filled.`e[0m"
+    Write-Information "`e[1;31mSlack Activity section not found in entry. Cannot inject.`e[0m"
 }

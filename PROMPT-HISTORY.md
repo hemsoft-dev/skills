@@ -186,3 +186,13 @@ Result: Refactored diary/entries/2026-02-17-DevEx-Refinement.md into a clear mee
 Result: Extracted 19 transactions from 20260214_BANK_USAA CLASSIC CHECKING_0456.pdf to CSV; added extract_single.py for single-file extraction; upgraded jira skill to V2.0 with Get-JiraTicket.ps1, Search-JiraTickets.ps1, and Get-JiraTicketComments.ps1 scripts.
 
 2026-02-24 - 18:22 - Used workiq skill to search for Slack token password from Relias helpdesk (ITHC-20764); WorkIQ located email but refused to display credentials due to security policy
+
+2026-03-01 - 00:26 - Tested and fixed 060-llm-models.ps1: Fixed Playwright integration (CJS with explicit chromium path instead of ESM import), fixed regex replacement to avoid $ backreference corruption in all scripts containing dollar signs (050, 060). All three LLM sub-sections (LMSYS carry-forward, OpenRouter new models, OpenRouter top apps) inject correctly and idempotently.
+
+2026-03-01 - 00:38 - Created 070-top-trending-github-repos.ps1: Scrapes GitHub Trending page via Playwright (CJS + local chromium) to get top 5 repos with descriptions, total stars, and today's star gains. Uses safe string-based section replacement (no regex backreference issues). Tested and idempotent.
+
+2026-03-01 - 00:53 - Created 080-software-watchlist.ps1 and config/software-watchlist.json: Tracks 7 software items (Claude Code, Gemini CLI, GitHub CLI, GitHub Copilot Chat, GitHub Web, Goose CLI, Node.js) via GitHub Releases API and RSS feed. Compares versions with previous entry for change detection (old → new). Supports excludePattern filter (used for Gemini CLI nightlies). Tested and idempotent.
+
+2026-03-01 - 01:31 - Created 090-personal.ps1: Sets minimal Personal section skeleton (just Reflections heading with empty bullet). Skips if user has already edited the section (no placeholder text). No goals, no tomorrow.
+
+2026-03-01 - 02:53 - Created 100-work.ps1 diary automation script. Uses WorkIQ for meetings with transcript summaries and important emails, parses Slack briefing for work DMs and active channels. Skips weekends. Injects/updates Work section in diary entries with safe string concatenation (no regex replace). Tested on 2026-02-27 (weekday) and 2026-02-28 (weekend skip), idempotent.
