@@ -3,7 +3,7 @@
 | Status | Priority | Task | Notes |
 |--------|----------|------|-------|
 | 📋 | Medium | [Update contributing skill documentation](#update-contributing-skill-documentation) | All contributing skills |
-| 📋 | Medium | [Create ElevenLabs voice skill](#create-elevenlabs-voice-skill) | For use with OpenClaw |
+| ✅ | Medium | [Create ElevenLabs voice skill](#create-elevenlabs-voice-skill) | Created V1.0 elevenlabs skill (2026-03-01) |
 | ✅ | High | Test complete diary workflow | All 10 scripts (010-100) tested individually (2026-03-01) |
 | ✅ | Medium | Add WorkIQ integration to today and diary skills | 100-work.ps1 uses WorkIQ for meetings + emails (2026-03-01) |
 | ✅ | High | Establish output/YYYY-MM-DD.md pattern | weather skill (2026-02-10) |
@@ -24,7 +24,7 @@
 
 ## Progress
 
-**Completed: 17 / 19** (89%)
+**Completed: 18 / 19** (95%)
 
 ---
 
