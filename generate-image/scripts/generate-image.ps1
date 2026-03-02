@@ -1,34 +1,27 @@
 <#
 .SYNOPSIS
-    Generates an image using OpenRouter API.
+    Generates an image using Nano Banana 2 (Gemini 3.1 Flash Image) via OpenRouter API.
 
 .DESCRIPTION
-    Calls OpenRouter's image generation models to generate an image based on a text prompt.
-    Requires OPENROUTER_API_KEY environment variable.
+    Uses google/gemini-3.1-flash-image-preview — Pro-level visual quality at Flash speed and cost.
+    Cost: ~$0.08-0.12/image
+    Supports contextual understanding, image editing, and multi-turn conversations.
 
 .PARAMETER Prompt
     The text prompt describing the image to generate.
 
 .PARAMETER OutputPath
-    Required. The full absolute path where the image will be saved (e.g., C:\Images\output.png).
+    The full absolute path where the image will be saved.
 
-.PARAMETER Model
-    Optional. The model to use. Can be a full OpenRouter model ID or a shortcut name:
-    - "seedream" or "default" -> bytedance-seed/seedream-4.5 ($0.04/image)
-    - "nanobanana" or "banana" -> google/gemini-2.5-flash-image ($0.30/M in, $2.50/M out)
-    - "nananapro" or "pro" -> google/gemini-3-pro-image-preview ($2/M in, $12/M out)
-    Default: bytedance-seed/seedream-4.5
+.PARAMETER Preview
+    Opens the generated image in Directory Opus viewer after saving.
 
 .EXAMPLE
-    .\generate-image.ps1 -Prompt "A nano banana on a fancy plate" -OutputPath "C:\Images\banana.png"
+    .\generate-image.ps1 -Prompt "A futuristic cityscape at night" -OutputPath "D:\city.png"
 
 .EXAMPLE
-    .\generate-image.ps1 -Prompt "A sunset over mountains" -OutputPath "D:\Pictures\sunset.png" -Model nanobanana
-
-.EXAMPLE
-    .\generate-image.ps1 -Prompt "Professional product shot" -OutputPath "C:\Images\product.png" -Model pro
+    .\generate-image.ps1 -Prompt "A futuristic cityscape at night" -OutputPath "D:\city.png" -Preview
 #>
-
 
 param(
     [Parameter(Mandatory = $true, Position = 0)]
@@ -38,94 +31,82 @@ param(
     [string]$OutputPath,
 
     [Parameter(Mandatory = $false)]
-    [string]$Model = "seedream"
+    [switch]$Preview
 )
 
 $InformationPreference = 'Continue'
-
 $ErrorActionPreference = "Stop"
+$Model = "google/gemini-3.1-flash-image-preview"
 
-# Model shortcuts mapping
-$modelMap = @{
-    "seedream"   = "bytedance-seed/seedream-4.5"
-    "default"    = "bytedance-seed/seedream-4.5"
-    "nanobanana" = "google/gemini-2.5-flash-image"
-    "banana"     = "google/gemini-2.5-flash-image"
-    "nananapro"  = "google/gemini-3-pro-image-preview"
-    "pro"        = "google/gemini-3-pro-image-preview"
-}
-
-# Resolve model shortcut to full ID
-$resolvedModel = if ($modelMap.ContainsKey($Model.ToLower())) {
-    $modelMap[$Model.ToLower()]
-} else {
-    $Model  # Assume it's a full model ID
-}
-
-# Validate OutputPath is an absolute path
+# Validate OutputPath
 if (-not [System.IO.Path]::IsPathRooted($OutputPath)) {
-    Write-Error "OutputPath must be an absolute path (e.g., C:\Images\output.png). Received: $OutputPath"
-    exit 1
+    throw "OutputPath must be absolute: $OutputPath"
 }
 
-# Ensure the directory exists
-$outputDir = [System.IO.Path]::GetDirectoryName($OutputPath)
-if (-not (Test-Path $outputDir)) {
-    Write-Information "[33mCreating directory: $outputDir`e[0m"
-    New-Item -ItemType Directory -Path $outputDir -Force | Out-Null
+# Ensure directory exists
+$dir = [System.IO.Path]::GetDirectoryName($OutputPath)
+if ($dir -and -not (Test-Path $dir)) {
+    New-Item -ItemType Directory -Path $dir -Force | Out-Null
 }
 
-# Check for API key
-$apiKey = $env:OPENROUTER_API_KEY
-if (-not $apiKey) {
-    Write-Error "OPENROUTER_API_KEY environment variable is not set. Get one at: https://openrouter.ai/keys"
-    exit 1
-}
+# Get API key
+$apiKey = [Environment]::GetEnvironmentVariable("OPENROUTER_API_KEY", "User")
+if (-not $apiKey) { $apiKey = $env:OPENROUTER_API_KEY }
+if (-not $apiKey) { throw "OPENROUTER_API_KEY not set" }
 
-Write-Information "[36mGenerating image with $resolvedModel...`e[0m"
+Write-Information "`e[36mGenerating with Nano Banana 2 (Gemini 3.1 Flash Image)...`e[0m"
 
 $body = @{
-    model = $resolvedModel
+    model    = $Model
     messages = @(@{ role = "user"; content = "Generate an image: $Prompt" })
 } | ConvertTo-Json -Depth 10
 
-try {
-    $response = Invoke-RestMethod -Uri "https://openrouter.ai/api/v1/chat/completions" -Method Post `
-        -Headers @{ "Authorization" = "Bearer $apiKey"; "Content-Type" = "application/json" } -Body $body
+$response = Invoke-RestMethod -Uri "https://openrouter.ai/api/v1/chat/completions" `
+    -Method Post `
+    -Headers @{ "Authorization" = "Bearer $apiKey"; "Content-Type" = "application/json" } `
+    -Body $body
 
-    $msg = $response.choices[0].message
+$msg = $response.choices[0].message
 
-    # Handle images array (OpenRouter format)
-    if ($msg.images) {
-        $img = @($msg.images)[0]
-        if ($img.image_url) {
-            $imgUrl = if ($img.image_url.url) { $img.image_url.url } else { $img.image_url }
-            if ($imgUrl -match '^data:image/[^;]+;base64,(.+)$') {
-                [IO.File]::WriteAllBytes($OutputPath, [Convert]::FromBase64String($matches[1]))
-            } else {
-                Invoke-WebRequest -Uri $imgUrl -OutFile $OutputPath
-            }
-            Write-Information "[32mImage saved to: $OutputPath ($([math]::Round((Get-Item $OutputPath).Length/1024))KB)`e[0m"
-            exit 0
-        }
-        if ($img.b64_json) {
-            [IO.File]::WriteAllBytes($OutputPath, [Convert]::FromBase64String($img.b64_json))
-            Write-Information "[32mImage saved to: $OutputPath ($([math]::Round((Get-Item $OutputPath).Length/1024))KB)`e[0m"
-            exit 0
-        }
+# Helper function to open preview
+function Open-ImagePreview {
+    param([string]$ImagePath)
+    $dopusViewer = "C:\Program Files\GPSoftware\Directory Opus\d8viewer.exe"
+    if (Test-Path $dopusViewer) {
+        Write-Information "`e[36mOpening preview in Directory Opus...`e[0m"
+        Start-Process $dopusViewer -ArgumentList "`"$ImagePath`""
+    } else {
+        Start-Process $ImagePath
     }
+}
 
-    # Handle inline base64 in content
-    if ($msg.content -match 'base64,([A-Za-z0-9+/=]+)') {
-        [IO.File]::WriteAllBytes($OutputPath, [Convert]::FromBase64String($matches[1]))
-        Write-Information "[32mImage saved to: $OutputPath`e[0m"
+# Helper to save and report
+function Save-Image {
+    param([byte[]]$Bytes)
+    [IO.File]::WriteAllBytes($OutputPath, $Bytes)
+    $size = [math]::Round((Get-Item $OutputPath).Length / 1024)
+    Write-Information "`e[32m✓ Saved: $OutputPath (${size}KB)`e[0m"
+    if ($Preview) { Open-ImagePreview -ImagePath $OutputPath }
+    # Show credit balance
+    $balanceScript = Join-Path $PSScriptRoot "Get-OpenRouterBalance.ps1"
+    if (Test-Path $balanceScript) { & $balanceScript }
+}
+
+# Method 1: Check images array
+if ($msg.images -and $msg.images.Count -gt 0) {
+    $imgData = $msg.images[0]
+    $imgUrl = if ($imgData.image_url.url) { $imgData.image_url.url } else { $imgData.image_url }
+
+    if ($imgUrl -match '^data:image/[^;]+;base64,(.+)$') {
+        Save-Image -Bytes ([Convert]::FromBase64String($matches[1]))
         exit 0
     }
+}
 
-    Write-Error "No image data found in response"
-    exit 1
+# Method 2: Check content for inline base64
+if ($msg.content -and $msg.content -match 'data:image/[^;]+;base64,([A-Za-z0-9+/=]+)') {
+    Save-Image -Bytes ([Convert]::FromBase64String($matches[1]))
+    exit 0
 }
-catch {
-    Write-Error "Failed to generate image: $_"
-    exit 1
-}
+
+throw "No image data found. Keys in message: $($msg.PSObject.Properties.Name -join ', ')"

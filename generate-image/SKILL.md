@@ -1,41 +1,25 @@
 ---
 name: generate-image
-description: V1.6 - Generates images from text prompts using OpenRouter API with dedicated scripts for each model (Seedream, Nano Banana, Nano Banana Pro). Includes automatic credit balance tracking.
+description: V2.0 - Generates images from text prompts using Nano Banana 2 (Gemini 3.1 Flash Image) via OpenRouter API. Pro-level quality at Flash speed. Includes automatic credit balance tracking.
 ---
 
 # Generate Image
 
 **Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
-Generate images from text descriptions using OpenRouter's image generation models.
+Generate images from text descriptions using **Nano Banana 2** (Gemini 3.1 Flash Image Preview) — Pro-level visual quality at Flash speed and cost (~$0.08-0.12/image).
 
-## Quick Start - Use Dedicated Scripts
-
-Each model has its own dedicated script in `$env:USERPROFILE\.agents\skills\generate-image\scripts\`:
-
-| Model | Script | Cost | Best For |
-|-------|--------|------|----------|
-| **Seedream 4.5** | `generate-seedream.ps1` | ~$0.04/image | Fast, good quality, best value |
-| **Nano Banana** | `generate-nanobanana.ps1` | ~$0.10-0.15/image | Contextual edits, multi-turn |
-| **Nano Banana Pro** | `generate-nananapro.ps1` | ~$0.50-1.00/image | Best quality, text rendering |
-
-### Usage
+## Usage
 
 ```powershell
-# Seedream 4.5 (fast, cheap)
-& $env:USERPROFILE\.agents\skills\generate-image\scripts\generate-seedream.ps1 -Prompt "Your prompt" -OutputPath "D:\image.png"
+# Basic
+& $env:USERPROFILE\.agents\skills\generate-image\scripts\generate-image.ps1 -Prompt "Your prompt" -OutputPath "D:\image.png"
 
-# Nano Banana (Google Gemini 2.5 Flash)
-& $env:USERPROFILE\.agents\skills\generate-image\scripts\generate-nanobanana.ps1 -Prompt "Your prompt" -OutputPath "D:\image.png"
-
-# Nano Banana Pro (Google Gemini 3 Pro - highest quality)
-& $env:USERPROFILE\.agents\skills\generate-image\scripts\generate-nananapro.ps1 -Prompt "Your prompt" -OutputPath "D:\image.png"
-
-# With Directory Opus preview (add -Preview to any script)
-& $env:USERPROFILE\.agents\skills\generate-image\scripts\generate-seedream.ps1 -Prompt "Your prompt" -OutputPath "D:\image.png" -Preview
+# With Directory Opus preview
+& $env:USERPROFILE\.agents\skills\generate-image\scripts\generate-image.ps1 -Prompt "Your prompt" -OutputPath "D:\image.png" -Preview
 ```
 
-### Parameters (All Scripts)
+### Parameters
 
 | Parameter | Required | Description |
 |-----------|----------|-------------|
@@ -88,9 +72,6 @@ Professional tech startup aesthetic, clean typography, high contrast, 4K quality
 
 **Aspect Ratio**: 16:9 (widescreen format, ideal for presentations and displays)
 
-- Use for: Infographics, presentations, social media headers
-- Alternative ratios only when specifically requested (1:1 for square posts, 9:16 for vertical/mobile)
-
 ## Infographic Templates
 
 ### Professional Infographic Style (Preferred)
@@ -133,37 +114,9 @@ Modern, clean corporate design. High contrast. Professional typography.
 Subtle geometric patterns. Futuristic style. 16:9 widescreen format. 4K resolution. Executive presentation quality."
 ```
 
-## CRITICAL: Model Selection
-
-**If the user does not specify a model, you MUST:**
-
-1. Ask which model they prefer OR present the comparison table
-2. Default to **Seedream** if they say "whatever" or "cheapest"
-3. Use **Nano Banana Pro** only if they explicitly want highest quality
-
-## Model Comparison
-
-| Feature | Seedream 4.5 | Nano Banana | Nano Banana Pro |
-|---------|--------------|-------------|-----------------|
-| Model ID | `bytedance-seed/seedream-4.5` | `google/gemini-2.5-flash-image` | `google/gemini-3-pro-image-preview` |
-| Speed | ⚡ Fastest | 🏃 Fast | 🐢 Slower |
-| Quality | ⭐⭐⭐ Good | ⭐⭐⭐⭐ Very Good | ⭐⭐⭐⭐⭐ Best |
-| Text Rendering | ⭐⭐ Basic | ⭐⭐⭐ Good | ⭐⭐⭐⭐⭐ Excellent |
-| Cost | ~$0.04 | ~$0.10-0.15 | ~$0.50-1.00 |
-| Resolution | 1024x1024 | 1024x1024 | Up to 4K |
-
 ## Credit Balance Tracking
 
-After each image generation, the system automatically displays your OpenRouter credit balance:
-
-```
-💰 OpenRouter Credit Balance
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Total:     $70
-Used:      $41.64 (59.49%)
-Remaining: $28.36
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
+After each image generation, the system automatically displays your OpenRouter credit balance.
 
 **Manual Balance Check:**
 
@@ -171,41 +124,36 @@ Remaining: $28.36
 & $env:USERPROFILE\.agents\skills\generate-image\scripts\Get-OpenRouterBalance.ps1
 ```
 
-This helps track spending and avoid unexpected charges. The balance check uses OpenRouter's `/api/v1/credits` endpoint.
+## Model Info
 
-## Legacy Script (Still Works)
-
-The unified `generate-image.ps1` script still works with model shortcuts:
-
-```powershell
-.\generate-image.ps1 -Prompt "Your prompt" -OutputPath "D:\image.png" -Model seedream
-.\generate-image.ps1 -Prompt "Your prompt" -OutputPath "D:\image.png" -Model banana
-.\generate-image.ps1 -Prompt "Your prompt" -OutputPath "D:\image.png" -Model pro
-```
+| Property | Value |
+|----------|-------|
+| Model ID | `google/gemini-3.1-flash-image-preview` |
+| Nickname | Nano Banana 2 |
+| Quality | Pro-level |
+| Speed | Flash (fast) |
+| Cost | ~$0.08-0.12/image |
+| Released | Feb 26, 2026 |
+| Features | Contextual understanding, image editing, multi-turn, aspect ratio control |
 
 ## Technical Notes
 
-### Response Formats (Important for Debugging)
+### Response Format
 
-Each model returns images differently:
-
-- **Seedream**: `choices[0].message.images[0].image_url` = base64 data URL
-- **Nano Banana/Pro**: `choices[0].message.content` contains inline base64 data URL, OR `message.images[]` array
-
-The dedicated scripts handle these differences automatically.
+Nano Banana 2 returns images via `choices[0].message.images[]` array with base64 data URLs, or inline base64 in `message.content`. The script handles both formats automatically.
 
 ### API Structure
 
-All models use OpenRouter's chat completions endpoint:
-
 - URL: `https://openrouter.ai/api/v1/chat/completions`
 - Method: POST
-- Body: `{ "model": "<model-id>", "messages": [{ "role": "user", "content": "Generate an image: <prompt>" }] }`
+- Body: `{ "model": "google/gemini-3.1-flash-image-preview", "messages": [{ "role": "user", "content": "Generate an image: <prompt>" }] }`
 
 ## History
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 2.0 | 2026-03-01 | Hardwired to Nano Banana 2 (Gemini 3.1 Flash Image). Removed multi-model scripts. Single script simplicity. |
+| 1.6 | 2026-02-28 | Added Nano Banana Pro script |
 | 1.5 | 2026-01-06 | Added OpenRouter credit balance tracking after each generation |
 | 1.4 | 2026-01-06 | Added dedicated per-model scripts for reliability |
 | 1.3 | 2026-01-06 | Added model shortcuts and CRITICAL model selection requirement |

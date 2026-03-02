@@ -155,14 +155,6 @@
 
 ## 🏠 Personal
 
-### Done Today
-
-- {user to provide}
-
-### Tomorrow's Goals
-
-- {user to provide}
-
 ### 💭 Reflections
 
 {user to provide}

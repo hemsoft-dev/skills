@@ -69,3 +69,4 @@ gh auth switch --user fhemmerrelias # For Work1
 | Repo | Profile | Owner | Visibility | Path | Purpose |
 |------|---------|-------|------------|------|---------|
 | `public-skills` | Personal1 | HemSoft | Public | `D:\github\HemSoft\public-skills` | Public agent skills for skills.sh ecosystem |
+| `hs-buddy-vscode-extension` | Personal1 | HemSoft | Private | `D:\github\HemSoft\hs-buddy-vscode-extension` | HemSoft Buddy VS Code productivity extension suite |

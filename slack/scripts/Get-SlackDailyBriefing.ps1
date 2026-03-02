@@ -283,7 +283,7 @@ $briefingData = @{
 #region Display Header
 
 if ($OutputFormat -ne 'JSON') {
-    Write-Information "`n" -NoNewline
+    Write-Information ""
     Write-Information "[35m╔════════════════════════════════════════════════════════════════╗`e[0m"
     Write-Information "[35m║              📋 SLACK DAILY BRIEFING                           ║`e[0m"
     Write-Information "[35m║              $(Get-Date -Format 'dddd, MMMM d, yyyy')                       ║`e[0m"
@@ -655,15 +655,19 @@ if ($OutputFormat -eq 'JSON') {
 }
 else {
     # Final summary
-    Write-Information "`n" -NoNewline
+    Write-Information ""
     Write-Information "[35m╔════════════════════════════════════════════════════════════════╗`e[0m"
     Write-Information "[35m║                        📊 SUMMARY                              ║`e[0m"
     Write-Information "[35m╚════════════════════════════════════════════════════════════════╝`e[0m"
     
-    Write-Information "  🔔 Mentions:      $($briefingData.Mentions.Count)" -ForegroundColor $(if ($briefingData.Mentions.Count -gt 0) { 'Yellow' } else { 'Green' })
-    Write-Information "  💬 DMs:           $($briefingData.DirectMessages.Count)" -ForegroundColor $(if ($briefingData.DirectMessages.Count -gt 0) { 'Yellow' } else { 'Green' })
-    Write-Information "  📢 Announcements: $($briefingData.Announcements.Count)" -ForegroundColor $(if ($briefingData.Announcements.Count -gt 0) { 'Yellow' } else { 'Green' })
-    Write-Information "  ⚡ Action Items:  $($briefingData.ActionItems.Count)" -ForegroundColor $(if ($briefingData.ActionItems.Count -gt 0) { 'Red' } else { 'Green' })
+    $mentionColor = if ($briefingData.Mentions.Count -gt 0) { "`e[33m" } else { "`e[32m" }
+    $dmColor = if ($briefingData.DirectMessages.Count -gt 0) { "`e[33m" } else { "`e[32m" }
+    $annColor = if ($briefingData.Announcements.Count -gt 0) { "`e[33m" } else { "`e[32m" }
+    $actionColor = if ($briefingData.ActionItems.Count -gt 0) { "`e[31m" } else { "`e[32m" }
+    Write-Information "${mentionColor}  🔔 Mentions:      $($briefingData.Mentions.Count)`e[0m"
+    Write-Information "${dmColor}  💬 DMs:           $($briefingData.DirectMessages.Count)`e[0m"
+    Write-Information "${annColor}  📢 Announcements: $($briefingData.Announcements.Count)`e[0m"
+    Write-Information "${actionColor}  ⚡ Action Items:  $($briefingData.ActionItems.Count)`e[0m"
     
     $totalChannelMessages = ($briefingData.ChannelActivity.Values | ForEach-Object { $_.TotalMessages } | Measure-Object -Sum).Sum
     Write-Information "[97m  📁 Channel Msgs:  $totalChannelMessages (across $($briefingData.ChannelActivity.Count) channels)`e[0m"
