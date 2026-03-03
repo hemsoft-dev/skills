@@ -4,8 +4,9 @@
     Fills the Daily Numbers section of a diary entry.
 
 .DESCRIPTION
-    Fetches stock market data (Dow Jones, S&P 500) from Yahoo Finance and
-    repo counts from GitHub (relias-engineering) and Bitbucket (relias).
+    Fetches stock market data (Dow Jones, S&P 500) from Yahoo Finance,
+    repo counts from GitHub (relias-engineering) and Bitbucket (relias),
+    and GitHub Copilot premium request usage for all accounts.
     Computes deltas against the previous diary entry's values.
     Skips stock data on weekends (markets closed).
 
@@ -95,10 +96,15 @@ function Format-IntDelta {
 
 Write-Information "`e[1;36mGathering daily numbers...`e[0m"
 
+# --- Save original gh account (restore at end) ---
+$originalGhUser = $null
+try { $originalGhUser = gh api /user --jq '.login' 2>$null } catch {}
+
 $prev = Get-PreviousValues
 
-# --- Fetch GitHub repo count ---
+# --- Fetch GitHub repo count (use fhemmerrelias which has admin:org scope) ---
 Write-Information "`e[1;36mFetching GitHub repo count ($GitHubOrg)...`e[0m"
+gh auth switch -u fhemmerrelias 2>&1 | Out-Null
 $ghRepoCount = 0
 try {
     $page = 1
@@ -166,12 +172,61 @@ else {
     Write-Information "`e[90mWeekend — skipping stock market data (markets closed).`e[0m"
 }
 
+# --- Fetch GitHub Copilot Usage ---
+Write-Information "`e[1;36mFetching GitHub Copilot usage...`e[0m"
+
+$copilotAccounts = @('HemSoft', 'franzhemmer', 'fhemmerrelias', 'fhemmer2-relias')
+
+$copilotLines = @()
+$grandTotalUsed = 0
+$grandTotalEntitlement = 0
+$grandTotalOverageCost = 0.0
+
+foreach ($username in $copilotAccounts) {
+    try {
+        gh auth switch -u $username 2>&1 | Out-Null
+        $response = gh api /copilot_internal/user --jq '.quota_snapshots.premium_interactions' 2>&1
+        if ($LASTEXITCODE -eq 0) {
+            $premium = $response | ConvertFrom-Json
+            $entitlement = [int]$premium.entitlement
+            $remaining = [int]$premium.remaining
+            $used = $entitlement - $remaining
+            $pctUsed = if ($entitlement -gt 0) { [math]::Round(100 - $premium.percent_remaining, 1) } else { 0 }
+            $overageCount = [math]::Max(0, [int]$premium.overage_count)
+            $overageCost = $overageCount * 0.04
+            $grandTotalUsed += $used
+            $grandTotalEntitlement += $entitlement
+            $grandTotalOverageCost += $overageCost
+            $line = "  - **$username**: $used / $entitlement used ($pctUsed%)"
+            if ($overageCost -gt 0) {
+                $line += " — overage: $overageCount reqs (`$$($overageCost.ToString('N2')))"
+            }
+            $copilotLines += $line
+        } else {
+            $copilotLines += "  - **$username**: *(unavailable)*"
+        }
+    }
+    catch {
+        $copilotLines += "  - **$username**: *(error)*"
+    }
+}
+
+$grandPct = if ($grandTotalEntitlement -gt 0) { [math]::Round(($grandTotalUsed / $grandTotalEntitlement) * 100, 1) } else { 0 }
+$copilotSummaryLine = "- **GitHub Copilot Usage**: $grandTotalUsed / $grandTotalEntitlement premium requests ($grandPct%)"
+if ($grandTotalOverageCost -gt 0) {
+    $copilotSummaryLine += " — overage: `$$($grandTotalOverageCost.ToString('N2'))"
+}
+
 # --- Build markdown ---
 $sb = [System.Text.StringBuilder]::new()
 
 if ($dowLine) { [void]$sb.AppendLine($dowLine) }
 if ($spLine) { [void]$sb.AppendLine($spLine) }
 [void]$sb.AppendLine("- **Relias Repo Count**: GitHub: $ghRepoCount ($ghDelta), Bitbucket: $bbRepoCount ($bbDelta)")
+[void]$sb.AppendLine($copilotSummaryLine)
+foreach ($line in $copilotLines) {
+    [void]$sb.AppendLine($line)
+}
 
 $numbersContent = $sb.ToString().TrimEnd()
 
@@ -190,7 +245,13 @@ if ($m.Success) {
     Write-Information "`e[1;32mDaily numbers injected into diary entry.`e[0m"
     if ($dowLine) { Write-Information "  Dow: $($dowPrice.ToString('N2')) | S&P: $($spPrice.ToString('N2'))" }
     Write-Information "  GitHub: $ghRepoCount ($ghDelta) | Bitbucket: $bbRepoCount ($bbDelta)"
+    Write-Information "  Copilot: $grandTotalUsed / $grandTotalEntitlement premium requests"
 }
 else {
     Write-Information "`e[1;31mDaily Numbers section (## 📊 Daily Numbers) not found in entry. Cannot inject.`e[0m"
+}
+
+# --- Restore original gh account ---
+if ($originalGhUser) {
+    gh auth switch -u $originalGhUser 2>&1 | Out-Null
 }

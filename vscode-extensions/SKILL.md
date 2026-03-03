@@ -247,3 +247,35 @@ Requires a publisher account at <https://marketplace.visualstudio.com/manage>.
 - **Input boxes**: `vscode.window.showInputBox({ prompt: 'Enter name' })`
 - **Progress**: `vscode.window.withProgress({ location: ProgressLocation.Notification }, async (progress) => { ... })`
 - **Output channel**: `vscode.window.createOutputChannel('My Extension')` for logging
+
+## Copilot Session Data Architecture
+
+VS Code Copilot stores session data in two distinct formats under `%APPDATA%/Code[-Insiders]/User/workspaceStorage/<hash>/`:
+
+### Data Sources
+
+| Source | Path | Format | Has Real Tokens | Era |
+|---|---|---|---|---|
+| **chatSessions** | `chatSessions/*.jsonl` | Structured JSONL with kind/keyPath | Yes (`promptTokens`, `outputTokens`) | Current |
+| **transcripts** | `GitHub.copilot-chat/transcripts/*.jsonl` | Event-based JSONL | No (char counts → estimated) | Legacy |
+
+### Live vs Historical Sessions
+
+| Category | Description | Detection |
+|---|---|---|
+| **Active (live)** | Sessions started since the extension activated. Detected via `FileSystemWatcher` on chatSessions/transcripts directories. Updated incrementally via byte/line offsets. | `session.startTime >= tracker.activationTime` |
+| **Historical** | Sessions discovered during `scan()` which walks all `workspaceStorage/<hash>/` dirs. Loaded from persisted `globalState` (backed by SQLite). | `session.startTime < tracker.activationTime` |
+
+### Multi-Instance Awareness
+
+- Multiple VS Code instances (Stable + Insiders) each write to separate storage paths
+- `getVSCodeStoragePath()` currently returns the first found (Insiders preferred)
+- Each workspace hash gets its own `chatSessions/` directory
+- The `workspaceHash` field on `CopilotSession` identifies which VS Code workspace produced it
+
+### Key Fields
+
+- `source`: `'chatSessions'` (new) or `'transcripts'` (legacy) — indicates data format
+- `premiumRequests`: Computed as `requestCount × model.multiplierNumeric`
+- `promptTokens` / `outputTokens`: Real counts from chatSessions; zero from transcripts
+- `estimatedTotalTokens`: Fallback estimate via `vscode.lm.countTokens` or char-based heuristic
