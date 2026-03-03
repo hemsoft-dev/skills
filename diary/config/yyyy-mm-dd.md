@@ -74,12 +74,19 @@
 
 ## 📊 Daily Numbers
 
-<!-- Script: TBD | Sources: GitHub API, Bitbucket API -->
+<!-- Script: 050-daily-numbers.ps1 | Sources: Yahoo Finance, GitHub API, Bitbucket API, GitHub Copilot API, Cloudflare API -->
 
-| Metric | Value | Delta |
-|--------|-------|-------|
-| Relias GitHub Repos | {count} | {+/- n} |
-| Relias Bitbucket Repos | {count} | {+/- n} |
+- **Dow Jones**: {price} ({delta})
+- **S&P 500**: {price} ({delta})
+
+*{1-2 sentence market commentary — written by agent using today's news headlines to explain why markets moved}*
+
+- **Relias Repo Count**: GitHub: {count} ({+/- n}), Bitbucket: {count} ({+/- n})
+- **GitHub Copilot Usage**: {used} / {total} premium requests ({pct}%)
+  - **{account}**: {used} / {quota} used ({pct}%)
+- **Cloudflare Usage**:
+  - **nowleadershipgroup.com**: {page views} page views, {unique visitors} unique visitors, {emails forwarded} emails forwarded
+  - **setitfreeloop.org**: {page views} page views, {unique visitors} unique visitors
 
 ---
 
@@ -150,6 +157,18 @@
 | Software | Version | Released | Highlights | Links |
 |----------|---------|----------|------------|-------|
 | {from watchlist — zero updates = checking failure} |||||
+
+---
+
+## 💼 Work
+
+### 📅 Meetings
+
+<!-- Source: workiq — today's calendar meetings with attendees and transcripts (if available) -->
+
+| Time | Meeting | Attendees |
+|------|---------|-----------|
+| {from workiq} |||
 
 ---
 
