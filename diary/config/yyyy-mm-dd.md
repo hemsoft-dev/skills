@@ -83,10 +83,13 @@
 
 - **Relias Repo Count**: GitHub: {count} ({+/- n}), Bitbucket: {count} ({+/- n})
 - **GitHub Copilot Usage**: {used} / {total} premium requests ({pct}%)
+  - **Delta vs Yesterday**: {+/- used requests}, {+/- pct points}
   - **{account}**: {used} / {quota} used ({pct}%)
 - **Cloudflare Usage**:
   - **nowleadershipgroup.com**: {page views} page views, {unique visitors} unique visitors, {emails forwarded} emails forwarded
+    - **Delta vs Yesterday**: {+/- page views}, {+/- unique visitors}, {+/- emails forwarded}
   - **setitfreeloop.org**: {page views} page views, {unique visitors} unique visitors
+    - **Delta vs Yesterday**: {+/- page views}, {+/- unique visitors}
 
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: helpdesk
-description: "V1.0 - Commands: list. Query Jira Service Management (JSM) helpdesk tickets via REST API using existing Atlassian credentials."
+description: "V1.1 - Commands: list, list-details. Query Jira Service Management (JSM) helpdesk tickets via REST API using existing Atlassian credentials."
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -65,4 +65,28 @@ List helpdesk tickets (customer requests). Defaults to your own open requests.
 
 # Increase result count
 & "$PSScriptRoot\scripts\Get-HelpdeskRequests.ps1" -MaxResults 50
+```
+
+### list-details
+
+List helpdesk tickets with richer details and full change history.
+
+Outputs:
+
+- Top-level ticket summary table (including who last changed each ticket)
+- Detailed section per ticket
+- One line per changelog item (oldest to newest), including who made the change and when
+
+```powershell
+# List detailed open requests (default)
+& "$PSScriptRoot\scripts\Get-HelpdeskRequestDetails.ps1"
+
+# Limit to a specific service desk
+& "$PSScriptRoot\scripts\Get-HelpdeskRequestDetails.ps1" -ServiceDeskId 14
+
+# Include closed requests too
+& "$PSScriptRoot\scripts\Get-HelpdeskRequestDetails.ps1" -Status "ALL"
+
+# Increase result count
+& "$PSScriptRoot\scripts\Get-HelpdeskRequestDetails.ps1" -MaxResults 50
 ```

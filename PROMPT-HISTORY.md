@@ -4,6 +4,36 @@ This file tracks meaningful prompts and their outcomes for the Claude Skills rep
 
 ---
 
+2026-03-03 - 22:03 - Add full personal reflections to today's diary entry
+Result: Updated `diary/entries/2026-03-03.md` Personal Reflections with user-provided narrative on sleep, family, SFL proof-of-concept progress, Relias Assistant service account setup, Copilot follow-up, and AI Foundation Chapter handoff planning.
+
+2026-03-03 - 21:53 - Verify Cloudflare API usage against docs and correct date handling
+Result: Confirmed GraphQL queries and filters are valid per Cloudflare docs, identified that scaffolding called Cloudflare script without `-Date` (defaulting to yesterday), updated prompt fallback to pass explicit date, and corrected `diary/entries/2026-03-03.md` Cloudflare values/deltas to true 2026-03-03 data.
+
+2026-03-03 - 21:48 - Execute and populate today's Copilot and Cloudflare deltas
+Result: Calculated day-over-day deltas from `2026-03-02.md` and updated `diary/entries/2026-03-03.md` with explicit delta lines for GitHub Copilot usage and Cloudflare domain metrics.
+
+2026-03-03 - 21:47 - Add delta placeholders to diary template Daily Numbers
+Result: Updated `diary/config/yyyy-mm-dd.md` to include explicit `Delta vs Yesterday` lines for GitHub Copilot usage and Cloudflare metrics so every scaffolded entry structurally expects day-over-day comparisons.
+
+2026-03-03 - 21:44 - Require persistent Daily Numbers deltas for Copilot and Cloudflare
+Result: Updated `scaffold-todays-diary-entry.prompt.md` and `diary/SKILL.md` so every future scaffold includes day-over-day deltas for GitHub Copilot usage and Cloudflare usage, with explicit "delta unavailable" fallback when yesterday data is missing.
+
+2026-03-03 - 21:31 - Scaffold today's diary entry from prompt workflow with cached/live data
+Result: Created `diary/entries/2026-03-03.md` in required section order, populated weather/news/slack/daily numbers/LLM/trending/software/watchlist updates/productivity/meetings, and left TODO placeholders for Today's Highlight and Personal Reflections.
+
+2026-03-03 - 20:52 - Add explicit last change comment sentence to helpdesk list-details output
+Result: Enhanced Get-HelpdeskRequestDetails.ps1 to print a "Last Change Comment" sentence per ticket based on the latest JSM comment (author, timestamp, comment text), with "No comment updates yet." when no comments exist.
+
+2026-03-03 - 20:21 - Replace Jira changelog dependency with JSM status/comment timeline for helpdesk list-details
+Result: Updated Get-HelpdeskRequestDetails.ps1 to pull detailed history from /rest/servicedeskapi/request/{key}/status and /comment, producing one-line chronological history entries with available actor and timestamp data and avoiding 404 changelog failures.
+
+2026-03-03 - 16:04 - Add helpdesk list-details command with full per-ticket change history
+Result: Upgraded helpdesk skill to V1.1 with new list-details command, added Get-HelpdeskRequestDetails.ps1, and verified output includes summary table plus per-ticket detailed sections with one-line changelog entries showing who changed fields and when.
+
+2026-03-03 - 00:49 - Create cloudflare skill for web analytics and email routing stats
+Result: Created V1.0 cloudflare skill with Get-CloudflareUsage.ps1 querying GraphQL Analytics API for page views, unique visitors (both domains), and email forwarding (nowleadershipgroup.com). Integrated as diary cached data source #8. Verified API token and all endpoints working.
+
 2026-03-01 - 06:10 - Create elevenlabs skill with TTS command
 Result: Created V1.0 elevenlabs skill as ElevenLabs API expert with tts command, PowerShell script (Invoke-ElevenLabsTts.ps1), voice/model reference tables, API endpoint reference, and troubleshooting guide.
 

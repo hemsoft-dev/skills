@@ -57,3 +57,10 @@ Personal diary management.
 | `diary-orchestrator.ps1` | Runs all `###-*.ps1` section scripts in order |
 | `010-diary-header.ps1` | Scaffolds entry file from `config/yyyy-mm-dd.md` template |
 | `020-slack-activity.ps1` | Curates Slack briefing into 5-8 bullet summary via Copilot CLI, falls back to raw briefing |
+
+## Scaffolding Defaults
+
+- In `📊 Daily Numbers`, always include day-over-day deltas versus yesterday for:
+  - GitHub Copilot usage
+  - Cloudflare usage metrics (page views, unique visitors, and emails forwarded where applicable)
+- If a prior-day value is missing, explicitly state that the delta is unavailable.

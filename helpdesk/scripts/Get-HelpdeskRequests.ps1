@@ -101,7 +101,7 @@ function ConvertTo-ShortDate([long]$epochMillis) {
     return $dt.ToString("dd/MM/yy")
 }
 
-# Fetch last comment per ticket for "By" column
+# Fetch changelog per ticket to find who last changed it
 $sorted = $response.values | Sort-Object { [long]$_.createdDate.epochMillis }
 $results = foreach ($item in $sorted) {
     $issueKey      = $item.issueKey
@@ -111,18 +111,18 @@ $results = foreach ($item in $sorted) {
     $lastUpdated   = ConvertTo-ShortDate $item.currentStatus.statusDate.epochMillis
     $lastUpdatedBy = $item.reporter.displayName  # fallback: ticket creator
 
-    # Get last comment to find a real person who last touched it
+    # Get changelog to find who last modified the ticket
     try {
-        $comments = Invoke-RestMethod `
-            -Uri "$baseUrl/rest/servicedeskapi/request/$issueKey/comment?limit=100" `
+        $issue = Invoke-RestMethod `
+            -Uri "$baseUrl/rest/api/3/issue/${issueKey}?expand=changelog&fields=updated" `
             -Headers $headers `
             -Method Get `
             -ErrorAction Stop
 
-        if ($comments.values.Count -gt 0) {
-            $lc = $comments.values[-1]
-            $lastUpdated   = ConvertTo-ShortDate $lc.created.epochMillis
-            $lastUpdatedBy = $lc.author.displayName
+        if ($issue.changelog.histories.Count -gt 0) {
+            $lastChange    = $issue.changelog.histories[-1]
+            $lastUpdatedBy = $lastChange.author.displayName
+            $lastUpdated   = ([datetime]$lastChange.created).ToString("dd/MM/yy")
         }
     }
     catch {

@@ -27,7 +27,7 @@ Workflows may optionally include:
 - Workflow files: `.github/workflows/*.md` and `.github/workflows/**/*.md`
 - Workflow lock files: `.github/workflows/*.lock.yml`
 - Shared components: `.github/workflows/shared/*.md`
-- Configuration: https://github.com/github/gh-aw/blob/v0.47.1/.github/aw/github-agentic-workflows.md
+- Configuration: <https://github.com/github/gh-aw/blob/v0.47.1/.github/aw/github-agentic-workflows.md>
 
 ## Problems This Solves
 
@@ -47,51 +47,61 @@ When you interact with this agent, it will:
 ## Available Prompts
 
 ### Create New Workflow
+
 **Load when**: User wants to create a new workflow from scratch, add automation, or design a workflow that doesn't exist yet
 
-**Prompt file**: https://github.com/github/gh-aw/blob/v0.47.1/.github/aw/create-agentic-workflow.md
+**Prompt file**: <https://github.com/github/gh-aw/blob/v0.47.1/.github/aw/create-agentic-workflow.md>
 
 **Use cases**:
+
 - "Create a workflow that triages issues"
 - "I need a workflow to label pull requests"
 - "Design a weekly research automation"
 
 ### Update Existing Workflow  
+
 **Load when**: User wants to modify, improve, or refactor an existing workflow
 
-**Prompt file**: https://github.com/github/gh-aw/blob/v0.47.1/.github/aw/update-agentic-workflow.md
+**Prompt file**: <https://github.com/github/gh-aw/blob/v0.47.1/.github/aw/update-agentic-workflow.md>
 
 **Use cases**:
+
 - "Add web-fetch tool to the issue-classifier workflow"
 - "Update the PR reviewer to use discussions instead of issues"
 - "Improve the prompt for the weekly-research workflow"
 
 ### Debug Workflow  
+
 **Load when**: User needs to investigate, audit, debug, or understand a workflow, troubleshoot issues, analyze logs, or fix errors
 
-**Prompt file**: https://github.com/github/gh-aw/blob/v0.47.1/.github/aw/debug-agentic-workflow.md
+**Prompt file**: <https://github.com/github/gh-aw/blob/v0.47.1/.github/aw/debug-agentic-workflow.md>
 
 **Use cases**:
+
 - "Why is this workflow failing?"
 - "Analyze the logs for workflow X"
 - "Investigate missing tool calls in run #12345"
 
 ### Upgrade Agentic Workflows
+
 **Load when**: User wants to upgrade workflows to a new gh-aw version or fix deprecations
 
-**Prompt file**: https://github.com/github/gh-aw/blob/v0.47.1/.github/aw/upgrade-agentic-workflows.md
+**Prompt file**: <https://github.com/github/gh-aw/blob/v0.47.1/.github/aw/upgrade-agentic-workflows.md>
 
 **Use cases**:
+
 - "Upgrade all workflows to the latest version"
 - "Fix deprecated fields in workflows"
 - "Apply breaking changes from the new release"
 
 ### Create Shared Agentic Workflow
+
 **Load when**: User wants to create a reusable workflow component or wrap an MCP server
 
-**Prompt file**: https://github.com/github/gh-aw/blob/v0.47.1/.github/aw/create-shared-agentic-workflow.md
+**Prompt file**: <https://github.com/github/gh-aw/blob/v0.47.1/.github/aw/create-shared-agentic-workflow.md>
 
 **Use cases**:
+
 - "Create a shared component for Notion integration"
 - "Wrap the Slack MCP server as a reusable component"
 - "Design a shared workflow for database queries"
@@ -136,7 +146,7 @@ gh aw compile --validate
 
 ## Important Notes
 
-- Always reference the instructions file at https://github.com/github/gh-aw/blob/v0.47.1/.github/aw/github-agentic-workflows.md for complete documentation
+- Always reference the instructions file at <https://github.com/github/gh-aw/blob/v0.47.1/.github/aw/github-agentic-workflows.md> for complete documentation
 - Use the MCP tool `agentic-workflows` when running in GitHub Copilot Cloud
 - Workflows must be compiled to `.lock.yml` files before running in GitHub Actions
 - **Bash tools are enabled by default** - Don't restrict bash commands unnecessarily since workflows are sandboxed by the AWF
