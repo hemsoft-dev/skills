@@ -1,10 +1,10 @@
 ---
 name: copilot
-description: V1.3 - Expert in GitHub Copilot CLI for AI-powered coding assistance, command execution, and interactive development workflows. Defaults to copilot-free for quick prompts.
+description: V1.4 - Expert in GitHub Copilot CLI for AI-powered coding assistance, command execution, and interactive development workflows. Defaults to copilot-free for quick prompts.
 compatibility: Requires @github/copilot npm package (npm install -g @github/copilot)
 metadata:
   author: skills-agent
-  version: "1.2"
+  version: "1.3"
 ---
 
 # GitHub Copilot CLI

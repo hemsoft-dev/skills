@@ -1,6 +1,6 @@
 ---
 name: elevenlabs
-description: "V1.0 - Commands: tts. Expert in ElevenLabs API for text-to-speech generation, voice management, and audio processing. Use when generating speech, listing voices, or working with ElevenLabs features."
+description: "V1.2 - Commands: tts, podcast. Expert in ElevenLabs API for text-to-speech generation, voice management, and audio processing. Use when generating speech, producing two-host podcasts, listing voices, or working with ElevenLabs features."
 dependencies: PowerShell 5.1+
 compatibility: Requires ELEVENLABS_API_KEY environment variable, network access, and ffplay (from ffmpeg) for playback.
 hooks:
@@ -93,6 +93,148 @@ Generate speech audio from text using ElevenLabs voices.
 | `-Stability` | No | `0.5` | Voice stability (0.0-1.0) |
 | `-SimilarityBoost` | No | `0.75` | Voice similarity boost (0.0-1.0) |
 | `-Style` | No | `0.0` | Style exaggeration (0.0-1.0) |
+
+### podcast - Two-Host Podcast Generation
+
+Generate a two-host conversational podcast from user-provided sources, then synthesize it with alternating ElevenLabs voices.
+
+**Scripts**:
+
+- `scripts/New-ElevenLabsPodcastDialogue.ps1` (builds source-driven dialogue)
+- `scripts/Invoke-ElevenLabsPodcast.ps1` (synthesizes dialogue to audio)
+
+**Default Voices** (researched and selected for contrast and clarity):
+
+- Host 1: `Sarah` (confident, warm explainer tone)
+- Host 2: `Adam` (deep, steady analyst tone)
+
+These defaults create a clear conversational contrast similar to two-host explainer formats.
+
+**Source requirement (mandatory):**
+
+The user must provide at least one source. If no source is provided, stop and ask for sources. Encourage multiple sources because breadth improves podcast quality.
+
+Accepted source types:
+
+- URLs
+- File paths (PDF, Markdown, text, docs)
+- Raw pasted notes
+
+**Workflow:**
+
+1. Ask for sources (required, one or more)
+2. Ask for podcast length: `short`, `medium`, or `long`
+3. Ask for style direction:
+   - `casual/conversational` (default)
+   - `formal`
+   - `news-reporting`
+4. Ask for audience depth (default: digestible, non-deep-technical)
+5. Ask for any focus hints (must-cover points, callouts, sections)
+6. Ask for output path (required)
+7. Generate a two-host script from the sources
+  - Preferred helper: `New-ElevenLabsPodcastDialogue.ps1`
+8. Review transcript for quality (required before synthesis)
+9. Synthesize with `Invoke-ElevenLabsPodcast.ps1`
+
+**Default behavior for script generation:**
+
+- Gravitate toward conversational back-and-forth between two hosts (NotebookLM-style)
+- Prioritize clarity and digestibility over deep technical depth
+- Keep examples practical and concrete
+- Use v3-friendly expressive cues sparingly (audio tags + punctuation)
+
+**Dialogue authoring constraints:**
+
+- Alternate hosts naturally (avoid long monologues)
+- Keep turns short-to-medium and easy to follow
+- Include occasional recap lines and transitions
+- Avoid inventing facts not grounded in provided sources
+- Do not overuse audio tags; one subtle tag every few turns is usually enough
+- Never read raw URLs, route paths, or website navigation labels out loud
+- Synthesize purpose and meaning from source material; do not enumerate menus or page chrome
+
+**Cost-control guidance:**
+
+- Default to transcript-first generation and review (`.txt`) before running audio synthesis
+- If transcript quality is poor, fix prompts/source extraction first; do not repeatedly regenerate audio
+
+**Length guidance:**
+
+| Length | Target turns | Typical duration |
+|--------|-------------|------------------|
+| `short` | 12-18 turns | 3-6 minutes |
+| `medium` | 22-32 turns | 8-14 minutes |
+| `long` | 36-52 turns | 16-28 minutes |
+
+**Required dialogue format (input to script):**
+
+```text
+Host 1: [curious] Welcome back - today we are unpacking...
+Host 2: [thoughtful] Right, and the first source highlights...
+Host 1: So the practical takeaway is...
+```
+
+Speaker labels can match custom host names passed to script parameters.
+
+**Usage:**
+
+```powershell
+# Basic podcast synthesis from prepared dialogue text
+.\scripts\Invoke-ElevenLabsPodcast.ps1 `
+  -DialogueText (Get-Content .\podcast-dialogue.txt -Raw) `
+  -OutputFile "C:\audio\episode-01.mp3"
+
+# Auto-build dialogue from sources, then generate audio
+.\scripts\New-ElevenLabsPodcastDialogue.ps1 `
+  -Source "https://example.com/article", ".\notes.md" `
+  -Length medium -StylePreset casual `
+  -FocusHint "focus on practical takeaways" `
+  -OutputDialogueFile "C:\audio\episode-01-dialogue.txt" `
+  -GenerateAudio -OutputAudioFile "C:\audio\episode-01.mp3"
+
+# Custom host voices and names
+.\scripts\Invoke-ElevenLabsPodcast.ps1 `
+  -DialogueText (Get-Content .\podcast-dialogue.txt -Raw) `
+  -Host1Name "Maya" -Host1Voice "Sarah" `
+  -Host2Name "Noah" -Host2Voice "Adam" `
+  -OutputFile "C:\audio\episode-01.mp3" -Play
+
+# News-style with stronger delivery
+.\scripts\Invoke-ElevenLabsPodcast.ps1 `
+  -DialogueText (Get-Content .\podcast-dialogue.txt -Raw) `
+  -OutputFile "C:\audio\daily-brief.mp3" `
+  -Style 0.45 -Stability 0.35
+```
+
+**Parameters:**
+
+| Parameter | Required | Default | Description |
+|-----------|----------|---------|-------------|
+| `-DialogueText` | Yes | - | Two-host dialogue text using `Speaker: line` format |
+| `-OutputFile` | Yes | - | Output podcast file path |
+| `-Host1Name` | No | `Host 1` | Speaker label for host 1 lines |
+| `-Host2Name` | No | `Host 2` | Speaker label for host 2 lines |
+| `-Host1Voice` | No | `Sarah` | Voice name or ID for host 1 |
+| `-Host2Voice` | No | `Adam` | Voice name or ID for host 2 |
+| `-Model` | No | `eleven_v3` | TTS model ID |
+| `-Play` | No | `$false` | Play audio after generation |
+| `-Stability` | No | `0.35` | Voice stability (0.0-1.0) |
+| `-SimilarityBoost` | No | `0.80` | Voice similarity boost (0.0-1.0) |
+| `-Style` | No | `0.35` | Style exaggeration (0.0-1.0) |
+
+**Dialogue helper parameters (`New-ElevenLabsPodcastDialogue.ps1`):**
+
+| Parameter | Required | Default | Description |
+|-----------|----------|---------|-------------|
+| `-Source` | Yes | - | One or more URL/file/raw-text sources |
+| `-OutputDialogueFile` | Yes | - | Where to save generated dialogue text |
+| `-Length` | No | `medium` | `short`, `medium`, or `long` |
+| `-StylePreset` | No | `casual` | `casual`, `formal`, or `news-reporting` |
+| `-FocusHint` | No | - | Extra guidance on what to emphasize |
+| `-Host1Name` | No | `Host 1` | Speaker label for host 1 |
+| `-Host2Name` | No | `Host 2` | Speaker label for host 2 |
+| `-GenerateAudio` | No | `$false` | If set, also synthesize audio |
+| `-OutputAudioFile` | No* | - | Required when `-GenerateAudio` is set |
 
 ### Long-Form Audio (Automatic Chunking)
 

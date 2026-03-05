@@ -1,12 +1,13 @@
 ---
 description: |
-  This workflow creates daily repo status reports. It gathers recent repository
+  This workflow creates repo status reports. It gathers recent repository
   activity (issues, PRs, discussions, releases, code changes) and generates
   engaging GitHub issues with productivity insights, community highlights,
   and project recommendations.
 
 on:
-  schedule: daily
+  schedule:
+    - cron: "0 4 * * 1"
   workflow_dispatch:
 
 permissions:
@@ -26,14 +27,14 @@ tools:
 safe-outputs:
   create-issue:
     title-prefix: "[repo-status] "
-    labels: [report, daily-status]
+    labels: [report, repo-status]
 source: githubnext/agentics/workflows/daily-repo-status.md@b87234850bf9664d198f28a02df0f937d0447295
 engine: copilot
 ---
 
-# Daily Repo Status
+# Repo Status
 
-Create an upbeat daily status report for the repo as a GitHub issue.
+Create an upbeat repo status report for the repo as a GitHub issue.
 
 ## What to include
 
