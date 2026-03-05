@@ -294,3 +294,6 @@ Result: Updated copilot/SKILL.md with a Stop hook that runs scripts/Invoke-Agent
 2026-03-05 - 06:21 - Switch automation from local git post-commit to Copilot Stop hook only
 Result: Removed the installed .git/hooks/post-commit wrapper and kept session-end auto commit/push enforcement in copilot/SKILL.md Stop hook.
 
+
+2026-03-05 - 06:55 - Archive wezterm skill folder on user request
+Result: Moved 'wezterm' to '_archived/wezterm' and removed it from active skills by directory placement.
