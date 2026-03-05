@@ -1,14 +1,26 @@
 #!/usr/bin/env pwsh
-Set-StrictMode -Version Latest
-$ErrorActionPreference = 'Stop'
-
 param(
     [Parameter()]
     [string]$RepoPath = '.'
 )
 
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
+
 function Write-Ok([string]$Message) { Write-Host $Message -ForegroundColor Green }
 function Write-Err([string]$Message) { Write-Host $Message -ForegroundColor Red }
+function Write-Warn([string]$Message) { Write-Host $Message -ForegroundColor Yellow }
+
+function Get-ActiveHooksPath {
+    param([string]$RepoRoot)
+
+    $configured = (git -C $RepoRoot config --get core.hooksPath 2>$null)
+    if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($configured)) {
+        return '.git/hooks'
+    }
+
+    return $configured.Trim()
+}
 
 function Get-RepoRoot {
     param([string]$Path)
@@ -29,15 +41,23 @@ function Get-RepoRoot {
 }
 
 $repoRoot = Get-RepoRoot -Path $RepoPath
+$activeHooksPath = Get-ActiveHooksPath -RepoRoot $repoRoot
 $hooksDir = Join-Path $repoRoot '.git/hooks'
 $preCommitPath = Join-Path $hooksDir 'pre-commit'
 $preCommitMarkdownPath = Join-Path $hooksDir 'pre-commit-markdown.ps1'
 $markdownConfigPath = Join-Path $repoRoot '.markdownlint.jsonc'
+$huskyPreCommitPath = Join-Path $repoRoot '.husky/pre-commit'
+$copilotHooksJsonPath = Join-Path $repoRoot '.github/hooks/hooks.json'
+$copilotFallbackJsonPath = Join-Path $repoRoot '.github/hooks/session-stop-autopush.json'
+$copilotStopScriptPath = Join-Path $repoRoot '.github/hooks/Invoke-AgentSessionAutoPush.ps1'
+
+Write-Warn "Detected active hooks path: $activeHooksPath"
 
 $checks = @(
     [pscustomobject]@{ Name = 'pre-commit exists'; Pass = (Test-Path $preCommitPath) },
     [pscustomobject]@{ Name = 'pre-commit-markdown exists'; Pass = (Test-Path $preCommitMarkdownPath) },
-    [pscustomobject]@{ Name = '.markdownlint.jsonc exists'; Pass = (Test-Path $markdownConfigPath) }
+    [pscustomobject]@{ Name = '.markdownlint.jsonc exists'; Pass = (Test-Path $markdownConfigPath) },
+    [pscustomobject]@{ Name = 'Copilot Stop script exists'; Pass = (Test-Path $copilotStopScriptPath) }
 )
 
 if (Test-Path $preCommitPath) {
@@ -49,8 +69,44 @@ if (Test-Path $preCommitPath) {
 if (Test-Path $preCommitMarkdownPath) {
     $psHookText = Get-Content -Path $preCommitMarkdownPath -Raw
     $usesMarkdownlint = $psHookText -match 'markdownlint-cli2'
+    $usesSafeVarInterpolation = $psHookText -match 'Issues found in \$\{file\}:'
     $checks += [pscustomobject]@{ Name = 'markdown hook uses markdownlint-cli2'; Pass = $usesMarkdownlint }
+    $checks += [pscustomobject]@{ Name = 'markdown hook avoids $file: parser bug'; Pass = $usesSafeVarInterpolation }
 }
+
+if ($activeHooksPath -eq '.husky/_') {
+    $hasHuskyBlock = $false
+    if (Test-Path $huskyPreCommitPath) {
+        $huskyText = Get-Content -Path $huskyPreCommitPath -Raw
+        $hasHuskyBlock = ($huskyText -match 'copilot-hooks:begin markdown gate')
+    }
+
+    $checks += [pscustomobject]@{ Name = 'Husky pre-commit contains copilot markdown gate'; Pass = $hasHuskyBlock }
+}
+
+$copilotHookConfigured = $false
+if (Test-Path $copilotHooksJsonPath) {
+    try {
+        $hooksObj = Get-Content -Path $copilotHooksJsonPath -Raw | ConvertFrom-Json
+        if ($hooksObj.hooks -and $hooksObj.hooks.Stop) {
+            foreach ($entry in @($hooksObj.hooks.Stop)) {
+                $windowsCmd = "$($entry.windows)"
+                $commandCmd = "$($entry.command)"
+                if ($windowsCmd -match 'Invoke-AgentSessionAutoPush\.ps1' -or $commandCmd -match 'Invoke-AgentSessionAutoPush\.ps1') {
+                    $copilotHookConfigured = $true
+                    break
+                }
+            }
+        }
+    } catch {
+        $copilotHookConfigured = $false
+    }
+} elseif (Test-Path $copilotFallbackJsonPath) {
+    $fallbackText = Get-Content -Path $copilotFallbackJsonPath -Raw
+    $copilotHookConfigured = $fallbackText -match 'Invoke-AgentSessionAutoPush\.ps1'
+}
+
+$checks += [pscustomobject]@{ Name = 'Copilot Stop hook references auto-push script'; Pass = $copilotHookConfigured }
 
 $commandCheck = $null -ne (Get-Command markdownlint-cli2 -ErrorAction SilentlyContinue)
 $checks += [pscustomobject]@{ Name = 'markdownlint-cli2 installed'; Pass = $commandCheck }
@@ -66,6 +122,7 @@ foreach ($check in $checks) {
 
 if ($failed) {
     Write-Err "Verification failed: $($failed.Count) check(s) did not pass"
+    Write-Err 'Run install again: pwsh -NoProfile -ExecutionPolicy Bypass -File .\copilot-hooks\scripts\1-Install-CopilotHooks.ps1'
     exit 1
 }
 
