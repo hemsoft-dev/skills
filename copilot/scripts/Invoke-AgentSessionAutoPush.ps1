@@ -20,6 +20,56 @@ function Write-Info([string]$Message) {
     Write-Host "[agent-session-hook] $Message"
 }
 
+function Get-OptionalPropertyValue($InputObject, [string]$PropertyName, [string]$DefaultValue = 'unknown') {
+    if ($null -eq $InputObject) {
+        return $DefaultValue
+    }
+
+    $property = $InputObject.PSObject.Properties[$PropertyName]
+    if ($null -eq $property) {
+        return $DefaultValue
+    }
+
+    $value = $property.Value
+    if ($null -eq $value) {
+        return $DefaultValue
+    }
+
+    $text = "$value"
+    if ([string]::IsNullOrWhiteSpace($text)) {
+        return $DefaultValue
+    }
+
+    return $text
+}
+
+function Get-HookInput {
+    try {
+        $raw = [Console]::In.ReadToEnd()
+        if ([string]::IsNullOrWhiteSpace($raw)) {
+            return $null
+        }
+
+        return ($raw | ConvertFrom-Json)
+    }
+    catch {
+        Write-Info "Unable to parse hook stdin payload: $($_.Exception.Message)"
+        return $null
+    }
+}
+
+function Write-HookRuntimeLog($HookInput) {
+    $tempPath = if ($env:TEMP) { $env:TEMP } else { [IO.Path]::GetTempPath() }
+    $logPath = Join-Path $tempPath 'copilot-stop-hook.log'
+
+    $eventName = Get-OptionalPropertyValue -InputObject $HookInput -PropertyName 'hookEventName'
+    $sessionId = Get-OptionalPropertyValue -InputObject $HookInput -PropertyName 'sessionId'
+    $active = Get-OptionalPropertyValue -InputObject $HookInput -PropertyName 'stop_hook_active'
+    $line = "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') | event=$eventName | session=$sessionId | stop_hook_active=$active"
+
+    Add-Content -Path $logPath -Value $line
+}
+
 function Get-StatusPorcelain {
     return (git status --porcelain)
 }
@@ -75,6 +125,9 @@ $repoRoot = (git rev-parse --show-toplevel).Trim()
 if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($repoRoot)) {
     throw 'Not inside a Git repository.'
 }
+
+$hookInput = Get-HookInput
+Write-HookRuntimeLog -HookInput $hookInput
 
 Write-Info "Running in $repoRoot"
 
