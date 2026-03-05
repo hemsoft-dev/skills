@@ -2,7 +2,7 @@
 
 | Status | Priority | Task | Notes |
 |--------|----------|------|-------|
-| 📋 | Medium | [Update contributing skill documentation](#update-contributing-skill-documentation) | All contributing skills |
+| ✅ | Medium | Update contributing skill documentation | Abandoned as out-of-scope for now (2026-03-05) |
 | ✅ | Medium | [Create ElevenLabs voice skill](#create-elevenlabs-voice-skill) | Created V1.0 elevenlabs skill (2026-03-01) |
 | ✅ | High | Test complete diary workflow | All 10 scripts (010-100) tested individually (2026-03-01) |
 | ✅ | Medium | Add WorkIQ integration to today and diary skills | 100-work.ps1 uses WorkIQ for meetings + emails (2026-03-01) |
@@ -24,19 +24,7 @@
 
 ## Progress
 
-**Completed: 18 / 19** (95%)
-
----
-
-## Remaining Items
-
-### Update contributing skill documentation
-
-**Goal**: Finalize documented responsibilities for all skills involved in the diary workflow.
-
-**Skills to update**: `weather`, `news`, `today`, `diary`, `slack`
-
-**Each should clearly state**: what it owns, what it outputs, and what it does NOT do.
+**Completed: 19 / 19** (100%)
 
 ---
 
