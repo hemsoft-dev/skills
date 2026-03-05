@@ -58,7 +58,7 @@ function Remove-ManagedFile {
         return
     }
 
-    throw "$Label exists but was not installed by github-hooks skill. Use -Force to remove it."
+    throw "$Label exists but was not installed by copilot-hooks skill. Use -Force to remove it."
 }
 
 $repoRoot = Get-RepoRoot -Path $RepoPath
@@ -69,9 +69,9 @@ $preCommitMarkdownPath = Join-Path $hooksDir 'pre-commit-markdown.ps1'
 $markdownConfigPath = Join-Path $repoRoot '.markdownlint.jsonc'
 
 try {
-    Remove-ManagedFile -Path $preCommitPath -Marker 'Managed by github-hooks skill' -Label 'pre-commit hook'
-    Remove-ManagedFile -Path $preCommitMarkdownPath -Marker 'Managed by github-hooks skill' -Label 'pre-commit-markdown hook'
-    Remove-ManagedFile -Path $markdownConfigPath -Marker 'Managed by github-hooks skill' -Label 'starter markdownlint config'
+    Remove-ManagedFile -Path $preCommitPath -Marker 'Managed by copilot-hooks skill' -Label 'pre-commit hook'
+    Remove-ManagedFile -Path $preCommitMarkdownPath -Marker 'Managed by copilot-hooks skill' -Label 'pre-commit-markdown hook'
+    Remove-ManagedFile -Path $markdownConfigPath -Marker 'Managed by copilot-hooks skill' -Label 'starter markdownlint config'
 } catch {
     Write-Err $_.Exception.Message
     exit 1

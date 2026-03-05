@@ -40,7 +40,7 @@ $markdownConfigPath = Join-Path $repoRoot '.markdownlint.jsonc'
 
 $preCommitContent = @'
 #!/bin/sh
-# Managed by github-hooks skill
+# Managed by copilot-hooks skill
 # Windows Git hook wrapper - calls PowerShell and Markdown quality checks
 
 POWERSHELL_EXIT=0
@@ -61,7 +61,7 @@ exit 0
 
 $preCommitMarkdownContent = @'
 #!/usr/bin/env pwsh
-# Managed by github-hooks skill
+# Managed by copilot-hooks skill
 # Git pre-commit hook that enforces Markdown quality standards.
 # Runs markdownlint-cli2 on staged Markdown files.
 
@@ -100,7 +100,7 @@ if ($IsWindows -or $PSVersionTable.PSVersion.Major -lt 6) {
 $configPath = Join-Path $repoRoot '.markdownlint.jsonc'
 if (-not (Test-Path $configPath)) {
     Write-Fail "Missing markdownlint config at $configPath"
-    Write-Info "Run github-hooks install again to create a starter config."
+    Write-Info "Run copilot-hooks install again to create a starter config."
     exit 1
 }
 
@@ -131,7 +131,7 @@ exit 0
 '@
 
 $starterMarkdownlintConfig = @'
-// Managed by github-hooks skill
+// Managed by copilot-hooks skill
 {
   "$schema": "https://json.schemastore.org/markdownlint-cli2.json",
   "config": {
