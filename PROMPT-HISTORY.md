@@ -4,6 +4,9 @@ This file tracks meaningful prompts and their outcomes for the Claude Skills rep
 
 ---
 
+2026-03-05 - 07:01 - Create reusable github-hooks skill for cross-repo pre-commit setup
+Result: Created `github-hooks` V1.0 with script-first and manual fallback workflows plus numbered `install`, `verify`, and `uninstall` scripts that mirror this repo's pre-commit wrapper + markdown hook behavior and auto-create starter `.markdownlint.jsonc` when missing.
+
 2026-03-05 - 06:25 - Replace skill-frontmatter stop hook with official Copilot hooks configuration
 Result: Switched to VS Code's documented hooks system by adding `.github/hooks/session-stop-autopush.json` with a `Stop` command hook, moved automation to `copilot/scripts/Invoke-AgentSessionAutoPush.ps1`, and removed misplaced hook frontmatter from `copilot/SKILL.md`.
 
