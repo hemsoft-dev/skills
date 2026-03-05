@@ -67,6 +67,49 @@ if (Test-Path $hookPath) {
 
 Write-Information "`e[36mConfiguring pre-commit hook...`e[0m"
 
+$hookScript = @'
+#!/usr/bin/env pwsh
+[CmdletBinding()]
+param()
+
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
+
+function Get-StagedFilesByExtension([string]$ExtensionPattern) {
+    return @(git diff --cached --name-only --diff-filter=ACMR | Where-Object { $_ -match $ExtensionPattern })
+}
+
+function Write-HookInfo([string]$Message) {
+    Write-Host "[pre-commit] $Message"
+}
+
+$stagedPs1 = Get-StagedFilesByExtension '\.ps1$'
+$stagedMd = Get-StagedFilesByExtension '\.md$'
+
+if ($stagedPs1.Count -gt 0) {
+    Write-HookInfo "Running PSScriptAnalyzer on $($stagedPs1.Count) staged PowerShell file(s)..."
+    $analysis = @(Invoke-ScriptAnalyzer -Path $stagedPs1 -Settings .PSScriptAnalyzerSettings.psd1)
+    if ($analysis.Count -gt 0) {
+        Write-HookInfo 'PowerShell lint errors/warnings found:'
+        $analysis | Format-Table -AutoSize | Out-Host
+        exit 1
+    }
+}
+
+if ($stagedMd.Count -gt 0) {
+    Write-HookInfo "Running markdownlint-cli2 on $($stagedMd.Count) staged Markdown file(s)..."
+    & markdownlint-cli2 @stagedMd
+    if ($LASTEXITCODE -ne 0) {
+        Write-HookInfo 'Markdown lint errors found.'
+        exit 1
+    }
+}
+
+exit 0
+'@
+
+Set-Content -Path $hookPath -Value $hookScript -Encoding utf8
+
 # On Unix-like systems, ensure the hook is executable
 if ($IsLinux -or $IsMacOS) {
     Write-Information "`e[36mSetting executable permissions...`e[0m"
