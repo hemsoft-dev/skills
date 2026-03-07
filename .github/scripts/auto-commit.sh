@@ -1,6 +1,20 @@
 #!/bin/sh
 # Managed by copilot-hooks skill
 
+LOCK_ROOT="${TMPDIR:-${TEMP:-/tmp}}"
+LOCK_FILE="$LOCK_ROOT/copilot-session-hook-$(git rev-parse --show-toplevel 2>/dev/null | tr '/:\\' '_' | tr -cd '[:alnum:]_-').lock"
+
+if [ -f "$LOCK_FILE" ]; then
+    NOW=$(date +%s 2>/dev/null || echo 0)
+    LAST=$(cat "$LOCK_FILE" 2>/dev/null || echo 0)
+    if [ "$NOW" -gt 0 ] && [ "$LAST" -gt 0 ] && [ $((NOW - LAST)) -lt 30 ]; then
+        echo "Auto-commit skipped (duplicate hook invocation)"
+        exit 0
+    fi
+fi
+
+date +%s 2>/dev/null > "$LOCK_FILE" || true
+
 if [ "$SKIP_AUTO_COMMIT" = "true" ]; then
     echo "Auto-commit skipped (SKIP_AUTO_COMMIT=true)"
     exit 0

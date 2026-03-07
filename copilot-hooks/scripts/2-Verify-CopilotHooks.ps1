@@ -86,6 +86,7 @@ if (Test-Path $copilotAutoCommitScriptPath) {
     $disablesTerminalPrompt = $stopHookText -match 'GIT_TERMINAL_PROMPT=0'
     $disablesGcmPrompt = $stopHookText -match 'GCM_INTERACTIVE=Never'
     $usesFastSsh = $stopHookText -match 'BatchMode=yes' -and $stopHookText -match 'ConnectTimeout=5'
+    $usesDuplicateGuard = $stopHookText -match 'duplicate hook invocation' -and $stopHookText -match 'copilot-session-hook-'
     $checks += [pscustomobject]@{ Name = 'sessionEnd hook stages remaining changes'; Pass = $stagesBeforeBlocking }
     $checks += [pscustomobject]@{ Name = 'sessionEnd hook auto-commits staged changes'; Pass = $autoCommitsChanges }
     $checks += [pscustomobject]@{ Name = 'sessionEnd hook uses timestamped auto-commit message'; Pass = $usesTimestampedAutoCommit }
@@ -94,6 +95,7 @@ if (Test-Path $copilotAutoCommitScriptPath) {
     $checks += [pscustomobject]@{ Name = 'sessionEnd hook disables terminal git prompts'; Pass = $disablesTerminalPrompt }
     $checks += [pscustomobject]@{ Name = 'sessionEnd hook disables interactive Git Credential Manager prompts'; Pass = $disablesGcmPrompt }
     $checks += [pscustomobject]@{ Name = 'sessionEnd hook uses fast-fail SSH options'; Pass = $usesFastSsh }
+    $checks += [pscustomobject]@{ Name = 'sessionEnd hook guards against duplicate Stop and sessionEnd invocations'; Pass = $usesDuplicateGuard }
 }
 
 if ($activeHooksPath -eq '.husky/_') {
@@ -108,15 +110,18 @@ if ($activeHooksPath -eq '.husky/_') {
 
 $copilotHookConfigured = $false
 $copilotWindowsHookConfigured = $false
+$copilotStopFallbackConfigured = $false
 if (Test-Path $copilotHookJsonPath) {
     $hookText = Get-Content -Path $copilotHookJsonPath -Raw
     $copilotHookConfigured = $hookText -match '"sessionEnd"' -and $hookText -match '\.github/scripts/auto-commit\.sh'
     $copilotWindowsHookConfigured = $hookText -match '"windows"' -and $hookText -match 'sh \.\/\.github/scripts/auto-commit\.sh'
+    $copilotStopFallbackConfigured = $hookText -match '"Stop"' -and $hookText -match '\.github/scripts/auto-commit\.sh'
 }
 
 $checks += [pscustomobject]@{ Name = 'Copilot hooks.json exists'; Pass = (Test-Path $copilotHookJsonPath) }
 $checks += [pscustomobject]@{ Name = 'Copilot hooks.json references .github/scripts/auto-commit.sh'; Pass = $copilotHookConfigured }
 $checks += [pscustomobject]@{ Name = 'Copilot hooks.json uses sh override on Windows'; Pass = $copilotWindowsHookConfigured }
+$checks += [pscustomobject]@{ Name = 'Copilot hooks.json includes Stop fallback for older clients'; Pass = $copilotStopFallbackConfigured }
 $checks += [pscustomobject]@{ Name = 'Legacy standalone Stop profile is absent'; Pass = (-not (Test-Path $legacyStandaloneJsonPath)) }
 $checks += [pscustomobject]@{ Name = 'Legacy .github/hooks Stop script is absent'; Pass = (-not (Test-Path $legacyStopScriptPath)) }
 $checks += [pscustomobject]@{ Name = 'Legacy copilot/scripts PowerShell hook is absent'; Pass = (-not (Test-Path $legacyManagedCopilotScriptPath)) }

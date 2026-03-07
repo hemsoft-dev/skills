@@ -327,6 +327,15 @@ Result: Removed the extra `copilot/scripts/Invoke-AgentSessionAutoPush.ps1` laye
 2026-03-06 - 22:08 - Fix Windows sessionEnd hook hang in skills repo
 Result: Identified that the new sessionEnd hook was routing through `C:\Windows\System32\bash.exe` on this machine, switched Windows hook execution to `sh ./.github/scripts/auto-commit.sh`, lowered the timeout, and hardened the shell script plus verifier/docs to fail fast instead of waiting on interactive git or SSH prompts.
 
+2026-03-06 - 22:16 - Correct false no-transcript claim for DevEx Huddle
+Result: Confirmed the 11 a.m. DevEx Huddle diary note was overstating absence based on incomplete WorkIQ output, updated `diary/scripts/100-work.ps1` to stop asserting missing transcripts unless explicitly confirmed, and corrected the 2026-03-06 entry to treat DevEx Huddle as a retrieval miss rather than proof that no transcript existed.
+
+2026-03-06 - 22:22 - Simplify diary WorkIQ prompts for retrieval-only behavior
+Result: Tightened `diary/scripts/100-work.ps1` so its meeting and email prompts request only source-backed surfaced summaries from WorkIQ and no longer ask it to reason or synthesize beyond retrieved Microsoft 365 data.
+
+2026-03-06 - 22:24 - Add Stop fallback to Copilot hook compatibility layer
+Result: Verified the repo hook files were present but found Copilot runtime logs still reporting Stop-hook execution, then updated `.github/hooks/hooks.json`, `.github/scripts/auto-commit.sh`, and the `copilot-hooks` installer/verifier/docs to register the same shell script for both `Stop` and `sessionEnd` with a short duplicate-invocation guard.
+
 2026-03-01 - 02:53 - Created 100-work.ps1 diary automation script. Uses WorkIQ for meetings with transcript summaries and important emails, parses Slack briefing for work DMs and active channels. Skips weekends. Injects/updates Work section in diary entries with safe string concatenation (no regex replace). Tested on 2026-02-27 (weekday) and 2026-02-28 (weekend skip), idempotent.
 
 2026-03-05 - 05:39 - Scaffold 2026 Q1 self evaluation structure for achievement capture

@@ -1,6 +1,14 @@
 {
     "version": 1,
     "hooks": {
+        "Stop": [
+            {
+                "type": "command",
+                "windows": "sh ./.github/scripts/auto-commit.sh",
+                "bash": ".github/scripts/auto-commit.sh",
+                "timeoutSec": 10
+            }
+        ],
         "sessionEnd": [
             {
                 "type": "command",

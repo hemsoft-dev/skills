@@ -90,11 +90,11 @@ Write-Information "`e[1;36mFetching meetings from WorkIQ...`e[0m"
 $meetingsContent = ''
 try {
     $meetingPrompt = @"
-List all my meetings on $friendlyDate. For each meeting, format as a bullet point:
+List all my meetings on $friendlyDate. For each meeting, format as a bullet point using only information you can retrieve directly from Microsoft 365 data:
 
 - **{start time} - {end time}** - {Meeting Title} (Organizer: {name})
   - Attendees: {comma-separated attendee names}
-  - {If transcript available: 2-3 sentence summary of key discussions and decisions. If no transcript: "No transcript recorded"}
+    - {If transcript, recap, notes, or chat content is available: return a concise source-backed summary and prefix it with the source label, such as "Transcript:", "Recap:", "Notes:", or "Chat:". Do not infer missing details or combine sources into new conclusions. If no such content is surfaced, say "WorkIQ did not surface transcript, recap, notes, or chat content for this meeting." Do not claim that no transcript was recorded unless the source explicitly confirms that.}
 
 Output ONLY the formatted bullet list. No introduction, no conclusion, no offers for more info.
 If I had no meetings, output exactly: "No meetings scheduled."
@@ -113,9 +113,9 @@ Write-Information "`e[1;36mFetching work emails from WorkIQ...`e[0m"
 $emailsContent = ''
 try {
     $emailPrompt = @"
-List the most important work emails I sent or received on $friendlyDate. Format each as a bullet point:
+List the most important work emails I sent or received on $friendlyDate using only details you can retrieve directly from Microsoft 365 data. Format each as a bullet point:
 
-- **{Sender Name}**: {Subject} - {one-line summary of content or action needed}
+- **{Sender Name}**: {Subject} - {one-line source-backed summary of the email content or action needed}
 
 Skip automated notifications, calendar invites, newsletters, and routine messages.
 If no important emails, output exactly: "No significant work emails."

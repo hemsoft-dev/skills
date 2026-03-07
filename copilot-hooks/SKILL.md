@@ -1,6 +1,6 @@
 ---
 name: copilot-hooks
-description: "V1.9 - Commands: install, verify, uninstall. Reuse this repo's proven pre-commit hook setup in other repositories with a simple hooks.json plus .github/scripts/auto-commit.sh sessionEnd workflow."
+description: "V1.10 - Commands: install, verify, uninstall. Reuse this repo's proven pre-commit hook setup in other repositories with compatible Stop plus sessionEnd shell wiring."
 ---
 
 # Copilot Hooks
@@ -23,7 +23,7 @@ The install process is Husky-aware and avoids the common trap where `.git/hooks/
 | `.markdownlint.jsonc` (optional) | Repo root | Starter markdownlint config if missing |
 | Husky markdown gate block | `.husky/pre-commit` | Calls `.git/hooks/pre-commit-markdown.ps1` when `core.hooksPath=.husky/_` |
 | `auto-commit.sh` | `.github/scripts/auto-commit.sh` | Copilot session-end hook script that stages changes, creates a timestamped auto-commit, and pushes when possible |
-| `hooks.json` | `.github/hooks/hooks.json` | Registers the managed shell script on `sessionEnd`, with a Windows `sh` override to avoid broken WSL `bash.exe` routing |
+| `hooks.json` | `.github/hooks/hooks.json` | Registers the managed shell script on `sessionEnd` and `Stop`, with a Windows `sh` override to avoid broken WSL `bash.exe` routing |
 
 ## Commands
 
@@ -43,10 +43,12 @@ If session-end automation is not firing, debug `.github/hooks/hooks.json` first.
 ## Session-End Hook Findings
 
 - The upstream working pattern uses `hooks.json` with a `sessionEnd` event that calls a shell script directly.
+- Some clients and logs still refer to `Stop` hooks, so the managed config should register the same command under both `sessionEnd` and `Stop` for compatibility.
 - The managed script should behave like the upstream hook: stage all changes, create `auto-commit: YYYY-MM-DD HH:MM:SS`, attempt a push, and never block session termination.
 - The hook should use `--no-verify` on commit to avoid recursive pre-commit failures during session shutdown.
 - On Windows, prefer a `windows` command entry that invokes `sh ./.github/scripts/auto-commit.sh` so Copilot does not route through `C:\Windows\System32\bash.exe` and accidentally depend on WSL.
 - The shell script should disable interactive git prompts and use fast-fail SSH options so session shutdown is not held open by credentials or network negotiation.
+- Because both `Stop` and `sessionEnd` may fire in some builds, the shell script should guard against duplicate invocation within a short window.
 - Failed commits or pushes should be reported as informational output and exit successfully, matching the upstream behavior.
 
 ## Decision Table
@@ -123,6 +125,14 @@ Create or update `.github/hooks/hooks.json` with a `sessionEnd` command:
 {
   "version": 1,
   "hooks": {
+    "Stop": [
+      {
+        "type": "command",
+        "windows": "sh ./.github/scripts/auto-commit.sh",
+        "bash": ".github/scripts/auto-commit.sh",
+        "timeoutSec": 10
+      }
+    ],
     "sessionEnd": [
       {
         "type": "command",
@@ -169,6 +179,8 @@ Expected `sessionEnd` behavior:
 - Markdown hook uses `${file}` string interpolation to avoid the `$file:` parser error.
 - sessionEnd hook should stage remaining changes before committing.
 - sessionEnd hook should use a timestamped `auto-commit:` message with `--no-verify`, matching the upstream reference.
+- sessionEnd hook should register the same command under `Stop` as a compatibility fallback for clients that still use that event name.
 - sessionEnd hook should disable interactive git prompts and use fast-fail SSH options before attempting push.
+- sessionEnd hook should ignore duplicate invocations within a short time window so `Stop` plus `sessionEnd` cannot double-commit.
 - sessionEnd hook should not block session termination when commit or push fails.
 - Verify checks Husky-vs-Git-hook wiring so mismatched hook paths are caught immediately.
