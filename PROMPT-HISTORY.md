@@ -37,6 +37,9 @@ Result: Verified from official VS Code and GitHub Copilot docs plus VS Code hook
 2026-03-06 - 20:42 - Diagnose post-commit Stop-hook push warning and harden push error reporting
 Result: Confirmed the repo is tracking `origin/main`, SSH auth to `git@github-personal1:hemsoft/skills.git` works, and both default and explicit non-destructive push probes succeed; updated the live Stop hook and installer template to push to an explicit remote/branch target and preserve meaningful `git push` error details instead of collapsing failures to `failed to push some refs`.
 
+2026-03-06 - 20:55 - Remove rejected oversized MP4 from unpublished history and verify push readiness
+Result: Identified that an unpublished 151 MB `diary/entries/2026-03-05-SFL Task Force.mp4` blob was causing GitHub's pre-receive rejection, rebuilt local `main` on top of `origin/main` as a clean snapshot commit without the blob in history, fixed staged markdown blockers so the replacement commit could pass pre-commit, and verified with `git push --dry-run origin main` that the cleaned branch is now pushable.
+
 2026-03-05 - 07:04 - Rename newly created github-hooks skill to copilot-hooks
 Result: Renamed the skill directory to `copilot-hooks`, renamed all lifecycle scripts, and updated frontmatter, hook text, managed markers, and command examples to use the new skill name consistently.
 
