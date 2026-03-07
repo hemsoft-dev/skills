@@ -74,6 +74,24 @@ if (Test-Path $preCommitMarkdownPath) {
     $checks += [pscustomobject]@{ Name = 'markdown hook avoids $file: parser bug'; Pass = $usesSafeVarInterpolation }
 }
 
+if (Test-Path $copilotStopScriptPath) {
+    $stopHookText = Get-Content -Path $copilotStopScriptPath -Raw
+    $stagesBeforeBlocking = $stopHookText -match 'git add -A'
+    $autoCommitsChanges = $stopHookText -match 'git commit -m'
+    $attemptsPush = $stopHookText -match 'git push' -and $stopHookText -match 'Invoke-GitPush'
+    $pushesAheadBranches = $stopHookText -match 'AheadCount -gt 0' -and $stopHookText -match 'Working tree is clean; nothing to commit or push'
+    $generatesSemanticCommit = $stopHookText -match 'Get-CommitSubject' -and $stopHookText -match 'Get-CommitType'
+    $avoidsStaticAutoFollowup = $stopHookText -notmatch 'CommitPrefix\s*=\s*''chore\(session\): auto-followup''' -and $stopHookText -notmatch 'Invoke-GitCommitFaultTolerant'
+    $keepsStdoutJsonClean = $stopHookText -match '\[Console\]::Error\.WriteLine' -and $stopHookText -notmatch 'Write-Host'
+    $checks += [pscustomobject]@{ Name = 'Stop hook stages remaining changes before blocking'; Pass = $stagesBeforeBlocking }
+    $checks += [pscustomobject]@{ Name = 'Stop hook auto-commits staged changes'; Pass = $autoCommitsChanges }
+    $checks += [pscustomobject]@{ Name = 'Stop hook attempts to push committed changes'; Pass = $attemptsPush }
+    $checks += [pscustomobject]@{ Name = 'Stop hook pushes ahead branches even when tree is clean'; Pass = $pushesAheadBranches }
+    $checks += [pscustomobject]@{ Name = 'Stop hook generates semantic commit messages'; Pass = $generatesSemanticCommit }
+    $checks += [pscustomobject]@{ Name = 'Stop hook avoids static auto-followup subjects'; Pass = $avoidsStaticAutoFollowup }
+    $checks += [pscustomobject]@{ Name = 'Stop hook keeps stdout clean for structured JSON responses'; Pass = $keepsStdoutJsonClean }
+}
+
 if ($activeHooksPath -eq '.husky/_') {
     $hasHuskyBlock = $false
     if (Test-Path $huskyPreCommitPath) {
@@ -85,28 +103,18 @@ if ($activeHooksPath -eq '.husky/_') {
 }
 
 $copilotHookConfigured = $false
+$hasDuplicateFallback = $false
 if (Test-Path $copilotHooksJsonPath) {
-    try {
-        $hooksObj = Get-Content -Path $copilotHooksJsonPath -Raw | ConvertFrom-Json
-        if ($hooksObj.hooks -and $hooksObj.hooks.Stop) {
-            foreach ($entry in @($hooksObj.hooks.Stop)) {
-                $windowsCmd = "$($entry.windows)"
-                $commandCmd = "$($entry.command)"
-                if ($windowsCmd -match 'Invoke-AgentSessionAutoPush\.ps1' -or $commandCmd -match 'Invoke-AgentSessionAutoPush\.ps1') {
-                    $copilotHookConfigured = $true
-                    break
-                }
-            }
-        }
-    } catch {
-        $copilotHookConfigured = $false
-    }
+    $hooksText = Get-Content -Path $copilotHooksJsonPath -Raw
+    $copilotHookConfigured = $hooksText -match 'Invoke-AgentSessionAutoPush\.ps1'
+    $hasDuplicateFallback = Test-Path $copilotFallbackJsonPath
 } elseif (Test-Path $copilotFallbackJsonPath) {
     $fallbackText = Get-Content -Path $copilotFallbackJsonPath -Raw
     $copilotHookConfigured = $fallbackText -match 'Invoke-AgentSessionAutoPush\.ps1'
 }
 
-$checks += [pscustomobject]@{ Name = 'Copilot Stop hook references auto-push script'; Pass = $copilotHookConfigured }
+$checks += [pscustomobject]@{ Name = 'Copilot Stop hook references managed Stop script'; Pass = $copilotHookConfigured }
+$checks += [pscustomobject]@{ Name = 'Copilot Stop hook does not have a duplicate fallback profile'; Pass = (-not $hasDuplicateFallback) }
 
 $commandCheck = $null -ne (Get-Command markdownlint-cli2 -ErrorAction SilentlyContinue)
 $checks += [pscustomobject]@{ Name = 'markdownlint-cli2 installed'; Pass = $commandCheck }

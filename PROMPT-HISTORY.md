@@ -7,6 +7,36 @@ This file tracks meaningful prompts and their outcomes for the Claude Skills rep
 2026-03-05 - 14:15 - Scaffold today's diary entry from prompt workflow with cached and live data requirements
 Result: Created `diary/entries/2026-03-05.md` in required section order with weather/news/slack, daily numbers (including Copilot and Cloudflare deltas), LLM carry-forward, trending repos, software/watchlist updates, productivity, meetings, and TODO placeholders for Today's Highlight and Personal Reflections.
 
+2026-03-06 - 19:15 - Scaffold today's diary entry from prompt workflow with cached and live data requirements
+Result: Created `diary/entries/2026-03-06.md` in required section order with cached weather, news, and Slack, live market/Copilot/Cloudflare/trending/productivity/meeting data, refreshed software and watchlist updates, LLM carry-forward, and TODO placeholders for Today's Highlight and Personal Reflections.
+
+2026-03-06 - 19:31 - Troubleshoot stale Copilot Stop hook after diary scaffolding push failure
+Result: Found the repo had been using the legacy `copilot/scripts/Invoke-AgentSessionAutoPush.ps1` auto-push flow, repaired the `copilot-hooks` verifier, installed the managed `.github/hooks/Invoke-AgentSessionAutoPush.ps1` stage-and-block flow, and confirmed the old warning can still appear until a fresh Copilot session reloads the updated hook config.
+
+2026-03-06 - 19:46 - Diagnose restarted-session Stop hook behavior from VS Code logs
+Result: Confirmed from `GitHub Copilot Chat Hooks.log` that the Stop hook was firing and blocking as designed, fixed misleading runtime logging caused by snake_case hook input fields, removed the duplicate fallback Stop hook profile, and repaired the installer so reruns no longer recreate the duplicate hook configuration.
+
+2026-03-06 - 19:57 - Add added-repo detail to diary Daily Numbers Relias repo delta
+Result: Updated `diary/scripts/050-daily-numbers.ps1` to snapshot `relias-engineering` repo names under `diary/output`, compare against the previous snapshot, and append the added GitHub repo names when the Relias repo count delta is positive; validated by rerunning the script for `2026-03-06`.
+
+2026-03-06 - 20:00 - Add removed-repo detail to diary Daily Numbers Relias repo delta
+Result: Extended `diary/scripts/050-daily-numbers.ps1` so negative `relias-engineering` GitHub repo deltas append removed repo names from the prior snapshot while leaving today's entry content untouched unless the script is rerun.
+
+2026-03-06 - 20:03 - Replace unreliable Stop hook block flow with deterministic local auto-commit
+Result: Reworked `.github/hooks/Invoke-AgentSessionAutoPush.ps1`, the `copilot-hooks` installer, verifier, and skill docs so the Stop hook now stages changes and creates a local Conventional Commit automatically instead of blocking and hoping the agent completes the commit.
+
+2026-03-06 - 20:08 - Restore lost Dow Jones market commentary in diary Daily Numbers
+Result: Fixed `diary/scripts/050-daily-numbers.ps1` so it once again emits the 1-2 sentence market summary under the Dow Jones and S&P lines, using daily index moves plus current-entry headline cues, and regenerated `diary/entries/2026-03-06.md`.
+
+2026-03-06 - 20:14 - Restore Stop hook push behavior after local-auto-commit redesign
+Result: Updated the managed Stop hook, installer template, verifier, and skill docs so session-end automation now pushes committed changes when possible and also pushes already-ahead branches even when the working tree is clean.
+
+2026-03-06 - 20:21 - Research public GitHub Copilot hook examples and fix real Stop-hook blocker
+Result: Verified from official VS Code and GitHub Copilot docs plus VS Code hook PRs and community posts that hooks are supported and Stop-block semantics are real, but first-party examples focus on validation/logging rather than auto-push; also fixed the markdownlint MD012 error in `diary/entries/2026-03-06.md` that was blocking the real repo's Stop-hook commit.
+
+2026-03-06 - 20:42 - Diagnose post-commit Stop-hook push warning and harden push error reporting
+Result: Confirmed the repo is tracking `origin/main`, SSH auth to `git@github-personal1:hemsoft/skills.git` works, and both default and explicit non-destructive push probes succeed; updated the live Stop hook and installer template to push to an explicit remote/branch target and preserve meaningful `git push` error details instead of collapsing failures to `failed to push some refs`.
+
 2026-03-05 - 07:04 - Rename newly created github-hooks skill to copilot-hooks
 Result: Renamed the skill directory to `copilot-hooks`, renamed all lifecycle scripts, and updated frontmatter, hook text, managed markers, and command examples to use the new skill name consistently.
 
@@ -296,13 +326,11 @@ Result: Revised Achievement 2 in personal-review/reviews/2026 Q1 Self Evaluation
 2026-03-05 - 06:15 - Research GitHub hooks and add repo-level post-commit automation for session-end commit/push hygiene
 Result: Added Setup-AgentSessionGitHook.ps1 and scripts/Invoke-AgentSessionAutoPush.ps1, installed .git/hooks/post-commit wrapper, and configured follow-up commit+push loop with recursion guard and safety cap.
 
-
 2026-03-05 - 06:21 - Configure Copilot Stop hook to auto-commit and push at session end
 Result: Updated copilot/SKILL.md with a Stop hook that runs scripts/Invoke-AgentSessionAutoPush.ps1 and blocks session stop when git status remains dirty or push fails.
 
 2026-03-05 - 06:21 - Switch automation from local git post-commit to Copilot Stop hook only
 Result: Removed the installed .git/hooks/post-commit wrapper and kept session-end auto commit/push enforcement in copilot/SKILL.md Stop hook.
-
 
 2026-03-05 - 06:55 - Archive wezterm skill folder on user request
 Result: Moved 'wezterm' to '_archived/wezterm' and removed it from active skills by directory placement.

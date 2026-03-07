@@ -2,7 +2,7 @@
 
 ## 🎯 Today's Highlight
 
-**{title}**
+**[{title}]({url})**
 
 {1-2 sentence context from user}
 

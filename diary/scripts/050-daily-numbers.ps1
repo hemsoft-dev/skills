@@ -32,6 +32,7 @@ $InformationPreference = 'Continue'
 # --- Configuration ---
 $GitHubOrg = 'relias-engineering'
 $BitbucketWorkspace = 'relias'
+$RepoSnapshotsDir = Join-Path $PSScriptRoot '..' 'output'
 
 # --- Resolve entry path ---
 if (-not $EntryPath) {
@@ -94,7 +95,127 @@ function Format-IntDelta {
     return "$sign$delta"
 }
 
+function Get-MarketDriverText {
+    param([string]$EntryContent)
+
+    $content = if ($EntryContent) { $EntryContent.ToLowerInvariant() } else { '' }
+
+    if ($content -match 'jobs|labor market|unemployment|economy') {
+        return 'after weak U.S. labor data intensified economic worries'
+    }
+
+    if ($content -match 'tariff|trade war|trade tensions') {
+        return 'as trade tensions kept investors on edge'
+    }
+
+    if ($content -match 'inflation|fed|interest rate|rates') {
+        return 'as rate and inflation concerns weighed on sentiment'
+    }
+
+    if ($content -match 'iran|israel|lebanon|ukraine|russia|geopolitical') {
+        return 'as geopolitical risk pushed traders toward a risk-off posture'
+    }
+
+    return 'as investors digested the day''s macro headlines'
+}
+
+function Get-MarketCommentary {
+    param(
+        [decimal]$DowCurrent,
+        [decimal]$DowPrevious,
+        [decimal]$SPCurrent,
+        [decimal]$SPPrevious,
+        [string]$EntryContent
+    )
+
+    if ($DowPrevious -eq 0 -or $SPPrevious -eq 0) {
+        return ''
+    }
+
+    $dowDelta = $DowCurrent - $DowPrevious
+    $spDelta = $SPCurrent - $SPPrevious
+    $dowPct = [math]::Round(($dowDelta / $DowPrevious) * 100, 2)
+    $spPct = [math]::Round(($spDelta / $SPPrevious) * 100, 2)
+    $driver = Get-MarketDriverText -EntryContent $EntryContent
+
+    if ($dowPct -le -1 -and $spPct -le -1) {
+        $lead = "Markets sold off sharply $driver."
+    }
+    elseif ($dowPct -gt 0.5 -and $spPct -gt 0.5) {
+        $lead = "Markets pushed higher $driver."
+    }
+    elseif ($dowPct -ge 0 -and $spPct -ge 0) {
+        $lead = "Markets finished modestly higher $driver."
+    }
+    elseif ($dowPct -le 0 -and $spPct -le 0) {
+        $lead = "Markets finished lower $driver."
+    }
+    else {
+        $lead = "Markets ended mixed $driver."
+    }
+
+    $relative = if ([math]::Abs($dowPct - $spPct) -ge 0.4) {
+        if ([math]::Abs($dowPct) -gt [math]::Abs($spPct)) {
+            "The Dow's $([math]::Abs($dowPct).ToString('0.00'))% move was steeper than the S&P's $([math]::Abs($spPct).ToString('0.00'))%, suggesting heavier pressure in blue-chip names."
+        }
+        else {
+            "The S&P's $([math]::Abs($spPct).ToString('0.00'))% move outpaced the Dow's $([math]::Abs($dowPct).ToString('0.00'))%, pointing to sharper weakness in the broader large-cap mix."
+        }
+    }
+    else {
+        "The Dow and S&P moved broadly in tandem, indicating a market-wide tone rather than an isolated sector move."
+    }
+
+    return "*$lead $relative*"
+}
+
+function Get-RepoSnapshotPath {
+    param([string]$SnapshotDate)
+    return (Join-Path $RepoSnapshotsDir "$SnapshotDate-$GitHubOrg-repos.json")
+}
+
+function Save-RepoSnapshot {
+    param(
+        [string]$SnapshotDate,
+        [string[]]$RepoNames
+    )
+
+    [System.IO.Directory]::CreateDirectory($RepoSnapshotsDir) | Out-Null
+    $snapshotPath = Get-RepoSnapshotPath -SnapshotDate $SnapshotDate
+    $payload = [pscustomobject]@{
+        date = $SnapshotDate
+        org = $GitHubOrg
+        repos = @($RepoNames | Sort-Object -Unique)
+    }
+    $payload | ConvertTo-Json -Depth 4 | Set-Content -Path $snapshotPath -Encoding utf8NoBOM
+}
+
+function Get-PreviousRepoSnapshot {
+    $snapshotFiles = Get-ChildItem -Path $RepoSnapshotsDir -Filter "*-$GitHubOrg-repos.json" -ErrorAction SilentlyContinue |
+        Where-Object { $_.BaseName -lt "$Date-$GitHubOrg-repos" } |
+        Sort-Object Name -Descending
+
+    foreach ($snapshotFile in $snapshotFiles) {
+        try {
+            $snapshot = Get-Content -Path $snapshotFile.FullName -Raw | ConvertFrom-Json
+            if ($snapshot.repos) {
+                return [pscustomobject]@{
+                    Date = "$($snapshot.date)"
+                    Repos = @($snapshot.repos | ForEach-Object { "$_" })
+                }
+            }
+        }
+        catch {
+            Write-Information "`e[1;33mFailed to parse repo snapshot: $($snapshotFile.Name)`e[0m"
+        }
+    }
+
+    return $null
+}
+
 Write-Information "`e[1;36mGathering daily numbers...`e[0m"
+
+$entry = Get-Content $EntryPath -Raw
 
 # --- Save original gh account (restore at end) ---
 $originalGhUser = $null
@@ -105,18 +226,29 @@ $prev = Get-PreviousValues
 # --- Fetch GitHub repo count (use fhemmerrelias which has admin:org scope) ---
 Write-Information "`e[1;36mFetching GitHub repo count ($GitHubOrg)...`e[0m"
 gh auth switch -u fhemmerrelias 2>&1 | Out-Null
-$ghRepoCount = 0
+$ghRepoNames = New-Object System.Collections.Generic.List[string]
 try {
     $page = 1
     do {
-        $count = gh api "orgs/$GitHubOrg/repos?per_page=100&page=$page" --jq 'length' 2>&1
-        $count = [int]$count
-        $ghRepoCount += $count
+        $response = gh api "orgs/$GitHubOrg/repos?per_page=100&page=$page" 2>&1
+        $pageRepos = @($response | ConvertFrom-Json)
+        $count = $pageRepos.Count
+        foreach ($repo in $pageRepos) {
+            if ($repo.name) {
+                [void]$ghRepoNames.Add("$($repo.name)")
+            }
+        }
         $page++
     } while ($count -eq 100)
 }
 catch {
     Write-Information "`e[1;31mFailed to fetch GitHub repo count: $_`e[0m"
+}
+
+$ghRepoNames = @($ghRepoNames | Sort-Object -Unique)
+$ghRepoCount = $ghRepoNames.Count
+if ($ghRepoCount -gt 0) {
+    Save-RepoSnapshot -SnapshotDate $Date -RepoNames $ghRepoNames
 }
 
 # --- Fetch Bitbucket repo count ---
@@ -142,10 +274,44 @@ catch {
 # --- Compute repo deltas ---
 $ghDelta = if ($prev.ContainsKey('GitHubRepos')) { Format-IntDelta $ghRepoCount $prev.GitHubRepos } else { '—' }
 $bbDelta = if ($prev.ContainsKey('BitbucketRepos')) { Format-IntDelta $bbRepoCount $prev.BitbucketRepos } else { '—' }
+$ghRepoDeltaDetailText = ''
+
+if ($prev.ContainsKey('GitHubRepos') -and $ghRepoCount -ne $prev.GitHubRepos) {
+    $previousSnapshot = Get-PreviousRepoSnapshot
+    if ($null -ne $previousSnapshot) {
+        if ($ghRepoCount -gt $prev.GitHubRepos) {
+            $ghAddedRepos = @($ghRepoNames | Where-Object { $_ -notin $previousSnapshot.Repos })
+            if ($ghAddedRepos.Count -gt 0) {
+                $ghRepoDeltaDetailText = '; added: ' + ($ghAddedRepos -join ', ')
+            }
+            else {
+                $ghRepoDeltaDetailText = "; added repos unavailable (snapshot $($previousSnapshot.Date) did not reveal a name diff)"
+            }
+        }
+        else {
+            $ghRemovedRepos = @($previousSnapshot.Repos | Where-Object { $_ -notin $ghRepoNames })
+            if ($ghRemovedRepos.Count -gt 0) {
+                $ghRepoDeltaDetailText = '; removed: ' + ($ghRemovedRepos -join ', ')
+            }
+            else {
+                $ghRepoDeltaDetailText = "; removed repos unavailable (snapshot $($previousSnapshot.Date) did not reveal a name diff)"
+            }
+        }
+    }
+    else {
+        if ($ghRepoCount -gt $prev.GitHubRepos) {
+            $ghRepoDeltaDetailText = '; added repos unavailable (no previous snapshot found)'
+        }
+        else {
+            $ghRepoDeltaDetailText = '; removed repos unavailable (no previous snapshot found)'
+        }
+    }
+}
 
 # --- Fetch stock market data (weekdays only) ---
 $dowLine = ''
 $spLine = ''
+$marketCommentaryLine = ''
 
 if (-not $isWeekend) {
     Write-Information "`e[1;36mFetching stock market data...`e[0m"
@@ -163,6 +329,7 @@ if (-not $isWeekend) {
 
         $dowLine = "- **Dow Jones**: $($dowPrice.ToString('N2')) ($dowDelta)"
         $spLine = "- **S&P 500**: $($spPrice.ToString('N2')) ($spDelta)"
+        $marketCommentaryLine = Get-MarketCommentary -DowCurrent $dowPrice -DowPrevious $dowPrev -SPCurrent $spPrice -SPPrevious $spPrev -EntryContent $entry
     }
     catch {
         Write-Information "`e[1;33mFailed to fetch stock data: $_`e[0m"
@@ -222,7 +389,12 @@ $sb = [System.Text.StringBuilder]::new()
 
 if ($dowLine) { [void]$sb.AppendLine($dowLine) }
 if ($spLine) { [void]$sb.AppendLine($spLine) }
-[void]$sb.AppendLine("- **Relias Repo Count**: GitHub: $ghRepoCount ($ghDelta), Bitbucket: $bbRepoCount ($bbDelta)")
+if ($marketCommentaryLine) {
+    [void]$sb.AppendLine('')
+    [void]$sb.AppendLine($marketCommentaryLine)
+    [void]$sb.AppendLine('')
+}
+[void]$sb.AppendLine("- **Relias Repo Count**: GitHub: $ghRepoCount ($ghDelta$ghRepoDeltaDetailText), Bitbucket: $bbRepoCount ($bbDelta)")
 [void]$sb.AppendLine($copilotSummaryLine)
 foreach ($line in $copilotLines) {
     [void]$sb.AppendLine($line)
@@ -231,8 +403,6 @@ foreach ($line in $copilotLines) {
 $numbersContent = $sb.ToString().TrimEnd()
 
 # --- Inject into diary entry ---
-$entry = Get-Content $EntryPath -Raw
-
 $sectionPattern = '(#{2,3}\s+📊\s+Daily Numbers\s*\r?\n)([\s\S]*?)(\r?\n---)'
 $regex = [regex]::new($sectionPattern)
 $m = $regex.Match($entry)
@@ -244,7 +414,7 @@ if ($m.Success) {
     [System.IO.File]::WriteAllText($EntryPath, $entry, $utf8NoBom)
     Write-Information "`e[1;32mDaily numbers injected into diary entry.`e[0m"
     if ($dowLine) { Write-Information "  Dow: $($dowPrice.ToString('N2')) | S&P: $($spPrice.ToString('N2'))" }
-    Write-Information "  GitHub: $ghRepoCount ($ghDelta) | Bitbucket: $bbRepoCount ($bbDelta)"
+    Write-Information "  GitHub: $ghRepoCount ($ghDelta$ghRepoDeltaDetailText) | Bitbucket: $bbRepoCount ($bbDelta)"
     Write-Information "  Copilot: $grandTotalUsed / $grandTotalEntitlement premium requests"
 }
 else {

@@ -1,39 +1,6 @@
 ---
 name: copilot-hooks
-description: "V1.0 - Commands: install, verify, uninstall. Reuse this repo's proven pre-commit hook setup in other repositories with script-first and manual fallback workflows."
-hooks:
-  PostToolUse:
-    - matcher: "Read|Write|Edit"
-      hooks:
-        - type: prompt
-          prompt: |
-            If a file was read, written, or edited in the copilot-hooks directory (path contains 'copilot-hooks'), verify that history logging occurred.
-
-            Check if History/{YYYY-MM-DD}.md exists and contains an entry for this interaction with:
-            - Format: "## HH:MM - {Action Taken}"
-            - One-line summary
-            - Accurate timestamp (obtained via `Get-Date -Format "HH:mm"` command, never guessed)
-
-            If history entry is missing or incomplete, provide specific feedback on what needs to be added.
-            If history entry exists and is properly formatted, acknowledge completion.
-  Stop:
-    - matcher: "*"
-      hooks:
-        - type: prompt
-          prompt: |
-            Before stopping, if copilot-hooks was used (check if any files in copilot-hooks directory were modified), verify that the interaction was logged:
-
-            1. Check if History/{YYYY-MM-DD}.md exists in copilot-hooks directory
-            2. Verify it contains an entry with format "## HH:MM - {Action Taken}" where HH:MM was obtained via `Get-Date -Format "HH:mm"` (never guessed)
-            3. Ensure the entry includes a one-line summary of what was done
-
-            If history entry is missing:
-            - Return {"decision": "block", "reason": "History entry missing. Please log this interaction to History/{YYYY-MM-DD}.md with format: ## HH:MM - {Action Taken}\n{One-line summary}\n\nCRITICAL: Get the current time using `Get-Date -Format \"HH:mm\"` command - never guess the timestamp."}
-
-            If history entry exists:
-            - Return {"decision": "approve"}
-
-            Include a systemMessage with details about the history entry status.
+description: "V1.5 - Commands: install, verify, uninstall. Reuse this repo's proven pre-commit hook setup in other repositories with script-first and manual fallback workflows."
 ---
 
 # Copilot Hooks
@@ -43,7 +10,7 @@ When user activates this skill without specifying an action, do `install` agains
 This skill now installs two related systems:
 
 1. Git commit-time Markdown quality gates (`pre-commit` flow).
-2. Copilot session-end Stop automation (`auto-commit + push` flow).
+2. Copilot session-end Stop automation (`stage + auto-commit + push` flow).
 
 The install process is Husky-aware and avoids the common trap where `.git/hooks/pre-commit` exists but Git actually executes `.husky/_`.
 
@@ -55,7 +22,7 @@ The install process is Husky-aware and avoids the common trap where `.git/hooks/
 | `pre-commit-markdown.ps1` | `.git/hooks/pre-commit-markdown.ps1` | Lints staged Markdown files with `markdownlint-cli2` |
 | `.markdownlint.jsonc` (optional) | Repo root | Starter markdownlint config if missing |
 | Husky markdown gate block | `.husky/pre-commit` | Calls `.git/hooks/pre-commit-markdown.ps1` when `core.hooksPath=.husky/_` |
-| `Invoke-AgentSessionAutoPush.ps1` | `.github/hooks/Invoke-AgentSessionAutoPush.ps1` | Copilot Stop hook session-end auto-commit/push |
+| `Invoke-AgentSessionAutoPush.ps1` | `.github/hooks/Invoke-AgentSessionAutoPush.ps1` | Copilot Stop hook that stages changes, creates a Conventional Commit, and pushes when possible |
 | Stop hook entry | `.github/hooks/hooks.json` | Registers Stop command to run `Invoke-AgentSessionAutoPush.ps1` |
 
 ## Commands
@@ -69,9 +36,19 @@ The install process is Husky-aware and avoids the common trap where `.git/hooks/
 ## Scope Clarification
 
 - `Git hooks`: run at commit time (`pre-commit`).
-- `Copilot Stop hook`: runs when the Copilot session ends.
+- `Copilot Stop hook`: runs when the Copilot session ends, stages remaining changes, creates a Conventional Commit automatically, and pushes local commits when possible.
 
 If Stop automation is not firing, debug `.github/hooks/hooks.json` first.
+
+## Stop Hook Findings
+
+- Static placeholder subjects like `chore(session): auto-followup` are not acceptable because they flatten history and degrade commit-derived changelogs.
+- Repo-specific filename heuristics are still the wrong long-term fix for commit summaries in a reusable hook skill.
+- In practice, the stage-and-block design proved too unreliable because agent follow-through at Stop was inconsistent even when the hook returned `decision: block` correctly.
+- The reliable design is to let the Stop hook stage remaining changes, create a Conventional Commit itself with deterministic path-based heuristics, and then push if the branch state allows it.
+- The hook should not treat a clean working tree as a no-op when the branch is still ahead of upstream.
+- Detached `HEAD` still needs explicit handling in the instructions because pushing requires a real branch.
+- Stop-hook command scripts should keep stdout machine-readable. Write diagnostics to stderr or a file so the JSON block payload is not polluted.
 
 ## Decision Table
 
@@ -159,6 +136,14 @@ Create or update `.github/hooks/hooks.json` with a Stop command:
 
 Create `.github/hooks/Invoke-AgentSessionAutoPush.ps1` using the script generated by `install`.
 
+Expected Stop behavior:
+
+1. If the working tree has changes, the hook stages them.
+2. The hook creates a deterministic Conventional Commit.
+3. The hook pushes the current branch.
+4. If the tree is already clean but the branch is ahead of upstream, the hook still pushes those pending local commits.
+5. If push is unsafe or impossible, the hook returns a user-visible `systemMessage` explaining why.
+
 ## Parameters
 
 | Script | Parameter | Required | Default |
@@ -180,5 +165,8 @@ Create `.github/hooks/Invoke-AgentSessionAutoPush.ps1` using the script generate
 
 - Install scripts place `param(...)` first so PowerShell parses them correctly.
 - Markdown hook uses `${file}` string interpolation to avoid the `$file:` parser error.
-- Stop auto-push handles non-fast-forward push failures by running `git pull --rebase` and retrying push.
+- Stop hook should stage remaining changes before committing.
+- Stop hook should generate a descriptive Conventional Commit subject and body deterministically from the staged diff.
+- Stop hook should avoid embedding repo-specific naming heuristics in the PowerShell script.
+- Stop hook should not emit human-readable logs to stdout before structured JSON output.
 - Verify checks Husky-vs-Git-hook wiring so mismatched hook paths are caught immediately.
