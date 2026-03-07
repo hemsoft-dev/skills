@@ -315,6 +315,18 @@ Result: Extracted 19 transactions from 20260214_BANK_USAA CLASSIC CHECKING_0456.
 2026-03-04 - 20:50 - Drive live Vercel verification after Cloudflare proxy enablement for nowleadershipgroup.com
 Result: Used Playwright to inspect Vercel Domains UI for nowleadershipgroup.com, confirmed no invalid/misconfigured warnings, verified Vercel CDN active, and confirmed SSL certificates exist for both apex and www with automatic renewal.
 
+2026-03-06 - 21:01 - Fix diary Daily Numbers missing yesterday deltas and Cloudflare section
+Result: Repaired the diary Daily Numbers generator to compare against the exact previous day's entry, restored GitHub Copilot delta output, reintegrated Cloudflare usage and per-domain deltas, and regenerated the 2026-03-06 entry from live data.
+
+2026-03-06 - 21:15 - Implement standalone session auto-push hook layout and teach copilot-hooks skill
+Result: Migrated this repo from the legacy `.github/hooks/hooks.json` plus `.github/hooks/Invoke-AgentSessionAutoPush.ps1` Stop flow to `.github/hooks/session-stop-autopush.json` pointing at `copilot/scripts/Invoke-AgentSessionAutoPush.ps1`, updated the managed script to the richer auto-commit/push logic, and revised the copilot-hooks installer, verifier, uninstaller, and skill docs to apply the same layout in other repositories.
+
+2026-03-06 - 21:41 - Simplify sessionEnd hook to direct .github/scripts shell layout
+Result: Removed the extra `copilot/scripts/Invoke-AgentSessionAutoPush.ps1` layer, added `.github/scripts/auto-commit.sh`, rewired `.github/hooks/hooks.json` to call that script directly on `sessionEnd`, and simplified the copilot-hooks installer, verifier, uninstaller, and docs to match that single layout.
+
+2026-03-06 - 22:08 - Fix Windows sessionEnd hook hang in skills repo
+Result: Identified that the new sessionEnd hook was routing through `C:\Windows\System32\bash.exe` on this machine, switched Windows hook execution to `sh ./.github/scripts/auto-commit.sh`, lowered the timeout, and hardened the shell script plus verifier/docs to fail fast instead of waiting on interactive git or SSH prompts.
+
 2026-03-01 - 02:53 - Created 100-work.ps1 diary automation script. Uses WorkIQ for meetings with transcript summaries and important emails, parses Slack briefing for work DMs and active channels. Skips weekends. Injects/updates Work section in diary entries with safe string concatenation (no regex replace). Tested on 2026-02-27 (weekday) and 2026-02-28 (weekend skip), idempotent.
 
 2026-03-05 - 05:39 - Scaffold 2026 Q1 self evaluation structure for achievement capture

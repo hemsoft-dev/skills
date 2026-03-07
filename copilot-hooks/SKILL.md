@@ -1,6 +1,6 @@
 ---
 name: copilot-hooks
-description: "V1.5 - Commands: install, verify, uninstall. Reuse this repo's proven pre-commit hook setup in other repositories with script-first and manual fallback workflows."
+description: "V1.9 - Commands: install, verify, uninstall. Reuse this repo's proven pre-commit hook setup in other repositories with a simple hooks.json plus .github/scripts/auto-commit.sh sessionEnd workflow."
 ---
 
 # Copilot Hooks
@@ -10,7 +10,7 @@ When user activates this skill without specifying an action, do `install` agains
 This skill now installs two related systems:
 
 1. Git commit-time Markdown quality gates (`pre-commit` flow).
-2. Copilot session-end Stop automation (`stage + auto-commit + push` flow).
+2. Copilot session-end automation (`stage + auto-commit + push` flow).
 
 The install process is Husky-aware and avoids the common trap where `.git/hooks/pre-commit` exists but Git actually executes `.husky/_`.
 
@@ -22,8 +22,8 @@ The install process is Husky-aware and avoids the common trap where `.git/hooks/
 | `pre-commit-markdown.ps1` | `.git/hooks/pre-commit-markdown.ps1` | Lints staged Markdown files with `markdownlint-cli2` |
 | `.markdownlint.jsonc` (optional) | Repo root | Starter markdownlint config if missing |
 | Husky markdown gate block | `.husky/pre-commit` | Calls `.git/hooks/pre-commit-markdown.ps1` when `core.hooksPath=.husky/_` |
-| `Invoke-AgentSessionAutoPush.ps1` | `.github/hooks/Invoke-AgentSessionAutoPush.ps1` | Copilot Stop hook that stages changes, creates a Conventional Commit, and pushes when possible |
-| Stop hook entry | `.github/hooks/hooks.json` | Registers Stop command to run `Invoke-AgentSessionAutoPush.ps1` |
+| `auto-commit.sh` | `.github/scripts/auto-commit.sh` | Copilot session-end hook script that stages changes, creates a timestamped auto-commit, and pushes when possible |
+| `hooks.json` | `.github/hooks/hooks.json` | Registers the managed shell script on `sessionEnd`, with a Windows `sh` override to avoid broken WSL `bash.exe` routing |
 
 ## Commands
 
@@ -36,19 +36,18 @@ The install process is Husky-aware and avoids the common trap where `.git/hooks/
 ## Scope Clarification
 
 - `Git hooks`: run at commit time (`pre-commit`).
-- `Copilot Stop hook`: runs when the Copilot session ends, stages remaining changes, creates a Conventional Commit automatically, and pushes local commits when possible.
+- `Copilot sessionEnd hook`: runs when the Copilot session ends, stages remaining changes, creates a timestamped auto-commit, and pushes when possible.
 
-If Stop automation is not firing, debug `.github/hooks/hooks.json` first.
+If session-end automation is not firing, debug `.github/hooks/hooks.json` first.
 
-## Stop Hook Findings
+## Session-End Hook Findings
 
-- Static placeholder subjects like `chore(session): auto-followup` are not acceptable because they flatten history and degrade commit-derived changelogs.
-- Repo-specific filename heuristics are still the wrong long-term fix for commit summaries in a reusable hook skill.
-- In practice, the stage-and-block design proved too unreliable because agent follow-through at Stop was inconsistent even when the hook returned `decision: block` correctly.
-- The reliable design is to let the Stop hook stage remaining changes, create a Conventional Commit itself with deterministic path-based heuristics, and then push if the branch state allows it.
-- The hook should not treat a clean working tree as a no-op when the branch is still ahead of upstream.
-- Detached `HEAD` still needs explicit handling in the instructions because pushing requires a real branch.
-- Stop-hook command scripts should keep stdout machine-readable. Write diagnostics to stderr or a file so the JSON block payload is not polluted.
+- The upstream working pattern uses `hooks.json` with a `sessionEnd` event that calls a shell script directly.
+- The managed script should behave like the upstream hook: stage all changes, create `auto-commit: YYYY-MM-DD HH:MM:SS`, attempt a push, and never block session termination.
+- The hook should use `--no-verify` on commit to avoid recursive pre-commit failures during session shutdown.
+- On Windows, prefer a `windows` command entry that invokes `sh ./.github/scripts/auto-commit.sh` so Copilot does not route through `C:\Windows\System32\bash.exe` and accidentally depend on WSL.
+- The shell script should disable interactive git prompts and use fast-fail SSH options so session shutdown is not held open by credentials or network negotiation.
+- Failed commits or pushes should be reported as informational output and exit successfully, matching the upstream behavior.
 
 ## Decision Table
 
@@ -81,7 +80,7 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File .\copilot-hooks\scripts\3-Uninstal
 
 ### Step 4: Restart Copilot Session
 
-Copilot hook configuration is often loaded at session start. After changing `.github/hooks/*.json`, start a fresh Copilot session before testing Stop behavior.
+Copilot hook configuration is often loaded at session start. After changing `.github/hooks/*.json`, start a fresh Copilot session before testing `sessionEnd` behavior.
 
 ## Manual Fallback Workflow
 
@@ -116,33 +115,36 @@ Run `scripts/1-Install-CopilotHooks.ps1` if possible. If manual creation is requ
 
 Use a project-specific config or the starter config generated by `install`.
 
-### Step 4: Wire Copilot Stop hook
+### Step 4: Wire Copilot sessionEnd hook
 
-Create or update `.github/hooks/hooks.json` with a Stop command:
+Create or update `.github/hooks/hooks.json` with a `sessionEnd` command:
 
 ```json
 {
+  "version": 1,
   "hooks": {
-    "Stop": [
+    "sessionEnd": [
       {
         "type": "command",
-        "windows": "pwsh -NoProfile -ExecutionPolicy Bypass -File ./.github/hooks/Invoke-AgentSessionAutoPush.ps1",
-        "timeout": 120
+        "windows": "sh ./.github/scripts/auto-commit.sh",
+        "bash": ".github/scripts/auto-commit.sh",
+        "timeoutSec": 10
       }
     ]
   }
 }
 ```
 
-Create `.github/hooks/Invoke-AgentSessionAutoPush.ps1` using the script generated by `install`.
+Create `.github/scripts/auto-commit.sh` using the script generated by `install`.
 
-Expected Stop behavior:
+If an older `.github/hooks/session-stop-autopush.json` exists, remove it to avoid conflicting hook configurations.
+
+Expected `sessionEnd` behavior:
 
 1. If the working tree has changes, the hook stages them.
-2. The hook creates a deterministic Conventional Commit.
-3. The hook pushes the current branch.
-4. If the tree is already clean but the branch is ahead of upstream, the hook still pushes those pending local commits.
-5. If push is unsafe or impossible, the hook returns a user-visible `systemMessage` explaining why.
+2. The hook creates `auto-commit: YYYY-MM-DD HH:MM:SS` with `--no-verify`.
+3. The hook attempts to push the current branch.
+4. Failures are reported as informational output but do not block session shutdown.
 
 ## Parameters
 
@@ -165,8 +167,8 @@ Expected Stop behavior:
 
 - Install scripts place `param(...)` first so PowerShell parses them correctly.
 - Markdown hook uses `${file}` string interpolation to avoid the `$file:` parser error.
-- Stop hook should stage remaining changes before committing.
-- Stop hook should generate a descriptive Conventional Commit subject and body deterministically from the staged diff.
-- Stop hook should avoid embedding repo-specific naming heuristics in the PowerShell script.
-- Stop hook should not emit human-readable logs to stdout before structured JSON output.
+- sessionEnd hook should stage remaining changes before committing.
+- sessionEnd hook should use a timestamped `auto-commit:` message with `--no-verify`, matching the upstream reference.
+- sessionEnd hook should disable interactive git prompts and use fast-fail SSH options before attempting push.
+- sessionEnd hook should not block session termination when commit or push fails.
 - Verify checks Husky-vs-Git-hook wiring so mismatched hook paths are caught immediately.

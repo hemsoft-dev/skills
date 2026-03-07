@@ -6,8 +6,9 @@
 .DESCRIPTION
     Fetches stock market data (Dow Jones, S&P 500) from Yahoo Finance,
     repo counts from GitHub (relias-engineering) and Bitbucket (relias),
-    and GitHub Copilot premium request usage for all accounts.
-    Computes deltas against the previous diary entry's values.
+    GitHub Copilot premium request usage for all accounts, and Cloudflare
+    web/email metrics for managed domains.
+    Computes deltas against yesterday's diary entry values.
     Skips stock data on weekends (markets closed).
 
 .PARAMETER Date
@@ -33,6 +34,11 @@ $InformationPreference = 'Continue'
 $GitHubOrg = 'relias-engineering'
 $BitbucketWorkspace = 'relias'
 $RepoSnapshotsDir = Join-Path $PSScriptRoot '..' 'output'
+$CloudflareScriptPath = Join-Path $PSScriptRoot '..' '..' 'cloudflare' 'scripts' 'Get-CloudflareUsage.ps1'
+$CloudflareDomains = @(
+    [pscustomobject]@{ Name = 'nowleadershipgroup.com'; HasEmailRouting = $true },
+    [pscustomobject]@{ Name = 'setitfreeloop.org'; HasEmailRouting = $false }
+)
 
 # --- Resolve entry path ---
 if (-not $EntryPath) {
@@ -48,35 +54,95 @@ $parsedDate = [datetime]::ParseExact($Date, 'yyyy-MM-dd', $null)
 $isWeekend = $parsedDate.DayOfWeek -eq 'Saturday' -or $parsedDate.DayOfWeek -eq 'Sunday'
 
 # --- Find previous entry for deltas ---
-function Get-PreviousValues {
+function Get-DiaryEntryPathByDate {
+    param([datetime]$TargetDate)
+
     $entriesDir = Join-Path $PSScriptRoot '..' 'entries'
-    $entries = Get-ChildItem $entriesDir -Filter '*.md' |
-        Where-Object { $_.BaseName -lt $Date } |
-        Sort-Object Name -Descending
+    $targetFileName = "$($TargetDate.ToString('yyyy-MM-dd')).md"
 
-    foreach ($entry in $entries) {
-        $content = Get-Content $entry.FullName -Raw
-        $prev = @{}
+    return Get-ChildItem -Path $entriesDir -Filter $targetFileName -Recurse -ErrorAction SilentlyContinue |
+        Sort-Object FullName |
+        Select-Object -First 1 -ExpandProperty FullName
+}
 
-        if ($content -match 'GitHub:\s*(\d+)') {
-            $prev.GitHubRepos = [int]$Matches[1]
-        }
-        if ($content -match 'Bitbucket:\s*(\d+)') {
-            $prev.BitbucketRepos = [int]$Matches[1]
-        }
-        if ($content -match '\*\*Dow Jones\*\*:\s*([\d,]+\.\d+)') {
-            $prev.Dow = [decimal]($Matches[1] -replace ',', '')
-        }
-        if ($content -match '\*\*S&P 500\*\*:\s*([\d,]+\.\d+)') {
-            $prev.SP500 = [decimal]($Matches[1] -replace ',', '')
-        }
+function Get-CloudflareStatsFromText {
+    param(
+        [string[]]$Lines,
+        [string]$DomainName,
+        [bool]$HasEmailRouting
+    )
 
-        if ($prev.Count -gt 0) {
-            Write-Information "`e[90m  Previous values from: $($entry.Name)`e[0m"
-            return $prev
+    $domainPattern = [regex]::Escape($DomainName)
+    $pattern = if ($HasEmailRouting) {
+        "- \*\*$domainPattern\*\*: (\d+) page views, (\d+) unique visitors, (\d+) emails forwarded(?:, (\d+) dropped)?"
+    }
+    else {
+        "- \*\*$domainPattern\*\*: (\d+) page views, (\d+) unique visitors"
+    }
+
+    foreach ($line in $Lines) {
+        if ($line -match $pattern) {
+            $stats = [ordered]@{
+                PageViews = [int]$Matches[1]
+                UniqueVisitors = [int]$Matches[2]
+            }
+
+            if ($HasEmailRouting) {
+                $stats.EmailsForwarded = [int]$Matches[3]
+            }
+
+            return [pscustomobject]$stats
         }
     }
-    return @{}
+
+    return $null
+}
+
+function Get-PreviousValues {
+    $previousDate = $parsedDate.AddDays(-1)
+    $previousEntryPath = Get-DiaryEntryPathByDate -TargetDate $previousDate
+    if (-not $previousEntryPath) {
+        Write-Information "`e[90m  No diary entry found for yesterday ($($previousDate.ToString('yyyy-MM-dd'))).`e[0m"
+        return @{}
+    }
+
+    $content = Get-Content $previousEntryPath -Raw
+    $prev = @{}
+
+    if ($content -match 'GitHub:\s*(\d+)') {
+        $prev.GitHubRepos = [int]$Matches[1]
+    }
+    if ($content -match 'Bitbucket:\s*(\d+)') {
+        $prev.BitbucketRepos = [int]$Matches[1]
+    }
+    if ($content -match '\*\*Dow Jones\*\*:\s*([\d,]+\.\d+)') {
+        $prev.Dow = [decimal]($Matches[1] -replace ',', '')
+    }
+    if ($content -match '\*\*S&P 500\*\*:\s*([\d,]+\.\d+)') {
+        $prev.SP500 = [decimal]($Matches[1] -replace ',', '')
+    }
+    if ($content -match '- \*\*GitHub Copilot Usage\*\*: (\d+) / (\d+) premium requests \(([\d.]+)%\)') {
+        $prev.CopilotUsed = [int]$Matches[1]
+        $prev.CopilotEntitlement = [int]$Matches[2]
+        $prev.CopilotPct = [decimal]$Matches[3]
+    }
+
+    $prevCloudflare = @{}
+    foreach ($domain in $CloudflareDomains) {
+        $domainStats = Get-CloudflareStatsFromText -Lines ($content -split "`r?`n") -DomainName $domain.Name -HasEmailRouting $domain.HasEmailRouting
+        if ($null -ne $domainStats) {
+            $prevCloudflare[$domain.Name] = $domainStats
+        }
+    }
+    if ($prevCloudflare.Count -gt 0) {
+        $prev.Cloudflare = $prevCloudflare
+    }
+
+    if ($prev.Count -gt 0) {
+        Write-Information "`e[90m  Previous values from: $([System.IO.Path]::GetFileName($previousEntryPath))`e[0m"
+    }
+
+    return $prev
 }
 
 function Format-Delta {
@@ -93,6 +159,30 @@ function Format-IntDelta {
     $delta = $Current - $Previous
     $sign = if ($delta -ge 0) { '+' } else { '' }
     return "$sign$delta"
+}
+
+function Format-PctPointDelta {
+    param([decimal]$Current, [decimal]$Previous)
+
+    $delta = [math]::Round($Current - $Previous, 1)
+    $sign = if ($delta -ge 0) { '+' } else { '' }
+    return "$sign$($delta.ToString('0.0'))"
+}
+
+function Get-CopilotDeltaLine {
+    param(
+        [int]$CurrentUsed,
+        [decimal]$CurrentPct,
+        [hashtable]$PreviousValues
+    )
+
+    if (-not ($PreviousValues.ContainsKey('CopilotUsed') -and $PreviousValues.ContainsKey('CopilotPct'))) {
+        return '  - **Delta vs Yesterday**: unavailable (previous diary entry missing GitHub Copilot usage)'
+    }
+
+    $requestsDelta = Format-IntDelta -Current $CurrentUsed -Previous $PreviousValues.CopilotUsed
+    $pctPointDelta = Format-PctPointDelta -Current $CurrentPct -Previous $PreviousValues.CopilotPct
+    return "  - **Delta vs Yesterday**: $requestsDelta requests, $pctPointDelta pct points"
 }
 
 function Get-MarketDriverText {
@@ -163,7 +253,7 @@ function Get-MarketCommentary {
         }
     }
     else {
-        "The Dow and S&P moved broadly in tandem, indicating a market-wide tone rather than an isolated sector move."
+        'The Dow and S&P moved broadly in tandem, indicating a market-wide tone rather than an isolated sector move.'
     }
 
     return "*$lead $relative*"
@@ -211,6 +301,58 @@ function Get-PreviousRepoSnapshot {
     }
 
     return $null
+}
+
+function Get-CloudflareUsageStats {
+    param([string]$TargetDate)
+
+    if (-not (Test-Path $CloudflareScriptPath)) {
+        Write-Information "`e[1;33mCloudflare usage script not found: $CloudflareScriptPath`e[0m"
+        return @{}
+    }
+
+    try {
+        $outputLines = & $CloudflareScriptPath -Date $TargetDate 6>&1 | ForEach-Object { "$_" }
+    }
+    catch {
+        Write-Information "`e[1;33mFailed to fetch Cloudflare usage: $_`e[0m"
+        return @{}
+    }
+
+    $statsByDomain = @{}
+    foreach ($domain in $CloudflareDomains) {
+        $stats = Get-CloudflareStatsFromText -Lines $outputLines -DomainName $domain.Name -HasEmailRouting $domain.HasEmailRouting
+        if ($null -ne $stats) {
+            $statsByDomain[$domain.Name] = $stats
+        }
+    }
+
+    return $statsByDomain
+}
+
+function Get-CloudflareDeltaLine {
+    param(
+        [string]$DomainName,
+        [pscustomobject]$CurrentStats,
+        [hashtable]$PreviousValues,
+        [bool]$HasEmailRouting
+    )
+
+    if (-not ($PreviousValues.ContainsKey('Cloudflare') -and $PreviousValues.Cloudflare.ContainsKey($DomainName))) {
+        return '    - **Delta vs Yesterday**: unavailable (previous diary entry missing Cloudflare metrics)'
+    }
+
+    $previousStats = $PreviousValues.Cloudflare[$DomainName]
+    $parts = @(
+        "$(Format-IntDelta -Current $CurrentStats.PageViews -Previous $previousStats.PageViews) page views",
+        "$(Format-IntDelta -Current $CurrentStats.UniqueVisitors -Previous $previousStats.UniqueVisitors) unique visitors"
+    )
+
+    if ($HasEmailRouting) {
+        $parts += "$(Format-IntDelta -Current $CurrentStats.EmailsForwarded -Previous $previousStats.EmailsForwarded) emails forwarded"
+    }
+
+    return '    - **Delta vs Yesterday**: ' + ($parts -join ', ')
 }
 
 Write-Information "`e[1;36mGathering daily numbers...`e[0m"
@@ -272,8 +414,8 @@ catch {
 }
 
 # --- Compute repo deltas ---
-$ghDelta = if ($prev.ContainsKey('GitHubRepos')) { Format-IntDelta $ghRepoCount $prev.GitHubRepos } else { '—' }
-$bbDelta = if ($prev.ContainsKey('BitbucketRepos')) { Format-IntDelta $bbRepoCount $prev.BitbucketRepos } else { '—' }
+$ghDelta = if ($prev.ContainsKey('GitHubRepos')) { Format-IntDelta -Current $ghRepoCount -Previous $prev.GitHubRepos } else { '—' }
+$bbDelta = if ($prev.ContainsKey('BitbucketRepos')) { Format-IntDelta -Current $bbRepoCount -Previous $prev.BitbucketRepos } else { '—' }
 $ghRepoDeltaDetailText = ''
 
 if ($prev.ContainsKey('GitHubRepos') -and $ghRepoCount -ne $prev.GitHubRepos) {
@@ -316,16 +458,16 @@ $marketCommentaryLine = ''
 if (-not $isWeekend) {
     Write-Information "`e[1;36mFetching stock market data...`e[0m"
     try {
-        $dowData = Invoke-RestMethod -Uri "https://query1.finance.yahoo.com/v8/finance/chart/%5EDJI?range=2d&interval=1d" -ErrorAction Stop
-        $spData = Invoke-RestMethod -Uri "https://query1.finance.yahoo.com/v8/finance/chart/%5EGSPC?range=2d&interval=1d" -ErrorAction Stop
+        $dowData = Invoke-RestMethod -Uri 'https://query1.finance.yahoo.com/v8/finance/chart/%5EDJI?range=2d&interval=1d' -ErrorAction Stop
+        $spData = Invoke-RestMethod -Uri 'https://query1.finance.yahoo.com/v8/finance/chart/%5EGSPC?range=2d&interval=1d' -ErrorAction Stop
 
         $dowPrice = [decimal]$dowData.chart.result[0].meta.regularMarketPrice
         $dowPrev = [decimal]$dowData.chart.result[0].meta.chartPreviousClose
         $spPrice = [decimal]$spData.chart.result[0].meta.regularMarketPrice
         $spPrev = [decimal]$spData.chart.result[0].meta.chartPreviousClose
 
-        $dowDelta = Format-Delta $dowPrice $dowPrev
-        $spDelta = Format-Delta $spPrice $spPrev
+        $dowDelta = Format-Delta -Current $dowPrice -Previous $dowPrev
+        $spDelta = Format-Delta -Current $spPrice -Previous $spPrev
 
         $dowLine = "- **Dow Jones**: $($dowPrice.ToString('N2')) ($dowDelta)"
         $spLine = "- **S&P 500**: $($spPrice.ToString('N2')) ($spDelta)"
@@ -336,7 +478,7 @@ if (-not $isWeekend) {
     }
 }
 else {
-    Write-Information "`e[90mWeekend — skipping stock market data (markets closed).`e[0m"
+    Write-Information "`e[90mWeekend - skipping stock market data (markets closed).`e[0m"
 }
 
 # --- Fetch GitHub Copilot Usage ---
@@ -364,12 +506,14 @@ foreach ($username in $copilotAccounts) {
             $grandTotalUsed += $used
             $grandTotalEntitlement += $entitlement
             $grandTotalOverageCost += $overageCost
+
             $line = "  - **$username**: $used / $entitlement used ($pctUsed%)"
             if ($overageCost -gt 0) {
-                $line += " — overage: $overageCount reqs (`$$($overageCost.ToString('N2')))"
+                $line += " - overage: $overageCount reqs (`$$($overageCost.ToString('N2')))"
             }
             $copilotLines += $line
-        } else {
+        }
+        else {
             $copilotLines += "  - **$username**: *(unavailable)*"
         }
     }
@@ -381,7 +525,29 @@ foreach ($username in $copilotAccounts) {
 $grandPct = if ($grandTotalEntitlement -gt 0) { [math]::Round(($grandTotalUsed / $grandTotalEntitlement) * 100, 1) } else { 0 }
 $copilotSummaryLine = "- **GitHub Copilot Usage**: $grandTotalUsed / $grandTotalEntitlement premium requests ($grandPct%)"
 if ($grandTotalOverageCost -gt 0) {
-    $copilotSummaryLine += " — overage: `$$($grandTotalOverageCost.ToString('N2'))"
+    $copilotSummaryLine += " - overage: `$$($grandTotalOverageCost.ToString('N2'))"
+}
+$copilotDeltaLine = Get-CopilotDeltaLine -CurrentUsed $grandTotalUsed -CurrentPct $grandPct -PreviousValues $prev
+
+# --- Fetch Cloudflare usage ---
+Write-Information "`e[1;36mFetching Cloudflare usage...`e[0m"
+$cloudflareUsage = Get-CloudflareUsageStats -TargetDate $Date
+$cloudflareLines = @()
+foreach ($domain in $CloudflareDomains) {
+    if ($cloudflareUsage.ContainsKey($domain.Name)) {
+        $currentStats = $cloudflareUsage[$domain.Name]
+        $domainLine = "  - **$($domain.Name)**: $($currentStats.PageViews) page views, $($currentStats.UniqueVisitors) unique visitors"
+        if ($domain.HasEmailRouting) {
+            $domainLine += ", $($currentStats.EmailsForwarded) emails forwarded"
+        }
+
+        $cloudflareLines += $domainLine
+        $cloudflareLines += Get-CloudflareDeltaLine -DomainName $domain.Name -CurrentStats $currentStats -PreviousValues $prev -HasEmailRouting $domain.HasEmailRouting
+    }
+    else {
+        $cloudflareLines += "  - **$($domain.Name)**: *(unavailable)*"
+        $cloudflareLines += '    - **Delta vs Yesterday**: unavailable (current Cloudflare metrics unavailable)'
+    }
 }
 
 # --- Build markdown ---
@@ -396,8 +562,15 @@ if ($marketCommentaryLine) {
 }
 [void]$sb.AppendLine("- **Relias Repo Count**: GitHub: $ghRepoCount ($ghDelta$ghRepoDeltaDetailText), Bitbucket: $bbRepoCount ($bbDelta)")
 [void]$sb.AppendLine($copilotSummaryLine)
+[void]$sb.AppendLine($copilotDeltaLine)
 foreach ($line in $copilotLines) {
     [void]$sb.AppendLine($line)
+}
+if ($cloudflareLines.Count -gt 0) {
+    [void]$sb.AppendLine('- **Cloudflare Usage**:')
+    foreach ($line in $cloudflareLines) {
+        [void]$sb.AppendLine($line)
+    }
 }
 
 $numbersContent = $sb.ToString().TrimEnd()

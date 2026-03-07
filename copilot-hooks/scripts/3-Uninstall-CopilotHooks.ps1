@@ -106,29 +106,45 @@ function Remove-StopHookEntry {
 
     try {
         $hooksObj = Get-Content -Path $HooksJsonPath -Raw | ConvertFrom-Json
-        if ($null -eq $hooksObj.hooks -or $null -eq $hooksObj.hooks.Stop) {
+        if ($null -eq $hooksObj.hooks) {
             return
         }
 
-        $before = @($hooksObj.hooks.Stop)
-        $after = @(
-            $before | Where-Object {
-                $w = "$($_.windows)"
-                $c = "$($_.command)"
-                -not ($w -match 'Invoke-AgentSessionAutoPush\.ps1' -or $c -match 'Invoke-AgentSessionAutoPush\.ps1')
-            }
-        )
+        $updated = $false
+        if ($null -ne $hooksObj.hooks.PSObject.Properties['sessionEnd']) {
+            $before = @($hooksObj.hooks.sessionEnd)
+            $after = @(
+                $before | Where-Object {
+                    $bash = "$($_.bash)"
+                    -not ($bash -match '\.github/scripts/auto-commit\.sh')
+                }
+            )
 
-        if ($after.Count -ne $before.Count) {
-            $hooksObj.hooks.Stop = $after
+            if ($after.Count -ne $before.Count) {
+                if ($after.Count -gt 0) {
+                    $hooksObj.hooks.sessionEnd = $after
+                }
+                else {
+                    $hooksObj.hooks.PSObject.Properties.Remove('sessionEnd')
+                }
+                $updated = $true
+            }
+        }
+
+        if ($null -ne $hooksObj.hooks.PSObject.Properties['Stop']) {
+            $hooksObj.hooks.PSObject.Properties.Remove('Stop')
+            $updated = $true
+        }
+
+        if ($updated) {
             $hooksObj | ConvertTo-Json -Depth 10 | Set-Content -Path $HooksJsonPath -Encoding utf8NoBOM
-            Write-Ok "Removed Stop hook entry from: $HooksJsonPath"
+            Write-Ok "Removed managed sessionEnd hook entry from: $HooksJsonPath"
         }
     } catch {
         if (-not $Force) {
             throw "Could not parse $HooksJsonPath. Use -Force to skip JSON entry cleanup."
         }
-        Write-Warn "Skipping Stop hook entry removal due to parse error (forced): $HooksJsonPath"
+        Write-Warn "Skipping hooks.json entry removal due to parse error (forced): $HooksJsonPath"
     }
 }
 
@@ -141,8 +157,10 @@ $preCommitMarkdownPath = Join-Path $hooksDir 'pre-commit-markdown.ps1'
 $markdownConfigPath = Join-Path $repoRoot '.markdownlint.jsonc'
 $huskyPreCommitPath = Join-Path $repoRoot '.husky/pre-commit'
 $copilotHooksJsonPath = Join-Path $repoRoot '.github/hooks/hooks.json'
-$copilotFallbackJsonPath = Join-Path $repoRoot '.github/hooks/session-stop-autopush.json'
-$copilotStopScriptPath = Join-Path $repoRoot '.github/hooks/Invoke-AgentSessionAutoPush.ps1'
+$copilotAutoCommitScriptPath = Join-Path $repoRoot '.github/scripts/auto-commit.sh'
+$legacyStandaloneHookJsonPath = Join-Path $repoRoot '.github/hooks/session-stop-autopush.json'
+$legacyCopilotStopScriptPath = Join-Path $repoRoot '.github/hooks/Invoke-AgentSessionAutoPush.ps1'
+$copilotStopScriptPath = Join-Path $repoRoot 'copilot/scripts/Invoke-AgentSessionAutoPush.ps1'
 
 try {
     Remove-ManagedFile -Path $preCommitPath -Marker 'Managed by copilot-hooks skill' -Label 'pre-commit hook'
@@ -153,9 +171,11 @@ try {
         Remove-HuskyBlock -Path $huskyPreCommitPath
     }
 
-    Remove-ManagedFile -Path $copilotStopScriptPath -Marker 'Managed by copilot-hooks skill' -Label 'Copilot Stop auto-push script'
+    Remove-ManagedFile -Path $copilotAutoCommitScriptPath -Marker 'Managed by copilot-hooks skill' -Label 'Copilot sessionEnd auto-commit shell script'
     Remove-StopHookEntry -HooksJsonPath $copilotHooksJsonPath -Force:$Force
-    Remove-ManagedFile -Path $copilotFallbackJsonPath -Marker 'Invoke-AgentSessionAutoPush.ps1' -Label 'Copilot Stop fallback hook profile'
+    Remove-ManagedFile -Path $legacyStandaloneHookJsonPath -Marker 'copilot/scripts/Invoke-AgentSessionAutoPush.ps1' -Label 'Legacy standalone Stop hook profile'
+    Remove-ManagedFile -Path $legacyCopilotStopScriptPath -Marker 'Managed by copilot-hooks skill' -Label 'Legacy Copilot Stop auto-push script'
+    Remove-ManagedFile -Path $copilotStopScriptPath -Marker 'Managed by copilot-hooks skill' -Label 'Legacy copilot/scripts PowerShell hook'
 } catch {
     Write-Err $_.Exception.Message
     exit 1
