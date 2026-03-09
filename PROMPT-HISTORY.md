@@ -7,6 +7,9 @@ This file tracks meaningful prompts and their outcomes for the Claude Skills rep
 2026-03-08 - 20:42 - Scaffold today's diary entry from prompt workflow with cached and live data requirements
 Result: Created `diary/entries/2026-03-08.md` in the required order with cached weather, news, and Slack; weekend-aware daily numbers with Copilot and Cloudflare deltas; refreshed LLM, trending repo, software watchlist, watchlist updates, productivity, and meetings sections; omitted screenshots because none were present; and left TODO placeholders for Today's Highlight and Personal Reflections.
 
+2026-03-08 - 22:40 - Replace OpenRouter app rankings Playwright scrape with HTTP parsing
+Result: Updated `diary/scripts/060-llm-models.ps1` to parse the server-rendered OpenRouter Top Apps section from a normal web request, removing the Playwright dependency for that subsection and unblocking diary population.
+
 2026-03-07 - 23:00 - Scaffold today's diary entry from prompt workflow with cached and live data requirements
 Result: Created `diary/entries/2026-03-07.md` in the required order with cached weather, news, and Slack; weekend-aware daily numbers with Copilot and Cloudflare deltas; refreshed LLM, trending repo, software watchlist, watchlist updates, and productivity sections; omitted meetings and screenshots correctly for Saturday/no files; and left TODO placeholders for Today's Highlight and Personal Reflections.
 

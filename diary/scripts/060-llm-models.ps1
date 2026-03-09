@@ -141,82 +141,48 @@ catch {
 }
 
 # ============================================================
-# SECTION 3: Top OpenRouter Apps (by Token Usage) via Playwright
+# SECTION 3: Top OpenRouter Apps (by Token Usage) via HTTP
 # ============================================================
-Write-Information "`e[1;36mFetching OpenRouter app rankings via Playwright...`e[0m"
+Write-Information "`e[1;36mFetching OpenRouter app rankings via web request...`e[0m"
 
 $appsSection = ''
 try {
-    # Resolve playwright package and chromium executable from global npm
-    $npmRoot = Join-Path $env:APPDATA 'npm' 'node_modules'
-    $pwPkg = Join-Path $npmRoot '@playwright' 'cli' 'node_modules' 'playwright'
-    if (-not (Test-Path $pwPkg)) { throw "Playwright npm package not found at $pwPkg" }
+    $response = Invoke-WebRequest -Uri 'https://openrouter.ai/rankings/apps' -UseBasicParsing -ErrorAction Stop
+    $html = $response.Content
 
-    # Find latest installed chromium browser
-    $msPlaywright = Join-Path $env:LOCALAPPDATA 'ms-playwright'
-    $chromiumDir = Get-ChildItem $msPlaywright -Directory -Filter 'chromium-*' |
-        Sort-Object Name -Descending | Select-Object -First 1
-    if (-not $chromiumDir) { throw "No chromium browser installed in $msPlaywright" }
-    $chromeExe = Join-Path $chromiumDir.FullName 'chrome-win64' 'chrome.exe'
-    if (-not (Test-Path $chromeExe)) { throw "Chrome executable not found at $chromeExe" }
+    $appsHeaderIndex = $html.IndexOf('href="#apps"')
+    if ($appsHeaderIndex -lt 0) {
+        throw 'Top Apps section anchor not found in rankings page.'
+    }
 
-    $escapedPkg = $pwPkg -replace '\\', '\\\\'
-    $escapedExe = $chromeExe -replace '\\', '\\\\'
+    $sectionEndIndex = $html.IndexOf('Visit the new App &amp; Agent Rankings', $appsHeaderIndex)
+    if ($sectionEndIndex -lt 0) {
+        $sectionEndIndex = $html.Length
+    }
 
-    $tempJs = Join-Path ([System.IO.Path]::GetTempPath()) "diary-or-rankings-$Date.cjs"
-    $jsContent = @"
-const { chromium } = require('$escapedPkg');
-(async () => {
-    const browser = await chromium.launch({ headless: true, executablePath: '$escapedExe' });
-    const page = await browser.newPage();
-    try {
-        await page.goto('https://openrouter.ai/rankings/apps', { waitUntil: 'networkidle', timeout: 30000 });
-        await page.waitForTimeout(3000);
+    $appsHtml = $html.Substring($appsHeaderIndex, $sectionEndIndex - $appsHeaderIndex)
+    $entryPattern = '<div class="grid grid-cols-12 items-center rounded-lg">[\s\S]*?<div class="col-span-1 text-left text-slate-11">\s*(\d+)(?:<!-- -->)?\.[\s\S]*?<a[^>]+href="(/apps\?url=[^"]+)"[^>]*>([^<]+)(?:<!-- -->)?[\s\S]*?<span class="inline-block truncate cursor-help"[^>]*>([^<]+)</span>[\s\S]*?<span class="text-sm font-medium text-muted-foreground">([^<]+)</span>\s*<span class="text-xs text-slate-9 ml-1">tokens</span>'
+    $matches = [regex]::Matches($appsHtml, $entryPattern)
 
-        const data = await page.evaluate(() => {
-            const text = document.body.innerText;
-            const appsMatch = text.match(/Top Apps[\s\S]*?Largest public apps[\s\S]*?Today\n([\s\S]*?)(?=\n\nProduct|$)/);
-            if (!appsMatch) return [];
-            const section = appsMatch[1];
-            const entries = [];
-            const lines = section.split('\n').filter(l => l.trim());
-            let i = 0;
-            while (i < lines.length && entries.length < 10) {
-                const rankMatch = lines[i].match(/^(\d+)\.$/);
-                if (rankMatch) {
-                    const rank = parseInt(rankMatch[1]);
-                    const name = lines[i+1] ? lines[i+1].trim() : '';
-                    const desc = lines[i+2] ? lines[i+2].trim() : '';
-                    const tokensLine = lines[i+3] ? lines[i+3].trim() : '';
-                    const tokenMatch = tokensLine.match(/([\d.]+[TGBM])tokens/i);
-                    const tokens = tokenMatch ? tokenMatch[1] : tokensLine;
-                    entries.push({rank, name, desc, tokens});
-                    i += 4;
-                } else { i++; }
-            }
-            return entries;
-        });
+    $apps = @()
+    foreach ($match in $matches) {
+        $decodedHref = [System.Net.WebUtility]::HtmlDecode($match.Groups[2].Value)
+        $decodedUrl = if ($decodedHref -match 'url=(.+)$') {
+            [uri]::UnescapeDataString($Matches[1])
+        } else {
+            ''
+        }
 
-        const links = await page.evaluate(() => {
-            const appLinks = document.querySelectorAll('a[href*="/apps?url="]');
-            return Array.from(appLinks).slice(0, 10).map(l => {
-                const urlMatch = l.href.match(/url=(.+)/);
-                return urlMatch ? decodeURIComponent(urlMatch[1]) : '';
-            });
-        });
+        $apps += [pscustomobject]@{
+            rank = [int]$match.Groups[1].Value
+            name = [System.Net.WebUtility]::HtmlDecode($match.Groups[3].Value).Trim()
+            desc = [System.Net.WebUtility]::HtmlDecode($match.Groups[4].Value).Trim() -replace '\|', '–'
+            tokens = [System.Net.WebUtility]::HtmlDecode($match.Groups[5].Value).Trim()
+            url = $decodedUrl
+        }
+    }
 
-        data.forEach((item, i) => { item.url = links[i] || ''; });
-        console.log(JSON.stringify(data));
-    } finally { await browser.close(); }
-})();
-"@
-    $utf8NoBom = [System.Text.UTF8Encoding]::new($false)
-    [System.IO.File]::WriteAllText($tempJs, $jsContent, $utf8NoBom)
-
-    $rawOutput = node $tempJs 2>$null
-    Remove-Item $tempJs -ErrorAction SilentlyContinue
-
-    $apps = $rawOutput | ConvertFrom-Json
+    $apps = $apps | Sort-Object rank | Select-Object -First 10
 
     if ($apps.Count -gt 0) {
         $sb = [System.Text.StringBuilder]::new()
@@ -228,9 +194,11 @@ const { chromium } = require('$escapedPkg');
         foreach ($app in $apps) {
             $appLink = if ($app.url) {
                 "[$($app.name)]($($app.url))"
-            } else {
+            }
+            else {
                 $app.name
             }
+
             [void]$sb.AppendLine("| $($app.rank) | $appLink | $($app.desc) | $($app.tokens) |")
         }
 
@@ -243,8 +211,8 @@ const { chromium } = require('$escapedPkg');
     }
 }
 catch {
-    Write-Information "`e[1;33mPlaywright scraping failed: $_. Skipping app rankings.`e[0m"
-    $appsSection = "### Top OpenRouter Apps (by Token Usage)`n`n*Failed to fetch rankings (Playwright error).*"
+    Write-Information "`e[1;33mHTTP rankings fetch failed: $_. Skipping app rankings.`e[0m"
+    $appsSection = "### Top OpenRouter Apps (by Token Usage)`n`n*Failed to fetch rankings (HTTP parsing error).*"
 }
 
 # ============================================================
