@@ -218,6 +218,9 @@ Result: Successfully reprocessed <https://youtu.be/aKUZCxTdDDg> with updated you
 2026-02-01 - 14:00 - Commit and push skills repository changes
 Result: Successfully pushed pending skills changes.
 
+2026-03-09 - 12:13 - Archive ask-user-questions skill folder on user request
+Result: Moved 'ask-user-questions' to '_archived/ask-user-questions' and removed it from active skills by directory placement.
+
 2026-02-01 - 16:52 - Enhance productivity repos dashboard with SVG icons and Issues/PRs tracking
 Result: Added modern SVG iconography to all metric cards in repo-analytics.html template. Created new collect-repo-issues-prs.ps1 script for collecting pull request and issue activity from GitHub API. Updated generate-repo-report.ps1 to integrate PR/issue data with new chart visualizations. Dashboard now displays: 10 metric cards with icons (commits, LOC, contributors, active days, additions, deletions, avg LOC/day, days analyzed, PRs, issues), 6 time series charts including PR activity and issues activity, and enhanced key insights section with PR/issue summaries.
 Result: Successfully staged and committed 9 files/changes including: new verbiage skill for managing VERBIAGE.md terminology dictionaries, enhanced todo skill documentation with improved guidelines, added screenshot library entries, and HemSoft Conductor logs. All pre-commit markdown quality checks passed. Pushed to remote successfully. Repository now in clean state with no uncommitted changes.
