@@ -4,6 +4,9 @@ This file tracks meaningful prompts and their outcomes for the Claude Skills rep
 
 ---
 
+2026-03-10 - 11:51 - Create github-metrics user-level skill from researched GitHub Copilot billing and usage APIs
+Result: Created a new `github-metrics` skill in the user skills workspace with decision tables, confirmed REST endpoints for Copilot usage metrics and premium request billing usage, access caveats, and ready-to-run `gh api` examples.
+
 2026-03-10 - 11:48 - Research GitHub Copilot Enterprise API access for org usage and premium request analytics
 Result: Verified that GitHub exposes documented REST APIs for Copilot usage metrics reports and for premium request billing usage reports at the enterprise and organization levels, and clarified the distinction between usage telemetry endpoints and premium-request billing/report endpoints.
 
