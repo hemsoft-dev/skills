@@ -408,3 +408,6 @@ Result: Corrected the billing query to use the bertelsmann enterprise slug with 
 
 2026-03-11 - 12:45 - Identify the top February premium request user and compare against productivity
 Result: Queried enterprise billing usage across relias-engineering members, found the highest February premium-request user, and ran the compact premium-requests versus commits and PRs report for that user.
+
+2026-03-11 - 13:16 - Add a separate user productivity breakdown script
+Result: Created a new productivity script that takes start date, end date, and GitHub username and returns premium requests, total commits, and open, merged, and closed PR counts for relias-engineering.
