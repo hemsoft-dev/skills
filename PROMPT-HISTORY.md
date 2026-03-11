@@ -396,3 +396,6 @@ Result: Moved 'wezterm' to '_archived/wezterm' and removed it from active skills
 
 2026-03-11 - 00:04 - Investigate ssadhula-relias activity in relias-engineering
 Result: Confirmed org membership and identified contribution footprint in notification-delivery-service and policy-manager, including authored PRs, commits, and review activity.
+
+2026-03-11 - 00:14 - Build a script for per-user Relias GitHub productivity metrics
+Result: Added productivity/scripts/Get-UserOrgProductivity.ps1 to report per-repo and total PR and commit metrics for any GitHub username in relias-engineering, and validated it against ssadhula-relias.
