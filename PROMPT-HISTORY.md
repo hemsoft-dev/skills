@@ -393,3 +393,6 @@ Result: Removed the installed .git/hooks/post-commit wrapper and kept session-en
 
 2026-03-05 - 06:55 - Archive wezterm skill folder on user request
 Result: Moved 'wezterm' to '_archived/wezterm' and removed it from active skills by directory placement.
+
+2026-03-11 - 00:04 - Investigate ssadhula-relias activity in relias-engineering
+Result: Confirmed org membership and identified contribution footprint in notification-delivery-service and policy-manager, including authored PRs, commits, and review activity.
