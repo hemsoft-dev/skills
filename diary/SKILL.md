@@ -1,6 +1,6 @@
 ---
 name: diary
-description: V1.0 - Comamands: create [date]
+description: V1.1 - Commands: create [date], update [date]. Personal diary management with scaffolded entries where Today's Highlight is always the main news headline of the day.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -60,6 +60,9 @@ Personal diary management.
 
 ## Scaffolding Defaults
 
+- `🎯 Today's Highlight` is not a work summary, task summary, or personal accomplishment.
+- It must always be the main news headline of the day, chosen from the same day's `📰 News Headlines` section.
+- If the entry is saved with a placeholder, the placeholder should still tell the user to provide a news headline plus source URL, not a work-related update.
 - In `📊 Daily Numbers`, always include day-over-day deltas versus yesterday for:
   - GitHub Copilot usage
   - Cloudflare usage metrics (page views, unique visitors, and emails forwarded where applicable)

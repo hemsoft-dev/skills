@@ -2,6 +2,8 @@
 
 ## 🎯 Today's Highlight
 
+<!-- Must be the main news headline of the day from the News Headlines section, not a work update -->
+
 **[{title}]({url})**
 
 {1-2 sentence context from user}
