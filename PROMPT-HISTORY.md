@@ -411,3 +411,6 @@ Result: Queried enterprise billing usage across relias-engineering members, foun
 
 2026-03-11 - 13:16 - Add a separate user productivity breakdown script
 Result: Created a new productivity script that takes start date, end date, and GitHub username and returns premium requests, total commits, and open, merged, and closed PR counts for relias-engineering.
+
+2026-03-11 - 13:24 - Expand the user productivity breakdown with issues and workflows
+Result: Updated the new per-user breakdown script to include issue counts and workflow run counts and validated the expanded live output.

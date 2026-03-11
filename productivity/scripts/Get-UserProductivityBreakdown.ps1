@@ -8,7 +8,10 @@
     exactly three parameters: start date, end date, and GitHub username.
 
     Pull request counts are based on PRs created during the requested period and
-    are bucketed into open, merged, and closed-unmerged states.
+    are bucketed into open, merged, and closed-unmerged states. Issue counts are
+    based on issues created during the requested period and are bucketed into
+    open and closed states. Workflow runs count runs triggered by the user
+    during the requested period across all non-archived, non-forked repositories.
 .PARAMETER Username
     GitHub username to analyze.
 .PARAMETER Since
@@ -129,6 +132,27 @@ function Get-PullRequestCount {
     return [int]$result.total_count
 }
 
+function Get-IssueCount {
+    param(
+        [Parameter(Mandatory)]
+        [string]$Author,
+
+        [Parameter(Mandatory)]
+        [string[]]$Qualifiers
+    )
+
+    $query = @(
+        "org:$Organization",
+        "author:$Author",
+        'is:issue',
+        (Get-DateQualifier -FieldName 'created' -Start $Since -End $Until)
+    ) + $Qualifiers
+
+    $encodedQuery = [System.Uri]::EscapeDataString(($query -join ' '))
+    $result = Invoke-GhApiJson -Path "/search/issues?q=$encodedQuery&per_page=1"
+    return [int]$result.total_count
+}
+
 function Get-CommitCountForRepository {
     param(
         [Parameter(Mandatory)]
@@ -172,6 +196,55 @@ function Get-TotalCommitCount {
     return $totalCommits
 }
 
+function Get-RepositoryList {
+    return @(gh repo list $Organization --limit 500 --json name,isArchived,isFork | ConvertFrom-Json |
+        Where-Object { -not $_.isArchived -and -not $_.isFork })
+}
+
+function Get-WorkflowRunCountForRepository {
+    param(
+        [Parameter(Mandatory)]
+        [string]$RepositoryName
+    )
+
+    $queryParts = @(
+        "actor=$([System.Uri]::EscapeDataString($Username))",
+        "created=$([System.Uri]::EscapeDataString("$($Since.ToString('yyyy-MM-dd'))..$($Until.ToString('yyyy-MM-dd'))"))",
+        'per_page=100'
+    )
+
+    $page = 1
+    $workflowRuns = 0
+
+    do {
+        $path = "/repos/$Organization/$RepositoryName/actions/runs?{0}&page={1}" -f ($queryParts -join '&'), $page
+        $response = Invoke-GhApiJson -Path $path -AllowFailure
+        if ($null -eq $response) {
+            break
+        }
+
+        $batch = @($response.workflow_runs)
+        $workflowRuns += $batch.Count
+        $page++
+    } while ($batch.Count -eq 100)
+
+    return $workflowRuns
+}
+
+function Get-TotalWorkflowRunCount {
+    param(
+        [Parameter(Mandatory)]
+        [object[]]$Repositories
+    )
+
+    $totalWorkflowRuns = 0
+    foreach ($repository in $Repositories) {
+        $totalWorkflowRuns += Get-WorkflowRunCountForRepository -RepositoryName $repository.name
+    }
+
+    return $totalWorkflowRuns
+}
+
 function Get-PremiumRequestCount {
     $headers = @('Accept: application/vnd.github+json')
     $total = 0.0
@@ -206,6 +279,8 @@ catch {
 
 $null = Invoke-GhApiJson -Path "/users/$Username"
 
+$repositories = Get-RepositoryList
+
 $summary = [PSCustomObject]@{
     StartDate        = $Since.ToString('yyyy-MM-dd')
     EndDate          = $Until.ToString('yyyy-MM-dd')
@@ -215,6 +290,9 @@ $summary = [PSCustomObject]@{
     OpenPRs          = Get-PullRequestCount -Author $Username -Qualifiers @('state:open')
     MergedPRs        = Get-PullRequestCount -Author $Username -Qualifiers @('is:merged')
     ClosedUnmergedPRs = Get-PullRequestCount -Author $Username -Qualifiers @('state:closed', '-is:merged')
+    OpenIssues       = Get-IssueCount -Author $Username -Qualifiers @('state:open')
+    ClosedIssues     = Get-IssueCount -Author $Username -Qualifiers @('state:closed')
+    WorkflowRuns     = Get-TotalWorkflowRunCount -Repositories $repositories
 }
 
 $summaryTable = @(
@@ -226,6 +304,9 @@ $summaryTable = @(
     [PSCustomObject]@{ Metric = 'Open PRs'; Value = $summary.OpenPRs }
     [PSCustomObject]@{ Metric = 'Merged PRs'; Value = $summary.MergedPRs }
     [PSCustomObject]@{ Metric = 'Closed PRs'; Value = $summary.ClosedUnmergedPRs }
+    [PSCustomObject]@{ Metric = 'Open Issues'; Value = $summary.OpenIssues }
+    [PSCustomObject]@{ Metric = 'Closed Issues'; Value = $summary.ClosedIssues }
+    [PSCustomObject]@{ Metric = 'Workflow Runs'; Value = $summary.WorkflowRuns }
 )
 
 $summaryTable | Format-Table -AutoSize | Out-String | Write-Output
