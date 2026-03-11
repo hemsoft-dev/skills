@@ -405,3 +405,6 @@ Result: Reworked productivity/scripts/Get-UserOrgProductivity.ps1 to accept a da
 
 2026-03-11 - 10:07 - Fix the enterprise slug and live premium request lookup
 Result: Corrected the billing query to use the bertelsmann enterprise slug with a valid user-only filter, then verified the live February report without a manual premium request override.
+
+2026-03-11 - 12:45 - Identify the top February premium request user and compare against productivity
+Result: Queried enterprise billing usage across relias-engineering members, found the highest February premium-request user, and ran the compact premium-requests versus commits and PRs report for that user.
