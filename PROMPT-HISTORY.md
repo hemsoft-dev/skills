@@ -399,3 +399,6 @@ Result: Confirmed org membership and identified contribution footprint in notifi
 
 2026-03-11 - 00:14 - Build a script for per-user Relias GitHub productivity metrics
 Result: Added productivity/scripts/Get-UserOrgProductivity.ps1 to report per-repo and total PR and commit metrics for any GitHub username in relias-engineering, and validated it against ssadhula-relias.
+
+2026-03-11 - 00:32 - Simplify the Relias user productivity script for premium-request reality checks
+Result: Reworked productivity/scripts/Get-UserOrgProductivity.ps1 to accept a date range and output only start date, end date, premium requests, commits, and pull requests, with enterprise billing API support and a manual override fallback.

@@ -1,41 +1,45 @@
 #Requires -Version 7.0
 <#
 .SYNOPSIS
-    Reports per-user productivity metrics across a GitHub organization.
+    Reports premium requests, commits, and pull requests for a user over a date range.
 .DESCRIPTION
-    Collects authored pull requests and commit counts for a GitHub user across
-    all repositories in an organization. Pull request metrics are grouped into
-    open, merged, and closed-unmerged buckets. Commit counts are gathered per
-    repository through the GitHub REST API and totaled across the organization.
+    Compares GitHub Copilot premium request consumption against authored GitHub
+    productivity for a single user in a single organization. The output is
+    intentionally concise: date range, premium requests, commits, and pull
+    requests.
 
-    By default, the script analyzes all repositories in the organization and
-    emits a human-readable table. Use -OutputFormat Json for structured output.
+    Premium requests are fetched from the enterprise billing usage API when an
+    enterprise slug is supplied and the active token has enterprise billing
+    access. If that API is not available in the current environment, you can
+    supply -PremiumRequestsOverride to inject a known total.
 .PARAMETER Username
     GitHub username to analyze.
 .PARAMETER Org
     GitHub organization to analyze. Defaults to relias-engineering.
 .PARAMETER Since
-    Optional lower bound for authored commits and pull requests. Pull request
-    filtering is based on created date.
+    Inclusive start date for the reporting period.
 .PARAMETER Until
-    Optional upper bound for authored commits and pull requests. Pull request
-    filtering is based on created date.
+    Inclusive end date for the reporting period.
+.PARAMETER Enterprise
+    Enterprise slug for the premium request billing API.
+.PARAMETER PremiumRequestsOverride
+    Optional manual premium request total. Use this when the billing endpoint is
+    unavailable or when you already have the number from the GitHub UI.
+.PARAMETER PremiumQuantityField
+    Which billing quantity to aggregate from the premium request usage API.
+    Gross is the consumed quantity; Net is the billable quantity after discounts.
 .PARAMETER ThrottleMs
-    Optional delay between per-repository commit API requests.
+    Delay between per-repository commit API requests.
 .PARAMETER IncludeArchived
-    Include archived repositories.
+    Include archived repositories when counting commits.
 .PARAMETER IncludeForks
-    Include forked repositories.
-.PARAMETER IncludeInactiveRepos
-    Include repositories with zero commits and zero pull requests in the output.
+    Include forked repositories when counting commits.
 .PARAMETER OutputFormat
     Output mode: Table or Json.
 .EXAMPLE
-    .\Get-UserOrgProductivity.ps1 -Username ssadhula-relias
+    .\Get-UserOrgProductivity.ps1 -Username ssadhula-relias -Since '2026-02-01' -Until '2026-02-28' -PremiumRequestsOverride 3400
 .EXAMPLE
-    .\Get-UserOrgProductivity.ps1 -Username ssadhula-relias -Since (Get-Date).AddDays(-30)
-.EXAMPLE
-    .\Get-UserOrgProductivity.ps1 -Username ssadhula-relias -OutputFormat Json
+    .\Get-UserOrgProductivity.ps1 -Username ssadhula-relias -Org relias-engineering -Enterprise relias -Since '2026-02-01' -Until '2026-02-28'
 #>
 
 [CmdletBinding()]
@@ -47,9 +51,18 @@ param(
     [ValidateNotNullOrEmpty()]
     [string]$Org = 'relias-engineering',
 
-    [Nullable[datetime]]$Since,
+    [Parameter(Mandatory)]
+    [datetime]$Since,
 
-    [Nullable[datetime]]$Until,
+    [Parameter(Mandatory)]
+    [datetime]$Until,
+
+    [string]$Enterprise,
+
+    [double]$PremiumRequestsOverride,
+
+    [ValidateSet('Gross', 'Net')]
+    [string]$PremiumQuantityField = 'Gross',
 
     [ValidateRange(0, 5000)]
     [int]$ThrottleMs = 0,
@@ -58,15 +71,13 @@ param(
 
     [switch]$IncludeForks,
 
-    [switch]$IncludeInactiveRepos,
-
     [ValidateSet('Table', 'Json')]
     [string]$OutputFormat = 'Table'
 )
 
 $ErrorActionPreference = 'Stop'
 
-if ($Since -and $Until -and $Since -gt $Until) {
+if ($Since.Date -gt $Until.Date) {
     throw 'Since must be earlier than or equal to Until.'
 }
 
@@ -75,16 +86,44 @@ function Invoke-GhApiJson {
         [Parameter(Mandatory)]
         [string]$Path,
 
+        [string[]]$Headers,
+
         [switch]$AllowFailure
     )
 
-    $output = & gh api $Path 2>&1
+    $arguments = @('api')
+    if ($null -ne $Headers) {
+        foreach ($header in $Headers) {
+            $arguments += @('-H', $header)
+        }
+    }
+    $arguments += $Path
+
+    $stderrFile = [System.IO.Path]::GetTempFileName()
+    try {
+        $output = & gh @arguments 2> $stderrFile
+        $stderrOutput = Get-Content $stderrFile -Raw -ErrorAction SilentlyContinue
+    }
+    finally {
+        if ([System.IO.File]::Exists($stderrFile)) {
+            [System.IO.File]::Delete($stderrFile)
+        }
+    }
+
     if ($LASTEXITCODE -ne 0) {
         if ($AllowFailure) {
             return $null
         }
 
-        throw "GitHub API call failed for '$Path': $($output | Out-String)"
+        $errorMessage = $stderrOutput
+        if ([string]::IsNullOrWhiteSpace($errorMessage)) {
+            $errorMessage = ($output | Out-String).Trim()
+        }
+        if ([string]::IsNullOrWhiteSpace($errorMessage)) {
+            $errorMessage = "GitHub API call failed for '$Path'."
+        }
+
+        Write-Error -Message $errorMessage -ErrorAction Stop
     }
 
     if ([string]::IsNullOrWhiteSpace(($output | Out-String))) {
@@ -94,82 +133,46 @@ function Invoke-GhApiJson {
     return $output | ConvertFrom-Json
 }
 
-function Invoke-GhGraphQlJson {
-    param(
-        [Parameter(Mandatory)]
-        [string]$Query
-    )
-
-    $tempFile = [System.IO.Path]::GetTempFileName()
-    try {
-        [System.IO.File]::WriteAllText($tempFile, $Query)
-        $output = & gh api graphql -f "query=$(Get-Content $tempFile -Raw)" 2>&1
-    }
-    finally {
-        if ([System.IO.File]::Exists($tempFile)) {
-            [System.IO.File]::Delete($tempFile)
-        }
-    }
-
-    if ($LASTEXITCODE -ne 0) {
-        throw "GitHub GraphQL query failed: $($output | Out-String)"
-    }
-
-    return $output | ConvertFrom-Json
-}
-
-function ConvertTo-GraphQlStringLiteral {
-    param(
-        [Parameter(Mandatory)]
-        [string]$Value
-    )
-
-    return ($Value -replace '\\', '\\\\' -replace '"', '\\"')
-}
-
-function Get-DateQualifier {
+function Get-SearchDateQualifier {
     param(
         [Parameter(Mandatory)]
         [string]$FieldName,
 
-        [Nullable[datetime]]$Start,
+        [Parameter(Mandatory)]
+        [datetime]$Start,
 
-        [Nullable[datetime]]$End
+        [Parameter(Mandatory)]
+        [datetime]$End
     )
 
-    if (-not $Start -and -not $End) {
-        return $null
-    }
-
-    if ($Start -and $End) {
-        return "${FieldName}:$($Start.ToString('yyyy-MM-dd'))..$($End.ToString('yyyy-MM-dd'))"
-    }
-
-    if ($Start) {
-        return "${FieldName}:>=$($Start.ToString('yyyy-MM-dd'))"
-    }
-
-    return "${FieldName}:<=$($End.ToString('yyyy-MM-dd'))"
+    return "${FieldName}:$($Start.ToString('yyyy-MM-dd'))..$($End.ToString('yyyy-MM-dd'))"
 }
 
-function New-RepoMetric {
+function Get-TotalPullRequestCount {
     param(
         [Parameter(Mandatory)]
-        [pscustomobject]$Repository
+        [string]$Organization,
+
+        [Parameter(Mandatory)]
+        [string]$Author,
+
+        [Parameter(Mandatory)]
+        [datetime]$Start,
+
+        [Parameter(Mandatory)]
+        [datetime]$End
     )
 
-    return [PSCustomObject]@{
-        Repo               = $Repository.nameWithOwner
-        Url                = $Repository.url
-        IsArchived         = $Repository.isArchived
-        IsFork             = $Repository.isFork
-        OpenPRs            = 0
-        MergedPRs          = 0
-        ClosedUnmergedPRs  = 0
-        DraftOpenPRs       = 0
-        TotalPRs           = 0
-        Commits            = 0
-    }
+    $query = @(
+        "org:$Organization",
+        "author:$Author",
+        'is:pr',
+        (Get-SearchDateQualifier -FieldName 'created' -Start $Start -End $End)
+    ) -join ' '
+
+    $encodedQuery = [System.Uri]::EscapeDataString($query)
+    $result = Invoke-GhApiJson -Path "/search/issues?q=$encodedQuery&per_page=1"
+    return [int]$result.total_count
 }
 
 function Get-CommitCountForRepository {
@@ -183,25 +186,21 @@ function Get-CommitCountForRepository {
         [Parameter(Mandatory)]
         [string]$Author,
 
-        [Nullable[datetime]]$Start,
+        [Parameter(Mandatory)]
+        [datetime]$Start,
 
-        [Nullable[datetime]]$End,
+        [Parameter(Mandatory)]
+        [datetime]$End,
 
         [int]$DelayMs
     )
 
     $queryParts = @(
         "author=$([System.Uri]::EscapeDataString($Author))",
+        "since=$([System.Uri]::EscapeDataString($Start.ToUniversalTime().ToString('o')))",
+        "until=$([System.Uri]::EscapeDataString($End.Date.AddDays(1).AddTicks(-1).ToUniversalTime().ToString('o')))",
         'per_page=100'
     )
-
-    if ($Start) {
-        $queryParts += "since=$([System.Uri]::EscapeDataString($Start.ToUniversalTime().ToString('o')))"
-    }
-
-    if ($End) {
-        $queryParts += "until=$([System.Uri]::EscapeDataString($End.ToUniversalTime().ToString('o')))"
-    }
 
     $page = 1
     $commitCount = 0
@@ -225,187 +224,142 @@ function Get-CommitCountForRepository {
     return $commitCount
 }
 
+function Get-TotalCommitCount {
+    param(
+        [Parameter(Mandatory)]
+        [string]$Organization,
+
+        [Parameter(Mandatory)]
+        [string]$Author,
+
+        [Parameter(Mandatory)]
+        [datetime]$Start,
+
+        [Parameter(Mandatory)]
+        [datetime]$End,
+
+        [int]$DelayMs,
+
+        [bool]$IncludeArchivedRepositories,
+
+        [bool]$IncludeForkRepositories
+    )
+
+    $repositories = @(gh repo list $Organization --limit 500 --json name,isArchived,isFork | ConvertFrom-Json)
+    if (-not $IncludeArchivedRepositories) {
+        $repositories = @($repositories | Where-Object { -not $_.isArchived })
+    }
+
+    if (-not $IncludeForkRepositories) {
+        $repositories = @($repositories | Where-Object { -not $_.isFork })
+    }
+
+    $totalCommits = 0
+
+    foreach ($repository in $repositories) {
+        $totalCommits += Get-CommitCountForRepository -Organization $Organization -RepositoryName $repository.name -Author $Author -Start $Start -End $End -DelayMs $DelayMs
+    }
+
+    return $totalCommits
+}
+
+function Get-TotalPremiumRequestCount {
+    param(
+        [Parameter(Mandatory)]
+        [string]$EnterpriseSlug,
+
+        [Parameter(Mandatory)]
+        [string]$Organization,
+
+        [Parameter(Mandatory)]
+        [string]$UserLogin,
+
+        [Parameter(Mandatory)]
+        [datetime]$Start,
+
+        [Parameter(Mandatory)]
+        [datetime]$End,
+
+        [Parameter(Mandatory)]
+        [ValidateSet('Gross', 'Net')]
+        [string]$QuantityField
+    )
+
+    $quantityPropertyName = if ($QuantityField -eq 'Gross') { 'grossQuantity' } else { 'netQuantity' }
+    $headers = @('Accept: application/vnd.github+json')
+    $total = 0.0
+
+    for ($date = $Start.Date; $date -le $End.Date; $date = $date.AddDays(1)) {
+        $queryString = @(
+            "year=$($date.Year)",
+            "month=$($date.Month)",
+            "day=$($date.Day)",
+            "organization=$([System.Uri]::EscapeDataString($Organization))",
+            "user=$([System.Uri]::EscapeDataString($UserLogin))",
+            'product=Copilot'
+        ) -join '&'
+
+        $path = "/enterprises/$EnterpriseSlug/settings/billing/premium_request/usage?$queryString"
+        $response = Invoke-GhApiJson -Path $path -Headers $headers
+        foreach ($item in @($response.usageItems)) {
+            $value = $item.$quantityPropertyName
+            if ($null -ne $value) {
+                $total += [double]$value
+            }
+        }
+    }
+
+    return $total
+}
+
 try {
-    [void](& gh auth status 2>&1)
+    $null = & gh auth status
 }
 catch {
     throw "GitHub CLI is not authenticated. Run 'gh auth login' first."
 }
 
-$userProfile = Invoke-GhApiJson -Path "/users/$Username"
+$null = Invoke-GhApiJson -Path "/users/$Username"
 
-$repositories = @(gh repo list $Org --limit 500 --json name,nameWithOwner,isArchived,isFork,url | ConvertFrom-Json)
-if (-not $IncludeArchived) {
-    $repositories = @($repositories | Where-Object { -not $_.isArchived })
-}
-
-if (-not $IncludeForks) {
-    $repositories = @($repositories | Where-Object { -not $_.isFork })
-}
-
-$repoMetrics = [ordered]@{}
-foreach ($repository in $repositories) {
-    $repoMetrics[$repository.nameWithOwner] = New-RepoMetric -Repository $repository
-}
-
-$prSearchParts = @(
-    "org:$Org",
-    "author:$Username",
-    'is:pr'
-)
-
-$createdDateQualifier = Get-DateQualifier -FieldName 'created' -Start $Since -End $Until
-if ($createdDateQualifier) {
-    $prSearchParts += $createdDateQualifier
-}
-
-$prSearch = $prSearchParts -join ' '
-$escapedPrSearch = ConvertTo-GraphQlStringLiteral -Value $prSearch
-$prCursor = $null
-
-do {
-    $afterClause = if ($prCursor) { ', after: "{0}"' -f $prCursor } else { '' }
-    $query = @"
-query {
-  search(query: "$escapedPrSearch", type: ISSUE, first: 100$afterClause) {
-    pageInfo { hasNextPage endCursor }
-    nodes {
-      ... on PullRequest {
-        repository { nameWithOwner }
-        number
-        title
-        url
-        state
-        isDraft
-        merged
-        createdAt
-        closedAt
-        mergedAt
-      }
-    }
-  }
-}
-"@
-
-    $result = Invoke-GhGraphQlJson -Query $query
-    $searchResult = $result.data.search
-
-    foreach ($pullRequest in @($searchResult.nodes)) {
-        if ($null -eq $pullRequest) {
-            continue
-        }
-
-        if (-not $repoMetrics.Contains($pullRequest.repository.nameWithOwner)) {
-            continue
-        }
-
-        $metric = $repoMetrics[$pullRequest.repository.nameWithOwner]
-        $metric.TotalPRs++
-
-        if ($pullRequest.state -eq 'OPEN') {
-            $metric.OpenPRs++
-            if ($pullRequest.isDraft) {
-                $metric.DraftOpenPRs++
-            }
-            continue
-        }
-
-        if ($pullRequest.merged) {
-            $metric.MergedPRs++
-            continue
-        }
-
-        $metric.ClosedUnmergedPRs++
-    }
-
-    $prCursor = $searchResult.pageInfo.endCursor
-    $hasNextPage = $searchResult.pageInfo.hasNextPage
-} while ($hasNextPage)
-
-$repoIndex = 0
-foreach ($repository in $repositories) {
-    $repoIndex++
-    $percentComplete = if ($repositories.Count -gt 0) {
-        [int](($repoIndex / $repositories.Count) * 100)
-    }
-    else {
-        100
-    }
-
-    Write-Progress -Activity 'Collecting commit counts' -Status $repository.nameWithOwner -PercentComplete $percentComplete
-
-    $metric = $repoMetrics[$repository.nameWithOwner]
-    $metric.Commits = Get-CommitCountForRepository -Organization $Org -RepositoryName $repository.name -Author $Username -Start $Since -End $Until -DelayMs $ThrottleMs
-}
-
-Write-Progress -Activity 'Collecting commit counts' -Completed
-
-$activeRepositories = @(
-    $repoMetrics.Values | Where-Object {
-        $_.TotalPRs -gt 0 -or $_.Commits -gt 0
-    } | Sort-Object @{ Expression = { $_.Commits + $_.TotalPRs }; Descending = $true }, Repo
-)
-
-$displayRepositories = if ($IncludeInactiveRepos) {
-    @($repoMetrics.Values | Sort-Object Repo)
+$premiumRequests = 0.0
+if ($PSBoundParameters.ContainsKey('PremiumRequestsOverride')) {
+    $premiumRequests = [double]$PremiumRequestsOverride
 }
 else {
-    $activeRepositories
+    if ([string]::IsNullOrWhiteSpace($Enterprise)) {
+        throw 'Enterprise is required unless PremiumRequestsOverride is provided.'
+    }
+
+    try {
+        $premiumRequests = Get-TotalPremiumRequestCount -EnterpriseSlug $Enterprise -Organization $Org -UserLogin $Username -Start $Since -End $Until -QuantityField $PremiumQuantityField
+    }
+    catch {
+        throw "Failed to retrieve premium requests. This endpoint requires the enterprise slug and a token with enterprise billing access, typically admin:enterprise. Underlying error: $($_.Exception.Message)"
+    }
 }
+
+$totalPullRequests = Get-TotalPullRequestCount -Organization $Org -Author $Username -Start $Since -End $Until
+$totalCommits = Get-TotalCommitCount -Organization $Org -Author $Username -Start $Since -End $Until -DelayMs $ThrottleMs -IncludeArchivedRepositories:$IncludeArchived -IncludeForkRepositories:$IncludeForks
 
 $summary = [PSCustomObject]@{
-    Username                 = $Username
-    DisplayName              = $userProfile.name
-    Organization             = $Org
-    Since                    = if ($Since) { $Since.ToString('o') } else { $null }
-    Until                    = if ($Until) { $Until.ToString('o') } else { $null }
-    RepositoriesAnalyzed     = $repositories.Count
-    RepositoriesWithActivity = $activeRepositories.Count
-    PullRequestsOpen         = ($repoMetrics.Values | Measure-Object -Property OpenPRs -Sum).Sum
-    PullRequestsMerged       = ($repoMetrics.Values | Measure-Object -Property MergedPRs -Sum).Sum
-    PullRequestsClosedUnmerged = ($repoMetrics.Values | Measure-Object -Property ClosedUnmergedPRs -Sum).Sum
-    DraftOpenPullRequests    = ($repoMetrics.Values | Measure-Object -Property DraftOpenPRs -Sum).Sum
-    PullRequestsTotal        = ($repoMetrics.Values | Measure-Object -Property TotalPRs -Sum).Sum
-    CommitsTotal             = ($repoMetrics.Values | Measure-Object -Property Commits -Sum).Sum
-    CommitCountSource        = 'GitHub REST commits API (author=username)'
-    GeneratedAt              = (Get-Date).ToString('o')
-}
-
-$report = [PSCustomObject]@{
-    Summary      = $summary
-    Repositories = $displayRepositories
+    StartDate       = $Since.ToString('yyyy-MM-dd')
+    EndDate         = $Until.ToString('yyyy-MM-dd')
+    PremiumRequests = [math]::Round($premiumRequests, 2)
+    Commits         = $totalCommits
+    PullRequests    = $totalPullRequests
 }
 
 if ($OutputFormat -eq 'Json') {
-    $report | ConvertTo-Json -Depth 6
+    $summary | ConvertTo-Json -Depth 4
     return
 }
 
 $summaryTable = @(
-    [PSCustomObject]@{ Metric = 'Username'; Value = $summary.Username }
-    [PSCustomObject]@{ Metric = 'Display Name'; Value = if ($summary.DisplayName) { $summary.DisplayName } else { '-' } }
-    [PSCustomObject]@{ Metric = 'Organization'; Value = $summary.Organization }
-    [PSCustomObject]@{ Metric = 'Repositories analyzed'; Value = $summary.RepositoriesAnalyzed }
-    [PSCustomObject]@{ Metric = 'Repositories with activity'; Value = $summary.RepositoriesWithActivity }
-    [PSCustomObject]@{ Metric = 'Open PRs'; Value = $summary.PullRequestsOpen }
-    [PSCustomObject]@{ Metric = 'Merged PRs'; Value = $summary.PullRequestsMerged }
-    [PSCustomObject]@{ Metric = 'Closed unmerged PRs'; Value = $summary.PullRequestsClosedUnmerged }
-    [PSCustomObject]@{ Metric = 'Draft open PRs'; Value = $summary.DraftOpenPullRequests }
-    [PSCustomObject]@{ Metric = 'Total PRs'; Value = $summary.PullRequestsTotal }
-    [PSCustomObject]@{ Metric = 'Total commits'; Value = $summary.CommitsTotal }
+    [PSCustomObject]@{ Metric = 'Start Date'; Value = $summary.StartDate }
+    [PSCustomObject]@{ Metric = 'End Date'; Value = $summary.EndDate }
+    [PSCustomObject]@{ Metric = 'Premium Requests'; Value = $summary.PremiumRequests }
+    [PSCustomObject]@{ Metric = 'Commits'; Value = $summary.Commits }
+    [PSCustomObject]@{ Metric = 'Pull Requests'; Value = $summary.PullRequests }
 )
 
-Write-Output "### Productivity for $Username in $Org"
-Write-Output ''
 $summaryTable | Format-Table -AutoSize | Out-String | Write-Output
-
-if ($displayRepositories.Count -eq 0) {
-    Write-Output 'No repository activity found for the supplied filters.'
-    return
-}
-
-Write-Output '### Repository Breakdown'
-Write-Output ''
-$displayRepositories |
-    Select-Object Repo, Commits, OpenPRs, MergedPRs, ClosedUnmergedPRs, DraftOpenPRs, TotalPRs |
-    Format-Table -AutoSize | Out-String | Write-Output
