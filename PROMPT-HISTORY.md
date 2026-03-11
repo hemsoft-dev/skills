@@ -402,3 +402,6 @@ Result: Added productivity/scripts/Get-UserOrgProductivity.ps1 to report per-rep
 
 2026-03-11 - 00:32 - Simplify the Relias user productivity script for premium-request reality checks
 Result: Reworked productivity/scripts/Get-UserOrgProductivity.ps1 to accept a date range and output only start date, end date, premium requests, commits, and pull requests, with enterprise billing API support and a manual override fallback.
+
+2026-03-11 - 10:07 - Fix the enterprise slug and live premium request lookup
+Result: Corrected the billing query to use the bertelsmann enterprise slug with a valid user-only filter, then verified the live February report without a manual premium request override.

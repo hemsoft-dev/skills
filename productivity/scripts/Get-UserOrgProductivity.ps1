@@ -269,9 +269,6 @@ function Get-TotalPremiumRequestCount {
         [string]$EnterpriseSlug,
 
         [Parameter(Mandatory)]
-        [string]$Organization,
-
-        [Parameter(Mandatory)]
         [string]$UserLogin,
 
         [Parameter(Mandatory)]
@@ -294,7 +291,6 @@ function Get-TotalPremiumRequestCount {
             "year=$($date.Year)",
             "month=$($date.Month)",
             "day=$($date.Day)",
-            "organization=$([System.Uri]::EscapeDataString($Organization))",
             "user=$([System.Uri]::EscapeDataString($UserLogin))",
             'product=Copilot'
         ) -join '&'
@@ -331,7 +327,7 @@ else {
     }
 
     try {
-        $premiumRequests = Get-TotalPremiumRequestCount -EnterpriseSlug $Enterprise -Organization $Org -UserLogin $Username -Start $Since -End $Until -QuantityField $PremiumQuantityField
+        $premiumRequests = Get-TotalPremiumRequestCount -EnterpriseSlug $Enterprise -UserLogin $Username -Start $Since -End $Until -QuantityField $PremiumQuantityField
     }
     catch {
         throw "Failed to retrieve premium requests. This endpoint requires the enterprise slug and a token with enterprise billing access, typically admin:enterprise. Underlying error: $($_.Exception.Message)"
