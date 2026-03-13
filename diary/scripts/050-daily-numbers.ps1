@@ -121,9 +121,9 @@ function Get-PreviousValues {
     if ($content -match '\*\*S&P 500\*\*:\s*([\d,]+\.\d+)') {
         $prev.SP500 = [decimal]($Matches[1] -replace ',', '')
     }
-    if ($content -match '- \*\*GitHub Copilot Usage\*\*: (\d+) / (\d+) premium requests \(([\d.]+)%\)') {
-        $prev.CopilotUsed = [int]$Matches[1]
-        $prev.CopilotEntitlement = [int]$Matches[2]
+    if ($content -match '- \*\*GitHub Copilot Usage\*\*: ([\d,]+) / ([\d,]+) premium requests \(([\d.]+)%\)') {
+        $prev.CopilotUsed = [int]($Matches[1] -replace ',', '')
+        $prev.CopilotEntitlement = [int]($Matches[2] -replace ',', '')
         $prev.CopilotPct = [decimal]$Matches[3]
     }
 
