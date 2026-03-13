@@ -7,6 +7,9 @@ This file tracks meaningful prompts and their outcomes for the Claude Skills rep
 2026-03-12 - 20:56 - Scaffold today's diary entry from prompt workflow with cached and live data requirements
 Result: Created `diary/entries/2026-03-12.md` in the required section order with cached weather and news, curated Slack activity, live daily numbers with Copilot and Cloudflare deltas, refreshed LLM and software watchlist sections, added trending repos, watchlist updates, productivity, and meetings, omitted screenshots because none were present, and left TODO placeholders for Today's Highlight and Personal Reflections.
 
+2026-03-12 - 21:15 - Fix AI news markdown link hover issue in today's diary entry
+Result: Simplified the two Simon Willison AI-news URLs in `diary/entries/2026-03-12.md` by removing fragment anchors so the markdown editor can treat them as normal links more reliably inside the table.
+
 2026-03-11 - 19:25 - Scaffold today's diary entry from prompt workflow with cached and live data requirements
 Result: Created `diary/entries/2026-03-11.md` in the required order with cached weather, news, and Slack; injected daily numbers with Copilot and Cloudflare deltas; refreshed LLM and software watchlist sections; added live trending repos, watchlist updates, productivity, and meetings; omitted screenshots because none were present; and left TODO placeholders for Today's Highlight and Personal Reflections.
 
