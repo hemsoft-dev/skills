@@ -49,8 +49,20 @@ When user activates this skill without specifying an action, choose the smallest
 | Today or daily coding activity | `Get-TodayProductivity.ps1` |
 | One user's premium requests, commits, and total PR count over a period | `Get-OneUserOrgProductivity.ps1` |
 | One user's premium requests plus detailed PR, issue, and workflow breakdown over a period | `Get-UserProductivityBreakdown.ps1` |
-| Org-wide per-user JSON dump with all metrics | `Get-AllOrgUserProductivity.ps1` |
+| Org-wide per-user metrics, premium requests, and HTML report | 3-Phase Pipeline (see below) |
 | Organization-wide repository productivity ranking | `Get-OrgProductivity.ps1` |
+
+### 3-Phase Org-Wide User Productivity Pipeline
+
+Run these scripts in order. Each phase is independent and workflow-friendly.
+
+| Phase | Script | Output | API Calls |
+|-------|--------|--------|-----------|
+| 1 | `Get-AllUserProductivityMetrics.ps1` | `relias-engineering-user-productivity.json` | ~2,000–3,000 (repos × metrics) |
+| 2 | `Get-AllUserPremiumRequestConsumption.ps1` | Enriches the JSON with premium requests | ~5,700 (users × days), cached |
+| 3 | `Build-AllUserProductivityReport.ps1` | `relias-engineering-user-productivity.html` | 0 (offline) |
+
+**Phase 2 caching**: Premium requests are cached per-user per-day in `relias-engineering-premium-cache.json`. Subsequent runs skip already-collected days, making reruns near-instant.
 
 ## ⚠️ CRITICAL: Local Clone Policy (READ-ONLY)
 
