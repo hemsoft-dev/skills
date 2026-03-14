@@ -46,6 +46,9 @@ Result: Created `Get-OrgUserProductivityDump.ps1` to enumerate org members, coll
 2026-03-14 - 06:15 - Build repo-centric fast org productivity collector
 Result: Added `Get-OrgUserProductivityFast.ps1`, a repo-centric org-wide collector that aggregates commits, PRs, issues, reviews, and workflow runs in one pass across repositories, avoids the user-by-user search bottleneck, and treats per-user premium requests as an optional slower step.
 
+2026-03-14 - 12:34 - Add premium-only enrichment pass for org productivity dump
+Result: Added `Add-OrgUserPremiumRequests.ps1`, a rate-aware helper that enriches an existing org-wide productivity JSON file with per-user premium request totals, validated it on a two-user sample, and started the full enrichment pass for the 408-user dump.
+
 2026-03-12 - 21:15 - Fix AI news markdown link hover issue in today's diary entry
 Result: Simplified the two Simon Willison AI-news URLs in `diary/entries/2026-03-12.md` by removing fragment anchors so the markdown editor can treat them as normal links more reliably inside the table.
 
