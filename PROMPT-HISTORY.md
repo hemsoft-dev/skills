@@ -34,6 +34,9 @@ Result: Revised the recommendation so the universal score explicitly includes ev
 2026-03-14 - 05:21 - Refine universal score to near-equal all-metric weighting
 Result: Produced a v1 weighting model that keeps every numeric productivity metric in the score with roughly even importance, while slightly favoring premium requests, commits, and merged pull requests.
 
+2026-03-14 - 05:43 - Make Get-UserOrgProductivity default Until to current time
+Result: Updated `Get-UserOrgProductivity.ps1` so `-Until` is optional, defaults to the current timestamp when omitted, and commit queries now honor the exact end time; verified with a month-to-date run for `fhemmerrelias`.
+
 2026-03-12 - 21:15 - Fix AI news markdown link hover issue in today's diary entry
 Result: Simplified the two Simon Willison AI-news URLs in `diary/entries/2026-03-12.md` by removing fragment anchors so the markdown editor can treat them as normal links more reliably inside the table.
 

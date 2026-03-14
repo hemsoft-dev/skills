@@ -19,7 +19,7 @@
 .PARAMETER Since
     Inclusive start date for the reporting period.
 .PARAMETER Until
-    Inclusive end date for the reporting period.
+    Inclusive end timestamp for the reporting period. Defaults to the current time.
 .PARAMETER Enterprise
     Enterprise slug for the premium request billing API.
 .PARAMETER PremiumRequestsOverride
@@ -40,6 +40,8 @@
     .\Get-UserOrgProductivity.ps1 -Username ssadhula-relias -Since '2026-02-01' -Until '2026-02-28' -PremiumRequestsOverride 3400
 .EXAMPLE
     .\Get-UserOrgProductivity.ps1 -Username ssadhula-relias -Org relias-engineering -Enterprise relias -Since '2026-02-01' -Until '2026-02-28'
+.EXAMPLE
+    .\Get-UserOrgProductivity.ps1 -Username ssadhula-relias -Org relias-engineering -Enterprise bertelsmann -Since '2026-03-01'
 #>
 
 [CmdletBinding()]
@@ -54,8 +56,7 @@ param(
     [Parameter(Mandatory)]
     [datetime]$Since,
 
-    [Parameter(Mandatory)]
-    [datetime]$Until,
+    [datetime]$Until = (Get-Date),
 
     [string]$Enterprise,
 
@@ -198,7 +199,7 @@ function Get-CommitCountForRepository {
     $queryParts = @(
         "author=$([System.Uri]::EscapeDataString($Author))",
         "since=$([System.Uri]::EscapeDataString($Start.ToUniversalTime().ToString('o')))",
-        "until=$([System.Uri]::EscapeDataString($End.Date.AddDays(1).AddTicks(-1).ToUniversalTime().ToString('o')))",
+        "until=$([System.Uri]::EscapeDataString($End.ToUniversalTime().ToString('o')))",
         'per_page=100'
     )
 
@@ -339,7 +340,7 @@ $totalCommits = Get-TotalCommitCount -Organization $Org -Author $Username -Start
 
 $summary = [PSCustomObject]@{
     StartDate       = $Since.ToString('yyyy-MM-dd')
-    EndDate         = $Until.ToString('yyyy-MM-dd')
+    EndDate         = $Until.ToString('yyyy-MM-dd HH:mm')
     PremiumRequests = [math]::Round($premiumRequests, 2)
     Commits         = $totalCommits
     PullRequests    = $totalPullRequests
