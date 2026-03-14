@@ -49,6 +49,7 @@ When user activates this skill without specifying an action, choose the smallest
 | Today or daily coding activity | `Get-TodayProductivity.ps1` |
 | One user's premium requests, commits, and total PR count over a period | `Get-UserOrgProductivity.ps1` |
 | One user's premium requests plus detailed PR, issue, and workflow breakdown over a period | `Get-UserProductivityBreakdown.ps1` |
+| Org-wide per-user JSON dump with all metrics | `Get-OrgUserProductivity.ps1` |
 | Organization-wide repository productivity ranking | `Get-OrgProductivity.ps1` |
 
 ## ⚠️ CRITICAL: Local Clone Policy (READ-ONLY)
@@ -223,9 +224,10 @@ Scripts for collecting and calculating productivity metrics are stored in the `s
 | `Get-UserOrgProductivity.ps1` | Compact per-user premium requests, commits, and total PR count for a date range |
 | `Get-UserProductivityBreakdown.ps1` | Full per-user premium requests, commits, PR states, issue states, and workflow runs for a date range with table or JSON output |
 | `Get-UserProductivityScores.ps1` | Multi-user universal productivity scoring using all numeric breakdown metrics with normalized weighted ranking |
-| `Get-OrgUserProductivityDump.ps1` | Month-to-date JSON dump of detailed productivity metrics plus username, full name, and public email for every org member |
-| `Get-OrgUserProductivityFast.ps1` | Repo-centric org-wide JSON dump optimized for speed; premium requests optional because per-user billing remains slow |
-| `Add-OrgUserPremiumRequests.ps1` | Enriches an existing org JSON dump with per-user premium request totals using rate-aware billing lookups |
+| `Get-OrgUserProductivity.ps1` | Primary org-wide JSON dump that collects repo activity plus per-user premium requests in one run |
+| `Get-OrgUserProductivityDump.ps1` | Legacy user-by-user org dump kept for comparison and fallback |
+| `Get-OrgUserProductivityFast.ps1` | Compatibility wrapper for the faster no-premium org collection path |
+| `Add-OrgUserPremiumRequests.ps1` | Legacy enrichment helper for previously generated partial org JSON dumps |
 | `Get-OrgProductivity.ps1` | Organization-wide repository productivity ranking and HTML report |
 
 ## Common Commands
@@ -246,13 +248,13 @@ Scripts for collecting and calculating productivity metrics are stored in the `s
 # Universal score for multiple users
 .\scripts\Get-UserProductivityScores.ps1 -Usernames ssadhula-relias,fhemmerrelias -Since '2026-03-01' -Until '2026-03-31'
 
-# Org-wide month-to-date JSON dump
-.\scripts\Get-OrgUserProductivityDump.ps1
+# Org-wide month-to-date JSON dump with premium requests included
+.\scripts\Get-OrgUserProductivity.ps1
 
-# Faster repo-centric org-wide JSON dump
+# Faster repo-centric org-wide JSON dump without premium requests
 .\scripts\Get-OrgUserProductivityFast.ps1
 
-# Add per-user premium requests to an existing org dump
+# Legacy: add per-user premium requests to an existing partial org dump
 .\scripts\Add-OrgUserPremiumRequests.ps1 -InputPath .\org-fast-full.json
 
 # Org report
