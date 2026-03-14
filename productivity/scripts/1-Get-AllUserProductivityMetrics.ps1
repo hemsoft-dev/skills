@@ -68,7 +68,8 @@ if (-not $Force -and (Test-Path $OutputPath)) {
     $todayDate = (Get-Date).ToString('yyyy-MM-dd')
     $existingStart = ($existing.StartDate -split ' ')[0]
     $requestedStart = $Since.ToString('yyyy-MM-dd')
-    if ($generatedDate -eq $todayDate -and $existingStart -eq $requestedStart -and $UserLimit -eq 0 -and $RepoLimit -eq 0) {
+    $existingIsFullRun = $existing.IsFullRun -eq $true
+    if ($generatedDate -eq $todayDate -and $existingStart -eq $requestedStart -and $existingIsFullRun -and $UserLimit -eq 0 -and $RepoLimit -eq 0) {
         Write-Information "Phase 1 data already collected today ($generatedDate). Use -Force to re-collect." -InformationAction Continue
         [PSCustomObject]@{
             Organization    = $existing.Organization
@@ -711,6 +712,7 @@ $payload = [PSCustomObject]@{
     StartDate               = $Since.ToString('yyyy-MM-dd HH:mm')
     EndDate                 = $Until.ToString('yyyy-MM-dd HH:mm')
     GeneratedAt             = (Get-Date).ToString('yyyy-MM-dd HH:mm:ss')
+    IsFullRun               = ($UserLimit -eq 0 -and $RepoLimit -eq 0)
     UserCount               = $orderedUsers.Count
     RepositoryCount         = $repositories.Count
     Users                   = $orderedUsers
