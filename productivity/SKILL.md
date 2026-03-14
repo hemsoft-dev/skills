@@ -225,8 +225,6 @@ Scripts for collecting and calculating productivity metrics are stored in the `s
 | `Get-UserProductivityBreakdown.ps1` | Full per-user premium requests, commits, PR states, issue states, and workflow runs for a date range with table or JSON output |
 | `Get-UserProductivityScores.ps1` | Multi-user universal productivity scoring using all numeric breakdown metrics with normalized weighted ranking |
 | `Get-AllOrgUserProductivity.ps1` | Primary org-wide JSON dump that collects repo activity plus per-user premium requests in one run |
-| `Get-OrgUserProductivityDump.ps1` | Legacy user-by-user org dump kept for comparison and fallback |
-| `Add-OrgUserPremiumRequests.ps1` | Legacy enrichment helper for previously generated partial org JSON dumps |
 | `Get-OrgProductivity.ps1` | Organization-wide repository productivity ranking and HTML report |
 
 ## Common Commands
@@ -249,9 +247,6 @@ Scripts for collecting and calculating productivity metrics are stored in the `s
 
 # Org-wide month-to-date JSON dump with premium requests included
 .\scripts\Get-AllOrgUserProductivity.ps1
-
-# Legacy: add per-user premium requests to an existing partial org dump
-.\scripts\Add-OrgUserPremiumRequests.ps1 -InputPath .\org-fast-full.json
 
 # Org report
 .\scripts\Get-OrgProductivity.ps1 -Org relias-engineering
