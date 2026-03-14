@@ -200,14 +200,15 @@ $usersJson = $usersJsonEntries -join ",`n"
 # ── Premium column header/cells ──────────────────────────────────────
 
 $premiumColHeader = if ($hasPremium) {
-    '<th data-sort="premiumRequests">Premium<br>Requests</th>'
+    '<th data-sort="premiumRequests" class="has-tip">Premium<br>Requests<div class="tip"><div class="tip-title">Premium Requests</div>GitHub Copilot <em>premium request consumption</em> by this user. Sourced from the Copilot billing API. Reflects AI-assisted code generation and chat usage.</div></th>'
 } else { '' }
 
 $premiumSummaryCard = if ($hasPremium) {
     @"
-        <div class="stat-card">
+        <div class="stat-card has-tip">
           <div class="stat-value" id="stat-premium">$([math]::Round($totalPremium, 1))</div>
           <div class="stat-label">Premium Requests</div>
+          <div class="tip"><div class="tip-title">Premium Requests</div>Total <em>GitHub Copilot premium requests</em> consumed across the organization. Tracks AI-assisted coding usage from the Copilot billing API. Higher values indicate heavier Copilot adoption.</div>
         </div>
 "@
 } else { '' }
@@ -472,6 +473,99 @@ $html = @"
   .score-mid { color: var(--accent-cyan); }
   .score-low { color: var(--text-muted); }
 
+  /* ── Tooltips ──────────────────────────────────────────────── */
+  .has-tip {
+    position: relative;
+    cursor: help;
+  }
+
+  .has-tip .tip {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    min-width: 260px;
+    max-width: 340px;
+    padding: 0.85rem 1rem;
+    margin-top: 8px;
+    background: linear-gradient(135deg, #1e293b 0%, #1a2234 100%);
+    border: 1px solid var(--accent-blue);
+    border-radius: 10px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 12px rgba(59,130,246,0.15);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 400;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    text-align: left;
+    white-space: normal;
+    pointer-events: none;
+    transition: opacity 0.2s, visibility 0.2s;
+  }
+
+  .has-tip .tip::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-bottom-color: var(--accent-blue);
+  }
+
+  .has-tip:hover .tip {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .has-tip .tip .tip-title {
+    font-weight: 700;
+    font-size: 0.82rem;
+    color: var(--accent-cyan);
+    margin-bottom: 0.3rem;
+    letter-spacing: 0.01em;
+  }
+
+  .has-tip .tip em {
+    color: var(--accent-blue);
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  /* Keep stat-card tips from overflowing layout */
+  .stat-card { position: relative; overflow: visible; }
+
+  /* Table header tips: pin to right edge for right-aligned columns */
+  th.has-tip .tip {
+    left: auto;
+    right: 0;
+    transform: none;
+  }
+
+  th.has-tip .tip::before {
+    left: auto;
+    right: 1rem;
+    transform: none;
+  }
+
+  /* First two th columns: pin tip to left */
+  th:first-child.has-tip .tip,
+  th:nth-child(2).has-tip .tip {
+    left: 0;
+    right: auto;
+    transform: none;
+  }
+
+  th:first-child.has-tip .tip::before,
+  th:nth-child(2).has-tip .tip::before {
+    left: 1rem;
+    right: auto;
+    transform: none;
+  }
+
   /* ── Footer ───────────────────────────────────────────────────── */
   .footer {
     text-align: center;
@@ -505,41 +599,50 @@ $html = @"
 <div class="container">
 
   <div class="stats-grid">
-    <div class="stat-card">
+    <div class="stat-card has-tip">
       <div class="stat-value">$activeUsers</div>
       <div class="stat-label">Active Users</div>
+      <div class="tip"><div class="tip-title">Active Users</div>Users with at least <em>one commit</em>, <em>opened PR</em>, or <em>merged PR</em> in the reporting period. Inactive members (bots, departed, idle) are excluded from this count but still appear in the table.</div>
     </div>
-    <div class="stat-card">
+    <div class="stat-card has-tip">
       <div class="stat-value">$($totalCommits.ToString('N0'))</div>
       <div class="stat-label">Commits</div>
+      <div class="tip"><div class="tip-title">Commits</div>Total commits pushed to <em>default branches</em> across all repositories. Includes merge commits. Aggregated from the GitHub Events API over the reporting window.</div>
     </div>
-    <div class="stat-card">
+    <div class="stat-card has-tip">
       <div class="stat-value">$($totalLinesAdded.ToString('N0'))</div>
       <div class="stat-label">Lines Added</div>
+      <div class="tip"><div class="tip-title">Lines Added</div>Sum of all <em>insertions</em> across every commit. Measures raw code output. Large values may indicate new features, migrations, or auto-generated code.</div>
     </div>
-    <div class="stat-card">
+    <div class="stat-card has-tip">
       <div class="stat-value">$($totalLinesDeleted.ToString('N0'))</div>
       <div class="stat-label">Lines Deleted</div>
+      <div class="tip"><div class="tip-title">Lines Deleted</div>Sum of all <em>deletions</em> across every commit. High deletion counts often signal healthy refactoring, cleanup, or dead-code removal.</div>
     </div>
-    <div class="stat-card">
+    <div class="stat-card has-tip">
       <div class="stat-value">$($totalPRs.ToString('N0'))</div>
       <div class="stat-label">Pull Requests</div>
+      <div class="tip"><div class="tip-title">Pull Requests</div>Combined count of <em>open</em>, <em>merged</em>, and <em>closed</em> pull requests authored by all users in the period. Reflects code review throughput.</div>
     </div>
-    <div class="stat-card">
+    <div class="stat-card has-tip">
       <div class="stat-value">$($totalMergedPRs.ToString('N0'))</div>
       <div class="stat-label">Merged PRs</div>
+      <div class="tip"><div class="tip-title">Merged PRs</div>Pull requests that were <em>successfully merged</em> into their target branch. The strongest signal of completed, reviewed work landing in production.</div>
     </div>
-    <div class="stat-card">
+    <div class="stat-card has-tip">
       <div class="stat-value">$($totalReviews.ToString('N0'))</div>
       <div class="stat-label">Reviews</div>
+      <div class="tip"><div class="tip-title">Reviews</div>Sum of <em>approved</em> and <em>comment-only</em> pull request reviews. Measures engagement in the code review process, which is critical for code quality and knowledge sharing.</div>
     </div>
-    <div class="stat-card">
+    <div class="stat-card has-tip">
       <div class="stat-value">$($totalIssues.ToString('N0'))</div>
       <div class="stat-label">Issues</div>
+      <div class="tip"><div class="tip-title">Issues</div>Combined count of <em>opened</em> and <em>closed</em> GitHub Issues. Tracks participation in bug reporting, feature requests, and project management.</div>
     </div>
-    <div class="stat-card">
+    <div class="stat-card has-tip">
       <div class="stat-value">$($totalWorkflowRuns.ToString('N0'))</div>
       <div class="stat-label">Workflow Runs</div>
+      <div class="tip"><div class="tip-title">Workflow Runs</div>GitHub Actions <em>workflow runs triggered</em> by each user (via push, PR, or manual dispatch). Indicates CI/CD activity and testing frequency.</div>
     </div>
 $premiumSummaryCard
   </div>
@@ -554,21 +657,21 @@ $premiumSummaryCard
       <thead>
         <tr>
           <th class="rank-cell">#</th>
-          <th data-sort="username">User</th>
-          <th data-sort="score" class="sorted-desc">Score</th>
+          <th data-sort="username" class="has-tip">User<div class="tip"><div class="tip-title">User</div>GitHub username and display name. Click to visit their GitHub profile. Sortable alphabetically.</div></th>
+          <th data-sort="score" class="sorted-desc has-tip">Score<div class="tip"><div class="tip-title">Productivity Score (0–100)</div>A <em>universal composite score</em> combining all metrics using weighted percentile ranking.<br><br><em>How it works:</em> Each metric is log-transformed to reduce outlier impact, then ranked as a percentile (0–100) against all other users. Percentiles are combined using these weights:<br><br>• <em>Commits</em> &amp; <em>Premium Requests</em>: 10% each<br>• <em>Merged PRs</em>, <em>Lines+</em>, <em>Lines−</em>, <em>Net LOC</em>, <em>Total Changed</em>: 8% each<br>• <em>Approved Reviews</em>: 7%<br>• <em>Open/Closed PRs</em>, <em>Closed Issues</em>: 6% each<br>• <em>Comment Reviews</em>, <em>Open Issues</em>, <em>Workflows</em>: 5% each<br><br><em>70+</em> = high activity &bull; <em>35–70</em> = moderate &bull; <em>&lt;35</em> = low</div></th>
           $premiumColHeader
-          <th data-sort="commits">Commits</th>
-          <th data-sort="linesAdded">Lines+</th>
-          <th data-sort="linesDeleted">Lines-</th>
-          <th data-sort="netLOC">Net LOC</th>
-          <th data-sort="openPRs">Open PRs</th>
-          <th data-sort="mergedPRs">Merged PRs</th>
-          <th data-sort="closedPRs">Closed PRs</th>
-          <th data-sort="approvedReviews">Approved</th>
-          <th data-sort="commentReviews">Comment</th>
-          <th data-sort="openIssues">Open Issues</th>
-          <th data-sort="closedIssues">Closed Issues</th>
-          <th data-sort="workflowRuns">Workflows</th>
+          <th data-sort="commits" class="has-tip">Commits<div class="tip"><div class="tip-title">Commits</div>Number of commits pushed to <em>default branches</em> by this user during the reporting period.</div></th>
+          <th data-sort="linesAdded" class="has-tip">Lines+<div class="tip"><div class="tip-title">Lines Added</div>Total <em>line insertions</em> across all commits by this user. Measures raw code output volume.</div></th>
+          <th data-sort="linesDeleted" class="has-tip">Lines-<div class="tip"><div class="tip-title">Lines Deleted</div>Total <em>line deletions</em> across all commits. Healthy codebases often show strong deletion counts from refactoring.</div></th>
+          <th data-sort="netLOC" class="has-tip">Net LOC<div class="tip"><div class="tip-title">Net Lines of Code</div><em>Lines Added minus Lines Deleted.</em> Positive means net growth, negative means net reduction. Neither is inherently good or bad—it depends on context.</div></th>
+          <th data-sort="openPRs" class="has-tip">Open PRs<div class="tip"><div class="tip-title">Open Pull Requests</div>PRs authored by this user that are still <em>open and awaiting review</em> or merge.</div></th>
+          <th data-sort="mergedPRs" class="has-tip">Merged PRs<div class="tip"><div class="tip-title">Merged Pull Requests</div>PRs authored by this user that were <em>successfully merged</em>. The strongest indicator of completed, reviewed work.</div></th>
+          <th data-sort="closedPRs" class="has-tip">Closed PRs<div class="tip"><div class="tip-title">Closed Pull Requests</div>PRs authored by this user that were <em>closed without merging</em>. May indicate abandoned work, duplicates, or superseded PRs.</div></th>
+          <th data-sort="approvedReviews" class="has-tip">Approved<div class="tip"><div class="tip-title">Approved Reviews</div>PR reviews where this user submitted an <em>"Approve"</em> verdict. Shows participation as a code reviewer and gatekeeper.</div></th>
+          <th data-sort="commentReviews" class="has-tip">Comment<div class="tip"><div class="tip-title">Comment Reviews</div>PR reviews where this user left <em>comments without approving or requesting changes</em>. Indicates collaborative engagement.</div></th>
+          <th data-sort="openIssues" class="has-tip">Open Issues<div class="tip"><div class="tip-title">Open Issues</div>GitHub Issues <em>opened</em> by this user. Tracks bug reports, feature requests, and task creation.</div></th>
+          <th data-sort="closedIssues" class="has-tip">Closed Issues<div class="tip"><div class="tip-title">Closed Issues</div>GitHub Issues <em>closed</em> by this user. Indicates resolution of bugs, tasks, and feature requests.</div></th>
+          <th data-sort="workflowRuns" class="has-tip">Workflows<div class="tip"><div class="tip-title">Workflow Runs</div>GitHub Actions <em>workflow runs triggered</em> by this user’s pushes, PRs, or manual dispatches. Measures CI/CD and testing activity.</div></th>
         </tr>
       </thead>
       <tbody id="userTableBody"></tbody>
