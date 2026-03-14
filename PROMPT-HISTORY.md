@@ -4,6 +4,9 @@ This file tracks meaningful prompts and their outcomes for the Claude Skills rep
 
 ---
 
+2026-03-14 - 16:15 - Add today-check caching to all 3 pipeline scripts to skip re-collection
+Result: All scripts now check if data was already collected/enriched/built today and skip with a message. Phase 1 checks `GeneratedAt` date + same `StartDate`. Phase 2 checks `PremiumRequestsEnrichedAt` date. Phase 3 checks HTML vs JSON file timestamps. All support `-Force` to bypass.
+
 2026-03-14 - 15:53 - Add numeric prefixes to 3-phase productivity pipeline scripts for execution order clarity
 Result: Renamed `Get-AllUserProductivityMetrics.ps1` → `1-Get-AllUserProductivityMetrics.ps1`, `Get-AllUserPremiumRequestConsumption.ps1` → `2-Get-AllUserPremiumRequestConsumption.ps1`, `Build-AllUserProductivityReport.ps1` → `3-Build-AllUserProductivityReport.ps1`. Updated all internal references in scripts, SKILL.md, and generated HTML.
 

@@ -41,7 +41,9 @@ param(
     [int]$UserLimit = 0,
 
     [ValidateRange(1, 10000)]
-    [int]$RepoLimit = 0
+    [int]$RepoLimit = 0,
+
+    [switch]$Force
 )
 
 $ErrorActionPreference = 'Stop'
@@ -56,6 +58,30 @@ if ($Since -gt $Until) {
 
 if ([string]::IsNullOrWhiteSpace($OutputPath)) {
     $OutputPath = Join-Path (Get-Location) 'relias-engineering-user-productivity.json'
+}
+
+# ── Skip if already collected today ──────────────────────────────────
+
+if (-not $Force -and (Test-Path $OutputPath)) {
+    $existing = Get-Content $OutputPath -Raw | ConvertFrom-Json
+    $generatedDate = ($existing.GeneratedAt -split ' ')[0]
+    $todayDate = (Get-Date).ToString('yyyy-MM-dd')
+    $existingStart = ($existing.StartDate -split ' ')[0]
+    $requestedStart = $Since.ToString('yyyy-MM-dd')
+    if ($generatedDate -eq $todayDate -and $existingStart -eq $requestedStart -and $UserLimit -eq 0 -and $RepoLimit -eq 0) {
+        Write-Information "Phase 1 data already collected today ($generatedDate). Use -Force to re-collect." -InformationAction Continue
+        [PSCustomObject]@{
+            Organization    = $existing.Organization
+            OutputPath      = $OutputPath
+            StartDate       = $existing.StartDate
+            EndDate         = $existing.EndDate
+            UserCount       = $existing.UserCount
+            RepositoryCount = $existing.RepositoryCount
+            FailureCount    = $existing.Failures.Count
+            Status          = 'Skipped (already collected today)'
+        } | Format-Table -AutoSize | Out-String | Write-Output
+        return
+    }
 }
 
 # ── Shared helpers ───────────────────────────────────────────────────

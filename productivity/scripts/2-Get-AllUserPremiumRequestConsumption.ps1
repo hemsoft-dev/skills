@@ -35,7 +35,9 @@ param(
 
     [switch]$SkipCache,
 
-    [int]$UserLimit = 0
+    [int]$UserLimit = 0,
+
+    [switch]$Force
 )
 
 $ErrorActionPreference = 'Stop'
@@ -48,6 +50,28 @@ if ([string]::IsNullOrWhiteSpace($InputPath)) {
 
 if (-not (Test-Path $InputPath)) {
     throw "Input file not found: $InputPath. Run 1-Get-AllUserProductivityMetrics.ps1 (Phase 1) first."
+}
+
+# ── Skip if already enriched today ───────────────────────────────────
+
+if (-not $Force -and $UserLimit -eq 0) {
+    $checkData = Get-Content $InputPath -Raw | ConvertFrom-Json
+    if ($checkData.PremiumRequestsIncluded -eq $true) {
+        $enrichedAt = $checkData.PremiumRequestsEnrichedAt
+        if ($null -ne $enrichedAt) {
+            $enrichedDate = ($enrichedAt -split ' ')[0]
+            $todayDate = (Get-Date).ToString('yyyy-MM-dd')
+            if ($enrichedDate -eq $todayDate) {
+                Write-Information "Phase 2 premium requests already enriched today ($enrichedDate). Use -Force to re-enrich." -InformationAction Continue
+                [PSCustomObject]@{
+                    InputPath = $InputPath
+                    Status    = 'Skipped (already enriched today)'
+                } | Format-Table -AutoSize | Out-String | Write-Output
+                return
+            }
+        }
+    }
+    $checkData = $null
 }
 
 if ([string]::IsNullOrWhiteSpace($CachePath)) {

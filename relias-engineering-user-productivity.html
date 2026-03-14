@@ -1,149 +1,9 @@
-#Requires -Version 7.0
-<#
-.SYNOPSIS
-    Phase 3: Builds an HTML productivity report from the user productivity JSON.
-.DESCRIPTION
-    Reads relias-engineering-user-productivity.json (produced by Phase 1 and
-    optionally enriched by Phase 2) and generates a visually rich, sortable
-    HTML report. Makes ZERO GitHub API calls.
-
-    Output: relias-engineering-user-productivity.html
-.PARAMETER InputPath
-    Path to the JSON file to read. Defaults to
-    relias-engineering-user-productivity.json in the current directory.
-.PARAMETER OutputPath
-    Path to the HTML file to create. Defaults to
-    relias-engineering-user-productivity.html in the current directory.
-.EXAMPLE
-    .\3-Build-AllUserProductivityReport.ps1
-.EXAMPLE
-    .\3-Build-AllUserProductivityReport.ps1 -InputPath .\relias-engineering-user-productivity.json
-#>
-
-[CmdletBinding()]
-param(
-    [string]$InputPath,
-
-    [string]$OutputPath,
-
-    [switch]$Force
-)
-
-$ErrorActionPreference = 'Stop'
-
-if ([string]::IsNullOrWhiteSpace($InputPath)) {
-    $InputPath = Join-Path (Get-Location) 'relias-engineering-user-productivity.json'
-}
-
-if (-not (Test-Path $InputPath)) {
-    throw "Input file not found: $InputPath. Run 1-Get-AllUserProductivityMetrics.ps1 (Phase 1) first."
-}
-
-if ([string]::IsNullOrWhiteSpace($OutputPath)) {
-    $OutputPath = Join-Path (Get-Location) 'relias-engineering-user-productivity.html'
-}
-
-# ── Skip if HTML is already up-to-date ───────────────────────────────
-
-if (-not $Force -and (Test-Path $OutputPath)) {
-    $jsonTime = (Get-Item $InputPath).LastWriteTime
-    $htmlTime = (Get-Item $OutputPath).LastWriteTime
-    if ($htmlTime -ge $jsonTime) {
-        Write-Information "Phase 3 report is already up-to-date (HTML: $($htmlTime.ToString('yyyy-MM-dd HH:mm')), JSON: $($jsonTime.ToString('yyyy-MM-dd HH:mm'))). Use -Force to regenerate." -InformationAction Continue
-        [PSCustomObject]@{
-            OutputPath = $OutputPath
-            Status     = 'Skipped (HTML newer than JSON)'
-        } | Format-Table -AutoSize | Out-String | Write-Output
-        return
-    }
-}
-
-$data = Get-Content $InputPath -Raw | ConvertFrom-Json
-$users = @($data.Users)
-
-# ── Compute summary stats ────────────────────────────────────────────
-
-$totalCommits = ($users | Measure-Object -Property Commits -Sum).Sum
-$totalLinesAdded = ($users | Measure-Object -Property LinesAdded -Sum).Sum
-$totalLinesDeleted = ($users | Measure-Object -Property LinesDeleted -Sum).Sum
-$totalNetLOC = ($users | Measure-Object -Property NetLOC -Sum).Sum
-$totalPRs = ($users | ForEach-Object { $_.OpenPRs + $_.MergedPRs + $_.ClosedPRs } | Measure-Object -Sum).Sum
-$totalMergedPRs = ($users | Measure-Object -Property MergedPRs -Sum).Sum
-$totalReviews = ($users | ForEach-Object { $_.ApprovedReviews + $_.CommentReviews } | Measure-Object -Sum).Sum
-$totalIssues = ($users | ForEach-Object { $_.OpenIssues + $_.ClosedIssues } | Measure-Object -Sum).Sum
-$totalWorkflowRuns = ($users | Measure-Object -Property WorkflowRuns -Sum).Sum
-$activeUsers = @($users | Where-Object { $_.Commits -gt 0 -or $_.MergedPRs -gt 0 -or $_.OpenPRs -gt 0 }).Count
-
-$hasPremium = [bool]$data.PremiumRequestsIncluded
-$totalPremium = 0.0
-if ($hasPremium) {
-    $totalPremium = ($users | ForEach-Object {
-        if ($null -ne $_.PremiumRequests) { $_.PremiumRequests } else { 0 }
-    } | Measure-Object -Sum).Sum
-}
-
-# ── Build users JSON for client-side sorting ─────────────────────────
-
-$usersJsonEntries = @()
-foreach ($user in $users) {
-    $fullName = if ($user.FullName) { $user.FullName -replace '"', '\"' -replace "`n", ' ' } else { '' }
-    $profileUrl = if ($user.ProfileUrl) { $user.ProfileUrl } else { "https://github.com/$($user.Username)" }
-    $premium = if ($null -ne $user.PremiumRequests) { $user.PremiumRequests } else { 'null' }
-
-    $usersJsonEntries += @"
-    {
-      "username": "$($user.Username)",
-      "fullName": "$fullName",
-      "profileUrl": "$profileUrl",
-      "premiumRequests": $premium,
-      "commits": $($user.Commits),
-      "linesAdded": $($user.LinesAdded),
-      "linesDeleted": $($user.LinesDeleted),
-      "netLOC": $($user.NetLOC),
-      "totalLinesChanged": $($user.TotalLinesChanged),
-      "openPRs": $($user.OpenPRs),
-      "mergedPRs": $($user.MergedPRs),
-      "closedPRs": $($user.ClosedPRs),
-      "approvedReviews": $($user.ApprovedReviews),
-      "commentReviews": $($user.CommentReviews),
-      "openIssues": $($user.OpenIssues),
-      "closedIssues": $($user.ClosedIssues),
-      "workflowRuns": $($user.WorkflowRuns)
-    }
-"@
-}
-
-$usersJson = $usersJsonEntries -join ",`n"
-
-# ── Premium column header/cells ──────────────────────────────────────
-
-$premiumColHeader = if ($hasPremium) {
-    '<th data-sort="premiumRequests">Premium<br>Requests</th>'
-} else { '' }
-
-$premiumSummaryCard = if ($hasPremium) {
-    @"
-        <div class="stat-card">
-          <div class="stat-value" id="stat-premium">$([math]::Round($totalPremium, 1))</div>
-          <div class="stat-label">Premium Requests</div>
-        </div>
-"@
-} else { '' }
-
-# ── Generate HTML ────────────────────────────────────────────────────
-
-$enrichedNote = ''
-if ($null -ne ($data.PSObject.Properties | Where-Object Name -eq 'PremiumRequestsEnrichedAt') -and $data.PremiumRequestsEnrichedAt) {
-    $enrichedNote = " &middot; Premium enriched: $($data.PremiumRequestsEnrichedAt)"
-}
-
-$html = @"
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>$($data.Organization) — User Productivity Report</title>
+<title>relias-engineering — User Productivity Report</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
 
@@ -405,9 +265,9 @@ $html = @"
 
 <div class="hero">
   <div class="hero-content">
-    <h1>$($data.Organization)</h1>
+    <h1>relias-engineering</h1>
     <p class="subtitle">User Productivity Report</p>
-    <p class="meta">$($data.StartDate) &mdash; $($data.EndDate) &middot; $($data.UserCount) users &middot; $($data.RepositoryCount) repos$enrichedNote</p>
+    <p class="meta">2026-03-01 00:00 &mdash; 2026-03-14 15:46 &middot; 10 users &middot; 10 repos</p>
   </div>
 </div>
 
@@ -415,42 +275,42 @@ $html = @"
 
   <div class="stats-grid">
     <div class="stat-card">
-      <div class="stat-value">$activeUsers</div>
+      <div class="stat-value">0</div>
       <div class="stat-label">Active Users</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value">$($totalCommits.ToString('N0'))</div>
+      <div class="stat-value">0</div>
       <div class="stat-label">Commits</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value">$($totalLinesAdded.ToString('N0'))</div>
+      <div class="stat-value">0</div>
       <div class="stat-label">Lines Added</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value">$($totalLinesDeleted.ToString('N0'))</div>
+      <div class="stat-value">0</div>
       <div class="stat-label">Lines Deleted</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value">$($totalPRs.ToString('N0'))</div>
+      <div class="stat-value">0</div>
       <div class="stat-label">Pull Requests</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value">$($totalMergedPRs.ToString('N0'))</div>
+      <div class="stat-value">0</div>
       <div class="stat-label">Merged PRs</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value">$($totalReviews.ToString('N0'))</div>
+      <div class="stat-value">0</div>
       <div class="stat-label">Reviews</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value">$($totalIssues.ToString('N0'))</div>
+      <div class="stat-value">0</div>
       <div class="stat-label">Issues</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value">$($totalWorkflowRuns.ToString('N0'))</div>
+      <div class="stat-value">0</div>
       <div class="stat-label">Workflow Runs</div>
     </div>
-$premiumSummaryCard
+
   </div>
 
   <div class="controls">
@@ -464,7 +324,7 @@ $premiumSummaryCard
         <tr>
           <th class="rank-cell">#</th>
           <th data-sort="username">User</th>
-          $premiumColHeader
+          
           <th data-sort="commits" class="sorted-desc">Commits</th>
           <th data-sort="linesAdded">Lines+</th>
           <th data-sort="linesDeleted">Lines-</th>
@@ -485,15 +345,204 @@ $premiumSummaryCard
 </div>
 
 <div class="footer">
-  Generated by <a href="#">1-Get-AllUserProductivityMetrics.ps1</a> pipeline &middot; $($data.GeneratedAt)
+  Generated by <a href="#">1-Get-AllUserProductivityMetrics.ps1</a> pipeline &middot; 2026-03-14 15:47:21
 </div>
 
 <script>
 const users = [
-$usersJson
+    {
+      "username": "4-ndrea",
+      "fullName": "",
+      "profileUrl": "https://github.com/4-ndrea",
+      "premiumRequests": null,
+      "commits": 0,
+      "linesAdded": 0,
+      "linesDeleted": 0,
+      "netLOC": 0,
+      "totalLinesChanged": 0,
+      "openPRs": 0,
+      "mergedPRs": 0,
+      "closedPRs": 0,
+      "approvedReviews": 0,
+      "commentReviews": 0,
+      "openIssues": 0,
+      "closedIssues": 0,
+      "workflowRuns": 0
+    },
+    {
+      "username": "a-abero",
+      "fullName": "Agustin Abero",
+      "profileUrl": "https://github.com/a-abero",
+      "premiumRequests": null,
+      "commits": 0,
+      "linesAdded": 0,
+      "linesDeleted": 0,
+      "netLOC": 0,
+      "totalLinesChanged": 0,
+      "openPRs": 0,
+      "mergedPRs": 0,
+      "closedPRs": 0,
+      "approvedReviews": 0,
+      "commentReviews": 0,
+      "openIssues": 0,
+      "closedIssues": 0,
+      "workflowRuns": 0
+    },
+    {
+      "username": "a-dharmaraj",
+      "fullName": "",
+      "profileUrl": "https://github.com/a-dharmaraj",
+      "premiumRequests": null,
+      "commits": 0,
+      "linesAdded": 0,
+      "linesDeleted": 0,
+      "netLOC": 0,
+      "totalLinesChanged": 0,
+      "openPRs": 0,
+      "mergedPRs": 0,
+      "closedPRs": 0,
+      "approvedReviews": 0,
+      "commentReviews": 0,
+      "openIssues": 0,
+      "closedIssues": 0,
+      "workflowRuns": 0
+    },
+    {
+      "username": "aamach",
+      "fullName": "",
+      "profileUrl": "https://github.com/aamach",
+      "premiumRequests": null,
+      "commits": 0,
+      "linesAdded": 0,
+      "linesDeleted": 0,
+      "netLOC": 0,
+      "totalLinesChanged": 0,
+      "openPRs": 0,
+      "mergedPRs": 0,
+      "closedPRs": 0,
+      "approvedReviews": 0,
+      "commentReviews": 0,
+      "openIssues": 0,
+      "closedIssues": 0,
+      "workflowRuns": 0
+    },
+    {
+      "username": "AbelWright",
+      "fullName": "Abel Wright",
+      "profileUrl": "https://github.com/AbelWright",
+      "premiumRequests": null,
+      "commits": 0,
+      "linesAdded": 0,
+      "linesDeleted": 0,
+      "netLOC": 0,
+      "totalLinesChanged": 0,
+      "openPRs": 0,
+      "mergedPRs": 0,
+      "closedPRs": 0,
+      "approvedReviews": 0,
+      "commentReviews": 0,
+      "openIssues": 0,
+      "closedIssues": 0,
+      "workflowRuns": 0
+    },
+    {
+      "username": "abharti-relias",
+      "fullName": "",
+      "profileUrl": "https://github.com/abharti-relias",
+      "premiumRequests": null,
+      "commits": 0,
+      "linesAdded": 0,
+      "linesDeleted": 0,
+      "netLOC": 0,
+      "totalLinesChanged": 0,
+      "openPRs": 0,
+      "mergedPRs": 0,
+      "closedPRs": 0,
+      "approvedReviews": 0,
+      "commentReviews": 0,
+      "openIssues": 0,
+      "closedIssues": 0,
+      "workflowRuns": 0
+    },
+    {
+      "username": "abose-relias",
+      "fullName": "",
+      "profileUrl": "https://github.com/abose-relias",
+      "premiumRequests": null,
+      "commits": 0,
+      "linesAdded": 0,
+      "linesDeleted": 0,
+      "netLOC": 0,
+      "totalLinesChanged": 0,
+      "openPRs": 0,
+      "mergedPRs": 0,
+      "closedPRs": 0,
+      "approvedReviews": 0,
+      "commentReviews": 0,
+      "openIssues": 0,
+      "closedIssues": 0,
+      "workflowRuns": 0
+    },
+    {
+      "username": "across-sa-relias",
+      "fullName": "",
+      "profileUrl": "https://github.com/across-sa-relias",
+      "premiumRequests": null,
+      "commits": 0,
+      "linesAdded": 0,
+      "linesDeleted": 0,
+      "netLOC": 0,
+      "totalLinesChanged": 0,
+      "openPRs": 0,
+      "mergedPRs": 0,
+      "closedPRs": 0,
+      "approvedReviews": 0,
+      "commentReviews": 0,
+      "openIssues": 0,
+      "closedIssues": 0,
+      "workflowRuns": 0
+    },
+    {
+      "username": "adesai-relias",
+      "fullName": "",
+      "profileUrl": "https://github.com/adesai-relias",
+      "premiumRequests": null,
+      "commits": 0,
+      "linesAdded": 0,
+      "linesDeleted": 0,
+      "netLOC": 0,
+      "totalLinesChanged": 0,
+      "openPRs": 0,
+      "mergedPRs": 0,
+      "closedPRs": 0,
+      "approvedReviews": 0,
+      "commentReviews": 0,
+      "openIssues": 0,
+      "closedIssues": 0,
+      "workflowRuns": 0
+    },
+    {
+      "username": "aditya-relias",
+      "fullName": "Aditya Gaikwad",
+      "profileUrl": "https://github.com/aditya-relias",
+      "premiumRequests": null,
+      "commits": 0,
+      "linesAdded": 0,
+      "linesDeleted": 0,
+      "netLOC": 0,
+      "totalLinesChanged": 0,
+      "openPRs": 0,
+      "mergedPRs": 0,
+      "closedPRs": 0,
+      "approvedReviews": 0,
+      "commentReviews": 0,
+      "openIssues": 0,
+      "closedIssues": 0,
+      "workflowRuns": 0
+    }
 ];
 
-const hasPremium = $($hasPremium.ToString().ToLower());
+const hasPremium = false;
 
 let sortKey = 'commits';
 let sortDir = 'desc';
@@ -599,13 +648,3 @@ renderTable();
 </script>
 </body>
 </html>
-"@
-
-$html | Set-Content -Path $OutputPath -Encoding UTF8
-
-[PSCustomObject]@{
-    InputPath  = $InputPath
-    OutputPath = $OutputPath
-    UserCount  = $data.UserCount
-    HasPremium = $hasPremium
-} | Format-Table -AutoSize | Out-String | Write-Output
