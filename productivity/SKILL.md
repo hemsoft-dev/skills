@@ -223,6 +223,7 @@ Scripts for collecting and calculating productivity metrics are stored in the `s
 | `Get-UserOrgProductivity.ps1` | Compact per-user premium requests, commits, and total PR count for a date range |
 | `Get-UserProductivityBreakdown.ps1` | Full per-user premium requests, commits, PR states, issue states, and workflow runs for a date range with table or JSON output |
 | `Get-UserProductivityScores.ps1` | Multi-user universal productivity scoring using all numeric breakdown metrics with normalized weighted ranking |
+| `Get-OrgUserProductivityDump.ps1` | Month-to-date JSON dump of detailed productivity metrics plus username, full name, and public email for every org member |
 | `Get-OrgProductivity.ps1` | Organization-wide repository productivity ranking and HTML report |
 
 ## Common Commands
@@ -242,6 +243,9 @@ Scripts for collecting and calculating productivity metrics are stored in the `s
 
 # Universal score for multiple users
 .\scripts\Get-UserProductivityScores.ps1 -Usernames ssadhula-relias,fhemmerrelias -Since '2026-03-01' -Until '2026-03-31'
+
+# Org-wide month-to-date JSON dump
+.\scripts\Get-OrgUserProductivityDump.ps1
 
 # Org report
 .\scripts\Get-OrgProductivity.ps1 -Org relias-engineering
