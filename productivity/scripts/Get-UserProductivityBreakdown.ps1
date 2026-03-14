@@ -12,7 +12,7 @@
     based on issues created during the requested period and are bucketed into
     open and closed states. Workflow runs count runs triggered by the user
     during the requested period across all non-archived, non-forked repositories.
-    Commit line totals are calculated from code files only, and PR review
+    Commit line totals are calculated from all committed file changes, and PR review
     activity counts submitted APPROVED and COMMENTED reviews during the period.
 .PARAMETER Username
     GitHub username to analyze.
@@ -41,62 +41,11 @@ $ErrorActionPreference = 'Stop'
 
 $Organization = 'relias-engineering'
 $Enterprise = 'bertelsmann'
-$CodeExtensions = @(
-    '.js', '.ts', '.tsx', '.jsx',
-    '.py', '.cs', '.fs', '.fsx',
-    '.go', '.rs', '.java', '.kt',
-    '.c', '.cpp', '.h', '.hpp',
-    '.ps1', '.psm1', '.psd1',
-    '.rb', '.php', '.swift',
-    '.scala', '.clj', '.ex', '.exs',
-    '.vue', '.svelte', '.astro',
-    '.yaml', '.yml', '.json', '.xml', '.sql'
-)
-$ExcludePatterns = @(
-    'node_modules',
-    'bin',
-    'obj',
-    'dist',
-    'build',
-    '.git',
-    'package-lock.json',
-    'yarn.lock',
-    'pnpm-lock.yaml',
-    '*.min.js',
-    '*.min.css',
-    '*.generated.*',
-    '*.designer.*'
-)
 $SinceUtc = $Since.Date.ToUniversalTime()
 $UntilUtc = $Until.Date.AddDays(1).AddTicks(-1).ToUniversalTime()
 
 if ($Since.Date -gt $Until.Date) {
     throw 'Since must be earlier than or equal to Until.'
-}
-
-function Test-IsCodeFile {
-    param(
-        [Parameter(Mandatory)]
-        [string]$Path
-    )
-
-    $extension = [System.IO.Path]::GetExtension($Path).ToLowerInvariant()
-    return $CodeExtensions -contains $extension
-}
-
-function Test-ShouldExclude {
-    param(
-        [Parameter(Mandatory)]
-        [string]$Path
-    )
-
-    foreach ($pattern in $ExcludePatterns) {
-        if ($Path -like "*$pattern*") {
-            return $true
-        }
-    }
-
-    return $false
 }
 
 function Test-IsWithinRange {
@@ -317,15 +266,7 @@ function Get-CommitStatsForRepository {
             }
 
             foreach ($file in @($details.files)) {
-                if ($null -eq $file.filename) {
-                    continue
-                }
-
-                if (-not (Test-IsCodeFile -Path $file.filename)) {
-                    continue
-                }
-
-                if (Test-ShouldExclude -Path $file.filename) {
+                if ($null -eq $file) {
                     continue
                 }
 

@@ -174,10 +174,10 @@ Use [scripts/Get-UserProductivityBreakdown.ps1](scripts/Get-UserProductivityBrea
 | Username | GitHub username analyzed |
 | Premium Requests | Total gross premium requests for the user |
 | Commits | Total authored commits across non-archived, non-forked org repos |
-| Lines Added | Total added lines across tracked source and structured config files in those commits |
-| Lines Deleted | Total deleted lines across tracked source and structured config files in those commits |
-| Net LOC | Net lines changed across tracked source and structured config files: additions minus deletions |
-| Total Changed Lines | Total churn across tracked source and structured config files: additions plus deletions |
+| Lines Added | Total added lines across all files in those commits |
+| Lines Deleted | Total deleted lines across all files in those commits |
+| Net LOC | Net lines changed across all files: additions minus deletions |
+| Total Changed Lines | Total churn across all files: additions plus deletions |
 | Open PRs | PRs created in the period that are still open |
 | Merged PRs | PRs created in the period that were merged |
 | Closed PRs | PRs created in the period that were closed without merge |
@@ -194,7 +194,7 @@ Use [scripts/Get-UserProductivityBreakdown.ps1](scripts/Get-UserProductivityBrea
 3. Sum `grossQuantity` from returned `usageItems` to get premium requests.
 4. List non-archived, non-forked repositories in `relias-engineering`.
 5. Count authored commits across those repositories with the REST commits API.
-6. Fetch commit details for those commits and sum additions, deletions, net LOC, and total changed lines for tracked source and structured config files.
+6. Fetch commit details for those commits and sum additions, deletions, net LOC, and total changed lines across all committed files.
 7. Count PR states with GitHub search queries scoped to `org:relias-engineering`, `author:{username}`, and the `created:` date range.
 8. Count submitted `APPROVED` and `COMMENTED` PR reviews during the period.
 9. Count issue states with GitHub search queries scoped to `org:relias-engineering`, `author:{username}`, and the `created:` date range.

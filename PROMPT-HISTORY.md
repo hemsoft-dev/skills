@@ -16,6 +16,9 @@ Result: Re-ran the month-to-date `Get-UserProductivityBreakdown.ps1` report for 
 2026-03-14 - 04:29 - Expand productivity breakdown with commit LOC and PR review metrics
 Result: Updated `Get-UserProductivityBreakdown.ps1` to include tracked-file line totals plus submitted `APPROVED` and `COMMENTED` PR review counts, and verified the output for `npeterson-relias`.
 
+2026-03-14 - 04:53 - Remove all commit line filtering from productivity breakdown
+Result: Updated `Get-UserProductivityBreakdown.ps1` so LOC totals now count every changed line in every committed file, then verified the `npeterson-relias` report still returns 48 added, 46 deleted, and 94 total changed lines.
+
 2026-03-12 - 21:15 - Fix AI news markdown link hover issue in today's diary entry
 Result: Simplified the two Simon Willison AI-news URLs in `diary/entries/2026-03-12.md` by removing fragment anchors so the markdown editor can treat them as normal links more reliably inside the table.
 
