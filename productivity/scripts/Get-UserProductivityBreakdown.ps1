@@ -20,6 +20,8 @@
     Inclusive start date for the reporting period.
 .PARAMETER Until
     Inclusive end date for the reporting period.
+.PARAMETER OutputFormat
+    Output mode: Table or Json.
 .EXAMPLE
     .\Get-UserProductivityBreakdown.ps1 -Username fhemmerrelias -Since '2026-02-01' -Until '2026-02-28'
 #>
@@ -35,6 +37,11 @@ param(
 
     [Parameter(Mandatory)]
     [datetime]$Until
+
+    ,
+
+    [ValidateSet('Table', 'Json')]
+    [string]$OutputFormat = 'Table'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -485,16 +492,21 @@ $summary = [PSCustomObject]@{
     Commits           = $commitStats.CommitCount
     LinesAdded        = $commitStats.LinesAdded
     LinesDeleted      = $commitStats.LinesDeleted
-    NetLinesOfCode    = $commitStats.NetLinesOfCode
+    NetLOC            = $commitStats.NetLinesOfCode
     TotalLinesChanged = $commitStats.TotalLinesChanged
     OpenPRs           = Get-PullRequestCount -Author $Username -Qualifiers @('state:open')
     MergedPRs         = Get-PullRequestCount -Author $Username -Qualifiers @('is:merged')
-    ClosedUnmergedPRs = Get-PullRequestCount -Author $Username -Qualifiers @('state:closed', '-is:merged')
-    ApprovedReviews  = $reviewActivity.ApprovedReviews
-    CommentReviews   = $reviewActivity.CommentReviews
-    OpenIssues       = Get-IssueCount -Author $Username -Qualifiers @('state:open')
-    ClosedIssues     = Get-IssueCount -Author $Username -Qualifiers @('state:closed')
-    WorkflowRuns     = Get-TotalWorkflowRunCount -Repositories $repositories
+    ClosedPRs         = Get-PullRequestCount -Author $Username -Qualifiers @('state:closed', '-is:merged')
+    ApprovedReviews   = $reviewActivity.ApprovedReviews
+    CommentReviews    = $reviewActivity.CommentReviews
+    OpenIssues        = Get-IssueCount -Author $Username -Qualifiers @('state:open')
+    ClosedIssues      = Get-IssueCount -Author $Username -Qualifiers @('state:closed')
+    WorkflowRuns      = Get-TotalWorkflowRunCount -Repositories $repositories
+}
+
+if ($OutputFormat -eq 'Json') {
+    $summary | ConvertTo-Json -Depth 4 | Write-Output
+    return
 }
 
 $summaryTable = @(
@@ -505,11 +517,11 @@ $summaryTable = @(
     [PSCustomObject]@{ Metric = 'Commits'; Value = $summary.Commits }
     [PSCustomObject]@{ Metric = 'Lines Added'; Value = $summary.LinesAdded }
     [PSCustomObject]@{ Metric = 'Lines Deleted'; Value = $summary.LinesDeleted }
-    [PSCustomObject]@{ Metric = 'Net LOC'; Value = $summary.NetLinesOfCode }
+    [PSCustomObject]@{ Metric = 'Net LOC'; Value = $summary.NetLOC }
     [PSCustomObject]@{ Metric = 'Total Changed Lines'; Value = $summary.TotalLinesChanged }
     [PSCustomObject]@{ Metric = 'Open PRs'; Value = $summary.OpenPRs }
     [PSCustomObject]@{ Metric = 'Merged PRs'; Value = $summary.MergedPRs }
-    [PSCustomObject]@{ Metric = 'Closed PRs'; Value = $summary.ClosedUnmergedPRs }
+    [PSCustomObject]@{ Metric = 'Closed PRs'; Value = $summary.ClosedPRs }
     [PSCustomObject]@{ Metric = 'Approved Reviews'; Value = $summary.ApprovedReviews }
     [PSCustomObject]@{ Metric = 'Comment Reviews'; Value = $summary.CommentReviews }
     [PSCustomObject]@{ Metric = 'Open Issues'; Value = $summary.OpenIssues }
