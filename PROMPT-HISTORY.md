@@ -37,6 +37,9 @@ Result: Produced a v1 weighting model that keeps every numeric productivity metr
 2026-03-14 - 05:43 - Make Get-UserOrgProductivity default Until to current time
 Result: Updated `Get-UserOrgProductivity.ps1` so `-Until` is optional, defaults to the current timestamp when omitted, and commit queries now honor the exact end time; verified with a month-to-date run for `fhemmerrelias`.
 
+2026-03-14 - 05:50 - Make Get-UserProductivityBreakdown default Until to current time
+Result: Updated `Get-UserProductivityBreakdown.ps1` so `-Until` is optional, defaults to the current timestamp when omitted, and exact-time commit queries now honor that end time; verified with a month-to-date run for `fhemmerrelias`.
+
 2026-03-12 - 21:15 - Fix AI news markdown link hover issue in today's diary entry
 Result: Simplified the two Simon Willison AI-news URLs in `diary/entries/2026-03-12.md` by removing fragment anchors so the markdown editor can treat them as normal links more reliably inside the table.
 

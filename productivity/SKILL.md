@@ -146,7 +146,7 @@ Use [scripts/Get-UserOrgProductivity.ps1](scripts/Get-UserOrgProductivity.ps1) w
 |-----------|----------|---------|
 | `Username` | Yes | GitHub username to analyze |
 | `Since` | Yes | Inclusive start date |
-| `Until` | Yes | Inclusive end date |
+| `Until` | No | Inclusive end date/time; defaults to now |
 | `Enterprise` | Usually | Enterprise slug for premium request lookup |
 
 | Output | Meaning |
@@ -165,7 +165,7 @@ Use [scripts/Get-UserProductivityBreakdown.ps1](scripts/Get-UserProductivityBrea
 |-----------|----------|---------|
 | `Username` | Yes | GitHub username to analyze |
 | `Since` | Yes | Inclusive start date |
-| `Until` | Yes | Inclusive end date |
+| `Until` | No | Inclusive end date/time; defaults to now |
 
 | Output | Meaning |
 |--------|---------|
@@ -236,6 +236,9 @@ Scripts for collecting and calculating productivity metrics are stored in the `s
 
 # User breakdown
 .\scripts\Get-UserProductivityBreakdown.ps1 -Username ssadhula-relias -Since '2026-03-01' -Until '2026-03-11'
+
+# Month-to-date user breakdown
+.\scripts\Get-UserProductivityBreakdown.ps1 -Username ssadhula-relias -Since '2026-03-01'
 
 # Universal score for multiple users
 .\scripts\Get-UserProductivityScores.ps1 -Usernames ssadhula-relias,fhemmerrelias -Since '2026-03-01' -Until '2026-03-31'

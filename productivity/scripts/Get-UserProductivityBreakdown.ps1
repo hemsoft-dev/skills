@@ -5,7 +5,8 @@
 .DESCRIPTION
     Queries the Bertelsmann enterprise premium request billing endpoint and the
     GitHub APIs for authored activity in relias-engineering. The script accepts
-    exactly three parameters: start date, end date, and GitHub username.
+    a GitHub username plus a reporting window. If Until is omitted, the report
+    runs through the current timestamp.
 
     Pull request counts are based on PRs created during the requested period and
     are bucketed into open, merged, and closed-unmerged states. Issue counts are
@@ -19,11 +20,13 @@
 .PARAMETER Since
     Inclusive start date for the reporting period.
 .PARAMETER Until
-    Inclusive end date for the reporting period.
+    Inclusive end timestamp for the reporting period. Defaults to the current time.
 .PARAMETER OutputFormat
     Output mode: Table or Json.
 .EXAMPLE
     .\Get-UserProductivityBreakdown.ps1 -Username fhemmerrelias -Since '2026-02-01' -Until '2026-02-28'
+.EXAMPLE
+    .\Get-UserProductivityBreakdown.ps1 -Username fhemmerrelias -Since '2026-03-01'
 #>
 
 [CmdletBinding()]
@@ -35,8 +38,7 @@ param(
     [Parameter(Mandatory)]
     [datetime]$Since,
 
-    [Parameter(Mandatory)]
-    [datetime]$Until
+    [datetime]$Until = (Get-Date)
 
     ,
 
@@ -49,7 +51,7 @@ $ErrorActionPreference = 'Stop'
 $Organization = 'relias-engineering'
 $Enterprise = 'bertelsmann'
 $SinceUtc = $Since.Date.ToUniversalTime()
-$UntilUtc = $Until.Date.AddDays(1).AddTicks(-1).ToUniversalTime()
+$UntilUtc = $Until.ToUniversalTime()
 
 if ($Since.Date -gt $Until.Date) {
     throw 'Since must be earlier than or equal to Until.'
@@ -210,7 +212,7 @@ function Get-CommitCountForRepository {
     $queryParts = @(
         "author=$([System.Uri]::EscapeDataString($Username))",
         "since=$([System.Uri]::EscapeDataString($Since.ToUniversalTime().ToString('o')))",
-        "until=$([System.Uri]::EscapeDataString($Until.Date.AddDays(1).AddTicks(-1).ToUniversalTime().ToString('o')))",
+        "until=$([System.Uri]::EscapeDataString($Until.ToUniversalTime().ToString('o')))",
         'per_page=100'
     )
 
@@ -486,7 +488,7 @@ $reviewActivity = Get-PullRequestReviewActivity
 
 $summary = [PSCustomObject]@{
     StartDate         = $Since.ToString('yyyy-MM-dd')
-    EndDate           = $Until.ToString('yyyy-MM-dd')
+    EndDate           = $Until.ToString('yyyy-MM-dd HH:mm')
     Username          = $Username
     PremiumRequests   = Get-PremiumRequestCount
     Commits           = $commitStats.CommitCount
