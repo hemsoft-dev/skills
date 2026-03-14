@@ -28,6 +28,9 @@ Result: Validated the intended Relias usernames, ran `Get-UserProductivityBreakd
 2026-03-14 - 05:11 - Design a universal organizational productivity score
 Result: Proposed a balanced, percentile-normalized scoring model that uses premium requests, commits, lines added, and lines deleted without letting one outlier metric dominate the ranking.
 
+2026-03-14 - 05:16 - Refine scoring model to include every script metric
+Result: Revised the recommendation so the universal score explicitly includes every numeric metric produced by `Get-UserProductivityBreakdown.ps1`, while still normalizing and dampening overlap between correlated measures.
+
 2026-03-12 - 21:15 - Fix AI news markdown link hover issue in today's diary entry
 Result: Simplified the two Simon Willison AI-news URLs in `diary/entries/2026-03-12.md` by removing fragment anchors so the markdown editor can treat them as normal links more reliably inside the table.
 
