@@ -85,15 +85,15 @@ if ($hasPremium) {
 # ── Compute universal productivity scores ────────────────────────────
 
 $metricWeights = [ordered]@{
-    PremiumRequests   = 0.10
-    Commits           = 0.10
+    PremiumRequests   = 0.03
+    Commits           = 0.13
     LinesAdded        = 0.08
     LinesDeleted      = 0.08
     NetLOC            = 0.08
     TotalLinesChanged = 0.08
-    OpenPRs           = 0.06
-    MergedPRs         = 0.08
-    ClosedPRs         = 0.06
+    OpenPRs           = 0.07
+    MergedPRs         = 0.10
+    ClosedPRs         = 0.07
     ApprovedReviews   = 0.07
     CommentReviews    = 0.05
     OpenIssues        = 0.05
@@ -687,7 +687,7 @@ $premiumSummaryCard
         <tr>
           <th class="rank-cell">#</th>
           <th data-sort="username" class="has-tip">User<div class="tip"><div class="tip-title">User</div>GitHub username and display name. Click to visit their GitHub profile. Sortable alphabetically.</div></th>
-          <th data-sort="score" class="sorted-desc has-tip">Score<div class="tip"><div class="tip-title">Productivity Score (0–100)</div>A <em>universal composite score</em> combining all metrics using weighted percentile ranking.<br><br><em>How it works:</em> Each metric is log-transformed to reduce outlier impact, then ranked as a percentile (0–100) against all other users. Percentiles are combined using these weights:<br><br>• <em>Commits</em> &amp; <em>Premium Requests</em>: 10% each<br>• <em>Merged PRs</em>, <em>Lines+</em>, <em>Lines−</em>, <em>Net LOC</em>, <em>Total Changed</em>: 8% each<br>• <em>Approved Reviews</em>: 7%<br>• <em>Open/Closed PRs</em>, <em>Closed Issues</em>: 6% each<br>• <em>Comment Reviews</em>, <em>Open Issues</em>, <em>Workflows</em>: 5% each<br><br><em>70+</em> = high activity &bull; <em>35–70</em> = moderate &bull; <em>&lt;35</em> = low</div></th>
+          <th data-sort="score" class="sorted-desc has-tip">Score<div class="tip"><div class="tip-title">Productivity Score (0–100)</div>A <em>universal composite score</em> combining all metrics using weighted percentile ranking.<br><br><em>How it works:</em> Each metric is log-transformed to reduce outlier impact, then ranked as a percentile (0–100) against all other users. Percentiles are combined using these weights:<br><br>• <em>Commits</em>: 13%<br>• <em>Merged PRs</em>: 10%<br>• <em>Lines+</em>, <em>Lines−</em>, <em>Net LOC</em>, <em>Total Changed</em>: 8% each<br>• <em>Open PRs</em>, <em>Closed PRs</em>, <em>Approved Reviews</em>: 7% each<br>• <em>Closed Issues</em>: 6%<br>• <em>Comment Reviews</em>, <em>Open Issues</em>, <em>Workflows</em>: 5% each<br>• <em>Premium Requests</em>: 3%<br><br><em>70+</em> = high activity &bull; <em>35–70</em> = moderate &bull; <em>&lt;35</em> = low</div></th>
           $premiumColHeader
           <th data-sort="commits" class="has-tip">Commits<div class="tip"><div class="tip-title">Commits</div>Number of commits pushed to <em>default branches</em> by this user during the reporting period.</div></th>
           <th data-sort="linesAdded" class="has-tip">Lines+<div class="tip"><div class="tip-title">Lines Added</div>Total <em>line insertions</em> across all commits by this user. Measures raw code output volume.</div></th>
