@@ -37,11 +37,11 @@
 .PARAMETER OutputFormat
     Output mode: Table or Json.
 .EXAMPLE
-    .\Get-UserOrgProductivity.ps1 -Username ssadhula-relias -Since '2026-02-01' -Until '2026-02-28' -PremiumRequestsOverride 3400
+    .\Get-OneUserOrgProductivity.ps1 -Username ssadhula-relias -Since '2026-02-01' -Until '2026-02-28' -PremiumRequestsOverride 3400
 .EXAMPLE
-    .\Get-UserOrgProductivity.ps1 -Username ssadhula-relias -Org relias-engineering -Enterprise relias -Since '2026-02-01' -Until '2026-02-28'
+    .\Get-OneUserOrgProductivity.ps1 -Username ssadhula-relias -Org relias-engineering -Enterprise relias -Since '2026-02-01' -Until '2026-02-28'
 .EXAMPLE
-    .\Get-UserOrgProductivity.ps1 -Username ssadhula-relias -Org relias-engineering -Enterprise bertelsmann -Since '2026-03-01'
+    .\Get-OneUserOrgProductivity.ps1 -Username ssadhula-relias -Org relias-engineering -Enterprise bertelsmann -Since '2026-03-01'
 #>
 
 [CmdletBinding()]

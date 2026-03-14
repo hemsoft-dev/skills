@@ -27,11 +27,11 @@
 .PARAMETER SkipPremiumRequests
     Skip per-user premium request enrichment. Use this only for faster partial runs.
 .EXAMPLE
-    .\Get-OrgUserProductivity.ps1
+    .\Get-AllOrgUserProductivity.ps1
 .EXAMPLE
-    .\Get-OrgUserProductivity.ps1 -UserLimit 10 -RepoLimit 5
+    .\Get-AllOrgUserProductivity.ps1 -UserLimit 10 -RepoLimit 5
 .EXAMPLE
-    .\Get-OrgUserProductivity.ps1 -SkipPremiumRequests
+    .\Get-AllOrgUserProductivity.ps1 -SkipPremiumRequests
 #>
 
 [CmdletBinding()]
@@ -200,14 +200,14 @@ function Get-OrganizationMembers {
     return $distinctMembers
 }
 
-function Get-UserProfile {
+function Get-UserIdentity {
     param(
         [Parameter(Mandatory)]
         [string]$Username
     )
 
-    $profile = Invoke-GhApiJson -Path "/users/$Username" -AllowFailure
-    if ($null -eq $profile) {
+    $githubUser = Invoke-GhApiJson -Path "/users/$Username" -AllowFailure
+    if ($null -eq $githubUser) {
         return [PSCustomObject]@{
             FullName   = $null
             Email      = $null
@@ -216,9 +216,9 @@ function Get-UserProfile {
     }
 
     return [PSCustomObject]@{
-        FullName   = $profile.name
-        Email      = $profile.email
-        ProfileUrl = $profile.html_url
+        FullName   = $githubUser.name
+        Email      = $githubUser.email
+        ProfileUrl = $githubUser.html_url
     }
 }
 
@@ -689,8 +689,8 @@ catch {
 $members = @(Get-OrganizationMembers)
 $userMap = @{}
 foreach ($member in $members) {
-    $profile = Get-UserProfile -Username $member.login
-    $userMap[$member.login] = New-UserMetricRecord -Username $member.login -FullName $profile.FullName -Email $profile.Email -ProfileUrl $profile.ProfileUrl
+    $memberIdentity = Get-UserIdentity -Username $member.login
+    $userMap[$member.login] = New-UserMetricRecord -Username $member.login -FullName $memberIdentity.FullName -Email $memberIdentity.Email -ProfileUrl $memberIdentity.ProfileUrl
 }
 
 $repositories = @(Get-RepositoryList)

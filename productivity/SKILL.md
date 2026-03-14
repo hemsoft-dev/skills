@@ -47,9 +47,9 @@ When user activates this skill without specifying an action, choose the smallest
 | User asks for | Use |
 |--------------|-----|
 | Today or daily coding activity | `Get-TodayProductivity.ps1` |
-| One user's premium requests, commits, and total PR count over a period | `Get-UserOrgProductivity.ps1` |
+| One user's premium requests, commits, and total PR count over a period | `Get-OneUserOrgProductivity.ps1` |
 | One user's premium requests plus detailed PR, issue, and workflow breakdown over a period | `Get-UserProductivityBreakdown.ps1` |
-| Org-wide per-user JSON dump with all metrics | `Get-OrgUserProductivity.ps1` |
+| Org-wide per-user JSON dump with all metrics | `Get-AllOrgUserProductivity.ps1` |
 | Organization-wide repository productivity ranking | `Get-OrgProductivity.ps1` |
 
 ## ⚠️ CRITICAL: Local Clone Policy (READ-ONLY)
@@ -141,7 +141,7 @@ Report productivity for one GitHub username over a chosen date range in `relias-
 
 #### UserSummary
 
-Use [scripts/Get-UserOrgProductivity.ps1](scripts/Get-UserOrgProductivity.ps1) when the user wants a compact summary.
+Use [scripts/Get-OneUserOrgProductivity.ps1](scripts/Get-OneUserOrgProductivity.ps1) when the user wants a compact summary.
 
 | Parameter | Required | Purpose |
 |-----------|----------|---------|
@@ -205,7 +205,7 @@ Use [scripts/Get-UserProductivityBreakdown.ps1](scripts/Get-UserProductivityBrea
 
 ```powershell
 # Compact summary for one month
-.\scripts\Get-UserOrgProductivity.ps1 -Username ssadhula-relias -Since '2026-02-01' -Until '2026-02-28' -Enterprise bertelsmann
+.\scripts\Get-OneUserOrgProductivity.ps1 -Username ssadhula-relias -Since '2026-02-01' -Until '2026-02-28' -Enterprise bertelsmann
 
 # Full monthly breakdown for one user
 .\scripts\Get-UserProductivityBreakdown.ps1 -Username ssadhula-relias -Since '2026-03-01' -Until '2026-03-31'
@@ -221,12 +221,11 @@ Scripts for collecting and calculating productivity metrics are stored in the `s
 | Script | Purpose |
 |--------|---------|
 | `Get-TodayProductivity.ps1` | Daily LOC and activity summary |
-| `Get-UserOrgProductivity.ps1` | Compact per-user premium requests, commits, and total PR count for a date range |
+| `Get-OneUserOrgProductivity.ps1` | Compact per-user premium requests, commits, and total PR count for a date range |
 | `Get-UserProductivityBreakdown.ps1` | Full per-user premium requests, commits, PR states, issue states, and workflow runs for a date range with table or JSON output |
 | `Get-UserProductivityScores.ps1` | Multi-user universal productivity scoring using all numeric breakdown metrics with normalized weighted ranking |
-| `Get-OrgUserProductivity.ps1` | Primary org-wide JSON dump that collects repo activity plus per-user premium requests in one run |
+| `Get-AllOrgUserProductivity.ps1` | Primary org-wide JSON dump that collects repo activity plus per-user premium requests in one run |
 | `Get-OrgUserProductivityDump.ps1` | Legacy user-by-user org dump kept for comparison and fallback |
-| `Get-OrgUserProductivityFast.ps1` | Compatibility wrapper for the faster no-premium org collection path |
 | `Add-OrgUserPremiumRequests.ps1` | Legacy enrichment helper for previously generated partial org JSON dumps |
 | `Get-OrgProductivity.ps1` | Organization-wide repository productivity ranking and HTML report |
 
@@ -237,7 +236,7 @@ Scripts for collecting and calculating productivity metrics are stored in the `s
 .\scripts\Get-TodayProductivity.ps1
 
 # User summary
-.\scripts\Get-UserOrgProductivity.ps1 -Username ssadhula-relias -Since '2026-02-01' -Until '2026-02-28' -Enterprise bertelsmann
+.\scripts\Get-OneUserOrgProductivity.ps1 -Username ssadhula-relias -Since '2026-02-01' -Until '2026-02-28' -Enterprise bertelsmann
 
 # User breakdown
 .\scripts\Get-UserProductivityBreakdown.ps1 -Username ssadhula-relias -Since '2026-03-01' -Until '2026-03-11'
@@ -249,10 +248,7 @@ Scripts for collecting and calculating productivity metrics are stored in the `s
 .\scripts\Get-UserProductivityScores.ps1 -Usernames ssadhula-relias,fhemmerrelias -Since '2026-03-01' -Until '2026-03-31'
 
 # Org-wide month-to-date JSON dump with premium requests included
-.\scripts\Get-OrgUserProductivity.ps1
-
-# Faster repo-centric org-wide JSON dump without premium requests
-.\scripts\Get-OrgUserProductivityFast.ps1
+.\scripts\Get-AllOrgUserProductivity.ps1
 
 # Legacy: add per-user premium requests to an existing partial org dump
 .\scripts\Add-OrgUserPremiumRequests.ps1 -InputPath .\org-fast-full.json

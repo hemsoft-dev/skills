@@ -55,6 +55,9 @@ Result: Updated `Add-OrgUserPremiumRequests.ps1` to emit a `Write-Progress` bar 
 2026-03-14 - 12:52 - Unify org-wide productivity collection into one JSON script
 Result: Added `Get-OrgUserProductivity.ps1` as the primary org-wide collector that combines repo activity and per-user premium requests in one run, converted `Get-OrgUserProductivityFast.ps1` into a compatibility wrapper, updated the skill docs, and validated the unified JSON output.
 
+2026-03-14 - 13:00 - Replace ambiguous productivity script names with OneUser and All
+Result: Renamed the supported entrypoints to `Get-OneUserOrgProductivity.ps1` and `Get-AllOrgUserProductivity.ps1`, removed the old ambiguous script names and fast wrapper, updated the productivity skill docs, and validated both renamed scripts.
+
 2026-03-14 - 12:41 - Add clothed EB terminology to Egg Inc reporting
 Result: Updated `egg-inc/scripts/Get-AccountStats.ps1` to print clothed EB explicitly and revised `egg-inc/SKILL.md` to use clothed EB in examples and calculation guidance.
 
