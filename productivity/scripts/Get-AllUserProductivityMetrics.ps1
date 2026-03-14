@@ -60,6 +60,8 @@ if ([string]::IsNullOrWhiteSpace($OutputPath)) {
 
 # ── Shared helpers ───────────────────────────────────────────────────
 
+$script:ApiCallCount = 0
+
 function Invoke-GhApiJson {
     param(
         [Parameter(Mandatory)]
@@ -70,6 +72,7 @@ function Invoke-GhApiJson {
         [switch]$AllowFailure
     )
 
+    $script:ApiCallCount++
     $arguments = @('api')
     if ($null -ne $Headers) {
         foreach ($header in $Headers) {
@@ -196,26 +199,72 @@ function Get-OrganizationMembers {
     return $distinctMembers
 }
 
-function Get-UserIdentity {
+function Get-UserIdentitiesBatch {
     param(
         [Parameter(Mandatory)]
-        [string]$Username
+        [string[]]$Usernames
     )
 
-    $githubUser = Invoke-GhApiJson -Path "/users/$Username" -AllowFailure
-    if ($null -eq $githubUser) {
-        return [PSCustomObject]@{
-            FullName   = $null
-            Email      = $null
-            ProfileUrl = $null
+    $results = @{}
+    $batchSize = 50
+
+    for ($i = 0; $i -lt $Usernames.Count; $i += $batchSize) {
+        $batchEnd = [math]::Min($i + $batchSize - 1, $Usernames.Count - 1)
+        $batch = $Usernames[$i..$batchEnd]
+        $batchNum = [math]::Floor($i / $batchSize) + 1
+        $totalBatches = [math]::Ceiling($Usernames.Count / $batchSize)
+        Write-Information "[GraphQL batch $batchNum/$totalBatches] Fetching $($batch.Count) user identities..." -InformationAction Continue
+
+        $aliases = @()
+        for ($j = 0; $j -lt $batch.Count; $j++) {
+            $login = $batch[$j]
+            $aliases += "u$j`: user(login: `"$login`") { login name email url }"
         }
+
+        $query = '{ ' + ($aliases -join ' ') + ' }'
+        $script:ApiCallCount++
+        $stderrFile = [System.IO.Path]::GetTempFileName()
+        try {
+            $output = & gh api graphql -f "query=$query" 2> $stderrFile
+            $stderrOutput = Get-Content $stderrFile -Raw -ErrorAction SilentlyContinue
+        }
+        finally {
+            if ([System.IO.File]::Exists($stderrFile)) {
+                [System.IO.File]::Delete($stderrFile)
+            }
+        }
+
+        if ($LASTEXITCODE -ne 0) {
+            Write-Information "GraphQL batch failed, falling back to REST for this batch..." -InformationAction Continue
+            foreach ($login in $batch) {
+                $githubUser = Invoke-GhApiJson -Path "/users/$login" -AllowFailure
+                $results[$login] = if ($null -eq $githubUser) {
+                    [PSCustomObject]@{ FullName = $null; Email = $null; ProfileUrl = $null }
+                }
+                else {
+                    [PSCustomObject]@{ FullName = $githubUser.name; Email = $githubUser.email; ProfileUrl = $githubUser.html_url }
+                }
+            }
+            continue
+        }
+
+        $parsed = $output | ConvertFrom-Json
+        $data = $parsed.data
+        for ($j = 0; $j -lt $batch.Count; $j++) {
+            $login = $batch[$j]
+            $user = $data."u$j"
+            $results[$login] = if ($null -eq $user) {
+                [PSCustomObject]@{ FullName = $null; Email = $null; ProfileUrl = $null }
+            }
+            else {
+                [PSCustomObject]@{ FullName = $user.name; Email = $user.email; ProfileUrl = $user.url }
+            }
+        }
+
+        Start-Sleep -Seconds 2
     }
 
-    return [PSCustomObject]@{
-        FullName   = $githubUser.name
-        Email      = $githubUser.email
-        ProfileUrl = $githubUser.html_url
-    }
+    return $results
 }
 
 function Get-RepositoryList {
@@ -307,20 +356,18 @@ function Add-CommitMetricsForRepository {
     } while ($batch.Count -eq 100)
 }
 
-function Add-PullRequestMetricsForRepository {
+function Get-AllPullRequestsForRepository {
     param(
         [Parameter(Mandatory)]
-        [string]$RepositoryName,
-
-        [Parameter(Mandatory)]
-        [hashtable]$UserMap
+        [string]$RepositoryName
     )
 
+    $allPulls = [System.Collections.Generic.List[object]]::new()
     $page = 1
     $shouldContinue = $true
 
     while ($shouldContinue) {
-        $path = "/repos/$Organization/$RepositoryName/pulls?state=all&sort=created&direction=desc&per_page=100&page=$page"
+        $path = "/repos/$Organization/$RepositoryName/pulls?state=all&sort=updated&direction=desc&per_page=100&page=$page"
         $response = Invoke-GhApiJson -Path $path -AllowFailure
         if ($null -eq $response) {
             break
@@ -332,33 +379,12 @@ function Add-PullRequestMetricsForRepository {
         }
 
         foreach ($pull in $batch) {
-            $createdAt = ([datetimeoffset]::Parse($pull.created_at)).UtcDateTime
-            if ($createdAt -lt $SinceUtc) {
+            $updatedAt = ([datetimeoffset]::Parse($pull.updated_at)).UtcDateTime
+            if ($updatedAt -lt $SinceUtc) {
                 $shouldContinue = $false
                 continue
             }
-            if (-not (Test-IsWithinRange -Value $createdAt -Start $SinceUtc -End $UntilUtc)) {
-                continue
-            }
-            if ($null -eq $pull.user -or [string]::IsNullOrWhiteSpace($pull.user.login)) {
-                continue
-            }
-
-            $username = $pull.user.login
-            if (-not $UserMap.ContainsKey($username)) {
-                continue
-            }
-
-            $record = $UserMap[$username]
-            if (-not [string]::IsNullOrWhiteSpace($pull.merged_at)) {
-                $record.MergedPRs++
-            }
-            elseif ($pull.state -eq 'closed') {
-                $record.ClosedPRs++
-            }
-            else {
-                $record.OpenPRs++
-            }
+            $allPulls.Add($pull)
         }
 
         if (-not $shouldContinue -or $batch.Count -lt 100) {
@@ -366,6 +392,45 @@ function Add-PullRequestMetricsForRepository {
         }
 
         $page++
+    }
+
+    return $allPulls
+}
+
+function Add-PullRequestMetricsForRepository {
+    param(
+        [Parameter(Mandatory)]
+        [hashtable]$UserMap,
+
+        [Parameter(Mandatory)]
+        [AllowEmptyCollection()]
+        [System.Collections.Generic.List[object]]$PullRequests
+    )
+
+    foreach ($pull in $PullRequests) {
+        $createdAt = ([datetimeoffset]::Parse($pull.created_at)).UtcDateTime
+        if (-not (Test-IsWithinRange -Value $createdAt -Start $SinceUtc -End $UntilUtc)) {
+            continue
+        }
+        if ($null -eq $pull.user -or [string]::IsNullOrWhiteSpace($pull.user.login)) {
+            continue
+        }
+
+        $username = $pull.user.login
+        if (-not $UserMap.ContainsKey($username)) {
+            continue
+        }
+
+        $record = $UserMap[$username]
+        if (-not [string]::IsNullOrWhiteSpace($pull.merged_at)) {
+            $record.MergedPRs++
+        }
+        elseif ($pull.state -eq 'closed') {
+            $record.ClosedPRs++
+        }
+        else {
+            $record.OpenPRs++
+        }
     }
 }
 
@@ -489,93 +554,71 @@ function Add-ReviewMetricsForRepository {
         [Parameter(Mandatory)]
         [hashtable]$UserMap,
 
+        [Parameter(Mandatory)]
+        [AllowEmptyCollection()]
+        [System.Collections.Generic.List[object]]$PullRequests,
+
         [AllowEmptyCollection()]
         [System.Collections.Generic.List[object]]$Failures
     )
 
-    $page = 1
-    $shouldContinue = $true
-
-    while ($shouldContinue) {
-        $path = "/repos/$Organization/$RepositoryName/pulls?state=all&sort=updated&direction=desc&per_page=100&page=$page"
-        $response = Invoke-GhApiJson -Path $path -AllowFailure
-        if ($null -eq $response) {
-            break
+    foreach ($pull in $PullRequests) {
+        $updatedAt = ([datetimeoffset]::Parse($pull.updated_at)).UtcDateTime
+        if (-not (Test-IsWithinRange -Value $updatedAt -Start $SinceUtc -End $UntilUtc)) {
+            continue
         }
 
-        $batch = @($response)
-        if ($batch.Count -eq 0) {
-            break
-        }
-
-        foreach ($pull in $batch) {
-            $updatedAt = ([datetimeoffset]::Parse($pull.updated_at)).UtcDateTime
-            if ($updatedAt -lt $SinceUtc) {
-                $shouldContinue = $false
-                continue
-            }
-            if (-not (Test-IsWithinRange -Value $updatedAt -Start $SinceUtc -End $UntilUtc)) {
-                continue
-            }
-
-            $reviewPage = 1
-            $reviewBatch = @()
-            do {
-                try {
-                    $reviewPath = "/repos/$Organization/$RepositoryName/pulls/$($pull.number)/reviews?per_page=100&page=$reviewPage"
-                    $reviewResponse = Invoke-GhApiJson -Path $reviewPath -AllowFailure
-                    if ($null -eq $reviewResponse) {
-                        break
-                    }
-
-                    $reviewBatch = @($reviewResponse)
-                    foreach ($review in $reviewBatch) {
-                        if ($null -eq $review.user -or [string]::IsNullOrWhiteSpace($review.user.login)) {
-                            continue
-                        }
-                        if ([string]::IsNullOrWhiteSpace($review.submitted_at)) {
-                            continue
-                        }
-
-                        $submittedAt = ([datetimeoffset]::Parse($review.submitted_at)).UtcDateTime
-                        if (-not (Test-IsWithinRange -Value $submittedAt -Start $SinceUtc -End $UntilUtc)) {
-                            continue
-                        }
-
-                        $username = $review.user.login
-                        if (-not $UserMap.ContainsKey($username)) {
-                            continue
-                        }
-
-                        switch ($review.state) {
-                            'APPROVED' {
-                                $UserMap[$username].ApprovedReviews++
-                            }
-                            'COMMENTED' {
-                                $UserMap[$username].CommentReviews++
-                            }
-                        }
-                    }
-                }
-                catch {
-                    $Failures.Add([PSCustomObject]@{
-                        Repository = $RepositoryName
-                        Stage      = 'reviews'
-                        Username   = $null
-                        Error      = $_.Exception.Message
-                    })
+        $reviewPage = 1
+        $reviewBatch = @()
+        do {
+            try {
+                $reviewPath = "/repos/$Organization/$RepositoryName/pulls/$($pull.number)/reviews?per_page=100&page=$reviewPage"
+                $reviewResponse = Invoke-GhApiJson -Path $reviewPath -AllowFailure
+                if ($null -eq $reviewResponse) {
                     break
                 }
 
-                $reviewPage++
-            } while ($reviewBatch.Count -eq 100)
-        }
+                $reviewBatch = @($reviewResponse)
+                foreach ($review in $reviewBatch) {
+                    if ($null -eq $review.user -or [string]::IsNullOrWhiteSpace($review.user.login)) {
+                        continue
+                    }
+                    if ([string]::IsNullOrWhiteSpace($review.submitted_at)) {
+                        continue
+                    }
 
-        if (-not $shouldContinue -or $batch.Count -lt 100) {
-            break
-        }
+                    $submittedAt = ([datetimeoffset]::Parse($review.submitted_at)).UtcDateTime
+                    if (-not (Test-IsWithinRange -Value $submittedAt -Start $SinceUtc -End $UntilUtc)) {
+                        continue
+                    }
 
-        $page++
+                    $username = $review.user.login
+                    if (-not $UserMap.ContainsKey($username)) {
+                        continue
+                    }
+
+                    switch ($review.state) {
+                        'APPROVED' {
+                            $UserMap[$username].ApprovedReviews++
+                        }
+                        'COMMENTED' {
+                            $UserMap[$username].CommentReviews++
+                        }
+                    }
+                }
+            }
+            catch {
+                $Failures.Add([PSCustomObject]@{
+                    Repository = $RepositoryName
+                    Stage      = 'reviews'
+                    Username   = $null
+                    Error      = $_.Exception.Message
+                })
+                break
+            }
+
+            $reviewPage++
+        } while ($reviewBatch.Count -eq 100)
     }
 }
 
@@ -590,19 +633,18 @@ catch {
 
 Write-Information "Discovering members for $Organization..." -InformationAction Continue
 $members = @(Get-OrganizationMembers)
-Write-Information "Found $($members.Count) members. Loading user identities..." -InformationAction Continue
+Write-Information "Found $($members.Count) members. Loading user identities via GraphQL batch..." -InformationAction Continue
+$logins = @($members | ForEach-Object { $_.login })
+$identities = Get-UserIdentitiesBatch -Usernames $logins
 $userMap = @{}
-$memberCount = $members.Count
-$memberIndex = 0
 foreach ($member in $members) {
-    $memberIndex++
-    $memberPercent = [int][math]::Floor(($memberIndex / [math]::Max($memberCount, 1)) * 100)
-    Write-Progress -Activity 'Loading user identities' -Status "[$memberIndex/$memberCount] $($member.login)" -PercentComplete $memberPercent -CurrentOperation 'Fetching GitHub profile details'
-    Write-Information "[User $memberIndex/$memberCount] $($member.login)" -InformationAction Continue
-    $memberIdentity = Get-UserIdentity -Username $member.login
-    $userMap[$member.login] = New-UserMetricRecord -Username $member.login -FullName $memberIdentity.FullName -Email $memberIdentity.Email -ProfileUrl $memberIdentity.ProfileUrl
+    $identity = $identities[$member.login]
+    if ($null -eq $identity) {
+        $identity = [PSCustomObject]@{ FullName = $null; Email = $null; ProfileUrl = $null }
+    }
+    $userMap[$member.login] = New-UserMetricRecord -Username $member.login -FullName $identity.FullName -Email $identity.Email -ProfileUrl $identity.ProfileUrl
 }
-Write-Progress -Activity 'Loading user identities' -Completed
+Write-Information "Loaded identities for $($userMap.Count) users." -InformationAction Continue
 
 Write-Information 'Loading repository list...' -InformationAction Continue
 $repositories = @(Get-RepositoryList)
@@ -616,13 +658,21 @@ foreach ($repository in $repositories) {
     $currentIndex++
     $repoPercent = [int][math]::Floor(($currentIndex / [math]::Max($totalRepositories, 1)) * 100)
     Write-Progress -Activity 'Collecting repository activity' -Status "[$currentIndex/$totalRepositories] $($repository.name)" -PercentComplete $repoPercent -CurrentOperation 'Aggregating commits, PRs, issues, reviews, and workflow runs'
-    Write-Information "[$currentIndex/$($repositories.Count)] $($repository.name)" -InformationAction Continue
+    Write-Information "[$currentIndex/$($repositories.Count)] $($repository.name) (API calls so far: $($script:ApiCallCount))" -InformationAction Continue
 
     Add-CommitMetricsForRepository -RepositoryName $repository.name -UserMap $userMap -Failures $failures
-    Add-PullRequestMetricsForRepository -RepositoryName $repository.name -UserMap $userMap
+    $repoPulls = Get-AllPullRequestsForRepository -RepositoryName $repository.name
+    if ($null -eq $repoPulls) {
+        $repoPulls = [System.Collections.Generic.List[object]]::new()
+    }
+    Add-PullRequestMetricsForRepository -UserMap $userMap -PullRequests $repoPulls
     Add-IssueMetricsForRepository -RepositoryName $repository.name -UserMap $userMap
     Add-WorkflowRunMetricsForRepository -RepositoryName $repository.name -UserMap $userMap
-    Add-ReviewMetricsForRepository -RepositoryName $repository.name -UserMap $userMap -Failures $failures
+    Add-ReviewMetricsForRepository -RepositoryName $repository.name -UserMap $userMap -PullRequests $repoPulls -Failures $failures
+
+    if ($currentIndex -lt $totalRepositories) {
+        Start-Sleep -Seconds 5
+    }
 }
 
 Write-Progress -Activity 'Collecting repository activity' -Completed
@@ -639,6 +689,7 @@ $payload = [PSCustomObject]@{
     RepositoryCount         = $repositories.Count
     Users                   = $orderedUsers
     Failures                = @($failures)
+    TotalApiCalls           = $script:ApiCallCount
 }
 
 $payload | ConvertTo-Json -Depth 8 | Set-Content -Path $OutputPath
