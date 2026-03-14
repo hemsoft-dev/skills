@@ -43,6 +43,9 @@ Result: Updated `Get-UserProductivityBreakdown.ps1` so `-Until` is optional, def
 2026-03-14 - 05:59 - Add org-wide month-to-date productivity JSON dump
 Result: Created `Get-OrgUserProductivityDump.ps1` to enumerate org members, collect full breakdown metrics month-to-date into one JSON file, and enrich each record with username, full name, profile URL, and public email when GitHub exposes it.
 
+2026-03-14 - 06:15 - Build repo-centric fast org productivity collector
+Result: Added `Get-OrgUserProductivityFast.ps1`, a repo-centric org-wide collector that aggregates commits, PRs, issues, reviews, and workflow runs in one pass across repositories, avoids the user-by-user search bottleneck, and treats per-user premium requests as an optional slower step.
+
 2026-03-12 - 21:15 - Fix AI news markdown link hover issue in today's diary entry
 Result: Simplified the two Simon Willison AI-news URLs in `diary/entries/2026-03-12.md` by removing fragment anchors so the markdown editor can treat them as normal links more reliably inside the table.
 
