@@ -8,7 +8,7 @@
     requests, issues, review activity, and workflow runs by user.
 
     Does NOT collect premium requests — that is handled separately by
-    Get-AllUserPremiumRequestConsumption.ps1 (Phase 2).
+    2-Get-AllUserPremiumRequestConsumption.ps1 (Phase 2).
 
     Output: relias-engineering-user-productivity.json
 .PARAMETER Since
@@ -24,9 +24,9 @@
 .PARAMETER RepoLimit
     Optional maximum number of repositories to process. Useful for validation runs.
 .EXAMPLE
-    .\Get-AllUserProductivityMetrics.ps1
+    .\1-Get-AllUserProductivityMetrics.ps1
 .EXAMPLE
-    .\Get-AllUserProductivityMetrics.ps1 -UserLimit 10 -RepoLimit 5
+    .\1-Get-AllUserProductivityMetrics.ps1 -UserLimit 10 -RepoLimit 5
 #>
 
 [CmdletBinding()]

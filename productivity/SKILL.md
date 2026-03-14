@@ -58,9 +58,9 @@ Run these scripts in order. Each phase is independent and workflow-friendly.
 
 | Phase | Script | Output | API Calls |
 |-------|--------|--------|-----------|
-| 1 | `Get-AllUserProductivityMetrics.ps1` | `relias-engineering-user-productivity.json` | ~2,000–3,000 (repos × metrics) |
-| 2 | `Get-AllUserPremiumRequestConsumption.ps1` | Enriches the JSON with premium requests | ~5,700 (users × days), cached |
-| 3 | `Build-AllUserProductivityReport.ps1` | `relias-engineering-user-productivity.html` | 0 (offline) |
+| 1 | `1-Get-AllUserProductivityMetrics.ps1` | `relias-engineering-user-productivity.json` | ~2,000–3,000 (repos × metrics) |
+| 2 | `2-Get-AllUserPremiumRequestConsumption.ps1` | Enriches the JSON with premium requests | ~5,700 (users × days), cached |
+| 3 | `3-Build-AllUserProductivityReport.ps1` | `relias-engineering-user-productivity.html` | 0 (offline) |
 
 **Phase 2 caching**: Premium requests are cached per-user per-day in `relias-engineering-premium-requests-cache.json`. Subsequent runs skip already-collected days, making reruns near-instant.
 

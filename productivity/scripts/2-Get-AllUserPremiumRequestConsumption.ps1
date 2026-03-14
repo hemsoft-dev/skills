@@ -4,7 +4,7 @@
     Phase 2: Enriches the user productivity JSON with per-user premium request consumption.
 .DESCRIPTION
     Reads relias-engineering-user-productivity.json produced by Phase 1
-    (Get-AllUserProductivityMetrics.ps1) and adds per-user premium request
+    (1-Get-AllUserProductivityMetrics.ps1) and adds per-user premium request
     totals from the GitHub enterprise billing API.
 
     Supports incremental enrichment: days that were already collected in a
@@ -20,11 +20,11 @@
 .PARAMETER SkipCache
     Ignore any existing cache and re-collect all days from scratch.
 .EXAMPLE
-    .\Get-AllUserPremiumRequestConsumption.ps1
+    .\2-Get-AllUserPremiumRequestConsumption.ps1
 .EXAMPLE
-    .\Get-AllUserPremiumRequestConsumption.ps1 -InputPath .\relias-engineering-user-productivity.json
+    .\2-Get-AllUserPremiumRequestConsumption.ps1 -InputPath .\relias-engineering-user-productivity.json
 .EXAMPLE
-    .\Get-AllUserPremiumRequestConsumption.ps1 -SkipCache
+    .\2-Get-AllUserPremiumRequestConsumption.ps1 -SkipCache
 #>
 
 [CmdletBinding()]
@@ -47,7 +47,7 @@ if ([string]::IsNullOrWhiteSpace($InputPath)) {
 }
 
 if (-not (Test-Path $InputPath)) {
-    throw "Input file not found: $InputPath. Run Get-AllUserProductivityMetrics.ps1 (Phase 1) first."
+    throw "Input file not found: $InputPath. Run 1-Get-AllUserProductivityMetrics.ps1 (Phase 1) first."
 }
 
 if ([string]::IsNullOrWhiteSpace($CachePath)) {
