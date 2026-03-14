@@ -62,7 +62,7 @@ Run these scripts in order. Each phase is independent and workflow-friendly.
 | 2 | `Get-AllUserPremiumRequestConsumption.ps1` | Enriches the JSON with premium requests | ~5,700 (users × days), cached |
 | 3 | `Build-AllUserProductivityReport.ps1` | `relias-engineering-user-productivity.html` | 0 (offline) |
 
-**Phase 2 caching**: Premium requests are cached per-user per-day in `relias-engineering-premium-cache.json`. Subsequent runs skip already-collected days, making reruns near-instant.
+**Phase 2 caching**: Premium requests are cached per-user per-day in `relias-engineering-premium-requests-cache.json`. Subsequent runs skip already-collected days, making reruns near-instant.
 
 ## ⚠️ CRITICAL: Local Clone Policy (READ-ONLY)
 

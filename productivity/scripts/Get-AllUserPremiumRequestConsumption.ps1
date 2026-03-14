@@ -16,7 +16,7 @@
 .PARAMETER CachePath
     Path to the premium request cache file. Stores per-user, per-day results
     so subsequent runs skip already-collected days. Defaults to
-    relias-engineering-premium-cache.json in the same directory as InputPath.
+    relias-engineering-premium-requests-cache.json in the same directory as InputPath.
 .PARAMETER SkipCache
     Ignore any existing cache and re-collect all days from scratch.
 .EXAMPLE
@@ -33,7 +33,9 @@ param(
 
     [string]$CachePath,
 
-    [switch]$SkipCache
+    [switch]$SkipCache,
+
+    [int]$UserLimit = 0
 )
 
 $ErrorActionPreference = 'Stop'
@@ -49,7 +51,7 @@ if (-not (Test-Path $InputPath)) {
 }
 
 if ([string]::IsNullOrWhiteSpace($CachePath)) {
-    $CachePath = Join-Path (Split-Path $InputPath) 'relias-engineering-premium-cache.json'
+    $CachePath = Join-Path (Split-Path $InputPath) 'relias-engineering-premium-requests-cache.json'
 }
 
 # ── Shared helpers ───────────────────────────────────────────────────
@@ -207,6 +209,9 @@ $remainingCalls = $rateState.Remaining
 $resetEpoch = $rateState.ResetEpoch
 
 $users = @($data.Users)
+if ($UserLimit -gt 0 -and $UserLimit -lt $users.Count) {
+    $users = $users[0..($UserLimit - 1)]
+}
 $totalUsers = $users.Count
 $totalCacheHits = 0
 $totalApiCalls = 0
