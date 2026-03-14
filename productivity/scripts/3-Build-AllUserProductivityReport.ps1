@@ -82,6 +82,86 @@ if ($hasPremium) {
     } | Measure-Object -Sum).Sum
 }
 
+# ── Compute universal productivity scores ────────────────────────────
+
+$metricWeights = [ordered]@{
+    PremiumRequests   = 0.10
+    Commits           = 0.10
+    LinesAdded        = 0.08
+    LinesDeleted      = 0.08
+    NetLOC            = 0.08
+    TotalLinesChanged = 0.08
+    OpenPRs           = 0.06
+    MergedPRs         = 0.08
+    ClosedPRs         = 0.06
+    ApprovedReviews   = 0.07
+    CommentReviews    = 0.05
+    OpenIssues        = 0.05
+    ClosedIssues      = 0.06
+    WorkflowRuns      = 0.05
+}
+
+if (-not $hasPremium) {
+    # Redistribute premium weight across remaining metrics
+    $premiumWeight = $metricWeights['PremiumRequests']
+    $metricWeights.Remove('PremiumRequests')
+    $remainingCount = $metricWeights.Count
+    $extraEach = $premiumWeight / $remainingCount
+    $redistributed = [ordered]@{}
+    foreach ($key in $metricWeights.Keys) {
+        $redistributed[$key] = [math]::Round($metricWeights[$key] + $extraEach, 4)
+    }
+    $metricWeights = $redistributed
+}
+
+function Get-TransformedValue ([double]$Value) {
+    if ($Value -lt 0) { return -[math]::Log(1 + [math]::Abs($Value)) }
+    return [math]::Log(1 + $Value)
+}
+
+function Get-PercentileMap ([object[]]$Users, [string]$Metric) {
+    $entries = @(
+        foreach ($u in $Users) {
+            $raw = if ($null -ne $u.$Metric) { [double]$u.$Metric } else { 0.0 }
+            [PSCustomObject]@{ Username = $u.Username; Transformed = (Get-TransformedValue $raw) }
+        }
+    )
+    $map = @{}
+    if ($entries.Count -eq 1) { $map[$entries[0].Username] = 100.0; return $map }
+    $distinct = @($entries.Transformed | Sort-Object -Unique)
+    if ($distinct.Count -eq 1) {
+        foreach ($e in $entries) { $map[$e.Username] = 50.0 }
+        return $map
+    }
+    $sorted = @($entries | Sort-Object -Property Transformed, Username)
+    $pos = 0
+    while ($pos -lt $sorted.Count) {
+        $start = $pos
+        $val = $sorted[$pos].Transformed
+        while (($pos + 1) -lt $sorted.Count -and $sorted[$pos + 1].Transformed -eq $val) { $pos++ }
+        $avg = ($start + $pos) / 2.0
+        $score = [math]::Round(($avg / ($sorted.Count - 1)) * 100, 2)
+        for ($i = $start; $i -le $pos; $i++) { $map[$sorted[$i].Username] = $score }
+        $pos++
+    }
+    return $map
+}
+
+$percentileMaps = @{}
+foreach ($metric in $metricWeights.Keys) {
+    $percentileMaps[$metric] = Get-PercentileMap -Users $users -Metric $metric
+}
+
+$scoreMap = @{}
+foreach ($u in $users) {
+    $total = 0.0
+    foreach ($metric in $metricWeights.Keys) {
+        $pct = [double]$percentileMaps[$metric][$u.Username]
+        $total += $pct * $metricWeights[$metric]
+    }
+    $scoreMap[$u.Username] = [math]::Round($total, 2)
+}
+
 # ── Build users JSON for client-side sorting ─────────────────────────
 
 $usersJsonEntries = @()
@@ -89,12 +169,14 @@ foreach ($user in $users) {
     $fullName = if ($user.FullName) { $user.FullName -replace '"', '\"' -replace "`n", ' ' } else { '' }
     $profileUrl = if ($user.ProfileUrl) { $user.ProfileUrl } else { "https://github.com/$($user.Username)" }
     $premium = if ($null -ne $user.PremiumRequests) { $user.PremiumRequests } else { 'null' }
+    $uScore = $scoreMap[$user.Username]
 
     $usersJsonEntries += @"
     {
       "username": "$($user.Username)",
       "fullName": "$fullName",
       "profileUrl": "$profileUrl",
+      "score": $uScore,
       "premiumRequests": $premium,
       "commits": $($user.Commits),
       "linesAdded": $($user.LinesAdded),
@@ -381,6 +463,15 @@ $html = @"
   .rank-cell.silver { color: #94a3b8; font-weight: 700; }
   .rank-cell.bronze { color: #d97706; font-weight: 700; }
 
+  .score-cell {
+    font-weight: 700;
+    font-size: 0.85rem;
+  }
+
+  .score-high { color: var(--accent-green); }
+  .score-mid { color: var(--accent-cyan); }
+  .score-low { color: var(--text-muted); }
+
   /* ── Footer ───────────────────────────────────────────────────── */
   .footer {
     text-align: center;
@@ -464,8 +555,9 @@ $premiumSummaryCard
         <tr>
           <th class="rank-cell">#</th>
           <th data-sort="username">User</th>
+          <th data-sort="score" class="sorted-desc">Score</th>
           $premiumColHeader
-          <th data-sort="commits" class="sorted-desc">Commits</th>
+          <th data-sort="commits">Commits</th>
           <th data-sort="linesAdded">Lines+</th>
           <th data-sort="linesDeleted">Lines-</th>
           <th data-sort="netLOC">Net LOC</th>
@@ -495,7 +587,7 @@ $usersJson
 
 const hasPremium = $($hasPremium.ToString().ToLower());
 
-let sortKey = 'commits';
+let sortKey = 'score';
 let sortDir = 'desc';
 let activeOnly = true;
 let searchTerm = '';
@@ -543,12 +635,15 @@ function renderTable() {
       ? '<td>' + formatNum(u.premiumRequests) + '</td>'
       : '';
 
+    const scoreClass = u.score >= 70 ? 'score-high' : u.score >= 35 ? 'score-mid' : 'score-low';
+
     return '<tr>' +
       '<td class="rank-cell ' + rankClass + '">' + rank + '</td>' +
       '<td class="username-cell"><a href="' + u.profileUrl + '" target="_blank">' +
         u.username + '</a>' +
         (u.fullName ? '<span class="full-name">' + u.fullName + '</span>' : '') +
       '</td>' +
+      '<td class="score-cell ' + scoreClass + '">' + u.score.toFixed(1) + '</td>' +
       premiumCell +
       '<td>' + formatNum(u.commits) + '</td>' +
       '<td class="positive">' + formatNum(u.linesAdded) + '</td>' +
