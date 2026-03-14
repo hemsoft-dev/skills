@@ -13,6 +13,9 @@ Result: Ran the month-to-date `Get-UserProductivityBreakdown.ps1` report for `np
 2026-03-14 - 04:08 - Correct productivity report to use Relias account npeterson-relias
 Result: Re-ran the month-to-date `Get-UserProductivityBreakdown.ps1` report for `npeterson-relias` in `relias-engineering` and confirmed the public profile name as Nick Peterson.
 
+2026-03-14 - 04:29 - Expand productivity breakdown with commit LOC and PR review metrics
+Result: Updated `Get-UserProductivityBreakdown.ps1` to include tracked-file line totals plus submitted `APPROVED` and `COMMENTED` PR review counts, and verified the output for `npeterson-relias`.
+
 2026-03-12 - 21:15 - Fix AI news markdown link hover issue in today's diary entry
 Result: Simplified the two Simon Willison AI-news URLs in `diary/entries/2026-03-12.md` by removing fragment anchors so the markdown editor can treat them as normal links more reliably inside the table.
 

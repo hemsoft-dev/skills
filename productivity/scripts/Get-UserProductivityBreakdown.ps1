@@ -12,6 +12,8 @@
     based on issues created during the requested period and are bucketed into
     open and closed states. Workflow runs count runs triggered by the user
     during the requested period across all non-archived, non-forked repositories.
+    Commit line totals are calculated from code files only, and PR review
+    activity counts submitted APPROVED and COMMENTED reviews during the period.
 .PARAMETER Username
     GitHub username to analyze.
 .PARAMETER Since
@@ -39,9 +41,77 @@ $ErrorActionPreference = 'Stop'
 
 $Organization = 'relias-engineering'
 $Enterprise = 'bertelsmann'
+$CodeExtensions = @(
+    '.js', '.ts', '.tsx', '.jsx',
+    '.py', '.cs', '.fs', '.fsx',
+    '.go', '.rs', '.java', '.kt',
+    '.c', '.cpp', '.h', '.hpp',
+    '.ps1', '.psm1', '.psd1',
+    '.rb', '.php', '.swift',
+    '.scala', '.clj', '.ex', '.exs',
+    '.vue', '.svelte', '.astro',
+    '.yaml', '.yml', '.json', '.xml', '.sql'
+)
+$ExcludePatterns = @(
+    'node_modules',
+    'bin',
+    'obj',
+    'dist',
+    'build',
+    '.git',
+    'package-lock.json',
+    'yarn.lock',
+    'pnpm-lock.yaml',
+    '*.min.js',
+    '*.min.css',
+    '*.generated.*',
+    '*.designer.*'
+)
+$SinceUtc = $Since.Date.ToUniversalTime()
+$UntilUtc = $Until.Date.AddDays(1).AddTicks(-1).ToUniversalTime()
 
 if ($Since.Date -gt $Until.Date) {
     throw 'Since must be earlier than or equal to Until.'
+}
+
+function Test-IsCodeFile {
+    param(
+        [Parameter(Mandatory)]
+        [string]$Path
+    )
+
+    $extension = [System.IO.Path]::GetExtension($Path).ToLowerInvariant()
+    return $CodeExtensions -contains $extension
+}
+
+function Test-ShouldExclude {
+    param(
+        [Parameter(Mandatory)]
+        [string]$Path
+    )
+
+    foreach ($pattern in $ExcludePatterns) {
+        if ($Path -like "*$pattern*") {
+            return $true
+        }
+    }
+
+    return $false
+}
+
+function Test-IsWithinRange {
+    param(
+        [Parameter(Mandatory)]
+        [datetime]$Value,
+
+        [Parameter(Mandatory)]
+        [datetime]$Start,
+
+        [Parameter(Mandatory)]
+        [datetime]$End
+    )
+
+    return $Value -ge $Start -and $Value -le $End
 }
 
 function Invoke-GhApiJson {
@@ -109,6 +179,28 @@ function Get-DateQualifier {
     )
 
     return "${FieldName}:$($Start.ToString('yyyy-MM-dd'))..$($End.ToString('yyyy-MM-dd'))"
+}
+
+function Get-SearchResults {
+    param(
+        [Parameter(Mandatory)]
+        [string[]]$QueryParts
+    )
+
+    $page = 1
+    $items = [System.Collections.Generic.List[object]]::new()
+
+    do {
+        $encodedQuery = [System.Uri]::EscapeDataString(($QueryParts -join ' '))
+        $response = Invoke-GhApiJson -Path "/search/issues?q=$encodedQuery&per_page=100&page=$page"
+        $batch = @($response.items)
+        foreach ($item in $batch) {
+            $items.Add($item)
+        }
+        $page++
+    } while ($batch.Count -eq 100)
+
+    return @($items)
 }
 
 function Get-PullRequestCount {
@@ -184,6 +276,74 @@ function Get-CommitCountForRepository {
     return $commitCount
 }
 
+function Get-CommitStatsForRepository {
+    param(
+        [Parameter(Mandatory)]
+        [string]$RepositoryName
+    )
+
+    $queryParts = @(
+        "author=$([System.Uri]::EscapeDataString($Username))",
+        "since=$([System.Uri]::EscapeDataString($SinceUtc.ToString('o')))",
+        "until=$([System.Uri]::EscapeDataString($UntilUtc.ToString('o')))",
+        'per_page=100'
+    )
+
+    $stats = [PSCustomObject]@{
+        CommitCount       = 0
+        LinesAdded        = 0
+        LinesDeleted      = 0
+        NetLinesOfCode    = 0
+        TotalLinesChanged = 0
+    }
+
+    $page = 1
+
+    do {
+        $path = "/repos/$Organization/$RepositoryName/commits?{0}&page={1}" -f ($queryParts -join '&'), $page
+        $response = Invoke-GhApiJson -Path $path -AllowFailure
+        if ($null -eq $response) {
+            break
+        }
+
+        $batch = @($response)
+        foreach ($commit in $batch) {
+            $stats.CommitCount++
+
+            $commitSha = $commit.sha
+            $details = Invoke-GhApiJson -Path "/repos/$Organization/$RepositoryName/commits/$commitSha" -AllowFailure
+            if ($null -eq $details) {
+                continue
+            }
+
+            foreach ($file in @($details.files)) {
+                if ($null -eq $file.filename) {
+                    continue
+                }
+
+                if (-not (Test-IsCodeFile -Path $file.filename)) {
+                    continue
+                }
+
+                if (Test-ShouldExclude -Path $file.filename) {
+                    continue
+                }
+
+                $added = [int]$file.additions
+                $deleted = [int]$file.deletions
+                $stats.LinesAdded += $added
+                $stats.LinesDeleted += $deleted
+                $stats.NetLinesOfCode += ($added - $deleted)
+                $stats.TotalLinesChanged += ($added + $deleted)
+            }
+        }
+
+        $page++
+    } while ($batch.Count -eq 100)
+
+    return $stats
+}
+
 function Get-TotalCommitCount {
     $repositories = @(gh repo list $Organization --limit 500 --json name,isArchived,isFork | ConvertFrom-Json |
         Where-Object { -not $_.isArchived -and -not $_.isFork })
@@ -194,6 +354,32 @@ function Get-TotalCommitCount {
     }
 
     return $totalCommits
+}
+
+function Get-TotalCommitStats {
+    param(
+        [Parameter(Mandatory)]
+        [object[]]$Repositories
+    )
+
+    $totals = [PSCustomObject]@{
+        CommitCount       = 0
+        LinesAdded        = 0
+        LinesDeleted      = 0
+        NetLinesOfCode    = 0
+        TotalLinesChanged = 0
+    }
+
+    foreach ($repository in $Repositories) {
+        $repositoryStats = Get-CommitStatsForRepository -RepositoryName $repository.name
+        $totals.CommitCount += $repositoryStats.CommitCount
+        $totals.LinesAdded += $repositoryStats.LinesAdded
+        $totals.LinesDeleted += $repositoryStats.LinesDeleted
+        $totals.NetLinesOfCode += $repositoryStats.NetLinesOfCode
+        $totals.TotalLinesChanged += $repositoryStats.TotalLinesChanged
+    }
+
+    return $totals
 }
 
 function Get-RepositoryList {
@@ -245,6 +431,73 @@ function Get-TotalWorkflowRunCount {
     return $totalWorkflowRuns
 }
 
+function Get-PullRequestReviewActivity {
+    $query = @(
+        "org:$Organization",
+        "reviewed-by:$Username",
+        'is:pr',
+        (Get-DateQualifier -FieldName 'updated' -Start $Since -End $Until)
+    )
+
+    $items = Get-SearchResults -QueryParts $query
+    $activity = [PSCustomObject]@{
+        ApprovedReviews = 0
+        CommentReviews  = 0
+    }
+
+    foreach ($item in $items) {
+        if ([string]::IsNullOrWhiteSpace($item.repository_url)) {
+            continue
+        }
+
+        $repositorySegments = $item.repository_url.TrimEnd('/') -split '/'
+        if ($repositorySegments.Count -lt 2) {
+            continue
+        }
+
+        $repoOwner = $repositorySegments[-2]
+        $repoName = $repositorySegments[-1]
+        $page = 1
+
+        do {
+            $path = "/repos/$repoOwner/$repoName/pulls/$($item.number)/reviews?per_page=100&page=$page"
+            $response = Invoke-GhApiJson -Path $path -AllowFailure
+            if ($null -eq $response) {
+                break
+            }
+
+            $batch = @($response)
+            foreach ($review in $batch) {
+                if ($null -eq $review.user -or $review.user.login -ine $Username) {
+                    continue
+                }
+
+                if ([string]::IsNullOrWhiteSpace($review.submitted_at)) {
+                    continue
+                }
+
+                $submittedAt = ([datetimeoffset]::Parse($review.submitted_at)).UtcDateTime
+                if (-not (Test-IsWithinRange -Value $submittedAt -Start $SinceUtc -End $UntilUtc)) {
+                    continue
+                }
+
+                switch ($review.state) {
+                    'APPROVED' {
+                        $activity.ApprovedReviews++
+                    }
+                    'COMMENTED' {
+                        $activity.CommentReviews++
+                    }
+                }
+            }
+
+            $page++
+        } while ($batch.Count -eq 100)
+    }
+
+    return $activity
+}
+
 function Get-PremiumRequestCount {
     $headers = @('Accept: application/vnd.github+json')
     $total = 0.0
@@ -280,16 +533,24 @@ catch {
 $null = Invoke-GhApiJson -Path "/users/$Username"
 
 $repositories = Get-RepositoryList
+$commitStats = Get-TotalCommitStats -Repositories $repositories
+$reviewActivity = Get-PullRequestReviewActivity
 
 $summary = [PSCustomObject]@{
-    StartDate        = $Since.ToString('yyyy-MM-dd')
-    EndDate          = $Until.ToString('yyyy-MM-dd')
-    Username         = $Username
-    PremiumRequests  = Get-PremiumRequestCount
-    Commits          = Get-TotalCommitCount
-    OpenPRs          = Get-PullRequestCount -Author $Username -Qualifiers @('state:open')
-    MergedPRs        = Get-PullRequestCount -Author $Username -Qualifiers @('is:merged')
+    StartDate         = $Since.ToString('yyyy-MM-dd')
+    EndDate           = $Until.ToString('yyyy-MM-dd')
+    Username          = $Username
+    PremiumRequests   = Get-PremiumRequestCount
+    Commits           = $commitStats.CommitCount
+    LinesAdded        = $commitStats.LinesAdded
+    LinesDeleted      = $commitStats.LinesDeleted
+    NetLinesOfCode    = $commitStats.NetLinesOfCode
+    TotalLinesChanged = $commitStats.TotalLinesChanged
+    OpenPRs           = Get-PullRequestCount -Author $Username -Qualifiers @('state:open')
+    MergedPRs         = Get-PullRequestCount -Author $Username -Qualifiers @('is:merged')
     ClosedUnmergedPRs = Get-PullRequestCount -Author $Username -Qualifiers @('state:closed', '-is:merged')
+    ApprovedReviews  = $reviewActivity.ApprovedReviews
+    CommentReviews   = $reviewActivity.CommentReviews
     OpenIssues       = Get-IssueCount -Author $Username -Qualifiers @('state:open')
     ClosedIssues     = Get-IssueCount -Author $Username -Qualifiers @('state:closed')
     WorkflowRuns     = Get-TotalWorkflowRunCount -Repositories $repositories
@@ -301,9 +562,15 @@ $summaryTable = @(
     [PSCustomObject]@{ Metric = 'Username'; Value = $summary.Username }
     [PSCustomObject]@{ Metric = 'Premium Requests'; Value = $summary.PremiumRequests }
     [PSCustomObject]@{ Metric = 'Commits'; Value = $summary.Commits }
+    [PSCustomObject]@{ Metric = 'Lines Added'; Value = $summary.LinesAdded }
+    [PSCustomObject]@{ Metric = 'Lines Deleted'; Value = $summary.LinesDeleted }
+    [PSCustomObject]@{ Metric = 'Net LOC'; Value = $summary.NetLinesOfCode }
+    [PSCustomObject]@{ Metric = 'Total Changed Lines'; Value = $summary.TotalLinesChanged }
     [PSCustomObject]@{ Metric = 'Open PRs'; Value = $summary.OpenPRs }
     [PSCustomObject]@{ Metric = 'Merged PRs'; Value = $summary.MergedPRs }
     [PSCustomObject]@{ Metric = 'Closed PRs'; Value = $summary.ClosedUnmergedPRs }
+    [PSCustomObject]@{ Metric = 'Approved Reviews'; Value = $summary.ApprovedReviews }
+    [PSCustomObject]@{ Metric = 'Comment Reviews'; Value = $summary.CommentReviews }
     [PSCustomObject]@{ Metric = 'Open Issues'; Value = $summary.OpenIssues }
     [PSCustomObject]@{ Metric = 'Closed Issues'; Value = $summary.ClosedIssues }
     [PSCustomObject]@{ Metric = 'Workflow Runs'; Value = $summary.WorkflowRuns }
