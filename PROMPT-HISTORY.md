@@ -64,6 +64,9 @@ Result: Updated `Get-AllOrgUserProductivity.ps1` to show immediate startup statu
 2026-03-14 - 13:12 - Remove obsolete productivity scripts and JSON artifacts
 Result: Deleted legacy org-wide helper scripts and stale test or intermediate JSON files from `productivity/scripts`, and updated `productivity/SKILL.md` so it documents only the current supported script set.
 
+2026-03-14 - 14:06 - Build 3-phase workflow-friendly productivity pipeline
+Result: Created `Get-AllUserProductivityMetrics.ps1` (Phase 1: repo-centric collection), `Get-AllUserPremiumRequestConsumption.ps1` (Phase 2: premium enrichment with day-level JSON caching), and `Build-AllUserProductivityReport.ps1` (Phase 3: HTML report). Deleted superseded `Get-AllOrgUserProductivity.ps1` and stale `org-fast-full-premium.json`.
+
 2026-03-14 - 12:41 - Add clothed EB terminology to Egg Inc reporting
 Result: Updated `egg-inc/scripts/Get-AccountStats.ps1` to print clothed EB explicitly and revised `egg-inc/SKILL.md` to use clothed EB in examples and calculation guidance.
 
