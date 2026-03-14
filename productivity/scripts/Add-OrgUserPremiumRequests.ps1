@@ -182,10 +182,13 @@ if ($UserLimit -gt 0) {
 $rateState = Get-CoreRateState
 $remainingCalls = $rateState.Remaining
 $resetEpoch = $rateState.ResetEpoch
+$totalUsers = $users.Count
 
 $index = 0
 foreach ($user in $users) {
     $index++
+    $percentComplete = [int][math]::Floor((($index - 1) / [math]::Max($totalUsers, 1)) * 100)
+    Write-Progress -Activity 'Enriching premium requests' -Status "[$index/$totalUsers] $($user.Username) | Core remaining: $remainingCalls" -PercentComplete $percentComplete -CurrentOperation 'Querying daily billing usage'
     Write-Information "[$index/$($users.Count)] $($user.Username)" -InformationAction Continue
 
     $total = 0.0
@@ -216,6 +219,8 @@ foreach ($user in $users) {
     }
 
     $user.PremiumRequests = [math]::Round($total, 2)
+    $completedPercent = [int][math]::Floor(($index / [math]::Max($totalUsers, 1)) * 100)
+    Write-Progress -Activity 'Enriching premium requests' -Status "[$index/$totalUsers] $($user.Username) | Premium: $($user.PremiumRequests) | Core remaining: $remainingCalls" -PercentComplete $completedPercent -CurrentOperation 'Saving enriched user total'
 
     if (($index % 10) -eq 0) {
         Set-ObjectProperty -Object $payload -Name 'PremiumRequestsIncluded' -Value $true
@@ -223,6 +228,8 @@ foreach ($user in $users) {
         $payload | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $OutputPath
     }
 }
+
+Write-Progress -Activity 'Enriching premium requests' -Completed
 
 Set-ObjectProperty -Object $payload -Name 'PremiumRequestsIncluded' -Value $true
 Set-ObjectProperty -Object $payload -Name 'PremiumRequestsEnrichedAt' -Value ((Get-Date).ToString('yyyy-MM-dd HH:mm:ss'))
