@@ -25,6 +25,9 @@ Result: Reviewed GitHub’s official Copilot metrics docs and research, found no
 2026-03-14 - 05:08 - Compare month-to-date productivity for npeterson-relias and fhemmerrelias
 Result: Validated the intended Relias usernames, ran `Get-UserProductivityBreakdown.ps1` for both users for `2026-03-01` through `2026-03-14`, and prepared a side-by-side comparison across every metric the script produces.
 
+2026-03-14 - 05:11 - Design a universal organizational productivity score
+Result: Proposed a balanced, percentile-normalized scoring model that uses premium requests, commits, lines added, and lines deleted without letting one outlier metric dominate the ranking.
+
 2026-03-12 - 21:15 - Fix AI news markdown link hover issue in today's diary entry
 Result: Simplified the two Simon Willison AI-news URLs in `diary/entries/2026-03-12.md` by removing fragment anchors so the markdown editor can treat them as normal links more reliably inside the table.
 
