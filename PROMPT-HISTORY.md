@@ -10,6 +10,9 @@ Result: Created `diary/entries/2026-03-12.md` in the required section order with
 2026-03-14 - 03:35 - Generate personal productivity and Copilot usage report for npeterson
 Result: Ran the month-to-date `Get-UserProductivityBreakdown.ps1` report for `npeterson` in `relias-engineering`, capturing premium requests, commits, PRs, issues, and workflow runs.
 
+2026-03-14 - 04:08 - Correct productivity report to use Relias account npeterson-relias
+Result: Re-ran the month-to-date `Get-UserProductivityBreakdown.ps1` report for `npeterson-relias` in `relias-engineering` and confirmed the public profile name as Nick Peterson.
+
 2026-03-12 - 21:15 - Fix AI news markdown link hover issue in today's diary entry
 Result: Simplified the two Simon Willison AI-news URLs in `diary/entries/2026-03-12.md` by removing fragment anchors so the markdown editor can treat them as normal links more reliably inside the table.
 
