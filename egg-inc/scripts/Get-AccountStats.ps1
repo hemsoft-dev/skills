@@ -40,6 +40,21 @@ function Format-EB {
     return "{0:N3}{1}%" -f $formatted, $suffixes[$index]
 }
 
+function Get-ClothedEB {
+    param(
+        [double]$SoulEggs,
+        [int]$ProphecyEggs,
+        [int]$TruthEggs
+    )
+
+    try {
+        return $SoulEggs * 150.0 * [Math]::Pow(1.1, $ProphecyEggs) * [Math]::Pow(1.035, $TruthEggs)
+    }
+    catch {
+        return 0
+    }
+}
+
 $dataDir = Join-Path $PSScriptRoot "..\data"
 
 $accounts = @(
@@ -58,13 +73,7 @@ foreach ($acc in $accounts) {
     $eovEarned = ($data.virtue.eovEarnedList | Measure-Object -Sum).Sum
     $resets = [int]$data.virtue.resets
     $shifts = [int]$data.virtue.shiftCount
-    
-    # Calculate EB using double precision
-    try {
-        $eb = $se * 150.0 * [Math]::Pow(1.1, $pe) * [Math]::Pow(1.035, $eovEarned)
-    } catch {
-        $eb = 0
-    }
+    $clothedEB = Get-ClothedEB -SoulEggs $se -ProphecyEggs $pe -TruthEggs $eovEarned
     
     Write-Host ""
     Write-Host "$($acc.Name)" -ForegroundColor Cyan
@@ -74,7 +83,7 @@ foreach ($acc in $accounts) {
     Write-Host "Truth Eggs (Earned): $eovEarned"
     Write-Host "Virtue Resets: $resets"
     Write-Host "Shifts Completed: $shifts"
-    if ($eb -gt 0) {
-        Write-Host "Earnings Bonus: $(Format-EB $eb)"
+    if ($clothedEB -gt 0) {
+        Write-Host "Clothed EB: $(Format-EB $clothedEB)"
     }
 }

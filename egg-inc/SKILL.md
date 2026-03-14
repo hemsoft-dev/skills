@@ -1,6 +1,6 @@
 ---
 name: egg-inc
-description: V1.4 - Expert in Egg Inc mobile game mechanics, player tracking, spaceship missions, Truth Eggs/Path of Virtue, and progress calculations for King Friday, King Saturday, King Sunday, and King Monday accounts.
+description: V1.5 - Expert in Egg Inc mobile game mechanics, player tracking, spaceship missions, Truth Eggs/Path of Virtue, clothed EB reporting, and progress calculations for King Friday, King Saturday, King Sunday, and King Monday accounts.
 ---
 
 # Egg Inc Expert
@@ -159,6 +159,8 @@ https://sheets.googleapis.com/v4/spreadsheets/17juaBpcUiw1Rw3sMnVRbRkY_rxW-AdTCD
 ```
 Base EB = SoulEggs × 150 × (1.1 ^ ProphecyEggs) × (1.035 ^ TruthEggs)
 ```
+
+This value should be reported as **clothed EB** in user-facing summaries.
 
 - Base Soul Egg bonus: 150% (with max Soul Food Epic Research)
 - Prophecy Egg multiplier: 1.1x per PE (with max Prophecy Bonus)
@@ -527,20 +529,20 @@ King Friday!
 Truth Eggs: 43 (pending requires in-game check)
 PE: 231
 SE: 123.330s
-EB: 103.440d%
+Clothed EB: 103.440d%
 Title: Vendafarmer
 ```
 
-### Calculate EB (with Truth Eggs)
+### Calculate Clothed EB (with Truth Eggs)
 
 ```csharp
-// Full EB calculation including Truth Eggs
+// Full clothed EB calculation including Truth Eggs
 var baseEB = soulEggs * 150 * Math.Pow(1.1, prophecyEggs);
 var fullEB = baseEB * Math.Pow(1.035, truthEggs);
 ```
 
 ```powershell
-# PowerShell EB calculation
+# PowerShell clothed EB calculation
 $SE = $r.game.soulEggsD
 $PE = $r.game.eggsOfProphecy
 $EoV = ($r.virtue.eovEarnedList | Measure-Object -Sum).Sum

@@ -49,6 +49,9 @@ Result: Added `Get-OrgUserProductivityFast.ps1`, a repo-centric org-wide collect
 2026-03-14 - 12:34 - Add premium-only enrichment pass for org productivity dump
 Result: Added `Add-OrgUserPremiumRequests.ps1`, a rate-aware helper that enriches an existing org-wide productivity JSON file with per-user premium request totals, validated it on a two-user sample, and started the full enrichment pass for the 408-user dump.
 
+2026-03-14 - 12:41 - Add clothed EB terminology to Egg Inc reporting
+Result: Updated `egg-inc/scripts/Get-AccountStats.ps1` to print clothed EB explicitly and revised `egg-inc/SKILL.md` to use clothed EB in examples and calculation guidance.
+
 2026-03-12 - 21:15 - Fix AI news markdown link hover issue in today's diary entry
 Result: Simplified the two Simon Willison AI-news URLs in `diary/entries/2026-03-12.md` by removing fragment anchors so the markdown editor can treat them as normal links more reliably inside the table.
 
