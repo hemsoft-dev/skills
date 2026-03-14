@@ -58,6 +58,9 @@ Result: Added `Get-OrgUserProductivity.ps1` as the primary org-wide collector th
 2026-03-14 - 13:00 - Replace ambiguous productivity script names with OneUser and All
 Result: Renamed the supported entrypoints to `Get-OneUserOrgProductivity.ps1` and `Get-AllOrgUserProductivity.ps1`, removed the old ambiguous script names and fast wrapper, updated the productivity skill docs, and validated both renamed scripts.
 
+2026-03-14 - 13:05 - Add startup progress visibility to all-user productivity collector
+Result: Updated `Get-AllOrgUserProductivity.ps1` to show immediate startup status during member discovery and identity loading before repository processing begins, fixing the apparent no-output stall at launch.
+
 2026-03-14 - 12:41 - Add clothed EB terminology to Egg Inc reporting
 Result: Updated `egg-inc/scripts/Get-AccountStats.ps1` to print clothed EB explicitly and revised `egg-inc/SKILL.md` to use clothed EB in examples and calculation guidance.
 

@@ -175,6 +175,7 @@ function Get-OrganizationMembers {
     $members = [System.Collections.Generic.List[object]]::new()
 
     do {
+        Write-Information "Loading organization members page $page..." -InformationAction Continue
         $response = Invoke-GhApiJson -Path "/orgs/$Organization/members?per_page=100&page=$page"
         $batch = @($response)
         foreach ($member in $batch) {
@@ -686,13 +687,23 @@ catch {
     throw "GitHub CLI is not authenticated. Run 'gh auth login' first."
 }
 
+Write-Information "Discovering members for $Organization..." -InformationAction Continue
 $members = @(Get-OrganizationMembers)
+Write-Information "Found $($members.Count) members. Loading user identities..." -InformationAction Continue
 $userMap = @{}
+$memberCount = $members.Count
+$memberIndex = 0
 foreach ($member in $members) {
+    $memberIndex++
+    $memberPercent = [int][math]::Floor(($memberIndex / [math]::Max($memberCount, 1)) * 100)
+    Write-Progress -Activity 'Loading user identities' -Status "[$memberIndex/$memberCount] $($member.login)" -PercentComplete $memberPercent -CurrentOperation 'Fetching GitHub profile details'
+    Write-Information "[User $memberIndex/$memberCount] $($member.login)" -InformationAction Continue
     $memberIdentity = Get-UserIdentity -Username $member.login
     $userMap[$member.login] = New-UserMetricRecord -Username $member.login -FullName $memberIdentity.FullName -Email $memberIdentity.Email -ProfileUrl $memberIdentity.ProfileUrl
 }
+Write-Progress -Activity 'Loading user identities' -Completed
 
+Write-Information 'Loading repository list...' -InformationAction Continue
 $repositories = @(Get-RepositoryList)
 $failures = [System.Collections.Generic.List[object]]::new()
 
