@@ -1,13 +1,21 @@
 ---
 name: anti-slop
-description: V1.0 - Detects AI-generated slop patterns in text, code, PRs, and commit messages. Provides a slop score and actionable rewrite suggestions. Use when reviewing content for AI-generated low-quality patterns, improving authenticity of writing, or auditing code for excessive AI-style comments.
+description: V1.1 - Commands: identify (default), fix, suggest. Detects and fixes AI-generated slop patterns in text, code, PRs, and commit messages. Use when reviewing content for AI-generated low-quality patterns, improving authenticity of writing, or auditing code for excessive AI-style comments.
 ---
 
 # Anti-Slop
 
 Detect and fix AI-generated slop in any content. Inspired by [peakoss/anti-slop](https://github.com/peakoss/anti-slop) — battle-tested rules derived from 130+ manually reviewed AI slop PRs.
 
-**Default action**: When given text, code, or a file to review, run all applicable checks and produce a Slop Report.
+## Commands
+
+| Command | Description |
+|---|---|
+| `identify` | **(default)** Scan content and produce a Slop Report. Do not modify anything. |
+| `fix` | Apply all suggested fixes directly to the file(s). Produce a summary of changes made. |
+| `suggest` | Produce a Slop Report with before/after rewrite suggestions but do not modify files. |
+
+When invoked without a command, run `identify`.
 
 ## Check Categories
 
