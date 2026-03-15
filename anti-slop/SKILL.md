@@ -43,7 +43,7 @@ Detect formulaic AI writing patterns.
 | **Emoji overuse** | More than 2 emojis in non-casual content |
 | **Excessive bold/emphasis** | More than 20% of text is bold or italic |
 | **Header inflation** | Using H2/H3 for what should be a simple paragraph |
-| **Em-dash overload** | More than 3 em-dashes (—) in a single response |
+| **Em-dash overload** | More than 1 em-dash (—) in a single response |
 
 **Scoring**: 2 points per structural pattern detected.
 
