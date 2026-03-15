@@ -4,6 +4,9 @@ This file tracks meaningful prompts and their outcomes for the Claude Skills rep
 
 ---
 
+2026-03-15 - 14:25 - Run anti-slop fix mode across entire skills repo
+Result: Fixed 33 slop instances across 14 SKILL.md files. Replaced 'comprehensive' (29x), 'leverage' (2x), 'seamless' (1x), 'streamlined' (1x) with direct alternatives. Also fixed harmful MD013 pragma pairs in games/ and apple/ that were re-enabling a globally-disabled rule. Skipped 5 legitimate uses.
+
 2026-03-15 - 00:54 - Create anti-slop skill inspired by peakoss/anti-slop GitHub Action
 Result: Created V1.0 anti-slop skill with 4 check categories (Slop Words & Phrases, Structural Slop, Code Slop, PR & Commit Slop), scoring system, and standardized report format. Adapted 31 PR-focused checks into general-purpose text/code quality detection.
 
