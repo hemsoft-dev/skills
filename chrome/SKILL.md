@@ -1,10 +1,11 @@
 ---
 name: chrome
 description: >-
-  V1.0 - Commands: debug, connect, inspect, lighthouse, trace.
+  V1.1 - Commands: debug, connect, inspect, lighthouse, trace.
   Expert in Chrome DevTools Protocol debugging via MCP server for browser automation,
   performance tracing, network inspection, Lighthouse audits, and DOM interaction.
-  Use when debugging web apps, running browser automation, taking screenshots,
+  Also works with Electron apps (renderer process) via --browserUrl.
+  Use when debugging web apps, Electron apps, running browser automation, taking screenshots,
   inspecting network traffic, or profiling performance in Chrome.
 ---
 
@@ -255,6 +256,56 @@ Chrome 146 introduced important changes to the DevTools Protocol:
 1. Verify `.vscode/mcp.json` contains the chrome-devtools server config
 2. Restart VS Code to pick up MCP config changes
 3. Check that `github.copilot.chat.cli.mcp.enabled` is `true` in VS Code settings
+
+## Electron App Debugging
+
+Chrome DevTools MCP works with Electron apps because Electron embeds Chromium and exposes the same CDP.
+
+### What Works vs What Doesn't
+
+| Surface | Works with Chrome DevTools MCP? | How |
+|---|---|---|
+| Renderer process (UI, DOM, network) | Yes | Launch with `--remote-debugging-port`, connect via `--browserUrl` |
+| Main process (Node.js, IPC) | No | Use VS Code Node debugger with `--inspect=9229` instead |
+
+### Step 1: Launch Electron App with Debugging
+
+```powershell
+# Slack
+& "$env:LOCALAPPDATA\slack\slack.exe" --remote-debugging-port=9222
+
+# VS Code (another instance)
+& "$env:LOCALAPPDATA\Programs\Microsoft VS Code\Code.exe" --remote-debugging-port=9223
+
+# Discord
+& "$env:LOCALAPPDATA\Discord\Update.exe" --processStart Discord.exe --process-start-args "--remote-debugging-port=9224"
+```
+
+**Important**: Quit the app first if already running. The flag must be present at launch time.
+
+### Step 2: Connect Chrome DevTools MCP
+
+```powershell
+# Use --browserUrl (NOT --autoConnect, which reads Chrome's DevToolsActivePort file)
+npx -y chrome-devtools-mcp@latest --browserUrl http://127.0.0.1:9222
+```
+
+### Step 3: Use All 29 MCP Tools
+
+All tools work on Electron renderer windows: `take_screenshot`, `evaluate_script`,
+`list_console_messages`, `list_network_requests`, `click`, `fill`, `lighthouse_audit`,
+`performance_start_trace`, etc.
+
+### Key Difference from Chrome
+
+| | Chrome | Electron |
+|---|---|---|
+| Connection | `--autoConnect` (reads DevToolsActivePort) | `--browserUrl http://127.0.0.1:PORT` |
+| Launch | Already running | Must launch with `--remote-debugging-port` |
+| Main process | N/A | Requires separate `--inspect` + Node debugger |
+| Tab management | `list_pages` / `select_page` | Same, but Electron may have splash/hidden windows |
+
+**See also**: The `electron` skill covers Playwright, agent-browser, WebdriverIO, and main-process debugging.
 
 ## Links
 
