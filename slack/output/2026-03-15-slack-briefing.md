@@ -1,0 +1,23 @@
+### \ud83d\udcac Slack Briefing
+
+*Generated: 2026-03-15 17:19 | Date range: 2026-03-14 to 2026-03-15 | User: @fhemmer*
+
+#### \ud83d\udd14 Direct @Mentions (1)
+
+- **[2026-03-15 06:20] #pe-bot-franz** - @github: 
+
+#### \ud83d\udcac Direct Messages (1)
+
+- **[2026-03-15 08:01]** @Slack Skill Bot: :sunrise: _Morning Briefing — Sunday, March 15th, 2026_ :clipboard: _Tasks_ _Timed:_ • 8:00 AM — Take morning meds • 6:00 PM — Put laundry back • 10:0...
+
+#### \ud83d\udce2 Announcements (6)
+
+- **[2026-03-15 08:00] #gateway-watcher** - @gatewaywatcher: <!here> ```*************************** * GATEWAY WATCHER * *************************** Workflow: Assignment Completed Webhook Date: 3/15/2026 12:00:00 PM Exception: Newtonsoft.Json.JsonReaderException Error: Unexpected character encountered while par...
+- **[2026-03-15 07:30] #gateway-watcher** - @gatewaywatcher: <!here> ```*************************** * GATEWAY WATCHER * *************************** Workflow: Bundle Assignment Date: 3/15/2026 11:30:00 AM Exception: Newtonsoft.Json.JsonReaderException Error: Unexpected character encountered while parsing value:...
+- **[2026-03-15 07:00] #gateway-watcher** - @gatewaywatcher: <!here> ```*************************** * GATEWAY WATCHER * *************************** Workflow: Assessment Assignment Date: 3/15/2026 11:00:00 AM Exception: Newtonsoft.Json.JsonReaderException Error: Unexpected character encountered while parsing va...
+- **[2026-03-15 06:30] #gateway-watcher** - @gatewaywatcher: <!here> ```*************************** * GATEWAY WATCHER * *************************** Workflow: Assignment Results Date: 3/15/2026 10:30:00 AM Exception: Newtonsoft.Json.JsonReaderException Error: Unexpected character encountered while parsing value...
+- **[2026-03-15 06:00] #gateway-watcher** - @gatewaywatcher: <!here> ```*************************** * GATEWAY WATCHER * *************************** Workflow: Applicant Date: 3/15/2026 10:00:00 AM Exception: Newtonsoft.Json.JsonReaderException Error: Unexpected character encountered while parsing value: &lt;. P...
+- **[2026-03-15 05:30] #gateway-watcher** - @gatewaywatcher: <!here> ```*************************** * GATEWAY WATCHER * *************************** Workflow: User Date: 3/15/2026 9:30:00 AM Exception: Newtonsoft.Json.JsonReaderException Error: Unexpected character encountered while parsing value: &lt;. Path ''...
+
+---
+*Mentions: 1 | DMs: 1 | Announcements: 6 | Channel Messages: 0 (across 0 channels) | Action Items: 0*
