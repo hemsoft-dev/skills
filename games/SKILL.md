@@ -1,6 +1,6 @@
 ---
 name: games
-description: V1.4 - Tracks liked games and discovers new games matching user preferences by checking comprehensive gaming sources. Monitors news sites, discovery platforms, Reddit communities, and specialized sources for survival, crafting, RPG, and open-world games. ALWAYS includes clickable links and ratings (Metacritic, OpenCritic, Steam reviews) in game reports. Maintains a separate list of games to check out with comprehensive metadata.
+description: V1.4 - Tracks liked games and discovers new games matching user preferences by checking all gaming sources. Monitors news sites, discovery platforms, Reddit communities, and specialized sources for survival, crafting, RPG, and open-world games. ALWAYS includes clickable links and ratings (Metacritic, OpenCritic, Steam reviews) in game reports. Maintains a separate list of games to check out with full metadata.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -40,7 +40,7 @@ hooks:
 
 **Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
-Tracks your liked games and discovers new games matching your preferences by checking comprehensive gaming sources.
+Tracks your liked games and discovers new games matching your preferences by checking all gaming sources.
 
 ## ALWAYS: Log This Interaction
 
@@ -56,10 +56,8 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 ## Data Files
 
 - **GAMES.md** - Your liked games list and preferences
-- **sources.json** - Comprehensive list of gaming sources to check
-<!-- markdownlint-disable MD013 -->
-- **game-to-check-out.json** - List of games you want to try out with comprehensive metadata (release date, ratings, description, when added, etc.)
-<!-- markdownlint-enable MD013 -->
+- **sources.json** - Full list of gaming sources to check
+- **game-to-check-out.json** - List of games you want to try out with full metadata (release date, ratings, description, when added, etc.)
 
 ## Commands
 
@@ -112,21 +110,17 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
    - Release date/status (if available)
    - Platform availability
 
-   <!-- markdownlint-disable MD013 -->
    **CRITICAL**: Every game mentioned MUST include at least one clickable link AND ratings information. Use markdown format: `[Game Name](URL)`. Prioritize Steam store links when available, otherwise use official websites or source URLs.
-   <!-- markdownlint-enable MD013 -->
 
 ## Source Checking Protocol
 
 When checking sources, prioritize by checkFrequency:
 
 - **Daily sources**: Check first (news sites, Steam new releases, Reddit communities)
-- **Weekly sources**: Check if doing comprehensive search (YouTube channels, Epic free games)
+- **Weekly sources**: Check if doing full search (YouTube channels, Epic free games)
 - **As-needed sources**: Check for specific game details (HowLongToBeat, OpenCritic)
 
-<!-- markdownlint-disable MD013 -->
-**Never skip sources** - the sources.json file exists to ensure comprehensive coverage. If a source is unavailable, note it but continue checking others.
-<!-- markdownlint-enable MD013 -->
+**Never skip sources** - the sources.json file exists to ensure full coverage. If a source is unavailable, note it but continue checking others.
 
 ## Rating Requirements
 
@@ -142,9 +136,7 @@ When checking sources, prioritize by checkFrequency:
 
 **Format**: Include ratings in this format:
 
-<!-- markdownlint-disable MD013 -->
 - **Ratings**: Metacritic: {score}/100 (Critic), {score}/10 (User) | OpenCritic: {score}/100 | Steam: {rating} ({percentage}% positive, {count} reviews)
-<!-- markdownlint-enable MD013 -->
 
 **Never report a game without attempting to find ratings** - ratings help users assess game quality and community reception.
 
@@ -162,9 +154,7 @@ When discovering new games, prioritize games that match these characteristics.
 
 ## Games to Check Out List
 
-<!-- markdownlint-disable MD013 -->
-The skill maintains a separate list of games you want to try out in `game-to-check-out.json`. This file stores comprehensive metadata for each game:
-<!-- markdownlint-enable MD013 -->
+The skill maintains a separate list of games you want to try out in `game-to-check-out.json`. This file stores full metadata for each game:
 
 - **Game name** - Official title
 - **Release date** - When the game was released (or Early Access date)
@@ -197,7 +187,7 @@ When adding a game to the checkout list, gather as much metadata as possible:
 4. Filter and match games to preferences
 5. **For each game found, search for ratings** (Metacritic, OpenCritic, Steam reviews)
 6. Update `GAMES.md` if adding new liked games
-7. Update `game-to-check-out.json` if adding to checkout list (with comprehensive metadata)
+7. Update `game-to-check-out.json` if adding to checkout list (with full metadata)
 8. **Report findings with clear reasoning, ALWAYS include clickable links, and ALWAYS include ratings**
 
 ## Link Requirements
@@ -212,9 +202,7 @@ When adding a game to the checkout list, gather as much metadata as possible:
 
 **Format**: Always use markdown links: `[Game Name](URL)`
 
-<!-- markdownlint-disable MD013 -->
 **Never report a game without at least one link** - links are essential for users to easily access more information or purchase the game.
-<!-- markdownlint-enable MD013 -->
 
 ## Examples
 

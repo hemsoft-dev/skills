@@ -1,6 +1,6 @@
 ---
 name: bio
-description: V1.2 - Creates comprehensive biographies for any person using exhaustive research across multiple sources.
+description: V1.2 - Creates detailed biographies for any person using exhaustive research across multiple sources.
 ---
 
 # Biography Expert

@@ -7,7 +7,7 @@ description: V1.2 - Expert in architecting and maintaining high-performance, mul
 
 **Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
-Manage and optimize development containers for seamless local and cloud-based (GitHub Copilot Workspace) development.
+Manage and optimize development containers for consistent local and cloud-based (GitHub Copilot Workspace) development.
 
 ## ALWAYS: Log This Interaction
 

@@ -40,9 +40,7 @@ hooks:
 
 **Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
-<!-- markdownlint-disable MD013 -->
 Expert in all things Apple including macOS, iOS, iPadOS, watchOS, hardware (Mac, iPhone, iPad, Apple Watch, AirPods), software releases, and ecosystem integration. Tracks new releases, updates, and announcements.
-<!-- markdownlint-enable MD013 -->
 
 ## ALWAYS: Log This Interaction
 
@@ -58,8 +56,8 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 ## Data Files
 
 - **APPLE.md** - Your Apple products, interests, and preferences
-- **sources.json** - Comprehensive list of Apple news sources to check
-- **releases-to-check-out.json** - List of new releases, updates, or products you want to track with comprehensive metadata
+- **sources.json** - Full list of Apple news sources to check
+- **releases-to-check-out.json** - List of new releases, updates, or products you want to track with full metadata
 
 ## Commands
 
@@ -96,7 +94,7 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
    - Developer tools and frameworks
    - Ecosystem integration features
 5. **Compare against APPLE.md** to avoid duplicates
-6. **Gather comprehensive metadata** for each release found:
+6. **Gather full metadata** for each release found:
    - Release date/availability
    - Version numbers
    - Key features and improvements
@@ -113,21 +111,17 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
    - Source where found
    - Platform/device compatibility
 
-   <!-- markdownlint-disable MD013 -->
    **CRITICAL**: Every release mentioned MUST include at least one clickable link AND release date information. Use markdown format: `[Product Name](URL)`. Prioritize Apple official pages when available, otherwise use news articles or source URLs.
-   <!-- markdownlint-enable MD013 -->
 
 ## Source Checking Protocol
 
 When checking sources, prioritize by checkFrequency:
 
 - **Daily sources**: Check first (news sites, Apple Newsroom, MacRumors, Reddit communities)
-- **Weekly sources**: Check if doing comprehensive search (YouTube channels, developer blogs)
+- **Weekly sources**: Check if doing full search (YouTube channels, developer blogs)
 - **As-needed sources**: Check for specific product details (Apple Support, technical specifications)
 
-<!-- markdownlint-disable MD013 -->
-**Never skip sources** - the sources.json file exists to ensure comprehensive coverage. If a source is unavailable, note it but continue checking others.
-<!-- markdownlint-enable MD013 -->
+**Never skip sources** - the sources.json file exists to ensure full coverage. If a source is unavailable, note it but continue checking others.
 
 ## Release Requirements
 
@@ -148,23 +142,15 @@ When checking sources, prioritize by checkFrequency:
 - **Compatibility**: {devices/models}
 - **Links**: [Product Name](URL)
 
-<!-- markdownlint-disable MD013 -->
 **Never report a release without attempting to find release date and links** - this information helps users assess timing and access official resources.
-<!-- markdownlint-enable MD013 -->
 
 ## User Preferences
 
-<!-- markdownlint-disable MD013 -->
-<!-- markdownlint-disable MD013 -->
 Based on APPLE.md, track user's Apple products and interests. When discovering new releases, prioritize items that match these characteristics.
-<!-- markdownlint-enable MD013 -->
-<!-- markdownlint-enable MD013 -->
 
 ## Releases to Check Out List
 
-<!-- markdownlint-disable MD013 -->
-The skill maintains a separate list of releases/products you want to track in `releases-to-check-out.json`. This file stores comprehensive metadata for each item:
-<!-- markdownlint-enable MD013 -->
+The skill maintains a separate list of releases/products you want to track in `releases-to-check-out.json`. This file stores full metadata for each item:
 
 - **Product/Release name** - Official name
 - **Release date** - When it was released or announced
@@ -195,26 +181,22 @@ When adding a release to the checkout list, gather as much metadata as possible:
 2. Read `sources.json` to get source list
 3. Check sources systematically based on request
 4. Filter and match releases to interests
-5. **For each release found, gather comprehensive metadata** (release date, version, features, compatibility, links)
+5. **For each release found, gather full metadata** (release date, version, features, compatibility, links)
 6. Update `APPLE.md` if adding new products/interests
-7. Update `releases-to-check-out.json` if adding to checkout list (with comprehensive metadata)
+7. Update `releases-to-check-out.json` if adding to checkout list (with full metadata)
 8. **Report findings with clear reasoning, ALWAYS include clickable links, and ALWAYS include release dates**
 
 ## Link Requirements
 
 **MANDATORY**: When reporting any Apple release, you MUST include clickable links:
 
-<!-- markdownlint-disable MD013 -->
 - **Official Apple pages**: Use Apple.com URLs (e.g., `https://www.apple.com/macos/`, `https://www.apple.com/newsroom/`)
-<!-- markdownlint-enable MD013 -->
 - **News articles**: Use news site URLs
 - **Source URLs**: Include the source URL where the release was discovered
 
 **Format**: Always use markdown links: `[Product Name](URL)`
 
-<!-- markdownlint-disable MD013 -->
 **Never report a release without at least one link** - links are essential for users to easily access more information or official resources.
-<!-- markdownlint-enable MD013 -->
 
 ## Examples
 

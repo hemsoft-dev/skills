@@ -345,7 +345,7 @@ Hooks allow observing and influencing agent behavior at runtime.
 - Use Custom Modes to simulate different agent personas
 - Combine rules, MCP servers, and modes for complex workflows
 - Use parallel agents to test different approaches
-- Leverage hooks for runtime behavior control
+- Use hooks for runtime behavior control
 
 ## Workspace Configuration
 

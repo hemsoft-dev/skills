@@ -264,7 +264,7 @@ Reusable scripts are located in `Scripts/` subfolder:
 
 ### Invoke-OneDriveAudit.ps1
 
-Comprehensive audit of OneDrive status, locations, and configuration.
+Full audit of OneDrive status, locations, and configuration.
 
 ```powershell
 ~/.claude/skills/onedrive/Scripts/Invoke-OneDriveAudit.ps1 -PrimaryLocation "D:\OneDrive"
@@ -287,7 +287,7 @@ Comprehensive audit of OneDrive status, locations, and configuration.
 
 ### Test-OneDriveHealth.ps1
 
-**NEW** - Comprehensive health check with automatic issue detection and optional auto-fix.
+**NEW** - Full health check with automatic issue detection and optional auto-fix.
 
 ```powershell
 # Run health check

@@ -40,7 +40,7 @@ hooks:
 
 **Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
-Tracks comprehensive information about the user (Franz Hemmer) for quick reference and context.
+Tracks all information about the user (Franz Hemmer) for quick reference and context.
 
 ## Information Categories
 

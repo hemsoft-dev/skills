@@ -1,6 +1,6 @@
 ---
 name: weather
-description: V1.6 - Expert in weather reporting, forecasts, and analysis for 28117 (Mooresville, NC), Charlotte, NC metro area, and Greenville, SC. Provides current conditions, extended forecasts, severe weather analysis, comprehensive Duke Energy power outage tracking (official + crowdsourced + social media), and air travel impact assessment. Includes community forum sources and OpenWeather API integration for real-time weather data. CRITICAL: Never fabricate data - all metrics must be verified from official sources with EST timestamps. For power outages, checks ALL sources including PowerOutage.us, social media, and community reports.
+description: V1.6 - Expert in weather reporting, forecasts, and analysis for 28117 (Mooresville, NC), Charlotte, NC metro area, and Greenville, SC. Provides current conditions, extended forecasts, severe weather analysis, full Duke Energy power outage tracking (official + crowdsourced + social media), and air travel impact assessment. Includes community forum sources and OpenWeather API integration for real-time weather data. CRITICAL: Never fabricate data - all metrics must be verified from official sources with EST timestamps. For power outages, checks ALL sources including PowerOutage.us, social media, and community reports.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"

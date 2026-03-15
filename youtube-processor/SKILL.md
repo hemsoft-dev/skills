@@ -7,7 +7,7 @@ description: V1.6 - Processes a YouTube URL by extracting metadata, transcript, 
 
 **Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
-A comprehensive skill for processing YouTube videos into high-quality summaries and reports. This skill uses **Gemini 3 Flash Preview** for AI tasks and **PowerShell** for orchestration.
+Processes YouTube videos into high-quality summaries and reports. This skill uses **Gemini 3 Flash Preview** for AI tasks and **PowerShell** for orchestration.
 
 ## ALWAYS: Log This Interaction
 

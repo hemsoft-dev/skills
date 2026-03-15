@@ -7,7 +7,7 @@ description: V1.1 - Expert in .NET SDK installation, CLI tooling, project templa
 
 **Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
-Comprehensive guidance for .NET SDK installation, CLI commands, project management, and development on Windows.
+Full guide for .NET SDK installation, CLI commands, project management, and development on Windows.
 
 ## ALWAYS: Log This Interaction
 

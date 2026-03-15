@@ -1,6 +1,6 @@
 ---
 name: meeting-preparation
-description: V1.2 - Expert in helping prepare for meetings with structured templates, research, checklists, and streamlined readiness assessments.
+description: V1.2 - Expert in helping prepare for meetings with structured templates, research, checklists, and readiness assessments.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"

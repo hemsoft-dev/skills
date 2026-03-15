@@ -1,6 +1,6 @@
 ---
 name: recipes
-description: V1.1 - Expert in recipes and recipe management. Stores and manages personal recipe collection with comprehensive metadata, beautiful markdown formatting, and image support. Use when the user wants to add, view, search, or manage recipes.
+description: V1.1 - Expert in recipes and recipe management. Stores and manages personal recipe collection with detailed metadata, beautiful markdown formatting, and image support. Use when the user wants to add, view, search, or manage recipes.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"

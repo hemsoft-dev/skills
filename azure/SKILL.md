@@ -74,7 +74,7 @@ When working with Relias Azure infrastructure:
 
 ## PowerShell Integration
 
-When scripting Azure operations in PowerShell, leverage Azure CLI with JSON output:
+When scripting Azure operations in PowerShell, use Azure CLI with JSON output:
 
 ```powershell
 # Get subscriptions as objects
