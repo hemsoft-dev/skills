@@ -136,6 +136,7 @@ $inactiveCandidates = $result.Seats | Where-Object {
         LastActivity        = if ($lastActivity) { $lastActivity.ToString('yyyy-MM-dd') } else { 'Never' }
         DaysInactive        = if ($daysSince -ge 0) { $daysSince } else { 'N/A' }
         LastEditor          = if ($_.last_activity_editor) { $_.last_activity_editor.Split('/')[0] } else { '-' }
+        PremiumReqs         = '-'
         PlanType            = if ($_.plan_type) { $_.plan_type } else { '-' }
         Reason              = 'Inactive'
     }
@@ -191,6 +192,7 @@ if ($Enterprise) {
                         LastActivity        = if ($lastActivity) { $lastActivity.ToString('yyyy-MM-dd') } else { 'Never' }
                         DaysInactive        = if ($daysSince -ge 0) { $daysSince } else { 'N/A' }
                         LastEditor          = if ($seat.last_activity_editor) { $seat.last_activity_editor.Split('/')[0] } else { '-' }
+                        PremiumReqs         = 0
                         PlanType            = if ($seat.plan_type) { $seat.plan_type } else { '-' }
                         Reason              = 'Zero Premium Requests'
                     }
