@@ -50,10 +50,9 @@
 
 [CmdletBinding()]
 param(
-    [Parameter(Mandatory)]
-    [string]$Org,
+    [string]$Org = 'relias-engineering',
 
-    [string]$Enterprise,
+    [string]$Enterprise = 'bertelsmann',
 
     [int]$InactiveDays = 0,
 
