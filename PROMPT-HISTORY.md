@@ -4,6 +4,9 @@ This file tracks meaningful prompts and their outcomes for the Claude Skills rep
 
 ---
 
+2026-03-16 - 09:08 - Create copilot-license skill for GitHub Copilot seat management
+Result: Created copilot-license skill (V1.0) with 4 commands (ListSeats, InactiveCandidates, AssignLicense, RemoveLicense) and 3 PowerShell scripts using the GitHub Copilot billing API to list seats, find inactive users for license removal, and assign/remove licenses.
+
 2026-03-15 - 19:33 - Research Chrome DevTools MCP and create Chrome debugging skill
 Result: Researched Chrome 146 DevTools Protocol changes (WebSocket-only CDP, DevToolsActivePort file), configured Chrome DevTools MCP v0.20.0 in .vscode/mcp.json, and created chrome skill (V1.0) with 5 commands, connection methods, 29 MCP tool reference, Chrome 146 behavior changes, and troubleshooting guide.
 
