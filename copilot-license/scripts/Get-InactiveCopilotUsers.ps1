@@ -174,15 +174,15 @@ if ($Enterprise) {
                     $items = $premiumData.usage_items
                 }
 
-                $totalNet = 0
+                $totalGross = 0
                 foreach ($item in $items) {
-                    $qty = if ($null -ne $item.netQuantity) { $item.netQuantity }
-                           elseif ($null -ne $item.net_quantity) { $item.net_quantity }
+                    $qty = if ($null -ne $item.grossQuantity) { $item.grossQuantity }
+                           elseif ($null -ne $item.gross_quantity) { $item.gross_quantity }
                            else { 0 }
-                    $totalNet += $qty
+                    $totalGross += $qty
                 }
 
-                if ($totalNet -eq 0) {
+                if ($totalGross -eq 0) {
                     $lastActivity = if ($seat.last_activity_at) { [datetime]$seat.last_activity_at } else { $null }
                     $daysSince = if ($lastActivity) { [math]::Floor(($now - $lastActivity).TotalDays) } else { -1 }
 
@@ -248,9 +248,12 @@ if ($Enterprise) {
 }
 Write-Information "  Total candidates:        `e[33m$($candidates.Count)`e[0m"
 Write-Information ""
-Write-Information "`e[36mPotential savings (at `$$monthlyCostPerSeat/seat/month):`e[0m"
-Write-Information "  Monthly:  `e[32m`$$potentialSavings`e[0m"
-Write-Information "  Annual:   `e[32m`$$annualSavings`e[0m"
+$fmtMonthlyCost = '{0:N0}' -f $monthlyCostPerSeat
+$fmtMonthly = '{0:N0}' -f $potentialSavings
+$fmtAnnual = '{0:N0}' -f $annualSavings
+Write-Information "`e[36mPotential savings (at `$$fmtMonthlyCost/seat/month):`e[0m"
+Write-Information "  Monthly:  `e[32m`$$fmtMonthly`e[0m"
+Write-Information "  Annual:   `e[32m`$$fmtAnnual`e[0m"
 Write-Information ""
 
 if ($zeroPremiumCandidates.Count -gt 0) {
