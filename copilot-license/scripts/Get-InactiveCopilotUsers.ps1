@@ -29,6 +29,12 @@
     When set to a positive value, overrides the current-month logic
     and uses a rolling window instead.
 
+.PARAMETER MaxPremiumRequests
+    Optional threshold for premium request consumption. When set,
+    active users with premium requests at or below this value are
+    included as candidates. Requires -Enterprise.
+    Example: -MaxPremiumRequests 5 flags anyone with 0–5 requests.
+
 .PARAMETER ExportCsv
     Export results to a CSV file in the current directory.
 
@@ -46,6 +52,9 @@
 
 .EXAMPLE
     .\Get-InactiveCopilotUsers.ps1 -Org fhemmer -ExportCsv
+
+.EXAMPLE
+    .\Get-InactiveCopilotUsers.ps1 -MaxPremiumRequests 5
 #>
 
 [CmdletBinding()]
@@ -55,6 +64,8 @@ param(
     [string]$Enterprise = 'bertelsmann',
 
     [int]$InactiveDays = 0,
+
+    [int]$MaxPremiumRequests = -1,
 
     [switch]$ExportCsv,
 
@@ -142,7 +153,8 @@ $inactiveCandidates = $result.Seats | Where-Object {
 }
 
 # Cross-reference premium request consumption if Enterprise is provided
-$zeroPremiumCandidates = @()
+$lowPremiumCandidates = @()
+$premiumThreshold = if ($MaxPremiumRequests -ge 0) { $MaxPremiumRequests } else { 0 }
 if ($Enterprise) {
     $inactiveLogins = @($inactiveCandidates | Select-Object -ExpandProperty Login)
     $activeSeats = $result.Seats | Where-Object {
@@ -153,7 +165,8 @@ if ($Enterprise) {
     if ($activeSeats.Count -gt 0) {
         $year = $now.Year
         $month = $now.Month
-        Write-Information "`e[36mChecking premium request usage for $($activeSeats.Count) active users ($year-$('{0:D2}' -f $month))...`e[0m"
+        $thresholdLabel = if ($MaxPremiumRequests -ge 0) { "<= $MaxPremiumRequests" } else { '= 0' }
+        Write-Information "`e[36mChecking premium request usage ($thresholdLabel) for $($activeSeats.Count) active users ($year-$('{0:D2}' -f $month))...`e[0m"
 
         foreach ($seat in $activeSeats) {
             $login = $seat.assignee.login
@@ -182,18 +195,21 @@ if ($Enterprise) {
                     $totalGross += $qty
                 }
 
-                if ($totalGross -eq 0) {
+                if ($totalGross -le $premiumThreshold) {
                     $lastActivity = if ($seat.last_activity_at) { [datetime]$seat.last_activity_at } else { $null }
                     $daysSince = if ($lastActivity) { [math]::Floor(($now - $lastActivity).TotalDays) } else { -1 }
 
-                    $zeroPremiumCandidates += [PSCustomObject]@{
+                    $reason = if ($totalGross -eq 0) { 'Zero Premium Requests' }
+                              else { "Low Premium Requests ($totalGross)" }
+
+                    $lowPremiumCandidates += [PSCustomObject]@{
                         Login               = $login
                         LastActivity        = if ($lastActivity) { $lastActivity.ToString('yyyy-MM-dd') } else { 'Never' }
                         DaysInactive        = if ($daysSince -ge 0) { $daysSince } else { 'N/A' }
                         LastEditor          = if ($seat.last_activity_editor) { $seat.last_activity_editor.Split('/')[0] } else { '-' }
-                        PremiumReqs         = 0
+                        PremiumReqs         = $totalGross
                         PlanType            = if ($seat.plan_type) { $seat.plan_type } else { '-' }
-                        Reason              = 'Zero Premium Requests'
+                        Reason              = $reason
                     }
                 }
             } else {
@@ -204,7 +220,7 @@ if ($Enterprise) {
 }
 
 # Combine all candidates
-$candidates = @($inactiveCandidates) + @($zeroPremiumCandidates) |
+$candidates = @($inactiveCandidates) + @($lowPremiumCandidates) |
     Sort-Object -Property @{Expression = { if ($_.Reason -eq 'Inactive') { 0 } else { 1 } }},
                           @{Expression = { if ($_.DaysInactive -eq 'N/A') { 9999 } else { [int]$_.DaysInactive } }; Descending = $true }
 
@@ -225,8 +241,9 @@ Write-Information "`e[33m║  Candidates for removal: $($candidates.Count) of $(
 if ($inactiveCandidates.Count -gt 0) {
     Write-Information "`e[33m║    Inactive:             $($inactiveCandidates.Count)`e[0m"
 }
-if ($zeroPremiumCandidates.Count -gt 0) {
-    Write-Information "`e[33m║    Zero Premium Requests: $($zeroPremiumCandidates.Count) (tab-only users)`e[0m"
+if ($lowPremiumCandidates.Count -gt 0) {
+    $premLabel = if ($MaxPremiumRequests -gt 0) { "Premium Reqs <= $MaxPremiumRequests" } else { 'Zero Premium Requests' }
+    Write-Information "`e[33m║    $($premLabel): $($lowPremiumCandidates.Count)`e[0m"
 }
 Write-Information "`e[33m╚═══════════════════════════════════════════════════════════════╝`e[0m"
 Write-Information ""
@@ -245,7 +262,8 @@ Write-Information "  Total seats:             $($result.TotalSeats)"
 Write-Information "  Active (using premium):  `e[32m$activeCount`e[0m"
 Write-Information "  Inactive:                `e[33m$($inactiveCandidates.Count)`e[0m"
 if ($Enterprise) {
-    Write-Information "  Zero Premium Requests:   `e[33m$($zeroPremiumCandidates.Count)`e[0m"
+    $premSummaryLabel = if ($MaxPremiumRequests -gt 0) { "Premium Reqs <= $MaxPremiumRequests" } else { 'Zero Premium Requests' }
+    Write-Information "  $($premSummaryLabel):   `e[33m$($lowPremiumCandidates.Count)`e[0m"
 }
 Write-Information "  Total candidates:        `e[33m$($candidates.Count)`e[0m"
 Write-Information ""
@@ -257,8 +275,12 @@ Write-Information "  Monthly:  `e[32m`$$fmtMonthly`e[0m"
 Write-Information "  Annual:   `e[32m`$$fmtAnnual`e[0m"
 Write-Information ""
 
-if ($zeroPremiumCandidates.Count -gt 0) {
-    Write-Information "`e[90mNote: 'Zero Premium Requests' users only use tab completions (free).`e[0m"
+if ($lowPremiumCandidates.Count -gt 0) {
+    if ($MaxPremiumRequests -gt 0) {
+        Write-Information "`e[90mNote: Users with <= $MaxPremiumRequests premium requests are near-zero consumers.`e[0m"
+    } else {
+        Write-Information "`e[90mNote: 'Zero Premium Requests' users only use tab completions (free).`e[0m"
+    }
     Write-Information "`e[90mThey can switch to Copilot Free (2,000 completions/mo) or Windsurf (unlimited, free).`e[0m"
     Write-Information ""
 }
