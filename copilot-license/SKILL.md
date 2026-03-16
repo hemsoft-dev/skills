@@ -62,9 +62,11 @@ List all Copilot seat assignments for an organization with activity details.
 ### InactiveCandidates
 
 Find users who have not used Copilot in the current billing month — candidates for license removal.
+When `-Enterprise` is provided, also identifies "tab-only" users: those who show activity but have consumed zero premium requests in the current month.
 
 ```powershell
 .\scripts\Get-InactiveCopilotUsers.ps1 -Org {org}
+.\scripts\Get-InactiveCopilotUsers.ps1 -Org {org} -Enterprise {enterprise}
 .\scripts\Get-InactiveCopilotUsers.ps1 -Org {org} -InactiveDays 30
 .\scripts\Get-InactiveCopilotUsers.ps1 -Org {org} -ExportCsv
 ```
@@ -93,18 +95,20 @@ Remove Copilot licenses from one or more users (sets to pending cancellation).
 | `/orgs/{org}/copilot/billing` | GET | Billing summary with seat breakdown |
 | `/orgs/{org}/copilot/billing/selected_users` | POST | Assign licenses to users |
 | `/orgs/{org}/copilot/billing/selected_users` | DELETE | Remove licenses (pending cancellation) |
+| `/enterprises/{enterprise}/settings/billing/premium_request/usage` | GET | Per-user premium request consumption (enterprise only) |
 
 ## Script Reference
 
 | Script | Command | Purpose |
 | --- | --- | --- |
 | `Get-CopilotSeats.ps1` | ListSeats | Lists all seats with activity, editor, and plan info |
-| `Get-InactiveCopilotUsers.ps1` | InactiveCandidates | Finds users with no activity in current month |
+| `Get-InactiveCopilotUsers.ps1` | InactiveCandidates | Finds inactive users and zero-premium-request users |
 | `Set-CopilotLicense.ps1` | AssignLicense / RemoveLicense | Assigns or removes licenses for specified users |
 
 ## Important Notes
 
 - **RemoveLicense** sets seats to **pending cancellation** — the license remains active until the end of the current billing cycle
-- **InactiveCandidates** uses the `last_activity_at` field from the seats API, which tracks the last time the user used Copilot in any editor
+- **InactiveCandidates** uses the `last_activity_at` field from the seats API, which tracks the last time the user used Copilot in any editor (including free tab completions)
+- When `-Enterprise` is provided, the script cross-references each active user against the premium request billing API — users with activity but zero premium requests are flagged as "tab-only" candidates who can switch to Copilot Free or Windsurf
 - The seats API is paginated (max 100 per page) — scripts handle pagination automatically
 - `gh` CLI must be authenticated as an org owner or billing manager

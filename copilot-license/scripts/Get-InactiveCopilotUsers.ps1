@@ -1,6 +1,7 @@
 <#
 .SYNOPSIS
-    Find Copilot license holders who haven't used Copilot recently.
+    Find Copilot license holders who haven't used Copilot recently
+    or who have zero premium request consumption.
 
 .DESCRIPTION
     Queries the organization's Copilot seat assignments and identifies users
@@ -8,8 +9,19 @@
     within a configurable number of days). These are candidates for license
     removal to save costs.
 
+    When -Enterprise is provided, also cross-references the enterprise
+    premium request billing API to find users who show activity (tab
+    completions) but have consumed zero premium requests in the current
+    month. These "tab-only" users can switch to Copilot Free or a free
+    alternative like Windsurf/Codeium without losing functionality.
+
 .PARAMETER Org
     The GitHub organization name (case-insensitive).
+
+.PARAMETER Enterprise
+    The GitHub enterprise slug (e.g. "hemsoft-corp"). When provided,
+    queries the premium request billing API to identify active users
+    with zero premium request consumption.
 
 .PARAMETER InactiveDays
     Number of days without activity to consider a user inactive.
@@ -24,7 +36,10 @@
     Include users who already have pending cancellation dates.
 
 .EXAMPLE
-    .\Get-InactiveCopilotUsers.ps1 -Org relias-engineering
+    .\Get-InactiveCopilotUsers.ps1 -Org fhemmer
+
+.EXAMPLE
+    .\Get-InactiveCopilotUsers.ps1 -Org fhemmer -Enterprise hemsoft-corp
 
 .EXAMPLE
     .\Get-InactiveCopilotUsers.ps1 -Org fhemmer -InactiveDays 30
@@ -37,6 +52,8 @@
 param(
     [Parameter(Mandatory)]
     [string]$Org,
+
+    [string]$Enterprise,
 
     [int]$InactiveDays = 0,
 
@@ -96,7 +113,7 @@ Write-Information "`e[36mAnalyzing activity — inactive = no usage in $cutoffLa
 Write-Information ""
 
 # Identify inactive users
-$candidates = $result.Seats | Where-Object {
+$inactiveCandidates = $result.Seats | Where-Object {
     # Skip users already pending cancellation unless requested
     if (-not $IncludePendingCancellation -and $_.pending_cancellation_date) {
         return $false
@@ -119,23 +136,97 @@ $candidates = $result.Seats | Where-Object {
         LastActivity        = if ($lastActivity) { $lastActivity.ToString('yyyy-MM-dd') } else { 'Never' }
         DaysInactive        = if ($daysSince -ge 0) { $daysSince } else { 'N/A' }
         LastEditor          = if ($_.last_activity_editor) { $_.last_activity_editor.Split('/')[0] } else { '-' }
-        SeatCreated         = if ($_.created_at) { ([datetime]$_.created_at).ToString('yyyy-MM-dd') } else { '-' }
-        PendingCancellation = if ($_.pending_cancellation_date) { $_.pending_cancellation_date } else { '-' }
         PlanType            = if ($_.plan_type) { $_.plan_type } else { '-' }
+        Reason              = 'Inactive'
     }
-} | Sort-Object -Property @{Expression = { if ($_.DaysInactive -eq 'N/A') { 9999 } else { [int]$_.DaysInactive } }; Descending = $true }
+}
+
+# Cross-reference premium request consumption if Enterprise is provided
+$zeroPremiumCandidates = @()
+if ($Enterprise) {
+    $inactiveLogins = @($inactiveCandidates | Select-Object -ExpandProperty Login)
+    $activeSeats = $result.Seats | Where-Object {
+        $_.assignee.login -notin $inactiveLogins -and
+        (-not $_.pending_cancellation_date -or $IncludePendingCancellation)
+    }
+
+    if ($activeSeats.Count -gt 0) {
+        $year = $now.Year
+        $month = $now.Month
+        Write-Information "`e[36mChecking premium request usage for $($activeSeats.Count) active users ($year-$('{0:D2}' -f $month))...`e[0m"
+
+        foreach ($seat in $activeSeats) {
+            $login = $seat.assignee.login
+            $apiUrl = "/enterprises/$Enterprise/settings/billing/premium_request/usage"
+            $apiUrl += "?year=$year&month=$month&user=$login&product=Copilot"
+            $premiumResponse = gh api $apiUrl 2>&1
+
+            if ($LASTEXITCODE -eq 0) {
+                $premiumData = $premiumResponse | ConvertFrom-Json
+
+                # Handle response: could be array or object with nested items
+                $items = @()
+                if ($premiumData -is [array]) {
+                    $items = $premiumData
+                } elseif ($premiumData.usageItems) {
+                    $items = $premiumData.usageItems
+                } elseif ($premiumData.usage_items) {
+                    $items = $premiumData.usage_items
+                }
+
+                $totalNet = 0
+                foreach ($item in $items) {
+                    $qty = if ($null -ne $item.netQuantity) { $item.netQuantity }
+                           elseif ($null -ne $item.net_quantity) { $item.net_quantity }
+                           else { 0 }
+                    $totalNet += $qty
+                }
+
+                if ($totalNet -eq 0) {
+                    $lastActivity = if ($seat.last_activity_at) { [datetime]$seat.last_activity_at } else { $null }
+                    $daysSince = if ($lastActivity) { [math]::Floor(($now - $lastActivity).TotalDays) } else { -1 }
+
+                    $zeroPremiumCandidates += [PSCustomObject]@{
+                        Login               = $login
+                        LastActivity        = if ($lastActivity) { $lastActivity.ToString('yyyy-MM-dd') } else { 'Never' }
+                        DaysInactive        = if ($daysSince -ge 0) { $daysSince } else { 'N/A' }
+                        LastEditor          = if ($seat.last_activity_editor) { $seat.last_activity_editor.Split('/')[0] } else { '-' }
+                        PlanType            = if ($seat.plan_type) { $seat.plan_type } else { '-' }
+                        Reason              = 'Zero Premium Requests'
+                    }
+                }
+            } else {
+                Write-Warning "Could not check premium requests for $($login): $premiumResponse"
+            }
+        }
+    }
+}
+
+# Combine all candidates
+$candidates = @($inactiveCandidates) + @($zeroPremiumCandidates) |
+    Sort-Object -Property @{Expression = { if ($_.Reason -eq 'Inactive') { 0 } else { 1 } }},
+                          @{Expression = { if ($_.DaysInactive -eq 'N/A') { 9999 } else { [int]$_.DaysInactive } }; Descending = $true }
 
 # Display results
 $activeCount = $result.TotalSeats - $candidates.Count
 
 if ($candidates.Count -eq 0) {
     Write-Information "`e[32m✓ All $($result.TotalSeats) seat holders have been active in the $cutoffLabel.`e[0m"
+    if ($Enterprise) {
+        Write-Information "`e[32m  All active users have premium request consumption.`e[0m"
+    }
     exit 0
 }
 
 Write-Information "`e[33m╔═══════════════════════════════════════════════════════════════╗`e[0m"
-Write-Information "`e[33m║  Inactive Copilot Users — $Org`e[0m"
+Write-Information "`e[33m║  Copilot License Review — $Org`e[0m"
 Write-Information "`e[33m║  Candidates for removal: $($candidates.Count) of $($result.TotalSeats) seats`e[0m"
+if ($inactiveCandidates.Count -gt 0) {
+    Write-Information "`e[33m║    Inactive:             $($inactiveCandidates.Count)`e[0m"
+}
+if ($zeroPremiumCandidates.Count -gt 0) {
+    Write-Information "`e[33m║    Zero Premium Requests: $($zeroPremiumCandidates.Count) (tab-only users)`e[0m"
+}
 Write-Information "`e[33m╚═══════════════════════════════════════════════════════════════╝`e[0m"
 Write-Information ""
 
@@ -156,13 +247,23 @@ $annualSavings = $potentialSavings * 12
 
 Write-Information "`e[36mSummary:`e[0m"
 Write-Information "  Total seats:             $($result.TotalSeats)"
-Write-Information "  Active ($cutoffLabel):   `e[32m$activeCount`e[0m"
-Write-Information "  Inactive (candidates):   `e[33m$($candidates.Count)`e[0m"
+Write-Information "  Active (using premium):  `e[32m$activeCount`e[0m"
+Write-Information "  Inactive:                `e[33m$($inactiveCandidates.Count)`e[0m"
+if ($Enterprise) {
+    Write-Information "  Zero Premium Requests:   `e[33m$($zeroPremiumCandidates.Count)`e[0m"
+}
+Write-Information "  Total candidates:        `e[33m$($candidates.Count)`e[0m"
 Write-Information ""
 Write-Information "`e[36mPotential savings (at `$$monthlyCostPerSeat/seat/month):`e[0m"
 Write-Information "  Monthly:  `e[32m`$$potentialSavings`e[0m"
 Write-Information "  Annual:   `e[32m`$$annualSavings`e[0m"
 Write-Information ""
+
+if ($zeroPremiumCandidates.Count -gt 0) {
+    Write-Information "`e[90mNote: 'Zero Premium Requests' users only use tab completions (free).`e[0m"
+    Write-Information "`e[90mThey can switch to Copilot Free (2,000 completions/mo) or Windsurf (unlimited, free).`e[0m"
+    Write-Information ""
+}
 
 # Provide removal command
 $usernames = ($candidates | Select-Object -ExpandProperty Login) -join '","'
