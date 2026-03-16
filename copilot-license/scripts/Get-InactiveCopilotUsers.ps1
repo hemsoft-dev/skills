@@ -232,15 +232,9 @@ Write-Information ""
 
 $candidates | Format-Table -AutoSize
 
-# Cost estimate
-$billingResponse = gh api "/orgs/$Org/copilot/billing" 2>&1
-$monthlyCostPerSeat = 19  # Business default
-if ($LASTEXITCODE -eq 0) {
-    $billing = $billingResponse | ConvertFrom-Json
-    if ($billing.seat_management_setting -eq 'assign_all') {
-        # Enterprise is $39/seat, Business is $19/seat — keep default
-    }
-}
+# Cost estimate — detect from plan type on seats
+$hasEnterpriseSeat = $result.Seats | Where-Object { $_.plan_type -eq 'enterprise' } | Select-Object -First 1
+$monthlyCostPerSeat = if ($hasEnterpriseSeat) { 39 } else { 19 }
 
 $potentialSavings = $candidates.Count * $monthlyCostPerSeat
 $annualSavings = $potentialSavings * 12
