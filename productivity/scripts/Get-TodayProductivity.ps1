@@ -87,33 +87,48 @@ try {
 
 # Query GitHub API for user's activity
 if ($ghAuth -and $ghAuth -notmatch "not logged") {
-    # Determine which account to use
-    $accounts = gh auth status 2>&1 | Select-String "Logged in to"
-    $workAccount = $accounts | Where-Object { $_ -match "fhemmerrelias" }
-    $personalAccount = $accounts | Where-Object { $_ -match "HemSoft" -or $_ -match "fhemmer" }
-
-    # Get PRs created today
+    # Resolve active GitHub username (gh search does not support @me)
+    $GitHubUsername = $null
     try {
-        $prsCreated = gh search prs "author:@me created:$Today" --json number,repository,title,createdAt 2>$null | ConvertFrom-Json
-        $Metrics.PullRequests += $prsCreated.Count
+        $GitHubUsername = (gh api user --jq '.login' 2>$null).Trim()
     } catch {
-        Write-Verbose "Could not fetch PRs created: $_"
+        Write-Verbose "Could not resolve GitHub username: $_"
     }
 
-    # Get PRs reviewed today
-    try {
-        $prsReviewed = gh search prs "reviewed-by:@me updated:$Today" --json number,repository,title 2>$null | ConvertFrom-Json
-        $Metrics.CodeReviews += $prsReviewed.Count
-    } catch {
-        Write-Verbose "Could not fetch PRs reviewed: $_"
-    }
+    if ($GitHubUsername) {
+        # --- PRs merged today ---
+        # Use gh search prs with --merged flag for a single fast API call
+        try {
+            $mergedPRs = gh search prs --author $GitHubUsername --merged $Today `
+                --json number,repository,title 2>$null | ConvertFrom-Json
+            $Metrics.PullRequests = $mergedPRs.Count
+        } catch {
+            Write-Verbose "Could not fetch merged PRs: $_"
+        }
 
-    # Get issues closed today
-    try {
-        $issues = gh search issues "author:@me state:closed closed:$Today" --json number,repository,title 2>$null | ConvertFrom-Json
-        $Metrics.IssuesClosed += $issues.Count
-    } catch {
-        Write-Verbose "Could not fetch issues: $_"
+        # --- PRs reviewed today ---
+        try {
+            $prsReviewed = gh search prs --reviewed-by $GitHubUsername --updated $Today `
+                --json number,repository,title 2>$null | ConvertFrom-Json
+            $Metrics.CodeReviews += $prsReviewed.Count
+        } catch {
+            Write-Verbose "Could not fetch PRs reviewed: $_"
+        }
+
+        # --- Issues closed today ---
+        try {
+            $issuesRaw = gh search issues --involves $GitHubUsername --state closed `
+                --updated $Today --limit 100 `
+                --json number,repository,title,closedAt 2>$null | ConvertFrom-Json
+            # Filter to issues actually closed today (closedAt is parsed as DateTime by ConvertFrom-Json)
+            $TodayDate = (Get-Date $Today).Date
+            $issuesToday = $issuesRaw | Where-Object {
+                try { ([datetime]$_.closedAt).ToLocalTime().Date -eq $TodayDate } catch { $false }
+            }
+            $Metrics.IssuesClosed += @($issuesToday).Count
+        } catch {
+            Write-Verbose "Could not fetch issues: $_"
+        }
     }
 }
 
@@ -244,7 +259,7 @@ Write-Output "| Metric | Count |"
 Write-Output "|--------|-------|"
 Write-Output "| Lines of Code | $($Metrics.LinesOfCode.ToString("N0")) |"
 Write-Output "| Commits | $($Metrics.Commits) |"
-Write-Output "| Pull Requests | $($Metrics.PullRequests) |"
+Write-Output "| Pull Requests Merged | $($Metrics.PullRequests) |"
 Write-Output "| Code Reviews | $($Metrics.CodeReviews) |"
 Write-Output "| Issues Closed | $($Metrics.IssuesClosed) |"
 Write-Output ""
