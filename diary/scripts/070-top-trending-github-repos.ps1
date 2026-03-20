@@ -71,7 +71,7 @@ const { chromium } = require('$escapedPkg');
     const browser = await chromium.launch({ headless: true, executablePath: '$escapedExe' });
     const page = await browser.newPage();
     try {
-        await page.goto('https://github.com/trending', { waitUntil: 'networkidle', timeout: 30000 });
+        await page.goto('https://github.com/trending', { waitUntil: 'networkidle', timeout: 45000 });
 
         const repos = await page.evaluate(() => {
             const articles = document.querySelectorAll('article.Box-row');
@@ -101,11 +101,23 @@ const { chromium } = require('$escapedPkg');
 $utf8NoBom = [System.Text.UTF8Encoding]::new($false)
 [System.IO.File]::WriteAllText($tempJs, $jsContent, $utf8NoBom)
 
-$rawOutput = node $tempJs 2>$null
+# --- Run with retry (transient browser/network failures are common mid-orchestrator) ---
+$maxAttempts = 3
+$rawOutput = $null
+for ($attempt = 1; $attempt -le $maxAttempts; $attempt++) {
+    $stderrFile = Join-Path ([System.IO.Path]::GetTempPath()) "diary-gh-trending-stderr-$Date.txt"
+    $rawOutput = node $tempJs 2>$stderrFile
+    if ($rawOutput) { break }
+    $stderrContent = if (Test-Path $stderrFile) { Get-Content $stderrFile -Raw } else { '(no stderr captured)' }
+    Write-Information "`e[1;33mAttempt $attempt/$maxAttempts failed. Stderr: $($stderrContent.Substring(0, [Math]::Min(500, $stderrContent.Length)))`e[0m"
+    Remove-Item $stderrFile -ErrorAction SilentlyContinue
+    if ($attempt -lt $maxAttempts) { Start-Sleep -Seconds 3 }
+}
 Remove-Item $tempJs -ErrorAction SilentlyContinue
+Remove-Item $stderrFile -ErrorAction SilentlyContinue
 
 if (-not $rawOutput) {
-    Write-Information "`e[1;31mPlaywright returned no output. Cannot update trending repos.`e[0m"
+    Write-Information "`e[1;31mPlaywright returned no output after $maxAttempts attempts. Cannot update trending repos.`e[0m"
     exit 1
 }
 
