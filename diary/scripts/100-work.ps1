@@ -85,24 +85,49 @@ function Clean-WorkIQOutput {
     return ($lines[$startIdx..$endIdx] -join "`n").Trim()
 }
 
-# --- 1. Fetch meetings with transcripts from WorkIQ ---
+# --- 1. Fetch meetings from WorkIQ (two-pass: list, then per-meeting transcript) ---
 Write-Information "`e[1;36mFetching meetings from WorkIQ...`e[0m"
 $meetingsContent = ''
 try {
-    $meetingPrompt = @"
-List all my meetings on $friendlyDate. For each meeting, format as a bullet point using only information you can retrieve directly from Microsoft 365 data:
+    # Pass 1: Get the meeting list with basic info
+    $listPrompt = @"
+List all my meetings on $friendlyDate. For each meeting, format as a bullet point:
 
 - **{start time} - {end time}** - {Meeting Title} (Organizer: {name})
   - Attendees: {comma-separated attendee names}
-    - {If transcript, recap, notes, or chat content is available: return a concise source-backed summary and prefix it with the source label, such as "Transcript:", "Recap:", "Notes:", or "Chat:". Do not infer missing details or combine sources into new conclusions. If no such content is surfaced, say "WorkIQ did not surface transcript, recap, notes, or chat content for this meeting." Do not claim that no transcript was recorded unless the source explicitly confirms that.}
 
-Output ONLY the formatted bullet list. No introduction, no conclusion, no offers for more info.
+Output ONLY the formatted bullet list. No introduction, no conclusion.
 If I had no meetings, output exactly: "No meetings scheduled."
 "@
-    $rawMeetings = & workiq ask -q $meetingPrompt 2>&1 | Out-String
-    $meetingsContent = Clean-WorkIQOutput $rawMeetings
+    $rawList = & workiq ask -q $listPrompt 2>&1 | Out-String
+    $meetingsContent = Clean-WorkIQOutput $rawList
+    if ($meetingsContent -and $meetingsContent -notmatch 'No meetings scheduled') {
+        Write-Information "`e[1;32mMeetings retrieved. Fetching transcripts per meeting...`e[0m"
+
+        # Pass 2: Extract meeting titles and query each for transcript/notes
+        $titleMatches = [regex]::Matches($meetingsContent, '\*\*[\d:]+\s*[AP]M\s*-\s*[\d:]+\s*[AP]M\*\*\s*-\s*(.+?)(?:\s*\(Organizer:)')
+        foreach ($tm in $titleMatches) {
+            $meetingTitle = $tm.Groups[1].Value.Trim()
+            Write-Information "`e[90m  Querying transcript for: $meetingTitle`e[0m"
+            try {
+                $transcriptPrompt = "Show me the transcript or notes from the `"$meetingTitle`" meeting on $friendlyDate. Include key discussion points and action items. Output ONLY the content — no introduction or conclusion."
+                $rawTranscript = & workiq ask -q $transcriptPrompt 2>&1 | Out-String
+                $transcriptClean = Clean-WorkIQOutput $rawTranscript
+                if ($transcriptClean -and $transcriptClean -notmatch 'no transcript|not available|could not find|no notes|not surfaced|didn.t find') {
+                    # Append transcript summary under the meeting entry
+                    $escapedTitle = [regex]::Escape($meetingTitle)
+                    $meetingsContent = $meetingsContent -replace "($escapedTitle[^\n]*\n(?:\s+-[^\n]*\n)*)", "`$1    - Transcript: $($transcriptClean -replace "`n", ' ' -replace '\s{2,}', ' ')`n"
+                    Write-Information "`e[1;32m  Transcript found for $meetingTitle.`e[0m"
+                } else {
+                    Write-Information "`e[90m  No transcript surfaced for $meetingTitle.`e[0m"
+                }
+            } catch {
+                Write-Information "`e[1;33m  Transcript query failed for $meetingTitle`: $($_.Exception.Message)`e[0m"
+            }
+        }
+    }
     if ($meetingsContent) {
-        Write-Information "`e[1;32mMeetings retrieved.`e[0m"
+        Write-Information "`e[1;32mMeetings complete.`e[0m"
     }
 } catch {
     Write-Information "`e[1;33mWorkIQ meetings query failed: $($_.Exception.Message)`e[0m"
