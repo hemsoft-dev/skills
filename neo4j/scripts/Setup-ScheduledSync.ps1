@@ -17,7 +17,7 @@ param()
 
 .EXAMPLE
     .\Setup-ScheduledSync.ps1 -Time "2pm"
-# >
+#>
 
 [CmdletBinding()]
 param(

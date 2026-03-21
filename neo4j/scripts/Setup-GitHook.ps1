@@ -11,7 +11,7 @@ param()
 
 .EXAMPLE
     .\Setup-GitHook.ps1
-# >
+#>
 
 $skillsRepo = "$env:USERPROFILE\.claude\skills"
 $hookPath = "$skillsRepo\.git\hooks\post-commit"

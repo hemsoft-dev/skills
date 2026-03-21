@@ -11,7 +11,7 @@ param()
 
 .EXAMPLE
     .\Setup-ProfileAlias.ps1
-# >
+#>
 
 $syncScript = "$env:USERPROFILE\.claude\skills\neo4j\scripts\Sync-SkillsToNeo4j.ps1"
 

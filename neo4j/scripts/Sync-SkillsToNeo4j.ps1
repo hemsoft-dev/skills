@@ -16,7 +16,7 @@
 
 .EXAMPLE
     .\Sync-SkillsToNeo4j.ps1 -Force
-# >
+#>
 
 [CmdletBinding()]
 param(

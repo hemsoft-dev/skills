@@ -15,7 +15,7 @@
 
 .EXAMPLE
     .\Test-Neo4jEnvironment.ps1 -ValidateScripts
-# >
+#>
 
 [CmdletBinding()]
 param(

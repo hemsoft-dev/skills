@@ -27,7 +27,7 @@
 
 .EXAMPLE
     .\Import-SkillsToNeo4j.ps1 -SkillsPath "C:\custom\skills" -Password "mypassword"
-# >
+#>
 
 [CmdletBinding()]
 param(
