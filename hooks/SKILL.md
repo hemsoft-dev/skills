@@ -1,6 +1,6 @@
 ---
 name: hooks
-description: "V1.0 - Commands: lookup, suggest, configure, explain. Expert knowledge base on GitHub Copilot hooks — types, configuration, implementation patterns across projects, and best practices. Use when working with Copilot hooks, agent hooks, Git hooks, session hooks, or SKILL.md hook frontmatter."
+description: "V1.0 - Commands: lookup, suggest, configure, explain. Expert knowledge base on Copilot and Claude Code agent hooks — all 28+ hook events, 4 hook types (command, http, prompt, agent), matchers, decision control, SKILL.md frontmatter hooks, .github/hooks/hooks.json, and settings.json hook configuration. Use when working with agent hooks, session hooks, pre/post tool use hooks, stop hooks, or any agent lifecycle automation."
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -8,12 +8,12 @@ hooks:
         - type: prompt
           prompt: |
             If a file was read, written, or edited in the hooks directory (path contains 'hooks'), verify that history logging occurred.
-            
+
             Check if History/{YYYY-MM-DD}.md exists and contains an entry for this interaction with:
             - Format: "## HH:MM - {Action Taken}"
             - One-line summary
             - Accurate timestamp (obtained via `Get-Date -Format "HH:mm"` command, never guessed)
-            
+
             If history entry is missing or incomplete, provide specific feedback on what needs to be added.
             If history entry exists and is properly formatted, acknowledge completion.
   Stop:
@@ -22,228 +22,350 @@ hooks:
         - type: prompt
           prompt: |
             Before stopping, if hooks was used (check if any files in hooks directory were modified), verify that the interaction was logged:
-            
+
             1. Check if History/{YYYY-MM-DD}.md exists in hooks directory
             2. Verify it contains an entry with format "## HH:MM - {Action Taken}" where HH:MM was obtained via `Get-Date -Format "HH:mm"` (never guessed)
             3. Ensure the entry includes a one-line summary of what was done
-            
+
             If history entry is missing:
             - Return {"decision": "block", "reason": "History entry missing. Please log this interaction to History/{YYYY-MM-DD}.md with format: ## HH:MM - {Action Taken}\n{One-line summary}\n\nCRITICAL: Get the current time using `Get-Date -Format \"HH:mm\"` command - never guess the timestamp."}
-            
+
             If history entry exists:
             - Return {"decision": "approve"}
-            
+
             Include a systemMessage with details about the history entry status.
 ---
 
-# Hooks — GitHub Copilot Hooks Expert
+# Hooks — Copilot & Claude Code Agent Hooks Expert
 
-Expert knowledge base on every type of hook in the GitHub Copilot ecosystem. Use this skill to look up hook types, get configuration examples, suggest the right hook for a task, or explain how hooks work across different project types.
+Expert knowledge base on every type of **agent hook** in the Copilot and Claude Code ecosystem. This skill covers SKILL.md frontmatter hooks, `.github/hooks/hooks.json` Copilot coding-agent hooks, and Claude Code settings-based hooks. It does NOT cover Git hooks (pre-commit, etc.) — see the `copilot-hooks` skill for those.
 
 ## Commands
 
 | Command | Purpose |
 | --- | --- |
-| `lookup` | Find the right hook type for a specific need |
+| `lookup` | Find the right hook event for a specific need |
 | `suggest` | Recommend hooks to add to a project or skill |
-| `configure` | Generate correct hook configuration for a target project |
-| `explain` | Deep-dive explanation of how a specific hook type works |
+| `configure` | Generate correct hook configuration for a target |
+| `explain` | Deep-dive on how a specific hook event or type works |
 
-## The Three Hook Ecosystems in Copilot
+## Where Agent Hooks Are Defined
 
-There are **three distinct hook systems** that developers conflate. Understanding the boundaries is critical.
+There are three distinct places to define agent hooks. Each has different scope and use cases.
 
-| # | System | Where Configured | When It Runs | Runner |
-| --- | --- | --- | --- | --- |
-| 1 | **Git Hooks** | `.git/hooks/` or `.husky/` | Git events (commit, push, merge) | Git / Husky |
-| 2 | **Copilot Coding-Agent Hooks** | `.github/hooks/hooks.json` | Copilot agent lifecycle events | GitHub Copilot (cloud or CLI) |
-| 3 | **SKILL.md Frontmatter Hooks** | SKILL.md `hooks:` YAML | Agent tool use and session events | Claude Code / agent runtime |
+| Location | Scope | Format | Use Case |
+| --- | --- | --- | --- |
+| **SKILL.md frontmatter** | Active while the skill is in use | YAML `hooks:` block | History tracking, quality gates, stop guards on a per-skill basis |
+| **`.github/hooks/hooks.json`** | Repository-wide Copilot coding agent | JSON | Session-end auto-commit, auto-push, cleanup |
+| **Claude Code settings** | User, project, or local scope | JSON in `settings.json` | Pre-tool-use validation, permission automation, linting, security policies |
+
+### SKILL.md Frontmatter Hooks
+
+Defined in the YAML frontmatter of a `SKILL.md` file. Scoped to the skill's lifetime — only active when the skill is being used. All hook events are supported. For subagents, `Stop` hooks are automatically converted to `SubagentStop`.
+
+### `.github/hooks/hooks.json` (Copilot Coding Agent)
+
+A JSON file at the repo root that registers shell commands on Copilot agent lifecycle events like `sessionEnd` and `Stop`. These fire when the cloud-based Copilot coding agent (or the CLI agent) ends a session.
+
+### Claude Code Settings Hooks
+
+Defined in JSON settings files at various scopes:
+
+| File | Scope | Shareable |
+| --- | --- | --- |
+| `~/.claude/settings.json` | All your projects | No (local to machine) |
+| `.claude/settings.json` | Single project | Yes (commit to repo) |
+| `.claude/settings.local.json` | Single project | No (gitignored) |
+| Managed policy settings | Organization-wide | Yes (admin-controlled) |
+| Plugin `hooks/hooks.json` | When plugin is enabled | Yes (bundled with plugin) |
 
 ---
 
-## 1. Git Hooks (Traditional)
+## The Four Hook Types
 
-### What They Are
+Every hook handler is one of four types:
 
-Git hooks are scripts that Git executes before or after events such as `commit`, `push`, and `merge`. They live in `.git/hooks/` (or `.husky/_/` when using Husky).
-
-### Available Git Hook Types
-
-| Hook | Trigger | Common Use |
+| Type | How It Works | Best For |
 | --- | --- | --- |
-| `pre-commit` | Before a commit is created | Lint, format, run quick tests |
-| `prepare-commit-msg` | After default message, before editor opens | Auto-fill commit message templates |
-| `commit-msg` | After message is entered | Enforce conventional commits format |
-| `post-commit` | After commit is created | Notifications, logging |
-| `pre-push` | Before push to remote | Run full test suite, prevent force-push |
-| `pre-rebase` | Before rebase starts | Prevent rebasing published commits |
-| `post-merge` | After a merge completes | Reinstall dependencies, rebuild |
-| `post-checkout` | After checkout/switch | Rebuild, clear caches |
-| `pre-receive` | Server-side, before accepting push | Enforce policies (server hook) |
-| `post-receive` | Server-side, after accepting push | Deploy, notify CI (server hook) |
+| `command` | Runs a shell command; receives JSON on stdin, returns via exit code + stdout | Scripts, linting, auto-commit, file ops |
+| `http` | POSTs JSON to a URL; reads response body | External services, webhooks, APIs |
+| `prompt` | Single-turn LLM evaluation; returns `{ok: true/false}` | Quick quality checks, stop validation |
+| `agent` | Spawns a subagent with tool access (Read, Grep, Glob); up to 50 turns | Deep verification requiring file inspection |
 
-### Implementation by Project Type
+### Command Hook Fields
 
-#### Node.js / JavaScript / TypeScript Projects
+| Field | Required | Description |
+| --- | --- | --- |
+| `type` | Yes | `"command"` |
+| `command` | Yes | Shell command to execute |
+| `timeout` | No | Seconds before canceling (default: 600) |
+| `async` | No | If `true`, runs in background without blocking |
+| `shell` | No | `"bash"` (default) or `"powershell"` (Windows) |
+| `statusMessage` | No | Custom spinner message while hook runs |
+| `once` | No | If `true`, runs only once per session then removed (skills only) |
 
-**Recommended tool: Husky + lint-staged**
+### HTTP Hook Fields
+
+| Field | Required | Description |
+| --- | --- | --- |
+| `type` | Yes | `"http"` |
+| `url` | Yes | URL to POST to |
+| `timeout` | No | Seconds before canceling (default: 600) |
+| `headers` | No | Key-value pairs; supports `$VAR_NAME` interpolation |
+| `allowedEnvVars` | No | List of env vars allowed in header interpolation |
+
+### Prompt Hook Fields
+
+| Field | Required | Description |
+| --- | --- | --- |
+| `type` | Yes | `"prompt"` |
+| `prompt` | Yes | Prompt text; use `$ARGUMENTS` for hook input JSON |
+| `model` | No | Model to use (defaults to fast model) |
+| `timeout` | No | Seconds (default: 30) |
+
+### Agent Hook Fields
+
+| Field | Required | Description |
+| --- | --- | --- |
+| `type` | Yes | `"agent"` |
+| `prompt` | Yes | Prompt describing what to verify; use `$ARGUMENTS` |
+| `model` | No | Model to use (defaults to fast model) |
+| `timeout` | No | Seconds (default: 60) |
+
+---
+
+## All 28 Hook Events
+
+### Quick Reference Table
+
+| Event | When It Fires | Can Block? | Supports Matchers? |
+| --- | --- | --- | --- |
+| `SessionStart` | Session begins or resumes | No | Yes (`startup`, `resume`, `clear`, `compact`) |
+| `InstructionsLoaded` | CLAUDE.md or rules file loaded | No | Yes (`session_start`, `nested_traversal`, etc.) |
+| `UserPromptSubmit` | User submits a prompt | Yes | No |
+| `PreToolUse` | Before a tool call executes | Yes (allow/deny/ask) | Yes (tool name: `Bash`, `Edit`, `Write`, etc.) |
+| `PermissionRequest` | Permission dialog appears | Yes (allow/deny) | Yes (tool name) |
+| `PostToolUse` | After a tool succeeds | No (feedback only) | Yes (tool name) |
+| `PostToolUseFailure` | After a tool fails | No (feedback only) | Yes (tool name) |
+| `Notification` | Agent sends a notification | No | Yes (`permission_prompt`, `idle_prompt`, etc.) |
+| `SubagentStart` | Subagent spawned | No (context only) | Yes (agent type) |
+| `SubagentStop` | Subagent finishes | Yes | Yes (agent type) |
+| `TaskCreated` | Task being created | Yes | No |
+| `TaskCompleted` | Task being marked complete | Yes | No |
+| `Stop` | Agent finishes responding | Yes | No |
+| `StopFailure` | Turn ends due to API error | No | Yes (error type) |
+| `TeammateIdle` | Teammate about to go idle | Yes | No |
+| `ConfigChange` | Config file changes | Yes (except policy) | Yes (config source) |
+| `CwdChanged` | Working directory changes | No | No |
+| `FileChanged` | Watched file changes on disk | No | Yes (filename) |
+| `WorktreeCreate` | Worktree being created | Yes (returns path) | No |
+| `WorktreeRemove` | Worktree being removed | No | No |
+| `PreCompact` | Before context compaction | No | Yes (`manual`, `auto`) |
+| `PostCompact` | After compaction completes | No | Yes (`manual`, `auto`) |
+| `SessionEnd` | Session terminates | No | Yes (exit reason) |
+| `Elicitation` | MCP server requests input | Yes | Yes (MCP server name) |
+| `ElicitationResult` | User responds to elicitation | Yes | Yes (MCP server name) |
+
+### Hook Type Support by Event
+
+Not all events support all four hook types:
+
+**All four types (command, http, prompt, agent):**
+`PreToolUse`, `PermissionRequest`, `PostToolUse`, `PostToolUseFailure`, `Stop`, `SubagentStop`, `UserPromptSubmit`, `TaskCreated`, `TaskCompleted`
+
+**Command and HTTP only:**
+`ConfigChange`, `CwdChanged`, `Elicitation`, `ElicitationResult`, `FileChanged`, `InstructionsLoaded`, `Notification`, `PostCompact`, `PreCompact`, `SessionEnd`, `StopFailure`, `SubagentStart`, `TeammateIdle`, `WorktreeCreate`, `WorktreeRemove`
+
+**Command only:**
+`SessionStart`
+
+---
+
+## Exit Code Behavior
+
+| Exit Code | Meaning | Behavior |
+| --- | --- | --- |
+| **0** | Success | Action proceeds; stdout parsed for JSON |
+| **2** | Blocking error | Action blocked; stderr fed to agent as error |
+| **Other** | Non-blocking error | stderr shown in verbose mode; execution continues |
+
+---
+
+## Matcher Patterns
+
+The `matcher` field is a regex that filters when hooks fire. Use `"*"`, `""`, or omit entirely to match everything.
+
+| Event | What Matcher Filters | Example Values |
+| --- | --- | --- |
+| `PreToolUse`, `PostToolUse`, `PostToolUseFailure`, `PermissionRequest` | Tool name | `Bash`, `Edit\|Write`, `mcp__.*` |
+| `SessionStart` | How session started | `startup`, `resume`, `clear`, `compact` |
+| `SessionEnd` | Why session ended | `clear`, `resume`, `logout`, `other` |
+| `Notification` | Notification type | `permission_prompt`, `idle_prompt` |
+| `SubagentStart`, `SubagentStop` | Agent type | `Bash`, `Explore`, `Plan` |
+| `ConfigChange` | Config source | `user_settings`, `project_settings`, `skills` |
+| `FileChanged` | Filename (basename) | `.envrc`, `.env` |
+| `StopFailure` | Error type | `rate_limit`, `server_error` |
+| `InstructionsLoaded` | Load reason | `session_start`, `nested_traversal` |
+| `Elicitation`, `ElicitationResult` | MCP server name | Your configured server names |
+| `PreCompact`, `PostCompact` | Trigger | `manual`, `auto` |
+
+Events that **do not support matchers** (always fire): `UserPromptSubmit`, `Stop`, `TeammateIdle`, `TaskCreated`, `TaskCompleted`, `WorktreeCreate`, `WorktreeRemove`, `CwdChanged`.
+
+### Matching MCP Tools
+
+MCP tools follow the pattern `mcp__<server>__<tool>`. Use regex:
+
+- `mcp__memory__.*` — all tools from memory server
+- `mcp__.*__write.*` — any write tool from any server
+
+---
+
+## Decision Control Patterns
+
+Different events use different mechanisms to control behavior:
+
+| Events | Pattern | Key Fields |
+| --- | --- | --- |
+| `UserPromptSubmit`, `PostToolUse`, `PostToolUseFailure`, `Stop`, `SubagentStop`, `ConfigChange` | Top-level `decision` | `decision: "block"`, `reason` |
+| `PreToolUse` | `hookSpecificOutput` | `permissionDecision` (allow/deny/ask), `permissionDecisionReason`, `updatedInput` |
+| `PermissionRequest` | `hookSpecificOutput` | `decision.behavior` (allow/deny), `updatedInput`, `updatedPermissions` |
+| `TeammateIdle`, `TaskCreated`, `TaskCompleted` | Exit code 2 or `continue: false` | stderr for feedback; JSON to stop entirely |
+| `Elicitation` | `hookSpecificOutput` | `action` (accept/decline/cancel), `content` |
+
+### Universal JSON Output Fields
+
+These work across all events:
+
+| Field | Default | Description |
+| --- | --- | --- |
+| `continue` | `true` | If `false`, Claude stops entirely |
+| `stopReason` | none | Message to user when `continue` is false |
+| `suppressOutput` | `false` | Hide stdout from verbose mode |
+| `systemMessage` | none | Warning shown to user |
+
+---
+
+## Common Configuration Patterns
+
+### Pattern 1: History Tracking (SKILL.md Frontmatter)
+
+The most common pattern in this skills repo. Tracks usage in History files.
+
+```yaml
+hooks:
+  PostToolUse:
+    - matcher: "Read|Write|Edit"
+      hooks:
+        - type: prompt
+          prompt: |
+            If a file was read, written, or edited in the {skill-name} directory,
+            verify that History/{YYYY-MM-DD}.md exists with an entry:
+            "## HH:MM - {Action Taken}" and a one-line summary.
+  Stop:
+    - matcher: "*"
+      hooks:
+        - type: prompt
+          prompt: |
+            Before stopping, verify history entry exists for {skill-name}.
+            If missing: return {"decision": "block", "reason": "History entry missing."}
+            If present: return {"decision": "approve"}
+```
+
+### Pattern 2: Block Dangerous Commands (PreToolUse)
 
 ```json
-// package.json
 {
-  "scripts": {
-    "prepare": "husky"
-  },
-  "lint-staged": {
-    "*.{js,ts,tsx}": ["eslint --fix", "prettier --write"],
-    "*.{md,json,yaml}": ["prettier --write"]
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/block-dangerous.sh"
+          }
+        ]
+      }
+    ]
   }
 }
 ```
 
-```sh
-# .husky/pre-commit
-npx lint-staged
+The script reads stdin JSON, inspects `tool_input.command`, and returns:
+
+```json
+{
+  "hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "permissionDecision": "deny",
+    "permissionDecisionReason": "Destructive command blocked"
+  }
+}
 ```
 
-**Setup commands:**
+### Pattern 3: Auto-Lint After File Writes (PostToolUse)
 
-```sh
-npm install --save-dev husky lint-staged
-npx husky init
-echo "npx lint-staged" > .husky/pre-commit
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/lint-check.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
 ```
 
-#### Python Projects
+### Pattern 4: Quality Gate Before Stop (prompt type)
 
-**Recommended tool: pre-commit framework**
-
-```yaml
-# .pre-commit-config.yaml
-repos:
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
-    hooks:
-      - id: trailing-whitespace
-      - id: end-of-file-fixer
-      - id: check-yaml
-  - repo: https://github.com/psf/black
-    rev: 24.4.2
-    hooks:
-      - id: black
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.4.8
-    hooks:
-      - id: ruff
-        args: [--fix]
+```json
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Evaluate if Claude should stop: $ARGUMENTS. Check if all tasks are complete and tests pass.",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}
 ```
 
-**Setup commands:**
+The LLM responds: `{"ok": true}` to allow, or `{"ok": false, "reason": "Tests not passing"}` to block.
 
-```sh
-pip install pre-commit
-pre-commit install
-pre-commit run --all-files  # initial run
+### Pattern 5: Deep Verification Before Stop (agent type)
+
+```json
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "agent",
+            "prompt": "Verify all unit tests pass. Run the test suite and check results. $ARGUMENTS",
+            "timeout": 120
+          }
+        ]
+      }
+    ]
+  }
+}
 ```
 
-#### .NET / C# Projects
-
-**Recommended tool: Husky.Net**
-
-```sh
-dotnet tool install --global Husky
-dotnet husky install
-dotnet husky add pre-commit -c "dotnet format --verify-no-changes"
-```
-
-Or manual `.git/hooks/pre-commit`:
-
-```sh
-#!/bin/sh
-dotnet format --verify-no-changes
-if [ $? -ne 0 ]; then
-  echo "Code formatting issues detected. Run 'dotnet format' to fix."
-  exit 1
-fi
-```
-
-#### PowerShell-Heavy Projects
-
-**Direct `.git/hooks/pre-commit` wrapper:**
-
-```sh
-#!/bin/sh
-pwsh.exe -NoProfile -ExecutionPolicy Bypass -File ".git/hooks/pre-commit.ps1"
-POWERSHELL_EXIT=$?
-
-pwsh.exe -NoProfile -ExecutionPolicy Bypass -File ".git/hooks/pre-commit-markdown.ps1"
-MARKDOWN_EXIT=$?
-
-if [ $POWERSHELL_EXIT -ne 0 ] || [ $MARKDOWN_EXIT -ne 0 ]; then
-  exit 1
-fi
-exit 0
-```
-
-#### Rust Projects
-
-```yaml
-# .pre-commit-config.yaml
-repos:
-  - repo: local
-    hooks:
-      - id: cargo-fmt
-        name: cargo fmt
-        entry: cargo fmt --
-        language: system
-        types: [rust]
-      - id: cargo-clippy
-        name: cargo clippy
-        entry: cargo clippy -- -D warnings
-        language: system
-        types: [rust]
-        pass_filenames: false
-```
-
-#### Go Projects
-
-```yaml
-# .pre-commit-config.yaml
-repos:
-  - repo: local
-    hooks:
-      - id: go-fmt
-        name: go fmt
-        entry: gofmt -l -w
-        language: system
-        types: [go]
-      - id: go-vet
-        name: go vet
-        entry: go vet ./...
-        language: system
-        pass_filenames: false
-```
-
-### Husky vs Core Git Hooks — Key Trap
-
-When Husky is installed, Git's `core.hooksPath` is set to `.husky/_`. This means `.git/hooks/pre-commit` is **never executed**. If you need both:
-
-1. Wire your custom hook **inside** `.husky/pre-commit`
-2. Or call `.git/hooks/pre-commit-markdown.ps1` from the Husky hook
-
-The `copilot-hooks` skill's install script detects this and handles it automatically.
-
----
-
-## 2. Copilot Coding-Agent Hooks (GitHub)
-
-### What They Are
-
-These are hooks that run during the **GitHub Copilot coding agent lifecycle** — the cloud-based agent that opens PRs, or the CLI agent (`copilot` / `gh copilot`). Configured via `.github/hooks/hooks.json`.
-
-### Configuration File
-
-**Location:** `.github/hooks/hooks.json` at the repository root.
+### Pattern 6: Session-End Auto-Commit (.github/hooks/hooks.json)
 
 ```json
 {
@@ -269,231 +391,157 @@ These are hooks that run during the **GitHub Copilot coding agent lifecycle** �
 }
 ```
 
-### Available Copilot Agent Hook Events
+**Critical rules for session-end hooks:**
 
-| Event | When It Fires | Typical Use |
-| --- | --- | --- |
-| `sessionEnd` | Copilot agent session is ending | Auto-commit, push, cleanup |
-| `Stop` | Agent is stopping (legacy/compat name) | Same as sessionEnd — register both for compatibility |
+1. Register both `Stop` and `sessionEnd` for compatibility across clients
+2. Use `--no-verify` on commits to avoid recursive pre-commit failures
+3. On Windows, prefix with `sh` to avoid WSL bash routing
+4. Set `GIT_TERMINAL_PROMPT=0` and `GCM_INTERACTIVE=Never`
+5. Guard duplicate invocations with a lock file (30s window)
+6. Exit 0 on failure — never block session termination
 
-### Hook Entry Fields
+### Pattern 7: Async Background Tests (PostToolUse)
 
-| Field | Required | Description |
-| --- | --- | --- |
-| `type` | Yes | Must be `"command"` |
-| `bash` | Yes* | Command to run on Linux/macOS |
-| `windows` | No | Command to run on Windows (overrides `bash`) |
-| `timeoutSec` | No | Max seconds before the hook is killed (default varies) |
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/run-tests-async.sh",
+            "async": true,
+            "timeout": 300
+          }
+        ]
+      }
+    ]
+  }
+}
+```
 
-### Critical Implementation Rules
+Runs tests in background while Claude continues working. Results delivered on next turn.
 
-1. **Register both `Stop` and `sessionEnd`** — Some clients fire `Stop`, others fire `sessionEnd`. Wire the same command under both for compatibility.
-2. **Use `--no-verify` on commits** — Prevents recursive pre-commit failures during session shutdown.
-3. **On Windows, use `sh` prefix** — `"windows": "sh ./.github/scripts/auto-commit.sh"` avoids routing through `C:\Windows\System32\bash.exe` which depends on WSL.
-4. **Disable interactive prompts** — Set `GIT_TERMINAL_PROMPT=0`, `GCM_INTERACTIVE=Never`, and `GIT_ASKPASS=echo`.
-5. **Guard against duplicate invocations** — Both `Stop` and `sessionEnd` may fire in some builds. Use a lock file with a short time window.
-6. **Never block session termination** — Exit 0 even on failure. Log errors as informational output.
-7. **Use fast-fail SSH options** — `ssh -o BatchMode=yes -o ConnectTimeout=5` prevents hanging on credentials negotiation.
+### Pattern 8: Auto-Approve Known Safe Commands (PermissionRequest)
 
-### Auto-Commit Script Pattern
+```json
+{
+  "hooks": {
+    "PermissionRequest": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/auto-approve-safe.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
 
-The proven pattern (used by `copilot-hooks` skill):
+Returns:
 
-```sh
-#!/bin/sh
-# Guard duplicate invocation within 30s window
-LOCK_FILE="/tmp/copilot-session-hook-$(git rev-parse --show-toplevel 2>/dev/null | tr '/:\\' '_').lock"
-if [ -f "$LOCK_FILE" ]; then
-    NOW=$(date +%s); LAST=$(cat "$LOCK_FILE" 2>/dev/null || echo 0)
-    [ $((NOW - LAST)) -lt 30 ] && echo "Skipped (duplicate)" && exit 0
+```json
+{
+  "hookSpecificOutput": {
+    "hookEventName": "PermissionRequest",
+    "decision": {
+      "behavior": "allow"
+    }
+  }
+}
+```
+
+### Pattern 9: Task Completion Gate (TaskCompleted)
+
+```bash
+#!/bin/bash
+# Block task completion if tests fail
+if ! npm test 2>&1; then
+  echo "Tests not passing. Fix before completing task." >&2
+  exit 2
 fi
-date +%s > "$LOCK_FILE" || true
-
-export GIT_TERMINAL_PROMPT=0
-export GCM_INTERACTIVE=Never
-[ -z "$GIT_ASKPASS" ] && export GIT_ASKPASS=echo
-
-git rev-parse --is-inside-work-tree >/dev/null 2>&1 || exit 0
-[ -z "$(git status --porcelain 2>/dev/null)" ] && exit 0
-
-git add -A && git commit -m "auto-commit: $(date '+%Y-%m-%d %H:%M:%S')" --no-verify
-BRANCH=$(git symbolic-ref --quiet --short HEAD 2>/dev/null)
-REMOTE=$(git remote | head -n 1)
-[ -n "$REMOTE" ] && [ -n "$BRANCH" ] && \
-  GIT_SSH_COMMAND="ssh -o BatchMode=yes -o ConnectTimeout=5" git push 2>/dev/null
-
 exit 0
 ```
 
----
-
-## 3. SKILL.md Frontmatter Hooks (Agent Skills)
-
-### What They Are
-
-Hooks defined in the YAML frontmatter of a `SKILL.md` file. These are processed by the **agent runtime** (Claude Code, Copilot CLI agent, etc.) and fire during the AI session, not during Git operations.
-
-### Available Hook Events
-
-| Event | When It Fires | Purpose |
-| --- | --- | --- |
-| `PostToolUse` | After the agent uses a tool (read, write, edit, terminal, etc.) | Validate output, enforce logging, check quality |
-| `Stop` | Before the agent ends the session | Ensure work is saved, history logged, retrospective done |
-
-### Hook Configuration Structure
-
-```yaml
-hooks:
-  PostToolUse:
-    - matcher: "Read|Write|Edit"       # Regex matching tool names
-      hooks:
-        - type: prompt                   # "prompt" is the only supported type
-          prompt: |
-            Instructions for the agent to follow after the matched tool is used.
-  Stop:
-    - matcher: "*"                       # Wildcard matches all
-      hooks:
-        - type: prompt
-          prompt: |
-            Instructions to execute before the session ends.
-```
-
-### Hook Entry Fields
-
-| Field | Required | Description |
-| --- | --- | --- |
-| `matcher` | Yes | Regex or `"*"` wildcard to match tool names or events |
-| `hooks[].type` | Yes | Must be `"prompt"` — injects a prompt into the agent's context |
-| `hooks[].prompt` | Yes | The instruction text given to the agent |
-
-### Matcher Patterns
-
-| Pattern | Matches |
-| --- | --- |
-| `"*"` | Everything |
-| `"Read\|Write\|Edit"` | Read, Write, or Edit tools |
-| `"Terminal"` | Terminal/shell tool usage |
-| `"Read"` | Only file read operations |
-| `"Write\|Edit"` | Only file modification operations |
-
-### Common SKILL.md Hook Patterns
-
-#### History Tracking (Most Common)
-
-```yaml
-hooks:
-  PostToolUse:
-    - matcher: "Read|Write|Edit"
-      hooks:
-        - type: prompt
-          prompt: |
-            If a file was read, written, or edited in the {skill-name} directory,
-            verify that history logging occurred.
-            Check if History/{YYYY-MM-DD}.md exists with format:
-            "## HH:MM - {Action Taken}" and one-line summary.
-  Stop:
-    - matcher: "*"
-      hooks:
-        - type: prompt
-          prompt: |
-            Before stopping, verify history entry exists.
-            If missing: return {"decision": "block", "reason": "..."}
-            If present: return {"decision": "approve"}
-```
-
-#### Quality Gate Hook
-
-```yaml
-hooks:
-  PostToolUse:
-    - matcher: "Write|Edit"
-      hooks:
-        - type: prompt
-          prompt: |
-            After writing or editing code, verify:
-            1. No TODO comments were left unresolved
-            2. All functions have documentation
-            3. Error handling is present
-            If issues found, list them and suggest fixes.
-```
-
-#### Auto-Test Hook
-
-```yaml
-hooks:
-  PostToolUse:
-    - matcher: "Write|Edit"
-      hooks:
-        - type: prompt
-          prompt: |
-            After modifying source code, check if corresponding tests exist.
-            If test file exists, remind to run tests.
-            If no tests exist, suggest creating them.
-```
-
-#### Commit Message Enforcement Hook
-
-```yaml
-hooks:
-  PostToolUse:
-    - matcher: "Terminal"
-      hooks:
-        - type: prompt
-          prompt: |
-            If a git commit was just executed, verify the commit message
-            follows conventional commits format: type(scope): description
-            Valid types: feat, fix, docs, style, refactor, test, chore
-```
-
-### Stop Hook Response Format
-
-Stop hooks can return structured decisions:
+### Pattern 10: Environment Setup on Session Start (SessionStart)
 
 ```json
-{"decision": "approve"}
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/setup-env.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
 ```
+
+SessionStart hooks can persist env vars via `$CLAUDE_ENV_FILE`:
+
+```bash
+#!/bin/bash
+if [ -n "$CLAUDE_ENV_FILE" ]; then
+  echo 'export NODE_ENV=development' >> "$CLAUDE_ENV_FILE"
+fi
+exit 0
+```
+
+### Pattern 11: PowerShell Hook on Windows
 
 ```json
-{"decision": "block", "reason": "Explanation of why the session should not end yet."}
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "shell": "powershell",
+            "command": "Write-Host 'File written successfully'"
+          }
+        ]
+      }
+    ]
+  }
+}
 ```
 
 ---
 
-## Decision Matrix — Which Hook System to Use
+## Decision Matrix — Which Hook Event to Use
 
-| Goal | Hook System | Configuration |
+| Goal | Hook Event | Type |
 | --- | --- | --- |
-| Lint code before every commit | Git Hooks | `.husky/pre-commit` or `.git/hooks/pre-commit` |
-| Enforce commit message format | Git Hooks | `.git/hooks/commit-msg` |
-| Auto-commit when Copilot session ends | Copilot Agent Hooks | `.github/hooks/hooks.json` → `sessionEnd` |
-| Track skill usage history | SKILL.md Hooks | `hooks.PostToolUse` in frontmatter |
-| Block agent from stopping without saving | SKILL.md Hooks | `hooks.Stop` in frontmatter |
-| Run tests before push | Git Hooks | `.git/hooks/pre-push` |
-| Validate agent output quality | SKILL.md Hooks | `hooks.PostToolUse` matcher `"Write\|Edit"` |
-| Auto-push after Copilot agent work | Copilot Agent Hooks | `.github/hooks/hooks.json` → `sessionEnd` |
-| Rebuild after branch switch | Git Hooks | `.git/hooks/post-checkout` |
-
----
-
-## Quick Setup Recipes
-
-### Recipe: Add Copilot Session-End Auto-Commit to Any Repo
-
-1. Create `.github/hooks/hooks.json` with both `Stop` and `sessionEnd` entries
-2. Create `.github/scripts/auto-commit.sh` with the proven pattern above
-3. Restart the Copilot session (hooks are loaded at session start)
-
-### Recipe: Add Pre-Commit Markdown Linting to Any Repo
-
-Use the `copilot-hooks` skill:
-
-```powershell
-pwsh -NoProfile -ExecutionPolicy Bypass -File copilot-hooks/scripts/1-Install-CopilotHooks.ps1
-```
-
-### Recipe: Add History Tracking Hooks to a SKILL.md
-
-Copy the `PostToolUse` + `Stop` hook block from the Common SKILL.md Hook Patterns section above, replacing `{skill-name}` with the actual skill name.
+| Block dangerous shell commands | `PreToolUse` (matcher: `Bash`) | command |
+| Auto-approve safe operations | `PermissionRequest` | command |
+| Lint files after writes | `PostToolUse` (matcher: `Write\|Edit`) | command |
+| Run tests in background after edits | `PostToolUse` (async) | command |
+| Validate all tasks done before stopping | `Stop` | prompt or agent |
+| Track skill usage history | `PostToolUse` + `Stop` | prompt |
+| Auto-commit on session end | `SessionEnd` / `Stop` | command |
+| Set up environment variables | `SessionStart` | command |
+| Enforce commit message format | `PreToolUse` (matcher: `Bash`) | command |
+| Block task completion until tests pass | `TaskCompleted` | command |
+| Prevent teammate from going idle early | `TeammateIdle` | command |
+| Audit config changes | `ConfigChange` | command |
+| React to directory changes | `CwdChanged` | command |
+| Watch for file modifications | `FileChanged` (matcher: filename) | command |
+| Log MCP server operations | `PreToolUse` (matcher: `mcp__.*`) | command |
+| Validate user prompts before processing | `UserPromptSubmit` | command or prompt |
 
 ---
 
@@ -501,19 +549,24 @@ Copy the `PostToolUse` + `Stop` hook block from the Common SKILL.md Hook Pattern
 
 | Problem | Cause | Fix |
 | --- | --- | --- |
-| Pre-commit hook not running | Husky overrides `core.hooksPath` | Wire hook inside `.husky/pre-commit` instead |
+| Hook not firing | Wrong matcher or wrong event | Use `/hooks` menu to verify config; check matcher regex |
+| Stop hook runs infinitely | Hook keeps blocking without checking `stop_hook_active` | Check `stop_hook_active` field in input; skip if `true` |
+| JSON parse errors | Shell profile prints text on startup | Clean `.bashrc`/`.zshrc` or use `shell: "powershell"` |
+| Async hook results not appearing | Results delivered on next turn | Wait for next user interaction |
 | Session-end hook not firing | Config loaded at session start | Restart the Copilot session |
-| `bash.exe` error on Windows | Routes through WSL bash | Use `"windows": "sh ./.github/scripts/..."` |
-| Duplicate auto-commits | Both `Stop` and `sessionEnd` fire | Add lock-file guard with 30s window |
-| Push hangs on session end | Waiting for SSH credentials | Set `BatchMode=yes`, `ConnectTimeout=5` |
-| SKILL.md hooks not triggering | Frontmatter YAML syntax error | Validate YAML indentation, use `\|` for multiline |
-| Hook blocked but session ended anyway | Agent runtime ignores block | This is expected — block is advisory in some runtimes |
+| `bash.exe` error on Windows | Routes through WSL bash | Use `"windows": "sh ./.github/scripts/..."` or `shell: "powershell"` |
+| Duplicate auto-commits | Both `Stop` and `sessionEnd` fire | Add lock-file guard with 30s time window |
+| `permissionDecision` ignored | Using deprecated top-level `decision` for PreToolUse | Use `hookSpecificOutput.permissionDecision` instead |
+| Hook blocked but action continued | Event doesn't support blocking | Check the "Can Block?" column in the events table |
+| Policy hooks can't be disabled | `disableAllHooks` doesn't affect managed hooks | Only managed-level `disableAllHooks` can disable managed hooks |
+
+## Debugging
+
+Run `claude --debug` to see hook execution details. Toggle verbose mode with `Ctrl+O`. Use `/hooks` command to browse all configured hooks and their sources.
 
 ## Key References
 
+- Claude Code Hooks Reference (official): <https://docs.anthropic.com/en/docs/claude-code/hooks>
 - Agent Skills Specification: <https://agentskills.io/specification>
-- GitHub Docs — Custom Instructions: <https://docs.github.com/en/copilot/customizing-copilot/adding-repository-custom-instructions-for-github-copilot>
-- Husky: <https://typicode.github.io/husky/>
-- pre-commit framework: <https://pre-commit.com/>
-- Git Hooks documentation: <https://git-scm.com/docs/githooks>
-- Copilot Hooks skill (local): See `copilot-hooks/SKILL.md` in this skills repo
+- Copilot Hooks skill (local, for Git hooks + session-end): See `copilot-hooks/SKILL.md`
+- Skill Creator skill (local, for adding hooks to new skills): See `skill-creator/SKILL.md`
