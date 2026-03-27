@@ -526,3 +526,7 @@ Result: Identified the March repositories involved for ssadhula-relias and colle
 
 2026-03-11 - 13:54 - Document the per-user productivity reporting workflow in the productivity skill
 Result: Updated the productivity skill documentation to describe the new username-plus-date-range reporting scripts, the premium request lookup mechanics, and the detailed per-user productivity breakdown workflow.
+
+2026-03-26 - 22:10 - Create a global PowerShell alias for Zed editor
+Result: Added a global zed function to $PROFILE.CurrentUserAllHosts pointing at $env:LOCALAPPDATA\Programs\Zed\Zed.exe, created a timestamped profile backup, and verified the alias loads in a fresh PowerShell session.
+
