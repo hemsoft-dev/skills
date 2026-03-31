@@ -99,6 +99,7 @@ See `common-entries.json` for full alias list and Jira descriptions. Use natural
 | "professional development", "pd", "training" | INT-5 | Professional Development |
 | "assistant beta", "ra beta" | PE-904 | Relias Assistant -- first beta milestone |
 | "legacy release", "lrt", "release tool" | PE-889 | Legacy Release Tool |
+| "ai task force", "task force", "atf" | RPLAT-17591 | AI Task Force |
 
 **Example natural language requests:**
 

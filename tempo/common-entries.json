@@ -130,6 +130,20 @@
         "pe-889"
       ],
       "worklogDescription": "Working on issue PE-889"
+    },
+    {
+      "issueKey": "RPLAT-17591",
+      "title": "AI Task Force",
+      "account": "GEN-DEV",
+      "jiraDescription": "AI Task Force activities",
+      "aliases": [
+        "ai task force",
+        "task force",
+        "atf",
+        "ai taskforce",
+        "rplat-17591"
+      ],
+      "worklogDescription": "Working on issue RPLAT-17591"
     }
   ],
 
