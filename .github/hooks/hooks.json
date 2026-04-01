@@ -1,6 +1,14 @@
 {
     "version": 1,
     "hooks": {
+        "UserPromptSubmit": [
+            {
+                "type": "command",
+                "windows": "powershell -NoProfile -Command \"$dir = Join-Path $env:USERPROFILE '.agents/skills/logs/session'; New-Item -ItemType Directory -Force -Path $dir | Out-Null; Add-Content -Path (Join-Path $dir ((Get-Date -Format 'yyyy-MM-dd') + '.log')) -Value ('[' + (Get-Date -Format 'yyyy-MM-dd HH:mm:ss') + '] [UserPrompt] User submitted prompt')\"",
+                "bash": "mkdir -p ~/.agents/skills/logs/session && echo \"[$(date '+%Y-%m-%d %H:%M:%S')] [UserPrompt] User submitted prompt\" >> ~/.agents/skills/logs/session/$(date '+%Y-%m-%d').log",
+                "timeoutSec": 5
+            }
+        ],
         "Stop": [
             {
                 "type": "command",
