@@ -1,6 +1,6 @@
 ---
 name: hooks
-description: "V1.0 - Commands: lookup, suggest, configure, explain. Expert knowledge base on Copilot and Claude Code agent hooks — all 28+ hook events, 4 hook types (command, http, prompt, agent), matchers, decision control, SKILL.md frontmatter hooks, .github/hooks/hooks.json, and settings.json hook configuration. Use when working with agent hooks, session hooks, pre/post tool use hooks, stop hooks, or any agent lifecycle automation."
+description: "V1.1 - Commands: lookup, suggest, configure, explain, timestamp. Expert knowledge base on Copilot and Claude Code agent hooks — all 28+ hook events, 4 hook types (command, http, prompt, agent), matchers, decision control, SKILL.md frontmatter hooks, .github/hooks/hooks.json, and settings.json hook configuration. Use when working with agent hooks, session hooks, pre/post tool use hooks, stop hooks, or any agent lifecycle automation."
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -48,6 +48,7 @@ Expert knowledge base on every type of **agent hook** in the Copilot and Claude 
 | `suggest` | Recommend hooks to add to a project or skill |
 | `configure` | Generate correct hook configuration for a target |
 | `explain` | Deep-dive on how a specific hook event or type works |
+| `timestamp` | Deploy EST/EDT timestamp Stop hook to a repo |
 
 ## Where Agent Hooks Are Defined
 
@@ -563,6 +564,29 @@ exit 0
 ## Debugging
 
 Run `claude --debug` to see hook execution details. Toggle verbose mode with `Ctrl+O`. Use `/hooks` command to browse all configured hooks and their sources.
+
+## Deployable Templates
+
+Pre-built hooks in `templates/` ready to copy into any repo.
+
+### Timestamp (`templates/timestamp/`)
+
+Adds a deterministic EST/EDT timestamp at the end of every agent interaction via a `Stop` hook.
+
+**Files:**
+
+- `timestamp.json` — Hook definition (copy to `.github/hooks/`)
+- `timestamp.ps1` — PowerShell script for Windows (copy to `.github/hooks/`)
+
+**Deploy with `timestamp` command:**
+
+1. Copy `templates/timestamp/timestamp.json` to `{repo}/.github/hooks/timestamp.json`
+2. Copy `templates/timestamp/timestamp.ps1` to `{repo}/.github/hooks/timestamp.ps1`
+3. Restart the Copilot chat session
+
+The hook outputs `systemMessage` JSON, which VS Code renders as a collapsible notice after each response. The Linux/macOS path uses inline bash with `TZ='America/New_York'`; Windows uses the `.ps1` script via `TimeZoneInfo`.
+
+---
 
 ## Key References
 

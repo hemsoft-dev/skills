@@ -4,6 +4,18 @@ description: V1.0 - Centralized log management system for storing, organizing, a
 license: Apache-2.0
 compatibility: Windows PowerShell, requires write access to ~/.claude/skills/logs/
 hooks:
+  SessionStart:
+    - hooks:
+        - type: command
+          shell: powershell
+          command: "New-Item -ItemType Directory -Force -Path logs | Out-Null; Add-Content -Path logs/session.log -Value \"Session started: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')\""
+          timeout: 10
+  UserPromptSubmit:
+    - hooks:
+        - type: command
+          shell: powershell
+          command: "Add-Content -Path logs/session.log -Value \"User prompt: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')\""
+          timeout: 10
   PostToolUse:
     - matcher: "Read|Write|Edit"
       hooks:
@@ -21,6 +33,10 @@ hooks:
   Stop:
     - matcher: "*"
       hooks:
+        - type: command
+          shell: powershell
+          command: "Add-Content -Path logs/session.log -Value \"Session stopped: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')\""
+          timeout: 10
         - type: prompt
           prompt: |
             Before stopping, if logs skill was used (check if any files in logs directory were modified), verify that the interaction was logged:
