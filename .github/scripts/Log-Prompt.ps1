@@ -18,7 +18,7 @@ if ($raw) {
 $prompt = ($prompt -replace '[\r\n]+', ' ').Trim()
 if ($prompt.Length -gt 300) { $prompt = $prompt.Substring(0, 300) + '...' }
 
-$dir = Join-Path $env:USERPROFILE '.agents/skills/logs/session'
+$dir = 'logs/session'
 New-Item -ItemType Directory -Force -Path $dir | Out-Null
 $logFile = Join-Path $dir ((Get-Date -Format 'yyyy-MM-dd') + '.log')
 Add-Content -Path $logFile -Value ('[{0}] [UserPrompt] {1}' -f (Get-Date -Format 'yyyy-MM-dd HH:mm:ss'), $prompt)

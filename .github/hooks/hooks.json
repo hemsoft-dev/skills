@@ -12,29 +12,17 @@
         "Stop": [
             {
                 "type": "command",
-                "windows": "powershell -NoProfile -Command \"New-Item -ItemType Directory -Force -Path (Join-Path $env:USERPROFILE '.agents/skills/logs/session') | Out-Null; Add-Content -Path (Join-Path $env:USERPROFILE ('.agents/skills/logs/session/' + (Get-Date -Format 'yyyy-MM-dd') + '.log')) -Value ('[' + (Get-Date -Format 'yyyy-MM-dd HH:mm:ss') + '] [Stop] Session stopped')\"",
-                "bash": "mkdir -p ~/.agents/skills/logs/session && echo \"[$(date '+%Y-%m-%d %H:%M:%S')] [Stop] Session stopped\" >> ~/.agents/skills/logs/session/$(date '+%Y-%m-%d').log",
+                "windows": "powershell -NoProfile -Command \"New-Item -ItemType Directory -Force -Path 'logs/session' | Out-Null; Add-Content -Path ('logs/session/' + (Get-Date -Format 'yyyy-MM-dd') + '.log') -Value ('[' + (Get-Date -Format 'yyyy-MM-dd HH:mm:ss') + '] [Stop] Session stopped')\"",
+                "bash": "mkdir -p logs/session && echo \"[$(date '+%Y-%m-%d %H:%M:%S')] [Stop] Session stopped\" >> logs/session/$(date '+%Y-%m-%d').log",
                 "timeoutSec": 5
-            },
-            {
-                "type": "command",
-                "windows": "sh ./.github/scripts/auto-commit.sh",
-                "bash": ".github/scripts/auto-commit.sh",
-                "timeoutSec": 10
             }
         ],
         "sessionEnd": [
             {
                 "type": "command",
-                "windows": "powershell -NoProfile -Command \"New-Item -ItemType Directory -Force -Path (Join-Path $env:USERPROFILE '.agents/skills/logs/session') | Out-Null; Add-Content -Path (Join-Path $env:USERPROFILE ('.agents/skills/logs/session/' + (Get-Date -Format 'yyyy-MM-dd') + '.log')) -Value ('[' + (Get-Date -Format 'yyyy-MM-dd HH:mm:ss') + '] [sessionEnd] Session ended')\"",
-                "bash": "mkdir -p ~/.agents/skills/logs/session && echo \"[$(date '+%Y-%m-%d %H:%M:%S')] [sessionEnd] Session ended\" >> ~/.agents/skills/logs/session/$(date '+%Y-%m-%d').log",
+                "windows": "powershell -NoProfile -Command \"New-Item -ItemType Directory -Force -Path 'logs/session' | Out-Null; Add-Content -Path ('logs/session/' + (Get-Date -Format 'yyyy-MM-dd') + '.log') -Value ('[' + (Get-Date -Format 'yyyy-MM-dd HH:mm:ss') + '] [sessionEnd] Session ended')\"",
+                "bash": "mkdir -p logs/session && echo \"[$(date '+%Y-%m-%d %H:%M:%S')] [sessionEnd] Session ended\" >> logs/session/$(date '+%Y-%m-%d').log",
                 "timeoutSec": 5
-            },
-            {
-                "type": "command",
-                "windows": "sh ./.github/scripts/auto-commit.sh",
-                "bash": ".github/scripts/auto-commit.sh",
-                "timeoutSec": 10
             }
         ]
     }

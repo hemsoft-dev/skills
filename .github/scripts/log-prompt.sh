@@ -7,6 +7,6 @@ else
     prompt="$raw"
 fi
 prompt=$(echo "$prompt" | tr '\n' ' ' | cut -c1-300)
-dir="$HOME/.agents/skills/logs/session"
+dir="logs/session"
 mkdir -p "$dir"
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] [UserPrompt] $prompt" >> "$dir/$(date '+%Y-%m-%d').log"
