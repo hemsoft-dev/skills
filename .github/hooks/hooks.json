@@ -18,7 +18,7 @@
             },
             {
                 "type": "command",
-                "windows": "ffplay -nodisp -autoexit .github/hooks/done.mp3",
+                "windows": "ffplay -nodisp -autoexit -volume 25 .github/hooks/done.mp3",
                 "timeoutSec": 10
             }
         ],
@@ -31,7 +31,7 @@
             },
             {
                 "type": "command",
-                "windows": "ffplay -nodisp -autoexit .github/hooks/done.mp3",
+                "windows": "ffplay -nodisp -autoexit -volume 25 .github/hooks/done.mp3",
                 "timeoutSec": 10
             }
         ]
