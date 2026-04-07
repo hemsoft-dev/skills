@@ -9,9 +9,11 @@
   h2 { margin-top: 2rem; color: #333; }
   .description { color: #666; margin-bottom: 0.5rem; font-style: italic; }
   .diagram-container { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 1rem; margin: 0.5rem 0 1.5rem; overflow-x: auto; }
-  svg.railroad-diagram { }
+  svg.railroad-diagram { background-color: transparent; }
   svg.railroad-diagram path { stroke-width: 3; stroke: #333; fill: none; }
-  svg.railroad-diagram text { font-size: 14px; font-family: ui-monospace, 'Cascadia Code', 'Fira Code', monospace; }
+  svg.railroad-diagram text { font: bold 14px monospace; text-anchor: middle; }
+  svg.railroad-diagram text.label { text-anchor: start; }
+  svg.railroad-diagram text.comment { font: italic 12px monospace; }
   svg.railroad-diagram rect { stroke-width: 3; stroke: #333; fill: #dbeafe; }
   svg.railroad-diagram rect.group-box { stroke: #999; stroke-dasharray: 10 5; fill: #f3f4f6; }
   svg.railroad-diagram .non-terminal rect { fill: #fef3c7; }
