@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>VS Code Custom Agent (.agent.md) Frontmatter — Railroad Diagrams</title>
+<style>
+  body { font-family: system-ui, -apple-system, sans-serif; max-width: 960px; margin: 2rem auto; padding: 0 1rem; color: #1a1a1a; background: #fafafa; }
+  h1 { border-bottom: 2px solid #333; padding-bottom: 0.5rem; }
+  h2 { margin-top: 2rem; color: #333; }
+  .description { color: #666; margin-bottom: 0.5rem; font-style: italic; }
+  .diagram-container { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 1rem; margin: 0.5rem 0 1.5rem; overflow-x: auto; }
+  svg.railroad-diagram { }
+  svg.railroad-diagram path { stroke-width: 3; stroke: #333; fill: none; }
+  svg.railroad-diagram text { font-size: 14px; font-family: ui-monospace, 'Cascadia Code', 'Fira Code', monospace; }
+  svg.railroad-diagram rect { stroke-width: 3; stroke: #333; fill: #dbeafe; }
+  svg.railroad-diagram rect.group-box { stroke: #999; stroke-dasharray: 10 5; fill: #f3f4f6; }
+  svg.railroad-diagram .non-terminal rect { fill: #fef3c7; }
+  svg.railroad-diagram .terminal rect { fill: #dbeafe; }
+</style>
+</head>
+<body>
+<h1>VS Code Custom Agent (.agent.md) Frontmatter</h1>
+<p class="description">Railroad diagram for the YAML frontmatter schema of VS Code custom agent files (.agent.md)</p>
+<p>Source: <a href="https://code.visualstudio.com/docs/copilot/customization/custom-agents">https://code.visualstudio.com/docs/copilot/customization/custom-agents</a></p>
+<h2>agent-md File</h2>
+<p class="description">Complete structure of a .agent.md custom agent file</p>
+<div class="diagram-container">
+<svg class="railroad-diagram" height="62" viewBox="0 0 571.5 62" width="571.5">
+<g transform="translate(.5 .5)">
+<g>
+<path d="M20 21v20m0 -10h20" /></g><path d="M40 31h10" /><g>
+<path d="M50 31h0.0" /><path d="M521.5 31h0.0" /><g class="terminal ">
+<path d="M50.0 31h0.0" /><path d="M95.5 31h0.0" /><rect height="22" rx="10" ry="10" width="45.5" x="50" y="20"></rect><text x="72.75" y="35">---</text></g><path d="M95.5 31h10" /><path d="M105.5 31h10" /><g class="non-terminal ">
+<path d="M115.5 31h0.0" /><path d="M288.5 31h0.0" /><rect height="22" width="173" x="115.5" y="20"></rect><text x="202" y="35">Frontmatter Fields</text></g><path d="M288.5 31h10" /><path d="M298.5 31h10" /><g class="terminal ">
+<path d="M308.5 31h0.0" /><path d="M354.0 31h0.0" /><rect height="22" rx="10" ry="10" width="45.5" x="308.5" y="20"></rect><text x="331.25" y="35">---</text></g><path d="M354.0 31h10" /><path d="M364.0 31h10" /><g class="non-terminal ">
+<path d="M374.0 31h0.0" /><path d="M521.5 31h0.0" /><rect height="22" width="147.5" x="374" y="20"></rect><text x="447.75" y="35">Body (Markdown)</text></g></g><path d="M521.5 31h10" /><path d="M 531.5 31 h 20 m 0 -10 v 20"></path></g></svg>
+</div>
+<h2>Frontmatter Fields</h2>
+<p class="description">All available YAML frontmatter fields (all optional)</p>
+<div class="diagram-container">
+<svg class="railroad-diagram" height="553" viewBox="0 0 407.0 553" width="407.0">
+<g transform="translate(.5 .5)">
+<g>
+<path d="M20 20v20m0 -10h20" /></g><path d="M40 30h10" /><g>
+<path d="M50 30h0.0" /><path d="M50.0 30h10" /><g>
+<path d="M60.0 30h38.25" /><path d="M308.75 30h38.25" /><path d="M98.25 30h20" /><g>
+<path d="M118.25 30h170.5" /></g><path d="M288.75 30h20" /><path d="M98.25 30a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10" /><g>
+<path d="M118.25 50h0.0" /><path d="M288.75 50h0.0" /><g class="terminal ">
+<path d="M118.25 50h0.0" /><path d="M180.75 50h0.0" /><rect height="22" rx="10" ry="10" width="62.5" x="118.25" y="39"></rect><text x="149.5" y="54">name:</text></g><path d="M180.75 50h10" /><path d="M190.75 50h10" /><g class="terminal ">
+<path d="M200.75 50h0.0" /><path d="M288.75 50h0.0" /><rect height="22" rx="10" ry="10" width="88" x="200.75" y="39"></rect><text x="244.75" y="54">&lt;string></text></g></g><path d="M288.75 50a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10" /></g><path d="M347.0 30a10 10 0 0 1 10 10v19a10 10 0 0 1 -10 10h-287.0a10 10 0 0 0 -10 10v0a10 10 0 0 0 10 10" /><g>
+<path d="M60.0 89h8.5" /><path d="M338.5 89h8.5" /><path d="M68.5 89h20" /><g>
+<path d="M88.5 89h230.0" /></g><path d="M318.5 89h20" /><path d="M68.5 89a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10" /><g>
+<path d="M88.5 109h0.0" /><path d="M318.5 109h0.0" /><g class="terminal ">
+<path d="M88.5 109h0.0" /><path d="M210.5 109h0.0" /><rect height="22" rx="10" ry="10" width="122" x="88.5" y="98"></rect><text x="149.5" y="113">description:</text></g><path d="M210.5 109h10" /><path d="M220.5 109h10" /><g class="terminal ">
+<path d="M230.5 109h0.0" /><path d="M318.5 109h0.0" /><rect height="22" rx="10" ry="10" width="88" x="230.5" y="98"></rect><text x="274.5" y="113">&lt;string></text></g></g><path d="M318.5 109a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10" /></g><path d="M347.0 89a10 10 0 0 1 10 10v19a10 10 0 0 1 -10 10h-287.0a10 10 0 0 0 -10 10v0a10 10 0 0 0 10 10" /><g>
+<path d="M60.0 148h0.0" /><path d="M347.0 148h0.0" /><path d="M60.0 148h20" /><g>
+<path d="M80.0 148h247.0" /></g><path d="M327.0 148h20" /><path d="M60.0 148a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10" /><g>
+<path d="M80.0 168h0.0" /><path d="M327.0 168h0.0" /><g class="terminal ">
+<path d="M80.0 168h0.0" /><path d="M219.0 168h0.0" /><rect height="22" rx="10" ry="10" width="139" x="80" y="157"></rect><text x="149.5" y="172">argument-hint:</text></g><path d="M219.0 168h10" /><path d="M229.0 168h10" /><g class="terminal ">
+<path d="M239.0 168h0.0" /><path d="M327.0 168h0.0" /><rect height="22" rx="10" ry="10" width="88" x="239" y="157"></rect><text x="283" y="172">&lt;string></text></g></g><path d="M327.0 168a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10" /></g><path d="M347.0 148a10 10 0 0 1 10 10v19a10 10 0 0 1 -10 10h-287.0a10 10 0 0 0 -10 10v0a10 10 0 0 0 10 10" /><g>
+<path d="M60.0 207h25.5" /><path d="M321.5 207h25.5" /><path d="M85.5 207h20" /><g>
+<path d="M105.5 207h196.0" /></g><path d="M301.5 207h20" /><path d="M85.5 207a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10" /><g>
+<path d="M105.5 227h0.0" /><path d="M301.5 227h0.0" /><g class="terminal ">
+<path d="M105.5 227h0.0" /><path d="M176.5 227h0.0" /><rect height="22" rx="10" ry="10" width="71" x="105.5" y="216"></rect><text x="141" y="231">model:</text></g><path d="M176.5 227h10" /><path d="M186.5 227h10" /><g class="non-terminal ">
+<path d="M196.5 227h0.0" /><path d="M301.5 227h0.0" /><rect height="22" width="105" x="196.5" y="216"></rect><text x="249" y="231">Model Spec</text></g></g><path d="M301.5 227a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10" /></g><path d="M347.0 207a10 10 0 0 1 10 10v19a10 10 0 0 1 -10 10h-287.0a10 10 0 0 0 -10 10v0a10 10 0 0 0 10 10" /><g>
+<path d="M60.0 266h29.75" /><path d="M317.25 266h29.75" /><path d="M89.75 266h20" /><g>
+<path d="M109.75 266h187.5" /></g><path d="M297.25 266h20" /><path d="M89.75 266a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10" /><g>
+<path d="M109.75 286h0.0" /><path d="M297.25 286h0.0" /><g class="terminal ">
+<path d="M109.75 286h0.0" /><path d="M180.75 286h0.0" /><rect height="22" rx="10" ry="10" width="71" x="109.75" y="275"></rect><text x="145.25" y="290">tools:</text></g><path d="M180.75 286h10" /><path d="M190.75 286h10" /><g class="non-terminal ">
+<path d="M200.75 286h0.0" /><path d="M297.25 286h0.0" /><rect height="22" width="96.5" x="200.75" y="275"></rect><text x="249" y="290">Tool List</text></g></g><path d="M297.25 286a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10" /></g><path d="M347.0 266a10 10 0 0 1 10 10v19a10 10 0 0 1 -10 10h-287.0a10 10 0 0 0 -10 10v0a10 10 0 0 0 10 10" /><g>
+<path d="M60.0 325h21.25" /><path d="M325.75 325h21.25" /><path d="M81.25 325h20" /><g>
+<path d="M101.25 325h204.5" /></g><path d="M305.75 325h20" /><path d="M81.25 325a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10" /><g>
+<path d="M101.25 345h0.0" /><path d="M305.75 345h0.0" /><g class="terminal ">
+<path d="M101.25 345h0.0" /><path d="M180.75 345h0.0" /><rect height="22" rx="10" ry="10" width="79.5" x="101.25" y="334"></rect><text x="141" y="349">agents:</text></g><path d="M180.75 345h10" /><path d="M190.75 345h10" /><g class="non-terminal ">
+<path d="M200.75 345h0.0" /><path d="M305.75 345h0.0" /><rect height="22" width="105" x="200.75" y="334"></rect><text x="253.25" y="349">Agent List</text></g></g><path d="M305.75 345a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10" /></g><path d="M347.0 325a10 10 0 0 1 10 10v19a10 10 0 0 1 -10 10h-287.0a10 10 0 0 0 -10 10v0a10 10 0 0 0 10 10" /><g>
+<path d="M60.0 384h4.25" /><path d="M342.75 384h4.25" /><path d="M64.25 384h20" /><g>
+<path d="M84.25 384h238.5" /></g><path d="M322.75 384h20" /><path d="M64.25 384a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10" /><g>
+<path d="M84.25 404h0.0" /><path d="M322.75 404h0.0" /><g class="terminal ">
+<path d="M84.25 404h0.0" /><path d="M180.75 404h0.0" /><rect height="22" rx="10" ry="10" width="96.5" x="84.25" y="393"></rect><text x="132.5" y="408">handoffs:</text></g><path d="M180.75 404h10" /><path d="M190.75 404h10" /><g class="non-terminal ">
+<path d="M200.75 404h0.0" /><path d="M322.75 404h0.0" /><rect height="22" width="122" x="200.75" y="393"></rect><text x="261.75" y="408">Handoff List</text></g></g><path d="M322.75 404a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10" /></g><path d="M347.0 384a10 10 0 0 1 10 10v19a10 10 0 0 1 -10 10h-287.0a10 10 0 0 0 -10 10v0a10 10 0 0 0 10 10" /><g>
+<path d="M60.0 443h17.0" /><path d="M330.0 443h17.0" /><path d="M77.0 443h20" /><g>
+<path d="M97.0 443h213.0" /></g><path d="M310.0 443h20" /><path d="M77.0 443a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10" /><g>
+<path d="M97.0 463h0.0" /><path d="M310.0 463h0.0" /><g class="terminal ">
+<path d="M97.0 463h0.0" /><path d="M168.0 463h0.0" /><rect height="22" rx="10" ry="10" width="71" x="97" y="452"></rect><text x="132.5" y="467">hooks:</text></g><path d="M168.0 463h10" /><path d="M178.0 463h10" /><g class="non-terminal ">
+<path d="M188.0 463h0.0" /><path d="M310.0 463h0.0" /><rect height="22" width="122" x="188" y="452"></rect><text x="249" y="467">Hooks Config</text></g></g><path d="M310.0 463a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10" /></g><path d="M347.0 443a10 10 0 0 1 10 10v19a10 10 0 0 1 -10 10h-287.0a10 10 0 0 0 -10 10v0a10 10 0 0 0 10 10" /><g>
+<path d="M60.0 502h41.25" /><path d="M305.75 502h41.25" /><path d="M101.25 502h20" /><g>
+<path d="M121.25 502h164.5" /></g><path d="M285.75 502h20" /><path d="M101.25 502a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10" /><g class="non-terminal ">
+<path d="M121.25 522h0.0" /><path d="M285.75 522h0.0" /><rect height="22" width="164.5" x="121.25" y="511"></rect><text x="203.5" y="526">Visibility Fields</text></g><path d="M285.75 522a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10" /></g><path d="M347.0 502h10" /><path d="M357.0 502h0.0" /></g><path d="M357.0 502h10" /><path d="M 367.0 502 h 20 m 0 -10 v 20"></path></g></svg>
+</div>
+<h2>Model Spec</h2>
+<p class="description">A single model name or a prioritized list of model names</p>
+<div class="diagram-container">
+<svg class="railroad-diagram" height="122" viewBox="0 0 435.5 122" width="435.5">
+<g transform="translate(.5 .5)">
+<g>
+<path d="M20 21v20m0 -10h20" /></g><g>
+<path d="M40 31h0.0" /><path d="M395.5 31h0.0" /><path d="M40.0 31h20" /><g class="terminal ">
+<path d="M60.0 31h58.5" /><path d="M317.0 31h58.5" /><rect height="22" rx="10" ry="10" width="198.5" x="118.5" y="20"></rect><text x="217.75" y="35">&lt;model-name> (vendor)</text></g><path d="M375.5 31h20" /><path d="M40.0 31a10 10 0 0 1 10 10v10a10 10 0 0 0 10 10" /><g>
+<path d="M60.0 61h0.0" /><path d="M375.5 61h0.0" /><g class="terminal ">
+<path d="M60.0 61h0.0" /><path d="M88.5 61h0.0" /><rect height="22" rx="10" ry="10" width="28.5" x="60" y="50"></rect><text x="74.25" y="65">[</text></g><path d="M88.5 61h10" /><path d="M98.5 61h10" /><g>
+<path d="M108.5 61h0.0" /><path d="M327.0 61h0.0" /><path d="M108.5 61h10" /><g class="terminal ">
+<path d="M118.5 61h0.0" /><path d="M317.0 61h0.0" /><rect height="22" rx="10" ry="10" width="198.5" x="118.5" y="50"></rect><text x="217.75" y="65">&lt;model-name> (vendor)</text></g><path d="M317.0 61h10" /><path d="M118.5 61a10 10 0 0 0 -10 10v10a10 10 0 0 0 10 10" /><g class="terminal ">
+<path d="M118.5 91h85.0" /><path d="M232.0 91h85.0" /><rect height="22" rx="10" ry="10" width="28.5" x="203.5" y="80"></rect><text x="217.75" y="95">,</text></g><path d="M317.0 91a10 10 0 0 0 10 -10v-10a10 10 0 0 0 -10 -10" /></g><path d="M327.0 61h10" /><path d="M337.0 61h10" /><g class="terminal ">
+<path d="M347.0 61h0.0" /><path d="M375.5 61h0.0" /><rect height="22" rx="10" ry="10" width="28.5" x="347" y="50"></rect><text x="361.25" y="65">]</text></g></g><path d="M375.5 61a10 10 0 0 0 10 -10v-10a10 10 0 0 1 10 -10" /></g><path d="M 395.5 31 h 20 m 0 -10 v 20"></path></g></svg>
+</div>
+<h2>Tool List</h2>
+<p class="description">YAML array of tool identifiers</p>
+<div class="diagram-container">
+<svg class="railroad-diagram" height="92" viewBox="0 0 356.0 92" width="356.0">
+<g transform="translate(.5 .5)">
+<g>
+<path d="M20 21v20m0 -10h20" /></g><path d="M40 31h10" /><g>
+<path d="M50 31h0.0" /><path d="M306.0 31h0.0" /><g class="terminal ">
+<path d="M50.0 31h0.0" /><path d="M78.5 31h0.0" /><rect height="22" rx="10" ry="10" width="28.5" x="50" y="20"></rect><text x="64.25" y="35">[</text></g><path d="M78.5 31h10" /><path d="M88.5 31h10" /><g>
+<path d="M98.5 31h0.0" /><path d="M257.5 31h0.0" /><path d="M98.5 31h10" /><g class="non-terminal ">
+<path d="M108.5 31h0.0" /><path d="M247.5 31h0.0" /><rect height="22" width="139" x="108.5" y="20"></rect><text x="178" y="35">Tool Reference</text></g><path d="M247.5 31h10" /><path d="M108.5 31a10 10 0 0 0 -10 10v10a10 10 0 0 0 10 10" /><g class="terminal ">
+<path d="M108.5 61h55.25" /><path d="M192.25 61h55.25" /><rect height="22" rx="10" ry="10" width="28.5" x="163.75" y="50"></rect><text x="178" y="65">,</text></g><path d="M247.5 61a10 10 0 0 0 10 -10v-10a10 10 0 0 0 -10 -10" /></g><path d="M257.5 31h10" /><path d="M267.5 31h10" /><g class="terminal ">
+<path d="M277.5 31h0.0" /><path d="M306.0 31h0.0" /><rect height="22" rx="10" ry="10" width="28.5" x="277.5" y="20"></rect><text x="291.75" y="35">]</text></g></g><path d="M306.0 31h10" /><path d="M 316.0 31 h 20 m 0 -10 v 20"></path></g></svg>
+</div>
+<h2>Tool Reference</h2>
+<p class="description">A tool name, tool set, MCP server tools, or wildcard</p>
+<div class="diagram-container">
+<svg class="railroad-diagram" height="122" viewBox="0 0 267.5 122" width="267.5">
+<g transform="translate(.5 .5)">
+<g>
+<path d="M20 21v20m0 -10h20" /></g><g>
+<path d="M40 31h0.0" /><path d="M227.5 31h0.0" /><path d="M40.0 31h20" /><g class="terminal ">
+<path d="M60.0 31h17.0" /><path d="M190.5 31h17.0" /><rect height="22" rx="10" ry="10" width="113.5" x="77" y="20"></rect><text x="133.75" y="35">&lt;tool-name></text></g><path d="M207.5 31h20" /><path d="M40.0 31a10 10 0 0 1 10 10v10a10 10 0 0 0 10 10" /><g class="terminal ">
+<path d="M60.0 61h0.0" /><path d="M207.5 61h0.0" /><rect height="22" rx="10" ry="10" width="147.5" x="60" y="50"></rect><text x="133.75" y="65">&lt;server-name>/*</text></g><path d="M207.5 61a10 10 0 0 0 10 -10v-10a10 10 0 0 1 10 -10" /><path d="M40.0 31a10 10 0 0 1 10 10v40a10 10 0 0 0 10 10" /><g class="terminal ">
+<path d="M60.0 91h0.0" /><path d="M207.5 91h0.0" /><rect height="22" rx="10" ry="10" width="147.5" x="60" y="80"></rect><text x="133.75" y="95">&lt;tool-set-name></text></g><path d="M207.5 91a10 10 0 0 0 10 -10v-40a10 10 0 0 1 10 -10" /></g><path d="M 227.5 31 h 20 m 0 -10 v 20"></path></g></svg>
+</div>
+<h2>Agent List</h2>
+<p class="description">Subagents available to this agent</p>
+<div class="diagram-container">
+<svg class="railroad-diagram" height="152" viewBox="0 0 359.0 152" width="359.0">
+<g transform="translate(.5 .5)">
+<g>
+<path d="M20 21v20m0 -10h20" /></g><g>
+<path d="M40 31h0.0" /><path d="M319.0 31h0.0" /><path d="M40.0 31h20" /><g class="terminal ">
+<path d="M60.0 31h105.25" /><path d="M193.75 31h105.25" /><rect height="22" rx="10" ry="10" width="28.5" x="165.25" y="20"></rect><text x="179.5" y="35">*</text></g><path d="M299.0 31h20" /><path d="M40.0 31a10 10 0 0 1 10 10v10a10 10 0 0 0 10 10" /><g class="terminal ">
+<path d="M60.0 61h101.0" /><path d="M198.0 61h101.0" /><rect height="22" rx="10" ry="10" width="37" x="161" y="50"></rect><text x="179.5" y="65">[]</text></g><path d="M299.0 61a10 10 0 0 0 10 -10v-10a10 10 0 0 1 10 -10" /><path d="M40.0 31a10 10 0 0 1 10 10v40a10 10 0 0 0 10 10" /><g>
+<path d="M60.0 91h0.0" /><path d="M299.0 91h0.0" /><g class="terminal ">
+<path d="M60.0 91h0.0" /><path d="M88.5 91h0.0" /><rect height="22" rx="10" ry="10" width="28.5" x="60" y="80"></rect><text x="74.25" y="95">[</text></g><path d="M88.5 91h10" /><path d="M98.5 91h10" /><g>
+<path d="M108.5 91h0.0" /><path d="M250.5 91h0.0" /><path d="M108.5 91h10" /><g class="terminal ">
+<path d="M118.5 91h0.0" /><path d="M240.5 91h0.0" /><rect height="22" rx="10" ry="10" width="122" x="118.5" y="80"></rect><text x="179.5" y="95">&lt;agent-name></text></g><path d="M240.5 91h10" /><path d="M118.5 91a10 10 0 0 0 -10 10v10a10 10 0 0 0 10 10" /><g class="terminal ">
+<path d="M118.5 121h46.75" /><path d="M193.75 121h46.75" /><rect height="22" rx="10" ry="10" width="28.5" x="165.25" y="110"></rect><text x="179.5" y="125">,</text></g><path d="M240.5 121a10 10 0 0 0 10 -10v-10a10 10 0 0 0 -10 -10" /></g><path d="M250.5 91h10" /><path d="M260.5 91h10" /><g class="terminal ">
+<path d="M270.5 91h0.0" /><path d="M299.0 91h0.0" /><rect height="22" rx="10" ry="10" width="28.5" x="270.5" y="80"></rect><text x="284.75" y="95">]</text></g></g><path d="M299.0 91a10 10 0 0 0 10 -10v-40a10 10 0 0 1 10 -10" /></g><path d="M 319.0 31 h 20 m 0 -10 v 20"></path></g></svg>
+</div>
+<h2>Handoff Entry</h2>
+<p class="description">A single handoff definition with target agent and prompt</p>
+<div class="diagram-container">
+<svg class="railroad-diagram" height="111" viewBox="0 0 1283.0 111" width="1283.0">
+<g transform="translate(.5 .5)">
+<g>
+<path d="M20 21v20m0 -10h20" /></g><path d="M40 31h10" /><g>
+<path d="M50 31h0.0" /><path d="M1233.0 31h0.0" /><g class="terminal ">
+<path d="M50.0 31h0.0" /><path d="M78.5 31h0.0" /><rect height="22" rx="10" ry="10" width="28.5" x="50" y="20"></rect><text x="64.25" y="35">-</text></g><path d="M78.5 31h10" /><path d="M88.5 31h10" /><g>
+<path d="M98.5 31h0.0" /><path d="M328.5 31h0.0" /><g class="terminal ">
+<path d="M98.5 31h0.0" /><path d="M169.5 31h0.0" /><rect height="22" rx="10" ry="10" width="71" x="98.5" y="20"></rect><text x="134" y="35">label:</text></g><path d="M169.5 31h10" /><path d="M179.5 31h10" /><g class="terminal ">
+<path d="M189.5 31h0.0" /><path d="M328.5 31h0.0" /><rect height="22" rx="10" ry="10" width="139" x="189.5" y="20"></rect><text x="259" y="35">&lt;display text></text></g></g><path d="M328.5 31h10" /><path d="M338.5 31h10" /><g>
+<path d="M348.5 31h0.0" /><path d="M544.5 31h0.0" /><g class="terminal ">
+<path d="M348.5 31h0.0" /><path d="M419.5 31h0.0" /><rect height="22" rx="10" ry="10" width="71" x="348.5" y="20"></rect><text x="384" y="35">agent:</text></g><path d="M419.5 31h10" /><path d="M429.5 31h10" /><g class="terminal ">
+<path d="M439.5 31h0.0" /><path d="M544.5 31h0.0" /><rect height="22" rx="10" ry="10" width="105" x="439.5" y="20"></rect><text x="492" y="35">&lt;agent-id></text></g></g><path d="M544.5 31h10" /><g>
+<path d="M554.5 31h0.0" /><path d="M765.0 31h0.0" /><path d="M554.5 31h20" /><g>
+<path d="M574.5 31h170.5" /></g><path d="M745.0 31h20" /><path d="M554.5 31a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10" /><g>
+<path d="M574.5 51h0.0" /><path d="M745.0 51h0.0" /><g class="terminal ">
+<path d="M574.5 51h0.0" /><path d="M654.0 51h0.0" /><rect height="22" rx="10" ry="10" width="79.5" x="574.5" y="40"></rect><text x="614.25" y="55">prompt:</text></g><path d="M654.0 51h10" /><path d="M664.0 51h10" /><g class="terminal ">
+<path d="M674.0 51h0.0" /><path d="M745.0 51h0.0" /><rect height="22" rx="10" ry="10" width="71" x="674" y="40"></rect><text x="709.5" y="55">&lt;text></text></g></g><path d="M745.0 51a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10" /></g><g>
+<path d="M765.0 31h0.0" /><path d="M980.0 31h0.0" /><path d="M765.0 31h20" /><g>
+<path d="M785.0 31h175.0" /></g><path d="M960.0 31h20" /><path d="M765.0 31a10 10 0 0 1 10 10v29a10 10 0 0 0 10 10" /><g>
+<path d="M785.0 80h0.0" /><path d="M960.0 80h0.0" /><g class="terminal ">
+<path d="M785.0 80h0.0" /><path d="M847.5 80h0.0" /><rect height="22" rx="10" ry="10" width="62.5" x="785" y="69"></rect><text x="816.25" y="84">send:</text></g><path d="M847.5 80h10" /><g>
+<path d="M857.5 80h0.0" /><path d="M960.0 80h0.0" /><path d="M857.5 80a10 10 0 0 0 10 -10v-10a10 10 0 0 1 10 -10" /><g class="terminal ">
+<path d="M877.5 50h4.25" /><path d="M935.75 50h4.25" /><rect height="22" rx="10" ry="10" width="54" x="881.75" y="39"></rect><text x="908.75" y="54">true</text></g><path d="M940.0 50a10 10 0 0 1 10 10v10a10 10 0 0 0 10 10" /><path d="M857.5 80h20" /><g class="terminal ">
+<path d="M877.5 80h0.0" /><path d="M940.0 80h0.0" /><rect height="22" rx="10" ry="10" width="62.5" x="877.5" y="69"></rect><text x="908.75" y="84">false</text></g><path d="M940.0 80h20" /></g></g><path d="M960.0 80a10 10 0 0 0 10 -10v-29a10 10 0 0 1 10 -10" /></g><g>
+<path d="M980.0 31h0.0" /><path d="M1233.0 31h0.0" /><path d="M980.0 31h20" /><g>
+<path d="M1000.0 31h213.0" /></g><path d="M1213.0 31h20" /><path d="M980.0 31a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10" /><g>
+<path d="M1000.0 51h0.0" /><path d="M1213.0 51h0.0" /><g class="terminal ">
+<path d="M1000.0 51h0.0" /><path d="M1071.0 51h0.0" /><rect height="22" rx="10" ry="10" width="71" x="1000" y="40"></rect><text x="1035.5" y="55">model:</text></g><path d="M1071.0 51h10" /><path d="M1081.0 51h10" /><g class="terminal ">
+<path d="M1091.0 51h0.0" /><path d="M1213.0 51h0.0" /><rect height="22" rx="10" ry="10" width="122" x="1091" y="40"></rect><text x="1152" y="55">&lt;model-name></text></g></g><path d="M1213.0 51a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10" /></g></g><path d="M1233.0 31h10" /><path d="M 1243.0 31 h 20 m 0 -10 v 20"></path></g></svg>
+</div>
+<h2>Visibility Fields</h2>
+<p class="description">Control agent visibility in picker and subagent invocation</p>
+<div class="diagram-container">
+<svg class="railroad-diagram" height="212" viewBox="0 0 465.0 212" width="465.0">
+<g transform="translate(.5 .5)">
+<g>
+<path d="M20 21v20m0 -10h20" /></g><g>
+<path d="M40 31h0.0" /><path d="M425.0 31h0.0" /><path d="M40.0 31h20" /><g>
+<path d="M60.0 31h42.5" /><path d="M362.5 31h42.5" /><g class="terminal ">
+<path d="M102.5 31h0.0" /><path d="M250.0 31h0.0" /><rect height="22" rx="10" ry="10" width="147.5" x="102.5" y="20"></rect><text x="176.25" y="35">user-invocable:</text></g><path d="M250.0 31h10" /><g>
+<path d="M260.0 31h0.0" /><path d="M362.5 31h0.0" /><path d="M260.0 31h20" /><g class="terminal ">
+<path d="M280.0 31h4.25" /><path d="M338.25 31h4.25" /><rect height="22" rx="10" ry="10" width="54" x="284.25" y="20"></rect><text x="311.25" y="35">true</text></g><path d="M342.5 31h20" /><path d="M260.0 31a10 10 0 0 1 10 10v10a10 10 0 0 0 10 10" /><g class="terminal ">
+<path d="M280.0 61h0.0" /><path d="M342.5 61h0.0" /><rect height="22" rx="10" ry="10" width="62.5" x="280" y="50"></rect><text x="311.25" y="65">false</text></g><path d="M342.5 61a10 10 0 0 0 10 -10v-10a10 10 0 0 1 10 -10" /></g></g><path d="M405.0 31h20" /><path d="M40.0 31a10 10 0 0 1 10 10v70a10 10 0 0 0 10 10" /><g>
+<path d="M60.0 121h0.0" /><path d="M405.0 121h0.0" /><g class="terminal ">
+<path d="M60.0 121h0.0" /><path d="M292.5 121h0.0" /><rect height="22" rx="10" ry="10" width="232.5" x="60" y="110"></rect><text x="176.25" y="125">disable-model-invocation:</text></g><path d="M292.5 121h10" /><g>
+<path d="M302.5 121h0.0" /><path d="M405.0 121h0.0" /><path d="M302.5 121a10 10 0 0 0 10 -10v-10a10 10 0 0 1 10 -10" /><g class="terminal ">
+<path d="M322.5 91h4.25" /><path d="M380.75 91h4.25" /><rect height="22" rx="10" ry="10" width="54" x="326.75" y="80"></rect><text x="353.75" y="95">true</text></g><path d="M385.0 91a10 10 0 0 1 10 10v10a10 10 0 0 0 10 10" /><path d="M302.5 121h20" /><g class="terminal ">
+<path d="M322.5 121h0.0" /><path d="M385.0 121h0.0" /><rect height="22" rx="10" ry="10" width="62.5" x="322.5" y="110"></rect><text x="353.75" y="125">false</text></g><path d="M385.0 121h20" /></g></g><path d="M405.0 121a10 10 0 0 0 10 -10v-70a10 10 0 0 1 10 -10" /><path d="M40.0 31a10 10 0 0 1 10 10v100a10 10 0 0 0 10 10" /><g>
+<path d="M60.0 151h38.25" /><path d="M366.75 151h38.25" /><g class="terminal ">
+<path d="M98.25 151h0.0" /><path d="M177.75 151h0.0" /><rect height="22" rx="10" ry="10" width="79.5" x="98.25" y="140"></rect><text x="138" y="155">target:</text></g><path d="M177.75 151h10" /><g>
+<path d="M187.75 151h0.0" /><path d="M366.75 151h0.0" /><path d="M187.75 151h20" /><g class="terminal ">
+<path d="M207.75 151h34.0" /><path d="M312.75 151h34.0" /><rect height="22" rx="10" ry="10" width="71" x="241.75" y="140"></rect><text x="277.25" y="155">vscode</text></g><path d="M346.75 151h20" /><path d="M187.75 151a10 10 0 0 1 10 10v10a10 10 0 0 0 10 10" /><g class="terminal ">
+<path d="M207.75 181h0.0" /><path d="M346.75 181h0.0" /><rect height="22" rx="10" ry="10" width="139" x="207.75" y="170"></rect><text x="277.25" y="185">github-copilot</text></g><path d="M346.75 181a10 10 0 0 0 10 -10v-10a10 10 0 0 1 10 -10" /></g></g><path d="M405.0 151a10 10 0 0 0 10 -10v-100a10 10 0 0 1 10 -10" /></g><path d="M 425.0 31 h 20 m 0 -10 v 20"></path></g></svg>
+</div>
+</body>
+</html>

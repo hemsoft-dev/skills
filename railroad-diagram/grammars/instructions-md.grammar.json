@@ -1,0 +1,61 @@
+{
+  "meta": {
+    "title": "VS Code Instruction Files (.instructions.md)",
+    "description": "Railroad diagram for path-scoped instruction files with YAML frontmatter",
+    "source": "https://code.visualstudio.com/docs/copilot/customization/custom-instructions",
+    "version": "2026-04"
+  },
+  "rules": {
+    "instructions-md File": {
+      "description": "Complete structure of a NAME.instructions.md file",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          "---",
+          { "type": "NonTerminal", "label": "Frontmatter Fields" },
+          "---",
+          { "type": "NonTerminal", "label": "Body (Markdown instructions)" }
+        ]
+      }
+    },
+
+    "Frontmatter Fields": {
+      "description": "Required applyTo field and optional excludeAgent",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          { "type": "Sequence", "items": ["applyTo:", { "type": "NonTerminal", "label": "Glob Pattern" }] },
+          { "type": "Optional", "items": [
+            { "type": "Sequence", "items": ["excludeAgent:", { "type": "NonTerminal", "label": "Agent Exclusion" }] }
+          ], "skip": true }
+        ]
+      }
+    },
+
+    "Glob Pattern": {
+      "description": "A glob pattern matching workspace-relative file paths",
+      "definition": {
+        "type": "Choice",
+        "default": 0,
+        "items": [
+          { "type": "Terminal", "label": "**/*.ext" },
+          { "type": "Terminal", "label": "src/**" },
+          { "type": "Terminal", "label": "**/*" },
+          { "type": "Terminal", "label": "<custom glob>" }
+        ]
+      }
+    },
+
+    "Agent Exclusion": {
+      "description": "Exclude these instructions from specific agent types",
+      "definition": {
+        "type": "Choice",
+        "default": 0,
+        "items": [
+          { "type": "Terminal", "label": "code-review" },
+          { "type": "Terminal", "label": "coding-agent" }
+        ]
+      }
+    }
+  }
+}
