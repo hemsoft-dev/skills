@@ -4,6 +4,9 @@ This file tracks meaningful prompts and their outcomes for the Claude Skills rep
 
 ---
 
+2026-04-09 - 01:13 - Create ai-cert skill for Azure AI certification tracking (AI-901 + AI-103)
+Result: Created ai-cert skill (V1.0) with 4 commands (status, plan, log, review), comprehensive SKILL.md with exam details/links/skills measured, 20-week study plan (8 weeks AI-901 + 12 weeks AI-103), and progress tracker with module checklists. Researched all cert pages, study guides, learning paths, and Microsoft's certification transition blog.
+
 2026-03-16 - 09:08 - Create copilot-license skill for GitHub Copilot seat management
 Result: Created copilot-license skill (V1.0) with 4 commands (ListSeats, InactiveCandidates, AssignLicense, RemoveLicense) and 3 PowerShell scripts using the GitHub Copilot billing API to list seats, find inactive users for license removal, and assign/remove licenses.
 
@@ -529,4 +532,3 @@ Result: Updated the productivity skill documentation to describe the new usernam
 
 2026-03-26 - 22:10 - Create a global PowerShell alias for Zed editor
 Result: Added a global zed function to $PROFILE.CurrentUserAllHosts pointing at $env:LOCALAPPDATA\Programs\Zed\Zed.exe, created a timestamped profile backup, and verified the alias loads in a fresh PowerShell session.
-
