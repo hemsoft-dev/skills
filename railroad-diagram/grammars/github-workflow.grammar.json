@@ -1,0 +1,735 @@
+{
+  "meta": {
+    "title": "GitHub Actions Workflow (.github/workflows/*.yml)",
+    "description": "Railroad diagram for the YAML schema of GitHub Actions workflow files",
+    "source": "https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions",
+    "version": "2026-04"
+  },
+  "rules": {
+    "Workflow File": {
+      "description": "Top-level structure of a GitHub Actions workflow YAML file",
+      "definition": {
+        "type": "Stack",
+        "items": [
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["name:", { "type": "Terminal", "label": "<string>" }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["run-name:", { "type": "Terminal", "label": "<string | expression>" }] }], "skip": true },
+          { "type": "Sequence", "items": ["on:", { "type": "NonTerminal", "label": "Trigger Events" }] },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["permissions:", { "type": "NonTerminal", "label": "Permissions" }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["env:", { "type": "NonTerminal", "label": "Env Map" }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["defaults:", { "type": "NonTerminal", "label": "Defaults" }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["concurrency:", { "type": "NonTerminal", "label": "Concurrency" }] }], "skip": true },
+          { "type": "Sequence", "items": ["jobs:", { "type": "NonTerminal", "label": "Jobs Map" }] }
+        ]
+      }
+    },
+
+    "Trigger Events": {
+      "description": "Events that trigger the workflow (on:)",
+      "definition": {
+        "type": "Choice",
+        "default": 0,
+        "items": [
+          { "type": "NonTerminal", "label": "Single Event" },
+          { "type": "Sequence", "items": [
+            "[",
+            { "type": "OneOrMore", "items": [
+              { "type": "NonTerminal", "label": "Event Name" },
+              ","
+            ]},
+            "]"
+          ]},
+          { "type": "NonTerminal", "label": "Event Config Map" }
+        ]
+      }
+    },
+
+    "Single Event": {
+      "description": "A single event name as a string",
+      "definition": {
+        "type": "NonTerminal", "label": "Event Name"
+      }
+    },
+
+    "Event Name": {
+      "description": "Supported trigger event names",
+      "definition": {
+        "type": "Choice",
+        "default": 0,
+        "items": [
+          "push",
+          "pull_request",
+          "pull_request_target",
+          "workflow_dispatch",
+          "workflow_call",
+          "workflow_run",
+          "schedule",
+          "release",
+          "issues",
+          "issue_comment",
+          "create",
+          "delete",
+          "fork",
+          "repository_dispatch",
+          { "type": "Comment", "label": "...and more" }
+        ]
+      }
+    },
+
+    "Event Config Map": {
+      "description": "Map of event names to their filter configurations",
+      "definition": {
+        "type": "OneOrMore",
+        "items": [
+          { "type": "Sequence", "items": [
+            { "type": "NonTerminal", "label": "Event Name" },
+            ":",
+            { "type": "NonTerminal", "label": "Event Filters" }
+          ]}
+        ]
+      }
+    },
+
+    "Event Filters": {
+      "description": "Filter configuration for push/pull_request events",
+      "definition": {
+        "type": "Stack",
+        "items": [
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["branches:", { "type": "NonTerminal", "label": "String List" }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["branches-ignore:", { "type": "NonTerminal", "label": "String List" }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["tags:", { "type": "NonTerminal", "label": "String List" }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["tags-ignore:", { "type": "NonTerminal", "label": "String List" }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["paths:", { "type": "NonTerminal", "label": "String List" }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["paths-ignore:", { "type": "NonTerminal", "label": "String List" }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["types:", { "type": "NonTerminal", "label": "String List" }] }], "skip": true }
+        ]
+      }
+    },
+
+    "workflow_dispatch Inputs": {
+      "description": "Manual trigger with optional input parameters",
+      "definition": {
+        "type": "Optional",
+        "items": [
+          { "type": "Sequence", "items": [
+            "inputs:",
+            { "type": "OneOrMore", "items": [
+              { "type": "NonTerminal", "label": "Input Definition" }
+            ]}
+          ]}
+        ],
+        "skip": true
+      }
+    },
+
+    "Input Definition": {
+      "description": "A single workflow_dispatch input parameter",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          { "type": "Terminal", "label": "<input-id>" },
+          ":",
+          { "type": "Stack", "items": [
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["description:", { "type": "Terminal", "label": "<string>" }] }], "skip": true },
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["required:", { "type": "Choice", "default": 1, "items": ["true", "false"] }] }], "skip": true },
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["default:", { "type": "Terminal", "label": "<value>" }] }], "skip": true },
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["type:", { "type": "Choice", "default": 0, "items": ["string", "boolean", "choice", "number", "environment"] }] }], "skip": true },
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["options:", { "type": "NonTerminal", "label": "String List" }] }], "skip": true }
+          ]}
+        ]
+      }
+    },
+
+    "schedule": {
+      "description": "Cron-based schedule triggers",
+      "definition": {
+        "type": "OneOrMore",
+        "items": [
+          { "type": "Sequence", "items": [
+            "- cron:",
+            { "type": "Terminal", "label": "'<cron-expression>'" }
+          ]}
+        ]
+      }
+    },
+
+    "Permissions": {
+      "description": "Workflow or job-level GITHUB_TOKEN permissions",
+      "definition": {
+        "type": "Choice",
+        "default": 0,
+        "items": [
+          "read-all",
+          "write-all",
+          { "type": "Terminal", "label": "{}" },
+          { "type": "NonTerminal", "label": "Permission Map" }
+        ]
+      }
+    },
+
+    "Permission Map": {
+      "description": "Granular permission scopes",
+      "definition": {
+        "type": "OneOrMore",
+        "items": [
+          { "type": "Sequence", "items": [
+            { "type": "Choice", "default": 0, "items": [
+              "actions",
+              "checks",
+              "contents",
+              "deployments",
+              "id-token",
+              "issues",
+              "packages",
+              "pages",
+              "pull-requests",
+              "security-events",
+              "statuses",
+              { "type": "Comment", "label": "...more" }
+            ]},
+            ":",
+            { "type": "Choice", "default": 0, "items": [
+              "read",
+              "write",
+              "none"
+            ]}
+          ]}
+        ]
+      }
+    },
+
+    "Env Map": {
+      "description": "Environment variables as key-value pairs",
+      "definition": {
+        "type": "OneOrMore",
+        "items": [
+          { "type": "Sequence", "items": [
+            { "type": "Terminal", "label": "<KEY>" },
+            ":",
+            { "type": "Terminal", "label": "<value | expression>" }
+          ]}
+        ]
+      }
+    },
+
+    "Defaults": {
+      "description": "Default settings for all run steps",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          "run:",
+          { "type": "Stack", "items": [
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["shell:", { "type": "NonTerminal", "label": "Shell" }] }], "skip": true },
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["working-directory:", { "type": "Terminal", "label": "<path>" }] }], "skip": true }
+          ]}
+        ]
+      }
+    },
+
+    "Shell": {
+      "description": "Shell to use for run steps",
+      "definition": {
+        "type": "Choice",
+        "default": 0,
+        "items": [
+          "bash",
+          "pwsh",
+          "python",
+          "sh",
+          "cmd",
+          "powershell",
+          { "type": "Terminal", "label": "<custom>" }
+        ]
+      }
+    },
+
+    "Concurrency": {
+      "description": "Concurrency control to prevent simultaneous runs",
+      "definition": {
+        "type": "Choice",
+        "default": 0,
+        "items": [
+          { "type": "Terminal", "label": "<group-name | expression>" },
+          { "type": "Sequence", "items": [
+            { "type": "Sequence", "items": ["group:", { "type": "Terminal", "label": "<string | expression>" }] },
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["cancel-in-progress:", { "type": "Choice", "default": 0, "items": ["true", "false"] }] }], "skip": true }
+          ]}
+        ]
+      }
+    },
+
+    "Jobs Map": {
+      "description": "Map of job IDs to job definitions",
+      "definition": {
+        "type": "OneOrMore",
+        "items": [
+          { "type": "Sequence", "items": [
+            { "type": "Terminal", "label": "<job-id>" },
+            ":",
+            { "type": "NonTerminal", "label": "Job Definition" }
+          ]}
+        ]
+      }
+    },
+
+    "Job Definition": {
+      "description": "A single job's configuration",
+      "definition": {
+        "type": "Stack",
+        "items": [
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["name:", { "type": "Terminal", "label": "<string>" }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["needs:", { "type": "NonTerminal", "label": "Needs" }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["if:", { "type": "Terminal", "label": "<expression>" }] }], "skip": true },
+          { "type": "Choice", "default": 0, "items": [
+            { "type": "Sequence", "items": ["runs-on:", { "type": "NonTerminal", "label": "Runner" }] },
+            { "type": "Sequence", "items": ["uses:", { "type": "NonTerminal", "label": "Reusable Workflow Ref" }] }
+          ]},
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["permissions:", { "type": "NonTerminal", "label": "Permissions" }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["environment:", { "type": "NonTerminal", "label": "Environment" }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["concurrency:", { "type": "NonTerminal", "label": "Concurrency" }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["outputs:", { "type": "NonTerminal", "label": "Job Outputs" }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["env:", { "type": "NonTerminal", "label": "Env Map" }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["defaults:", { "type": "NonTerminal", "label": "Defaults" }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["strategy:", { "type": "NonTerminal", "label": "Strategy" }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["container:", { "type": "NonTerminal", "label": "Container" }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["services:", { "type": "NonTerminal", "label": "Services Map" }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["timeout-minutes:", { "type": "Terminal", "label": "<number>" }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["continue-on-error:", { "type": "Choice", "default": 1, "items": ["true", "false"] }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["steps:", { "type": "NonTerminal", "label": "Steps" }] }], "skip": true }
+        ]
+      }
+    },
+
+    "Needs": {
+      "description": "Job dependencies — jobs that must complete before this one",
+      "definition": {
+        "type": "Choice",
+        "default": 0,
+        "items": [
+          { "type": "Terminal", "label": "<job-id>" },
+          { "type": "Sequence", "items": [
+            "[",
+            { "type": "OneOrMore", "items": [
+              { "type": "Terminal", "label": "<job-id>" },
+              ","
+            ]},
+            "]"
+          ]}
+        ]
+      }
+    },
+
+    "Runner": {
+      "description": "The runner environment for the job",
+      "definition": {
+        "type": "Choice",
+        "default": 0,
+        "items": [
+          { "type": "NonTerminal", "label": "Runner Label" },
+          { "type": "Sequence", "items": [
+            "[",
+            { "type": "OneOrMore", "items": [
+              { "type": "NonTerminal", "label": "Runner Label" },
+              ","
+            ]},
+            "]"
+          ]},
+          { "type": "Sequence", "items": [
+            "group:",
+            { "type": "Terminal", "label": "<runner-group>" },
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["labels:", { "type": "NonTerminal", "label": "String List" }] }], "skip": true }
+          ]}
+        ]
+      }
+    },
+
+    "Runner Label": {
+      "description": "Common GitHub-hosted runner labels",
+      "definition": {
+        "type": "Choice",
+        "default": 0,
+        "items": [
+          "ubuntu-latest",
+          "ubuntu-24.04",
+          "ubuntu-22.04",
+          "windows-latest",
+          "windows-2022",
+          "macos-latest",
+          "macos-15",
+          "macos-14",
+          { "type": "Terminal", "label": "<self-hosted-label>" }
+        ]
+      }
+    },
+
+    "Environment": {
+      "description": "Deployment environment with optional protection rules",
+      "definition": {
+        "type": "Choice",
+        "default": 0,
+        "items": [
+          { "type": "Terminal", "label": "<environment-name>" },
+          { "type": "Sequence", "items": [
+            { "type": "Sequence", "items": ["name:", { "type": "Terminal", "label": "<environment-name>" }] },
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["url:", { "type": "Terminal", "label": "<url | expression>" }] }], "skip": true }
+          ]}
+        ]
+      }
+    },
+
+    "Job Outputs": {
+      "description": "Outputs from a job that can be used by dependent jobs",
+      "definition": {
+        "type": "OneOrMore",
+        "items": [
+          { "type": "Sequence", "items": [
+            { "type": "Terminal", "label": "<output-id>" },
+            ":",
+            { "type": "Terminal", "label": "<value | expression>" }
+          ]}
+        ]
+      }
+    },
+
+    "Strategy": {
+      "description": "Matrix strategy for running a job with multiple configurations",
+      "definition": {
+        "type": "Stack",
+        "items": [
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["matrix:", { "type": "NonTerminal", "label": "Matrix" }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["fail-fast:", { "type": "Choice", "default": 0, "items": ["true", "false"] }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["max-parallel:", { "type": "Terminal", "label": "<number>" }] }], "skip": true }
+        ]
+      }
+    },
+
+    "Matrix": {
+      "description": "Matrix configuration with dimensions, includes, and excludes",
+      "definition": {
+        "type": "Stack",
+        "items": [
+          { "type": "OneOrMore", "items": [
+            { "type": "Sequence", "items": [
+              { "type": "Terminal", "label": "<dimension>" },
+              ":",
+              { "type": "NonTerminal", "label": "Value List" }
+            ]}
+          ]},
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["include:", { "type": "NonTerminal", "label": "Matrix Modifier List" }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["exclude:", { "type": "NonTerminal", "label": "Matrix Modifier List" }] }], "skip": true }
+        ]
+      }
+    },
+
+    "Matrix Modifier List": {
+      "description": "Array of matrix combination overrides",
+      "definition": {
+        "type": "OneOrMore",
+        "items": [
+          { "type": "Sequence", "items": [
+            "-",
+            { "type": "OneOrMore", "items": [
+              { "type": "Sequence", "items": [
+                { "type": "Terminal", "label": "<key>" },
+                ":",
+                { "type": "Terminal", "label": "<value>" }
+              ]}
+            ]}
+          ]}
+        ]
+      }
+    },
+
+    "Container": {
+      "description": "Docker container to run the job in",
+      "definition": {
+        "type": "Choice",
+        "default": 0,
+        "items": [
+          { "type": "Terminal", "label": "<image>" },
+          { "type": "Stack", "items": [
+            { "type": "Sequence", "items": ["image:", { "type": "Terminal", "label": "<image>" }] },
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["credentials:", { "type": "NonTerminal", "label": "Credentials" }] }], "skip": true },
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["env:", { "type": "NonTerminal", "label": "Env Map" }] }], "skip": true },
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["ports:", { "type": "NonTerminal", "label": "Port List" }] }], "skip": true },
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["volumes:", { "type": "NonTerminal", "label": "String List" }] }], "skip": true },
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["options:", { "type": "Terminal", "label": "<docker-options>" }] }], "skip": true }
+          ]}
+        ]
+      }
+    },
+
+    "Credentials": {
+      "description": "Docker registry authentication",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          { "type": "Sequence", "items": ["username:", { "type": "Terminal", "label": "<string | expression>" }] },
+          { "type": "Sequence", "items": ["password:", { "type": "Terminal", "label": "<string | expression>" }] }
+        ]
+      }
+    },
+
+    "Services Map": {
+      "description": "Service containers for the job (e.g., databases)",
+      "definition": {
+        "type": "OneOrMore",
+        "items": [
+          { "type": "Sequence", "items": [
+            { "type": "Terminal", "label": "<service-id>" },
+            ":",
+            { "type": "NonTerminal", "label": "Container" }
+          ]}
+        ]
+      }
+    },
+
+    "Steps": {
+      "description": "Ordered list of steps to execute in the job",
+      "definition": {
+        "type": "OneOrMore",
+        "items": [
+          { "type": "Sequence", "items": [
+            "-",
+            { "type": "NonTerminal", "label": "Step" }
+          ]}
+        ]
+      }
+    },
+
+    "Step": {
+      "description": "A single step — either an action (uses) or a shell command (run)",
+      "definition": {
+        "type": "Stack",
+        "items": [
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["name:", { "type": "Terminal", "label": "<string>" }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["id:", { "type": "Terminal", "label": "<step-id>" }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["if:", { "type": "Terminal", "label": "<expression>" }] }], "skip": true },
+          { "type": "Choice", "default": 0, "items": [
+            { "type": "NonTerminal", "label": "Action Step (uses)" },
+            { "type": "NonTerminal", "label": "Run Step (run)" }
+          ]},
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["env:", { "type": "NonTerminal", "label": "Env Map" }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["continue-on-error:", { "type": "Choice", "default": 1, "items": ["true", "false"] }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["timeout-minutes:", { "type": "Terminal", "label": "<number>" }] }], "skip": true }
+        ]
+      }
+    },
+
+    "Action Step (uses)": {
+      "description": "Runs a reusable action from the marketplace or a local path",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          "uses:",
+          { "type": "NonTerminal", "label": "Action Reference" },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["with:", { "type": "NonTerminal", "label": "With Map" }] }], "skip": true }
+        ]
+      }
+    },
+
+    "Action Reference": {
+      "description": "Reference to a GitHub Action",
+      "definition": {
+        "type": "Choice",
+        "default": 0,
+        "items": [
+          { "type": "Sequence", "items": [
+            { "type": "Terminal", "label": "<owner>/<repo>" },
+            { "type": "Choice", "default": 0, "items": [
+              { "type": "Sequence", "items": ["@", { "type": "Terminal", "label": "<tag | branch | sha>" }] },
+              { "type": "Sequence", "items": ["/", { "type": "Terminal", "label": "<path>" }, "@", { "type": "Terminal", "label": "<ref>" }] }
+            ]}
+          ]},
+          { "type": "Sequence", "items": [
+            "docker://",
+            { "type": "Terminal", "label": "<image>:<tag>" }
+          ]},
+          { "type": "Sequence", "items": [
+            "./",
+            { "type": "Terminal", "label": "<local-path>" }
+          ]}
+        ]
+      }
+    },
+
+    "With Map": {
+      "description": "Input parameters for the action",
+      "definition": {
+        "type": "OneOrMore",
+        "items": [
+          { "type": "Sequence", "items": [
+            { "type": "Terminal", "label": "<input-name>" },
+            ":",
+            { "type": "Terminal", "label": "<value | expression>" }
+          ]}
+        ]
+      }
+    },
+
+    "Run Step (run)": {
+      "description": "Executes a shell command or script",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          "run:",
+          { "type": "Choice", "default": 0, "items": [
+            { "type": "Terminal", "label": "<command>" },
+            { "type": "Sequence", "items": ["|", { "type": "Terminal", "label": "<multiline script>" }] }
+          ]},
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["shell:", { "type": "NonTerminal", "label": "Shell" }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["working-directory:", { "type": "Terminal", "label": "<path>" }] }], "skip": true }
+        ]
+      }
+    },
+
+    "Reusable Workflow Ref": {
+      "description": "Reference to a reusable workflow (workflow_call)",
+      "definition": {
+        "type": "Choice",
+        "default": 0,
+        "items": [
+          { "type": "Sequence", "items": [
+            { "type": "Terminal", "label": "<owner>/<repo>" },
+            "/",
+            { "type": "Terminal", "label": "<path>.yml" },
+            "@",
+            { "type": "Terminal", "label": "<ref>" }
+          ]},
+          { "type": "Sequence", "items": [
+            "./",
+            { "type": "Terminal", "label": "<local-path>.yml" }
+          ]}
+        ]
+      }
+    },
+
+    "Expression": {
+      "description": "GitHub Actions expression syntax ${{ ... }}",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          "${{",
+          { "type": "Choice", "default": 0, "items": [
+            { "type": "NonTerminal", "label": "Context Reference" },
+            { "type": "NonTerminal", "label": "Function Call" },
+            { "type": "NonTerminal", "label": "Comparison" },
+            { "type": "NonTerminal", "label": "Logical Operation" }
+          ]},
+          "}}"
+        ]
+      }
+    },
+
+    "Context Reference": {
+      "description": "Available expression contexts",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          { "type": "Choice", "default": 0, "items": [
+            "github",
+            "env",
+            "vars",
+            "job",
+            "steps",
+            "runner",
+            "secrets",
+            "strategy",
+            "matrix",
+            "needs",
+            "inputs"
+          ]},
+          ".",
+          { "type": "Terminal", "label": "<property-path>" }
+        ]
+      }
+    },
+
+    "Function Call": {
+      "description": "Built-in expression functions",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          { "type": "Choice", "default": 0, "items": [
+            "contains",
+            "startsWith",
+            "endsWith",
+            "format",
+            "join",
+            "toJSON",
+            "fromJSON",
+            "hashFiles",
+            "success",
+            "failure",
+            "cancelled",
+            "always"
+          ]},
+          "(",
+          { "type": "ZeroOrMore", "items": [
+            { "type": "Terminal", "label": "<argument>" },
+            ","
+          ]},
+          ")"
+        ]
+      }
+    },
+
+    "String List": {
+      "description": "YAML array of strings",
+      "definition": {
+        "type": "Choice",
+        "default": 0,
+        "items": [
+          { "type": "Sequence", "items": [
+            "[",
+            { "type": "OneOrMore", "items": [
+              { "type": "Terminal", "label": "<string>" },
+              ","
+            ]},
+            "]"
+          ]},
+          { "type": "OneOrMore", "items": [
+            { "type": "Sequence", "items": [
+              "-",
+              { "type": "Terminal", "label": "<string>" }
+            ]}
+          ]}
+        ]
+      }
+    },
+
+    "Value List": {
+      "description": "YAML array of mixed values",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          "[",
+          { "type": "OneOrMore", "items": [
+            { "type": "Terminal", "label": "<value>" },
+            ","
+          ]},
+          "]"
+        ]
+      }
+    },
+
+    "Port List": {
+      "description": "Container port mappings",
+      "definition": {
+        "type": "OneOrMore",
+        "items": [
+          { "type": "Sequence", "items": [
+            "-",
+            { "type": "Choice", "default": 0, "items": [
+              { "type": "Terminal", "label": "<port>" },
+              { "type": "Sequence", "items": [
+                { "type": "Terminal", "label": "<host-port>" },
+                ":",
+                { "type": "Terminal", "label": "<container-port>" }
+              ]}
+            ]}
+          ]}
+        ]
+      }
+    }
+  }
+}
