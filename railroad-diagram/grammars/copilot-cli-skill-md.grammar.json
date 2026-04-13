@@ -1,8 +1,8 @@
 {
   "meta": {
-    "title": "GitHub Copilot CLI — SKILL.md Frontmatter",
-    "description": "Railroad diagram for the YAML frontmatter schema of agent skills (SKILL.md) per GitHub Copilot CLI documentation (docs.github.com)",
-    "source": "https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/create-skills",
+    "title": "GitHub Copilot — SKILL.md Frontmatter",
+    "description": "Railroad diagram for the YAML frontmatter schema of agent skills (SKILL.md) per agentskills.io specification and GitHub Copilot documentation. Covers Cloud Agent, CLI, and VS Code agent mode.",
+    "source": "https://agentskills.io/specification",
     "version": "2026-04"
   },
   "rules": {
@@ -20,7 +20,7 @@
     },
 
     "Frontmatter": {
-      "description": "Required and optional YAML fields",
+      "description": "Required and optional YAML fields per agentskills.io spec",
       "definition": {
         "type": "Stack",
         "items": [
@@ -56,18 +56,11 @@
           {
             "type": "Optional",
             "items": [
-              { "type": "NonTerminal", "label": "Allowed-Tools Field" }
-            ],
-            "skip": true
-          },
-          {
-            "type": "Optional",
-            "items": [
               {
                 "type": "Sequence",
                 "items": [
                   "compatibility:",
-                  { "type": "Terminal", "label": "free-text requirements" }
+                  { "type": "Terminal", "label": "free-text requirements (max 500 chars)" }
                 ]
               }
             ],
@@ -76,7 +69,14 @@
           {
             "type": "Optional",
             "items": [
-              { "type": "NonTerminal", "label": "Hooks Block" }
+              { "type": "NonTerminal", "label": "Metadata Block" }
+            ],
+            "skip": true
+          },
+          {
+            "type": "Optional",
+            "items": [
+              { "type": "NonTerminal", "label": "Allowed-Tools Field" }
             ],
             "skip": true
           }
@@ -95,6 +95,29 @@
             "items": [
               { "type": "NonTerminal", "label": "Tool Spec" },
               { "type": "Terminal", "label": " " }
+            ]
+          }
+        ]
+      }
+    },
+
+    "Metadata Block": {
+      "description": "Arbitrary key-value mapping for additional metadata (clients use this for non-spec properties)",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          "metadata:",
+          {
+            "type": "OneOrMore",
+            "items": [
+              {
+                "type": "Sequence",
+                "items": [
+                  { "type": "Terminal", "label": "key" },
+                  ":",
+                  { "type": "Terminal", "label": "string value" }
+                ]
+              }
             ]
           }
         ]
@@ -132,145 +155,6 @@
               "(",
               { "type": "Terminal", "label": "glob:pattern" },
               ")"
-            ]
-          }
-        ]
-      }
-    },
-
-    "Hooks Block": {
-      "description": "Lifecycle hooks — PostToolUse runs after tool calls; Stop runs before session ends",
-      "definition": {
-        "type": "Sequence",
-        "items": [
-          "hooks:",
-          {
-            "type": "Optional",
-            "items": [
-              {
-                "type": "Group",
-                "label": "PostToolUse",
-                "items": [
-                  {
-                    "type": "Sequence",
-                    "items": [
-                      "PostToolUse:",
-                      { "type": "NonTerminal", "label": "Hook Entry List" }
-                    ]
-                  }
-                ]
-              }
-            ],
-            "skip": true
-          },
-          {
-            "type": "Optional",
-            "items": [
-              {
-                "type": "Group",
-                "label": "Stop",
-                "items": [
-                  {
-                    "type": "Sequence",
-                    "items": [
-                      "Stop:",
-                      { "type": "NonTerminal", "label": "Hook Entry List" }
-                    ]
-                  }
-                ]
-              }
-            ],
-            "skip": true
-          }
-        ]
-      }
-    },
-
-    "Hook Entry List": {
-      "description": "One or more hook entries, each with a matcher and hook steps",
-      "definition": {
-        "type": "OneOrMore",
-        "items": [
-          { "type": "NonTerminal", "label": "Hook Entry" }
-        ]
-      }
-    },
-
-    "Hook Entry": {
-      "description": "A single hook entry: matcher pattern + list of hook steps",
-      "definition": {
-        "type": "Sequence",
-        "items": [
-          "-",
-          "matcher:",
-          { "type": "Terminal", "label": "pattern (e.g. Read|Write|Edit or *)" },
-          "hooks:",
-          { "type": "NonTerminal", "label": "Hook Step List" }
-        ]
-      }
-    },
-
-    "Hook Step List": {
-      "description": "One or more hook steps to execute",
-      "definition": {
-        "type": "OneOrMore",
-        "items": [
-          { "type": "NonTerminal", "label": "Hook Step" }
-        ]
-      }
-    },
-
-    "Hook Step": {
-      "description": "A single hook action — prompt injection or command execution",
-      "definition": {
-        "type": "Sequence",
-        "items": [
-          "-",
-          "type:",
-          {
-            "type": "Choice",
-            "default": 0,
-            "items": [
-              {
-                "type": "Sequence",
-                "items": [
-                  { "type": "Terminal", "label": "prompt" },
-                  "prompt:",
-                  { "type": "Terminal", "label": "multiline YAML string" }
-                ]
-              },
-              {
-                "type": "Sequence",
-                "items": [
-                  { "type": "Terminal", "label": "command" },
-                  {
-                    "type": "Optional",
-                    "items": [
-                      {
-                        "type": "Sequence",
-                        "items": [
-                          "bash:",
-                          { "type": "Terminal", "label": "shell command" }
-                        ]
-                      }
-                    ],
-                    "skip": true
-                  },
-                  {
-                    "type": "Optional",
-                    "items": [
-                      {
-                        "type": "Sequence",
-                        "items": [
-                          "powershell:",
-                          { "type": "Terminal", "label": "PS command" }
-                        ]
-                      }
-                    ],
-                    "skip": true
-                  }
-                ]
-              }
             ]
           }
         ]
