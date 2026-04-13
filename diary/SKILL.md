@@ -1,6 +1,6 @@
 ---
 name: diary
-description: V1.1 - Commands: create, scaffold, update. Personal diary management with daily entry creation, scaffolding, and updates.
+description: "V1.1 - Commands: create, scaffold, update. Personal diary management with daily entry creation, scaffolding, and updates."
 ---
 
 # Diary
