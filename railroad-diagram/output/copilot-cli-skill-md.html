@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>GitHub Copilot CLI — SKILL.md Frontmatter — Railroad Diagrams</title>
+<style>
+  body { font-family: system-ui, -apple-system, sans-serif; max-width: 960px; margin: 2rem auto; padding: 0 1rem; color: #1a1a1a; background: #fafafa; }
+  h1 { border-bottom: 2px solid #333; padding-bottom: 0.5rem; }
+  h2 { margin-top: 2rem; color: #333; }
+  .description { color: #666; margin-bottom: 0.5rem; font-style: italic; }
+  .diagram-container { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 1rem; margin: 0.5rem 0 1.5rem; overflow-x: auto; }
+  svg.railroad-diagram { background-color: transparent; }
+  svg.railroad-diagram path { stroke-width: 3; stroke: #333; fill: none; }
+  svg.railroad-diagram text { font: bold 14px monospace; text-anchor: middle; }
+  svg.railroad-diagram text.label { text-anchor: start; }
+  svg.railroad-diagram text.comment { font: italic 12px monospace; }
+  svg.railroad-diagram rect { stroke-width: 3; stroke: #333; fill: #dbeafe; }
+  svg.railroad-diagram rect.group-box { stroke: #999; stroke-dasharray: 10 5; fill: #f3f4f6; }
+  svg.railroad-diagram .non-terminal rect { fill: #fef3c7; }
+  svg.railroad-diagram .terminal rect { fill: #dbeafe; }
+</style>
+</head>
+<body>
+<h1>GitHub Copilot CLI — SKILL.md Frontmatter</h1>
+<p class="description">Railroad diagram for the YAML frontmatter schema of agent skills (SKILL.md) per GitHub Copilot CLI documentation (docs.github.com)</p>
+<p>Source: <a href="https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/create-skills">https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/create-skills</a></p>
+<h2>SKILL.md File</h2>
+<p class="description">Complete structure of a SKILL.md agent skill file</p>
+<div class="diagram-container">
+<svg class="railroad-diagram" height="62" viewBox="0 0 495.0 62" width="495.0">
+<g transform="translate(.5 .5)">
+<g>
+<path d="M20 21v20m0 -10h20" /></g><path d="M40 31h10" /><g>
+<path d="M50 31h0.0" /><path d="M445.0 31h0.0" /><g class="terminal ">
+<path d="M50.0 31h0.0" /><path d="M95.5 31h0.0" /><rect height="22" rx="10" ry="10" width="45.5" x="50" y="20"></rect><text x="72.75" y="35">---</text></g><path d="M95.5 31h10" /><path d="M105.5 31h10" /><g class="non-terminal ">
+<path d="M115.5 31h0.0" /><path d="M229.0 31h0.0" /><rect height="22" width="113.5" x="115.5" y="20"></rect><text x="172.25" y="35">Frontmatter</text></g><path d="M229.0 31h10" /><path d="M239.0 31h10" /><g class="terminal ">
+<path d="M249.0 31h0.0" /><path d="M294.5 31h0.0" /><rect height="22" rx="10" ry="10" width="45.5" x="249" y="20"></rect><text x="271.75" y="35">---</text></g><path d="M294.5 31h10" /><path d="M304.5 31h10" /><g class="non-terminal ">
+<path d="M314.5 31h0.0" /><path d="M445.0 31h0.0" /><rect height="22" width="130.5" x="314.5" y="20"></rect><text x="379.75" y="35">Markdown Body</text></g></g><path d="M445.0 31h10" /><path d="M 455.0 31 h 20 m 0 -10 v 20"></path></g></svg>
+</div>
+<h2>Frontmatter</h2>
+<p class="description">Required and optional YAML fields</p>
+<div class="diagram-container">
+<svg class="railroad-diagram" height="339" viewBox="0 0 677.0 339" width="677.0">
+<g transform="translate(.5 .5)">
+<g>
+<path d="M20 21v20m0 -10h20" /></g><path d="M40 31h10" /><g>
+<path d="M50 31h0.0" /><path d="M50.0 31h10" /><g>
+<path d="M60.0 31h86.5" /><path d="M530.5 31h86.5" /><g class="non-terminal ">
+<path d="M146.5 31h0.0" /><path d="M212.5 31h0.0" /><text class="comment" x="179.5" y="36">required</text></g><path d="M212.5 31h10" /><path d="M222.5 31h10" /><g class="terminal ">
+<path d="M232.5 31h0.0" /><path d="M295.0 31h0.0" /><rect height="22" rx="10" ry="10" width="62.5" x="232.5" y="20"></rect><text x="263.75" y="35">name:</text></g><path d="M295.0 31h10" /><path d="M305.0 31h10" /><g class="terminal ">
+<path d="M315.0 31h0.0" /><path d="M530.5 31h0.0" /><rect height="22" rx="10" ry="10" width="215.5" x="315" y="20"></rect><text x="422.75" y="35">lowercase-hyphenated-id</text></g></g><path d="M617.0 31a10 10 0 0 1 10 10v0a10 10 0 0 1 -10 10h-557.0a10 10 0 0 0 -10 10v0a10 10 0 0 0 10 10" /><g>
+<path d="M60.0 71h10.0" /><path d="M607.0 71h10.0" /><g class="non-terminal ">
+<path d="M70.0 71h0.0" /><path d="M136.0 71h0.0" /><text class="comment" x="103" y="76">required</text></g><path d="M136.0 71h10" /><path d="M146.0 71h10" /><g class="terminal ">
+<path d="M156.0 71h0.0" /><path d="M278.0 71h0.0" /><rect height="22" rx="10" ry="10" width="122" x="156" y="60"></rect><text x="217" y="75">description:</text></g><path d="M278.0 71h10" /><path d="M288.0 71h10" /><g class="terminal ">
+<path d="M298.0 71h0.0" /><path d="M607.0 71h0.0" /><rect height="22" rx="10" ry="10" width="309" x="298" y="60"></rect><text x="452.5" y="75">quoted string (what + when to use)</text></g></g><path d="M617.0 71a10 10 0 0 1 10 10v0a10 10 0 0 1 -10 10h-557.0a10 10 0 0 0 -10 10v0a10 10 0 0 0 10 10" /><g>
+<path d="M60.0 111h122.25" /><path d="M494.75 111h122.25" /><path d="M182.25 111h20" /><g>
+<path d="M202.25 111h272.5" /></g><path d="M474.75 111h20" /><path d="M182.25 111a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10" /><g>
+<path d="M202.25 131h0.0" /><path d="M474.75 131h0.0" /><g class="terminal ">
+<path d="M202.25 131h0.0" /><path d="M290.25 131h0.0" /><rect height="22" rx="10" ry="10" width="88" x="202.25" y="120"></rect><text x="246.25" y="135">license:</text></g><path d="M290.25 131h10" /><path d="M300.25 131h10" /><g class="terminal ">
+<path d="M310.25 131h0.0" /><path d="M474.75 131h0.0" /><rect height="22" rx="10" ry="10" width="164.5" x="310.25" y="120"></rect><text x="392.5" y="135">SPDX or free text</text></g></g><path d="M474.75 131a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10" /></g><path d="M617.0 111a10 10 0 0 1 10 10v19a10 10 0 0 1 -10 10h-557.0a10 10 0 0 0 -10 10v0a10 10 0 0 0 10 10" /><g>
+<path d="M60.0 170h167.75" /><path d="M449.25 170h167.75" /><path d="M227.75 170h20" /><g>
+<path d="M247.75 170h181.5" /></g><path d="M429.25 170h20" /><path d="M227.75 170a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10" /><g class="non-terminal ">
+<path d="M247.75 190h0.0" /><path d="M429.25 190h0.0" /><rect height="22" width="181.5" x="247.75" y="179"></rect><text x="338.5" y="194">Allowed-Tools Field</text></g><path d="M429.25 190a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10" /></g><path d="M617.0 170a10 10 0 0 1 10 10v19a10 10 0 0 1 -10 10h-557.0a10 10 0 0 0 -10 10v0a10 10 0 0 0 10 10" /><g>
+<path d="M60.0 229h75.5" /><path d="M541.5 229h75.5" /><path d="M135.5 229h20" /><g>
+<path d="M155.5 229h366.0" /></g><path d="M521.5 229h20" /><path d="M135.5 229a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10" /><g>
+<path d="M155.5 249h0.0" /><path d="M521.5 249h0.0" /><g class="terminal ">
+<path d="M155.5 249h0.0" /><path d="M294.5 249h0.0" /><rect height="22" rx="10" ry="10" width="139" x="155.5" y="238"></rect><text x="225" y="253">compatibility:</text></g><path d="M294.5 249h10" /><path d="M304.5 249h10" /><g class="terminal ">
+<path d="M314.5 249h0.0" /><path d="M521.5 249h0.0" /><rect height="22" rx="10" ry="10" width="207" x="314.5" y="238"></rect><text x="418" y="253">free-text requirements</text></g></g><path d="M521.5 249a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10" /></g><path d="M617.0 229a10 10 0 0 1 10 10v19a10 10 0 0 1 -10 10h-557.0a10 10 0 0 0 -10 10v0a10 10 0 0 0 10 10" /><g>
+<path d="M60.0 288h201.75" /><path d="M415.25 288h201.75" /><path d="M261.75 288h20" /><g>
+<path d="M281.75 288h113.5" /></g><path d="M395.25 288h20" /><path d="M261.75 288a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10" /><g class="non-terminal ">
+<path d="M281.75 308h0.0" /><path d="M395.25 308h0.0" /><rect height="22" width="113.5" x="281.75" y="297"></rect><text x="338.5" y="312">Hooks Block</text></g><path d="M395.25 308a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10" /></g><path d="M617.0 288h10" /><path d="M627.0 288h0.0" /></g><path d="M627.0 288h10" /><path d="M 637.0 288 h 20 m 0 -10 v 20"></path></g></svg>
+</div>
+<h2>Allowed-Tools Field</h2>
+<p class="description">Space-separated list of pre-approved tools (WARNING: shell/bash bypass confirmation)</p>
+<div class="diagram-container">
+<svg class="railroad-diagram" height="92" viewBox="0 0 375.5 92" width="375.5">
+<g transform="translate(.5 .5)">
+<g>
+<path d="M20 21v20m0 -10h20" /></g><path d="M40 31h10" /><g>
+<path d="M50 31h0.0" /><path d="M325.5 31h0.0" /><g class="terminal ">
+<path d="M50.0 31h0.0" /><path d="M189.0 31h0.0" /><rect height="22" rx="10" ry="10" width="139" x="50" y="20"></rect><text x="119.5" y="35">allowed-tools:</text></g><path d="M189.0 31h10" /><path d="M199.0 31h10" /><g>
+<path d="M209.0 31h0.0" /><path d="M325.5 31h0.0" /><path d="M209.0 31h10" /><g class="non-terminal ">
+<path d="M219.0 31h0.0" /><path d="M315.5 31h0.0" /><rect height="22" width="96.5" x="219" y="20"></rect><text x="267.25" y="35">Tool Spec</text></g><path d="M315.5 31h10" /><path d="M219.0 31a10 10 0 0 0 -10 10v10a10 10 0 0 0 10 10" /><g class="terminal ">
+<path d="M219.0 61h34.0" /><path d="M281.5 61h34.0" /><rect height="22" rx="10" ry="10" width="28.5" x="253" y="50"></rect><text x="267.25" y="65"> </text></g><path d="M315.5 61a10 10 0 0 0 10 -10v-10a10 10 0 0 0 -10 -10" /></g></g><path d="M325.5 31h10" /><path d="M 335.5 31 h 20 m 0 -10 v 20"></path></g></svg>
+</div>
+<h2>Tool Spec</h2>
+<p class="description">A single tool permission: simple name or qualified pattern</p>
+<div class="diagram-container">
+<svg class="railroad-diagram" height="242" viewBox="0 0 451.5 242" width="451.5">
+<g transform="translate(.5 .5)">
+<g>
+<path d="M20 21v20m0 -10h20" /></g><g>
+<path d="M40 31h0.0" /><path d="M411.5 31h0.0" /><path d="M40.0 31h20" /><g>
+<path d="M60.0 31h114.5" /><path d="M277.0 31h114.5" /><path d="M174.5 31h20" /><g class="terminal ">
+<path d="M194.5 31h0.0" /><path d="M257.0 31h0.0" /><rect height="22" rx="10" ry="10" width="62.5" x="194.5" y="20"></rect><text x="225.75" y="35">shell</text></g><path d="M257.0 31h20" /><path d="M174.5 31a10 10 0 0 1 10 10v10a10 10 0 0 0 10 10" /><g class="terminal ">
+<path d="M194.5 61h4.25" /><path d="M252.75 61h4.25" /><rect height="22" rx="10" ry="10" width="54" x="198.75" y="50"></rect><text x="225.75" y="65">bash</text></g><path d="M257.0 61a10 10 0 0 0 10 -10v-10a10 10 0 0 1 10 -10" /><path d="M174.5 31a10 10 0 0 1 10 10v40a10 10 0 0 0 10 10" /><g class="terminal ">
+<path d="M194.5 91h4.25" /><path d="M252.75 91h4.25" /><rect height="22" rx="10" ry="10" width="54" x="198.75" y="80"></rect><text x="225.75" y="95">Read</text></g><path d="M257.0 91a10 10 0 0 0 10 -10v-40a10 10 0 0 1 10 -10" /><path d="M174.5 31a10 10 0 0 1 10 10v70a10 10 0 0 0 10 10" /><g class="terminal ">
+<path d="M194.5 121h0.0" /><path d="M257.0 121h0.0" /><rect height="22" rx="10" ry="10" width="62.5" x="194.5" y="110"></rect><text x="225.75" y="125">Write</text></g><path d="M257.0 121a10 10 0 0 0 10 -10v-70a10 10 0 0 1 10 -10" /><path d="M174.5 31a10 10 0 0 1 10 10v100a10 10 0 0 0 10 10" /><g class="terminal ">
+<path d="M194.5 151h4.25" /><path d="M252.75 151h4.25" /><rect height="22" rx="10" ry="10" width="54" x="198.75" y="140"></rect><text x="225.75" y="155">Edit</text></g><path d="M257.0 151a10 10 0 0 0 10 -10v-100a10 10 0 0 1 10 -10" /></g><path d="M391.5 31h20" /><path d="M40.0 31a10 10 0 0 1 10 10v130a10 10 0 0 0 10 10" /><g>
+<path d="M60.0 181h0.0" /><path d="M391.5 181h0.0" /><g>
+<path d="M60.0 181h0.0" /><path d="M162.5 181h0.0" /><path d="M60.0 181h20" /><g class="terminal ">
+<path d="M80.0 181h4.25" /><path d="M138.25 181h4.25" /><rect height="22" rx="10" ry="10" width="54" x="84.25" y="170"></rect><text x="111.25" y="185">Bash</text></g><path d="M142.5 181h20" /><path d="M60.0 181a10 10 0 0 1 10 10v10a10 10 0 0 0 10 10" /><g class="terminal ">
+<path d="M80.0 211h0.0" /><path d="M142.5 211h0.0" /><rect height="22" rx="10" ry="10" width="62.5" x="80" y="200"></rect><text x="111.25" y="215">Shell</text></g><path d="M142.5 211a10 10 0 0 0 10 -10v-10a10 10 0 0 1 10 -10" /></g><path d="M162.5 181h10" /><g class="terminal ">
+<path d="M172.5 181h0.0" /><path d="M201.0 181h0.0" /><rect height="22" rx="10" ry="10" width="28.5" x="172.5" y="170"></rect><text x="186.75" y="185">(</text></g><path d="M201.0 181h10" /><path d="M211.0 181h10" /><g class="terminal ">
+<path d="M221.0 181h0.0" /><path d="M343.0 181h0.0" /><rect height="22" rx="10" ry="10" width="122" x="221" y="170"></rect><text x="282" y="185">glob:pattern</text></g><path d="M343.0 181h10" /><path d="M353.0 181h10" /><g class="terminal ">
+<path d="M363.0 181h0.0" /><path d="M391.5 181h0.0" /><rect height="22" rx="10" ry="10" width="28.5" x="363" y="170"></rect><text x="377.25" y="185">)</text></g></g><path d="M391.5 181a10 10 0 0 0 10 -10v-130a10 10 0 0 1 10 -10" /></g><path d="M 411.5 31 h 20 m 0 -10 v 20"></path></g></svg>
+</div>
+<h2>Hooks Block</h2>
+<p class="description">Lifecycle hooks — PostToolUse runs after tool calls; Stop runs before session ends</p>
+<div class="diagram-container">
+<svg class="railroad-diagram" height="113" viewBox="0 0 820.5 113" width="820.5">
+<g transform="translate(.5 .5)">
+<g>
+<path d="M20 21v20m0 -10h20" /></g><path d="M40 31h10" /><g>
+<path d="M50 31h0.0" /><path d="M770.5 31h0.0" /><g class="terminal ">
+<path d="M50.0 31h0.0" /><path d="M121.0 31h0.0" /><rect height="22" rx="10" ry="10" width="71" x="50" y="20"></rect><text x="85.5" y="35">hooks:</text></g><path d="M121.0 31h10" /><g>
+<path d="M131.0 31h0.0" /><path d="M480.5 31h0.0" /><path d="M131.0 31h20" /><g>
+<path d="M151.0 31h309.5" /></g><path d="M460.5 31h20" /><path d="M131.0 31a10 10 0 0 1 10 10v23a10 10 0 0 0 10 10" /><g>
+<path d="M151.0 74h0.0" /><path d="M460.5 74h0.0" /><rect class="group-box" height="38" rx="10" ry="10" width="309.5" x="151" y="55"></rect><g>
+<path d="M151.0 74h10.0" /><path d="M450.5 74h10.0" /><g class="terminal ">
+<path d="M161.0 74h0.0" /><path d="M283.0 74h0.0" /><rect height="22" rx="10" ry="10" width="122" x="161" y="63"></rect><text x="222" y="78">PostToolUse:</text></g><path d="M283.0 74h10" /><path d="M293.0 74h10" /><g class="non-terminal ">
+<path d="M303.0 74h0.0" /><path d="M450.5 74h0.0" /><rect height="22" width="147.5" x="303" y="63"></rect><text x="376.75" y="78">Hook Entry List</text></g></g><g class="non-terminal ">
+<path d="M151.0 47h0.0" /><path d="M238.0 47h0.0" /><text class="comment" x="194.5" y="52">PostToolUse</text></g></g><path d="M460.5 74a10 10 0 0 0 10 -10v-23a10 10 0 0 1 10 -10" /></g><g>
+<path d="M480.5 31h0.0" /><path d="M770.5 31h0.0" /><path d="M480.5 31h20" /><g>
+<path d="M500.5 31h250.0" /></g><path d="M750.5 31h20" /><path d="M480.5 31a10 10 0 0 1 10 10v23a10 10 0 0 0 10 10" /><g>
+<path d="M500.5 74h0.0" /><path d="M750.5 74h0.0" /><rect class="group-box" height="38" rx="10" ry="10" width="250" x="500.5" y="55"></rect><g>
+<path d="M500.5 74h10.0" /><path d="M740.5 74h10.0" /><g class="terminal ">
+<path d="M510.5 74h0.0" /><path d="M573.0 74h0.0" /><rect height="22" rx="10" ry="10" width="62.5" x="510.5" y="63"></rect><text x="541.75" y="78">Stop:</text></g><path d="M573.0 74h10" /><path d="M583.0 74h10" /><g class="non-terminal ">
+<path d="M593.0 74h0.0" /><path d="M740.5 74h0.0" /><rect height="22" width="147.5" x="593" y="63"></rect><text x="666.75" y="78">Hook Entry List</text></g></g><g class="non-terminal ">
+<path d="M500.5 47h0.0" /><path d="M538.5 47h0.0" /><text class="comment" x="519.5" y="52">Stop</text></g></g><path d="M750.5 74a10 10 0 0 0 10 -10v-23a10 10 0 0 1 10 -10" /></g></g><path d="M770.5 31h10" /><path d="M 780.5 31 h 20 m 0 -10 v 20"></path></g></svg>
+</div>
+<h2>Hook Entry List</h2>
+<p class="description">One or more hook entries, each with a matcher and hook steps</p>
+<div class="diagram-container">
+<svg class="railroad-diagram" height="71" viewBox="0 0 225.0 71" width="225.0">
+<g transform="translate(.5 .5)">
+<g>
+<path d="M20 21v20m0 -10h20" /></g><path d="M40 31h10" /><g>
+<path d="M50 31h0.0" /><path d="M175.0 31h0.0" /><path d="M50.0 31h10" /><g class="non-terminal ">
+<path d="M60.0 31h0.0" /><path d="M165.0 31h0.0" /><rect height="22" width="105" x="60" y="20"></rect><text x="112.5" y="35">Hook Entry</text></g><path d="M165.0 31h10" /><path d="M60.0 31a10 10 0 0 0 -10 10v0a10 10 0 0 0 10 10" /><g>
+<path d="M60.0 51h105.0" /></g><path d="M165.0 51a10 10 0 0 0 10 -10v0a10 10 0 0 0 -10 -10" /></g><path d="M175.0 31h10" /><path d="M 185.0 31 h 20 m 0 -10 v 20"></path></g></svg>
+</div>
+<h2>Hook Entry</h2>
+<p class="description">A single hook entry: matcher pattern + list of hook steps</p>
+<div class="diagram-container">
+<svg class="railroad-diagram" height="62" viewBox="0 0 824.0 62" width="824.0">
+<g transform="translate(.5 .5)">
+<g>
+<path d="M20 21v20m0 -10h20" /></g><path d="M40 31h10" /><g>
+<path d="M50 31h0.0" /><path d="M774.0 31h0.0" /><g class="terminal ">
+<path d="M50.0 31h0.0" /><path d="M78.5 31h0.0" /><rect height="22" rx="10" ry="10" width="28.5" x="50" y="20"></rect><text x="64.25" y="35">-</text></g><path d="M78.5 31h10" /><path d="M88.5 31h10" /><g class="terminal ">
+<path d="M98.5 31h0.0" /><path d="M186.5 31h0.0" /><rect height="22" rx="10" ry="10" width="88" x="98.5" y="20"></rect><text x="142.5" y="35">matcher:</text></g><path d="M186.5 31h10" /><path d="M196.5 31h10" /><g class="terminal ">
+<path d="M206.5 31h0.0" /><path d="M524.0 31h0.0" /><rect height="22" rx="10" ry="10" width="317.5" x="206.5" y="20"></rect><text x="365.25" y="35">pattern (e.g. Read|Write|Edit or *)</text></g><path d="M524.0 31h10" /><path d="M534.0 31h10" /><g class="terminal ">
+<path d="M544.0 31h0.0" /><path d="M615.0 31h0.0" /><rect height="22" rx="10" ry="10" width="71" x="544" y="20"></rect><text x="579.5" y="35">hooks:</text></g><path d="M615.0 31h10" /><path d="M625.0 31h10" /><g class="non-terminal ">
+<path d="M635.0 31h0.0" /><path d="M774.0 31h0.0" /><rect height="22" width="139" x="635" y="20"></rect><text x="704.5" y="35">Hook Step List</text></g></g><path d="M774.0 31h10" /><path d="M 784.0 31 h 20 m 0 -10 v 20"></path></g></svg>
+</div>
+<h2>Hook Step List</h2>
+<p class="description">One or more hook steps to execute</p>
+<div class="diagram-container">
+<svg class="railroad-diagram" height="71" viewBox="0 0 216.5 71" width="216.5">
+<g transform="translate(.5 .5)">
+<g>
+<path d="M20 21v20m0 -10h20" /></g><path d="M40 31h10" /><g>
+<path d="M50 31h0.0" /><path d="M166.5 31h0.0" /><path d="M50.0 31h10" /><g class="non-terminal ">
+<path d="M60.0 31h0.0" /><path d="M156.5 31h0.0" /><rect height="22" width="96.5" x="60" y="20"></rect><text x="108.25" y="35">Hook Step</text></g><path d="M156.5 31h10" /><path d="M60.0 31a10 10 0 0 0 -10 10v0a10 10 0 0 0 10 10" /><g>
+<path d="M60.0 51h96.5" /></g><path d="M156.5 51a10 10 0 0 0 10 -10v0a10 10 0 0 0 -10 -10" /></g><path d="M166.5 31h10" /><path d="M 176.5 31 h 20 m 0 -10 v 20"></path></g></svg>
+</div>
+<h2>Hook Step</h2>
+<p class="description">A single hook action — prompt injection or command execution</p>
+<div class="diagram-container">
+<svg class="railroad-diagram" height="112" viewBox="0 0 882.0 112" width="882.0">
+<g transform="translate(.5 .5)">
+<g>
+<path d="M20 21v20m0 -10h20" /></g><path d="M40 31h10" /><g>
+<path d="M50 31h0.0" /><path d="M832.0 31h0.0" /><g class="terminal ">
+<path d="M50.0 31h0.0" /><path d="M78.5 31h0.0" /><rect height="22" rx="10" ry="10" width="28.5" x="50" y="20"></rect><text x="64.25" y="35">-</text></g><path d="M78.5 31h10" /><path d="M88.5 31h10" /><g class="terminal ">
+<path d="M98.5 31h0.0" /><path d="M161.0 31h0.0" /><rect height="22" rx="10" ry="10" width="62.5" x="98.5" y="20"></rect><text x="129.75" y="35">type:</text></g><path d="M161.0 31h10" /><g>
+<path d="M171.0 31h0.0" /><path d="M832.0 31h0.0" /><path d="M171.0 31h20" /><g>
+<path d="M191.0 31h116.0" /><path d="M696.0 31h116.0" /><g class="terminal ">
+<path d="M307.0 31h0.0" /><path d="M378.0 31h0.0" /><rect height="22" rx="10" ry="10" width="71" x="307" y="20"></rect><text x="342.5" y="35">prompt</text></g><path d="M378.0 31h10" /><path d="M388.0 31h10" /><g class="terminal ">
+<path d="M398.0 31h0.0" /><path d="M477.5 31h0.0" /><rect height="22" rx="10" ry="10" width="79.5" x="398" y="20"></rect><text x="437.75" y="35">prompt:</text></g><path d="M477.5 31h10" /><path d="M487.5 31h10" /><g class="terminal ">
+<path d="M497.5 31h0.0" /><path d="M696.0 31h0.0" /><rect height="22" rx="10" ry="10" width="198.5" x="497.5" y="20"></rect><text x="596.75" y="35">multiline YAML string</text></g></g><path d="M812.0 31h20" /><path d="M171.0 31a10 10 0 0 1 10 10v10a10 10 0 0 0 10 10" /><g>
+<path d="M191.0 61h0.0" /><path d="M812.0 61h0.0" /><g class="terminal ">
+<path d="M191.0 61h0.0" /><path d="M270.5 61h0.0" /><rect height="22" rx="10" ry="10" width="79.5" x="191" y="50"></rect><text x="230.75" y="65">command</text></g><path d="M270.5 61h10" /><g>
+<path d="M280.5 61h0.0" /><path d="M533.5 61h0.0" /><path d="M280.5 61h20" /><g>
+<path d="M300.5 61h213.0" /></g><path d="M513.5 61h20" /><path d="M280.5 61a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10" /><g>
+<path d="M300.5 81h0.0" /><path d="M513.5 81h0.0" /><g class="terminal ">
+<path d="M300.5 81h0.0" /><path d="M363.0 81h0.0" /><rect height="22" rx="10" ry="10" width="62.5" x="300.5" y="70"></rect><text x="331.75" y="85">bash:</text></g><path d="M363.0 81h10" /><path d="M373.0 81h10" /><g class="terminal ">
+<path d="M383.0 81h0.0" /><path d="M513.5 81h0.0" /><rect height="22" rx="10" ry="10" width="130.5" x="383" y="70"></rect><text x="448.25" y="85">shell command</text></g></g><path d="M513.5 81a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10" /></g><g>
+<path d="M533.5 61h0.0" /><path d="M812.0 61h0.0" /><path d="M533.5 61h20" /><g>
+<path d="M553.5 61h238.5" /></g><path d="M792.0 61h20" /><path d="M533.5 61a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10" /><g>
+<path d="M553.5 81h0.0" /><path d="M792.0 81h0.0" /><g class="terminal ">
+<path d="M553.5 81h0.0" /><path d="M667.0 81h0.0" /><rect height="22" rx="10" ry="10" width="113.5" x="553.5" y="70"></rect><text x="610.25" y="85">powershell:</text></g><path d="M667.0 81h10" /><path d="M677.0 81h10" /><g class="terminal ">
+<path d="M687.0 81h0.0" /><path d="M792.0 81h0.0" /><rect height="22" rx="10" ry="10" width="105" x="687" y="70"></rect><text x="739.5" y="85">PS command</text></g></g><path d="M792.0 81a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10" /></g></g><path d="M812.0 61a10 10 0 0 0 10 -10v-10a10 10 0 0 1 10 -10" /></g></g><path d="M832.0 31h10" /><path d="M 842.0 31 h 20 m 0 -10 v 20"></path></g></svg>
+</div>
+<h2>Markdown Body</h2>
+<p class="description">Free-form Markdown instructions, examples, and guidelines for the agent</p>
+<div class="diagram-container">
+<svg class="railroad-diagram" height="91" viewBox="0 0 998.0 91" width="998.0">
+<g transform="translate(.5 .5)">
+<g>
+<path d="M20 30v20m0 -10h20" /></g><path d="M40 40h10" /><g>
+<path d="M50 40h0.0" /><path d="M948.0 40h0.0" /><g>
+<path d="M50.0 40h0.0" /><path d="M379.5 40h0.0" /><path d="M50.0 40h20" /><g>
+<path d="M70.0 40h289.5" /></g><path d="M359.5 40h20" /><path d="M50.0 40a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10" /><g>
+<path d="M70.0 60h0.0" /><path d="M359.5 60h0.0" /><g class="terminal ">
+<path d="M70.0 60h0.0" /><path d="M166.5 60h0.0" /><rect height="22" rx="10" ry="10" width="96.5" x="70" y="49"></rect><text x="118.25" y="64"># Heading</text></g><path d="M166.5 60h10" /><path d="M176.5 60h10" /><g class="terminal ">
+<path d="M186.5 60h0.0" /><path d="M359.5 60h0.0" /><rect height="22" rx="10" ry="10" width="173" x="186.5" y="49"></rect><text x="273" y="64">instructions prose</text></g></g><path d="M359.5 60a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10" /></g><g>
+<path d="M379.5 40h0.0" /><path d="M683.5 40h0.0" /><path d="M379.5 40h20" /><g>
+<path d="M399.5 40h264.0" /></g><path d="M663.5 40h20" /><path d="M379.5 40a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10" /><g>
+<path d="M399.5 60h0.0" /><path d="M663.5 60h0.0" /><g class="terminal ">
+<path d="M399.5 60h0.0" /><path d="M513.0 60h0.0" /><rect height="22" rx="10" ry="10" width="113.5" x="399.5" y="49"></rect><text x="456.25" y="64">## Commands</text></g><path d="M513.0 60h10" /><path d="M523.0 60h10" /><g class="terminal ">
+<path d="M533.0 60h0.0" /><path d="M663.5 60h0.0" /><rect height="22" rx="10" ry="10" width="130.5" x="533" y="49"></rect><text x="598.25" y="64">command table</text></g></g><path d="M663.5 60a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10" /></g><g>
+<path d="M683.5 40h0.0" /><path d="M948.0 40h0.0" /><path d="M683.5 40a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10" /><g>
+<path d="M703.5 20h224.5" /></g><path d="M928.0 20a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10" /><path d="M683.5 40h20" /><g>
+<path d="M703.5 40h0.0" /><path d="M928.0 40h0.0" /><path d="M703.5 40h10" /><g>
+<path d="M713.5 40h0.0" /><path d="M918.0 40h0.0" /><g class="terminal ">
+<path d="M713.5 40h0.0" /><path d="M818.5 40h0.0" /><rect height="22" rx="10" ry="10" width="105" x="713.5" y="29"></rect><text x="766" y="44">## Section</text></g><path d="M818.5 40h10" /><path d="M828.5 40h10" /><g class="terminal ">
+<path d="M838.5 40h0.0" /><path d="M918.0 40h0.0" /><rect height="22" rx="10" ry="10" width="79.5" x="838.5" y="29"></rect><text x="878.25" y="44">content</text></g></g><path d="M918.0 40h10" /><path d="M713.5 40a10 10 0 0 0 -10 10v0a10 10 0 0 0 10 10" /><g>
+<path d="M713.5 60h204.5" /></g><path d="M918.0 60a10 10 0 0 0 10 -10v0a10 10 0 0 0 -10 -10" /></g><path d="M928.0 40h20" /></g></g><path d="M948.0 40h10" /><path d="M 958.0 40 h 20 m 0 -10 v 20"></path></g></svg>
+</div>
+</body>
+</html>
