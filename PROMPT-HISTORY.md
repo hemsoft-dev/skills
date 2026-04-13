@@ -4,6 +4,9 @@ This file tracks meaningful prompts and their outcomes for the Claude Skills rep
 
 ---
 
+2026-04-13 - 04:13 - Fix railroad diagram grammar: remove unofficial hooks from Copilot SKILL.md spec
+Result: Removed 5 hooks-related rules from copilot-cli-skill-md.grammar.json that were mistakenly attributed to Copilot CLI (hooks: in SKILL.md frontmatter is a Claude Code convention, not part of the agentskills.io spec or any GitHub docs). Added missing Metadata Block rule which IS in the official spec. Updated meta title/source. Regenerated HTML. Committed 1f44866f.
+
 2026-04-09 - 01:13 - Create ai-cert skill for Azure AI certification tracking (AI-901 + AI-103)
 Result: Created ai-cert skill (V1.0) with 4 commands (status, plan, log, review), comprehensive SKILL.md with exam details/links/skills measured, 20-week study plan (8 weeks AI-901 + 12 weeks AI-103), and progress tracker with module checklists. Researched all cert pages, study guides, learning paths, and Microsoft's certification transition blog.
 
