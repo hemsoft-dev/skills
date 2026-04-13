@@ -2,7 +2,7 @@
     [Parameter(Mandatory=$true)] [string]$RepoName,
     [Parameter(Mandatory=$true)] [string]$Owner,
     [Parameter(Mandatory=$true)] [ValidateSet("Personal1", "Personal2", "Work1")] [string]$Profile,
-    [bool]$Private = $true
+    [ValidateSet("private", "public", "internal")] [string]$Visibility = "private"
 )
 
 $ErrorActionPreference = "Stop"
@@ -11,9 +11,8 @@ $ErrorActionPreference = "Stop"
 if (!(Get-Command gh -ErrorAction SilentlyContinue)) { throw "GitHub CLI (gh) is not installed." }
 
 # 2. Create GitHub Repository
-$visibility = if ($Private) { "--private" } else { "--public" }
-Write-Information "Creating repository $Owner/$RepoName..."
-gh repo create "$Owner/$RepoName" $visibility
+Write-Information "Creating repository $Owner/$RepoName ($Visibility)..."
+gh repo create "$Owner/$RepoName" --$Visibility
 
 # 3. Initialize Local Repository
 if (Test-Path .git) {

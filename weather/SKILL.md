@@ -1,46 +1,13 @@
 ---
 name: weather
-description: V1.6 - Expert in weather reporting, forecasts, and analysis for 28117 (Mooresville, NC), Charlotte, NC metro area, and Greenville, SC. Provides current conditions, extended forecasts, severe weather analysis, full Duke Energy power outage tracking (official + crowdsourced + social media), and air travel impact assessment. Includes community forum sources and OpenWeather API integration for real-time weather data. CRITICAL: Never fabricate data - all metrics must be verified from official sources with EST timestamps. For power outages, checks ALL sources including PowerOutage.us, social media, and community reports.
-hooks:
-  PostToolUse:
-    - matcher: "Read|Write|Edit"
-      hooks:
-        - type: prompt
-          prompt: |
-            If a file was read, written, or edited in the weather directory (path contains 'weather'), verify that history logging occurred.
-            
-            Check if History/{YYYY-MM-DD}.md exists and contains an entry for this interaction with:
-            - Format: "## HH:MM - {Action Taken}"
-            - One-line summary
-            - Accurate timestamp (obtained via `Get-Date -Format "HH:mm"` command, never guessed)
-            
-            If history entry is missing or incomplete, provide specific feedback on what needs to be added.
-            If history entry exists and is properly formatted, acknowledge completion.
-  Stop:
-    - matcher: "*"
-      hooks:
-        - type: prompt
-          prompt: |
-            Before stopping, if weather was used (check if any files in weather directory were modified), verify that the interaction was logged:
-            
-            1. Check if History/{YYYY-MM-DD}.md exists in weather directory
-            2. Verify it contains an entry with format "## HH:MM - {Action Taken}" where HH:MM was obtained via `Get-Date -Format "HH:mm"` (never guessed)
-            3. Ensure the entry includes a one-line summary of what was done
-            
-            If history entry is missing:
-            - Return {"decision": "block", "reason": "History entry missing. Please log this interaction to History/{YYYY-MM-DD}.md with format: ## HH:MM - {Action Taken}\n{One-line summary}\n\nCRITICAL: Get the current time using `Get-Date -Format \"HH:mm\"` command - never guess the timestamp."}
-            
-            If history entry exists:
-            - Return {"decision": "approve"}
-            
-            Include a systemMessage with details about the history entry status.
+description: Expert in weather reporting, forecasting, and analysis for Charlotte, NC and Greenville, SC areas with severe weather tracking and air travel impact assessment.
 ---
 
 # Weather Expert - Charlotte, NC and Greenville, SC Areas
 
 **Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
-Expert in weather reporting, forecasting, and analysis for **28117 (Mooresville, NC)**, the greater **Charlotte, NC metropolitan area**, and **Greenville, SC**. Provides comprehensive weather intelligence including current conditions, extended forecasts, severe weather analysis, power outage tracking, and air travel impact assessment.
+Expert in weather reporting, forecasting, and analysis for **28117 (Mooresville, NC)**, the greater **Charlotte, NC metropolitan area**, and **Greenville, SC**.Provides comprehensive weather intelligence including current conditions, extended forecasts, severe weather analysis, power outage tracking, and air travel impact assessment.
 
 ## CRITICAL DATA VERIFICATION REQUIREMENTS
 

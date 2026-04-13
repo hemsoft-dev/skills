@@ -1,6 +1,6 @@
 ---
 name: diary
-description: V1.1 - Commands: create [date], update [date]. Personal diary management with scaffolded entries where Today's Highlight is always the main news headline of the day.
+description: Personal diary management with daily entry creation and updates.
 ---
 
 # Diary

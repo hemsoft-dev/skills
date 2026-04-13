@@ -1,11 +1,11 @@
 ---
 name: anti-slop
-description: V1.1 - Commands: identify (default), fix, suggest. Detects and fixes AI-generated slop patterns in text, code, PRs, and commit messages. Use when reviewing content for AI-generated low-quality patterns, improving authenticity of writing, or auditing code for excessive AI-style comments.
+description: Detect and fix AI-generated slop in any content. Inspired by peakoss/anti-slop with battle-tested rules derived from 130+ manually reviewed AI slop PRs.
 ---
 
 # Anti-Slop
 
-Detect and fix AI-generated slop in any content. Inspired by [peakoss/anti-slop](https://github.com/peakoss/anti-slop) — battle-tested rules derived from 130+ manually reviewed AI slop PRs.
+Detect and fix AI-generated slop in any content.Inspired by [peakoss/anti-slop](https://github.com/peakoss/anti-slop) — battle-tested rules derived from 130+ manually reviewed AI slop PRs.
 
 ## Commands
 

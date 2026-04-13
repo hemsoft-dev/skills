@@ -1,14 +1,13 @@
 ---
 name: slack
-description: V2.7 - Slack Web API for messaging, channels, search, and files. Primary entry point with links to specialized sub-skills for search, files, and advanced features. CRITICAL: All PowerShell scripts require 6>&1 stream redirection.
-compatibility: Requires SLACK_TOKEN and SLACK_USER_TOKEN environment variables, PowerShell, network access
+description: Primary entry point for Slack API operations with sub-skills for search, files, and advanced features.
 ---
 
 # Slack Web API
 
 **Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
-**Primary entry point** for Slack API operations. For specialized functionality, see the sub-skills below.
+**Primary entry point** for Slack API operations.For specialized functionality, see the sub-skills below.
 
 ## 📋 Sub-Skills
 

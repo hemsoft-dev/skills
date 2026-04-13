@@ -1,7 +1,6 @@
-```skill
 ---
 name: screenshot
-description: V2.2 - Import screenshots from SnagIt library with automatic WebP compression, AI descriptions, and OCR text extraction.
+description: Import screenshots from SnagIt into skill image libraries with AI description and OCR text extraction.
 ---
 
 # Screenshot

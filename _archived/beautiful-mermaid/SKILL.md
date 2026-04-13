@@ -1,4 +1,3 @@
-```skill
 ---
 name: beautiful-mermaid
 description: V1.0 - Expert in Beautiful Mermaid library for rendering Mermaid diagrams as beautiful SVGs or ASCII art. Use for installing, configuring, and working with beautiful-mermaid in Node.js/TypeScript projects.

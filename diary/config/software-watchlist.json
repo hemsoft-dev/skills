@@ -19,6 +19,18 @@
     "includePrerelease": false
   },
   {
+    "name": "GitHub Copilot CLI",
+    "repo": "github/copilot-cli",
+    "type": "github",
+    "includePrerelease": false
+  },
+  {
+    "name": "GitHub Copilot (gh extension)",
+    "repo": "github/gh-copilot",
+    "type": "github",
+    "includePrerelease": false
+  },
+  {
     "name": "GitHub Copilot Chat",
     "repo": "microsoft/vscode-copilot-chat",
     "type": "github",

@@ -1,6 +1,3 @@
-# Bun Scaffold
-
-```skill
 ---
 name: bun-scaffold
 description: V1.2 - Scaffolds production-ready TypeScript utilities with Bun, Biome linting, Vitest testing (90%+ coverage), pre-commit hooks, and GitHub integration.

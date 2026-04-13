@@ -35,12 +35,12 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
    - **Organization repos**: Team projects, official releases, shared ownership (e.g., `github.com/fhemmer/repo`)
 
 3. **Execute Initialization Script**
-   - Run the `github-init.ps1` script located in the scripts subdirectory: `c:\Users\franz\.claude\skills\github-init\scripts\github-init.ps1`.
+   - Run the `github-init.ps1` script located in the scripts subdirectory: `c:\Users\User\.agents\skills\github-init\scripts\github-init.ps1`.
    - Use the following parameters:
      - `RepoName`: The name of the repository.
      - `Owner`: The GitHub **username** (e.g., `HemSoft`) or **organization** (e.g., `fhemmer`).
      - `Profile`: "Personal1", "Personal2", or "Work1".
-     - `Private`: (Optional) Default is `$true`.
+     - `Visibility`: (Optional) "private" (default), "public", or "internal".
    - **Report Success**: Always provide the user with the URL to the newly created repository.
 
 ## Requirements

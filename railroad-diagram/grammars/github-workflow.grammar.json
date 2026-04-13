@@ -90,7 +90,7 @@
     },
 
     "Event Filters": {
-      "description": "Filter configuration for push/pull_request events",
+      "description": "Filter configuration — varies by event type (push/PR: branches/tags/paths; workflow_dispatch: inputs; workflow_call: inputs/outputs/secrets; others: types)",
       "definition": {
         "type": "Stack",
         "items": [
@@ -100,24 +100,68 @@
           { "type": "Optional", "items": [{ "type": "Sequence", "items": ["tags-ignore:", { "type": "NonTerminal", "label": "String List" }] }], "skip": true },
           { "type": "Optional", "items": [{ "type": "Sequence", "items": ["paths:", { "type": "NonTerminal", "label": "String List" }] }], "skip": true },
           { "type": "Optional", "items": [{ "type": "Sequence", "items": ["paths-ignore:", { "type": "NonTerminal", "label": "String List" }] }], "skip": true },
-          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["types:", { "type": "NonTerminal", "label": "String List" }] }], "skip": true }
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["types:", { "type": "NonTerminal", "label": "String List" }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["inputs:", { "type": "NonTerminal", "label": "workflow_dispatch Inputs" }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "NonTerminal", "label": "workflow_call Config" }], "skip": true }
+        ]
+      }
+    },
+
+    "workflow_call Config": {
+      "description": "Reusable workflow trigger configuration (inputs, outputs, secrets)",
+      "definition": {
+        "type": "Stack",
+        "items": [
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["inputs:", { "type": "OneOrMore", "items": [{ "type": "NonTerminal", "label": "Input Definition" }] }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["outputs:", { "type": "OneOrMore", "items": [{ "type": "NonTerminal", "label": "workflow_call Output" }] }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["secrets:", { "type": "NonTerminal", "label": "workflow_call Secrets" }] }], "skip": true }
+        ]
+      }
+    },
+
+    "workflow_call Output": {
+      "description": "A single output exposed by a reusable workflow",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          { "type": "Terminal", "label": "<output-id>" },
+          ":",
+          { "type": "Stack", "items": [
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["description:", { "type": "Terminal", "label": "<string>" }] }], "skip": true },
+            { "type": "Sequence", "items": ["value:", { "type": "Terminal", "label": "<expression>" }] }
+          ]}
+        ]
+      }
+    },
+
+    "workflow_call Secrets": {
+      "description": "Secrets configuration for reusable workflows",
+      "definition": {
+        "type": "Choice",
+        "default": 0,
+        "items": [
+          { "type": "OneOrMore", "items": [
+            { "type": "Sequence", "items": [
+              { "type": "Terminal", "label": "<secret-id>" },
+              ":",
+              { "type": "Stack", "items": [
+                { "type": "Optional", "items": [{ "type": "Sequence", "items": ["description:", { "type": "Terminal", "label": "<string>" }] }], "skip": true },
+                { "type": "Optional", "items": [{ "type": "Sequence", "items": ["required:", { "type": "Choice", "default": 0, "items": ["true", "false"] }] }], "skip": true }
+              ]}
+            ]}
+          ]},
+          "inherit"
         ]
       }
     },
 
     "workflow_dispatch Inputs": {
-      "description": "Manual trigger with optional input parameters",
+      "description": "Manual trigger input parameters",
       "definition": {
-        "type": "Optional",
+        "type": "OneOrMore",
         "items": [
-          { "type": "Sequence", "items": [
-            "inputs:",
-            { "type": "OneOrMore", "items": [
-              { "type": "NonTerminal", "label": "Input Definition" }
-            ]}
-          ]}
-        ],
-        "skip": true
+          { "type": "NonTerminal", "label": "Input Definition" }
+        ]
       }
     },
 
@@ -333,9 +377,8 @@
             ]},
             "]"
           ]},
-          { "type": "Sequence", "items": [
-            "group:",
-            { "type": "Terminal", "label": "<runner-group>" },
+          { "type": "Stack", "items": [
+            { "type": "Sequence", "items": ["group:", { "type": "Terminal", "label": "<runner-group>" }] },
             { "type": "Optional", "items": [{ "type": "Sequence", "items": ["labels:", { "type": "NonTerminal", "label": "String List" }] }], "skip": true }
           ]}
         ]
@@ -669,6 +712,30 @@
             ","
           ]},
           ")"
+        ]
+      }
+    },
+
+    "Comparison": {
+      "description": "Comparison operations in expressions",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          { "type": "Terminal", "label": "<value>" },
+          { "type": "Choice", "default": 0, "items": ["==", "!=", "<", ">", "<=", ">="] },
+          { "type": "Terminal", "label": "<value>" }
+        ]
+      }
+    },
+
+    "Logical Operation": {
+      "description": "Logical operations in expressions",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          { "type": "Terminal", "label": "<expression>" },
+          { "type": "Choice", "default": 0, "items": ["&&", "||", "!"] },
+          { "type": "Terminal", "label": "<expression>" }
         ]
       }
     },

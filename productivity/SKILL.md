@@ -1,44 +1,11 @@
 ---
 name: productivity
-description: V1.1 - Commands: DailyLOC, UserSummary, UserBreakdown. Tracks personal productivity metrics including daily lines of code, per-user commits, pull requests, issues, workflow runs, and premium requests over a time range.
-hooks:
-  PostToolUse:
-    - matcher: "Read|Write|Edit"
-      hooks:
-        - type: prompt
-          prompt: |
-            If a file was read, written, or edited in the productivity directory (path contains 'productivity'), verify that history logging occurred.
-            
-            Check if History/{YYYY-MM-DD}.md exists and contains an entry for this interaction with:
-            - Format: "## HH:MM - {Action Taken}"
-            - One-line summary
-            - Accurate timestamp (obtained via `Get-Date -Format "HH:mm"` command, never guessed)
-            
-            If history entry is missing or incomplete, provide specific feedback on what needs to be added.
-            If history entry exists and is properly formatted, acknowledge completion.
-  Stop:
-    - matcher: "*"
-      hooks:
-        - type: prompt
-          prompt: |
-            Before stopping, if productivity was used (check if any files in productivity directory were modified), verify that the interaction was logged:
-            
-            1. Check if History/{YYYY-MM-DD}.md exists in productivity directory
-            2. Verify it contains an entry with format "## HH:MM - {Action Taken}" where HH:MM was obtained via `Get-Date -Format "HH:mm"` (never guessed)
-            3. Ensure the entry includes a one-line summary of what was done
-            
-            If history entry is missing:
-            - Return {"decision": "block", "reason": "History entry missing. Please log this interaction to History/{YYYY-MM-DD}.md with format: ## HH:MM - {Action Taken}\n{One-line summary}\n\nCRITICAL: Get the current time using `Get-Date -Format \"HH:mm\"` command - never guess the timestamp."}
-            
-            If history entry exists:
-            - Return {"decision": "approve"}
-            
-            Include a systemMessage with details about the history entry status.
+description: Tracks personal productivity metrics with deep insights into coding activity, collaboration, and issue resolution.
 ---
 
 # Productivity Skill
 
-Tracks personal productivity metrics with deep insights into coding activity, collaboration, and issue resolution. Currently supports daily lines of code (LOC) tracking as the primary use case, with extensibility for additional metrics.
+Tracks personal productivity metrics with deep insights into coding activity, collaboration, and issue resolution.Currently supports daily lines of code (LOC) tracking as the primary use case, with extensibility for additional metrics.
 
 ## Default Behavior
 

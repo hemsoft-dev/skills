@@ -1,3 +1,4 @@
+---
 name: ask-user-questions
 description: V1.0 - Expert in spec-based development using AskUserQuestionTool for thorough requirements gathering before implementation. Use when building large features or when user wants to be interviewed to create detailed specifications.
 ---
