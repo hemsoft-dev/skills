@@ -1,13 +1,18 @@
 ### \ud83d\udcac Slack Briefing
 
-*Generated: 2026-04-15 13:28 | Date range: 2026-04-14 to 2026-04-15 | User: @fhemmer*
+*Generated: 2026-04-15 17:00 | Date range: 2026-04-14 to 2026-04-15 | User: @fhemmer*
 
 #### \ud83d\udd14 Direct @Mentions (1)
 
 - **[2026-04-15 10:18] #ai-chapter** - @Geo Rufino: Our resident AI Evangelist <@U2XMZDPJ7|Franz> has a training video here: <https://reliaslearning.sharepoint.com/:f:/s/ProductivityEngineering/IgC4JQeFMTaWQ4_8EbDuUaoZAbQMiB18ZT5aFD-XqJPrdpU?e=g5muGZ|2...
 
-#### \ud83d\udcac Direct Messages (9)
+#### \ud83d\udcac Direct Messages (19)
 
+- **[2026-04-15 16:52]** @Bryan Halterman: how was AI chapter?
+- **[2026-04-15 15:02]** @Bryan Halterman: I will be glad when this permission work is done, I feel like I'm testing peoples patience. Who knew getting sonarcloud on sso would open such a large...
+- **[2026-04-15 15:01]** @Bryan Halterman: Had a good meeting with Kyle today prepping him on the permissions stuff coming to GitHub
+- **[2026-04-15 15:00]** @Bryan Halterman: I honestly enjoy passing on how I would use AI to solve problems. I don't want to do the work for them but I'm happy to show them how I would do it to...
+- **[2026-04-15 14:58]** @Bryan Halterman: that's wild man
 - **[2026-04-15 10:43]** @Christopher LaGant: <https://fantastic-winner-wwr8v7e.pages.github.io/> And just like that we're up
 - **[2026-04-15 10:12]** @Christopher LaGant: Do they work directly from a repo?
 - **[2026-04-15 09:58]** @Christopher LaGant: I'll take a look at that
@@ -15,11 +20,18 @@
 - **[2026-04-15 09:18]** @Christopher LaGant: Good Morning! I have a random question for you. In our new AI prototyping, Vibe Coding world, sharing the work becomes the last hurdle. The output of ...
 - **[2026-04-15 10:08]** @Gray Anthony: Well, I think that getting support for the framework into the golden-path repo and cookie cutter template would be helpful. And also setting up gating...
 - **[2026-04-15 07:46]** @Gray Anthony: Not really, I was just doing some research into using it and stumbled across the ADR and I think I've got some management support around pushing for u...
+- **[2026-04-15 16:33]** @Malia Paul: I'm confused - there are teams defined in github!
+- **[2026-04-15 15:54]** @Malia Paul: Hi Franz! I have feedback on the metrics site! Finally! KJ and Michelle would like to see the copilot usage aggregated by team and repo. Copilot does ...
 - **[2026-04-15 06:56]** @Michelle Barry: You can provide your own slides - we just need to send them over to Bertelsmann people - no worries on format 
 - **[2026-04-15 08:01]** @Slack Skill Bot: :sunrise: _Morning Briefing — Wednesday, April 15th_ :warning: _Needs attention_ • Todoist unavailable :clipboard: _Tasks_ Nothing scheduled :date: _T...
+- **[2026-04-15 16:26]** @Wes Wood: (yes, I realize you gave me the answer and steps :smile: I'll see if I can put 2 + 2 together is see if I get 4; or 3 or 5 :joy:
+- **[2026-04-15 16:25]** @Wes Wood: I should mention, I would consider myself an AI nooooooob. :sweat_smile: but I'm learning. but I will try to give that some thought and see what I can...
+- **[2026-04-15 15:44]** @Wes Wood: Hi. I'm Wes, I'm a new EM under Sharada's org. I heard you talk about a hardware skill for hardware support around the home. I think that would be awe...
 
-#### \ud83d\udce2 Announcements (4)
+#### \ud83d\udce2 Announcements (6)
 
+- **[2026-04-15 15:36] #platform-deployment-26-q1-05** - @Clark Bonham: archived the channel
+- **[2026-04-15 13:47] #software-dev-chapter** - @Malia Paul: Nevermind - saw what channel I'm in :slightly_smiling_face:
 - **[2026-04-15 12:03] #sysman-jira-alerts** - @sys jira alert: 
 - **[2026-04-15 10:28] #reliasvralerts** - @Amha Shiferaw: added an integration to this channel: <https://relias-engineering.slack.com/services/B0AT726LJJY|incoming-webhook>
 - **[2026-04-15 09:57] #UTAR5QVK5** - @Franz Hemmer: Hey good morning Chris! Great question - it really depends on the volume and rigor you want to put into it. You can go anywhere from Slack channel, GitHub repo, GitHub Pages, Gists, Azure Blob Storage to SharePoint and everything in between. There ar...
@@ -33,21 +45,35 @@
 - [2026-04-15 10:18] @Geo Rufino: Our resident AI Evangelist <@U2XMZDPJ7|Franz> has a training video here: <https://reliaslearning.sha...
 - [2026-04-15 09:42] @MB Clark: <@U032050R2TY|Malia Paul> I don't have a training to suggest yet, but I wanted to thank you for such...
 
-**#dev-tribe** (6 messages)
+**#dev-tribe** (7 messages)
 
+- [2026-04-15 14:37] @Girish Kade: <@U0AF3HHUQCT|Josh Bowman> Thanks for the update and the insight! I reran the pipeline and it’s work...
 - [2026-04-15 13:22] @Anushweta Balsaraf: Hi <!here> Can someone guide on this 403 err 'dev1-eus2-rp-kv-001' when trying to run platform repor...
 - [2026-04-15 13:21] @Josh Bowman: My dotnet test tasks were taking ~11-12 minutes each and it just finished them in seconds
-- [2026-04-15 13:20] @Josh Bowman: Actually.... it seems to be working now? So you might try re-running your pipeline
 
-**#next-deployment** (3 messages)
+**#product-engineering** (6 messages)
 
+- [2026-04-15 16:54] @Sarah Green: thank you for posting!
+- [2026-04-15 16:18] @Jill Browne: Updates complete although I'm not sure how much longer Atlassian will keep sending notifications. We...
+- [2026-04-15 16:13] @Christopher LaGant: Cohort 2 -> 1
+
+**#productivity-engineering-public** (5 messages)
+
+- [2026-04-15 14:45] @Tyler Deal: Will try to make my way back around today. Do you have a link to the test plans for the audit log, b...
+- [2026-04-15 14:29] @Ravindra Rayi: Hey <@U03R99WTXNW|Tyler Deal>, I've addressed your review feedback and pushed the changes. Also adde...
+- [2026-04-15 14:18] @Josh Bowman: Thanks for the clarification. I'll keep an eye out next time and see if I can discern which one of t...
+
+**#next-deployment** (4 messages)
+
+- [2026-04-15 13:39] @Jason Tolhurst: :white_check_mark: Physicians | WCEI | AP Craft &amp; Magento Release deployment is complete.
 - [2026-04-15 10:41] @Jason Tolhurst: :rocket: Physicians | WCEI | AP Craft &amp; Magento Release deployment is complete; QA is beginning.
 - [2026-04-15 10:06] @Jason Tolhurst: :rocket: Physicians | WCEI | AP Craft &amp; Magento Release deployment is beginning.
-- [2026-04-15 08:52] @Fawaz Baig: Good morning <@SBMTU8ZUY|cloudengineers-sysadmins>, We’re planning to proceed with the Auto-Enrollme...
 
-**#productivity-engineering-public** (1 messages)
+**#dev-env-help** (3 messages)
 
-- [2026-04-15 12:07] @Josh Bowman: <@S06JWMYQ3B7|pe> Posted this in systems-management but was redirected here: <https://relias-enginee...
+- [2026-04-15 16:18] @Anthony Garera: Flags look correct, I'm thinking it's permissions, walking through the debugger it returns false in ...
+- [2026-04-15 15:05] @Nathan Seith: hmm. You maybe also missing a feature flag, permissions or both. <https://relias.atlassian.net/wiki/...
+- [2026-04-15 14:46] @Anthony Garera: Hi All, Trying to access content-library from the local UI, each time I visit - I get sent to the ac...
 
 ---
-*Mentions: 1 | DMs: 9 | Announcements: 4 | Channel Messages: 19 (across 4 channels) | Action Items: 0*
+*Mentions: 1 | DMs: 19 | Announcements: 6 | Channel Messages: 34 (across 6 channels) | Action Items: 0*

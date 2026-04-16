@@ -550,3 +550,7 @@ Result: Created hardware skill (V1.0) with SKILL.md, inventory file, and first e
 2026-04-15 - 13:04 - Draft comprehensive Q1 2026 Self Evaluation using personal-review skill
 Result: Mined 90+ diary entries (Jan-Mar), productivity data, AI chapter history, one-on-one notes, and 10+ prior reviews. Produced 286-line STAR-format review with 8 achievements, 5 strengths, 3 growth areas, 4 Q2 goals, and polished Final Narrative in Relias three-pillar format.
 
+
+2026-04-15 - 14:21 - Generate C# 14 railroad syntax diagram covering full language grammar
+Result: Created csharp-14.grammar.json with 40+ rules (compilation unit, types, members, statements, expressions, patterns, LINQ, C# 14 features). Generated HTML with SVG diagrams at output/csharp-14.html.
+

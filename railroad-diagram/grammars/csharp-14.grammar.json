@@ -1,0 +1,1308 @@
+{
+  "meta": {
+    "title": "C# 14 Language Syntax (.NET 10)",
+    "description": "Railroad diagrams for C# 14 — declarations, statements, expressions, pattern matching, LINQ, and C# 14 features including extension members, field keyword, and partial constructors.",
+    "source": "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/",
+    "version": "2026-04"
+  },
+  "rules": {
+
+    "Compilation Unit": {
+      "description": "Top-level structure of a C# source file",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          { "type": "ZeroOrMore", "items": [{ "type": "NonTerminal", "label": "Using Directive" }] },
+          { "type": "ZeroOrMore", "items": [{ "type": "Sequence", "items": ["[", { "type": "Sequence", "items": [{ "type": "Choice", "default": 0, "items": ["assembly", "module"] }, ":"] }, { "type": "NonTerminal", "label": "Attribute" }, "]"] }] },
+          { "type": "Choice", "default": 0, "items": [
+            { "type": "ZeroOrMore", "items": [
+              { "type": "Choice", "default": 0, "items": [
+                { "type": "NonTerminal", "label": "Namespace Declaration" },
+                { "type": "NonTerminal", "label": "Type Declaration" }
+              ]}
+            ]},
+            { "type": "Group", "items": [
+              { "type": "OneOrMore", "items": [{ "type": "NonTerminal", "label": "Statement" }] }
+            ], "label": "Top-Level Statements (C# 9+)" }
+          ]}
+        ]
+      }
+    },
+
+    "Using Directive": {
+      "description": "Import types, namespaces, or create aliases",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          { "type": "Optional", "items": ["global"], "skip": true },
+          "using",
+          { "type": "Choice", "default": 0, "items": [
+            { "type": "Terminal", "label": "<namespace>" },
+            { "type": "Sequence", "items": ["static", { "type": "Terminal", "label": "<type>" }] },
+            { "type": "Sequence", "items": [
+              { "type": "Optional", "items": ["unsafe"], "skip": true },
+              { "type": "Terminal", "label": "<alias>" },
+              "=",
+              { "type": "NonTerminal", "label": "Type" }
+            ]}
+          ]},
+          ";"
+        ]
+      }
+    },
+
+    "Namespace Declaration": {
+      "description": "Organize types into namespaces — block-scoped or file-scoped (C# 10)",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          "namespace",
+          { "type": "Terminal", "label": "<qualified-name>" },
+          { "type": "Choice", "default": 0, "items": [
+            { "type": "Sequence", "items": [
+              "{",
+              { "type": "ZeroOrMore", "items": [{ "type": "NonTerminal", "label": "Using Directive" }] },
+              { "type": "ZeroOrMore", "items": [
+                { "type": "Choice", "default": 0, "items": [
+                  { "type": "NonTerminal", "label": "Namespace Declaration" },
+                  { "type": "NonTerminal", "label": "Type Declaration" }
+                ]}
+              ]},
+              "}"
+            ]},
+            { "type": "Group", "items": [";"], "label": "File-Scoped" }
+          ]}
+        ]
+      }
+    },
+
+    "Type Declaration": {
+      "description": "All type declaration forms with attributes and modifiers",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          { "type": "ZeroOrMore", "items": [{ "type": "NonTerminal", "label": "Attribute" }] },
+          { "type": "ZeroOrMore", "items": [{ "type": "NonTerminal", "label": "Modifier" }] },
+          { "type": "Choice", "default": 0, "items": [
+            { "type": "NonTerminal", "label": "Class Declaration" },
+            { "type": "NonTerminal", "label": "Struct Declaration" },
+            { "type": "NonTerminal", "label": "Record Declaration" },
+            { "type": "NonTerminal", "label": "Interface Declaration" },
+            { "type": "NonTerminal", "label": "Enum Declaration" },
+            { "type": "NonTerminal", "label": "Delegate Declaration" },
+            { "type": "NonTerminal", "label": "Extension Declaration" }
+          ]}
+        ]
+      }
+    },
+
+    "Modifier": {
+      "description": "Access modifiers and member modifiers",
+      "definition": {
+        "type": "Choice",
+        "default": 0,
+        "items": [
+          { "type": "Group", "items": [
+            { "type": "Choice", "default": 0, "items": [
+              "public", "private", "protected", "internal",
+              { "type": "Sequence", "items": ["protected", "internal"] },
+              { "type": "Sequence", "items": ["private", "protected"] },
+              "file"
+            ]}
+          ], "label": "Access" },
+          { "type": "Group", "items": [
+            { "type": "Choice", "default": 0, "items": [
+              "static", "abstract", "virtual", "override", "sealed",
+              "new", "extern", "partial", "async", "unsafe",
+              "volatile", "readonly", "required"
+            ]}
+          ], "label": "Member" }
+        ]
+      }
+    },
+
+    "Class Declaration": {
+      "description": "Class with optional generics, primary constructor (C# 12), base types",
+      "definition": {
+        "type": "Stack",
+        "items": [
+          { "type": "Sequence", "items": [
+            { "type": "Optional", "items": ["partial"], "skip": true },
+            "class",
+            { "type": "Terminal", "label": "<name>" },
+            { "type": "Optional", "items": [{ "type": "NonTerminal", "label": "Type Parameters" }], "skip": true },
+            { "type": "Optional", "items": [
+              { "type": "Sequence", "items": ["(", { "type": "NonTerminal", "label": "Parameter List" }, ")"] }
+            ], "skip": true }
+          ]},
+          { "type": "Sequence", "items": [
+            { "type": "Optional", "items": [
+              { "type": "Sequence", "items": [":", { "type": "OneOrMore", "items": [{ "type": "NonTerminal", "label": "Type" }, ","] }] }
+            ], "skip": true },
+            { "type": "ZeroOrMore", "items": [{ "type": "NonTerminal", "label": "Type Constraint" }] }
+          ]},
+          { "type": "Sequence", "items": [
+            "{",
+            { "type": "ZeroOrMore", "items": [{ "type": "NonTerminal", "label": "Member Declaration" }] },
+            "}"
+          ]}
+        ]
+      }
+    },
+
+    "Record Declaration": {
+      "description": "Record type with optional positional parameters and value semantics",
+      "definition": {
+        "type": "Stack",
+        "items": [
+          { "type": "Sequence", "items": [
+            { "type": "Optional", "items": ["partial"], "skip": true },
+            "record",
+            { "type": "Optional", "items": [
+              { "type": "Choice", "default": 0, "items": ["class", "struct"] }
+            ], "skip": true },
+            { "type": "Terminal", "label": "<name>" },
+            { "type": "Optional", "items": [{ "type": "NonTerminal", "label": "Type Parameters" }], "skip": true }
+          ]},
+          { "type": "Sequence", "items": [
+            { "type": "Optional", "items": [
+              { "type": "Sequence", "items": ["(", { "type": "NonTerminal", "label": "Parameter List" }, ")"] }
+            ], "skip": true },
+            { "type": "Optional", "items": [
+              { "type": "Sequence", "items": [":", { "type": "OneOrMore", "items": [{ "type": "NonTerminal", "label": "Type" }, ","] }] }
+            ], "skip": true }
+          ]},
+          { "type": "Choice", "default": 0, "items": [
+            { "type": "Sequence", "items": [
+              "{",
+              { "type": "ZeroOrMore", "items": [{ "type": "NonTerminal", "label": "Member Declaration" }] },
+              "}"
+            ]},
+            ";"
+          ]}
+        ]
+      }
+    },
+
+    "Struct Declaration": {
+      "description": "Value type — supports ref, readonly, and primary constructors (C# 12)",
+      "definition": {
+        "type": "Stack",
+        "items": [
+          { "type": "Sequence", "items": [
+            { "type": "Optional", "items": [
+              { "type": "Choice", "default": 0, "items": [
+                { "type": "Sequence", "items": ["readonly", "ref"] },
+                "readonly",
+                "ref"
+              ]}
+            ], "skip": true },
+            { "type": "Optional", "items": ["partial"], "skip": true },
+            "struct",
+            { "type": "Terminal", "label": "<name>" },
+            { "type": "Optional", "items": [{ "type": "NonTerminal", "label": "Type Parameters" }], "skip": true },
+            { "type": "Optional", "items": [
+              { "type": "Sequence", "items": ["(", { "type": "NonTerminal", "label": "Parameter List" }, ")"] }
+            ], "skip": true }
+          ]},
+          { "type": "Sequence", "items": [
+            { "type": "Optional", "items": [
+              { "type": "Sequence", "items": [":", { "type": "OneOrMore", "items": [{ "type": "NonTerminal", "label": "Type" }, ","] }] }
+            ], "skip": true },
+            { "type": "ZeroOrMore", "items": [{ "type": "NonTerminal", "label": "Type Constraint" }] }
+          ]},
+          { "type": "Sequence", "items": [
+            "{",
+            { "type": "ZeroOrMore", "items": [{ "type": "NonTerminal", "label": "Member Declaration" }] },
+            "}"
+          ]}
+        ]
+      }
+    },
+
+    "Interface Declaration": {
+      "description": "Contract type — supports default implementations (C# 8+) and static abstracts (C# 11)",
+      "definition": {
+        "type": "Stack",
+        "items": [
+          { "type": "Sequence", "items": [
+            { "type": "Optional", "items": ["partial"], "skip": true },
+            "interface",
+            { "type": "Terminal", "label": "<name>" },
+            { "type": "Optional", "items": [{ "type": "NonTerminal", "label": "Type Parameters" }], "skip": true }
+          ]},
+          { "type": "Sequence", "items": [
+            { "type": "Optional", "items": [
+              { "type": "Sequence", "items": [":", { "type": "OneOrMore", "items": [{ "type": "NonTerminal", "label": "Type" }, ","] }] }
+            ], "skip": true },
+            { "type": "ZeroOrMore", "items": [{ "type": "NonTerminal", "label": "Type Constraint" }] }
+          ]},
+          { "type": "Sequence", "items": [
+            "{",
+            { "type": "ZeroOrMore", "items": [{ "type": "NonTerminal", "label": "Member Declaration" }] },
+            "}"
+          ]}
+        ]
+      }
+    },
+
+    "Enum Declaration": {
+      "description": "Enumeration type with optional underlying integral type",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          "enum",
+          { "type": "Terminal", "label": "<name>" },
+          { "type": "Optional", "items": [
+            { "type": "Sequence", "items": [":", { "type": "Choice", "default": 0, "items": [
+              "byte", "sbyte", "short", "ushort", "int", "uint", "long", "ulong"
+            ]}]}
+          ], "skip": true },
+          "{",
+          { "type": "OneOrMore", "items": [
+            { "type": "Sequence", "items": [
+              { "type": "Terminal", "label": "<member>" },
+              { "type": "Optional", "items": [
+                { "type": "Sequence", "items": ["=", { "type": "NonTerminal", "label": "Expression" }] }
+              ], "skip": true }
+            ]},
+            ","
+          ]},
+          "}"
+        ]
+      }
+    },
+
+    "Delegate Declaration": {
+      "description": "Type-safe function pointer type",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          "delegate",
+          { "type": "NonTerminal", "label": "Type" },
+          { "type": "Terminal", "label": "<name>" },
+          { "type": "Optional", "items": [{ "type": "NonTerminal", "label": "Type Parameters" }], "skip": true },
+          "(", { "type": "Optional", "items": [{ "type": "NonTerminal", "label": "Parameter List" }], "skip": true }, ")",
+          { "type": "ZeroOrMore", "items": [{ "type": "NonTerminal", "label": "Type Constraint" }] },
+          ";"
+        ]
+      }
+    },
+
+    "Extension Declaration": {
+      "description": "C# 14: Extension members for a target type — replaces static class extension methods",
+      "definition": {
+        "type": "Stack",
+        "items": [
+          { "type": "Sequence", "items": [
+            { "type": "Optional", "items": ["implicit"], "skip": true },
+            "extension",
+            { "type": "Terminal", "label": "<name>" },
+            { "type": "Optional", "items": [{ "type": "NonTerminal", "label": "Type Parameters" }], "skip": true }
+          ]},
+          { "type": "Sequence", "items": [
+            "for",
+            { "type": "NonTerminal", "label": "Type" },
+            { "type": "ZeroOrMore", "items": [{ "type": "NonTerminal", "label": "Type Constraint" }] }
+          ]},
+          { "type": "Sequence", "items": [
+            "{",
+            { "type": "ZeroOrMore", "items": [{ "type": "NonTerminal", "label": "Member Declaration" }] },
+            "}"
+          ]}
+        ]
+      }
+    },
+
+    "Member Declaration": {
+      "description": "Members of a type — methods, properties, fields, constructors, events, operators, nested types",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          { "type": "ZeroOrMore", "items": [{ "type": "NonTerminal", "label": "Attribute" }] },
+          { "type": "ZeroOrMore", "items": [{ "type": "NonTerminal", "label": "Modifier" }] },
+          { "type": "Choice", "default": 0, "items": [
+            { "type": "NonTerminal", "label": "Method Declaration" },
+            { "type": "NonTerminal", "label": "Property Declaration" },
+            { "type": "NonTerminal", "label": "Field Declaration" },
+            { "type": "NonTerminal", "label": "Constructor Declaration" },
+            { "type": "NonTerminal", "label": "Event Declaration" },
+            { "type": "NonTerminal", "label": "Indexer Declaration" },
+            { "type": "NonTerminal", "label": "Operator Declaration" },
+            { "type": "NonTerminal", "label": "Type Declaration" }
+          ]}
+        ]
+      }
+    },
+
+    "Method Declaration": {
+      "description": "Method with optional generics — block body, expression body, or abstract",
+      "definition": {
+        "type": "Stack",
+        "items": [
+          { "type": "Sequence", "items": [
+            { "type": "NonTerminal", "label": "Type" },
+            { "type": "Terminal", "label": "<name>" },
+            { "type": "Optional", "items": [{ "type": "NonTerminal", "label": "Type Parameters" }], "skip": true },
+            "(", { "type": "Optional", "items": [{ "type": "NonTerminal", "label": "Parameter List" }], "skip": true }, ")"
+          ]},
+          { "type": "Sequence", "items": [
+            { "type": "ZeroOrMore", "items": [{ "type": "NonTerminal", "label": "Type Constraint" }] },
+            { "type": "Choice", "default": 0, "items": [
+              { "type": "NonTerminal", "label": "Block" },
+              { "type": "Sequence", "items": ["=>", { "type": "NonTerminal", "label": "Expression" }, ";"] },
+              ";"
+            ]}
+          ]}
+        ]
+      }
+    },
+
+    "Property Declaration": {
+      "description": "Auto-property, full property, or expression-bodied — supports field keyword (C# 14)",
+      "definition": {
+        "type": "Stack",
+        "items": [
+          { "type": "Sequence", "items": [
+            { "type": "NonTerminal", "label": "Type" },
+            { "type": "Terminal", "label": "<name>" }
+          ]},
+          { "type": "Choice", "default": 0, "items": [
+            { "type": "Sequence", "items": [
+              "{",
+              { "type": "NonTerminal", "label": "Accessor List" },
+              "}",
+              { "type": "Optional", "items": [
+                { "type": "Sequence", "items": ["=", { "type": "NonTerminal", "label": "Expression" }, ";"] }
+              ], "skip": true }
+            ]},
+            { "type": "Sequence", "items": ["=>", { "type": "NonTerminal", "label": "Expression" }, ";"] }
+          ]}
+        ]
+      }
+    },
+
+    "Accessor List": {
+      "description": "Property/indexer accessors — get, set, init with optional bodies using field keyword (C# 14)",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          { "type": "Optional", "items": [
+            { "type": "Sequence", "items": [
+              { "type": "ZeroOrMore", "items": [{ "type": "NonTerminal", "label": "Modifier" }] },
+              "get",
+              { "type": "Choice", "default": 0, "items": [
+                ";",
+                { "type": "NonTerminal", "label": "Block" },
+                { "type": "Sequence", "items": ["=>", { "type": "NonTerminal", "label": "Expression" }, ";"] }
+              ]}
+            ]}
+          ], "skip": true },
+          { "type": "Optional", "items": [
+            { "type": "Sequence", "items": [
+              { "type": "ZeroOrMore", "items": [{ "type": "NonTerminal", "label": "Modifier" }] },
+              { "type": "Choice", "default": 0, "items": ["set", "init"] },
+              { "type": "Choice", "default": 0, "items": [
+                ";",
+                { "type": "NonTerminal", "label": "Block" },
+                { "type": "Sequence", "items": ["=>", { "type": "NonTerminal", "label": "Expression" }, ";"] }
+              ]}
+            ]}
+          ], "skip": true }
+        ]
+      }
+    },
+
+    "Field Declaration": {
+      "description": "Field with optional initializer — multiple declarators allowed",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          { "type": "NonTerminal", "label": "Type" },
+          { "type": "OneOrMore", "items": [
+            { "type": "Sequence", "items": [
+              { "type": "Terminal", "label": "<name>" },
+              { "type": "Optional", "items": [
+                { "type": "Sequence", "items": ["=", { "type": "NonTerminal", "label": "Expression" }] }
+              ], "skip": true }
+            ]},
+            ","
+          ]},
+          ";"
+        ]
+      }
+    },
+
+    "Event Declaration": {
+      "description": "Event with field-like or accessor syntax — supports partial (C# 14)",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          "event",
+          { "type": "NonTerminal", "label": "Type" },
+          { "type": "Choice", "default": 0, "items": [
+            { "type": "Sequence", "items": [
+              { "type": "Terminal", "label": "<name>" },
+              ";"
+            ]},
+            { "type": "Sequence", "items": [
+              { "type": "Terminal", "label": "<name>" },
+              "{",
+              { "type": "Sequence", "items": ["add", { "type": "NonTerminal", "label": "Block" }] },
+              { "type": "Sequence", "items": ["remove", { "type": "NonTerminal", "label": "Block" }] },
+              "}"
+            ]}
+          ]}
+        ]
+      }
+    },
+
+    "Constructor Declaration": {
+      "description": "Instance or static constructor with optional base/this chaining — supports partial (C# 14)",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          { "type": "Terminal", "label": "<type-name>" },
+          "(", { "type": "Optional", "items": [{ "type": "NonTerminal", "label": "Parameter List" }], "skip": true }, ")",
+          { "type": "Optional", "items": [
+            { "type": "Sequence", "items": [
+              ":",
+              { "type": "Choice", "default": 0, "items": ["base", "this"] },
+              "(", { "type": "Optional", "items": [{ "type": "NonTerminal", "label": "Argument List" }], "skip": true }, ")"
+            ]}
+          ], "skip": true },
+          { "type": "NonTerminal", "label": "Block" }
+        ]
+      }
+    },
+
+    "Indexer Declaration": {
+      "description": "Indexer with accessor-based or expression body",
+      "definition": {
+        "type": "Stack",
+        "items": [
+          { "type": "Sequence", "items": [
+            { "type": "NonTerminal", "label": "Type" },
+            "this",
+            "[", { "type": "NonTerminal", "label": "Parameter List" }, "]"
+          ]},
+          { "type": "Choice", "default": 0, "items": [
+            { "type": "Sequence", "items": ["{", { "type": "NonTerminal", "label": "Accessor List" }, "}"] },
+            { "type": "Sequence", "items": ["=>", { "type": "NonTerminal", "label": "Expression" }, ";"] }
+          ]}
+        ]
+      }
+    },
+
+    "Operator Declaration": {
+      "description": "User-defined operator or conversion operator",
+      "definition": {
+        "type": "Choice",
+        "default": 0,
+        "items": [
+          { "type": "Sequence", "items": [
+            { "type": "NonTerminal", "label": "Type" },
+            "operator",
+            { "type": "Choice", "default": 0, "items": [
+              "+", "-", "*", "/", "%", "&", "|", "^", "<<", ">>",
+              "==", "!=", "<", ">", "<=", ">=",
+              "!", "~", "++", "--", "true", "false"
+            ]},
+            "(", { "type": "NonTerminal", "label": "Parameter List" }, ")",
+            { "type": "Choice", "default": 0, "items": [
+              { "type": "NonTerminal", "label": "Block" },
+              { "type": "Sequence", "items": ["=>", { "type": "NonTerminal", "label": "Expression" }, ";"] }
+            ]}
+          ]},
+          { "type": "Sequence", "items": [
+            { "type": "Choice", "default": 0, "items": ["implicit", "explicit"] },
+            "operator",
+            { "type": "NonTerminal", "label": "Type" },
+            "(", { "type": "NonTerminal", "label": "Parameter List" }, ")",
+            { "type": "Choice", "default": 0, "items": [
+              { "type": "NonTerminal", "label": "Block" },
+              { "type": "Sequence", "items": ["=>", { "type": "NonTerminal", "label": "Expression" }, ";"] }
+            ]}
+          ]}
+        ]
+      }
+    },
+
+    "Parameter List": {
+      "description": "Formal parameter list for methods, constructors, lambdas, etc.",
+      "definition": {
+        "type": "OneOrMore",
+        "items": [
+          { "type": "Sequence", "items": [
+            { "type": "ZeroOrMore", "items": [{ "type": "NonTerminal", "label": "Attribute" }] },
+            { "type": "Optional", "items": [
+              { "type": "Choice", "default": 0, "items": [
+                "ref", "out", "in", "params", "scoped",
+                { "type": "Sequence", "items": ["scoped", "ref"] },
+                { "type": "Sequence", "items": ["ref", "readonly"] },
+                "this"
+              ]}
+            ], "skip": true },
+            { "type": "NonTerminal", "label": "Type" },
+            { "type": "Terminal", "label": "<name>" },
+            { "type": "Optional", "items": [
+              { "type": "Sequence", "items": ["=", { "type": "Terminal", "label": "<default>" }] }
+            ], "skip": true }
+          ]},
+          ","
+        ]
+      }
+    },
+
+    "Type Parameters": {
+      "description": "Generic type parameter declaration with optional variance",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          "<",
+          { "type": "OneOrMore", "items": [
+            { "type": "Sequence", "items": [
+              { "type": "ZeroOrMore", "items": [{ "type": "NonTerminal", "label": "Attribute" }] },
+              { "type": "Optional", "items": [
+                { "type": "Choice", "default": 0, "items": ["in", "out"] }
+              ], "skip": true },
+              { "type": "Terminal", "label": "<name>" }
+            ]},
+            ","
+          ]},
+          ">"
+        ]
+      }
+    },
+
+    "Type Constraint": {
+      "description": "Generic type parameter constraint clause",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          "where",
+          { "type": "Terminal", "label": "<type-param>" },
+          ":",
+          { "type": "OneOrMore", "items": [
+            { "type": "Choice", "default": 0, "items": [
+              "class",
+              { "type": "Sequence", "items": ["class", "?"] },
+              "struct",
+              "unmanaged",
+              "notnull",
+              "default",
+              { "type": "Terminal", "label": "<base-type>" },
+              "new()",
+              { "type": "Sequence", "items": ["allows", "ref", "struct"] }
+            ]},
+            ","
+          ]}
+        ]
+      }
+    },
+
+    "Type": {
+      "description": "All type forms — predefined, generic, nullable, tuple, array, pointer, ref, function pointer",
+      "definition": {
+        "type": "Choice",
+        "default": 0,
+        "items": [
+          { "type": "Group", "items": [
+            { "type": "Choice", "default": 0, "items": [
+              "bool", "byte", "sbyte", "char", "short", "ushort",
+              "int", "uint", "long", "ulong", "float", "double",
+              "decimal", "string", "object", "dynamic", "nint", "nuint", "void"
+            ]}
+          ], "label": "Predefined" },
+          { "type": "Group", "items": [
+            { "type": "Sequence", "items": [
+              { "type": "Terminal", "label": "<qualified-name>" },
+              { "type": "Optional", "items": [
+                { "type": "Sequence", "items": [
+                  "<", { "type": "OneOrMore", "items": [{ "type": "NonTerminal", "label": "Type" }, ","] }, ">"
+                ]}
+              ], "skip": true }
+            ]}
+          ], "label": "Named / Generic" },
+          { "type": "Group", "items": [
+            { "type": "Sequence", "items": [{ "type": "NonTerminal", "label": "Type" }, "?"] }
+          ], "label": "Nullable" },
+          { "type": "Group", "items": [
+            { "type": "Sequence", "items": [
+              "(",
+              { "type": "OneOrMore", "items": [
+                { "type": "Sequence", "items": [
+                  { "type": "NonTerminal", "label": "Type" },
+                  { "type": "Optional", "items": [{ "type": "Terminal", "label": "<name>" }], "skip": true }
+                ]},
+                ","
+              ]},
+              ")"
+            ]}
+          ], "label": "Tuple" },
+          { "type": "Group", "items": [
+            { "type": "Sequence", "items": [
+              { "type": "NonTerminal", "label": "Type" },
+              { "type": "OneOrMore", "items": [
+                { "type": "Sequence", "items": ["[", { "type": "ZeroOrMore", "items": [","] }, "]"] }
+              ]}
+            ]}
+          ], "label": "Array" },
+          { "type": "Group", "items": [
+            { "type": "Sequence", "items": [
+              { "type": "Choice", "default": 0, "items": ["ref", { "type": "Sequence", "items": ["ref", "readonly"] }, "scoped"] },
+              { "type": "NonTerminal", "label": "Type" }
+            ]}
+          ], "label": "Ref / Scoped" },
+          { "type": "Group", "items": [
+            { "type": "Sequence", "items": [
+              "delegate*",
+              "<",
+              { "type": "ZeroOrMore", "items": [{ "type": "NonTerminal", "label": "Type" }, ","] },
+              { "type": "NonTerminal", "label": "Type" },
+              ">"
+            ]}
+          ], "label": "Function Pointer" }
+        ]
+      }
+    },
+
+    "Attribute": {
+      "description": "Metadata annotation with optional target specifier",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          "[",
+          { "type": "Optional", "items": [
+            { "type": "Sequence", "items": [
+              { "type": "Choice", "default": 0, "items": [
+                "assembly", "module", "type", "method",
+                "property", "field", "param", "return", "event"
+              ]},
+              ":"
+            ]}
+          ], "skip": true },
+          { "type": "OneOrMore", "items": [
+            { "type": "Sequence", "items": [
+              { "type": "Terminal", "label": "<attribute-name>" },
+              { "type": "Optional", "items": [
+                { "type": "Sequence", "items": [
+                  "(", { "type": "Optional", "items": [{ "type": "NonTerminal", "label": "Argument List" }], "skip": true }, ")"
+                ]}
+              ], "skip": true }
+            ]},
+            ","
+          ]},
+          "]"
+        ]
+      }
+    },
+
+    "Statement": {
+      "description": "All statement forms in C#",
+      "definition": {
+        "type": "Choice",
+        "default": 0,
+        "items": [
+          { "type": "NonTerminal", "label": "Block" },
+          { "type": "NonTerminal", "label": "Variable Declaration" },
+          { "type": "NonTerminal", "label": "Expression Statement" },
+          { "type": "NonTerminal", "label": "If Statement" },
+          { "type": "NonTerminal", "label": "Switch Statement" },
+          { "type": "NonTerminal", "label": "For Statement" },
+          { "type": "NonTerminal", "label": "Foreach Statement" },
+          { "type": "NonTerminal", "label": "While / Do Statement" },
+          { "type": "NonTerminal", "label": "Try-Catch-Finally" },
+          { "type": "NonTerminal", "label": "Using Statement" },
+          { "type": "NonTerminal", "label": "Return / Break / Continue" },
+          { "type": "NonTerminal", "label": "Throw Statement" },
+          { "type": "NonTerminal", "label": "Yield Statement" },
+          { "type": "NonTerminal", "label": "Lock Statement" },
+          { "type": "NonTerminal", "label": "Checked / Unchecked" },
+          { "type": "NonTerminal", "label": "Fixed Statement" },
+          { "type": "NonTerminal", "label": "Labeled Statement" }
+        ]
+      }
+    },
+
+    "Variable Declaration": {
+      "description": "Local variable with type inference (var) or explicit type",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          { "type": "Optional", "items": [
+            { "type": "Choice", "default": 0, "items": ["using", "ref", { "type": "Sequence", "items": ["ref", "readonly"] }, "scoped"] }
+          ], "skip": true },
+          { "type": "Choice", "default": 0, "items": [
+            { "type": "NonTerminal", "label": "Type" },
+            "var"
+          ]},
+          { "type": "OneOrMore", "items": [
+            { "type": "Sequence", "items": [
+              { "type": "Terminal", "label": "<name>" },
+              { "type": "Optional", "items": [
+                { "type": "Sequence", "items": ["=", { "type": "NonTerminal", "label": "Expression" }] }
+              ], "skip": true }
+            ]},
+            ","
+          ]},
+          ";"
+        ]
+      }
+    },
+
+    "If Statement": {
+      "description": "Conditional branching with optional else/else-if chain",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          "if",
+          "(", { "type": "NonTerminal", "label": "Expression" }, ")",
+          { "type": "NonTerminal", "label": "Statement" },
+          { "type": "Optional", "items": [
+            { "type": "Sequence", "items": ["else", { "type": "NonTerminal", "label": "Statement" }] }
+          ], "skip": true }
+        ]
+      }
+    },
+
+    "Switch Statement": {
+      "description": "Pattern-based branching with case guards (C# 7+)",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          "switch",
+          "(", { "type": "NonTerminal", "label": "Expression" }, ")",
+          "{",
+          { "type": "OneOrMore", "items": [
+            { "type": "Sequence", "items": [
+              { "type": "Choice", "default": 0, "items": [
+                { "type": "Sequence", "items": [
+                  "case",
+                  { "type": "NonTerminal", "label": "Pattern" },
+                  { "type": "Optional", "items": [
+                    { "type": "Sequence", "items": ["when", { "type": "NonTerminal", "label": "Expression" }] }
+                  ], "skip": true }
+                ]},
+                "default"
+              ]},
+              ":",
+              { "type": "OneOrMore", "items": [{ "type": "NonTerminal", "label": "Statement" }] }
+            ]}
+          ]},
+          "}"
+        ]
+      }
+    },
+
+    "For Statement": {
+      "description": "C-style for loop with initializer, condition, and iterator",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          "for",
+          "(",
+          { "type": "Optional", "items": [{ "type": "NonTerminal", "label": "Initializer" }], "skip": true },
+          ";",
+          { "type": "Optional", "items": [{ "type": "NonTerminal", "label": "Expression" }], "skip": true },
+          ";",
+          { "type": "Optional", "items": [{ "type": "NonTerminal", "label": "Expression List" }], "skip": true },
+          ")",
+          { "type": "NonTerminal", "label": "Statement" }
+        ]
+      }
+    },
+
+    "Foreach Statement": {
+      "description": "Iterate over a collection — supports await foreach for async streams (C# 8+)",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          { "type": "Optional", "items": ["await"], "skip": true },
+          "foreach",
+          "(",
+          { "type": "Choice", "default": 0, "items": [
+            { "type": "NonTerminal", "label": "Type" },
+            "var"
+          ]},
+          { "type": "Terminal", "label": "<name>" },
+          "in",
+          { "type": "NonTerminal", "label": "Expression" },
+          ")",
+          { "type": "NonTerminal", "label": "Statement" }
+        ]
+      }
+    },
+
+    "While / Do Statement": {
+      "description": "Pre-condition and post-condition loops",
+      "definition": {
+        "type": "Choice",
+        "default": 0,
+        "items": [
+          { "type": "Sequence", "items": [
+            "while",
+            "(", { "type": "NonTerminal", "label": "Expression" }, ")",
+            { "type": "NonTerminal", "label": "Statement" }
+          ]},
+          { "type": "Sequence", "items": [
+            "do",
+            { "type": "NonTerminal", "label": "Statement" },
+            "while",
+            "(", { "type": "NonTerminal", "label": "Expression" }, ")",
+            ";"
+          ]}
+        ]
+      }
+    },
+
+    "Try-Catch-Finally": {
+      "description": "Exception handling with catch filters (C# 6+) and optional finally",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          "try",
+          { "type": "NonTerminal", "label": "Block" },
+          { "type": "ZeroOrMore", "items": [
+            { "type": "Sequence", "items": [
+              "catch",
+              { "type": "Optional", "items": [
+                { "type": "Sequence", "items": [
+                  "(",
+                  { "type": "NonTerminal", "label": "Type" },
+                  { "type": "Optional", "items": [{ "type": "Terminal", "label": "<name>" }], "skip": true },
+                  ")"
+                ]}
+              ], "skip": true },
+              { "type": "Optional", "items": [
+                { "type": "Sequence", "items": ["when", "(", { "type": "NonTerminal", "label": "Expression" }, ")"] }
+              ], "skip": true },
+              { "type": "NonTerminal", "label": "Block" }
+            ]}
+          ]},
+          { "type": "Optional", "items": [
+            { "type": "Sequence", "items": ["finally", { "type": "NonTerminal", "label": "Block" }] }
+          ], "skip": true }
+        ]
+      }
+    },
+
+    "Using Statement": {
+      "description": "Resource management with automatic disposal — declaration form (C# 8+)",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          { "type": "Optional", "items": ["await"], "skip": true },
+          "using",
+          { "type": "Choice", "default": 0, "items": [
+            { "type": "Sequence", "items": [
+              "(", { "type": "NonTerminal", "label": "Variable Declaration" }, ")",
+              { "type": "NonTerminal", "label": "Statement" }
+            ]},
+            { "type": "Group", "items": [
+              { "type": "NonTerminal", "label": "Variable Declaration" }
+            ], "label": "Declaration Form" }
+          ]}
+        ]
+      }
+    },
+
+    "Yield Statement": {
+      "description": "Iterator method yield control — return or break",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          "yield",
+          { "type": "Choice", "default": 0, "items": [
+            { "type": "Sequence", "items": ["return", { "type": "NonTerminal", "label": "Expression" }] },
+            "break"
+          ]},
+          ";"
+        ]
+      }
+    },
+
+    "Expression": {
+      "description": "Expression forms — precedence hierarchy (simplified overview)",
+      "definition": {
+        "type": "Choice",
+        "default": 0,
+        "items": [
+          { "type": "NonTerminal", "label": "Assignment" },
+          { "type": "NonTerminal", "label": "Conditional (? :)" },
+          { "type": "NonTerminal", "label": "Null-Coalescing (??)" },
+          { "type": "NonTerminal", "label": "Logical / Relational" },
+          { "type": "NonTerminal", "label": "Arithmetic / Bitwise" },
+          { "type": "NonTerminal", "label": "Unary / Cast" },
+          { "type": "NonTerminal", "label": "Primary Expression" },
+          { "type": "NonTerminal", "label": "Lambda Expression" },
+          { "type": "NonTerminal", "label": "Switch Expression" },
+          { "type": "NonTerminal", "label": "With Expression" },
+          { "type": "NonTerminal", "label": "LINQ Query" },
+          { "type": "NonTerminal", "label": "Collection Expression" },
+          { "type": "NonTerminal", "label": "Range Expression" },
+          { "type": "Sequence", "items": ["await", { "type": "NonTerminal", "label": "Expression" }] },
+          { "type": "Sequence", "items": ["throw", { "type": "NonTerminal", "label": "Expression" }] }
+        ]
+      }
+    },
+
+    "Primary Expression": {
+      "description": "Highest-precedence expressions — literals, invocations, member access, etc.",
+      "definition": {
+        "type": "Choice",
+        "default": 0,
+        "items": [
+          { "type": "Terminal", "label": "<literal>" },
+          { "type": "Terminal", "label": "<identifier>" },
+          { "type": "Sequence", "items": ["(", { "type": "NonTerminal", "label": "Expression" }, ")"] },
+          { "type": "Sequence", "items": [
+            { "type": "NonTerminal", "label": "Expression" },
+            { "type": "Choice", "default": 0, "items": [
+              { "type": "Sequence", "items": [".", { "type": "Terminal", "label": "<member>" }] },
+              { "type": "Sequence", "items": ["?.", { "type": "Terminal", "label": "<member>" }] },
+              { "type": "Sequence", "items": ["[", { "type": "NonTerminal", "label": "Argument List" }, "]"] },
+              { "type": "Sequence", "items": ["?[", { "type": "NonTerminal", "label": "Argument List" }, "]"] },
+              { "type": "Sequence", "items": ["(", { "type": "Optional", "items": [{ "type": "NonTerminal", "label": "Argument List" }], "skip": true }, ")"] },
+              "!",
+              "++",
+              "--"
+            ]}
+          ]},
+          { "type": "Sequence", "items": [
+            "new",
+            { "type": "Choice", "default": 0, "items": [
+              { "type": "Sequence", "items": [
+                { "type": "NonTerminal", "label": "Type" },
+                "(", { "type": "Optional", "items": [{ "type": "NonTerminal", "label": "Argument List" }], "skip": true }, ")",
+                { "type": "Optional", "items": [{ "type": "NonTerminal", "label": "Object Initializer" }], "skip": true }
+              ]},
+              { "type": "Sequence", "items": [
+                { "type": "NonTerminal", "label": "Type" },
+                { "type": "NonTerminal", "label": "Object Initializer" }
+              ]},
+              { "type": "Sequence", "items": [
+                { "type": "NonTerminal", "label": "Type" },
+                "[", { "type": "NonTerminal", "label": "Expression" }, "]"
+              ]}
+            ]}
+          ]},
+          "typeof ( Type )",
+          "nameof ( Expression )",
+          "sizeof ( Type )",
+          "default",
+          "this",
+          "base"
+        ]
+      }
+    },
+
+    "Lambda Expression": {
+      "description": "Anonymous function with expression or block body — supports attributes and return type",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          { "type": "ZeroOrMore", "items": [{ "type": "NonTerminal", "label": "Attribute" }] },
+          { "type": "Optional", "items": ["static"], "skip": true },
+          { "type": "Optional", "items": ["async"], "skip": true },
+          { "type": "Optional", "items": [{ "type": "NonTerminal", "label": "Type" }], "skip": true },
+          { "type": "Choice", "default": 0, "items": [
+            { "type": "Terminal", "label": "<param>" },
+            { "type": "Sequence", "items": [
+              "(", { "type": "Optional", "items": [{ "type": "NonTerminal", "label": "Parameter List" }], "skip": true }, ")"
+            ]}
+          ]},
+          "=>",
+          { "type": "Choice", "default": 0, "items": [
+            { "type": "NonTerminal", "label": "Expression" },
+            { "type": "NonTerminal", "label": "Block" }
+          ]}
+        ]
+      }
+    },
+
+    "Switch Expression": {
+      "description": "Expression-based pattern matching (C# 8+)",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          { "type": "NonTerminal", "label": "Expression" },
+          "switch",
+          "{",
+          { "type": "OneOrMore", "items": [
+            { "type": "Sequence", "items": [
+              { "type": "NonTerminal", "label": "Pattern" },
+              { "type": "Optional", "items": [
+                { "type": "Sequence", "items": ["when", { "type": "NonTerminal", "label": "Expression" }] }
+              ], "skip": true },
+              "=>",
+              { "type": "NonTerminal", "label": "Expression" }
+            ]},
+            ","
+          ]},
+          "}"
+        ]
+      }
+    },
+
+    "Pattern": {
+      "description": "All pattern forms for is-expressions and switch arms (C# 7–14)",
+      "definition": {
+        "type": "Choice",
+        "default": 0,
+        "items": [
+          { "type": "Group", "items": [{ "type": "Terminal", "label": "<constant>" }], "label": "Constant" },
+          { "type": "Group", "items": [
+            { "type": "Sequence", "items": [
+              { "type": "NonTerminal", "label": "Type" },
+              { "type": "Optional", "items": [{ "type": "Terminal", "label": "<name>" }], "skip": true }
+            ]}
+          ], "label": "Type" },
+          { "type": "Group", "items": [
+            { "type": "Sequence", "items": ["var", { "type": "Terminal", "label": "<name>" }] }
+          ], "label": "Var" },
+          { "type": "Group", "items": ["_"], "label": "Discard" },
+          { "type": "Group", "items": [
+            { "type": "Sequence", "items": [
+              { "type": "Optional", "items": [{ "type": "NonTerminal", "label": "Type" }], "skip": true },
+              "(", { "type": "OneOrMore", "items": [{ "type": "NonTerminal", "label": "Pattern" }, ","] }, ")"
+            ]}
+          ], "label": "Positional" },
+          { "type": "Group", "items": [
+            { "type": "Sequence", "items": [
+              { "type": "Optional", "items": [{ "type": "NonTerminal", "label": "Type" }], "skip": true },
+              "{",
+              { "type": "ZeroOrMore", "items": [
+                { "type": "Sequence", "items": [
+                  { "type": "Terminal", "label": "<member>" }, ":", { "type": "NonTerminal", "label": "Pattern" }
+                ]},
+                ","
+              ]},
+              "}"
+            ]}
+          ], "label": "Property" },
+          { "type": "Group", "items": [
+            { "type": "Sequence", "items": [
+              { "type": "Choice", "default": 0, "items": ["<", "<=", ">", ">="] },
+              { "type": "NonTerminal", "label": "Expression" }
+            ]}
+          ], "label": "Relational (C# 9)" },
+          { "type": "Group", "items": [
+            { "type": "Choice", "default": 0, "items": [
+              { "type": "Sequence", "items": [{ "type": "NonTerminal", "label": "Pattern" }, "and", { "type": "NonTerminal", "label": "Pattern" }] },
+              { "type": "Sequence", "items": [{ "type": "NonTerminal", "label": "Pattern" }, "or", { "type": "NonTerminal", "label": "Pattern" }] },
+              { "type": "Sequence", "items": ["not", { "type": "NonTerminal", "label": "Pattern" }] }
+            ]}
+          ], "label": "Logical (C# 9)" },
+          { "type": "Group", "items": [
+            { "type": "Sequence", "items": [
+              "[",
+              { "type": "ZeroOrMore", "items": [
+                { "type": "Choice", "default": 0, "items": [
+                  { "type": "NonTerminal", "label": "Pattern" },
+                  ".."
+                ]},
+                ","
+              ]},
+              "]"
+            ]}
+          ], "label": "List (C# 11)" }
+        ]
+      }
+    },
+
+    "LINQ Query": {
+      "description": "Language-integrated query expression syntax",
+      "definition": {
+        "type": "Stack",
+        "items": [
+          { "type": "Sequence", "items": [
+            "from",
+            { "type": "Optional", "items": [{ "type": "NonTerminal", "label": "Type" }], "skip": true },
+            { "type": "Terminal", "label": "<range-var>" },
+            "in",
+            { "type": "NonTerminal", "label": "Expression" }
+          ]},
+          { "type": "ZeroOrMore", "items": [
+            { "type": "Choice", "default": 0, "items": [
+              { "type": "Sequence", "items": ["where", { "type": "NonTerminal", "label": "Expression" }] },
+              { "type": "Sequence", "items": ["let", { "type": "Terminal", "label": "<name>" }, "=", { "type": "NonTerminal", "label": "Expression" }] },
+              { "type": "Sequence", "items": [
+                "orderby",
+                { "type": "OneOrMore", "items": [
+                  { "type": "Sequence", "items": [
+                    { "type": "NonTerminal", "label": "Expression" },
+                    { "type": "Optional", "items": [
+                      { "type": "Choice", "default": 0, "items": ["ascending", "descending"] }
+                    ], "skip": true }
+                  ]},
+                  ","
+                ]}
+              ]},
+              { "type": "Sequence", "items": [
+                "join",
+                { "type": "Optional", "items": [{ "type": "NonTerminal", "label": "Type" }], "skip": true },
+                { "type": "Terminal", "label": "<name>" },
+                "in", { "type": "NonTerminal", "label": "Expression" },
+                "on", { "type": "NonTerminal", "label": "Expression" },
+                "equals", { "type": "NonTerminal", "label": "Expression" },
+                { "type": "Optional", "items": [
+                  { "type": "Sequence", "items": ["into", { "type": "Terminal", "label": "<name>" }] }
+                ], "skip": true }
+              ]},
+              { "type": "Sequence", "items": [
+                "from",
+                { "type": "Optional", "items": [{ "type": "NonTerminal", "label": "Type" }], "skip": true },
+                { "type": "Terminal", "label": "<name>" },
+                "in", { "type": "NonTerminal", "label": "Expression" }
+              ]}
+            ]}
+          ]},
+          { "type": "Sequence", "items": [
+            { "type": "Choice", "default": 0, "items": [
+              { "type": "Sequence", "items": ["select", { "type": "NonTerminal", "label": "Expression" }] },
+              { "type": "Sequence", "items": ["group", { "type": "NonTerminal", "label": "Expression" }, "by", { "type": "NonTerminal", "label": "Expression" }] }
+            ]},
+            { "type": "Optional", "items": [
+              { "type": "Sequence", "items": ["into", { "type": "Terminal", "label": "<name>" }, { "type": "NonTerminal", "label": "Query Body" }] }
+            ], "skip": true }
+          ]}
+        ]
+      }
+    },
+
+    "Collection Expression": {
+      "description": "Collection literal with spread operator (C# 12+)",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          "[",
+          { "type": "ZeroOrMore", "items": [
+            { "type": "Choice", "default": 0, "items": [
+              { "type": "NonTerminal", "label": "Expression" },
+              { "type": "Sequence", "items": ["..", { "type": "NonTerminal", "label": "Expression" }] }
+            ]},
+            ","
+          ]},
+          "]"
+        ]
+      }
+    },
+
+    "With Expression": {
+      "description": "Non-destructive mutation — create a copy with modifications (C# 9+)",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          { "type": "NonTerminal", "label": "Expression" },
+          "with",
+          "{",
+          { "type": "ZeroOrMore", "items": [
+            { "type": "Sequence", "items": [
+              { "type": "Terminal", "label": "<member>" },
+              "=",
+              { "type": "NonTerminal", "label": "Expression" }
+            ]},
+            ","
+          ]},
+          "}"
+        ]
+      }
+    },
+
+    "Range Expression": {
+      "description": "Range operator for slicing arrays, spans, and strings (C# 8+)",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          { "type": "Optional", "items": [{ "type": "NonTerminal", "label": "Expression" }], "skip": true },
+          "..",
+          { "type": "Optional", "items": [{ "type": "NonTerminal", "label": "Expression" }], "skip": true }
+        ]
+      }
+    },
+
+    "String Interpolation": {
+      "description": "Interpolated string with optional raw form (C# 11+)",
+      "definition": {
+        "type": "Choice",
+        "default": 0,
+        "items": [
+          { "type": "Sequence", "items": [
+            { "type": "Terminal", "label": "$\"" },
+            { "type": "ZeroOrMore", "items": [
+              { "type": "Choice", "default": 0, "items": [
+                { "type": "Terminal", "label": "<text>" },
+                { "type": "Sequence", "items": [
+                  "{",
+                  { "type": "NonTerminal", "label": "Expression" },
+                  { "type": "Optional", "items": [
+                    { "type": "Sequence", "items": [":", { "type": "Terminal", "label": "<format>" }] }
+                  ], "skip": true },
+                  "}"
+                ]}
+              ]}
+            ]},
+            { "type": "Terminal", "label": "\"" }
+          ]},
+          { "type": "Sequence", "items": [
+            { "type": "Terminal", "label": "$@\" or @$\"" },
+            { "type": "Terminal", "label": "<verbatim interpolated content>" },
+            { "type": "Terminal", "label": "\"" }
+          ]},
+          { "type": "Group", "items": [
+            { "type": "Sequence", "items": [
+              { "type": "Terminal", "label": "$$\"\"\"" },
+              { "type": "Terminal", "label": "<raw content with {{expr}}>" },
+              { "type": "Terminal", "label": "\"\"\"" }
+            ]}
+          ], "label": "Raw (C# 11)" }
+        ]
+      }
+    },
+
+    "Async Method": {
+      "description": "Async method pattern with Task-based return types",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          "async",
+          { "type": "Choice", "default": 0, "items": [
+            "Task",
+            { "type": "Sequence", "items": ["Task", "<", { "type": "NonTerminal", "label": "Type" }, ">"] },
+            "ValueTask",
+            { "type": "Sequence", "items": ["ValueTask", "<", { "type": "NonTerminal", "label": "Type" }, ">"] },
+            { "type": "Sequence", "items": ["IAsyncEnumerable", "<", { "type": "NonTerminal", "label": "Type" }, ">"] },
+            "void"
+          ]},
+          { "type": "Terminal", "label": "<name>" },
+          "(", { "type": "Optional", "items": [{ "type": "NonTerminal", "label": "Parameter List" }], "skip": true }, ")",
+          { "type": "Choice", "default": 0, "items": [
+            { "type": "NonTerminal", "label": "Block" },
+            { "type": "Sequence", "items": ["=>", { "type": "NonTerminal", "label": "Expression" }, ";"] }
+          ]}
+        ]
+      }
+    },
+
+    "Argument List": {
+      "description": "Arguments passed to method calls, constructors, indexers",
+      "definition": {
+        "type": "OneOrMore",
+        "items": [
+          { "type": "Sequence", "items": [
+            { "type": "Optional", "items": [
+              { "type": "Sequence", "items": [{ "type": "Terminal", "label": "<name>" }, ":"] }
+            ], "skip": true },
+            { "type": "Optional", "items": [
+              { "type": "Choice", "default": 0, "items": ["ref", "out", "in"] }
+            ], "skip": true },
+            { "type": "NonTerminal", "label": "Expression" }
+          ]},
+          ","
+        ]
+      }
+    }
+
+  }
+}
