@@ -4,6 +4,9 @@ This file tracks meaningful prompts and their outcomes for the Claude Skills rep
 
 ---
 
+2026-04-16 - 12:11 - Add global PowerShell aliases for Copilot model selection
+Result: Added `copo` for `claude-opus-4.7` and `copg` for `gpt-5.4` to the shared PowerShell profile via the create-alias workflow, while leaving the existing `cop` alias on `claude-opus-4.6`.
+
 2026-04-13 - 04:13 - Fix railroad diagram grammar: remove unofficial hooks from Copilot SKILL.md spec
 Result: Removed 5 hooks-related rules from copilot-cli-skill-md.grammar.json that were mistakenly attributed to Copilot CLI (hooks: in SKILL.md frontmatter is a Claude Code convention, not part of the agentskills.io spec or any GitHub docs). Added missing Metadata Block rule which IS in the official spec. Updated meta title/source. Regenerated HTML. Committed 1f44866f.
 
