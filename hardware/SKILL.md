@@ -1,6 +1,6 @@
 ---
 name: hardware
-description: V1.0 - Commands: list, add, remove, info. Tracks personal hardware inventory with product details, manuals, and maintenance info. Use when the user asks about their hardware, devices, appliances, or equipment.
+description: "V1.0 - Commands: list, add, remove, info. Tracks personal hardware inventory with product details, manuals, and maintenance info. Use when the user asks about their hardware, devices, appliances, or equipment."
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
