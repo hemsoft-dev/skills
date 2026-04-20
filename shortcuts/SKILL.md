@@ -42,7 +42,7 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 | CTRL+SHIFT+N | `^+n` | Activate/launch Obsidian Notes |
 | CTRL+SHIFT+T | `^+t` | Activate/launch Todoist |
 | CTRL+SHIFT+X | `^+x` | Activate/launch X (Twitter) |
-| CTRL+SHIFT+C | `^+c` | Activate/launch WezTerm |
+| CTRL+SHIFT+C | `^+c` | Activate/launch Windows Terminal |
 | CTRL+SHIFT+V | `^+v` | Activate/launch VS Code Insiders |
 | CTRL+SHIFT+S | `^+s` | Activate/launch VS Code Insiders with Skills repo |
 | CTRL+ALT+P | `^!p` | Speak clipboard (TTS via edge-tts) |
@@ -59,7 +59,7 @@ Press `WIN+Space` to open GUI prompt, type code, press Enter.
 |------|--------|
 | `100` | Run `cm` PowerShell script (`f:\github\HemSoft\cli-tools\scripts\cm.ps1`, copies output to clipboard) |
 | `101` | Activate/launch VS Code Insiders |
-| `102` | Activate/launch WezTerm |
+| `102` | Activate/launch Windows Terminal |
 | `103` | Paint (mspaint) |
 
 ### Text Expansion Hotstrings
