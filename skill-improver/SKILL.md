@@ -1,6 +1,6 @@
 ---
 name: skill-improver
-description: V2.1 - Applies standardized improvements to skills and proactively suggests missing opt-in features. Converts "ALWAYS:" sections to hooks. Checks for protocol reference opportunities. Checks for commands-first description format. Use when modifying any skill.
+description: V2.2 - Applies standardized improvements to skills and proactively suggests missing opt-in features. Converts "ALWAYS:" sections to hooks. Checks for protocol reference opportunities. Checks for commands-first description format. Enforces .agents/skills/ as the universal skill location per agentskills.io spec. Use when modifying any skill.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -196,6 +196,23 @@ Apply all active improvements from the registry below. This includes:
 | 5   | Retrospective              | Opt-in |
 | 6   | Protocol References        | Active |
 | 7   | Commands-First Description | Active |
+| 8   | Location Standard          | Active |
+
+## Skill Location Standard (ID 8)
+
+**Rule**: All skills MUST use `.agents/skills/` as their directory path — this is the universal standard from the [agentskills.io](https://agentskills.io/specification) specification (AAIF/Linux Foundation, 30+ tools).
+
+**Check**: When improving a skill, verify its path. If found in a vendor-specific location:
+
+| Legacy Path | Action |
+|-------------|--------|
+| `.claude/skills/{name}/` | Recommend move to `.agents/skills/{name}/` |
+| `.github/skills/{name}/` | Recommend move to `.agents/skills/{name}/` |
+| `~/.claude/skills/{name}/` | Recommend move to `~/.agents/skills/{name}/` |
+
+**Why**: Vendor-specific paths limit which AI tools can discover the skill. The `.agents/skills/` path is scanned by Claude Code, GitHub Copilot, OpenAI Codex CLI, Cursor, Gemini CLI, JetBrains, and others — write once, use everywhere.
+
+**Exception**: Only keep vendor-specific paths if the skill uses vendor-exclusive features (e.g., Cursor's `.mdc` format, Copilot-specific agent configuration).
 
 ## Commands-First Description Format
 
@@ -308,7 +325,7 @@ When a skill exceeds threshold:
 
 **Rule**: Opt-in per skill. When enabled, hooks automatically verify history logging.
 
-**Location**: `~/.claude/skills/{skill-name}/History/{YYYY-MM-DD}.md`
+**Location**: `~/.agents/skills/{skill-name}/History/{YYYY-MM-DD}.md`
 
 **Implementation**: Add hooks to frontmatter (not manual "ALWAYS:" sections):
 

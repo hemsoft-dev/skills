@@ -4,7 +4,10 @@ This file tracks meaningful prompts and their outcomes for the Claude Skills rep
 
 ---
 
-2026-04-16 - 12:11 - Add global PowerShell aliases for Copilot model selection
+2026-04-20 - 15:52 - Create mutation-testing skill for ad-hoc test quality assessment
+Result: Created mutation-testing skill (V1.0) using Stryker for TypeScript and C# projects. Designed for periodic/ad-hoc use (not CI). Includes Setup-TypeScript.ps1, Setup-CSharp.ps1, and Run-MutationTest.ps1 scripts. All project artifacts live in a dedicated `.mutation-testing/` folder.
+
+2026-04-16- 12:11 - Add global PowerShell aliases for Copilot model selection
 Result: Added `copo` for `claude-opus-4.7` and `copg` for `gpt-5.4` to the shared PowerShell profile via the create-alias workflow, while leaving the existing `cop` alias on `claude-opus-4.6`.
 
 2026-04-13 - 04:13 - Fix railroad diagram grammar: remove unofficial hooks from Copilot SKILL.md spec

@@ -1,6 +1,6 @@
 ---
 name: skill-creator
-description: V1.10 - Creates new Claude skills with optimized SKILL.md files following best practices. Uses hooks for history tracking and retrospectives (enabled by default). Includes explicit instructions for getting accurate timestamps. Consults protocols skill for standardized execution patterns.
+description: V1.11 - Creates new skills with optimized SKILL.md files following the agentskills.io open standard. Default location is .agents/skills/ (universal, all vendors). Uses hooks for history tracking and retrospectives (enabled by default). Includes explicit instructions for getting accurate timestamps. Consults protocols skill for standardized execution patterns.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -40,7 +40,13 @@ hooks:
 
 **Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
-Create new skills in the user's `.claude/skills/` directory.
+Create new skills following the [agentskills.io](https://agentskills.io/specification) open standard.
+
+## Skill Location Standard
+
+The canonical location for skills is **`.agents/skills/`** — this is the universal path defined by the agentskills.io specification (v0.9+, AAIF/Linux Foundation). It is scanned by all major AI coding tools: Claude Code, GitHub Copilot, OpenAI Codex CLI, Cursor, Gemini CLI, JetBrains, and 30+ others.
+
+**Do NOT use vendor-specific paths** (`.claude/skills/`, `.github/skills/`, `.cursor/rules/`) for new skills unless the user explicitly requests vendor lock-in. Those are legacy/fallback paths.
 
 ## Agent Skills Specification - Frontmatter Reference
 
@@ -61,7 +67,7 @@ Per the official spec at <https://agentskills.io/specification>, SKILL.md frontm
 Each skill requires:
 
 ```text
-.claude/skills/{skill-name}/
+.agents/skills/{skill-name}/
 ├── SKILL.md
 ├── scripts/              # Optional: PowerShell/Python scripts
 │   └── script-name.ps1
@@ -157,17 +163,19 @@ Ask user for skill name and purpose. If you need to ask clarifying questions, co
 
 **Option A - User Folder (Global)** [DEFAULT]:
 
-- Location: `~/.claude/skills/{skill-name}/`
-- Available across all projects
+- Location: `~/.agents/skills/{skill-name}/`
+- Available across all projects for all AI tools
 - Use for: General-purpose skills, tools, utilities
 
 **Option B - Repository (Project-Scoped)**:
 
-- Location: `{repo-root}/.claude/skills/{skill-name}/`
-- Only available in this project
+- Location: `{repo-root}/.agents/skills/{skill-name}/`
+- Available in this project for all AI tools
 - Use for: Project-specific workflows, context
 
 **Only ask if unclear**: If user explicitly mentions "repo", "repository", or "project-specific", use Option B. Otherwise, default to Option A (user folder).
+
+> **Note**: The `.agents/skills/` path is the agentskills.io universal standard, supported by Claude, Copilot, Codex CLI, Cursor, Gemini CLI, and others. Avoid vendor-specific paths like `.claude/skills/` or `.github/skills/` unless explicitly requested.
 
 ### Step 3: Enable History Tracking & Retrospectives via Hooks
 
@@ -251,7 +259,7 @@ Before finalizing the skill, check the `skill-improver` skill for available impr
 | Version prefix       | Always applied | Never (always V1.0 for new skills)          |
 | History Tracking     | Enabled        | Only if user says "no history" or similar   |
 | Retrospective        | Enabled        | Only if user says "no retrospective" or similar |
-| Location             | User folder    | Only if user says "repo" or "project-specific" |
+| Location             | `.agents/skills/` (user) | "repo" → `{repo}/.agents/skills/`, vendor-specific only if explicitly requested |
 | History Tracking (hooks) | Enabled    | Only if user says "no history" or similar   |
 | Retrospectives (hooks)   | Enabled    | Only if user says "no retrospective" or similar |
 
