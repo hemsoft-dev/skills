@@ -21,7 +21,7 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 ## Workflow
 
 1. **Profile Selection (CRITICAL)**
-   - **Mandatory Step**: Ask the user which GitHub profile to use: **Personal1** (HemSoft), **Personal2** (franzhemmer), or **Work1** (Relias).
+   - **Mandatory Step**: Ask the user which GitHub profile to use: **Personal1** (HemSoft) or **Work1** (Relias).
    - **Never proceed** without this information.
    - This selection determines the SSH host alias used for the remote.
 
@@ -29,7 +29,6 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
    - Determine if the repo should be created under the **user account** or an **organization**.
    - **Default**: Use the user account unless explicitly requested otherwise:
      - Personal1 → `HemSoft` (user) or `fhemmer` (org)
-     - Personal2 → `franzhemmer` (user) or `fhemmer` (org)
      - Work1 → `fhemmerrelias` (user) or `relias-engineering` (org)
    - **User account repos**: Personal projects, experiments, individual ownership (e.g., `github.com/HemSoft/repo`)
    - **Organization repos**: Team projects, official releases, shared ownership (e.g., `github.com/fhemmer/repo`)
@@ -39,14 +38,14 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
    - Use the following parameters:
      - `RepoName`: The name of the repository.
      - `Owner`: The GitHub **username** (e.g., `HemSoft`) or **organization** (e.g., `fhemmer`).
-     - `Profile`: "Personal1", "Personal2", or "Work1".
+     - `Profile`: "Personal1" or "Work1".
      - `Visibility`: (Optional) "private" (default), "public", or "internal".
    - **Report Success**: Always provide the user with the URL to the newly created repository.
 
 ## Requirements
 
 - Requires GitHub CLI (`gh`) to be installed and authenticated.
-- SSH keys must be configured in `~/.ssh/config` with appropriate aliases (`github-personal1`, `github-personal2`, `github-work1`).
+- SSH keys must be configured in `~/.ssh/config` with appropriate aliases (`github-personal1`, `github-work1`).
 
 ## Important: GitHub CLI Auth Switching
 
@@ -58,7 +57,6 @@ gh auth status
 
 # Switch to the account matching your profile
 gh auth switch --user HemSoft       # For Personal1
-gh auth switch --user franzhemmer   # For Personal2
 gh auth switch --user fhemmerrelias # For Work1
 ```
 

@@ -1,7 +1,7 @@
 ﻿param(
     [Parameter(Mandatory=$true)] [string]$RepoName,
     [Parameter(Mandatory=$true)] [string]$Owner,
-    [Parameter(Mandatory=$true)] [ValidateSet("Personal1", "Personal2", "Work1")] [string]$Profile,
+    [Parameter(Mandatory=$true)] [ValidateSet("Personal1", "Work1")] [string]$Profile,
     [ValidateSet("private", "public", "internal")] [string]$Visibility = "private"
 )
 
@@ -26,7 +26,6 @@ if (Test-Path .git) {
 $gitName = "Franz Hemmer"
 $gitEmail = switch ($Profile) {
     "Personal1" { "franz_hemmer@hotmail.com" }
-    "Personal2" { "fphemmer@gmail.com" }
     "Work1"     { "fhemmer@relias.com" }
 }
 
@@ -37,7 +36,6 @@ git config --local user.email "$gitEmail"
 # 4. Commit and Push
 $alias = switch ($Profile) {
     "Personal1" { "github-personal1" }
-    "Personal2" { "github-personal2" }
     "Work1"     { "github-work1" }
 }
 $remoteUrl = "git@$($alias):$($Owner)/$($RepoName).git"

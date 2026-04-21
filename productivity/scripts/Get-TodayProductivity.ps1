@@ -44,7 +44,7 @@ $EndISO     = $EndUTC.ToString('yyyy-MM-ddTHH:mm:ssZ')
 # ---------------------------------------------------------------------------
 # Identity: All known accounts / emails
 # ---------------------------------------------------------------------------
-$GitHubUsernames = @('fhemmerrelias', 'HemSoft', 'franzhemmer', 'fhemmer2-relias')
+$GitHubUsernames = @('fhemmerrelias', 'HemSoft', 'fhemmer2-relias')
 
 # Emails and name patterns used in git commits across all machines
 $GitAuthorPatterns = @(

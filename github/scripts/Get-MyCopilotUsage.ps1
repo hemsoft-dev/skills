@@ -5,11 +5,10 @@
 .DESCRIPTION
     Fetches and displays Copilot Pro+/Business usage for:
     - HemSoft (Personal #1) - Pro+ personal + fhemmer org Business
-    - franzhemmer (Personal #2) - fhemmer org Business only
     - fhemmerrelias (Work #1) - Pro+ via Relias
 
 .PARAMETER Account
-    Which account(s) to query: 'personal1', 'personal2', 'work', or 'all' (default)
+    Which account(s) to query: 'personal1', 'work', or 'all' (default)
 
 .PARAMETER Year
     Year to query (default: current year)
@@ -32,7 +31,7 @@
 
 [CmdletBinding()]
 param(
-    [ValidateSet('personal1', 'personal2', 'work', 'all')]
+    [ValidateSet('personal1', 'work', 'all')]
     [string]$Account = 'all',
     [int]$Year = (Get-Date).Year,
     [int]$Month = (Get-Date).Month,
@@ -51,14 +50,6 @@ $accounts = @{
         Quota    = 1500
         OrgAccess = 'fhemmer'
     }
-    personal2 = @{
-        Username = 'franzhemmer'
-        Email    = 'fphemmer@gmail.com'
-        Label    = 'Personal #2 (franzhemmer)'
-        Plan     = 'Business (fhemmer org)'
-        Quota    = 0  # No personal quota, org only
-        OrgAccess = 'fhemmer'
-    }
     work = @{
         Username = 'fhemmerrelias'
         Email    = 'fhemmer@relias.com'
@@ -73,8 +64,8 @@ $organizations = @{
     fhemmer = @{
         Name       = 'HemSoft Developments'
         PlanType   = 'Business'
-        Seats      = 2
-        Members    = @('HemSoft', 'franzhemmer')
+        Seats      = 1
+        Members    = @('HemSoft')
         Enterprise = 'hemsoft-corp'
         # Business plan includes 300 premium requests per user per month
         PremiumAllowancePerSeat = 300  # requests
@@ -85,7 +76,7 @@ $enterprises = @{
     'hemsoft-corp' = @{
         Name     = 'HemSoft Corp'
         Licenses = 50
-        Admins   = @('HemSoft', 'franzhemmer')
+        Admins   = @('HemSoft')
         Orgs     = @('fhemmer')
         Url      = 'https://github.com/enterprises/hemsoft-corp'
     }
@@ -365,7 +356,7 @@ Write-Information "[36m  ======================================================
 
 # Determine which accounts to query
 $targetAccounts = switch ($Account) {
-    'all'       { @('personal1', 'personal2', 'work') }
+    'all'       { @('personal1', 'work') }
     'personal'  { @('personal1') }  # Backwards compat
     default     { @($Account) }
 }

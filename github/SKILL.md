@@ -28,7 +28,6 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 | Account     | Type        | Email                         | Username        | Plan                                                  |
 |-------------|-------------|-------------------------------|-----------------|-------------------------------------------------------|
 | Personal #1 | HemSoft     | <franz_hemmer@hotmail.com>    | HemSoft         | Copilot Pro+ (1500 req/mo) + Business (fhemmer org)   |
-| Personal #2 | franzhemmer | <fphemmer@gmail.com>          | franzhemmer     | Copilot Business (fhemmer org)                        |
 | Work #1     | Relias      | <fhemmer@relias.com>          | fhemmerrelias   | Copilot Pro+ (1500 req/mo)                            |
 | Work #2     | Relias      | <fhemmer2relias@hemmer.us>    | fhemmer2-relias | TBD                                                   |
 
@@ -36,14 +35,14 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 
 | Organization                    | Owner(s)                 | Enterprise   | URL                                       |
 |---------------------------------|--------------------------|--------------|-------------------------------------------|
-| fhemmer (HemSoft Developments)  | Personal #1, Personal #2 | hemsoft-corp | <https://github.com/fhemmer>              |
+| fhemmer (HemSoft Developments)  | Personal #1              | hemsoft-corp | <https://github.com/fhemmer>              |
 | Relias Engineering (Relias LLC) | Work #1                  | —            | <https://github.com/relias-engineering>   |
 
 ## Franz's Enterprises
 
 | Enterprise   | Slug         | Licenses | Admins               | Orgs    |
 |--------------|--------------|----------|----------------------|---------|
-| HemSoft Corp | hemsoft-corp | 50       | HemSoft, franzhemmer | fhemmer |
+| HemSoft Corp | hemsoft-corp | 50       | HemSoft              | fhemmer |
 
 **Enterprise URL**: <https://github.com/enterprises/hemsoft-corp>
 
@@ -54,13 +53,12 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 | Profile     | Username        | Default Owner (User) | Can Also Create In (Org)     | Example User Repo                          | Example Org Repo                           |
 |-------------|-----------------|----------------------|------------------------------|--------------------------------------------|-----------------------------------------|
 | Personal #1 | HemSoft         | `HemSoft`            | `fhemmer`                    | `github.com/HemSoft/repo`                  | `github.com/fhemmer/repo`               |
-| Personal #2 | franzhemmer     | `franzhemmer`        | `fhemmer`                    | `github.com/franzhemmer/repo`              | `github.com/fhemmer/repo`               |
 | Work #1     | fhemmerrelias   | `fhemmerrelias`      | `relias-engineering`         | `github.com/fhemmerrelias/repo`            | `github.com/relias-engineering/repo`    |
 | Work #2     | fhemmer2-relias | `fhemmer2-relias`    | `relias-engineering`         | `github.com/fhemmer2-relias/repo`          | `github.com/relias-engineering/repo`    |
 
 **When to use user vs org:**
 
-- **User account** (`HemSoft`, `franzhemmer`, `fhemmerrelias`) - Personal projects, experiments, individual ownership
+- **User account** (`HemSoft`, `fhemmerrelias`) - Personal projects, experiments, individual ownership
 - **Organization** (`fhemmer`, `relias-engineering`) - Team projects, official releases, shared ownership
 
 **Default behavior**: Unless explicitly specified, create repos under the **user account**, not the organization.
@@ -76,7 +74,7 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 ### Organization Quotas (Business Plans)
 
 - **Business**: **300 premium requests/seat/month** ($19/seat/mo)
-- fhemmer org: 2 seats × 300 = **600 requests/month**
+- fhemmer org: 1 seat × 300 = **300 requests/month**
 - Overage: $0.04/request after quota exhausted
 - GitHub UI shows percentage like "147.6%" when over quota (often relative to individual seat allowance)
 
@@ -113,7 +111,7 @@ Run the script to get current billing for all accounts:
 & "c:\Users\User\.claude\skills\github\scripts\Get-MyCopilotUsage.ps1"
 ```
 
-Options: -Account personal1|personal2|work|all
+Options: -Account personal1|work|all
 
 ## Pull Requests Check
 
@@ -190,7 +188,6 @@ gh auth refresh -h github.com -s read:enterprise,manage_billing:enterprise,read:
 | Account     | Host Alias       | Key File                                        |
 |-------------|------------------|-------------------------------------------------|
 | Personal #1 | github-personal1 | ~/.ssh/id_ed25519_github_home2026_personal1     |
-| Personal #2 | github-personal2 | ~/.ssh/id_ed25519_github_home2026_personal2     |
 | Work #1     | github-work1     | ~/.ssh/id_ed25519_github_home2026_work1         |
 | Work #2     | github-work2     | ~/.ssh/id_ed25519_github_home2026_work2         |
 
@@ -206,14 +203,7 @@ Host github-personal1
     IdentityFile ~/.ssh/id_ed25519_github_home2026_personal1
     IdentitiesOnly yes
 
-# franzhemmer (Personal #2) - fphemmer@gmail.com / franzhemmer
-Host github-personal2
-    HostName github.com
-    User git
-    IdentityFile ~/.ssh/id_ed25519_github_home2026_personal2
-    IdentitiesOnly yes
-
-# Relias (Work #1) - fhemmer@relias.com / fhemmerrelias
+# Relias (Work #1)- fhemmer@relias.com / fhemmerrelias
 Host github-work1
     HostName github.com
     User git
