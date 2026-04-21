@@ -1,6 +1,6 @@
 ---
 name: diary
-description: "V1.1 - Commands: create, scaffold, update. Personal diary management with daily entry creation, scaffolding, and updates."
+description: "V1.2 - Commands: create, scaffold, update. Personal diary management with daily entry creation, scaffolding, and updates."
 ---
 
 # Diary
@@ -111,6 +111,20 @@ Print this checklist in the output so the user can see what was populated:
 - [ ] Today's Productivity present (or confirmed zero activity)
 - [ ] Meetings populated from workiq (weekdays) or correctly omitted (weekends)
 - [ ] Screenshots present or confirmed none today
+
+### Step 6: Validate Automated Sections
+
+After saving the entry, validate the following rules. If any validation fails, **fix the section before
+finishing** — do not leave known-bad data in the entry.
+
+| # | Validation Rule | Action on Failure |
+|---|----------------|-------------------|
+| 1 | **Productivity script must complete.** If the script hangs (>120s) or errors, kill it and re-run with explicit `-Date YYYY-MM-DD`. If it hangs a second time, run it in a fresh shell. | Re-run up to 2 retries before accepting zero. |
+| 2 | **Weekday productivity must not be all zeros.** On weekdays (Mon–Fri), if LOC, Commits, PRs, Reviews, and Issues are ALL zero, treat this as a data collection failure — not a valid result. | Re-run the script with `-Date` parameter. Check that `D:\github` search roots are accessible. If still zero after retries, add a note: *"⚠️ Productivity data collection failed — metrics may be incomplete."* |
+| 3 | **Weekend zero is acceptable.** On Sat/Sun, all-zero productivity is valid — no retry needed. |  |
+| 4 | **Trending repos must have star counts.** All 5 repos must show `⭐ {number}` — not blank or zero. | Re-fetch star counts via `gh repo view {owner/repo} --json stargazerCount`. |
+| 5 | **News section must have headlines.** Each news category (US, World, AI, Danish) must have at least 1 headline. | Re-run news script or flag as data collection failure. |
+| 6 | **Cloudflare deltas must be computed.** If yesterday's entry exists, deltas must show actual numbers — not "unavailable." | Re-read yesterday's entry and compute manually. |
 
 ## Scaffolding Defaults
 

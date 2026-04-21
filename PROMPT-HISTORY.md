@@ -564,3 +564,7 @@ Result: Created diary/entries/2026/04/2026-04-15.md (228 lines). Populated weath
 
 2026-04-17 - 23:13 - Scaffold diary entry for Friday 2026-04-17 with all automated sections
 Result: Created diary/entries/2026/04/2026-04-17.md with weather, news, Slack (12 items), market data (Dow +1.79% record, S&P first close >7,100), Cloudflare deltas, LLM models, trending repos, software watchlist (3 new releases), productivity (+4,386 LOC, 62 commits), and 3 meetings from workiq. User to fill in Today's Highlight and Personal Reflections.
+
+2026-04-21 - 12:59 - Remove all personal2 (franzhemmer) GitHub account references after account cancellation
+Result: Cleaned 6 skill files (github-init, github, diary, productivity), removed SSH config block and key pair files. Updated org seats from 2 to 1, removed from enterprise admins.
+
