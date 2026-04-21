@@ -4,6 +4,9 @@ This file tracks meaningful prompts and their outcomes for the Claude Skills rep
 
 ---
 
+2026-04-21 - 19:50 - Fix OpenRouter app rankings scraping in 060-llm-models.ps1
+Result: Replaced brittle HTML regex scraping with JSON extraction from embedded Next.js hydration data (rankMap.day array). Old regex failed because OpenRouter changed link format from /apps?url= to /apps/{slug}. New approach extracts structured JSON with 20 ranked apps. Added bounds check, null safety, and Format-TokenCount helper.
+
 2026-04-21 - 15:00 - Scaffold diary entry for 2026-04-21 and fix stale LMSYS leaderboard data
 Result: Scaffolded full diary entry from 13 data sources. Fixed 060-llm-models.ps1 to fetch live LMSYS Chatbot Arena data from lmarena.ai by parsing embedded Next.js hydration JSON (636 models). Previously the script never fetched live data and carried forward stale rankings from January/February. Also fixed YYYY/MM/ directory recursion bug, router pricing sentinel, and entry path defaults.
 
