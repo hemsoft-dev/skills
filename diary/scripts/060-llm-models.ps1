@@ -266,78 +266,80 @@ catch {
 }
 
 # ============================================================
-# SECTION 3: Top OpenRouter Apps (by Token Usage) via HTTP
+# SECTION 3: Top OpenRouter Apps (by Token Usage) via embedded JSON
 # ============================================================
-Write-Information "`e[1;36mFetching OpenRouter app rankings via web request...`e[0m"
+Write-Information "`e[1;36mFetching OpenRouter app rankings...`e[0m"
+
+function Format-TokenCount ([string]$RawToken) {
+    $n = [decimal]$RawToken
+    if ($n -ge 1e12) { return '{0:N0}T' -f ($n / 1e12) }
+    if ($n -ge 1e9)  { return '{0:N0}B' -f ($n / 1e9) }
+    if ($n -ge 1e6)  { return '{0:N0}M' -f ($n / 1e6) }
+    if ($n -ge 1e3)  { return '{0:N0}K' -f ($n / 1e3) }
+    return $RawToken
+}
 
 $appsSection = ''
 try {
-    $response = Invoke-WebRequest -Uri 'https://openrouter.ai/rankings/apps' -UseBasicParsing -ErrorAction Stop
-    $html = $response.Content
+    $webResponse = Invoke-WebRequest -Uri 'https://openrouter.ai/rankings/apps' -UseBasicParsing -ErrorAction Stop
+    $pageHtml = $webResponse.Content
 
-    $appsHeaderIndex = $html.IndexOf('href="#apps"')
-    if ($appsHeaderIndex -lt 0) {
-        throw 'Top Apps section anchor not found in rankings page.'
-    }
+    # App ranking data is embedded in Next.js hydration blocks as escaped JSON
+    # containing a rankMap with day/week/month arrays. Find the block with rankMap.
+    $rankMapMarker = '\"rankMap\":{'
+    $rmPos = $pageHtml.IndexOf($rankMapMarker)
+    if ($rmPos -lt 0) { throw 'rankMap not found in page hydration data.' }
 
-    $sectionEndIndex = $html.IndexOf('Visit the new App &amp; Agent Rankings', $appsHeaderIndex)
-    if ($sectionEndIndex -lt 0) {
-        $sectionEndIndex = $html.Length
-    }
+    # Extract the "day" array via bracket matching
+    $dayMarker = '\"day\":['
+    $dayPos = $pageHtml.IndexOf($dayMarker, $rmPos)
+    if ($dayPos -lt 0) { throw '"day" array not found in rankMap.' }
 
-    $appsHtml = $html.Substring($appsHeaderIndex, $sectionEndIndex - $appsHeaderIndex)
-    $entryPattern = '<div class="grid grid-cols-12 items-center rounded-lg">[\s\S]*?<div class="col-span-1 text-left text-slate-11">\s*(\d+)(?:<!-- -->)?\.[\s\S]*?<a[^>]+href="(/apps\?url=[^"]+)"[^>]*>([^<]+)(?:<!-- -->)?[\s\S]*?<span class="inline-block truncate cursor-help"[^>]*>([^<]+)</span>[\s\S]*?<span class="text-sm font-medium text-muted-foreground">([^<]+)</span>\s*<span class="text-xs text-slate-9 ml-1">tokens</span>'
-    $regexMatches = [regex]::Matches($appsHtml, $entryPattern)
-
-    $apps = @()
-    foreach ($match in $regexMatches) {
-        $decodedHref = [System.Net.WebUtility]::HtmlDecode($match.Groups[2].Value)
-        $decodedUrl = if ($decodedHref -match 'url=(.+)$') {
-            [uri]::UnescapeDataString($Matches[1])
-        } else {
-            ''
+    $arrayStart = $dayPos + $dayMarker.Length - 1  # position of [
+    $depth = 0
+    for ($i = $arrayStart; $i -lt $pageHtml.Length; $i++) {
+        $ch = $pageHtml[$i]
+        if ($ch -eq '\' -and ($i + 1) -lt $pageHtml.Length -and $pageHtml[$i + 1] -eq '"') {
+            $i++; continue
         }
-
-        $apps += [pscustomobject]@{
-            rank = [int]$match.Groups[1].Value
-            name = [System.Net.WebUtility]::HtmlDecode($match.Groups[3].Value).Trim()
-            desc = [System.Net.WebUtility]::HtmlDecode($match.Groups[4].Value).Trim() -replace '\|', '–'
-            tokens = [System.Net.WebUtility]::HtmlDecode($match.Groups[5].Value).Trim()
-            url = $decodedUrl
-        }
+        if ($ch -eq '[') { $depth++ }
+        elseif ($ch -eq ']') { $depth--; if ($depth -eq 0) { break } }
     }
+    if ($i -ge $pageHtml.Length) { throw 'Malformed JSON: day array not properly closed.' }
+    $dayJson = $pageHtml.Substring($arrayStart, $i - $arrayStart + 1) -replace '\\"', '"'
+    $dayApps = $dayJson | ConvertFrom-Json
 
-    $apps = $apps | Sort-Object rank | Select-Object -First 10
+    $topApps = $dayApps | Sort-Object rank | Select-Object -First 10
 
-    if ($apps.Count -gt 0) {
+    if ($topApps.Count -gt 0) {
         $sb = [System.Text.StringBuilder]::new()
-        [void]$sb.AppendLine("### Top OpenRouter Apps (by Token Usage)")
+        [void]$sb.AppendLine('### Top OpenRouter Apps (by Token Usage)')
         [void]$sb.AppendLine()
-        [void]$sb.AppendLine("| # | App | Description | Tokens |")
-        [void]$sb.AppendLine("|---|-----|-------------|--------|")
+        [void]$sb.AppendLine('| # | App | Description | Tokens |')
+        [void]$sb.AppendLine('|---|-----|-------------|--------|')
 
-        foreach ($app in $apps) {
-            $appLink = if ($app.url) {
-                "[$($app.name)]($($app.url))"
-            }
-            else {
-                $app.name
-            }
-
-            [void]$sb.AppendLine("| $($app.rank) | $appLink | $($app.desc) | $($app.tokens) |")
+        foreach ($a in $topApps) {
+            if (-not $a.app -or -not $a.rank) { continue }
+            $name = if ($a.app.title) { $a.app.title } else { 'Unknown' }
+            $slug = $a.app.slug
+            $desc = if ($a.app.description) { ($a.app.description -replace '\|', '–').Trim() } else { '' }
+            if ($desc.Length -gt 100) { $desc = $desc.Substring(0, 97) + '...' }
+            $tokenDisplay = if ($a.total_tokens) { Format-TokenCount $a.total_tokens } else { 'N/A' }
+            $link = if ($slug) { "[$name](https://openrouter.ai/apps/$slug)" } else { $name }
+            [void]$sb.AppendLine("| $($a.rank) | $link | $desc | $tokenDisplay |")
         }
 
         $appsSection = $sb.ToString().TrimEnd()
-        Write-Information "`e[32m  Top apps: $($apps.Count) entries`e[0m"
+        Write-Information "`e[32m  Top apps: $($topApps.Count) entries`e[0m"
     }
     else {
-        $appsSection = "### Top OpenRouter Apps (by Token Usage)`n`n*Failed to parse rankings page.*"
-        Write-Information "`e[1;33m  Could not parse app rankings.`e[0m"
+        $appsSection = "### Top OpenRouter Apps (by Token Usage)`n`n*No app ranking data available.*"
+        Write-Information "`e[1;33m  rankMap.day was empty.`e[0m"
     }
 }
 catch {
-    Write-Information "`e[1;33mHTTP rankings fetch failed: $_. Skipping app rankings.`e[0m"
-    $appsSection = "### Top OpenRouter Apps (by Token Usage)`n`n*Failed to fetch rankings (HTTP parsing error).*"
+    Write-Information "`e[1;33mApp rankings fetch failed: $_`e[0m"
+    $appsSection = "### Top OpenRouter Apps (by Token Usage)`n`n*Failed to fetch app rankings.*"
 }
 
 # ============================================================
