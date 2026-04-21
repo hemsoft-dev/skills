@@ -4,6 +4,9 @@ This file tracks meaningful prompts and their outcomes for the Claude Skills rep
 
 ---
 
+2026-04-21 - 15:00 - Scaffold diary entry for 2026-04-21 and fix stale LMSYS leaderboard data
+Result: Scaffolded full diary entry from 13 data sources. Fixed 060-llm-models.ps1 to fetch live LMSYS Chatbot Arena data from lmarena.ai by parsing embedded Next.js hydration JSON (636 models). Previously the script never fetched live data and carried forward stale rankings from January/February. Also fixed YYYY/MM/ directory recursion bug, router pricing sentinel, and entry path defaults.
+
 2026-04-20 - 15:52 - Create mutation-testing skill for ad-hoc test quality assessment
 Result: Created mutation-testing skill (V1.0) using Stryker for TypeScript and C# projects. Designed for periodic/ad-hoc use (not CI). Includes Setup-TypeScript.ps1, Setup-CSharp.ps1, and Run-MutationTest.ps1 scripts. All project artifacts live in a dedicated `.mutation-testing/` folder.
 
