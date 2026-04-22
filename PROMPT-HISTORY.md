@@ -576,3 +576,6 @@ Result: Cleaned 6 skill files (github-init, github, diary, productivity), remove
 
 2026-04-21 - 19:15 - Scaffold diary entry for 2026-04-21 with all automated data sections
 Result: Created diary/entries/2026-04-21.md with weather, news, Slack (12 items), stock market, GitHub/Bitbucket repo counts, Copilot usage, Cloudflare stats, LLM models (5 new on OpenRouter), trending repos (5), software watchlist (8 items), watchlist updates (Gemini CLI), meetings (2 with DevEx Refinement transcript), and productivity (+4,770 LOC, 40 commits). Deltas unavailable — no previous diary entry exists.
+
+2026-04-21 - 22:10 - Fix productivity script PR/review counts always reporting 0, update diary reflections
+Result: Fixed two bugs in Get-TodayProductivity.ps1: (1) gh auth status fails with inactive accounts - replaced with gh auth token, (2) per-repo PR queries miss most activity - replaced with GitHub Search API (gh search prs). Before: PRs=0, Reviews=0. After: PRs=4, Reviews=5, Issues=1. Also added personal reflections to 2026-04-21 diary entry.
