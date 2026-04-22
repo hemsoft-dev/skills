@@ -38,8 +38,9 @@ $StartEST   = [datetime]::new($ParsedDate.Year, $ParsedDate.Month, $ParsedDate.D
 $EndEST     = [datetime]::new($ParsedDate.Year, $ParsedDate.Month, $ParsedDate.Day, 23, 59, 59)
 $StartUTC   = [System.TimeZoneInfo]::ConvertTimeToUtc($StartEST, $Eastern)
 $EndUTC     = [System.TimeZoneInfo]::ConvertTimeToUtc($EndEST, $Eastern)
-$StartISO   = $StartUTC.ToString('yyyy-MM-ddTHH:mm:ssZ')
-$EndISO     = $EndUTC.ToString('yyyy-MM-ddTHH:mm:ssZ')
+# ISO strings available for consumers that need them
+# $StartISO = $StartUTC.ToString('yyyy-MM-ddTHH:mm:ssZ')
+# $EndISO   = $EndUTC.ToString('yyyy-MM-ddTHH:mm:ssZ')
 
 # ---------------------------------------------------------------------------
 # Identity: All known accounts / emails
@@ -109,35 +110,30 @@ $SeenCommits = [System.Collections.Generic.HashSet[string]]::new()
 # ---------------------------------------------------------------------------
 $ghAvailable = $false
 try {
-    $null = gh auth status 2>&1
+    # Use gh auth token to check the active account only (gh auth status
+    # exits non-zero if ANY account has issues, even inactive ones)
+    $null = gh auth token 2>&1
     $ghAvailable = ($LASTEXITCODE -eq 0)
-} catch {}
+} catch { Write-Verbose "gh auth token check failed: $_" }
 
 if ($ghAvailable) {
     # -----------------------------------------------------------------------
-    # Strategy: gh search has indexing lag and uses UTC dates with no TZ
-    # control. Instead, list merged PRs per-repo and filter mergedAt in EST.
-    # We query repos discovered from local git dirs + known org repos.
+    # Strategy: Use gh search API for PRs, reviews, and issues. Search a
+    # 3-day date window (PrevDay..NextDay) to cover EST/EDT→UTC offset,
+    # then filter results precisely against EST boundaries.
     # -----------------------------------------------------------------------
-
-    # Known GitHub orgs/owners to query (repos discovered during local scan
-    # will be added below after the local git section runs).
-    # For now, collect repos from local paths first, then do API queries.
-    # We defer PR/review queries to after the local git section so we know
-    # which repos to query.
-    $DeferredPRQuery = $true
 
     # Deduplicate across accounts
     $SeenPRs = [System.Collections.Generic.HashSet[string]]::new()
     $SeenReviews = [System.Collections.Generic.HashSet[string]]::new()
     $SeenIssues = [System.Collections.Generic.HashSet[string]]::new()
 
-    # Issues still use search API (closedAt filter makes it reliable)
+    $PrevDay = $ParsedDate.AddDays(-1).ToString('yyyy-MM-dd')
+    $NextDay = $ParsedDate.AddDays(1).ToString('yyyy-MM-dd')
+
+    # Issues closed on $Date (EST)
     foreach ($user in $GitHubUsernames) {
         try {
-            # Search 2-day window to cover EST→UTC offset, then filter precisely
-            $PrevDay = $ParsedDate.AddDays(-1).ToString('yyyy-MM-dd')
-            $NextDay = $ParsedDate.AddDays(1).ToString('yyyy-MM-dd')
             $raw = gh search issues --author $user --state closed `
                 --updated "$PrevDay..$NextDay" --limit 100 `
                 --json number,repository,title,closedAt 2>$null
@@ -177,7 +173,7 @@ $SearchRoots = @(
 try {
     $cwd = git rev-parse --show-toplevel 2>$null
     if ($LASTEXITCODE -eq 0 -and $cwd) { $SearchRoots += $cwd.Trim() }
-} catch {}
+} catch { Write-Verbose "CWD repo detection failed: $_" }
 
 # Discover all repos under search roots, deduplicate by resolved path
 $RepoPathSet = [System.Collections.Generic.HashSet[string]]::new(
@@ -272,82 +268,68 @@ foreach ($repoPath in $RepoPathSet) {
 }
 
 # ---------------------------------------------------------------------------
-# Deferred PR & Review queries (uses gh pr list per-repo, not search index)
+# GitHub Search API: PRs merged and Code Reviews (across all repos)
 # ---------------------------------------------------------------------------
 if ($ghAvailable) {
-    # Collect unique GitHub repos from local git remotes
-    $GitHubRepos = [System.Collections.Generic.HashSet[string]]::new(
-        [System.StringComparer]::OrdinalIgnoreCase
-    )
-
-    foreach ($repoPath in $RepoPathSet) {
-        Push-Location $repoPath
+    # --- PRs authored and merged on $Date (EST) ---
+    foreach ($user in $GitHubUsernames) {
         try {
-            $remoteUrl = git remote get-url origin 2>$null
-            # Match github.com, or SSH aliases like github-work1, github-personal1
-            if ($remoteUrl -match '(?:github(?:\.com|[-\w]+))[:/](.+?)(?:\.git)?$') {
-                $null = $GitHubRepos.Add($Matches[1])
-            }
-        } catch {} finally { Pop-Location }
-    }
-
-    # Also add known orgs' repos that might not be cloned locally
-    # (handled by the repos we already found via git remotes)
-
-    $LoginSet = [System.Collections.Generic.HashSet[string]]::new(
-        [System.StringComparer]::OrdinalIgnoreCase
-    )
-    foreach ($u in $GitHubUsernames) { $null = $LoginSet.Add($u) }
-
-    foreach ($nwo in $GitHubRepos) {
-        # --- PRs merged on $Date (EST) ---
-        try {
-            $raw = gh pr list --repo $nwo --state merged --limit 30 `
-                --json number,mergedAt,author 2>$null
+            $raw = gh search prs --author $user --merged `
+                --merged-at "$PrevDay..$NextDay" `
+                --limit 100 --json number,repository,closedAt 2>$null
             if ($raw) {
-                $prs = $raw | ConvertFrom-Json
+                $prs = ($raw -join "`n") | ConvertFrom-Json
                 foreach ($pr in $prs) {
-                    if (-not $LoginSet.Contains($pr.author.login)) { continue }
-                    $prKey = "${nwo}#$($pr.number)"
+                    $prKey = "$($pr.repository.nameWithOwner)#$($pr.number)"
                     if (-not $SeenPRs.Add($prKey)) { continue }
 
-                    $mergedUtc = ([datetime]$pr.mergedAt).ToUniversalTime()
-                    if ($mergedUtc -ge $StartUTC -and $mergedUtc -le $EndUTC) {
+                    $closedUtc = ([datetime]$pr.closedAt).ToUniversalTime()
+                    if ($closedUtc -ge $StartUTC -and $closedUtc -le $EndUTC) {
                         $Metrics.PullRequests++
                     }
                 }
             }
-        } catch { Write-Verbose "PR list for ${nwo}: $_" }
+        } catch { Write-Verbose "Merged PRs for ${user}: $_" }
+    }
 
-        # --- PRs reviewed on $Date (EST) ---
-        # List recently merged/closed PRs and check if user left a review
+    # --- Code reviews submitted on $Date (EST) ---
+    # Search for candidate PRs reviewed by user, then verify each review date
+    foreach ($user in $GitHubUsernames) {
         try {
-            $raw = gh pr list --repo $nwo --state all --limit 30 `
-                --json number,reviews,updatedAt 2>$null
+            $raw = gh search prs --reviewed-by $user `
+                --updated "$PrevDay..$NextDay" `
+                --limit 100 --json number,repository 2>$null
             if ($raw) {
-                $prs = $raw | ConvertFrom-Json
+                $prs = ($raw -join "`n") | ConvertFrom-Json
                 foreach ($pr in $prs) {
-                    # Quick filter: skip PRs not updated recently
-                    $updatedUtc = ([datetime]$pr.updatedAt).ToUniversalTime()
-                    if ($updatedUtc -lt $StartUTC.AddDays(-1)) { continue }
-
-                    $prKey = "${nwo}#$($pr.number)"
+                    $prKey = "$($pr.repository.nameWithOwner)#$($pr.number)"
                     if (-not $SeenReviews.Add($prKey)) { continue }
 
-                    # Check if any of our accounts left a review
-                    foreach ($review in $pr.reviews) {
-                        if ($LoginSet.Contains($review.author.login)) {
-                            $reviewUtc = ([datetime]$review.submittedAt).ToUniversalTime()
-                            $reviewEst = [System.TimeZoneInfo]::ConvertTimeFromUtc($reviewUtc, $Eastern)
-                            if ($reviewEst.Date -eq $ParsedDate.Date) {
-                                $Metrics.CodeReviews++
-                                break
+                    # Verify actual review date via REST API
+                    $nwo = $pr.repository.nameWithOwner
+                    $num = $pr.number
+                    $escapedUser = $user.Replace('"', '\"')
+                    $jqFilter = '.[] | select(.user.login == "' + $escapedUser + '") | .submitted_at'
+                    try {
+                        $reviewsRaw = gh api "repos/$nwo/pulls/$num/reviews" `
+                            --jq $jqFilter 2>$null
+                        if ($reviewsRaw) {
+                            foreach ($ts in ($reviewsRaw -split "`n")) {
+                                $ts = $ts.Trim().Trim('"')
+                                if (-not $ts) { continue }
+                                try {
+                                    $reviewUtc = ([datetime]$ts).ToUniversalTime()
+                                    if ($reviewUtc -ge $StartUTC -and $reviewUtc -le $EndUTC) {
+                                        $Metrics.CodeReviews++
+                                        break
+                                    }
+                                } catch { Write-Verbose "Date parse for review on ${nwo}#${num}: $_" }
                             }
                         }
-                    }
+                    } catch { Write-Verbose "Review check for ${nwo}#${num}: $_" }
                 }
             }
-        } catch { Write-Verbose "Reviews list for ${nwo}: $_" }
+        } catch { Write-Verbose "Reviews for ${user}: $_" }
     }
 }
 
