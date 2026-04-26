@@ -1,6 +1,6 @@
 ---
 name: now-leadershipgroup
-description: V1.1 - Expert in Now Leadership Group business, website, tech stack, infrastructure, accounts, and email/domain management. Use when working on NLG website, managing accounts, troubleshooting email/DNS, or planning infrastructure changes.
+description: V1.2 - Expert in Now Leadership Group business, website, tech stack, infrastructure, accounts, and email/domain management. Use when working on NLG website, managing accounts, troubleshooting email/DNS, or planning infrastructure changes. See TODO.md for active migration tracking.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -294,89 +294,64 @@ DMARC is stuck at `p=none` (monitor mode) for both domains. Tightening to `p=qua
 - **Gmail "Show Original"** from Rebecca's iPhone (Mar 31, 2026) — SPF PASS, DKIM ABSENT
 - **Network Solutions webmail test** (Apr 8, 2026) — SPF PASS, DKIM PASS (proves webmail works, SMTP doesn't)
 - **Network Solutions response** — "DKIM signing is built directly into the webmail system... our system is mainly configured to sign those internally generated webmail emails"
+- **Live header analysis** (Apr 26, 2026) — Rebecca → Franz (Relias/Microsoft 365): SPF SoftFail, DKIM None, DMARC Fail, compauth=none (reason 405). Delivered only because DMARC `p=none` and Proofpoint scored it `0`. See details below.
 
-## Game Plans for Fixing Email
+### Apr 26, 2026 — Header Analysis (Rebecca → Franz at Relias)
 
-### Game Plan A: Google Workspace Migration (Recommended — Already Planned)
+Rebecca sent a test from Outlook to `fhemmer@relias.com`. Full auth results:
 
-**Timeline:** Before July 2, 2026 (Network Solutions renewal deadline)
+| Check | Result | Detail |
+|-------|--------|--------|
+| SPF | ❌ SoftFail | IP `148.163.154.157` (Proofpoint gateway) not in hemmer.us SPF |
+| DKIM | ❌ None | "message not signed" — Network Solutions SMTP bug |
+| DMARC | ❌ Fail | From=`nowleadershipgroup.com`, envelope=`hemmer.us` — no alignment |
+| compauth | ❌ None | Reason 405 — Microsoft composite auth failed |
 
-**What it fixes:** Everything. Google Workspace signs DKIM on ALL sending paths — Gmail web, iPhone, Outlook, any SMTP client. Rebecca can send as `rebecca@nowleadershipgroup.com` with proper DKIM alignment from any device.
+**Sending chain:** Rebecca's Outlook → `MW4PR20MB5591.namprd20.prod.outlook.com` (Microsoft) → Network Solutions SMTP (`cmsmtp`/`cloudfilter.net`) → Proofpoint (`mx0b-001ede02.pphosted.com`) → Microsoft 365 (Relias)
 
-**Steps:** See [Active Migration Plan](#active-migration-plan) below (7 phases).
+**Why it delivered despite triple failure:**
 
-**Pros:**
+1. DMARC policy `p=none` → `action=none` (no enforcement)
+2. Proofpoint (Relias email gateway) scored `score=0`, verdict `Deliver`
+3. Microsoft SCL=1 (low spam confidence)
 
-- Permanent fix for DKIM on all paths
-- 30 GB storage per user (vs 512 MB now)
-- Google-grade spam filtering
-- Calendar, Drive included
-- Familiar Gmail interface
-- Can tighten DMARC to `p=reject` after migration
+**Additional issues found:**
 
-**Cons:**
+- **Display name is wrong:** From header shows `"rebecca@hemmer.us" <rebecca@nowleadershipgroup.com>` — email address as display name instead of "Rebecca Hemmer"
+- **SPF double-evaluation:** Proofpoint evaluates SPF correctly (PASS at cloudfilter IP), but Microsoft re-evaluates against Proofpoint's IP (SoftFail). This is a known issue with email security gateways.
 
-- $14/mo (2 users × $7)
-- Requires careful DNS migration
-- Multiple devices need reconfiguration
-- Contact form worker needs adaptation (Cloudflare Email Routing binding may break)
+### Personal Gmail Accounts
 
-### Game Plan B: Immediate Workaround — Use Webmail Only
+| Person | Gmail | hemmer.us | Role |
+|--------|-------|-----------|------|
+| Franz Hemmer | `fphemmer@gmail.com` | `franz@hemmer.us` | Technical/admin |
+| Rebecca Hemmer | `rebeccahemmernow@gmail.com` | `rebecca@hemmer.us` | Business owner, sends as `rebecca@nowleadershipgroup.com` |
 
-**Timeline:** Now (zero effort)
+## Game Plan: Google Workspace Migration
 
-**What it fixes:** DKIM passes when sending from Network Solutions webmail.
+**Decision (Apr 26, 2026):** Drop Network Solutions email entirely. Move to Google Workspace Business Starter so Rebecca can send natively as `rebecca@nowleadershipgroup.com` with full DKIM/SPF/DMARC on every device.
 
-**How:** Rebecca uses `https://webmail.hemmer.us` or the Network Solutions webmail URL instead of iPhone Mail / Outlook for business email.
+**See [TODO.md](TODO.md) for active task tracking and detailed phase instructions.**
 
-**Pros:** Works today, no cost, no migration
+**Why Google Workspace (not free Gmail):**
 
-**Cons:** Terrible mobile UX, not sustainable for a business professional
+- Free Gmail "Send mail as" signs DKIM as `gmail.com`, not the custom domain → DMARC alignment still fails
+- Google Workspace signs DKIM as the custom domain on ALL paths (web, phone, desktop, API)
+- Rebecca gets `rebecca@nowleadershipgroup.com` as a native first-class address
+- Both domains (`hemmer.us` + `nowleadershipgroup.com`) under one admin console
+- 30 GB storage per user (vs 512 MB now, nearly full)
+- $7/user/month (2 users = $14/mo)
 
-### Game Plan C: Cloudflare Email Routing + SMTP Relay (Interim)
+**What this replaces:**
 
-**Timeline:** Could implement in 1-2 sessions
-
-**What it fixes:** Outbound email authentication for NLG domain specifically.
-
-**How:**
-
-1. Set up a third-party transactional email service (Resend, SendGrid, or Mailgun — most have free tiers)
-2. Configure Rebecca's mail client to use the relay's SMTP server for outbound `@nowleadershipgroup.com` mail
-3. The relay signs DKIM with NLG's domain key
-4. Inbound still routes through Cloudflare → <rebecca@hemmer.us>
-
-**Pros:** Fixes NLG outbound without full migration; can be done quickly
-
-**Cons:**
-
-- Extra service to manage
-- Doesn't fix hemmer.us DKIM (only NLG domain)
-- Still need Google Workspace migration eventually
-- Free tiers have sending limits
-
-### Game Plan D: Fast-Track DNS to Cloudflare (De-risks Migration)
-
-**Timeline:** 1 session + 24-48hr propagation
-
-**What it fixes:** Gets hemmer.us DNS under our control at Cloudflare, de-risking future changes.
-
-**How:** Execute Phase 2 of the migration plan now — move hemmer.us nameservers from Network Solutions to Cloudflare. Email stays at Network Solutions (MX unchanged), but we gain:
-
-- Faster DNS changes when we're ready for MX cutover
-- Single dashboard for both domains
-- Ability to add/modify records instantly
-
-**Pros:** Low risk, high value prep step; no email disruption
-
-**Cons:** Doesn't fix the DKIM problem itself (still Network Solutions SMTP)
-
-### Recommended Sequence
-
-1. **Now:** Game Plan B (webmail workaround for critical emails)
-2. **Next session:** Game Plan D (move hemmer.us DNS to Cloudflare)
-3. **May-June 2026:** Game Plan A (full Google Workspace migration)
-4. **Post-migration:** Tighten DMARC to `p=reject` on both domains
+| Before | After |
+|--------|-------|
+| Network Solutions Deluxe Email (~$12/mo) | Google Workspace Business Starter ($14/mo) |
+| Network Solutions DNS for hemmer.us | Cloudflare DNS (free) |
+| Network Solutions domain registration (~$40/yr) | Cloudflare Registrar ($6.50/yr) |
+| DKIM broken on SMTP | DKIM on all paths |
+| 512 MB storage (nearly full) | 30 GB per user |
+| DMARC stuck at `p=none` | Path to `p=reject` |
 
 ## Active Migration Plan
 
@@ -414,11 +389,7 @@ DMARC is stuck at `p=none` (monitor mode) for both domains. Tightening to `p=qua
 
 ## Current TODO Status
 
-| Status | Priority | Task |
-|--------|----------|------|
-| 📋 | Medium | Contact form end-to-end test |
-| 📋 | Low | DMARC progression (p=none → quarantine → reject) |
-| ✅ | — | 9 of 11 tasks completed (82%) |
+See [TODO.md](TODO.md) for the full migration tracking document with detailed phases and checklists.
 
 ## SEO Configuration
 
