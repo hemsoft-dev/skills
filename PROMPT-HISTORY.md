@@ -588,3 +588,6 @@ Result: Created V1.0 skill with comprehensive coverage of business overview, tec
 
 2026-04-26 - 18:48 - Create NLG email migration TODO.md with 8-phase Google Workspace plan
 Result: Created comprehensive TODO.md (todo skill format) with pre-flight checklist, 8 migration phases (Google Workspace signup through DMARC hardening), per-phase checklists, risk register, timeline with July 2 2026 deadline, and contact form worker adaptation plan. Updated SKILL.md to V1.2 with Apr 26 header analysis evidence (triple auth failure) and personal Gmail accounts.
+
+2026-04-26 - 19:25 - NLG pre-flight: domain WHOIS check and migration decisions
+Result: Confirmed hemmer.us is LOCKED (clientTransferProhibited) at Domain.com LLC registrar, expiry 2026-07-02. Made default decisions for 4 pre-flight items (annual billing, retire rebecca.online, no catch-all, SES needs investigation). Updated TODO.md and SKILL.md.
