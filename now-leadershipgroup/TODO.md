@@ -26,7 +26,7 @@
 
 ## Progress
 
-**Completed: 9 / 21** (43%)
+**Completed: 9 / 21** (43%) — Pre-flight: 4/9 items resolved (2026-04-26)
 
 **Hard deadline: July 2, 2026** — Network Solutions email renewal + hemmer.us domain expiry
 
@@ -66,11 +66,16 @@ Must complete before starting Phase 1.
 - [ ] Inventory all "Send as" configurations — Rebecca sends as `rebecca@nowleadershipgroup.com` from Outlook
 - [ ] Back up all email from Network Solutions (IMAP download to local archive)
 - [ ] Note any email filters/rules configured at Network Solutions or in email clients
-- [ ] Check hemmer.us domain lock status at Network Solutions (needs unlocking for Phase 6)
-- [ ] Decide: annual billing ($7/user/mo) or monthly ($8.40/user/mo) for Google Workspace
-- [ ] Decide: keep `hemmerus_catchall` mailbox content? Set up catch-all rule in Google?
-- [ ] Decide: is `rebecca.online@hemmer.us` still needed? (Currently a forward)
+- [x] Check hemmer.us domain lock status *(checked 2026-04-26)*
+  - **Status: LOCKED** (`clientTransferProhibited`) — must unlock before Phase 6
+  - **Registrar: Domain.com, LLC** (Network Solutions family — admin may be at domain.com portal)
+  - **Expiry: 2026-07-02** confirmed
+  - **NS: ns1.domain.com, ns2.domain.com** (Network Solutions/Domain.com)
+- [x] Decide: annual billing ($7/user/mo) or monthly ($8.40/user/mo) → **Annual ($7/user/mo)** — saves ~$34/yr, committed to migration *(decided 2026-04-26)*
+- [x] Decide: keep catch-all for hemmer.us? → **No** — create explicit aliases only (`contact@hemmer.us`, etc.), reduces spam *(decided 2026-04-26)*
+- [x] Decide: is `rebecca.online@hemmer.us` still needed? → **No, retire it** — not referenced in any active workflows *(decided 2026-04-26)*
 - [ ] Decide: decommission Amazon SES subdomain (`send.updates.hemmer.us`) or preserve?
+  - ⚠️ **Needs investigation** — MX record still active (`feedback-smtp.us-east-1.amazonses.com`). Ask Rebecca/Franz if anything sends email via this subdomain (newsletters, notifications, etc.)
 
 ---
 

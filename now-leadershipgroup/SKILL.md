@@ -171,7 +171,7 @@ bunx vercel --prod --yes        # Deploy to production
 | **Cloudflare** | `fphemmer@gmail.com` (Free plan) | DNS for nowleadershipgroup.com, Email Routing, Workers |
 | **Vercel** | HemSoft team (`team_v5nrX8yNM2ZpAJMlqTMjqjvX`) | Website hosting & deployment |
 | **GoDaddy** | — | Domain registration for nowleadershipgroup.com |
-| **Network Solutions** | Account #119555933 (Franz Hemmer) | hemmer.us domain + Deluxe Email (migrating away) |
+| **Network Solutions / Domain.com** | Account #119555933 (Franz Hemmer) | hemmer.us domain + Deluxe Email (migrating away). WHOIS registrar is Domain.com, LLC (same parent company). Domain is **LOCKED** (`clientTransferProhibited`). |
 | **GitHub** | HemSoft org | Source code repository (private) |
 
 ### Vercel Deployment
