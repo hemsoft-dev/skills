@@ -1,6 +1,6 @@
 ---
 name: now-leadershipgroup
-description: V1.0 - Expert in Now Leadership Group business, website, tech stack, infrastructure, accounts, and email/domain management. Use when working on NLG website, managing accounts, troubleshooting email/DNS, or planning infrastructure changes.
+description: V1.1 - Expert in Now Leadership Group business, website, tech stack, infrastructure, accounts, and email/domain management. Use when working on NLG website, managing accounts, troubleshooting email/DNS, or planning infrastructure changes.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -241,6 +241,142 @@ bunx vercel --prod --yes        # Deploy to production
 | `rebecca@nowleadershipgroup.com` | NLG | Routed alias | Cloudflare → <rebecca@hemmer.us> |
 | `info@nowleadershipgroup.com` | NLG | Unknown | Referenced on NLG site footer |
 | `website@nowleadershipgroup.com` | NLG | Sender identity | Contact form worker From address |
+
+## Email Deliverability Crisis
+
+### The Core Problem
+
+Rebecca's outbound email is **unreliable**. She sends as `rebecca@nowleadershipgroup.com` (her business identity) from her `rebecca@hemmer.us` mailbox. Some recipients receive her email fine; others never see it or it lands in spam. This is actively hurting her business.
+
+### Why It Happens — Technical Root Cause
+
+The problem is a **confirmed platform bug at Network Solutions** (ticket E-502096, escalated Apr 8, 2026):
+
+| Sending Method | SPF | DKIM | DMARC | Result |
+|----------------|-----|------|-------|--------|
+| Network Solutions **webmail** | ✅ PASS | ✅ PASS | ✅ PASS | Works reliably |
+| iPhone/Outlook via **SMTP** | ✅ PASS | ❌ ABSENT | ⚠️ PASS (SPF only) | Inconsistent delivery |
+
+Network Solutions confirmed their **SMTP relay does not attach DKIM signatures** — only their webmail system does. When Rebecca sends from her iPhone or Outlook, the email goes through their SMTP infrastructure (`cmsmtp` → `cloudfilter.net`) which simply does not sign DKIM. This is not a misconfiguration; it is a platform limitation with **no ETA for a fix**.
+
+### Why Some Recipients Get It and Others Don't
+
+When Rebecca sends as `rebecca@nowleadershipgroup.com` from her hemmer.us mailbox via SMTP:
+
+1. **SPF check** — The receiving server checks if the sending IP is authorized for `nowleadershipgroup.com`. The NLG SPF record includes Network Solutions' IP range (`ip4:66.96.128.0/18`), so SPF **passes**.
+2. **DKIM check** — The receiving server looks for a DKIM signature header. There is **none** (Network Solutions SMTP doesn't sign). DKIM **fails/absent**.
+3. **DMARC check** — DMARC requires either SPF or DKIM to pass **and align** with the From domain. SPF passes for `hemmer.us` but the From header says `nowleadershipgroup.com` — **misaligned**. DKIM is absent. So DMARC **may fail** depending on how strict the receiving server is.
+
+**Result by recipient mail provider:**
+
+| Recipient Provider | Likely Outcome | Why |
+|--------------------|----------------|-----|
+| **Gmail** | Usually delivers (inbox or spam) | Lenient with `p=none` DMARC; SPF pass gives partial credit |
+| **Microsoft 365/Outlook.com** | Often spam or rejected | Stricter DMARC evaluation; missing DKIM heavily penalized |
+| **Yahoo/AOL** | Often spam or rejected | Strict DMARC enforcement since 2024 |
+| **Corporate mail servers** | Unpredictable | Depends on admin policy; many block missing DKIM |
+
+### Real-World Impact on Rebecca
+
+- Emails to potential clients may never arrive
+- Follow-ups after coaching sessions silently disappear
+- No bounce-back notification — Rebecca has no idea the email didn't land
+- Forces workaround of using webmail (poor UX on mobile)
+- Undermines professional credibility of the business
+
+### Why DMARC Can't Be Tightened
+
+DMARC is stuck at `p=none` (monitor mode) for both domains. Tightening to `p=quarantine` or `p=reject` would cause Rebecca's own SMTP-sent emails to be **quarantined or rejected** by receiving servers, since they lack DKIM. We'd be blocking our own legitimate mail.
+
+### Evidence on File
+
+- **Ticket E-502096** — Network Solutions escalation confirming the bug (`docs/E-502096.md` in repo)
+- **Gmail "Show Original"** from Rebecca's iPhone (Mar 31, 2026) — SPF PASS, DKIM ABSENT
+- **Network Solutions webmail test** (Apr 8, 2026) — SPF PASS, DKIM PASS (proves webmail works, SMTP doesn't)
+- **Network Solutions response** — "DKIM signing is built directly into the webmail system... our system is mainly configured to sign those internally generated webmail emails"
+
+## Game Plans for Fixing Email
+
+### Game Plan A: Google Workspace Migration (Recommended — Already Planned)
+
+**Timeline:** Before July 2, 2026 (Network Solutions renewal deadline)
+
+**What it fixes:** Everything. Google Workspace signs DKIM on ALL sending paths — Gmail web, iPhone, Outlook, any SMTP client. Rebecca can send as `rebecca@nowleadershipgroup.com` with proper DKIM alignment from any device.
+
+**Steps:** See [Active Migration Plan](#active-migration-plan) below (7 phases).
+
+**Pros:**
+
+- Permanent fix for DKIM on all paths
+- 30 GB storage per user (vs 512 MB now)
+- Google-grade spam filtering
+- Calendar, Drive included
+- Familiar Gmail interface
+- Can tighten DMARC to `p=reject` after migration
+
+**Cons:**
+
+- $14/mo (2 users × $7)
+- Requires careful DNS migration
+- Multiple devices need reconfiguration
+- Contact form worker needs adaptation (Cloudflare Email Routing binding may break)
+
+### Game Plan B: Immediate Workaround — Use Webmail Only
+
+**Timeline:** Now (zero effort)
+
+**What it fixes:** DKIM passes when sending from Network Solutions webmail.
+
+**How:** Rebecca uses `https://webmail.hemmer.us` or the Network Solutions webmail URL instead of iPhone Mail / Outlook for business email.
+
+**Pros:** Works today, no cost, no migration
+
+**Cons:** Terrible mobile UX, not sustainable for a business professional
+
+### Game Plan C: Cloudflare Email Routing + SMTP Relay (Interim)
+
+**Timeline:** Could implement in 1-2 sessions
+
+**What it fixes:** Outbound email authentication for NLG domain specifically.
+
+**How:**
+
+1. Set up a third-party transactional email service (Resend, SendGrid, or Mailgun — most have free tiers)
+2. Configure Rebecca's mail client to use the relay's SMTP server for outbound `@nowleadershipgroup.com` mail
+3. The relay signs DKIM with NLG's domain key
+4. Inbound still routes through Cloudflare → <rebecca@hemmer.us>
+
+**Pros:** Fixes NLG outbound without full migration; can be done quickly
+
+**Cons:**
+
+- Extra service to manage
+- Doesn't fix hemmer.us DKIM (only NLG domain)
+- Still need Google Workspace migration eventually
+- Free tiers have sending limits
+
+### Game Plan D: Fast-Track DNS to Cloudflare (De-risks Migration)
+
+**Timeline:** 1 session + 24-48hr propagation
+
+**What it fixes:** Gets hemmer.us DNS under our control at Cloudflare, de-risking future changes.
+
+**How:** Execute Phase 2 of the migration plan now — move hemmer.us nameservers from Network Solutions to Cloudflare. Email stays at Network Solutions (MX unchanged), but we gain:
+
+- Faster DNS changes when we're ready for MX cutover
+- Single dashboard for both domains
+- Ability to add/modify records instantly
+
+**Pros:** Low risk, high value prep step; no email disruption
+
+**Cons:** Doesn't fix the DKIM problem itself (still Network Solutions SMTP)
+
+### Recommended Sequence
+
+1. **Now:** Game Plan B (webmail workaround for critical emails)
+2. **Next session:** Game Plan D (move hemmer.us DNS to Cloudflare)
+3. **May-June 2026:** Game Plan A (full Google Workspace migration)
+4. **Post-migration:** Tighten DMARC to `p=reject` on both domains
 
 ## Active Migration Plan
 
