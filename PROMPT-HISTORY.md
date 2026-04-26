@@ -585,3 +585,6 @@ Result: Fixed two bugs in Get-TodayProductivity.ps1: (1) gh auth status fails wi
 
 2026-04-26 - 14:43 - Create now-leadershipgroup skill for Rebecca's NLG business
 Result: Created V1.0 skill with comprehensive coverage of business overview, tech stack (Next.js 16/React 19/Tailwind 4/Bun), infrastructure accounts (Cloudflare, Vercel, GoDaddy, Network Solutions), DNS/email config, Cloudflare Worker contact form, and active Google Workspace migration plan. Explored full codebase at D:\github\hemsoft\now-leadership-group.
+
+2026-04-26 - 18:48 - Create NLG email migration TODO.md with 8-phase Google Workspace plan
+Result: Created comprehensive TODO.md (todo skill format) with pre-flight checklist, 8 migration phases (Google Workspace signup through DMARC hardening), per-phase checklists, risk register, timeline with July 2 2026 deadline, and contact form worker adaptation plan. Updated SKILL.md to V1.2 with Apr 26 header analysis evidence (triple auth failure) and personal Gmail accounts.
