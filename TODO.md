@@ -3,7 +3,7 @@
 | Status | Priority | Task | Notes |
 |--------|----------|------|-------|
 | ✅ | Medium | Update contributing skill documentation | Abandoned as out-of-scope for now (2026-03-05) |
-| ✅ | Medium | [Create ElevenLabs voice skill](#create-elevenlabs-voice-skill) | Created V1.0 elevenlabs skill (2026-03-01) |
+| ✅ | Medium | Create ElevenLabs voice skill | Created V1.0 elevenlabs skill (2026-03-01) |
 | ✅ | High | Test complete diary workflow | All 10 scripts (010-100) tested individually (2026-03-01) |
 | ✅ | Medium | Add WorkIQ integration to today and diary skills | 100-work.ps1 uses WorkIQ for meetings + emails (2026-03-01) |
 | ✅ | High | Establish output/YYYY-MM-DD.md pattern | weather skill (2026-02-10) |
@@ -26,17 +26,3 @@
 
 **Completed: 19 / 19** (100%)
 
----
-
-### Create ElevenLabs voice skill
-
-**Goal**: Build a new skill that integrates with ElevenLabs TTS API for high-quality voice synthesis, usable via OpenClaw.
-
-**Proposed capabilities**:
-
-- Text-to-speech via ElevenLabs API (voice selection, stability, similarity settings)
-- Voice cloning support
-- Output to audio file (MP3/WAV)
-- OpenClaw integration for voice responses
-
-**Reference**: `play-audio` and `edge-tts` skills for patterns to follow.

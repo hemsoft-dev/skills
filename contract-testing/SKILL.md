@@ -1,6 +1,6 @@
 ---
 name: contract-testing
-description: "V1.0 - Expert in contract testing for .NET/C# microservices using PactNet (consumer-driven) and Specmatic (spec-driven). Covers Pact Broker deployment, CI/CD gating, async messaging contracts, and OpenAPI-based approaches. Use when implementing, reviewing, or discussing contract testing strategy."
+description: "V1.3 - Expert in contract testing for .NET/C# microservices using PactNet (consumer-driven). Covers Pact Broker, CI/CD gating, ADO pipeline patterns, and implementation. Includes Relias production broker credentials, service inventory, organizational context, and a complete 'implement in your repo' workflow. Use when implementing, reviewing, or discussing contract testing."
 ---
 
 # Contract Testing for .NET
@@ -95,15 +95,15 @@ public async Task GetUser_ReturnsExpectedUser()
         .WithJsonBody(new
         {
             id = 1,
-            firstName = "Franz",
-            lastName = "Rufino"
+            firstName = "Jane",
+            lastName = "Doe"
         });
 
     await _pact.VerifyAsync(async ctx =>
     {
         var client = new UserApiClient(ctx.MockServerUri);
         var user = await client.GetUserAsync(1);
-        Assert.Equal("Franz", user.FirstName);
+        Assert.Equal("Jane", user.FirstName);
     });
 }
 ```
@@ -115,7 +115,7 @@ public async Task GetUser_ReturnsExpectedUser()
 pact-broker publish ./pacts \
     --consumer-app-version=$(git rev-parse --short HEAD) \
     --branch=$(git branch --show-current) \
-    --broker-base-url=https://pact-broker.example.com
+    --broker-base-url=https://relias-pactbroker.reliaslearning.com
 ```
 
 ### Step 3: Provider Verifies Contract
@@ -130,7 +130,7 @@ public void VerifyPacts()
 
     provider
         .WithHttpEndpoint(new Uri("http://localhost:5000"))
-        .WithPactBrokerSource(new Uri("https://pact-broker.example.com"), options =>
+        .WithPactBrokerSource(new Uri("https://relias-pactbroker.reliaslearning.com"), options =>
         {
             options.ConsumerVersionSelectors(
                 new ConsumerVersionSelector { MainBranch = true }
@@ -224,7 +224,7 @@ public class ProviderStateMiddleware
     {
         _providerStates = new Dictionary<string, Action>
         {
-            ["user 1 exists"] = () => SeedUser(1, "Franz", "Rufino"),
+            ["user 1 exists"] = () => SeedUser(1, "Jane", "Doe"),
             ["no users exist"] = () => ClearUsers(),
         };
     }
@@ -370,11 +370,28 @@ If the team already maintains OpenAPI specs and wants zero consumer-side test au
 
 ## Relias Internal References
 
-- [Consumer-Driven Contract Testing Recommendations](https://relias.atlassian.net/wiki/spaces/RLMSM/pages/3780411481/Consumer-Driven+Contract+Testing+Recommendations) — Architecture team's full recommendation (PactNet, Pact Broker, Pact CLI)
-- [Pact Broker Deployment for Target](https://relias.atlassian.net/wiki/spaces/RLMSM/pages/4328882228/Contract+Testing+-+Pact+Broker+Deployment+for+Target) — ADR for Pact Broker deployment per environment (Dev1, Dev2, Staging, Prod)
-- [Best Practices Repo - PactNet POC](https://bitbucket.org/relias/relias-best-practices/pull-requests/39) — Self-contained PactNet consumer/provider POC
-- [RLMS Website JavaScript POC](https://bitbucket.org/relias/rlms-website/branch/rthomas/develop/RLPD-49997_pact_proof-of_concept_tests) — Frontend consumer POC
-- [Assessment Service Consumer POC](https://bitbucket.org/relias/assessmentservice/branch/rthomas/develop/RLPD-49996_pact_api_to_api_consumer_example_test) — API-to-API consumer example
+### Authoritative Sources
+
+- **ADR (Decision Record):** [`08-Pact-Broker.md`](https://github.com/relias-engineering/decision-records-system/blob/main/platform-foundations/backend/08-Pact-Broker.md) — Official architecture decision. Contains broker URL, credentials, deployment strategy.
+- **Pact Broker Config Repo:** [`relias-engineering/pact-broker`](https://github.com/relias-engineering/pact-broker) — Docker-compose for local dev, README lists services under contract.
+- **Confluence: CDC Recommendations:** [Consumer-Driven Contract Testing Recommendations](https://relias.atlassian.net/wiki/spaces/RLMSM/pages/3780411481/Consumer-Driven+Contract+Testing+Recommendations) — Architecture team's full recommendation (PactNet, Pact Broker, Pact CLI)
+- **Confluence: Pact Broker Deployment ADR:** [Contract Testing – Pact Broker Deployment for Target](https://relias.atlassian.net/wiki/spaces/RLMSM/pages/4328882228/Contract+Testing+-+Pact+Broker+Deployment+for+Target) — Per-environment deployment plan
+
+### Active Service Repos with Contract Tests (RPLAT-19223)
+
+- [`relias-engineering/grc-library-service`](https://github.com/relias-engineering/grc-library-service) — Producer + Consumer ([PR #64](https://github.com/relias-engineering/grc-library-service/pull/64))
+- [`relias-engineering/policy-manager`](https://github.com/relias-engineering/policy-manager) — Producer ([PR #243](https://github.com/relias-engineering/policy-manager/pull/243))
+- [`relias-engineering/content-scheduler`](https://github.com/relias-engineering/content-scheduler) — Consumer ([PR #193](https://github.com/relias-engineering/content-scheduler/pull/193))
+- [`relias-engineering/content-library-service`](https://github.com/relias-engineering/content-library-service) — Consumer ([PR #599](https://github.com/relias-engineering/content-library-service/pull/599))
+- [`relias-engineering/content-engagement-service`](https://github.com/relias-engineering/content-engagement-service) — Consumer ([PR #338](https://github.com/relias-engineering/content-engagement-service/pull/338))
+
+### POC and Reference Repos
+
+- [`relias-engineering/best-practices`](https://github.com/relias-engineering/best-practices) — `Contract Testing/` folder with Users.API PactNet consumer/provider example
+- [`relias-engineering/slide-decks`](https://github.com/relias-engineering/slide-decks) — [`pact-contract-testing-is-it-worth-it.md`](https://github.com/relias-engineering/slide-decks/blob/main/decks/pact-contract-testing-is-it-worth-it.md) — Marp presentation deck
+- [Best Practices Repo - PactNet POC (Bitbucket)](https://bitbucket.org/relias/relias-best-practices/pull-requests/39) — Original self-contained PactNet consumer/provider POC
+- [RLMS Website JavaScript POC (Bitbucket)](https://bitbucket.org/relias/rlms-website/branch/rthomas/develop/RLPD-49997_pact_proof-of_concept_tests) — Frontend consumer POC
+- [Assessment Service Consumer POC (Bitbucket)](https://bitbucket.org/relias/assessmentservice/branch/rthomas/develop/RLPD-49996_pact_api_to_api_consumer_example_test) — API-to-API consumer example
 
 ## External Resources
 
@@ -387,10 +404,33 @@ If the team already maintains OpenAPI specs and wants zero consumer-side test au
 - [Microsoft CDC Testing Playbook](https://microsoft.github.io/code-with-engineering-playbook/automated-testing/cdc-testing/) — Microsoft's engineering guidance
 - [Pact Docs](https://docs.pact.io/) — Official Pact documentation
 - [PactFlow](https://pactflow.io/) — Managed Pact Broker (commercial, bi-directional support)
+- [Pact AI Tools](https://docs.pact.io/ai_tools/installation) — Official Pact skills, MCP server, and Kiro agent for AI-assisted contract testing
+- [Pact Nirvana Guide](https://docs.pact.io/pact_nirvana) — CI/CD maturity levels (Bronze → Diamond)
 
-## Pact Broker Deployment (Relias ADR)
+## Pact Broker — Production Instance
 
-The architecture team's ADR specifies deploying Pact Broker per environment:
+**URL:** [`https://relias-pactbroker.reliaslearning.com/`](https://relias-pactbroker.reliaslearning.com/)
+**ADR:** `relias-engineering/decision-records-system/platform-foundations/backend/08-Pact-Broker.md` (status: accepted)
+**Config repo:** `relias-engineering/pact-broker` (docker-compose for local dev, README lists services under contract)
+
+### Credentials
+
+| Access | Username | Password |
+|--------|----------|----------|
+| Read/Write | `pactbroker` | Stored in Azure Key Vault: [`relias-pactbroker-kv-001`](https://portal.azure.com/#@ReliasAzureCloud.onmicrosoft.com/resource/subscriptions/e4ab9a4c-5333-4e52-a0e3-fd16c0c8e2f5/resourceGroups/relias-pactbroker-rg/providers/Microsoft.KeyVault/vaults/relias-pactbroker-kv-001/overview) (subscription `e4ab9a4c-5333-4e52-a0e3-fd16c0c8e2f5`, RG `relias-pactbroker-rg`) |
+| Read-Only | `pactbrokerRO` | `Hg&#ePysE2Hst8` |
+
+### Services Under Contract (RPLAT-19223)
+
+| Service | Role | Repo | PR |
+|---------|------|------|----|
+| GRC Library Service | Producer + Consumer | `relias-engineering/grc-library-service` | [#64](https://github.com/relias-engineering/grc-library-service/pull/64) |
+| Policy Manager | Producer | `relias-engineering/policy-manager` | [#243](https://github.com/relias-engineering/policy-manager/pull/243) |
+| Content Scheduler | Consumer | `relias-engineering/content-scheduler` | [#193](https://github.com/relias-engineering/content-scheduler/pull/193) |
+| Content Library Service | Consumer | `relias-engineering/content-library-service` | [#599](https://github.com/relias-engineering/content-library-service/pull/599) |
+| Content Engagement Service | Consumer | `relias-engineering/content-engagement-service` | [#338](https://github.com/relias-engineering/content-engagement-service/pull/338) |
+
+### Environment Deployment (ADR)
 
 | Environment | Purpose |
 |-------------|---------|
@@ -405,6 +445,57 @@ Each broker instance provides:
 - Service dependency visualization
 - Webhook-triggered provider verification
 
+### ⚠️ Duplicate Repo — To Be Deleted
+
+`relias-engineering/contract-testing-server` is a **duplicate** POC broker deployment (Bicep IaC → Azure Container Apps in `relias-int-svc-rg`). It is NOT the real broker. Needs cleanup: delete the repo AND its Azure resources.
+
+## Organizational Context (from #contract-testing Slack channel)
+
+**Slack channel:** [`#contract-testing`](https://relias-engineering.slack.com/archives/C0ATZFS4SBY) (created 2026-04-20 by @jbuda)
+
+### Key Contacts (by Slack handle)
+
+| Handle | Role in Contract Testing |
+|--------|-------------------------|
+| @jbuda | Created channel. Built PactNet POC for GRC backend Service Bus messages. Running Diamond-level `can-i-deploy` (with `--dry-run`). Drove RPLAT-19223 PRs across 5 repos. |
+| @grufino | Deployed production Pact Broker ~1 year ago. Authored the ADR. Provided Pact AI tools link (skills, MCP server, Kiro agent). Raised onboarding/training concerns. |
+| @fhemmer | Created the `contract-testing` POC repo. Pushing for AI skill + reference repo approach. Proposed chapter meeting demos. Reviewed pactbroker version bump PR. |
+| @ganthony | Advocated including contract testing in Golden Path template (health/live check contracts). Suggested rollout via SDC, AI, and Quality Chapter meetings. Proposed scorecards for adoption tracking before hard-gating. |
+| @bhalterman | Concerned about scaffolding cleanup burden in Golden Path. Suggested giving teams time to reach min threshold before enforcement. |
+| @mapaul | Argued Golden Path inclusion forces conscious decision to implement or remove. |
+| @cmutaba | New to the channel, expressed enthusiasm. |
+
+### Agreed Strategy (as of 2026-04-22)
+
+1. **Reference repo + AI skill** as the primary onboarding package (@fhemmer's proposal — agreed)
+2. **Demo sessions** at chapter meetings: SDC, AI Chapter, Quality Chapter (@ganthony's suggestion — agreed)
+3. **Scorecards** for adoption tracking before hard-gating (@ganthony/@bhalterman — agreed)
+4. **Golden Path**: Debated. Consensus leaning toward adding `can-i-deploy` CI/CD step (not full test scaffolding) since no dummy contracts to clean up. Template wouldn't add consumer/producer tests — just pipeline wiring.
+5. **Pact Nirvana level**: @jbuda's PRs target Diamond level (`can-i-deploy` per environment, currently `--dry-run`)
+6. **Pact Broker version**: Updated to `2.138.0-pactbroker2.119.0` (from `2.107.0.1`) — [Bitbucket PR #9](https://bitbucket.org/relias/pactbroker/pull-requests/9)
+
+### Known Concerns (from Slack discussion)
+
+| Concern | Raised By | Status |
+|---------|-----------|--------|
+| **Cross-repo blast radius** — badly implemented contracts can block deployments across multiple repos | @grufino | Open — needs strong onboarding/training |
+| **Knowledge gap** — devs won't know where to look when pipeline fails | @grufino | Open — Pact Broker UI helps but needs training |
+| **Organizational buy-in** — ADR says 100% coverage for 2+ years but adoption is near-zero | @ganthony/@jbuda | Open — need enforcement mechanism |
+| **Golden Path scaffolding cleanup** — adding templates means teams must clean up examples | @bhalterman | Resolved — only add CI/CD wiring, not test scaffolding |
+| **Pact Broker version** — old version can't parse v4 pact specs | @jbuda | Resolved — version bump PR submitted |
+| **Pact Broker deployment** — deployed via ADO pipeline (definition 427) in Bitbucket `relias/pactbroker` | @grufino | Documented |
+
+### Pact AI Tools (mentioned by @grufino)
+
+Pact provides official AI integration: skills, MCP server, and an agent called **Kiro**.
+Docs: [https://docs.pact.io/ai_tools/installation](https://docs.pact.io/ai_tools/installation)
+
+### Infrastructure Notes
+
+- **Pact Broker is deployed from Bitbucket** (`relias/pactbroker`), NOT GitHub — uses ADO pipeline [definition 427](https://dev.azure.com/ReliasEngineering/PlatformDevelopment/_build?definitionId=427)
+- **Environments seeded in Pact Broker** by @jbuda: matches deployment environments for `can-i-deploy` checks
+- **Docker image version**: `pactfoundation/pact-broker:2.138.0-pactbroker2.119.0` (upstream changed tagging convention from simple semver)
+
 ## NuGet Packages
 
 ```xml
@@ -414,6 +505,395 @@ Each broker instance provides:
 <!-- For service virtualization (optional) -->
 <PackageReference Include="WireMock.Net" Version="1.*" />
 ```
+
+## Implement in Your Repo
+
+**This section is the actionable guide for when a developer invokes `/contract-testing implement this in my repo`.** Follow these steps in order. Adapt to the repo's structure, service names, and CI system.
+
+### Step 0: Assess the Repo
+
+Before writing any code, survey the repository:
+
+1. **Find service projects:** `glob **/*.csproj` — identify the main service project(s)
+2. **Find existing test projects:** `glob **/Tests/**/*.csproj` or `glob **/*.Tests.csproj`
+3. **Identify the service role:**
+   - **Consumer** — calls other services via `HttpClient`, `IHttpClientFactory`, or typed clients. Search for: `HttpClient`, `IHttpClientFactory`, `Refit`, `RestSharp`
+   - **Provider** — exposes API endpoints consumed by other services. Has `Controller` or `MinimalApi` endpoints
+   - **Both** — many services are both consumer AND provider
+4. **Find CI pipeline:** Look for `.azuredevops/pipelines/*.yml` (ADO) or `.github/workflows/*.yml` (GHA)
+5. **Check for existing PactNet usage:** `grep -r "PactNet" --include="*.csproj"` and `grep -r "PactBrokerConfig" --include="*.cs"`
+6. **Identify the service's Pact participant name:** Usually matches the service name as it appears in deployment. Ask the developer if unclear.
+
+**Ask the developer:**
+- Which role does this service play? (Consumer / Provider / Both)
+- What is the participant name for the Pact Broker? (e.g., "Content Scheduler Messaging")
+- Which service(s) does it interact with? (for consumer: which provider? for provider: which consumers?)
+- What are the key API endpoints or messages involved?
+
+### Step 1: Create Contract Test Project
+
+Create a dedicated contract test project. Do NOT mix contract tests with unit or integration tests.
+
+```powershell
+# From the repo root
+dotnet new xunit -n YourService.Contract.Tests -o tests/YourService.Contract.Tests
+```
+
+Edit the `.csproj` to add PactNet and reference the service project:
+
+```xml
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PactNet" Version="5.*" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.*" />
+    <PackageReference Include="xunit" Version="2.*" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\YourService\YourService.csproj" />
+  </ItemGroup>
+</Project>
+```
+
+**Add the project to the solution:** `dotnet sln add tests/YourService.Contract.Tests`
+
+### Step 2: Create PactBrokerConfig Helper
+
+This is the env-var-driven config helper. Every service uses the same pattern:
+
+```csharp
+namespace YourService.Contract.Tests.Helpers;
+
+/// <summary>
+/// Centralised Pact Broker configuration. Values are read from environment
+/// variables so CI can inject real broker credentials.
+/// </summary>
+public static class PactBrokerConfig
+{
+    public static string PactDir =>
+        Path.GetFullPath(Path.Combine(
+            AppContext.BaseDirectory, "..", "..", "..", "pacts"));
+
+    public static string? BrokerUrl =>
+        Environment.GetEnvironmentVariable("PACT_BROKER_URL");
+
+    public static string? BrokerUsername =>
+        Environment.GetEnvironmentVariable("PACT_BROKER_USERNAME");
+
+    public static string? BrokerPassword =>
+        Environment.GetEnvironmentVariable("PACT_BROKER_PASSWORD");
+
+    public static string GitCommitSha =>
+        Environment.GetEnvironmentVariable("GIT_COMMIT_SHA") ?? "local";
+
+    public static string GitBranch =>
+        Environment.GetEnvironmentVariable("GIT_BRANCH") ?? "local";
+
+    public static bool IsBrokerConfigured =>
+        !string.IsNullOrWhiteSpace(BrokerUrl)
+        && !string.IsNullOrWhiteSpace(BrokerUsername)
+        && !string.IsNullOrWhiteSpace(BrokerPassword);
+}
+```
+
+### Step 3a: Consumer Test (if this service is a consumer)
+
+The consumer test defines what this service expects from the provider API.
+
+**Key rules:**
+- One test class per provider
+- One test per interaction (endpoint + scenario)
+- Use the consumer's own DTO models, NOT the provider's
+- Only assert on fields the consumer actually reads
+
+```csharp
+using System.Net;
+using PactNet;
+
+namespace YourService.Contract.Tests.Consumer;
+
+public class SomeProviderApiConsumerTests
+{
+    private readonly IPactBuilderV4 _pactBuilder;
+
+    public SomeProviderApiConsumerTests()
+    {
+        var pact = Pact.V4(
+            "YourService",           // ← Consumer participant name
+            "SomeProviderService",   // ← Provider participant name
+            new PactConfig { PactDir = PactBrokerConfig.PactDir });
+        _pactBuilder = pact.WithHttpInteractions();
+    }
+
+    [Fact]
+    [Trait("Category", "Contract")]
+    public async Task GetResource_WhenExists_ReturnsExpectedShape()
+    {
+        _pactBuilder
+            .UponReceiving("a request to get a resource")
+            .Given("resource 1 exists")
+            .WithRequest(HttpMethod.Get, "/api/resources/1")
+            .WillRespond()
+            .WithStatus(HttpStatusCode.OK)
+            .WithHeader("Content-Type", "application/json; charset=utf-8")
+            .WithJsonBody(new
+            {
+                id = 1,
+                name = "Example"
+            });
+
+        await _pactBuilder.VerifyAsync(async ctx =>
+        {
+            // Use the REAL client class from the consumer project
+            var client = new YourApiClient(ctx.MockServerUri);
+            var result = await client.GetResourceAsync(1);
+            Assert.NotNull(result);
+            Assert.Equal("Example", result.Name);
+        });
+    }
+}
+```
+
+### Step 3b: Provider Test (if this service is a provider)
+
+The provider test verifies that this service's actual API matches what consumers expect.
+
+**Critical: PactNet CANNOT use `WebApplicationFactory` or `TestServer`.** The Rust FFI internals require a real TCP socket. Use Kestrel hosting.
+
+**Create the fixture:**
+
+```csharp
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.Hosting.Server.Features;
+
+namespace YourService.Contract.Tests.Provider;
+
+public class YourServiceFixture : IAsyncLifetime
+{
+    public Uri ServerUri { get; private set; } = null!;
+    private IHost _host = null!;
+
+    public async Task InitializeAsync()
+    {
+        _host = Host.CreateDefaultBuilder()
+            .ConfigureWebHostDefaults(web =>
+            {
+                web.UseUrls("http://127.0.0.1:0"); // Random available port
+                web.ConfigureServices(services =>
+                {
+                    // Register your controllers and DI
+                    services.AddControllers()
+                        .AddApplicationPart(typeof(YourController).Assembly);
+                    // Override real dependencies with test doubles
+                    services.AddSingleton<IYourRepository, InMemoryTestRepository>();
+                });
+                web.Configure(app =>
+                {
+                    app.UseMiddleware<ProviderStateMiddleware>();
+                    app.UseRouting();
+                    app.UseEndpoints(endpoints => endpoints.MapControllers());
+                });
+            })
+            .Build();
+
+        await _host.StartAsync();
+        var server = _host.Services.GetRequiredService<IServer>();
+        var addresses = server.Features.Get<IServerAddressesFeature>();
+        ServerUri = new Uri(addresses!.Addresses.First());
+    }
+
+    public async Task DisposeAsync()
+    {
+        await _host.StopAsync();
+        _host.Dispose();
+    }
+}
+```
+
+**Create the provider state middleware:**
+
+```csharp
+using Microsoft.AspNetCore.Http;
+using System.Text.Json;
+
+namespace YourService.Contract.Tests.Provider;
+
+public class ProviderStateMiddleware(RequestDelegate next)
+{
+    private static readonly JsonSerializerOptions JsonOptions = new()
+    {
+        PropertyNameCaseInsensitive = true
+    };
+
+    // Map provider state strings to data-seeding actions
+    private readonly Dictionary<string, Action> _providerStates = new()
+    {
+        ["resource 1 exists"] = () => { /* seed test data */ },
+        ["no resources exist"] = () => { /* clear test data */ },
+    };
+
+    public async Task InvokeAsync(HttpContext context)
+    {
+        if (context.Request.Path.StartsWithSegments("/provider-states"))
+        {
+            var body = await new StreamReader(context.Request.Body).ReadToEndAsync();
+            var state = JsonSerializer.Deserialize<ProviderStateRequest>(body, JsonOptions);
+
+            if (state?.State is not null && _providerStates.TryGetValue(state.State, out var action))
+                action();
+
+            context.Response.StatusCode = 200;
+            return;
+        }
+
+        await next(context);
+    }
+
+    private sealed class ProviderStateRequest
+    {
+        public string? State { get; set; }
+    }
+}
+```
+
+**Create the verification test:**
+
+```csharp
+using PactNet.Verifier;
+using Xunit.Abstractions;
+
+namespace YourService.Contract.Tests.Provider;
+
+public class YourServiceProviderTests(YourServiceFixture fixture, ITestOutputHelper output)
+    : IClassFixture<YourServiceFixture>
+{
+    [Fact]
+    [Trait("Category", "Contract")]
+    public void VerifyPacts()
+    {
+        var config = new PactVerifierConfig
+        {
+            Outputters = [new XUnitOutput(output)]
+        };
+
+        using var verifier = new PactVerifier("YourProviderService", config);
+        verifier.WithHttpEndpoint(fixture.ServerUri);
+
+        IPactVerifierSource source;
+
+        if (PactBrokerConfig.IsBrokerConfigured)
+        {
+            source = verifier.WithPactBrokerSource(
+                new Uri(PactBrokerConfig.BrokerUrl!), options =>
+            {
+                options.BasicAuthentication(
+                    PactBrokerConfig.BrokerUsername!,
+                    PactBrokerConfig.BrokerPassword!);
+                options.ConsumerVersionSelectors(
+                    new ConsumerVersionSelector { MainBranch = true },
+                    new ConsumerVersionSelector { MatchingBranch = true },
+                    new ConsumerVersionSelector { DeployedOrReleased = true }
+                );
+                options.EnablePending();
+                options.PublishResults(PactBrokerConfig.GitCommitSha, cfg =>
+                {
+                    cfg.ProviderBranch(PactBrokerConfig.GitBranch);
+                });
+            });
+        }
+        else
+        {
+            var pactFile = Path.Combine(PactBrokerConfig.PactDir,
+                "ConsumerName-YourProviderService.json");
+            source = verifier.WithFileSource(new FileInfo(pactFile));
+        }
+
+        source
+            .WithProviderStateUrl(new Uri(fixture.ServerUri, "/provider-states"))
+            .Verify();
+    }
+}
+```
+
+### Step 4: Wire CI/CD Pipeline
+
+**For Azure DevOps** (primary at Relias), add a ContractTests stage to your existing pipeline. Copy from the POC repo's `pipelines/` directory:
+
+- **Consumer:** Use `pipelines/consumer-ci.yml` as reference — add the ContractTests stage
+- **Provider:** Use `pipelines/provider-ci.yml` as reference — add the ContractVerification stage
+- **Post-deploy:** Use `pipelines/templates/pact-record-deployment.yml` to record deployments
+
+**Required ADO pipeline variables** (set via Variable Group or pipeline settings):
+
+| Variable | Value | Secret? |
+|----------|-------|---------|
+| `PACT_BROKER_URL` | `https://relias-pactbroker.reliaslearning.com` | No |
+| `PACT_BROKER_USERNAME` | `pactbroker` | Yes |
+| `PACT_BROKER_PASSWORD` | From Key Vault `relias-pactbroker-kv-001` | Yes |
+
+**Key CI/CD patterns:**
+- All contract testing steps gracefully skip when credentials aren't configured
+- Use `--filter "Category=Contract"` to run only contract tests
+- `can-i-deploy` in CI should use `--dry-run` (advisory). The real gate goes in the deploy pipeline
+- `record-deployment` runs AFTER successful deployment, not in CI
+- Pipeline examples target **Linux hosted agents** (`vmImage: ubuntu-latest`)
+
+### Step 5: Add .gitignore Entry
+
+Ensure generated pact files are not committed:
+
+```gitignore
+# Generated pact contract files
+pacts/
+```
+
+### Step 6: Multi-Repo Considerations
+
+Most Relias services are in separate repositories. Key differences from the mono-repo POC:
+
+| Concern | Mono-Repo (POC) | Multi-Repo (Production) |
+|---------|-----------------|------------------------|
+| Pact source for provider | Local file from disk | Pact Broker (via `WithPactBrokerSource`) |
+| Pact publishing | Optional (can use file) | Required — consumer CI must publish to broker |
+| Provider state coordination | Shared code | State strings documented in contract; teams must coordinate |
+| `can-i-deploy` | Against local broker | Against production broker with real environment data |
+| Versioning | Git SHA from same repo | Git SHA from each repo independently |
+
+**Consumer repo responsibilities:**
+1. Generate pact files via consumer tests
+2. Publish pacts to broker with version (git SHA) and branch
+3. Run advisory `can-i-deploy` in CI
+
+**Provider repo responsibilities:**
+1. Verify pacts from broker (not local files)
+2. Publish verification results back to broker
+3. Run `can-i-deploy` gate before deployment
+4. `record-deployment` after successful deployment
+
+### Implementation Checklist
+
+Before reporting success, verify ALL applicable items:
+
+- [ ] Contract test project created and added to solution
+- [ ] `PactBrokerConfig.cs` helper present
+- [ ] Tests have `[Trait("Category", "Contract")]` for filtering
+- [ ] Consumer tests: one test per interaction, using real client class
+- [ ] Provider tests: real TCP socket hosting (NOT `WebApplicationFactory`)
+- [ ] Provider tests: `ProviderStateMiddleware` handles all consumer states
+- [ ] Provider tests: broker verification publishes results with version + branch
+- [ ] `.gitignore` includes `pacts/`
+- [ ] CI pipeline stage added with graceful skip when creds missing
+- [ ] Build succeeds with zero errors
+- [ ] Tests pass locally (in local/file mode)
 
 ## ALWAYS: Log This Interaction
 
