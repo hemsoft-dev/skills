@@ -582,3 +582,6 @@ Result: Created diary/entries/2026-04-21.md with weather, news, Slack (12 items)
 
 2026-04-21 - 22:10 - Fix productivity script PR/review counts always reporting 0, update diary reflections
 Result: Fixed two bugs in Get-TodayProductivity.ps1: (1) gh auth status fails with inactive accounts - replaced with gh auth token, (2) per-repo PR queries miss most activity - replaced with GitHub Search API (gh search prs). Before: PRs=0, Reviews=0. After: PRs=4, Reviews=5, Issues=1. Also added personal reflections to 2026-04-21 diary entry.
+
+2026-04-26 - 14:43 - Create now-leadershipgroup skill for Rebecca's NLG business
+Result: Created V1.0 skill with comprehensive coverage of business overview, tech stack (Next.js 16/React 19/Tailwind 4/Bun), infrastructure accounts (Cloudflare, Vercel, GoDaddy, Network Solutions), DNS/email config, Cloudflare Worker contact form, and active Google Workspace migration plan. Explored full codebase at D:\github\hemsoft\now-leadership-group.
