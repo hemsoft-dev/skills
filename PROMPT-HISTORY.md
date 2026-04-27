@@ -4,6 +4,9 @@ This file tracks meaningful prompts and their outcomes for the Claude Skills rep
 
 ---
 
+2026-04-26 - 23:20 - NLG Google Workspace migration: complete pre-flight, hit Phase 1 blocker
+Result: Completed 8/9 pre-flight items (WHOIS domain check, device inventory, send-as audit, billing/catch-all/SES decisions, IMAP backup deferred). Created DEVICE-INVENTORY.md and Backup-Imap.ps1. Phase 1 signup blocked — Google says hemmer.us "already in use" (Rebecca may have prior account). Documented blocker with resolution steps in TODO.md, SKILL.md, and risk register.
+
 2026-04-21 - 19:50 - Fix OpenRouter app rankings scraping in 060-llm-models.ps1
 Result: Replaced brittle HTML regex scraping with JSON extraction from embedded Next.js hydration data (rankMap.day array). Old regex failed because OpenRouter changed link format from /apps?url= to /apps/{slug}. New approach extracts structured JSON with 20 ranked apps. Added bounds check, null safety, and Format-TokenCount helper.
 

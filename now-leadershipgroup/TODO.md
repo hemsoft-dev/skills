@@ -26,7 +26,7 @@
 
 ## Progress
 
-**Completed: 9 / 21** (43%) — Pre-flight: 8/9 items resolved, only IMAP backup deferred to Phase 3 (2026-04-26)
+**Completed: 9 / 21** (43%) — Pre-flight: 8/9 items resolved, IMAP backup deferred to Phase 3. **Phase 1 BLOCKED:** Google says hemmer.us "already in use" — Rebecca may have a prior Google account (2026-04-26)
 
 **Hard deadline: July 2, 2026** — Network Solutions email renewal + hemmer.us domain expiry
 
@@ -87,6 +87,18 @@ Must complete before starting Phase 1.
 ### Phase 1: Sign up for Google Workspace
 
 **Risk:** 🟢 Low — no changes to live systems
+
+**⚠️ BLOCKER (2026-04-26):** Google says "This domain name is already in use" when signing up with `hemmer.us`. Rebecca may have previously attempted a Google Workspace signup, associating the domain with an existing Google account.
+
+**Resolution steps:**
+
+1. Ask Rebecca if she has a Google Workspace / G Suite / Google Apps account for hemmer.us
+2. Try signing in at [admin.google.com](https://admin.google.com) with `rebecca@hemmer.us`, `franz@hemmer.us`, or `admin@hemmer.us`
+3. If an old account is found: either recover it and reuse, or remove the domain from that account
+4. If no account found: use Google's "already own this domain" flow — prove ownership via DNS TXT record
+5. Last resort: contact [Google Workspace support](https://support.google.com/a/answer/1047213) with domain registrar proof
+
+**Original checklist (resume after blocker resolved):**
 
 - [ ] Sign up at [workspace.google.com](https://workspace.google.com) — Business Starter plan
 - [ ] Use `hemmer.us` as the primary domain
@@ -321,6 +333,7 @@ Worker (`nlg-contact-form`) is deployed at `https://nlg-contact-form.nlg.workers
 
 | Risk | Impact | Mitigation |
 |------|--------|------------|
+| **Domain "already in use" at Google** | **High** | **ACTIVE** — Rebecca may have prior Google account. Try admin.google.com login, domain recovery, or Google support |
 | Email loss during MX cutover | High | Migrate data first, keep NS mailboxes as fallback, cutover at low-traffic time |
 | DNS propagation delay | Medium | Cloudflare has ~5 min TTL; allow 24-48hr buffer for ISP caches |
 | Devices not updated after cutover | Medium | Inventory all devices in pre-flight, update same day as MX switch |

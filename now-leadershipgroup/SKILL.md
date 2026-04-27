@@ -365,7 +365,8 @@ Rebecca sent a test from Outlook to `fhemmer@relias.com`. Full auth results:
 
 | Phase | Description | Risk | Status |
 |-------|-------------|------|--------|
-| 1 | Set up Google Workspace | 🟢 Low | Pending |
+| Pre-flight | Inventory, backup, decisions | 🟢 Low | ✅ 8/9 complete (IMAP backup deferred to Phase 3) |
+| 1 | Set up Google Workspace | 🟢 Low | ⚠️ **BLOCKED** — Google says hemmer.us "already in use" |
 | 2 | Migrate hemmer.us DNS to Cloudflare | 🟡 Medium | Pending |
 | 3 | Migrate email data (IMAP) | 🟢 Low | Pending |
 | 4 | Switch MX records to Google | 🔴 High | Pending |
@@ -382,9 +383,10 @@ Rebecca sent a test from Outlook to `fhemmer@relias.com`. Full auth results:
 
 ### Known Issues
 
+- **⚠️ Phase 1 BLOCKED (2026-04-26):** Google Workspace signup says hemmer.us "already in use." Rebecca may have previously attempted signup, associating the domain with an existing Google account. Next steps: try admin.google.com login, domain recovery, or Google support.
 - Network Solutions DKIM not signing on SMTP (ticket E-502096, no ETA)
 - Contact form worker uses Cloudflare Email Routing `send_email` binding — may break when NLG email moves to Google Workspace
-- Amazon SES subdomain (`send.updates.hemmer.us`) needs preservation or decommissioning
+- Amazon SES subdomain (`send.updates.hemmer.us`) — confirmed decommission, delete MX in Phase 2
 - `contact@hemmer.us` and `info@nowleadershipgroup.com` not explicitly routed
 
 ## Current TODO Status
