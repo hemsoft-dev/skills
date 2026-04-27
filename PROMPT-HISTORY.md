@@ -594,3 +594,8 @@ Result: Created comprehensive TODO.md (todo skill format) with pre-flight checkl
 
 2026-04-26 - 19:25 - NLG pre-flight: domain WHOIS check and migration decisions
 Result: Confirmed hemmer.us is LOCKED (clientTransferProhibited) at Domain.com LLC registrar, expiry 2026-07-02. Made default decisions for 4 pre-flight items (annual billing, retire rebecca.online, no catch-all, SES needs investigation). Updated TODO.md and SKILL.md.
+
+2026-04-26 - 23:59 - Scaffold diary entry for 2026-04-26 (Sunday)
+Result: Assembled full diary entry with weather, news (4 categories), Slack (5 items, quiet Sunday), daily numbers (markets closed, GitHub 260 repos, Bitbucket 562, Copilot 17466/1000, Cloudflare deltas computed), LLM models (carried forward from 4/21), trending repos (5 with star counts), software watchlist (carried forward), 2 meetings (Prod Eng Standup + AI Task Force with detailed transcript), productivity (all zeros, Sunday acceptable). No watchlist updates or screenshots.
+2026-04-27 - 01:13 - Add GPT 5.4 Image 2 as elite option to generate-image skill
+Result: Added -Elite flag to generate-image.ps1 and updated SKILL.md (V2.1). Elite mode uses openai/gpt-5.4-image-2 via OpenRouter, only triggered by explicit user request.

@@ -1,17 +1,19 @@
 <#
 .SYNOPSIS
-    Generates an image using Nano Banana 2 (Gemini 3.1 Flash Image) via OpenRouter API.
+    Generates an image using Nano Banana 2 (default) or GPT 5.4 Image 2 (elite) via OpenRouter API.
 
 .DESCRIPTION
-    Uses google/gemini-3.1-flash-image-preview — Pro-level visual quality at Flash speed and cost.
-    Cost: ~$0.08-0.12/image
-    Supports contextual understanding, image editing, and multi-turn conversations.
+    Default: google/gemini-3.1-flash-image-preview — Pro-level visual quality at Flash speed (~$0.08-0.12/image).
+    Elite:   openai/gpt-5.4-image-2 — Premium quality ($8/$15/$30 per 1M tokens). Use only when explicitly requested.
 
 .PARAMETER Prompt
     The text prompt describing the image to generate.
 
 .PARAMETER OutputPath
     The full absolute path where the image will be saved.
+
+.PARAMETER Elite
+    Use GPT 5.4 Image 2 instead of the default Nano Banana 2. Significantly more expensive.
 
 .PARAMETER Preview
     Opens the generated image in Directory Opus viewer after saving.
@@ -20,9 +22,10 @@
     .\generate-image.ps1 -Prompt "A futuristic cityscape at night" -OutputPath "D:\city.png"
 
 .EXAMPLE
-    .\generate-image.ps1 -Prompt "A futuristic cityscape at night" -OutputPath "D:\city.png" -Preview
+    .\generate-image.ps1 -Prompt "A futuristic cityscape at night" -OutputPath "D:\city.png" -Elite -Preview
 #>
 
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'Preview', Justification = 'Used inside Save-Image function')]
 param(
     [Parameter(Mandatory = $true, Position = 0)]
     [string]$Prompt,
@@ -31,12 +34,22 @@ param(
     [string]$OutputPath,
 
     [Parameter(Mandatory = $false)]
+    [switch]$Elite,
+
+    [Parameter(Mandatory = $false)]
     [switch]$Preview
 )
 
 $InformationPreference = 'Continue'
 $ErrorActionPreference = "Stop"
-$Model = "google/gemini-3.1-flash-image-preview"
+
+if ($Elite) {
+    $Model = "openai/gpt-5.4-image-2"
+    $ModelLabel = "GPT 5.4 Image 2 (Elite)"
+} else {
+    $Model = "google/gemini-3.1-flash-image-preview"
+    $ModelLabel = "Nano Banana 2 (Gemini 3.1 Flash Image)"
+}
 
 # Validate OutputPath
 if (-not [System.IO.Path]::IsPathRooted($OutputPath)) {
@@ -54,7 +67,7 @@ $apiKey = [Environment]::GetEnvironmentVariable("OPENROUTER_API_KEY", "User")
 if (-not $apiKey) { $apiKey = $env:OPENROUTER_API_KEY }
 if (-not $apiKey) { throw "OPENROUTER_API_KEY not set" }
 
-Write-Information "`e[36mGenerating with Nano Banana 2 (Gemini 3.1 Flash Image)...`e[0m"
+Write-Information "`e[36mGenerating with $ModelLabel...`e[0m"
 
 $body = @{
     model    = $Model

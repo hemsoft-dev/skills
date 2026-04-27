@@ -1,19 +1,24 @@
 ---
 name: generate-image
-description: V2.0 - Generates images from text prompts using Nano Banana 2 (Gemini 3.1 Flash Image) via OpenRouter API. Pro-level quality at Flash speed. Includes automatic credit balance tracking.
+description: V2.1 - Generates images from text prompts using Nano Banana 2 (default) or GPT 5.4 Image 2 (elite) via OpenRouter API. Pro-level quality at Flash speed. Elite mode for premium quality on demand.
 ---
 
 # Generate Image
 
 **Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
-Generate images from text descriptions using **Nano Banana 2** (Gemini 3.1 Flash Image Preview) — Pro-level visual quality at Flash speed and cost (~$0.08-0.12/image).
+Generate images from text descriptions using **Nano Banana 2** (default) or **GPT 5.4 Image 2** (elite).
+
+**Default behavior**: Always use Nano Banana 2. Only use GPT 5.4 Image 2 when the user explicitly requests it or asks for an "elite" image.
 
 ## Usage
 
 ```powershell
-# Basic
+# Basic (Nano Banana 2 — default)
 & $env:USERPROFILE\.agents\skills\generate-image\scripts\generate-image.ps1 -Prompt "Your prompt" -OutputPath "D:\image.png"
+
+# Elite mode (GPT 5.4 Image 2 — premium)
+& $env:USERPROFILE\.agents\skills\generate-image\scripts\generate-image.ps1 -Prompt "Your prompt" -OutputPath "D:\image.png" -Elite
 
 # With Directory Opus preview
 & $env:USERPROFILE\.agents\skills\generate-image\scripts\generate-image.ps1 -Prompt "Your prompt" -OutputPath "D:\image.png" -Preview
@@ -25,6 +30,7 @@ Generate images from text descriptions using **Nano Banana 2** (Gemini 3.1 Flash
 |-----------|----------|-------------|
 | `-Prompt` | Yes | The text prompt describing the image to generate |
 | `-OutputPath` | Yes | Absolute path where the image will be saved |
+| `-Elite` | No | Use GPT 5.4 Image 2 instead of default. **Only when user explicitly requests elite/premium quality.** |
 | `-Preview` | No | Opens the generated image in Directory Opus viewer after saving |
 
 ## Requirements
@@ -124,17 +130,29 @@ After each image generation, the system automatically displays your OpenRouter c
 & $env:USERPROFILE\.agents\skills\generate-image\scripts\Get-OpenRouterBalance.ps1
 ```
 
-## Model Info
+## Models
+
+### Default: Nano Banana 2
 
 | Property | Value |
 |----------|-------|
 | Model ID | `google/gemini-3.1-flash-image-preview` |
-| Nickname | Nano Banana 2 |
 | Quality | Pro-level |
 | Speed | Flash (fast) |
 | Cost | ~$0.08-0.12/image |
 | Released | Feb 26, 2026 |
-| Features | Contextual understanding, image editing, multi-turn, aspect ratio control |
+| When | Always, unless user requests elite |
+
+### Elite: GPT 5.4 Image 2
+
+| Property | Value |
+|----------|-------|
+| Model ID | `openai/gpt-5.4-image-2` |
+| Quality | Premium |
+| Speed | Moderate |
+| Cost | $8/1M input, $15/1M output, $30/1M image tokens |
+| Released | Apr 21, 2026 |
+| When | **Only** when user explicitly asks for elite/premium or says "GPT 5.4" |
 
 ## Technical Notes
 
@@ -152,6 +170,7 @@ Nano Banana 2 returns images via `choices[0].message.images[]` array with base64
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 2.1 | 2026-04-27 | Added GPT 5.4 Image 2 as elite option via `-Elite` flag. Default remains Nano Banana 2. |
 | 2.0 | 2026-03-01 | Hardwired to Nano Banana 2 (Gemini 3.1 Flash Image). Removed multi-model scripts. Single script simplicity. |
 | 1.6 | 2026-02-28 | Added Nano Banana Pro script |
 | 1.5 | 2026-01-06 | Added OpenRouter credit balance tracking after each generation |
