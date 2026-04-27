@@ -1,14 +1,17 @@
 # Secrets and encryption keys
+
 .secrets/
 .age/
 *.age
 
 # Environment files
+
 .env
 .env.local
 .env.*.local
 
 # IDE
+
 .vscode/
 .idea/
 *.swp
@@ -16,24 +19,30 @@
 *~
 
 # OS
+
 .DS_Store
 Thumbs.db
 
 # Logs
+
 *.log
 
 # Temporary files
+
 tmp/
 temp/
 *.tmp
 
 # Python virtual environments
+
 browser-use/venv/
 
 # YouTube processor output files
+
 youtube-processor/output/
 
 # ChatGPT export files (including large HTML/JSON exports)
+
 me/gpt-export/**/*.html
 me/gpt-export/**/*.json
 me/gpt-export/**/*.png
@@ -61,3 +70,7 @@ me/gpt-export/**/*.so
 me/gpt-export/**/*.dylib
 me/gpt-export/**/*.bin
 me/gpt-export/**/*.dat
+
+# NLG email backup (IMAP download from Network Solutions)
+
+now-leadershipgroup/imap-backup/

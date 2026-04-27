@@ -26,7 +26,7 @@
 
 ## Progress
 
-**Completed: 9 / 21** (43%) — Pre-flight: 4/9 items resolved (2026-04-26)
+**Completed: 9 / 21** (43%) — Pre-flight: 6/9 items resolved (2026-04-26)
 
 **Hard deadline: July 2, 2026** — Network Solutions email renewal + hemmer.us domain expiry
 
@@ -62,9 +62,15 @@ Network Solutions confirmed (ticket E-502096) their SMTP relay **does not sign D
 
 Must complete before starting Phase 1.
 
-- [ ] Inventory ALL devices using hemmer.us email (Rebecca's iPhone, Franz's phone, Outlook desktop, other clients)
-- [ ] Inventory all "Send as" configurations — Rebecca sends as `rebecca@nowleadershipgroup.com` from Outlook
+- [x] Inventory ALL devices using hemmer.us email → **See [DEVICE-INVENTORY.md](DEVICE-INVENTORY.md)** *(completed 2026-04-26)*
+  - Franz: PC (Outlook), iPhone (Mail.app), iPad (Mail.app)
+  - Rebecca: PC (Outlook), iPhone (Mail.app), iPad (Mail.app)
+- [x] Inventory all "Send as" configurations → **Rebecca only** *(completed 2026-04-26)*
+  - Sends as `rebecca@nowleadershipgroup.com` from Outlook desktop
+  - Possibly also from iPhone — verify during Phase 4
 - [ ] Back up all email from Network Solutions (IMAP download to local archive)
+  - Backup script ready: `Backup-Imap.ps1` → saves to `imap-backup/{username}/`
+  - ⚠️ **Needs IMAP credentials** — run for both `franz@hemmer.us` and `rebecca@hemmer.us`
 - [ ] Note any email filters/rules configured at Network Solutions or in email clients
 - [x] Check hemmer.us domain lock status *(checked 2026-04-26)*
   - **Status: LOCKED** (`clientTransferProhibited`) — must unlock before Phase 6
