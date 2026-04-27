@@ -70,7 +70,7 @@ Must complete before starting Phase 1.
   - Possibly also from iPhone — verify during Phase 4
 - [ ] Back up all email from Network Solutions (IMAP download to local archive)
   - Backup script ready: `Backup-Imap.ps1` → saves to `imap-backup/{username}/`
-  - ⚠️ **Needs IMAP credentials** — run for both `franz@hemmer.us` and `rebecca@hemmer.us`
+  - ⚠️ **Skipped for now** — mail skill's hemmer.us child scripts not wired up, and IMAP env vars not set. Can revisit manually or during Phase 3 (Google Workspace has built-in IMAP migration).
 - [ ] Note any email filters/rules configured at Network Solutions or in email clients
 - [x] Check hemmer.us domain lock status *(checked 2026-04-26)*
   - **Status: LOCKED** (`clientTransferProhibited`) — must unlock before Phase 6
