@@ -26,7 +26,7 @@
 
 ## Progress
 
-**Completed: 9 / 21** (43%) — Pre-flight: 6/9 items resolved (2026-04-26)
+**Completed: 9 / 21** (43%) — Pre-flight: 8/9 items resolved, only IMAP backup deferred to Phase 3 (2026-04-26)
 
 **Hard deadline: July 2, 2026** — Network Solutions email renewal + hemmer.us domain expiry
 
@@ -71,7 +71,7 @@ Must complete before starting Phase 1.
 - [ ] Back up all email from Network Solutions (IMAP download to local archive)
   - Backup script ready: `Backup-Imap.ps1` → saves to `imap-backup/{username}/`
   - ⚠️ **Skipped for now** — mail skill's hemmer.us child scripts not wired up, and IMAP env vars not set. Can revisit manually or during Phase 3 (Google Workspace has built-in IMAP migration).
-- [ ] Note any email filters/rules configured at Network Solutions or in email clients
+- [x] Note any email filters/rules configured at Network Solutions or in email clients → **None** *(confirmed 2026-04-26)*
 - [x] Check hemmer.us domain lock status *(checked 2026-04-26)*
   - **Status: LOCKED** (`clientTransferProhibited`) — must unlock before Phase 6
   - **Registrar: Domain.com, LLC** (Network Solutions family — admin may be at domain.com portal)
@@ -80,8 +80,7 @@ Must complete before starting Phase 1.
 - [x] Decide: annual billing ($7/user/mo) or monthly ($8.40/user/mo) → **Annual ($7/user/mo)** — saves ~$34/yr, committed to migration *(decided 2026-04-26)*
 - [x] Decide: keep catch-all for hemmer.us? → **No** — create explicit aliases only (`contact@hemmer.us`, etc.), reduces spam *(decided 2026-04-26)*
 - [x] Decide: is `rebecca.online@hemmer.us` still needed? → **No, retire it** — not referenced in any active workflows *(decided 2026-04-26)*
-- [ ] Decide: decommission Amazon SES subdomain (`send.updates.hemmer.us`) or preserve?
-  - ⚠️ **Needs investigation** — MX record still active (`feedback-smtp.us-east-1.amazonses.com`). Ask Rebecca/Franz if anything sends email via this subdomain (newsletters, notifications, etc.)
+- [x] Decide: decommission Amazon SES subdomain (`send.updates.hemmer.us`) or preserve? → **Decommission** — not in use *(decided 2026-04-26)*
 
 ---
 
@@ -121,7 +120,7 @@ Must complete before starting Phase 1.
 | CNAME | www | Vercel DNS | ✅ <www.hemmer.us> |
 | CNAME | dashboard | Vercel DNS | ✅ dashboard.hemmer.us |
 | MX | @ | `mx.hemmer.us` (pri 30) | ✅ Keep — email still at NS during transition |
-| MX | send.updates | `feedback-smtp.us-east-1.amazonses.com` | ⚠️ Amazon SES subdomain |
+| MX | send.updates | `feedback-smtp.us-east-1.amazonses.com` | ❌ **Delete** — Amazon SES not in use (confirmed 2026-04-26) |
 | TXT | @ (SPF) | `v=spf1 ip4:66.96.128.0/18 include:websitewelcome.com ~all` | ✅ Keep for now |
 | TXT | _dmarc | `v=DMARC1; p=none; rua=mailto:rebecca@hemmer.us,mailto:franz@hemmer.us` | ✅ |
 | CNAME | dkim._domainkey | `cur.dkim.v.eigmail.net` | Keep (broken but harmless) |
