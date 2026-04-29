@@ -28,7 +28,9 @@ param(
 $ErrorActionPreference = 'Stop'
 $InformationPreference = 'Continue'
 
-$entriesDir = Join-Path $PSScriptRoot '..' 'entries'
+$year = $Date.Substring(0, 4)
+$month = $Date.Substring(5, 2)
+$entriesDir = Join-Path $PSScriptRoot '..' 'entries' $year $month
 $entryPath = Join-Path $entriesDir "$Date.md"
 
 # Validate: entry must not already exist

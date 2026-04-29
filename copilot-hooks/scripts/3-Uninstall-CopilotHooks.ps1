@@ -91,78 +91,76 @@ function Remove-HuskyBlock {
     }
 }
 
-function Remove-StopHookEntry {
-    param(
-        [Parameter(Mandatory = $true)]
-        [string]$HooksJsonPath,
-
-        [Parameter(Mandatory = $true)]
-        [switch]$Force
-    )
-
-    if (-not (Test-Path $HooksJsonPath)) {
-        return
-    }
-
-    try {
-        $hooksObj = Get-Content -Path $HooksJsonPath -Raw | ConvertFrom-Json
-        if ($null -eq $hooksObj.hooks) {
-            return
-        }
-
-        $updated = $false
-        if ($null -ne $hooksObj.hooks.PSObject.Properties['sessionEnd']) {
-            $before = @($hooksObj.hooks.sessionEnd)
-            $after = @(
-                $before | Where-Object {
-                    $bash = "$($_.bash)"
-                    -not ($bash -match '\.github/scripts/auto-commit\.sh')
-                }
-            )
-
-            if ($after.Count -ne $before.Count) {
-                if ($after.Count -gt 0) {
-                    $hooksObj.hooks.sessionEnd = $after
-                }
-                else {
-                    $hooksObj.hooks.PSObject.Properties.Remove('sessionEnd')
-                }
-                $updated = $true
-            }
-        }
-
-        if ($null -ne $hooksObj.hooks.PSObject.Properties['Stop']) {
-            $hooksObj.hooks.PSObject.Properties.Remove('Stop')
-            $updated = $true
-        }
-
-        if ($updated) {
-            $hooksObj | ConvertTo-Json -Depth 10 | Set-Content -Path $HooksJsonPath -Encoding utf8NoBOM
-            Write-Ok "Removed managed sessionEnd hook entry from: $HooksJsonPath"
-        }
-    } catch {
-        if (-not $Force) {
-            throw "Could not parse $HooksJsonPath. Use -Force to skip JSON entry cleanup."
-        }
-        Write-Warn "Skipping hooks.json entry removal due to parse error (forced): $HooksJsonPath"
-    }
-}
-
 $repoRoot = Get-RepoRoot -Path $RepoPath
 $activeHooksPath = Get-ActiveHooksPath -RepoRoot $repoRoot
 $hooksDir = Join-Path $repoRoot '.git/hooks'
 
+# File paths
 $preCommitPath = Join-Path $hooksDir 'pre-commit'
 $preCommitMarkdownPath = Join-Path $hooksDir 'pre-commit-markdown.ps1'
 $markdownConfigPath = Join-Path $repoRoot '.markdownlint.jsonc'
 $huskyPreCommitPath = Join-Path $repoRoot '.husky/pre-commit'
-$copilotHooksJsonPath = Join-Path $repoRoot '.github/hooks/hooks.json'
-$copilotAutoCommitScriptPath = Join-Path $repoRoot '.github/scripts/auto-commit.sh'
-$legacyStandaloneHookJsonPath = Join-Path $repoRoot '.github/hooks/session-stop-autopush.json'
-$legacyCopilotStopScriptPath = Join-Path $repoRoot '.github/hooks/Invoke-AgentSessionAutoPush.ps1'
+
+$copilotHooksDir = Join-Path $repoRoot '.github/hooks'
+$copilotHooksJsonPath = Join-Path $copilotHooksDir 'hooks.json'
+$playDonePs1Path = Join-Path $copilotHooksDir 'play-done.ps1'
+$playDoneShPath = Join-Path $copilotHooksDir 'play-done.sh'
+$logPromptPs1Path = Join-Path $copilotHooksDir 'Log-Prompt.ps1'
+$logPromptShPath = Join-Path $copilotHooksDir 'log-prompt.sh'
+$autoCommitShPath = Join-Path $copilotHooksDir 'auto-commit.sh'
+$hooksSettingsPath = Join-Path $copilotHooksDir 'hooks-settings.json'
+$audioFilePath = Join-Path $copilotHooksDir 'done.mp3'
+
+# Legacy paths
+$legacyStandaloneHookJsonPath = Join-Path $copilotHooksDir 'session-stop-autopush.json'
+$legacyCopilotStopScriptPath = Join-Path $copilotHooksDir 'Invoke-AgentSessionAutoPush.ps1'
 $copilotStopScriptPath = Join-Path $repoRoot 'copilot/scripts/Invoke-AgentSessionAutoPush.ps1'
+$legacyScriptsAutoCommitPath = Join-Path $repoRoot '.github/scripts/auto-commit.sh'
 
 try {
+    # ─────────────────────────────────────────────────────────────────────────
+    # Copilot CLI hooks
+    # ─────────────────────────────────────────────────────────────────────────
+
+    Remove-ManagedFile -Path $playDonePs1Path -Marker 'Managed by copilot-hooks skill' -Label 'play-done.ps1 (audio notification)'
+    Remove-ManagedFile -Path $playDoneShPath -Marker 'Managed by copilot-hooks skill' -Label 'play-done.sh (audio notification)'
+    Remove-ManagedFile -Path $logPromptPs1Path -Marker 'Managed by copilot-hooks skill' -Label 'Log-Prompt.ps1 (prompt logging)'
+    Remove-ManagedFile -Path $logPromptShPath -Marker 'Managed by copilot-hooks skill' -Label 'log-prompt.sh (prompt logging)'
+    Remove-ManagedFile -Path $autoCommitShPath -Marker 'Managed by copilot-hooks skill' -Label 'auto-commit.sh (session-end)'
+
+    # hooks.json - remove entirely if managed, otherwise remove just our entries
+    if (Test-Path $copilotHooksJsonPath) {
+        $hjContent = Get-Content -Path $copilotHooksJsonPath -Raw
+        # If it only has our managed hooks (postToolUse, userPromptSubmitted, sessionEnd), remove it
+        $hasOnlyOurHooks = $hjContent -match 'play-done' -and $hjContent -match '[Ll]og-[Pp]rompt' -and $hjContent -match 'auto-commit'
+        if ($hasOnlyOurHooks -or $Force) {
+            Remove-Item -Path $copilotHooksJsonPath -Force
+            Write-Ok "Removed: hooks.json"
+        } else {
+            Write-Warn "hooks.json has custom entries - not removing (use -Force to override)"
+        }
+    }
+
+    # Settings file (optional, user may want to keep)
+    if ((Test-Path $hooksSettingsPath) -and $Force) {
+        Remove-Item -Path $hooksSettingsPath -Force
+        Write-Ok "Removed: hooks-settings.json"
+    } elseif (Test-Path $hooksSettingsPath) {
+        Write-Warn "Kept hooks-settings.json (use -Force to remove)"
+    }
+
+    # Audio file (user-provided, only remove with -Force)
+    if ((Test-Path $audioFilePath) -and $Force) {
+        Remove-Item -Path $audioFilePath -Force
+        Write-Ok "Removed: done.mp3"
+    } elseif (Test-Path $audioFilePath) {
+        Write-Warn "Kept done.mp3 (user-provided, use -Force to remove)"
+    }
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # Pre-commit hooks
+    # ─────────────────────────────────────────────────────────────────────────
+
     Remove-ManagedFile -Path $preCommitPath -Marker 'Managed by copilot-hooks skill' -Label 'pre-commit hook'
     Remove-ManagedFile -Path $preCommitMarkdownPath -Marker 'Managed by copilot-hooks skill' -Label 'pre-commit-markdown hook'
     Remove-ManagedFile -Path $markdownConfigPath -Marker 'Managed by copilot-hooks skill' -Label 'starter markdownlint config'
@@ -171,8 +169,11 @@ try {
         Remove-HuskyBlock -Path $huskyPreCommitPath
     }
 
-    Remove-ManagedFile -Path $copilotAutoCommitScriptPath -Marker 'Managed by copilot-hooks skill' -Label 'Copilot sessionEnd auto-commit shell script'
-    Remove-StopHookEntry -HooksJsonPath $copilotHooksJsonPath -Force:$Force
+    # ─────────────────────────────────────────────────────────────────────────
+    # Legacy artifacts
+    # ─────────────────────────────────────────────────────────────────────────
+
+    Remove-ManagedFile -Path $legacyScriptsAutoCommitPath -Marker 'Managed by copilot-hooks skill' -Label 'Legacy .github/scripts/auto-commit.sh'
     Remove-ManagedFile -Path $legacyStandaloneHookJsonPath -Marker 'copilot/scripts/Invoke-AgentSessionAutoPush.ps1' -Label 'Legacy standalone Stop hook profile'
     Remove-ManagedFile -Path $legacyCopilotStopScriptPath -Marker 'Managed by copilot-hooks skill' -Label 'Legacy Copilot Stop auto-push script'
     Remove-ManagedFile -Path $copilotStopScriptPath -Marker 'Managed by copilot-hooks skill' -Label 'Legacy copilot/scripts PowerShell hook'

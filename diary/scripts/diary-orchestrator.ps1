@@ -28,7 +28,9 @@ $ErrorActionPreference = 'Stop'
 $InformationPreference = 'Continue'
 
 $scriptDir = $PSScriptRoot
-$entriesDir = Join-Path $scriptDir '..' 'entries'
+$year = $Date.Substring(0, 4)
+$month = $Date.Substring(5, 2)
+$entriesDir = Join-Path $scriptDir '..' 'entries' $year $month
 
 if (-not (Test-Path $entriesDir)) {
     New-Item -ItemType Directory -Path $entriesDir -Force | Out-Null

@@ -31,7 +31,9 @@ $configDir = Join-Path $PSScriptRoot '..' 'config'
 $templatePath = Join-Path $configDir 'yyyy-mm-dd.md'
 
 if (-not $EntryPath) {
-    $entriesDir = Join-Path $PSScriptRoot '..' 'entries'
+    $year = $Date.Substring(0, 4)
+    $month = $Date.Substring(5, 2)
+    $entriesDir = Join-Path $PSScriptRoot '..' 'entries' $year $month
     if (-not (Test-Path $entriesDir)) {
         New-Item -ItemType Directory -Path $entriesDir -Force | Out-Null
     }

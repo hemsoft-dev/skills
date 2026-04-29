@@ -1,16 +1,18 @@
 ---
 name: copilot-hooks
-description: "V1.11 - Commands: install, verify, uninstall. Reuse this repo's proven pre-commit hook setup in other repositories with compatible agentStop plus sessionEnd shell wiring."
+description: "V2.0 - Commands: install, verify, uninstall. Deploy the full Copilot CLI hook system: audio notifications on task_complete, prompt logging, debug tracing, session-end auto-commit, and pre-commit markdown linting."
 ---
 
 # Copilot Hooks
 
 When user activates this skill without specifying an action, do `install` against the current working directory.
 
-This skill now installs two related systems:
+This skill installs a proven, battle-tested Copilot CLI hook system with four capabilities:
 
-1. Git commit-time Markdown quality gates (`pre-commit` flow).
-2. Copilot session-end automation (`stage + auto-commit + push` flow).
+1. **Audio notification** — plays a sound when `task_complete` fires (turn is over).
+2. **Prompt logging** — captures user prompts to a debug log (marks turn starts).
+3. **Session-end auto-commit** — stages + commits + pushes remaining changes on session end.
+4. **Pre-commit markdown linting** — blocks commits with markdownlint violations.
 
 The install process is Husky-aware and avoids the common trap where `.git/hooks/pre-commit` exists but Git actually executes `.husky/_`.
 
@@ -18,39 +20,74 @@ The install process is Husky-aware and avoids the common trap where `.git/hooks/
 
 | File | Location | Purpose |
 | --- | --- | --- |
-| `pre-commit` | `.git/hooks/pre-commit` | Shell wrapper that runs PowerShell-based checks |
-| `pre-commit-markdown.ps1` | `.git/hooks/pre-commit-markdown.ps1` | Lints staged Markdown files with `markdownlint-cli2` |
-| `.markdownlint.jsonc` (optional) | Repo root | Starter markdownlint config if missing |
-| Husky markdown gate block | `.husky/pre-commit` | Calls `.git/hooks/pre-commit-markdown.ps1` when `core.hooksPath=.husky/_` |
-| `auto-commit.sh` | `.github/scripts/auto-commit.sh` | Copilot session-end hook script that stages changes, creates a timestamped auto-commit, and pushes when possible |
-| `hooks.json` | `.github/hooks/hooks.json` | Registers the managed shell script on `sessionEnd` and `agentStop`, with a Windows `sh` override to avoid broken WSL `bash.exe` routing |
+| `hooks.json` | `.github/hooks/hooks.json` | Registers all Copilot CLI hooks (postToolUse, userPromptSubmitted, sessionEnd) |
+| `play-done.ps1` | `.github/hooks/play-done.ps1` | Audio notification on task_complete (Windows/PowerShell) |
+| `play-done.sh` | `.github/hooks/play-done.sh` | Audio notification on task_complete (macOS/Linux) |
+| `Log-Prompt.ps1` | `.github/hooks/Log-Prompt.ps1` | Prompt logging + debug tracing (Windows/PowerShell) |
+| `log-prompt.sh` | `.github/hooks/log-prompt.sh` | Prompt logging + debug tracing (macOS/Linux) |
+| `auto-commit.sh` | `.github/hooks/auto-commit.sh` | Session-end auto-commit + push |
+| `hooks-settings.json` | `.github/hooks/hooks-settings.json` | Optional settings (audio enable/disable) |
+| `done.mp3` | `.github/hooks/done.mp3` | Audio file (user must provide) |
+| `pre-commit` | `.git/hooks/pre-commit` | Shell wrapper for pre-commit checks |
+| `pre-commit-markdown.ps1` | `.git/hooks/pre-commit-markdown.ps1` | Lints staged Markdown files |
+| `.markdownlint.jsonc` | Repo root | Starter markdownlint config if missing |
+| Husky markdown gate block | `.husky/pre-commit` | Calls markdown lint when Husky is active |
 
 ## Commands
 
 | Command | Script | Typical Use |
 | --- | --- | --- |
-| `install` | `scripts/1-Install-CopilotHooks.ps1` | Add hook files to a repo |
-| `verify` | `scripts/2-Verify-CopilotHooks.ps1` | Confirm hook files and baseline wiring |
-| `uninstall` | `scripts/3-Uninstall-CopilotHooks.ps1` | Remove files managed by this skill |
+| `install` | `scripts/1-Install-CopilotHooks.ps1` | Add all hook files to a repo |
+| `verify` | `scripts/2-Verify-CopilotHooks.ps1` | Confirm hook files and wiring |
+| `uninstall` | `scripts/3-Uninstall-CopilotHooks.ps1` | Remove all managed files |
 
-## Scope Clarification
+## Prerequisites
 
-- `Git hooks`: run at commit time (`pre-commit`).
-- `Copilot sessionEnd hook`: runs when the Copilot session ends, stages remaining changes, creates a timestamped auto-commit, and pushes when possible.
+- **FFmpeg** — required for audio notification (`ffplay` command). Install via `winget install ffmpeg` or `brew install ffmpeg`.
+- **jq** — required on Linux/macOS for JSON parsing in bash hooks. Install via package manager.
+- **markdownlint-cli2** — required for pre-commit markdown linting. Install via `npm install -g markdownlint-cli2`.
 
-If session-end automation is not firing, debug `.github/hooks/hooks.json` first.
+## Hook Architecture
 
-## Session-End Hook Findings
+### hooks.json Format (Copilot CLI 1.0.37+)
 
-- The upstream working pattern uses `hooks.json` with a `sessionEnd` event that calls a shell script directly.
-- The correct event name for "agent finished responding" is `agentStop` (not `Stop`). The managed config should register under both `agentStop` and `sessionEnd` for full coverage.
-- **Valid hook event names** (as of CLI 1.0.37): `sessionStart`, `sessionEnd`, `userPromptSubmitted`, `preToolUse`, `postToolUse`, `agentStop`, `subagentStop`, `errorOccurred`. The old `Stop` event name is no longer recognized.
-- The managed script should behave like the upstream hook: stage all changes, create `auto-commit: YYYY-MM-DD HH:MM:SS`, attempt a push, and never block session termination.
-- The hook should use `--no-verify` on commit to avoid recursive pre-commit failures during session shutdown.
-- On Windows, prefer a `windows` command entry that invokes `sh ./.github/scripts/auto-commit.sh` so Copilot does not route through `C:\Windows\System32\bash.exe` and accidentally depend on WSL.
-- The shell script should disable interactive git prompts and use fast-fail SSH options so session shutdown is not held open by credentials or network negotiation.
-- Because both `agentStop` and `sessionEnd` may fire in some builds, the shell script should guard against duplicate invocation within a short window.
-- Failed commits or pushes should be reported as informational output and exit successfully, matching the upstream behavior.
+The hooks.json file uses the `"powershell"` key for Windows (invokes PowerShell directly) and `"bash"` for Unix. Valid event names: `sessionStart`, `sessionEnd`, `userPromptSubmitted`, `preToolUse`, `postToolUse`, `agentStop`, `subagentStop`, `errorOccurred`.
+
+### postToolUse — Audio Notification
+
+**Trigger**: Every tool call completion. **Behavior**: Reads stdin JSON for `toolName`. If `toolName === "task_complete"`, plays `done.mp3` via `ffplay`. All other tool calls are logged but produce no audio.
+
+**Stdin JSON format**: `{ "toolName": "...", "args": {...}, "cwd": "...", "status": "...", "stdout": "...", "stderr": "...", "durationMs": N, "timestamp": "..." }`
+
+**Why task_complete only**: Earlier approaches used debounce timers on all tool calls to detect "turn over". This was fragile (complex timer spawning, race conditions). The `task_complete` tool name reliably signals turn completion — much simpler and 100% reliable.
+
+### userPromptSubmitted — Prompt Logging
+
+**Trigger**: Every user prompt submission. **Behavior**: Reads stdin JSON for prompt text. Logs a `── TURN START ──` marker to `logs/hook-debug.log` and the prompt text to `logs/session/{date}.log`.
+
+**Stdin JSON format**: `{ "prompt": "...", "userPrompt": "...", "content": "..." }` (field names vary by CLI version; scripts try all three).
+
+### sessionEnd — Auto-Commit
+
+**Trigger**: Session termination. **Behavior**: Stages all changes, creates `auto-commit: YYYY-MM-DD HH:MM:SS` with `--no-verify`, attempts push. Never blocks session shutdown.
+
+### Debug Log
+
+All hooks write to `logs/hook-debug.log` with millisecond timestamps. This provides a complete trace of:
+- `── TURN START ──` markers with prompt text (from userPromptSubmitted)
+- `postToolUse [toolName] fired` entries (every tool call)
+- `── AUDIO PLAYING ──` markers (when task_complete triggers audio)
+
+## Settings
+
+Optional `hooks-settings.json` supports:
+```json
+{
+  "audioEnabled": true
+}
+```
+
+Set `audioEnabled: false` to silence notifications without removing the hook.
 
 ## Decision Table
 
@@ -60,6 +97,7 @@ If session-end automation is not firing, debug `.github/hooks/hooks.json` first.
 | User gives a repo path | Run chosen command with `-RepoPath` |
 | User asks for safety check | Run `verify` |
 | User wants rollback | Run `uninstall` |
+| User wants audio only (no markdown lint) | Run `install -SkipPreCommit` |
 
 ## Script-First Workflow
 
@@ -81,87 +119,20 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File .\copilot-hooks\scripts\2-Verify-C
 pwsh -NoProfile -ExecutionPolicy Bypass -File .\copilot-hooks\scripts\3-Uninstall-CopilotHooks.ps1
 ```
 
-### Step 4: Restart Copilot Session
+### Step 4: Add Audio File
 
-Copilot hook configuration is often loaded at session start. After changing `.github/hooks/*.json`, start a fresh Copilot session before testing `sessionEnd` behavior.
+Place a `done.mp3` (or any audio file) at `.github/hooks/done.mp3`. The install script warns if this file is missing. Any short notification sound works.
 
-## Manual Fallback Workflow
+### Step 5: Restart Copilot Session
 
-### Step 1: Create `.git/hooks/pre-commit`
-
-```sh
-#!/bin/sh
-# Managed by copilot-hooks skill
-# Windows Git hook wrapper - calls PowerShell and Markdown quality checks
-
-POWERSHELL_EXIT=0
-if [ -f ".git/hooks/pre-commit.ps1" ]; then
-  pwsh.exe -NoProfile -ExecutionPolicy Bypass -File ".git/hooks/pre-commit.ps1"
-  POWERSHELL_EXIT=$?
-fi
-
-pwsh.exe -NoProfile -ExecutionPolicy Bypass -File ".git/hooks/pre-commit-markdown.ps1"
-MARKDOWN_EXIT=$?
-
-if [ $POWERSHELL_EXIT -ne 0 ] || [ $MARKDOWN_EXIT -ne 0 ]; then
-  exit 1
-fi
-
-exit 0
-```
-
-### Step 2: Create `.git/hooks/pre-commit-markdown.ps1`
-
-Run `scripts/1-Install-CopilotHooks.ps1` if possible. If manual creation is required, use the script content in that file exactly.
-
-### Step 3: Create `.markdownlint.jsonc` if missing
-
-Use a project-specific config or the starter config generated by `install`.
-
-### Step 4: Wire Copilot sessionEnd hook
-
-Create or update `.github/hooks/hooks.json` with a `sessionEnd` command:
-
-```json
-{
-  "version": 1,
-  "hooks": {
-    "agentStop": [
-      {
-        "type": "command",
-        "windows": "sh ./.github/scripts/auto-commit.sh",
-        "bash": ".github/scripts/auto-commit.sh",
-        "timeoutSec": 10
-      }
-    ],
-    "sessionEnd": [
-      {
-        "type": "command",
-        "windows": "sh ./.github/scripts/auto-commit.sh",
-        "bash": ".github/scripts/auto-commit.sh",
-        "timeoutSec": 10
-      }
-    ]
-  }
-}
-```
-
-Create `.github/scripts/auto-commit.sh` using the script generated by `install`.
-
-If an older `.github/hooks/session-stop-autopush.json` exists, remove it to avoid conflicting hook configurations.
-
-Expected `sessionEnd` behavior:
-
-1. If the working tree has changes, the hook stages them.
-2. The hook creates `auto-commit: YYYY-MM-DD HH:MM:SS` with `--no-verify`.
-3. The hook attempts to push the current branch.
-4. Failures are reported as informational output but do not block session shutdown.
+Copilot hook configuration is loaded at session start. After changing `.github/hooks/hooks.json`, start a fresh Copilot session.
 
 ## Parameters
 
 | Script | Parameter | Required | Default |
 | --- | --- | --- | --- |
 | `1-Install-CopilotHooks.ps1` | `-RepoPath` | No | `.` |
+| `1-Install-CopilotHooks.ps1` | `-SkipPreCommit` | No | `false` |
 | `2-Verify-CopilotHooks.ps1` | `-RepoPath` | No | `.` |
 | `3-Uninstall-CopilotHooks.ps1` | `-RepoPath` | No | `.` |
 | `3-Uninstall-CopilotHooks.ps1` | `-Force` | No | `false` |
@@ -176,12 +147,12 @@ Expected `sessionEnd` behavior:
 
 ## Hardening Notes
 
-- Install scripts place `param(...)` first so PowerShell parses them correctly.
+- **PowerShell spawning**: Use `-File` flag (not `-Command`) when spawning background PowerShell scripts. `-Command` silently fails with complex string interpolation.
+- **task_complete is the signal**: Do NOT debounce postToolUse calls with timers. Just check `toolName === "task_complete"`.
+- **ffplay -nodisp -autoexit**: These flags prevent ffplay from opening a window and ensure it exits after playback.
 - Markdown hook uses `${file}` string interpolation to avoid the `$file:` parser error.
-- sessionEnd hook should stage remaining changes before committing.
-- sessionEnd hook should use a timestamped `auto-commit:` message with `--no-verify`, matching the upstream reference.
-- sessionEnd hook should register the same command under `agentStop` for turn-completion notifications.
-- sessionEnd hook should disable interactive git prompts and use fast-fail SSH options before attempting push.
-- sessionEnd hook should ignore duplicate invocations within a short time window so `agentStop` plus `sessionEnd` cannot double-commit.
-- sessionEnd hook should not block session termination when commit or push fails.
-- Verify checks Husky-vs-Git-hook wiring so mismatched hook paths are caught immediately.
+- sessionEnd hook uses `--no-verify` to avoid recursive pre-commit during shutdown.
+- sessionEnd hook disables interactive git prompts and uses fast-fail SSH options.
+- sessionEnd hook guards against duplicate invocations within 30 seconds (both `agentStop` and `sessionEnd` may fire).
+- All hooks exit 0 on failure — never block the CLI.
+- The `logs/` directory is created automatically by hooks. Add `logs/` to `.gitignore`.

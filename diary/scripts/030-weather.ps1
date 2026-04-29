@@ -35,7 +35,9 @@ $SpeedUnit = 'mph'
 
 # --- Resolve entry path ---
 if (-not $EntryPath) {
-    $EntryPath = Join-Path $PSScriptRoot '..' 'entries' "$Date.md"
+    $year = $Date.Substring(0, 4)
+    $month = $Date.Substring(5, 2)
+    $EntryPath = Join-Path $PSScriptRoot '..' 'entries' $year $month "$Date.md"
 }
 
 if (-not (Test-Path $EntryPath)) {
