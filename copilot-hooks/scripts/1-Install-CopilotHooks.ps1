@@ -241,7 +241,7 @@ $stopHookConfig = @'
 {
     "version": 1,
     "hooks": {
-        "Stop": [
+        "agentStop": [
             {
                 "type": "command",
                 "windows": "sh ./.github/scripts/auto-commit.sh",
