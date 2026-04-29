@@ -1,6 +1,6 @@
 ---
 name: copilot-hooks
-description: "V2.0 - Commands: install, verify, uninstall. Deploy the full Copilot CLI hook system: audio notifications on task_complete, prompt logging, debug tracing, session-end auto-commit, and pre-commit markdown linting."
+description: "V2.1 - Commands: install, verify, uninstall. Deploy the full Copilot CLI hook system: audio notifications on task_complete, prompt logging, session-end auto-commit with logging, and pre-commit markdown linting."
 ---
 
 # Copilot Hooks
@@ -10,8 +10,8 @@ When user activates this skill without specifying an action, do `install` agains
 This skill installs a proven, battle-tested Copilot CLI hook system with four capabilities:
 
 1. **Audio notification** — plays a sound when `task_complete` fires (turn is over).
-2. **Prompt logging** — captures user prompts to a debug log (marks turn starts).
-3. **Session-end auto-commit** — stages + commits + pushes remaining changes on session end.
+2. **Prompt logging** — captures user prompts to `logs/session/{date}.log`.
+3. **Session-end auto-commit** — stages + commits + pushes remaining changes on session end, with session logging.
 4. **Pre-commit markdown linting** — blocks commits with markdownlint violations.
 
 The install process is Husky-aware and avoids the common trap where `.git/hooks/pre-commit` exists but Git actually executes `.husky/_`.
@@ -23,8 +23,8 @@ The install process is Husky-aware and avoids the common trap where `.git/hooks/
 | `hooks.json` | `.github/hooks/hooks.json` | Registers all Copilot CLI hooks (postToolUse, userPromptSubmitted, sessionEnd) |
 | `play-done.ps1` | `.github/hooks/play-done.ps1` | Audio notification on task_complete (Windows/PowerShell) |
 | `play-done.sh` | `.github/hooks/play-done.sh` | Audio notification on task_complete (macOS/Linux) |
-| `Log-Prompt.ps1` | `.github/hooks/Log-Prompt.ps1` | Prompt logging + debug tracing (Windows/PowerShell) |
-| `log-prompt.sh` | `.github/hooks/log-prompt.sh` | Prompt logging + debug tracing (macOS/Linux) |
+| `Log-Prompt.ps1` | `.github/hooks/Log-Prompt.ps1` | Prompt logging (Windows/PowerShell) |
+| `log-prompt.sh` | `.github/hooks/log-prompt.sh` | Prompt logging (macOS/Linux) |
 | `auto-commit.sh` | `.github/hooks/auto-commit.sh` | Session-end auto-commit + push |
 | `hooks-settings.json` | `.github/hooks/hooks-settings.json` | Optional settings (audio enable/disable) |
 | `done.mp3` | `.github/hooks/done.mp3` | Audio file (user must provide) |
@@ -55,7 +55,7 @@ The hooks.json file uses the `"powershell"` key for Windows (invokes PowerShell 
 
 ### postToolUse — Audio Notification
 
-**Trigger**: Every tool call completion. **Behavior**: Reads stdin JSON for `toolName`. If `toolName === "task_complete"`, plays `done.mp3` via `ffplay`. All other tool calls are logged but produce no audio.
+**Trigger**: Every tool call completion. **Behavior**: Reads stdin JSON for `toolName`. If `toolName === "task_complete"`, plays `done.mp3` via `ffplay`. All other tool calls are ignored. Uses `$PSScriptRoot`/`SCRIPT_DIR` for CWD-independent path resolution with fallback to `.github/hooks/`.
 
 **Stdin JSON format**: `{ "toolName": "...", "args": {...}, "cwd": "...", "status": "...", "stdout": "...", "stderr": "...", "durationMs": N, "timestamp": "..." }`
 
@@ -63,24 +63,25 @@ The hooks.json file uses the `"powershell"` key for Windows (invokes PowerShell 
 
 ### userPromptSubmitted — Prompt Logging
 
-**Trigger**: Every user prompt submission. **Behavior**: Reads stdin JSON for prompt text. Logs a `── TURN START ──` marker to `logs/hook-debug.log` and the prompt text to `logs/session/{date}.log`.
+**Trigger**: Every user prompt submission. **Behavior**: Reads stdin JSON for prompt text. Logs the prompt to `logs/session/{date}.log`.
 
 **Stdin JSON format**: `{ "prompt": "...", "userPrompt": "...", "content": "..." }` (field names vary by CLI version; scripts try all three).
 
 ### sessionEnd — Auto-Commit
 
-**Trigger**: Session termination. **Behavior**: Stages all changes, creates `auto-commit: YYYY-MM-DD HH:MM:SS` with `--no-verify`, attempts push. Never blocks session shutdown.
+**Trigger**: Session termination. **Behavior**: Stages all changes, creates `auto-commit: YYYY-MM-DD HH:MM:SS` with `--no-verify`, attempts push. Never blocks session shutdown. Also logs a `[sessionEnd]` marker to `logs/session/{date}.log`.
 
-### Debug Log
+### Session Log
 
-All hooks write to `logs/hook-debug.log` with millisecond timestamps. This provides a complete trace of:
-- `── TURN START ──` markers with prompt text (from userPromptSubmitted)
-- `postToolUse [toolName] fired` entries (every tool call)
-- `── AUDIO PLAYING ──` markers (when task_complete triggers audio)
+Prompts and session events are logged to `logs/session/{date}.log`:
+
+- `[UserPrompt]` entries with prompt text (from userPromptSubmitted)
+- `[sessionEnd]` markers (from sessionEnd hook)
 
 ## Settings
 
 Optional `hooks-settings.json` supports:
+
 ```json
 {
   "audioEnabled": true

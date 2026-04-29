@@ -58,7 +58,6 @@ $logPromptPs1Path = Join-Path $copilotHooksDir 'Log-Prompt.ps1'
 $logPromptShPath = Join-Path $copilotHooksDir 'log-prompt.sh'
 $autoCommitShPath = Join-Path $copilotHooksDir 'auto-commit.sh'
 $audioFilePath = Join-Path $copilotHooksDir 'done.mp3'
-$hooksSettingsPath = Join-Path $copilotHooksDir 'hooks-settings.json'
 
 # Legacy paths (should be absent)
 $legacyStandaloneJsonPath = Join-Path $copilotHooksDir 'session-stop-autopush.json'
@@ -105,20 +104,16 @@ if (Test-Path $playDonePs1Path) {
     $playText = Get-Content -Path $playDonePs1Path -Raw
     $checksTaskComplete = $playText -match 'task_complete'
     $usesFfplay = $playText -match 'ffplay'
-    $logsToDebug = $playText -match 'hook-debug\.log'
 
     $checks += [pscustomobject]@{ Name = 'play-done.ps1 triggers only on task_complete'; Pass = $checksTaskComplete }
     $checks += [pscustomobject]@{ Name = 'play-done.ps1 uses ffplay for audio'; Pass = $usesFfplay }
-    $checks += [pscustomobject]@{ Name = 'play-done.ps1 logs to hook-debug.log'; Pass = $logsToDebug }
 }
 
 # Log-Prompt.ps1 content checks
 if (Test-Path $logPromptPs1Path) {
     $promptText = Get-Content -Path $logPromptPs1Path -Raw
-    $logsTurnStart = $promptText -match 'TURN START'
     $readsStdin = $promptText -match 'ReadToEnd'
 
-    $checks += [pscustomobject]@{ Name = 'Log-Prompt.ps1 marks TURN START'; Pass = $logsTurnStart }
     $checks += [pscustomobject]@{ Name = 'Log-Prompt.ps1 reads stdin'; Pass = $readsStdin }
 }
 

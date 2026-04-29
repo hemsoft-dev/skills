@@ -79,7 +79,7 @@ $hooksJsonContent = @'
         "type": "command",
         "powershell": "powershell -NoProfile -ExecutionPolicy Bypass -File ./.github/hooks/play-done.ps1",
         "bash": "bash ./.github/hooks/play-done.sh",
-        "timeoutSec": 5
+        "timeoutSec": 10
       }
     ],
     "sessionEnd": [
@@ -88,6 +88,12 @@ $hooksJsonContent = @'
         "powershell": "sh ./.github/hooks/auto-commit.sh",
         "bash": ".github/hooks/auto-commit.sh",
         "timeoutSec": 10
+      },
+      {
+        "type": "command",
+        "powershell": "New-Item -ItemType Directory -Force -Path 'logs/session' | Out-Null; Add-Content -Path ('logs/session/' + (Get-Date -Format 'yyyy-MM-dd') + '.log') -Value ('[' + (Get-Date -Format 'yyyy-MM-dd HH:mm:ss') + '] [sessionEnd] Session ended')",
+        "bash": "mkdir -p logs/session && echo \"[$(date '+%Y-%m-%d %H:%M:%S')] [sessionEnd] Session ended\" >> logs/session/$(date '+%Y-%m-%d').log",
+        "timeoutSec": 5
       }
     ]
   }
@@ -97,88 +103,64 @@ $hooksJsonContent = @'
 # --- play-done.ps1 (audio on task_complete) ---
 $playDonePs1Content = @'
 # Managed by copilot-hooks skill
-# Audio notification for postToolUse hook.
-# Plays done.mp3 immediately when the tool is task_complete (turn is over).
-$debugLog = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..\logs\hook-debug.log'))
-$ts = Get-Date -Format 'yyyy-MM-dd HH:mm:ss.fff'
-
-# Read stdin for tool metadata
-$toolName = '(unknown)'
 $raw = try { [Console]::In.ReadToEnd() } catch { '' }
 if ($raw) {
     try {
         $json = $raw | ConvertFrom-Json
-        if ($json.toolName) { $toolName = $json.toolName }
-        elseif ($json.tool) { $toolName = $json.tool }
-        elseif ($json.name) { $toolName = $json.name }
-    } catch { }
+        if ($json.toolName -eq 'task_complete') {
+            $audioEnabled = $true
+            # Resolve paths relative to script location (CWD-independent)
+            $scriptDir = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+            $settingsPath = Join-Path $scriptDir 'hooks-settings.json'
+            if (-not (Test-Path $settingsPath)) {
+                # Fallback: check CWD-relative path (for when script runs in project context)
+                $settingsPath = '.github/hooks/hooks-settings.json'
+            }
+            if (Test-Path $settingsPath) {
+                try {
+                    $settings = Get-Content $settingsPath -Raw | ConvertFrom-Json
+                    if ($null -ne $settings.audioEnabled) { $audioEnabled = $settings.audioEnabled }
+                } catch {}
+            }
+            if ($audioEnabled) {
+                $mp3Path = Join-Path $scriptDir 'done.mp3'
+                if (-not (Test-Path $mp3Path)) { $mp3Path = '.github/hooks/done.mp3' }
+                Start-Process -NoNewWindow -FilePath 'ffplay' -ArgumentList '-nodisp', '-autoexit', '-volume', '50', $mp3Path
+            }
+        }
+    } catch { Write-Error "Failed to parse or handle task_complete: $_" }
 }
-
-Add-Content $debugLog "[$ts] postToolUse [$toolName] fired"
-
-# Only play audio on task_complete
-if ($toolName -ne 'task_complete') { exit 0 }
-
-$audioEnabled = $true
-$settingsPath = '.github/hooks/hooks-settings.json'
-if (Test-Path $settingsPath) {
-    try {
-        $settings = Get-Content $settingsPath -Raw | ConvertFrom-Json
-        if ($null -ne $settings.audioEnabled) { $audioEnabled = $settings.audioEnabled }
-    } catch { }
-}
-if (-not $audioEnabled) {
-    Add-Content $debugLog "[$ts] task_complete but audio disabled - skipping"
-    exit 0
-}
-
-$audioFile = (Resolve-Path '.github/hooks/done.mp3').Path
-Add-Content $debugLog "[$ts] ── AUDIO PLAYING ── task_complete detected"
-Start-Process -NoNewWindow -FilePath 'ffplay' -ArgumentList '-nodisp','-autoexit','-volume','50','-loglevel','quiet',$audioFile
 '@
 
 # --- play-done.sh (audio on task_complete - bash) ---
 $playDoneShContent = @'
 #!/bin/bash
 # Managed by copilot-hooks skill
-# Audio notification for postToolUse hook.
-# Plays done.mp3 immediately when the tool is task_complete (turn is over).
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-DEBUG_LOG="$SCRIPT_DIR/../../logs/hook-debug.log"
-TS=$(date '+%Y-%m-%d %H:%M:%S.%3N')
-
-# Read stdin for tool metadata
-RAW=$(cat 2>/dev/null || echo '')
-TOOL_NAME="(unknown)"
-if [ -n "$RAW" ] && command -v jq &>/dev/null; then
-    TOOL_NAME=$(echo "$RAW" | jq -r '.toolName // .tool // .name // "(unknown)"' 2>/dev/null)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+INPUT=$(cat)
+TOOL_NAME=$(echo "$INPUT" | jq -r '.toolName')
+if [ "$TOOL_NAME" = "task_complete" ]; then
+    SETTINGS="$SCRIPT_DIR/hooks-settings.json"
+    if [ ! -f "$SETTINGS" ]; then
+        # Fallback: check CWD-relative path (for when script runs in project context)
+        SETTINGS=".github/hooks/hooks-settings.json"
+    fi
+    AUDIO_ENABLED=true
+    if [ -f "$SETTINGS" ]; then
+        AUDIO_ENABLED=$(jq -r '.audioEnabled // true' "$SETTINGS")
+    fi
+    if [ "$AUDIO_ENABLED" = "true" ]; then
+        MP3="$SCRIPT_DIR/done.mp3"
+        if [ ! -f "$MP3" ]; then MP3=".github/hooks/done.mp3"; fi
+        ffplay -nodisp -autoexit -volume 50 "$MP3" &>/dev/null &
+    fi
 fi
-
-echo "[$TS] postToolUse [$TOOL_NAME] fired" >> "$DEBUG_LOG"
-
-# Only play audio on task_complete
-[ "$TOOL_NAME" != "task_complete" ] && exit 0
-
-SETTINGS=".github/hooks/hooks-settings.json"
-AUDIO_ENABLED=true
-if [ -f "$SETTINGS" ]; then
-    AUDIO_ENABLED=$(jq -r '.audioEnabled // true' "$SETTINGS")
-fi
-if [ "$AUDIO_ENABLED" != "true" ]; then
-    echo "[$TS] task_complete but audio disabled - skipping" >> "$DEBUG_LOG"
-    exit 0
-fi
-
-AUDIO_FILE="$(pwd)/.github/hooks/done.mp3"
-echo "[$TS] ── AUDIO PLAYING ── task_complete detected" >> "$DEBUG_LOG"
-ffplay -nodisp -autoexit -volume 50 -loglevel quiet "$AUDIO_FILE" &>/dev/null &
 '@
 
 # --- Log-Prompt.ps1 (prompt logging) ---
 $logPromptPs1Content = @'
 # Managed by copilot-hooks skill
 # Log-Prompt.ps1 - Captures the actual prompt text from UserPromptSubmit stdin JSON
-$debugLog = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..\logs\hook-debug.log'))
 $raw = try { [Console]::In.ReadToEnd() } catch { '' }
 
 $prompt = 'N/A'
@@ -198,12 +180,6 @@ if ($raw) {
 $prompt = ($prompt -replace '[\r\n]+', ' ').Trim()
 if ($prompt.Length -gt 300) { $prompt = $prompt.Substring(0, 300) + '...' }
 
-$ts = Get-Date -Format 'yyyy-MM-dd HH:mm:ss.fff'
-
-# Log to hook-debug.log (marks the start of a turn)
-Add-Content $debugLog "[$ts] ── TURN START ── userPromptSubmitted: $prompt"
-
-# Also log to session log
 $dir = 'logs/session'
 New-Item -ItemType Directory -Force -Path $dir | Out-Null
 $logFile = Join-Path $dir ((Get-Date -Format 'yyyy-MM-dd') + '.log')
@@ -215,9 +191,6 @@ $logPromptShContent = @'
 #!/bin/bash
 # Managed by copilot-hooks skill
 # log-prompt.sh - Captures the actual prompt text from UserPromptSubmit stdin JSON
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-DEBUG_LOG="$SCRIPT_DIR/../../logs/hook-debug.log"
-
 raw=$(cat 2>/dev/null || echo '')
 if command -v jq &>/dev/null; then
     prompt=$(echo "$raw" | jq -r '.prompt // .userPrompt // .content // .' 2>/dev/null)
@@ -225,13 +198,6 @@ else
     prompt="$raw"
 fi
 prompt=$(echo "$prompt" | tr '\n' ' ' | cut -c1-300)
-
-TS=$(date '+%Y-%m-%d %H:%M:%S.%3N')
-
-# Log to hook-debug.log (marks the start of a turn)
-echo "[$TS] ── TURN START ── userPromptSubmitted: $prompt" >> "$DEBUG_LOG"
-
-# Also log to session log
 dir="logs/session"
 mkdir -p "$dir"
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] [UserPrompt] $prompt" >> "$dir/$(date '+%Y-%m-%d').log"
