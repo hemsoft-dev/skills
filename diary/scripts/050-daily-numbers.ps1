@@ -495,7 +495,12 @@ $grandTotalOverageCost = 0.0
 
 foreach ($username in $copilotAccounts) {
     try {
-        gh auth switch -u $username 2>&1 | Out-Null
+        $switchOutput = gh auth switch -u $username 2>&1
+        if ($LASTEXITCODE -ne 0) {
+            Write-Information "  Skipping $username — gh auth switch failed: $switchOutput"
+            $copilotLines += "  - **$username**: *(not authenticated)*"
+            continue
+        }
         $response = gh api /copilot_internal/user --jq '.quota_snapshots.premium_interactions' 2>&1
         if ($LASTEXITCODE -eq 0) {
             $premium = $response | ConvertFrom-Json
