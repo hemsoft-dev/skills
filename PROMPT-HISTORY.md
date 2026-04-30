@@ -605,3 +605,7 @@ Result: Added -Elite flag to generate-image.ps1 and updated SKILL.md (V2.1). Eli
 
 2026-04-27 - 23:38 - Scaffold diary entry for 2026-04-27 (Monday)
 Result: Assembled full diary entry with weather, news (4 categories, all with links), Slack (10 curated items, heavy Copilot pricing discussion), stock market (Dow -0.29%, S&P +0.92%), daily numbers (GitHub 261 +1, Bitbucket 562 +0, Cloudflare deltas computed, Copilot API unavailable), LLM models (carried forward from 4/21), trending repos (5 fast-growing new repos with star counts), software watchlist (Claude Code v2.1.121 and Copilot CLI v1.0.37 new today), watchlist updates (both new releases detailed), 2 meetings (Prod Eng Standup no transcript, AI Task Force with full transcript + 6 discussion topics + action items), productivity (+8,697 LOC, 42 commits, 10 PRs, 3 reviews). No screenshots.
+
+2026-04-29 - 23:59 - Fix diary double-counting bug (gh auth switch failing silently for HemSoft) and remove HemSoft from Copilot tracking
+Result: Fixed 050-daily-numbers.ps1 to check exit code after auth switch, corrected today's diary entry (+410 not +19707), then removed HemSoft entirely since account is unsubscribed.
+
