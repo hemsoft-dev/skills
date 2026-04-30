@@ -486,7 +486,7 @@ else {
 # --- Fetch GitHub Copilot Usage ---
 Write-Information "`e[1;36mFetching GitHub Copilot usage...`e[0m"
 
-$copilotAccounts = @('HemSoft', 'fhemmerrelias')
+$copilotAccounts = @('fhemmerrelias')
 
 $copilotLines = @()
 $grandTotalUsed = 0
