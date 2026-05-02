@@ -609,3 +609,8 @@ Result: Assembled full diary entry with weather, news (4 categories, all with li
 2026-04-29 - 23:59 - Fix diary double-counting bug (gh auth switch failing silently for HemSoft) and remove HemSoft from Copilot tracking
 Result: Fixed 050-daily-numbers.ps1 to check exit code after auth switch, corrected today's diary entry (+410 not +19707), then removed HemSoft entirely since account is unsubscribed.
 
+2026-04-30 - 23:25 - Scaffold diary entry for 2026-04-30 (Thursday)
+Result: Assembled full diary entry with weather, news (4 categories, all with links), Slack (12 curated items), stock market (Dow +1.04%, S&P +0.98%), daily numbers (GitHub 265 +2, Bitbucket 562 +0, Cloudflare deltas computed, Copilot API unavailable), LLM models (carried forward from 4/29), trending repos (5 with real star counts - obra/superpowers at 174K!), software watchlist (Claude Code v2.1.126 and Gemini CLI v0.40.1 new today), watchlist updates (3 items), no meetings (sick day), productivity (+17,463 LOC, 53 commits, 4 PRs, 4 reviews). No screenshots.
+
+2026-05-01 - 15:30 - Scaffold diary entry for 2026-05-01 and fix Copilot API documentation
+Result: Scaffolded full diary entry with all automated sections. Discovered GitHub Copilot premium usage API returns 404 on /copilot/usage and /copilot/metrics endpoints — found working endpoint at /orgs/Relias-Engineering/settings/billing/usage. Updated diary SKILL.md (V1.2→V1.3) with correct API endpoints, replaced non-existent fallback scripts with actual commands, added prominent warning about 404 endpoints.
