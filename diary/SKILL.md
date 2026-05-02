@@ -1,6 +1,6 @@
 ---
 name: diary
-description: "V1.2 - Commands: create, scaffold, update. Personal diary management with daily entry creation, scaffolding, and updates."
+description: "V1.3 - Commands: create, scaffold, update. Personal diary management with daily entry creation, scaffolding, and updates."
 ---
 
 # Diary
@@ -48,23 +48,24 @@ Also load yesterday's diary entry (`diary/entries/YYYY-MM-DD.md` for yesterday) 
 
 #### Diary skill caches (base path: `~/.agents/skills/diary/output/`)
 
-| # | Section | Cached File | Fallback Script (in `diary/scripts/`) |
-|---|---------|-------------|----------------------------------------|
-| 4 | Stock Market | `YYYY-MM-DD-daily-financial-numbers.txt` | `Get-DailyFinancialNumbers.ps1` |
-| 5 | Relias Repo Counts | `YYYY-MM-DD-relias-repo-counts.txt` | `Get-ReliasRepoCounts.ps1` |
-| 6 | LLM Model Updates | `YYYY-MM-DD-llm-updates.txt` | `Get-LLMUpdates.ps1` |
-| 7 | Software Updates | `YYYY-MM-DD-software-updates.txt` | `Get-SoftwareUpdates.ps1` |
-| 8 | Cloudflare Usage | `YYYY-MM-DD-cloudflare-usage.txt` | `~/.agents/skills/cloudflare/scripts/Get-CloudflareUsage.ps1 -Date YYYY-MM-DD` |
+| # | Section | Cached File | Fallback |
+|---|---------|-------------|----------|
+| 4 | Stock Market | `YYYY-MM-DD-daily-financial-numbers.txt` | Yahoo Finance API: `Invoke-RestMethod "https://query1.finance.yahoo.com/v8/finance/chart/%5EDJI?interval=1d&range=1d"` (and `%5EGSPC` for S&P 500) — extract `meta.regularMarketPrice` and `meta.chartPreviousClose` to compute delta |
+| 5 | Relias Repo Counts | `YYYY-MM-DD-relias-repo-counts.txt` | GitHub: `gh api orgs/Relias-Engineering/repos --paginate --jq 'length'` (sum all pages). Bitbucket: `diary/scripts/Get-BitbucketRepoCount.ps1` |
+| 6 | GitHub Copilot Usage | *(no cache — always live)* | `gh api "/orgs/Relias-Engineering/settings/billing/usage"` → filter for `product=="copilot"` and `sku=="Copilot Premium Request"` where `date` matches current billing month. **⚠️ Do NOT use** `/orgs/.../copilot/usage` or `/orgs/.../copilot/metrics` or `/user/copilot/usage` — these return 404. The correct endpoint is `/orgs/Relias-Engineering/settings/billing/usage`. Per-user breakdown is unavailable; only org-wide totals. Included quota = seats × 1000 (get seat count from `/orgs/Relias-Engineering/copilot/billing` → `seat_breakdown.total`). |
+| 7 | LLM Model Updates | `YYYY-MM-DD-llm-updates.txt` | Carry forward yesterday's LLM section. No automated script exists — check LMSYS and OpenRouter manually if needed. |
+| 8 | Software Updates | `YYYY-MM-DD-software-updates.txt` | For each repo in `diary/config/software-watchlist.json`: `gh api "repos/{owner}/{repo}/releases/latest" --jq '"\(.tag_name) \| \(.published_at) \| \(.name)"'`. For GitHub Web (RSS type): `Invoke-RestMethod "https://github.blog/changelog/feed/"` and filter by today's date. |
+| 9 | Cloudflare Usage | `YYYY-MM-DD-cloudflare-usage.txt` | `~/.agents/skills/cloudflare/scripts/Get-CloudflareUsage.ps1 -Date YYYY-MM-DD` |
 
 ### Step 2: Gather Live Data (No Cache — Run in Order)
 
 | # | Section | How |
 |---|---------|------|
-| 9 | Meetings (workiq) | `workiq ask -q "What meetings did I have today {YYYY-MM-DD}? List each meeting with time, title, and attendees."` — then for each meeting: `workiq ask -q "Show me the transcript or notes from the {meeting title} meeting today. Include key discussion points and action items."` |
-| 10 | Watchlist Updates | Read `watchlist/WATCHLIST.md` → for each Active item, check its key resources for updates **from today** → include only items with actual changes |
-| 11 | Trending GitHub Repos | Fetch `https://github.com/trending` → Top 5 repos with real star counts |
-| 12 | Today's Productivity | `productivity/scripts/Get-TodayProductivity.ps1` → LOC, commits, PRs, reviews, issues |
-| 13 | Screenshots | Check `screenshot/images/library/YYYY-MM-DD/` for `.webp` files |
+| 10 | Meetings (workiq) | `workiq ask -q "What meetings did I have today {YYYY-MM-DD}? List each meeting with time, title, and attendees."` — then for each meeting: `workiq ask -q "Show me the transcript or notes from the {meeting title} meeting today. Include key discussion points and action items."` |
+| 11 | Watchlist Updates | Read `watchlist/WATCHLIST.md` → for each Active item, check its key resources for updates **from today** → include only items with actual changes |
+| 12 | Trending GitHub Repos | Fetch `https://github.com/trending` with `Invoke-WebRequest -UseBasicParsing`, then regex-extract repo paths from `/owner/repo/stargazers` links. Get star counts + descriptions via `gh api "repos/{owner}/{repo}" --jq '.stargazers_count, .description'`. Take top 5. |
+| 13 | Today's Productivity | `productivity/scripts/Get-TodayProductivity.ps1` → LOC, commits, PRs, reviews, issues |
+| 14 | Screenshots | Check `screenshot/images/library/YYYY-MM-DD/` for `.webp` files |
 
 ### Step 3: Assemble & Save Entry
 
@@ -78,15 +79,15 @@ Use `diary/config/yyyy-mm-dd.md` as the template. Populate every section in this
 | 2 | 💬 Slack Activity | Cache #3 — curate 8–12 items | Never |
 | 3 | 🌤 Weather | Cache #1 — copy verbatim | Never |
 | 4 | 📰 News Headlines | Cache #2 — copy verbatim, all links intact, no paraphrasing | Never |
-| 5 | 📊 Daily Numbers | Cache #4 + #5 + #8. **After injecting numbers, write 1–2 sentences explaining why markets moved using today's news headlines as context.** On weekends, note markets were closed. Include Cloudflare usage from cache #8. **Always compute and show deltas vs yesterday for GitHub Copilot usage and Cloudflare usage (page views, unique visitors, emails forwarded where applicable). If yesterday's value is unavailable, explicitly state delta unavailable.** | Weekends (market only) |
-| 6 | 🤖 LLM Models | Cache #6 — carry forward yesterday's section if no changes | Never |
-| 7 | 🔥 Trending GitHub Repos | Live #11 | Never |
-| 8 | 🛠 Software Watchlist | Cache #7 | Never |
-| 9 | 📋 Watchlist Updates | Live #10 — only if ≥1 Active item has updates today | No updates found |
-| 10 | 💻 Today's Productivity | Live #12 | All metrics are zero |
-| 11 | 💼 Meetings | Live #9 (workiq) — table of meetings with transcripts/notes if available | Saturday |
+| 5 | 📊 Daily Numbers | Cache #4 + #5 + #6 + #9. **After injecting numbers, write 1–2 sentences explaining why markets moved using today's news headlines as context.** On weekends, note markets were closed. Include Cloudflare usage from cache #9 and GitHub Copilot org-wide premium requests from cache #6. **Always compute and show deltas vs yesterday for GitHub Copilot usage and Cloudflare usage (page views, unique visitors, emails forwarded where applicable). If yesterday's value is unavailable, explicitly state delta unavailable.** | Weekends (market only) |
+| 6 | 🤖 LLM Models | Cache #7 — carry forward yesterday's section if no changes | Never |
+| 7 | 🔥 Trending GitHub Repos | Live #12 | Never |
+| 8 | 🛠 Software Watchlist | Cache #8 | Never |
+| 9 | 📋 Watchlist Updates | Live #11 — only if ≥1 Active item has updates today | No updates found |
+| 10 | 💻 Today's Productivity | Live #13 | All metrics are zero |
+| 11 | 💼 Meetings | Live #10 (workiq) — table of meetings with transcripts/notes if available | Saturday |
 | 12 | 💭 Personal Reflections | Placeholder: `<!-- TODO: fill in -->` | Never |
-| 13 | 📸 Screenshots | Live #13 | No screenshots today |
+| 13 | 📸 Screenshots | Live #14 | No screenshots today |
 
 ### Step 4: Tell User What to Fill In
 
