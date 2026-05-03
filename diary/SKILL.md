@@ -52,7 +52,7 @@ Also load yesterday's diary entry (`diary/entries/YYYY-MM-DD.md` for yesterday) 
 |---|---------|-------------|----------|
 | 4 | Stock Market | `YYYY-MM-DD-daily-financial-numbers.txt` | Yahoo Finance API: `Invoke-RestMethod "https://query1.finance.yahoo.com/v8/finance/chart/%5EDJI?interval=1d&range=1d"` (and `%5EGSPC` for S&P 500) — extract `meta.regularMarketPrice` and `meta.chartPreviousClose` to compute delta |
 | 5 | Relias Repo Counts | `YYYY-MM-DD-relias-repo-counts.txt` | GitHub: `gh api orgs/Relias-Engineering/repos --paginate --jq 'length'` (sum all pages). Bitbucket: `diary/scripts/Get-BitbucketRepoCount.ps1` |
-| 6 | GitHub Copilot Usage | *(no cache — always live)* | `gh api "/orgs/Relias-Engineering/settings/billing/usage"` → filter for `product=="copilot"` and `sku=="Copilot Premium Request"` where `date` matches current billing month. **⚠️ Do NOT use** `/orgs/.../copilot/usage` or `/orgs/.../copilot/metrics` or `/user/copilot/usage` — these return 404. The correct endpoint is `/orgs/Relias-Engineering/settings/billing/usage`. Per-user breakdown is unavailable; only org-wide totals. Included quota = seats × 1000 (get seat count from `/orgs/Relias-Engineering/copilot/billing` → `seat_breakdown.total`). |
+| 6 | GitHub Copilot Usage | *(no cache — always live)* | **Always show BOTH org-wide AND personal stats.** Org-wide: `gh api "/orgs/Relias-Engineering/settings/billing/usage"` → filter for `product=="copilot"` and `sku=="Copilot Premium Request"` where `date` matches current billing month. Also get Cloud Agent (`sku=="Coding Agent Premium Request"`). Org quota = seats × 1000 (get seat count from `/orgs/Relias-Engineering/copilot/billing` → `seat_breakdown.total`). Personal: `gh api "/orgs/Relias-Engineering/copilot/billing/seats?per_page=100" --jq '.seats[] \| select(.assignee.login == "fhemmerrelias") \| {last_activity_at, last_activity_editor}'` — per-user request count is NOT available via API (only visible at github.com/settings/copilot). Show: last active time, editor, allowance (1,000/month), and link to settings page. **⚠️ Do NOT use** `/orgs/.../copilot/usage` or `/copilot/metrics` — these return 404. |
 | 7 | LLM Model Updates | `YYYY-MM-DD-llm-updates.txt` | Carry forward yesterday's LLM section. No automated script exists — check LMSYS and OpenRouter manually if needed. |
 | 8 | Software Updates | `YYYY-MM-DD-software-updates.txt` | For each repo in `diary/config/software-watchlist.json`: `gh api "repos/{owner}/{repo}/releases/latest" --jq '"\(.tag_name) \| \(.published_at) \| \(.name)"'`. For GitHub Web (RSS type): `Invoke-RestMethod "https://github.blog/changelog/feed/"` and filter by today's date. |
 | 9 | Cloudflare Usage | `YYYY-MM-DD-cloudflare-usage.txt` | `~/.agents/skills/cloudflare/scripts/Get-CloudflareUsage.ps1 -Date YYYY-MM-DD` |
@@ -79,7 +79,7 @@ Use `diary/config/yyyy-mm-dd.md` as the template. Populate every section in this
 | 2 | 💬 Slack Activity | Cache #3 — curate 8–12 items | Never |
 | 3 | 🌤 Weather | Cache #1 — copy verbatim | Never |
 | 4 | 📰 News Headlines | Cache #2 — copy verbatim, all links intact, no paraphrasing | Never |
-| 5 | 📊 Daily Numbers | Cache #4 + #5 + #6 + #9. **After injecting numbers, write 1–2 sentences explaining why markets moved using today's news headlines as context.** On weekends, note markets were closed. Include Cloudflare usage from cache #9 and GitHub Copilot org-wide premium requests from cache #6. **Always compute and show deltas vs yesterday for GitHub Copilot usage and Cloudflare usage (page views, unique visitors, emails forwarded where applicable). If yesterday's value is unavailable, explicitly state delta unavailable.** | Weekends (market only) |
+| 5 | 📊 Daily Numbers | Cache #4 + #5 + #6 + #9. **After injecting numbers, write 1–2 sentences explaining why markets moved using today's news headlines as context.** On weekends, note markets were closed. Include Cloudflare usage from cache #9 and GitHub Copilot usage from cache #6 — **always show BOTH org-wide totals AND personal (fhemmerrelias) stats**. **Always compute and show deltas vs yesterday for GitHub Copilot usage and Cloudflare usage (page views, unique visitors, emails forwarded where applicable). If yesterday's value is unavailable, explicitly state delta unavailable.** | Weekends (market only) |
 | 6 | 🤖 LLM Models | Cache #7 — carry forward yesterday's section if no changes | Never |
 | 7 | 🔥 Trending GitHub Repos | Live #12 | Never |
 | 8 | 🛠 Software Watchlist | Cache #8 | Never |
@@ -104,7 +104,7 @@ Print this checklist in the output so the user can see what was populated:
 - [ ] Today's Highlight left as a placeholder for the user, but clearly framed as the news headline of the day
 - [ ] News populated — all headlines verbatim with links intact
 - [ ] Slack Activity has 8–12 curated items
-- [ ] Daily Numbers: Dow, S&P, GitHub repo count, Bitbucket repo count, Cloudflare usage, plus GitHub Copilot + Cloudflare deltas vs yesterday
+- [ ] Daily Numbers: Dow, S&P, GitHub repo count, Bitbucket repo count, Cloudflare usage, plus GitHub Copilot (org-wide AND personal/fhemmerrelias) + Cloudflare deltas vs yesterday
 - [ ] LLM Models present (new data or carried forward from yesterday)
 - [ ] Top 5 Trending GitHub Repos with real star counts
 - [ ] Software Watchlist populated from script output
@@ -133,6 +133,9 @@ finishing** — do not leave known-bad data in the entry.
 - It must always be the main news headline of the day, chosen from the same day's `📰 News Headlines` section.
 - If the entry is saved with a placeholder, the placeholder should still tell the user to provide a news headline plus source URL, not a work-related update.
 - In `📊 Daily Numbers`, always include day-over-day deltas versus yesterday for:
-  - GitHub Copilot usage
+  - GitHub Copilot usage (org-wide)
   - Cloudflare usage metrics (page views, unique visitors, and emails forwarded where applicable)
+- **GitHub Copilot must always show BOTH**:
+  - **Org-wide**: Total premium requests / quota from billing API
+  - **Personal (fhemmerrelias)**: Last activity time + editor (from seats API) + allowance (1,000/month) + link to github.com/settings/copilot for exact usage count (per-user request count is NOT available via API)
 - If a prior-day value is missing, explicitly state that the delta is unavailable.
