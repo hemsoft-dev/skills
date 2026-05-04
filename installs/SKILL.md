@@ -68,6 +68,7 @@ See [INSTALLS.md](INSTALLS.md) for full installation instructions.
 - [ ] XSplit VCam installed and licensed
 - [ ] .NET SDK installed
 - [ ] Python 3.12 installed
+- [ ] Conda installed (`conda --version`)
 - [ ] Docker Desktop installed
 - [ ] Neo4j running in Docker (<http://localhost:7474>)
 - [ ] edge-tts installed (TTS for AutoHotkey)
@@ -132,6 +133,7 @@ See [INSTALLS.md](INSTALLS.md) for full installation instructions.
 - [x] Wispr Flow installed and configured
 - [x] Directory Opus installed and licensed
 - [x] Python 3.12 installed
+- [x] Conda installed (Miniconda3, v25.11.1)
 - [ ] Neo4j running in Docker (<http://localhost:7474>)
 - [x] edge-tts installed
 - [x] ffmpeg installed

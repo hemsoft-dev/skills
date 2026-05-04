@@ -217,6 +217,38 @@ C:\Users\User\AppData\Local\Programs\Python\Python312\python.exe -m pip install 
 
 Creates a speak-clipboard script for AutoHotkey TTS shortcut (CTRL+ALT+P).
 
+### 8.4. Miniconda (Conda)
+
+Lightweight Conda distribution for Python environments and package management.
+
+```powershell
+winget install --id Anaconda.Miniconda3 -e --source winget
+```
+
+Initialize Conda for PowerShell:
+
+```powershell
+& "$env:USERPROFILE\miniconda3\Scripts\conda.exe" init powershell
+```
+
+Recommended: add Conda's `condabin` directory to the user PATH so `conda` also works in shells that do not load the PowerShell profile.
+
+```powershell
+$condabin = "$env:USERPROFILE\miniconda3\condabin"
+$userPath = [Environment]::GetEnvironmentVariable("Path","User")
+if ($userPath -notlike "*$condabin*") {
+    [Environment]::SetEnvironmentVariable("Path", "$userPath;$condabin", "User")
+}
+```
+
+Verify:
+
+```powershell
+conda --version
+```
+
+**Note:** Restart the terminal after `conda init` so the PowerShell profile changes take effect.
+
 ### 8.5. Ollama
 
 ```powershell
@@ -591,6 +623,7 @@ $apps = @(
     "Microsoft.Office",
     "OpenJS.NodeJS.LTS",
     "Python.Python.3.12",
+    "Anaconda.Miniconda3",
     "Ollama.Ollama",
     "Docker.DockerDesktop",
     "Obsidian.Obsidian",
