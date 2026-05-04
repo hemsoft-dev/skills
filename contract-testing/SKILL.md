@@ -1,6 +1,6 @@
 ---
 name: contract-testing
-description: "V1.3 - Expert in contract testing for .NET/C# microservices using PactNet (consumer-driven). Covers Pact Broker, CI/CD gating, ADO pipeline patterns, and implementation. Includes Relias production broker credentials, service inventory, organizational context, and a complete 'implement in your repo' workflow. Use when implementing, reviewing, or discussing contract testing."
+description: "V1.4 - Expert in contract testing for .NET/C# microservices using PactNet (consumer-driven). Covers Pact Broker, CI/CD gating, ADO pipeline patterns, and implementation. Includes Relias production broker credentials, service inventory, organizational context, meeting takeaways, and a complete 'implement in your repo' workflow. Use when implementing, reviewing, or discussing contract testing."
 ---
 
 # Contract Testing for .NET
@@ -465,14 +465,16 @@ Each broker instance provides:
 | @mapaul | Argued Golden Path inclusion forces conscious decision to implement or remove. |
 | @cmutaba | New to the channel, expressed enthusiasm. |
 
-### Agreed Strategy (as of 2026-04-22)
+### Agreed Strategy (as of 2026-04-29)
 
 1. **Reference repo + AI skill** as the primary onboarding package (@fhemmer's proposal — agreed)
 2. **Demo sessions** at chapter meetings: SDC, AI Chapter, Quality Chapter (@ganthony's suggestion — agreed)
 3. **Scorecards** for adoption tracking before hard-gating (@ganthony/@bhalterman — agreed)
 4. **Golden Path**: Debated. Consensus leaning toward adding `can-i-deploy` CI/CD step (not full test scaffolding) since no dummy contracts to clean up. Template wouldn't add consumer/producer tests — just pipeline wiring.
-5. **Pact Nirvana level**: @jbuda's PRs target Diamond level (`can-i-deploy` per environment, currently `--dry-run`)
+5. **Pact Nirvana level**: Start at **Gold level** (practical starting point). Diamond's Verifier pipeline has scaling cost concerns (excessive pipeline triggers as services grow). @jbuda's PRs target Diamond with `--dry-run` as aspirational.
 6. **Pact Broker version**: Updated to `2.138.0-pactbroker2.119.0` (from `2.107.0.1`) — [Bitbucket PR #9](https://bitbucket.org/relias/pactbroker/pull-requests/9)
+7. **Deployment philosophy**: Consumers deploy first; producers deploy only after compatibility verified (reduces data loss/runtime breakage risk)
+8. **Contracts are versioned artifacts**: Multiple versions may exist simultaneously (dev, staging, prod, PR) — not a single "current" definition
 
 ### Known Concerns (from Slack discussion)
 
@@ -481,6 +483,9 @@ Each broker instance provides:
 | **Cross-repo blast radius** — badly implemented contracts can block deployments across multiple repos | @grufino | Open — needs strong onboarding/training |
 | **Knowledge gap** — devs won't know where to look when pipeline fails | @grufino | Open — Pact Broker UI helps but needs training |
 | **Organizational buy-in** — ADR says 100% coverage for 2+ years but adoption is near-zero | @ganthony/@jbuda | Open — need enforcement mechanism |
+| **Pact Broker is mission-critical** — once wired into CI/CD, broker downtime blocks all deployments org-wide | @jbuda/@fhemmer (Apr 29 meeting) | Open — needs backup/recovery strategy, redundancy planning |
+| **Shared NuGet package already provides compile-time safety** — raises ROI questions for runtime contract testing | @jbuda (Apr 29 meeting) | Open — contract testing catches runtime/schema drift that compile-time can't |
+| **ADR may be outdated** — existing architecture decision record may be partially incorrect | @jbuda/@fhemmer (Apr 29 meeting) | Open — needs Architecture Review Board revalidation |
 | **Golden Path scaffolding cleanup** — adding templates means teams must clean up examples | @bhalterman | Resolved — only add CI/CD wiring, not test scaffolding |
 | **Pact Broker version** — old version can't parse v4 pact specs | @jbuda | Resolved — version bump PR submitted |
 | **Pact Broker deployment** — deployed via ADO pipeline (definition 427) in Bitbucket `relias/pactbroker` | @grufino | Documented |
@@ -495,6 +500,37 @@ Docs: [https://docs.pact.io/ai_tools/installation](https://docs.pact.io/ai_tools
 - **Pact Broker is deployed from Bitbucket** (`relias/pactbroker`), NOT GitHub — uses ADO pipeline [definition 427](https://dev.azure.com/ReliasEngineering/PlatformDevelopment/_build?definitionId=427)
 - **Environments seeded in Pact Broker** by @jbuda: matches deployment environments for `can-i-deploy` checks
 - **Docker image version**: `pactfoundation/pact-broker:2.138.0-pactbroker2.119.0` (upstream changed tagging convention from simple semver)
+
+### Meeting: Contract Testing Chat (2026-04-29, Franz Hemmer + Jeff Buda)
+
+**Recording:** [Contract Testing Chat-20260429](https://reliaslearning-my.sharepoint.com/personal/fhemmer_relias_com/Documents/Recordings/Contract%20Testing%20Chat-20260429_130340-Meeting%20Recording.mp4?web=1)
+
+**Key technical clarifications:**
+
+- Current contracts cover **Azure Service Bus message payloads** (async), NOT HTTP REST APIs
+- Contracts were generated **manually** from latest source code and uploaded to broker — no CI/CD automation yet
+- Shared NuGet packages already provide **compile-time safety** — contract testing adds **runtime/schema drift detection** that compile-time cannot catch
+- Pact deployment philosophy: **consumers deploy first**, producers only after compatibility verified (reduces data loss risk)
+
+**Strategy decisions:**
+
+- **Gold-level** Pact Nirvana is the practical starting point (Diamond has scaling cost concerns with excessive pipeline triggers)
+- Platinum/Diamond introduce a **Verifier pipeline** (auto-validates compatibility across producer/consumer ecosystem) — revisit once adoption matures
+- Contracts are **versioned artifacts** (dev, staging, prod, PR branches) — not a single "current" definition
+- Existing ADR needs revalidation — may be outdated or partially incorrect
+
+**Infrastructure risk:**
+
+- Pact Broker becomes **mission-critical** once wired into CI/CD — broker downtime = org-wide deployment freeze
+- Requires: backup/recovery strategy, ongoing maintenance, potential redundancy planning
+
+**Action items (Franz):**
+
+1. Create Confluence onboarding FAQ for contract testing concepts
+2. Engage Architecture Review Board to revalidate org-wide buy-in
+3. Consult Clark (legacy deployment manager) for deployment insights
+4. Share findings with Maria to determine proceed/validate decision
+5. Plan Pact Broker backup & recovery strategy before broader rollout
 
 ## NuGet Packages
 
@@ -525,6 +561,7 @@ Before writing any code, survey the repository:
 6. **Identify the service's Pact participant name:** Usually matches the service name as it appears in deployment. Ask the developer if unclear.
 
 **Ask the developer:**
+
 - Which role does this service play? (Consumer / Provider / Both)
 - What is the participant name for the Pact Broker? (e.g., "Content Scheduler Messaging")
 - Which service(s) does it interact with? (for consumer: which provider? for provider: which consumers?)
@@ -607,6 +644,7 @@ public static class PactBrokerConfig
 The consumer test defines what this service expects from the provider API.
 
 **Key rules:**
+
 - One test class per provider
 - One test per interaction (endpoint + scenario)
 - Use the consumer's own DTO models, NOT the provider's
@@ -841,6 +879,7 @@ public class YourServiceProviderTests(YourServiceFixture fixture, ITestOutputHel
 | `PACT_BROKER_PASSWORD` | From Key Vault `relias-pactbroker-kv-001` | Yes |
 
 **Key CI/CD patterns:**
+
 - All contract testing steps gracefully skip when credentials aren't configured
 - Use `--filter "Category=Contract"` to run only contract tests
 - `can-i-deploy` in CI should use `--dry-run` (advisory). The real gate goes in the deploy pipeline
@@ -869,11 +908,13 @@ Most Relias services are in separate repositories. Key differences from the mono
 | Versioning | Git SHA from same repo | Git SHA from each repo independently |
 
 **Consumer repo responsibilities:**
+
 1. Generate pact files via consumer tests
 2. Publish pacts to broker with version (git SHA) and branch
 3. Run advisory `can-i-deploy` in CI
 
 **Provider repo responsibilities:**
+
 1. Verify pacts from broker (not local files)
 2. Publish verification results back to broker
 3. Run `can-i-deploy` gate before deployment
