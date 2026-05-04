@@ -529,7 +529,7 @@ Docs: [https://docs.pact.io/ai_tools/installation](https://docs.pact.io/ai_tools
 1. Create Confluence onboarding FAQ for contract testing concepts
 2. Engage Architecture Review Board to revalidate org-wide buy-in
 3. Consult Clark (legacy deployment manager) for deployment insights
-4. Share findings with Maria to determine proceed/validate decision
+4. Share findings with Malia to determine proceed/validate decision
 5. Plan Pact Broker backup & recovery strategy before broader rollout
 
 ## NuGet Packages
