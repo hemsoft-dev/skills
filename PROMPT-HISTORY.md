@@ -4,6 +4,9 @@ This file tracks meaningful prompts and their outcomes for the Claude Skills rep
 
 ---
 
+2026-05-04 - 11:02 - Add Apr 29 meeting takeaways to contract-testing skill (Buda/Hemmer chat)
+Result: Retrieved full transcript via workiq from "Contract Testing Chat" meeting. Added to SKILL.md: Gold-level Pact Nirvana as starting point, Azure Service Bus scope (not REST), Pact Broker mission-critical risk, ADR revalidation need, 3 new concerns, 5 action items. Bumped skill V1.3→V1.4.
+
 2026-04-29 - 11:42 - Sync copilot-hooks installer templates with reference hooks from this repo
 Result: Updated 5 embedded templates in 1-Install-CopilotHooks.ps1 to match .github/hooks/ reference. Removed debug tracing (hook-debug.log), updated path resolution to PSScriptRoot/SCRIPT_DIR, added sessionEnd logging. Updated verify script and SKILL.md (V2.0→V2.1).
 
