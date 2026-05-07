@@ -141,6 +141,37 @@ python scripts/generate.py grammars/<name>.grammar.json
 
 Open the generated HTML file for the user.
 
+## ALWAYS: Accuracy Audit After Generation
+
+After generating or updating any grammar diagram, perform a **cross-reference audit** to verify the grammar matches the live specification:
+
+### Audit Steps
+
+1. **Fetch the live spec pages** referenced in `meta.source` (and related sub-pages).
+2. **Read the full grammar JSON** that was just generated/updated.
+3. **Cross-reference every rule** — for each field or option in the spec:
+   - Is it present in the grammar? (missing = gap)
+   - Is its value range correct? (e.g., `approved` only vs `none|low|medium|high|approved`)
+   - Are all variants/choices included? (e.g., `bi-weekly`, `tri-weekly`)
+4. **Check the user's actual workflow files** (if in workspace) against the grammar to catch real-world fields the grammar doesn't cover.
+5. **Report findings as a table** with: Field, Grammar Status, Fix Needed.
+6. **Fix all gaps immediately** — don't just report them.
+
+### What to Look For
+
+- **Missing fields**: Spec documents a field that grammar doesn't include
+- **Wrong value ranges**: Grammar hardcodes one value but spec allows multiple
+- **Missing choices**: Grammar has some options but not all (e.g., trigger types, schedule frequencies)
+- **Missing trigger shorthands**: Natural-language triggers the spec documents but grammar omits
+- **Missing safe output types**: New output types added to spec
+- **Missing tool types**: New tools in the tools reference
+
+### When to Audit
+
+- Every time `generate` or `explain` produces output for a spec-backed grammar
+- When user reports a discrepancy
+- When fetching updated spec pages
+
 ## EBNF Conversion
 
 For grammars written in EBNF notation:

@@ -3,7 +3,7 @@
     "title": "GitHub Agentic Workflows (.md) Frontmatter",
     "description": "Railroad diagram for the YAML frontmatter schema of gh-aw workflow markdown files",
     "source": "https://github.github.com/gh-aw/reference/frontmatter/",
-    "version": "2026-04 (gh aw v0.67.3)"
+    "version": "2026-05 (gh aw v0.76+)"
   },
   "rules": {
     "Workflow File": {
@@ -26,7 +26,8 @@
         "items": [
           { "type": "Sequence", "items": [
             { "type": "Optional", "items": [{ "type": "Sequence", "items": ["description:", { "type": "Terminal", "label": "<string>" }] }], "skip": true },
-            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["source:", { "type": "Terminal", "label": "owner/repo/path@ref" }] }], "skip": true }
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["source:", { "type": "Terminal", "label": "owner/repo/path@ref" }] }], "skip": true },
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["redirect:", { "type": "Terminal", "label": "owner/repo/path@ref" }] }], "skip": true }
           ]},
           { "type": "Sequence", "items": ["on:", { "type": "NonTerminal", "label": "Trigger Events" }] },
           { "type": "Sequence", "items": [
@@ -35,6 +36,7 @@
           ]},
           { "type": "Sequence", "items": [
             { "type": "Optional", "items": [{ "type": "Sequence", "items": ["tools:", { "type": "NonTerminal", "label": "Tools Config" }] }], "skip": true },
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["mcp-scripts:", { "type": "NonTerminal", "label": "MCP Scripts" }] }], "skip": true },
             { "type": "Optional", "items": [{ "type": "Sequence", "items": ["network:", { "type": "NonTerminal", "label": "Network Config" }] }], "skip": true }
           ]},
           { "type": "Sequence", "items": [
@@ -111,8 +113,12 @@
                 { "type": "Sequence", "items": [
                   "workflows:", { "type": "Terminal", "label": "[names]" },
                   "types:", { "type": "Terminal", "label": "[completed]" },
+                  { "type": "Optional", "items": [{ "type": "Sequence", "items": ["conclusion:", { "type": "Terminal", "label": "success | failure | cancelled | ..." }] }], "skip": true },
                   { "type": "Optional", "items": [{ "type": "Sequence", "items": ["branches:", { "type": "Terminal", "label": "[branches]" }] }], "skip": true }
                 ]}
+              ]},
+              { "type": "Group", "label": "deployment_status", "items": [
+                { "type": "Optional", "items": [{ "type": "Sequence", "items": ["state:", { "type": "Terminal", "label": "success | failure | error | pending | ..." }] }], "skip": true }
               ]},
               { "type": "Group", "label": "slash_command", "items": [
                 { "type": "Terminal", "label": "/command-name" }
@@ -152,9 +158,15 @@
           { "type": "Sequence", "items": ["discussion", { "type": "Terminal", "label": "<activity>" }] },
           { "type": "Sequence", "items": ["comment", { "type": "Terminal", "label": "created" }] },
           { "type": "Sequence", "items": [{ "type": "Terminal", "label": "daily" }, { "type": "Optional", "items": [{ "type": "NonTerminal", "label": "Time Constraint" }], "skip": true }] },
-          { "type": "Sequence", "items": ["weekly on", { "type": "Terminal", "label": "<day>" }, { "type": "Optional", "items": [{ "type": "NonTerminal", "label": "Time Constraint" }], "skip": true }] },
+          { "type": "Sequence", "items": [{ "type": "Terminal", "label": "weekly" }, { "type": "Optional", "items": [{ "type": "Sequence", "items": ["on", { "type": "Terminal", "label": "<day>" }] }], "skip": true }, { "type": "Optional", "items": [{ "type": "NonTerminal", "label": "Time Constraint" }], "skip": true }] },
           { "type": "Sequence", "items": ["every", { "type": "Terminal", "label": "<interval>" }] },
-          { "type": "Sequence", "items": [{ "type": "Terminal", "label": "label-command" }, { "type": "Terminal", "label": "<name>" }] }
+          { "type": "Sequence", "items": [{ "type": "Terminal", "label": "label-command" }, { "type": "Terminal", "label": "<name>" }] },
+          { "type": "Terminal", "label": "release published" },
+          { "type": "Terminal", "label": "repository starred" },
+          { "type": "Terminal", "label": "dependabot pull request" },
+          { "type": "Sequence", "items": ["deployment", { "type": "Choice", "default": 0, "items": ["failed", "error", "failed or error"] }] },
+          { "type": "Sequence", "items": ["workflow completed", { "type": "Terminal", "label": "<name>" }] },
+          { "type": "Sequence", "items": ["api dispatch", { "type": "Terminal", "label": "<event>" }] }
         ]
       }
     },
@@ -167,8 +179,11 @@
           { "type": "Choice", "default": 0, "items": [
             "hourly",
             "daily",
+            "weekly",
+            "bi-weekly",
+            "tri-weekly",
             { "type": "Sequence", "items": ["weekly on", { "type": "Terminal", "label": "<day>" }] },
-            { "type": "Sequence", "items": ["every", { "type": "Terminal", "label": "<interval>" }] }
+            { "type": "Sequence", "items": ["every", { "type": "Terminal", "label": "<N> <m|h|d|w>" }] }
           ]},
           { "type": "Optional", "items": [{ "type": "NonTerminal", "label": "Time Constraint" }], "skip": true },
           { "type": "Optional", "items": [{ "type": "Sequence", "items": [{ "type": "Terminal", "label": "utc±N" }] }], "skip": true }
@@ -195,7 +210,10 @@
         "items": [
           { "type": "Sequence", "items": [
             { "type": "Optional", "items": [{ "type": "Sequence", "items": ["reaction:", { "type": "Terminal", "label": "+1 | eyes | rocket | ..." }] }], "skip": true },
-            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["status-comment:", { "type": "Terminal", "label": "true" }] }], "skip": true }
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["status-comment:", { "type": "Choice", "default": 0, "items": [
+              { "type": "Terminal", "label": "true" },
+              { "type": "Sequence", "items": ["{", { "type": "Terminal", "label": "issues, pull-requests, discussions toggles" }, "}"] }
+            ] }] }], "skip": true }
           ]},
           { "type": "Sequence", "items": [
             { "type": "Optional", "items": [{ "type": "Sequence", "items": ["roles:", { "type": "Terminal", "label": "[admin, maintainer, write, ...]" }] }], "skip": true },
@@ -216,6 +234,10 @@
           { "type": "Sequence", "items": [
             { "type": "Optional", "items": [{ "type": "Sequence", "items": ["github-token:", { "type": "Terminal", "label": "${{ secrets.* }}" }] }], "skip": true },
             { "type": "Optional", "items": [{ "type": "Sequence", "items": ["github-app:", { "type": "NonTerminal", "label": "App Credentials" }] }], "skip": true }
+          ]},
+          { "type": "Sequence", "items": [
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["needs:", { "type": "Terminal", "label": "[job-ids]" }] }], "skip": true },
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["permissions:", { "type": "NonTerminal", "label": "Permissions" }] }], "skip": true }
           ]},
           { "type": "Optional", "items": [{ "type": "Sequence", "items": ["steps:", { "type": "NonTerminal", "label": "Pre-Activation Steps" }] }], "skip": true }
         ]
@@ -317,6 +339,10 @@
           ]},
           { "type": "Sequence", "items": [
             { "type": "Optional", "items": ["agentic-workflows:"], "skip": true },
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["qmd:", { "type": "Terminal", "label": "checkouts, patterns" }] }], "skip": true },
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["cli-proxy:", { "type": "Terminal", "label": "true" }] }], "skip": true }
+          ]},
+          { "type": "Sequence", "items": [
             { "type": "Optional", "items": [{ "type": "Sequence", "items": ["timeout:", { "type": "Terminal", "label": "<seconds>" }] }], "skip": true },
             { "type": "Optional", "items": [{ "type": "Sequence", "items": ["startup-timeout:", { "type": "Terminal", "label": "<seconds>" }] }], "skip": true }
           ]},
@@ -407,18 +433,23 @@
           ]},
           { "type": "Sequence", "items": [
             { "type": "Optional", "items": [{ "type": "Sequence", "items": ["environment:", { "type": "Terminal", "label": "<env>" }] }], "skip": true },
-            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["runs-on:", { "type": "Terminal", "label": "<runner>" }] }], "skip": true },
-            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["max-patch-size:", { "type": "Terminal", "label": "<KB>" }] }], "skip": true }
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["runs-on:", { "type": "Terminal", "label": "<runner>" }] }], "skip": true }
           ]},
           { "type": "Sequence", "items": [
             { "type": "Optional", "items": [{ "type": "Sequence", "items": ["concurrency-group:", { "type": "Terminal", "label": "<group-expr>" }] }], "skip": true },
             { "type": "Optional", "items": [{ "type": "Sequence", "items": ["allowed-domains:", { "type": "Terminal", "label": "[domains]" }] }], "skip": true },
-            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["max-bot-mentions:", { "type": "Terminal", "label": "<int>" }] }], "skip": true }
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["allowed-github-references:", { "type": "Terminal", "label": "[repos] or []" }] }], "skip": true }
+          ]},
+          { "type": "Sequence", "items": [
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["mentions:", { "type": "Choice", "default": 0, "items": [{ "type": "Terminal", "label": "true" }, { "type": "Terminal", "label": "false" }] }] }], "skip": true },
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["max-bot-mentions:", { "type": "Terminal", "label": "<int>" }] }], "skip": true },
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["needs:", { "type": "Terminal", "label": "[job-ids]" }] }], "skip": true }
           ]},
           { "type": "Sequence", "items": [
             { "type": "Optional", "items": [{ "type": "Sequence", "items": ["report-failure-as-issue:", { "type": "Terminal", "label": "bool" }] }], "skip": true },
             { "type": "Optional", "items": [{ "type": "Sequence", "items": ["failure-issue-repo:", { "type": "Terminal", "label": "owner/repo" }] }], "skip": true },
-            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["group-reports:", { "type": "Terminal", "label": "true" }] }], "skip": true }
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["group-reports:", { "type": "Terminal", "label": "true" }] }], "skip": true },
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["max-patch-size:", { "type": "Terminal", "label": "<KB>" }] }], "skip": true }
           ]},
           { "type": "Optional", "items": [{ "type": "Sequence", "items": ["messages:", { "type": "NonTerminal", "label": "Message Templates" }] }], "skip": true }
         ]
@@ -519,7 +550,10 @@
             { "type": "Optional", "items": [{ "type": "Group", "label": "assign-to-agent:", "items": [
               { "type": "Terminal", "label": "name, model, max, target" }
             ]}], "skip": true }
-          ]}
+          ]},
+          { "type": "Optional", "items": [{ "type": "Group", "label": "set-issue-type:", "items": [
+            { "type": "Terminal", "label": "allowed, max, target" }
+          ]}], "skip": true }
         ]
       }
     },
@@ -671,20 +705,30 @@
           { "type": "Sequence", "items": [
             { "type": "Optional", "items": [{ "type": "Sequence", "items": ["strict:", { "type": "Choice", "default": 0, "items": [{ "type": "Terminal", "label": "true" }, { "type": "Terminal", "label": "false" }] }] }], "skip": true },
             { "type": "Optional", "items": [{ "type": "Sequence", "items": ["private:", { "type": "Terminal", "label": "true" }] }], "skip": true },
-            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["labels:", { "type": "Terminal", "label": "[strings]" }] }], "skip": true }
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["labels:", { "type": "Terminal", "label": "[strings]" }] }], "skip": true },
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["metadata:", { "type": "Terminal", "label": "{key: value}" }] }], "skip": true }
+          ]},
+          { "type": "Sequence", "items": [
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["features:", { "type": "NonTerminal", "label": "Feature Flags" }] }], "skip": true },
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["resources:", { "type": "Terminal", "label": "[relative-paths]" }] }], "skip": true },
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["concurrency:", { "type": "NonTerminal", "label": "Concurrency Config" }] }], "skip": true }
           ]},
           { "type": "Sequence", "items": [
             { "type": "Optional", "items": [{ "type": "Sequence", "items": ["env:", { "type": "Terminal", "label": "{key: value}" }] }], "skip": true },
-            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["secrets:", { "type": "Terminal", "label": "{key: ${{ secrets.* }}}" }] }], "skip": true },
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["secrets:", { "type": "NonTerminal", "label": "Secrets Config" }] }], "skip": true },
             { "type": "Optional", "items": [{ "type": "Sequence", "items": ["environment:", { "type": "Terminal", "label": "<name>" }] }], "skip": true }
+          ]},
+          { "type": "Sequence", "items": [
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["container:", { "type": "Terminal", "label": "<image>" }] }], "skip": true },
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["services:", { "type": "NonTerminal", "label": "Service Containers" }] }], "skip": true }
           ]},
           { "type": "Sequence", "items": [
             { "type": "Optional", "items": [{ "type": "Sequence", "items": ["if:", { "type": "Terminal", "label": "<expression>" }] }], "skip": true },
             { "type": "Optional", "items": [{ "type": "Sequence", "items": ["checkout:", { "type": "Choice", "default": 0, "items": [{ "type": "Terminal", "label": "false" }, { "type": "NonTerminal", "label": "Checkout Config" }] }] }], "skip": true }
           ]},
           { "type": "Sequence", "items": [
-            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["pre-steps:", { "type": "NonTerminal", "label": "Custom Steps" }] }], "skip": true },
             { "type": "Optional", "items": [{ "type": "Sequence", "items": ["steps:", { "type": "NonTerminal", "label": "Custom Steps" }] }], "skip": true },
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["pre-agent-steps:", { "type": "NonTerminal", "label": "Custom Steps" }] }], "skip": true },
             { "type": "Optional", "items": [{ "type": "Sequence", "items": ["post-steps:", { "type": "NonTerminal", "label": "Post Steps" }] }], "skip": true },
             { "type": "Optional", "items": [{ "type": "Sequence", "items": ["jobs:", { "type": "NonTerminal", "label": "Custom Jobs" }] }], "skip": true }
           ]},
@@ -853,9 +897,10 @@
             { "type": "Terminal", "label": "[default]" },
             { "type": "Terminal", "label": "[context, repos, issues, pull_requests]" }
           ]}] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["lockdown:", { "type": "Choice", "default": 0, "items": [{ "type": "Terminal", "label": "true" }, { "type": "Terminal", "label": "false" }] }] }], "skip": true },
           { "type": "Optional", "items": [{ "type": "Sequence", "items": ["github-token:", { "type": "Terminal", "label": "${{ secrets.* }}" }] }], "skip": true },
           { "type": "Optional", "items": [{ "type": "Sequence", "items": ["github-app:", { "type": "NonTerminal", "label": "App Credentials" }] }], "skip": true },
-          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["min-integrity:", { "type": "Terminal", "label": "approved" }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["min-integrity:", { "type": "Choice", "default": 0, "items": ["none", "low", "medium", "high", "approved"] }] }], "skip": true },
           { "type": "Optional", "items": [{ "type": "Sequence", "items": ["integrity-proxy:", { "type": "Terminal", "label": "false" }] }], "skip": true }
         ]
       }
@@ -967,11 +1012,22 @@
               { "type": "Optional", "items": [{ "type": "Sequence", "items": ["needs:", { "type": "Terminal", "label": "[job-ids]" }] }], "skip": true },
               { "type": "Optional", "items": [{ "type": "Sequence", "items": ["runs-on:", { "type": "Terminal", "label": "<runner>" }] }], "skip": true },
               { "type": "Optional", "items": [{ "type": "Sequence", "items": ["if:", { "type": "Terminal", "label": "<expression>" }] }], "skip": true },
+              { "type": "Optional", "items": [{ "type": "Sequence", "items": ["permissions:", { "type": "NonTerminal", "label": "Permissions" }] }], "skip": true },
               { "type": "Optional", "items": [{ "type": "Sequence", "items": ["timeout-minutes:", { "type": "Terminal", "label": "<int>" }] }], "skip": true },
+              { "type": "Optional", "items": [{ "type": "Sequence", "items": ["concurrency:", { "type": "NonTerminal", "label": "Concurrency Config" }] }], "skip": true },
+              { "type": "Optional", "items": [{ "type": "Sequence", "items": ["continue-on-error:", { "type": "Terminal", "label": "true" }] }], "skip": true },
+              { "type": "Optional", "items": [{ "type": "Sequence", "items": ["container:", { "type": "Terminal", "label": "<image>" }] }], "skip": true },
+              { "type": "Optional", "items": [{ "type": "Sequence", "items": ["services:", { "type": "NonTerminal", "label": "Service Containers" }] }], "skip": true },
               { "type": "Optional", "items": [{ "type": "Sequence", "items": ["env:", { "type": "Terminal", "label": "{key: value}" }] }], "skip": true },
               { "type": "Optional", "items": [{ "type": "Sequence", "items": ["outputs:", { "type": "Terminal", "label": "{key: expr}" }] }], "skip": true },
-              "steps:",
-              { "type": "NonTerminal", "label": "Custom Steps" }
+              { "type": "Optional", "items": [{ "type": "Sequence", "items": ["pre-steps:", { "type": "NonTerminal", "label": "Custom Steps" }] }], "skip": true },
+              { "type": "Choice", "default": 0, "items": [
+                { "type": "Sequence", "items": ["steps:", { "type": "NonTerminal", "label": "Custom Steps" }] },
+                { "type": "Sequence", "items": ["uses:", { "type": "Terminal", "label": "<reusable-workflow>" },
+                  { "type": "Optional", "items": [{ "type": "Sequence", "items": ["with:", { "type": "Terminal", "label": "{inputs}" }] }], "skip": true },
+                  { "type": "Optional", "items": [{ "type": "Sequence", "items": ["secrets:", { "type": "Terminal", "label": "{key: secret}" }] }], "skip": true }
+                ] }
+              ]}
             ]}
           ]}
         ]
@@ -1036,7 +1092,95 @@
           { "type": "Optional", "items": [{ "type": "Sequence", "items": ["ref:", { "type": "Terminal", "label": "<branch | tag | sha>" }] }], "skip": true },
           { "type": "Optional", "items": [{ "type": "Sequence", "items": ["token:", { "type": "Terminal", "label": "${{ secrets.* }}" }] }], "skip": true },
           { "type": "Optional", "items": [{ "type": "Sequence", "items": ["path:", { "type": "Terminal", "label": "<directory>" }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["fetch:", { "type": "Terminal", "label": "<int | 0>" }] }], "skip": true },
           { "type": "Optional", "items": [{ "type": "Sequence", "items": ["submodules:", { "type": "Choice", "default": 0, "items": ["true", "recursive", "false"] }] }], "skip": true }
+        ]
+      }
+    },
+
+    "Feature Flags": {
+      "description": "Enable experimental or optional features",
+      "definition": {
+        "type": "Sequence",
+        "items": [
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["action-mode:", { "type": "Choice", "default": 0, "items": [
+            { "type": "Terminal", "label": "dev" },
+            { "type": "Terminal", "label": "release" },
+            { "type": "Terminal", "label": "action" },
+            { "type": "Terminal", "label": "script" }
+          ] }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["awf-diagnostic-logs:", { "type": "Terminal", "label": "true" }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": ["integrity-reactions:", { "type": "Terminal", "label": "true" }] }], "skip": true },
+          { "type": "Optional", "items": [{ "type": "Sequence", "items": [{ "type": "Terminal", "label": "<custom-flag>:" }, { "type": "Terminal", "label": "true | false" }] }], "skip": true }
+        ]
+      }
+    },
+
+    "Secrets Config": {
+      "description": "Secret values passed to workflow execution",
+      "definition": {
+        "type": "OneOrMore",
+        "items": [
+          { "type": "Group", "label": "<SECRET_NAME>:", "items": [
+            { "type": "Choice", "default": 0, "items": [
+              { "type": "Terminal", "label": "${{ secrets.* }}" },
+              { "type": "Sequence", "items": [
+                "value:", { "type": "Terminal", "label": "${{ secrets.* }}" },
+                { "type": "Optional", "items": [{ "type": "Sequence", "items": ["description:", { "type": "Terminal", "label": "<string>" }] }], "skip": true }
+              ]}
+            ]}
+          ]}
+        ]
+      }
+    },
+
+    "MCP Scripts": {
+      "description": "Inline custom MCP tools using JavaScript or shell scripts",
+      "definition": {
+        "type": "OneOrMore",
+        "items": [
+          { "type": "Group", "label": "<tool-name>:", "items": [
+            { "type": "Sequence", "items": [
+              { "type": "Optional", "items": [{ "type": "Sequence", "items": ["description:", { "type": "Terminal", "label": "<string>" }] }], "skip": true },
+              { "type": "Choice", "default": 0, "items": [
+                { "type": "Sequence", "items": ["run:", { "type": "Terminal", "label": "<shell-script>" }] },
+                { "type": "Sequence", "items": ["script:", { "type": "Terminal", "label": "<js-code>" }] }
+              ]},
+              { "type": "Optional", "items": [{ "type": "Sequence", "items": ["secrets:", { "type": "Terminal", "label": "[secret-names]" }] }], "skip": true },
+              { "type": "Optional", "items": [{ "type": "Sequence", "items": ["inputs:", { "type": "Terminal", "label": "{name: {type, description}}" }] }], "skip": true }
+            ]}
+          ]}
+        ]
+      }
+    },
+
+    "Service Containers": {
+      "description": "Service containers that run alongside the job (databases, caches)",
+      "definition": {
+        "type": "OneOrMore",
+        "items": [
+          { "type": "Group", "label": "<service-name>:", "items": [
+            { "type": "Sequence", "items": [
+              "image:", { "type": "Terminal", "label": "<docker-image>" },
+              { "type": "Optional", "items": [{ "type": "Sequence", "items": ["env:", { "type": "Terminal", "label": "{key: value}" }] }], "skip": true },
+              { "type": "Optional", "items": [{ "type": "Sequence", "items": ["ports:", { "type": "Terminal", "label": "[host:container]" }] }], "skip": true }
+            ]}
+          ]}
+        ]
+      }
+    },
+
+    "Concurrency Config": {
+      "description": "Workflow concurrency control",
+      "definition": {
+        "type": "Choice",
+        "default": 0,
+        "items": [
+          { "type": "Terminal", "label": "<group-expression>" },
+          { "type": "Sequence", "items": [
+            "group:", { "type": "Terminal", "label": "<expression>" },
+            { "type": "Optional", "items": [{ "type": "Sequence", "items": ["cancel-in-progress:", { "type": "Choice", "default": 0, "items": ["true", "false"] }] }], "skip": true }
+          ]}
         ]
       }
     }
