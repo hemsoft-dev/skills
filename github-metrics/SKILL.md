@@ -1,10 +1,10 @@
 ---
 name: github-metrics
-description: "V1.0 - Commands: CopilotUsage, PremiumRequests, LegacyMetrics. Reference for GitHub Copilot organization and enterprise usage, billing, and report APIs when you need to find the right metrics endpoint quickly."
+description: "V1.1 - Commands: CopilotUsage, PremiumRequests, LegacyMetrics. Reference for GitHub Copilot organization and enterprise usage, billing, and report APIs when you need to find the right metrics endpoint quickly."
 compatibility: Requires GitHub Cloud, network access, and org or enterprise owner or billing-manager access for most enterprise metrics endpoints.
 metadata:
   author: skills-agent
-  version: "1.0"
+  version: "1.1"
 ---
 
 # GitHub Metrics
@@ -38,6 +38,8 @@ Then return the matching documented endpoint, required scope, and a `gh api` or 
 | Copilot usage reports are exposed through dedicated Copilot usage metrics APIs | Use these for downloadable org and enterprise report files, including user-level reports |
 | The older Copilot metrics APIs are legacy | They are still documented, but GitHub says to migrate to usage-metrics endpoints before April 2, 2026 |
 | Usage telemetry and billing are separate surfaces | Do not treat Copilot usage report APIs as a replacement for premium request billing totals |
+| Organization admins on enterprise-owned orgs cannot always filter premium billing by `user` at org scope | `GET /orgs/{org}/settings/billing/premium_request/usage?...&user=...` can return `403`, even when the org aggregate endpoint works |
+| The `org-metrics` repo report path uses stronger workflow credentials than local org-admin CLI sessions | The `copilot-metrics.yml` workflow injects `secrets.ENTERPRISE_BILLING_PAT` into `Get-CopilotMetrics.ps1`, which is why CI can compute per-user premium rankings when a local session cannot |
 
 ## Decision Table
 
@@ -124,6 +126,7 @@ Use when the request is about premium request cost, quantities, overages, model-
 2. This endpoint is for billing usage, not general Copilot adoption telemetry.
 3. Only data from the past 24 months is available.
 4. For enterprise scope, you must be an enterprise administrator or billing manager.
+5. For enterprise-owned organizations, org-level aggregate calls can succeed while org-level `user=` filtering still returns `403`.
 
 **Example**
 
@@ -164,9 +167,21 @@ Use only when the user explicitly wants the older aggregated active and engaged 
 | Role or token situation | Caveat |
 | --- | --- |
 | Organization owners | Can use org-level Copilot usage metrics reports, but user-level premium request analytics access is more limited than enterprise owners and billing managers |
+| Organization admins on enterprise-owned orgs | Can often read org aggregate premium-request totals, but may get `403` on org-level `user=` filters; exact per-user ranking usually still needs enterprise admin or billing-manager scope |
 | Enterprise owners and billing managers | Can access enterprise-level premium request and Copilot usage report APIs |
 | Fine-grained PATs | Supported for org usage-metrics endpoints, but not for some enterprise billing endpoints |
 | Legacy metrics endpoints | May return `422` if the Copilot metrics API policy is disabled |
+
+## Repo-Specific Fallback: org-metrics
+
+For `relias-engineering/org-metrics`, the repeatable fallback when local CLI auth cannot read enterprise per-user billing is:
+
+1. Dispatch `.github/workflows/copilot-metrics.yml` with `report-month` and `skip-slack=true`
+2. Let the workflow run with `secrets.ENTERPRISE_BILLING_PAT`
+3. Read `reports/copilot-metrics-{yyyy-MM}.html` from `main`
+4. Parse the `Top 50 Most Active Users` table, which is ranked by premium requests for that billing cycle
+
+Use `Scripts\Get-CopilotPremiumTopConsumers.ps1` in this skill for that flow.
 
 ## Working Rules
 
