@@ -127,22 +127,26 @@ ai_credit_cost = ai_credits × $0.01
 
 ### Per-Token Pricing Reference (per 1M tokens)
 
-| Model | Input | Cached Input | Output | Category |
-|-------|-------|--------------|--------|----------|
-| GPT-4.1 | $2.00 | $0.50 | $8.00 | Versatile |
-| GPT-5 mini | $0.25 | $0.025 | $2.00 | Lightweight |
-| GPT-5.2 / 5.2-Codex / 5.3-Codex | $1.75 | $0.175 | $14.00 | Powerful |
-| GPT-5.4 | $2.50 | $0.25 | $15.00 | Versatile |
-| GPT-5.4 mini | $0.75 | $0.075 | $4.50 | Lightweight |
-| GPT-5.4 nano | $0.20 | $0.02 | $1.25 | Lightweight |
-| GPT-5.5 | $5.00 | $0.50 | $30.00 | Powerful |
-| Claude Haiku 4.5 | $1.00 | $0.10 | $5.00 | Versatile |
-| Claude Sonnet 4/4.5/4.6 | $3.00 | $0.30 | $15.00 | Versatile |
-| Claude Opus 4.5/4.6/4.7 | $5.00 | $0.50 | $25.00 | Powerful |
-| Gemini 2.5 Pro | $1.25 | $0.125 | $10.00 | Powerful |
-| Gemini 3 Flash | $0.50 | $0.05 | $3.00 | Lightweight |
-| Gemini 3.1 Pro | $2.00 | $0.20 | $12.00 | Powerful |
-| Grok Code Fast 1 | $0.20 | $0.02 | $1.50 | Lightweight |
+**IMPORTANT: Cached input tokens are a SUBSET of total input tokens, not additive.**
+The correct cost formula is: `(totalInput - cached) × inputRate + cached × cachedRate + output × outputRate`.
+Anthropic models also incur a separate **cache write** cost when new context is written to cache.
+
+| Model | Input | Cached Input | Cache Write | Output | Category |
+|-------|-------|--------------|-------------|--------|----------|
+| GPT-4.1 | $2.00 | $0.50 | — | $8.00 | Versatile |
+| GPT-5 mini | $0.25 | $0.025 | — | $2.00 | Lightweight |
+| GPT-5.2 / 5.2-Codex / 5.3-Codex | $1.75 | $0.175 | — | $14.00 | Powerful |
+| GPT-5.4 | $2.50 | $0.25 | — | $15.00 | Versatile |
+| GPT-5.4 mini | $0.75 | $0.075 | — | $4.50 | Lightweight |
+| GPT-5.4 nano | $0.20 | $0.02 | — | $1.25 | Lightweight |
+| GPT-5.5 | $5.00 | $0.50 | — | $30.00 | Powerful |
+| Claude Haiku 4.5 | $1.00 | $0.10 | $1.25 | $5.00 | Versatile |
+| Claude Sonnet 4/4.5/4.6 | $3.00 | $0.30 | $3.75 | $15.00 | Versatile |
+| Claude Opus 4.5/4.6/4.7 | $5.00 | $0.50 | $6.25 | $25.00 | Powerful |
+| Gemini 2.5 Pro | $1.25 | $0.125 | — | $10.00 | Powerful |
+| Gemini 3 Flash | $0.50 | $0.05 | — | $3.00 | Lightweight |
+| Gemini 3.1 Pro | $2.00 | $0.20 | — | $12.00 | Powerful |
+| Grok Code Fast 1 | $0.20 | $0.02 | — | $1.50 | Lightweight |
 
 *Source: <https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing>*
 
@@ -242,7 +246,7 @@ These return `download_links` to Azure-hosted NDJSON files with rich per-user/or
 
 - **CLI users**: `totals_by_cli.token_usage` has `prompt_tokens_sum`, `output_tokens_sum`, `avg_tokens_per_request`
 - **IDE/Chat/Agent**: `totals_by_model_feature` has model + feature + interaction counts — **NO token data**
-- **No cached token counts** anywhere in the API
+- **No cached token counts** anywhere in the API — cost estimates from NDJSON token data treat all prompt tokens at full input rate (slight overcount when caching is active)
 - After June 1, 2026: billing API should expose AI Credit consumption for all usage types
 
 **NDJSON Model Name Mapping** (internal → display):

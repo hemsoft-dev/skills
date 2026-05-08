@@ -212,15 +212,18 @@ function Resolve-NdjsonModelName {
 }
 
 function Get-TokenCostForModel {
-    param([string]$DisplayModelName, [long]$PromptTokens, [long]$OutputTokens)
+    param([string]$DisplayModelName, [long]$PromptTokens, [long]$OutputTokens, [long]$CachedTokens = 0)
     $info = $ModelLookup[$DisplayModelName]
     if (-not $info) {
         # Fallback: Sonnet-tier pricing
-        $info = @{ InputPer1M = 3.00; OutputPer1M = 15.00 }
+        $info = @{ InputPer1M = 3.00; CachedPer1M = 0.30; OutputPer1M = 15.00 }
     }
-    $promptCost = ($PromptTokens / 1000000.0) * $info.InputPer1M
+    # Cached input tokens are a SUBSET of total input — subtract before applying full rate
+    $uncachedInput = [math]::Max(0, $PromptTokens - $CachedTokens)
+    $promptCost = ($uncachedInput / 1000000.0) * $info.InputPer1M
+    $cachedCost = ($CachedTokens / 1000000.0) * $info.CachedPer1M
     $outputCost = ($OutputTokens / 1000000.0) * $info.OutputPer1M
-    return ($promptCost + $outputCost)
+    return ($promptCost + $cachedCost + $outputCost)
 }
 
 function Format-TokenCount {
