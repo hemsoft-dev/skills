@@ -1,10 +1,10 @@
 ---
 name: github-metrics
-description: "V1.1 - Commands: CopilotUsage, PremiumRequests, LegacyMetrics. Reference for GitHub Copilot organization and enterprise usage, billing, and report APIs when you need to find the right metrics endpoint quickly."
+description: "V1.2 - Commands: CopilotUsage, PremiumRequests, LegacyMetrics. Reference for GitHub Copilot organization and enterprise usage, billing, and report APIs when you need to find the right metrics endpoint quickly."
 compatibility: Requires GitHub Cloud, network access, and org or enterprise owner or billing-manager access for most enterprise metrics endpoints.
 metadata:
   author: skills-agent
-  version: "1.1"
+  version: "1.2"
 ---
 
 # GitHub Metrics
@@ -39,7 +39,8 @@ Then return the matching documented endpoint, required scope, and a `gh api` or 
 | The older Copilot metrics APIs are legacy | They are still documented, but GitHub says to migrate to usage-metrics endpoints before April 2, 2026 |
 | Usage telemetry and billing are separate surfaces | Do not treat Copilot usage report APIs as a replacement for premium request billing totals |
 | Organization admins on enterprise-owned orgs cannot always filter premium billing by `user` at org scope | `GET /orgs/{org}/settings/billing/premium_request/usage?...&user=...` can return `403`, even when the org aggregate endpoint works |
-| The `org-metrics` repo report path uses stronger workflow credentials than local org-admin CLI sessions | The `copilot-metrics.yml` workflow injects `secrets.ENTERPRISE_BILLING_PAT` into `Get-CopilotMetrics.ps1`, which is why CI can compute per-user premium rankings when a local session cannot |
+| Current-cycle top-consumer ranking only needs two direct API surfaces | Query Copilot seat assignments once, then issue one per-user premium billing query per seat holder and sort by `grossQuantity` |
+| CI may have stronger credentials than a local CLI session | That changes which direct API calls will succeed, but it does not change the correct solution: query billing directly instead of scraping workflow output |
 
 ## Decision Table
 
@@ -127,6 +128,7 @@ Use when the request is about premium request cost, quantities, overages, model-
 3. Only data from the past 24 months is available.
 4. For enterprise scope, you must be an enterprise administrator or billing manager.
 5. For enterprise-owned organizations, org-level aggregate calls can succeed while org-level `user=` filtering still returns `403`.
+6. The minimum direct ranking strategy is: enumerate current seat holders, query billing once per seat holder, sum `grossQuantity`, then sort descending.
 
 **Example**
 
@@ -143,6 +145,16 @@ $params = "year=2026&month=3&organization=fhemmer&user=octocat"
 gh api \
   -H "Accept: application/vnd.github+json" \
   "/enterprises/$enterprise/settings/billing/premium_request/usage?$params"
+```
+
+**Direct script example**
+
+```powershell
+.\Scripts\Get-CopilotPremiumTopConsumers.ps1 `
+  -Org "relias-engineering" `
+  -Enterprise "bertelsmann" `
+  -ReportMonth "2026-05" `
+  -BillingToken $env:ENTERPRISE_BILLING_TOKEN
 ```
 
 ### LegacyMetrics
@@ -172,16 +184,18 @@ Use only when the user explicitly wants the older aggregated active and engaged 
 | Fine-grained PATs | Supported for org usage-metrics endpoints, but not for some enterprise billing endpoints |
 | Legacy metrics endpoints | May return `422` if the Copilot metrics API policy is disabled |
 
-## Repo-Specific Fallback: org-metrics
+## Direct Top-Consumer Query
 
-For `relias-engineering/org-metrics`, the repeatable fallback when local CLI auth cannot read enterprise per-user billing is:
+For "who are the top Copilot premium request consumers right now?", use this direct pattern:
 
-1. Dispatch `.github/workflows/copilot-metrics.yml` with `report-month` and `skip-slack=true`
-2. Let the workflow run with `secrets.ENTERPRISE_BILLING_PAT`
-3. Read `reports/copilot-metrics-{yyyy-MM}.html` from `main`
-4. Parse the `Top 50 Most Active Users` table, which is ranked by premium requests for that billing cycle
+1. Enumerate current seat holders with `GET /orgs/{org}/copilot/billing/seats`
+2. Query premium request billing once per seat holder with either:
+   - `GET /orgs/{org}/settings/billing/premium_request/usage?...&user={login}` when org-level user filtering is allowed
+   - `GET /enterprises/{enterprise}/settings/billing/premium_request/usage?...&user={login}` when enterprise scope is required
+3. Sum `grossQuantity` for each user
+4. Sort descending and return the top N users
 
-Use `Scripts\Get-CopilotPremiumTopConsumers.ps1` in this skill for that flow.
+Use `Scripts\Get-CopilotPremiumTopConsumers.ps1` in this skill for that flow. It does not depend on workflow dispatch, committed reports, or HTML parsing.
 
 ## Working Rules
 
@@ -190,6 +204,7 @@ Use `Scripts\Get-CopilotPremiumTopConsumers.ps1` in this skill for that flow.
 3. If the user starts from a Copilot adoption or engagement question, prefer `CopilotUsage` first.
 4. When the API returns signed `download_links`, tell the user that the second step is downloading the report artifact.
 5. When a user asks whether "the same data" is available by API, answer precisely: sometimes yes, but it may be exposed through a different documented surface than the UI page they started from.
+6. For current-cycle premium-consumer ranking, prefer the direct billing script over workflow artifacts.
 
 ## Sources
 
