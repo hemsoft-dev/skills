@@ -1,6 +1,6 @@
 ---
 name: personal-review
-description: V1.1 - Expert in drafting, analyzing, and improving quarterly and annual work performance reviews based on historical review patterns and achievements.
+description: V1.2 - Expert in drafting, analyzing, and improving quarterly and annual work performance reviews based on historical review patterns and achievements.
 ---
 
 # Personal Review Assistant
@@ -33,6 +33,18 @@ Store your previous review documents in the `reviews/` subfolder:
 
 - Format: `reviews/{YYYY}-{Q#|Annual}-Review.md` or any format you prefer
 - Examples: `reviews/2025-Q4-Review.md`, `reviews/2025-Annual-Review.md`
+
+## Active Strategic Initiatives
+
+When drafting goals, future-focus sections, or initiative summaries, use the
+items below. Treat them as in-progress unless the user provides completed
+results.
+
+1. `ai-workflow`
+   - Purpose: New `ai-workflow` repository that will contain a library of
+     GitHub Agentic Workflows the engineering organization can use.
+   - Review angles: Repo launch, reusable workflow catalog, documentation and
+     examples, adoption by teams, and measurable reuse impact.
 
 ## Core Principles (Research-Backed)
 
@@ -87,7 +99,7 @@ Example: "When the API latency increased to 500ms (Situation), I was tasked with
 ### Drafting a New Review
 
 1. Specify review type (Quarterly/Annual) and time period
-2. Provide key accomplishments, projects, or focus areas
+2. Provide key accomplishments, projects, initiatives, or focus areas
 3. Assistant will draft review using patterns from previous reviews and best practices
 
 ### Analyzing Previous Reviews
@@ -133,6 +145,7 @@ Use STAR method for each major accomplishment:
 
 - Set SMART goals (Specific, Measurable, Achievable, Relevant, Time-bound)
 - Align with organizational priorities
+- Include active strategic initiatives when they materially affect team or org outcomes
 - Include both skill development and deliverable targets
 - Show how achieving these advances your career
 

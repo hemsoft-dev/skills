@@ -43,6 +43,7 @@ Source scope: all `diary/entries/2026/01/**`, `diary/entries/2026/02/**`, and `d
 **Task**: Lead and facilitate AI Chapter programs across two tracks (AI Engineering Chapter and AI Foundation Chapter), deliver compelling technical content, and grow community engagement.
 
 **Action**: I led or facilitated **10+ sessions** across the quarter:
+
 - **Jan 14**: Skills architecture presentation at AI Engineering Chapter (contrasted Skills vs. MCP, live demos of Cortex/Slack/image generation skills)
 - **Jan 21**: Comprehensive AI Foundation Chapter deep dive on VS Code Skills, context management, and organizational agents
 - **Feb 4**: Agent Skills Workshop #1 — hands-on skills creation (described as "a really good start")
@@ -207,6 +208,17 @@ I also recruited Geo Rufino to co-lead the Foundation Chapter, improving sustain
    - Why it matters: AI education must keep pace with the accelerating model landscape. The Foundation and Engineering tracks need fresh, relevant content to maintain engagement and drive real workflow adoption.
    - Deliverable: 6+ sessions delivered across both tracks; at least 2 hands-on workshop-format sessions; guest presenters sourced for variety.
    - Success metric: Consistent attendance; 2+ new skills or workflows adopted by attendees as a direct result of sessions.
+
+5. **`ai-workflow` Repository — Shared GitHub Agentic Workflow Library**
+   - Why it matters: Engineering teams need a reusable starting point for
+     GitHub-native agentic automation. A shared library turns one-off workflow
+     experiments into repeatable patterns the organization can adopt safely.
+   - Deliverable: Launch a new `ai-workflow` repository with documented GitHub
+     Agentic Workflows, contribution guidance, and examples teams can adopt or
+     adapt.
+   - Success metric: Repository published with at least 5 reusable workflows,
+     contributor-ready documentation, and pilot use in 2+ engineering teams or
+     repositories.
 
 ## Support Requested
 
