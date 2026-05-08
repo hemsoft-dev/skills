@@ -103,13 +103,22 @@ function Get-SeatHolderData {
     $seatHolders = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::OrdinalIgnoreCase)
     $page = 1
     $apiCalls = 0
+    $totalPages = $null
 
-    do {
+    while ($true) {
         $response = Invoke-GhApiJson -Path "/orgs/$Organization/copilot/billing/seats?per_page=100&page=$page" -Token $Token
         $apiCalls++
 
         if ($null -eq $response -or $null -eq $response.seats -or $response.seats.Count -eq 0) {
             break
+        }
+
+        if ($null -eq $totalPages) {
+            $totalSeats = [int]$response.total_seats
+            $totalPages = [int][math]::Ceiling($totalSeats / 100)
+            if ($totalPages -lt 1) {
+                break
+            }
         }
 
         foreach ($seat in $response.seats) {
@@ -118,8 +127,12 @@ function Get-SeatHolderData {
             }
         }
 
+        if ($page -ge $totalPages) {
+            break
+        }
+
         $page++
-    } while ($seatHolders.Count -lt [int]$response.total_seats)
+    }
 
     return [pscustomobject]@{
         Logins   = @($seatHolders | Sort-Object)
