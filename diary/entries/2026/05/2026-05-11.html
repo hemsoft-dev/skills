@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sunday, May 10, 2026 — Diary</title>
+  <title>Monday, May 11, 2026 — Diary</title>
   <style>
     /* === Theme Definitions === */
     [data-theme="paper"], :root {
@@ -387,6 +387,16 @@
       font-weight: 600;
     }
 
+    .badge-new {
+      background: var(--accent-secondary);
+      color: #fff;
+      padding: 2px var(--space-2);
+      border-radius: var(--space-1);
+      font-family: ui-monospace, "Cascadia Code", monospace;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+
     /* Mono text */
     .mono {
       font-family: ui-monospace, "Cascadia Code", "Fira Code", monospace;
@@ -488,6 +498,33 @@
     .stars {
       color: var(--star-color);
     }
+
+    /* Meeting card */
+    .meeting-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: var(--space-3);
+    }
+
+    .meeting-title {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .meeting-time {
+      font-family: ui-monospace, "Cascadia Code", monospace;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .meeting-notes {
+      padding-left: var(--space-4);
+    }
+
+    .meeting-notes li {
+      margin-bottom: var(--space-2);
+    }
   </style>
 </head>
 <body>
@@ -506,15 +543,15 @@
 
       <!-- Header -->
       <header class="diary-header">
-        <h1>Sunday, May 10, 2026</h1>
-        <div class="date-meta">Mooresville, NC · Mother's Day · Weekend</div>
+        <h1>Monday, May 11, 2026</h1>
+        <div class="date-meta">Mooresville, NC · Weekday</div>
       </header>
 
       <!-- Highlight -->
       <div class="hero">
         <div class="eyebrow">🎯 Today's Highlight</div>
-        <h2><em>Missing — pick a main news headline from below</em></h2>
-        <div class="context">Fill in your 1–2 sentence context about the day's top story.</div>
+        <h2><a href="https://www.bbc.com/news/articles/cjep78l5835o">US and French Nationals Test Positive for Hantavirus After Leaving Ship</a></h2>
+        <div class="context">Passengers who disembarked the cruise ship evacuated from Tenerife have now tested positive in their home countries, raising fears the rare rodent-borne virus may have spread beyond the vessel.</div>
       </div>
 
       <!-- Slack Activity -->
@@ -522,22 +559,45 @@
         <h2 class="section-title"><span class="emoji">💬</span>Slack Activity</h2>
         <div class="card">
           <div class="slack-item">
-            <div class="slack-channel">DM — Slack Skill Bot</div>
-            <div class="slack-text">Morning briefing flagged 2 overdue tasks: Change Fridge Filter and Submit time sheet, plus a Sunday schedule note.</div>
+            <div class="slack-channel">DM — Bryan Halterman</div>
+            <div class="slack-text">Discussing Peter Diamandis "Moonshots" show — concerns about compute constraints and AI bubble takes. Blitzy CEO's view more realistic than Diamandis's "3x efficiency every 18 months" claim.</div>
           </div>
           <div class="slack-item">
-            <div class="slack-channel">DM — Slack Skill Bot</div>
-            <div class="slack-text">DMARC Aggregate Report from Microsoft arrived — domain authentication monitoring for hemmer.services.</div>
+            <div class="slack-channel">DM — Malia Paul</div>
+            <div class="slack-text">AI Task Force planning: drafting best practice recommendations and creating pathway for org-wide AI adoption. Agreed on "guidance not guardrails" approach.</div>
           </div>
           <div class="slack-item">
-            <div class="slack-channel">DM — Slack Skill Bot</div>
-            <div class="slack-text">Supabase email: ant.wilson@supabase.com regarding the project dashboard — appears to be a product update or support follow-up.</div>
+            <div class="slack-channel">#productivity-engineering-public</div>
+            <div class="slack-text">Charlette and Gray expressing admiration — "you're all amazing and I appreciate learning from you every day." Team morale moment.</div>
           </div>
           <div class="slack-item">
-            <div class="slack-channel">DM — Slack Skill Bot</div>
-            <div class="slack-text">Luminar Marketplace promo: 24 hours left on 86% OFF Luminar Neo + 510 skies deal.</div>
+            <div class="slack-channel">#productivity-engineering-public</div>
+            <div class="slack-text">Malia amused by sarcastic demo username "iluvkittykats-relias" spotted in a walkthrough.</div>
           </div>
-          <p class="muted" style="margin-top: var(--space-3); font-style: italic;">No public channel activity today (Sunday). Slack traffic was entirely bot-delivered DMs — no human conversations or action items.</p>
+          <div class="slack-item">
+            <div class="slack-channel">#prod-eng-devex-private</div>
+            <div class="slack-text">Nick confirmed new feature "works great"; Franz shared control-click PR shortcut for multi-selecting review files.</div>
+          </div>
+          <div class="slack-item">
+            <div class="slack-channel">#dev-ex-private</div>
+            <div class="slack-text">Nick's PRs #33/#34 ready for Bryan — rated "A++ S tier" by team. Addressing org metrics and scorecard enhancements.</div>
+          </div>
+          <div class="slack-item">
+            <div class="slack-channel">#dev-tribe</div>
+            <div class="slack-text">Jeff/Chuck/Trey discussing Relias Germany directory structure and request telemetry patterns for international services.</div>
+          </div>
+          <div class="slack-item">
+            <div class="slack-channel">#ai-chapter</div>
+            <div class="slack-text">George shared printingpress.dev tool; Franz discussing data source syncing strategies for the AI knowledge base.</div>
+          </div>
+          <div class="slack-item">
+            <div class="slack-channel">#ai-skills</div>
+            <div class="slack-text">Franz set channel topic: "Discussions are ai-skills, prs, etc" — channel now active for AI skill PR coordination.</div>
+          </div>
+          <div class="slack-item">
+            <div class="slack-channel">📧 Email Digests</div>
+            <div class="slack-text">Innermost Loop, Supabase product update, TLDR AI (Nvidia $40B AI push, Anthropic compute scaling), TLDR Dev/DevOps newsletters.</div>
+          </div>
         </div>
       </section>
 
@@ -546,16 +606,16 @@
         <h2 class="section-title"><span class="emoji">🌤️</span>Weather</h2>
         <div class="card">
           <div class="subsection-title">📍 Mooresville, US</div>
-          <div class="mono muted" style="font-size: 0.85rem;">2026-05-10 · Sunday · 9:50 PM Eastern</div>
+          <div class="mono muted" style="font-size: 0.85rem;">2026-05-11 · Monday · Eastern</div>
           <hr class="sep">
           <div class="weather-current">
-            <div class="weather-temp">67°F</div>
+            <div class="weather-temp">54°F</div>
             <div class="weather-details">
               <table class="data-table">
-                <tr><td class="mono" style="width:120px">Feels Like</td><td>66°F</td></tr>
-                <tr><td class="mono">Condition</td><td>Clear Sky</td></tr>
-                <tr><td class="mono">Wind</td><td>3 mph</td></tr>
-                <tr><td class="mono">Humidity</td><td>62%</td></tr>
+                <tr><td class="mono" style="width:120px">Feels Like</td><td>51°F</td></tr>
+                <tr><td class="mono">Condition</td><td>Overcast Clouds</td></tr>
+                <tr><td class="mono">Wind</td><td>12 mph</td></tr>
+                <tr><td class="mono">Humidity</td><td>58%</td></tr>
               </table>
             </div>
           </div>
@@ -566,9 +626,9 @@
               <tr><th>Day</th><th>Condition</th><th>Low</th><th>High</th><th>Wind</th></tr>
             </thead>
             <tbody>
-              <tr><td>Monday</td><td>🌥️ Broken Clouds</td><td>59°F</td><td>70°F</td><td>13 mph</td></tr>
               <tr><td>Tuesday</td><td>☀️ Clear Sky</td><td>44°F</td><td>72°F</td><td>9 mph</td></tr>
-              <tr><td>Wednesday</td><td>☀️ Clear Sky</td><td>50°F</td><td>74°F</td><td>14 mph</td></tr>
+              <tr><td>Wednesday</td><td>☀️ Clear Sky</td><td>50°F</td><td>78°F</td><td>8 mph</td></tr>
+              <tr><td>Thursday</td><td>🌤️ Few Clouds</td><td>55°F</td><td>80°F</td><td>7 mph</td></tr>
             </tbody>
           </table>
         </div>
@@ -576,46 +636,50 @@
 
       <!-- News Headlines -->
       <section class="section">
-        <h2 class="section-title"><span class="emoji">📰</span>News Headlines · May 10, 2026</h2>
+        <h2 class="section-title"><span class="emoji">📰</span>News Headlines · May 11, 2026</h2>
 
         <div class="subsection-title">🇺🇸 US News</div>
         <div class="card">
           <ol class="num-list">
-            <li><a href="https://www.npr.org/2026/05/10/g-s1-121099/mothers-day-mother-kindness-strangers">Happy Mother's Day to the kindest mom. P.S. Your kindness annoyed me when I was a kid</a> — <span class="tag tag-clay">NPR</span></li>
-            <li><a href="https://www.npr.org/2026/05/10/nx-s1-5779279/gleevec-leukemia-cancer-treatment">How a pill approved 25 years ago transformed cancer treatment</a> — <span class="tag tag-clay">NPR</span></li>
-            <li><a href="https://www.pbs.org/newshour/world/moscow-holds-scaled-back-victory-day-parade-under-heavy-security">Moscow holds scaled-back Victory Day Parade under heavy security</a> — <span class="tag tag-clay">PBS NewsHour</span></li>
-            <li><a href="https://www.pbs.org/newshour/world/surfers-in-war-torn-gaza-find-rare-moments-of-joy-in-the-waves">Surfers in war-torn Gaza find rare moments of joy in the waves</a> — <span class="tag tag-clay">PBS NewsHour</span></li>
+            <li><a href="https://www.npr.org/2026/05/11/g-s1-121375/up-first-newsletter-trump-iran-congress-ice-cbp-hantavirus">Trump rejects Iran's ceasefire proposal response. And, Congress to tackle ICE funding</a> — <span class="tag tag-clay">NPR</span></li>
+            <li><a href="https://www.npr.org/2026/05/11/nx-s1-5781255/oregon-reading-education-governor-pencil">Oregon's most unexpected gubernatorial candidate? A pencil with a point</a> — <span class="tag tag-clay">NPR</span></li>
+            <li><a href="https://www.pbs.org/newshour/world/remains-recovered-of-u-s-soldier-who-went-missing-during-military-exercises-in-morocco">Remains recovered of U.S. soldier who went missing during military exercises in Morocco</a> — <span class="tag tag-clay">PBS NewsHour</span></li>
+            <li><a href="https://www.pbs.org/newshour/world/nobel-laureate-narges-mohammadi-moved-to-tehran-hospital-her-foundation-says">Nobel laureate Narges Mohammadi moved to Tehran hospital, her foundation says</a> — <span class="tag tag-clay">PBS NewsHour</span></li>
           </ol>
         </div>
 
         <div class="subsection-title">🌍 World News</div>
         <div class="card">
           <ol class="num-list">
-            <li><a href="https://www.bbc.com/news/articles/cvgzdpxv2d7o">Israel deports two activists detained on board Gaza flotilla</a> — <span class="tag tag-sky">BBC</span></li>
-            <li><a href="https://www.aljazeera.com/news/2026/5/10/why-is-being-a-mother-so-expensive-in-the-united-states">Why is being a mother so expensive in the United States?</a> — <span class="tag tag-sky">Al Jazeera</span></li>
-            <li><a href="https://www.theguardian.com/politics/live/2026/may/10/may-elections-keir-starmer-catherine-west-labour-leadership-nigel-farage-reform-conservatives-kemi-badenoch-richard-tice-bridget-phillipson-uk-politics-latest-news-updates">Labour MP challenges ministers to trigger leadership contest as Starmer vows to fight on</a> — <span class="tag tag-sky">The Guardian</span></li>
-            <li><a href="https://www.aljazeera.com/features/2026/5/10/the-genocide-is-still-taking-gazas-mothers">The genocide is still taking Gaza's mothers</a> — <span class="tag tag-sky">Al Jazeera</span></li>
-            <li><a href="https://www.theguardian.com/world/live/2026/may/10/hantavirus-cruise-ship-rat-spain-tenerife-russia-ukraine-putin-zelenskyy-war-europe-latest-news-updates">First plane carrying passengers evacuated from hantavirus-hit cruise ship leaves Tenerife</a> — <span class="tag tag-sky">The Guardian</span></li>
-            <li><a href="https://www.dw.com/en/no-comment-after-schr%C3%B6der-named-by-putin-for-ukraine-talks/a-77110295">'No comment' after Schröder named by Putin for Ukraine talks</a> — <span class="tag tag-sky">DW News</span></li>
-            <li><a href="https://www.bbc.com/news/articles/cn7pzmg8zeno">Spain starts evacuating virus-hit cruise ship in Tenerife</a> — <span class="tag tag-sky">BBC</span></li>
+            <li><a href="https://www.theguardian.com/politics/live/2026/may/11/keir-starmer-labour-leadership-speech-angela-rayner-wes-streeting-andy-burnham-catherine-west-may-elections-uk-politics-latest-news-updates">Labour MP who gave Starmer leadership ultimatum says PM's speech was 'too little, too late'</a> — <span class="tag tag-sky">The Guardian</span></li>
+            <li><a href="https://www.theguardian.com/politics/2026/may/11/labour-mp-keir-starmer-leadership-challenge-catherine-west">Catherine West backs down from Starmer challenge but urges him to go by September</a> — <span class="tag tag-sky">The Guardian</span></li>
+            <li><a href="https://www.bbc.com/news/articles/cjep78l5835o">US and French nationals test positive for hantavirus after leaving ship</a> — <span class="tag tag-sky">BBC</span></li>
+            <li><a href="https://www.aljazeera.com/video/newsfeed/2026/5/11/uk-pm-keir-starmer-vows-stronger-performance-as-calls-for-resignation-grow">UK PM Keir Starmer vows stronger performance as calls for resignation grow</a> — <span class="tag tag-sky">Al Jazeera</span></li>
+            <li><a href="https://www.aljazeera.com/news/2026/5/11/who-is-gerhard-schroeder-putins-pick-for-ukraine-peace-talks-mediation">Who is Gerhard Schroeder, Putin's pick for Ukraine peace talks mediation?</a> — <span class="tag tag-sky">Al Jazeera</span></li>
+            <li><a href="https://www.dw.com/en/uk-prime-minister-keir-starmer-not-walking-away-after-local-election-mauling/a-77116149">UK Prime Minister Keir Starmer 'not walking away' after local election mauling</a> — <span class="tag tag-sky">DW News</span></li>
+            <li><a href="https://www.france24.com/en/video/20260511-trump-rejects-iran-s-response-to-us-peace-proposal-as-unacceptable">Trump rejects Iran's response to US peace proposal as 'unacceptable'</a> — <span class="tag tag-sky">France 24</span></li>
           </ol>
         </div>
 
         <div class="subsection-title">🤖 AI News</div>
         <div class="card">
           <ol class="num-list">
-            <li><a href="https://techcrunch.com/2026/05/09/voice-ai-in-india-is-hard-wispr-flow-is-betting-on-it-anyway/">Voice AI in India is hard. Wispr Flow is betting on it anyway.</a> — <span class="tag tag-olive">TechCrunch</span></li>
-            <li><a href="https://techcrunch.com/2026/05/09/artificial-intelligence-definition-glossary-hallucinations-guide-to-common-ai-terms/">So you've heard these AI terms and nodded along; let's fix that</a> — <span class="tag tag-olive">TechCrunch</span></li>
-            <li><a href="https://www.theverge.com/tech/917225/sam-altman-elon-musk-openai-lawsuit">Live updates from Elon Musk and Sam Altman's court battle over the future of OpenAI</a> — <span class="tag tag-olive">The Verge</span></li>
+            <li><a href="https://simonwillison.net/2026/May/10/new-york-times-editors-note/#atom-everything">Quoting New York Times Editors' Note</a> — <span class="tag tag-olive">Simon Willison</span></li>
+            <li><a href="https://simonwillison.net/2026/May/10/andrew-quinn/#atom-everything">Quoting Andrew Quinn</a> — <span class="tag tag-olive">Simon Willison</span></li>
+            <li><a href="https://www.wired.com/story/cuda-proves-nvidia-is-a-software-company/">CUDA Proves Nvidia Is a Software Company</a> — <span class="tag tag-olive">Wired</span></li>
+            <li><a href="https://www.wired.com/story/i-work-in-hollywood-everyone-who-used-to-make-tv-now-training-ai/">I Work in Hollywood. Everyone Who Used to Make TV Is Now Secretly Training AI</a> — <span class="tag tag-olive">Wired</span></li>
+            <li><a href="https://techcrunch.com/2026/05/10/get-ready-for-the-whisper-filled-office-of-the-future/">Get ready for the whisper-filled office of the future</a> — <span class="tag tag-olive">TechCrunch</span></li>
+            <li><a href="https://techcrunch.com/2026/05/10/anthropic-says-evil-portrayals-of-ai-were-responsible-for-claudes-blackmail-attempts/">Anthropic says 'evil' portrayals of AI were responsible for Claude's blackmail attempts</a> — <span class="tag tag-olive">TechCrunch</span></li>
           </ol>
         </div>
 
         <div class="subsection-title">🇩🇰 Danish News</div>
         <div class="card">
           <ol class="num-list">
-            <li><a href="https://cphpost.dk/2026-05-10/news/round-up/chairman-of-the-liberals-invites-all-parties-to-talks/">Chairman of the Liberals invites all parties to talks.</a> — <span class="tag tag-slate">CPH Post</span></li>
-            <li><a href="https://www.dr.dk/nyheder/seneste/rusland-og-ukraine-anklager-hinanden-bryde-vaabenhvile">Rusland og Ukraine anklager hinanden for at bryde våbenhvile</a> — <span class="tag tag-slate">DR News</span></li>
-            <li><a href="https://www.dr.dk/sporten/seneste-sport/etiopier-faa-sekunder-fra-rekord-ved-copenhagen-marathon">Etiopier få sekunder fra rekord ved Copenhagen Marathon</a> — <span class="tag tag-slate">DR News</span></li>
+            <li><a href="https://www.dr.dk/nyheder/seneste/udenrigsministeriet-advarer-mangel-paa-braendstof-kan-faa-betydning-danskernes-rejseplaner">Udenrigsministeriet advarer: Mangel på brændstof kan få betydning for danskernes rejseplaner</a> — <span class="tag tag-slate">DR News</span></li>
+            <li><a href="https://www.dr.dk/nyheder/seneste/marius-borg-hoeiby-faar-dom-15-juni">Marius Borg Høiby får dom 15. juni</a> — <span class="tag tag-slate">DR News</span></li>
+            <li><a href="https://cphpost.dk/2026-05-11/news/round-up/right-wing-leader-wil-have-2-weeks-to-try-to-form-the-government/">Right wing leader will have 2 weeks to try to form the government</a> — <span class="tag tag-slate">CPH Post</span></li>
+            <li><a href="https://cphpost.dk/2026-05-11/life-in-denmark/direct-berlin-oslo-rail-link-planned-via-copenhagen-from-2028/">Direct Berlin-Oslo rail link planned via Copenhagen from 2028</a> — <span class="tag tag-slate">CPH Post</span></li>
           </ol>
         </div>
       </section>
@@ -623,23 +687,23 @@
       <!-- Daily Numbers -->
       <section class="section">
         <h2 class="section-title"><span class="emoji">📊</span>Daily Numbers</h2>
-        <p class="muted" style="margin-bottom: var(--space-4); font-style: italic;">Markets were closed for the weekend. Geopolitical tensions continue — Moscow's scaled-back Victory Day Parade and the hantavirus cruise ship evacuation in Tenerife dominate international headlines, while U.S. Mother's Day coverage and the Gleevec cancer-pill anniversary mark domestic news.</p>
+        <p class="muted" style="margin-bottom: var(--space-4); font-style: italic;">Markets opened the week with modest gains as investors digested Trump's rejection of Iran's ceasefire response and congressional debates over ICE funding. Both the Dow and S&amp;P edged up 0.19% on light volume.</p>
 
         <div class="grid grid-4" style="margin-bottom: var(--space-4);">
           <div class="card stat-block">
             <div class="stat-label">Dow Jones</div>
-            <div class="stat-value muted">Closed</div>
-            <div class="stat-delta">Weekend</div>
+            <div class="stat-value">49,704</div>
+            <div class="stat-delta">+95.31 (+0.19%)</div>
           </div>
           <div class="card stat-block">
             <div class="stat-label">S&P 500</div>
-            <div class="stat-value muted">Closed</div>
-            <div class="stat-delta">Weekend</div>
+            <div class="stat-value">7,413</div>
+            <div class="stat-delta">+13.91 (+0.19%)</div>
           </div>
           <div class="card stat-block">
             <div class="stat-label">GitHub Repos</div>
-            <div class="stat-value">271</div>
-            <div class="stat-delta">+0 vs yesterday</div>
+            <div class="stat-value">273</div>
+            <div class="stat-delta">+2 vs yesterday</div>
           </div>
           <div class="card stat-block">
             <div class="stat-label">Bitbucket Repos</div>
@@ -653,20 +717,20 @@
           <div class="grid grid-3">
             <div class="stat-block">
               <div class="stat-label">Org-Wide</div>
-              <div class="stat-value">14.9%</div>
-              <div class="mono">41,239.8 / 277,000 PRUs</div>
-              <div class="stat-delta">+0.0 pts vs yesterday</div>
+              <div class="stat-value">17.1%</div>
+              <div class="mono">48,144 / 281,000 PRUs</div>
+              <div class="stat-delta">+2.2 pts vs yesterday</div>
             </div>
             <div class="stat-block">
               <div class="stat-label">fhemmerrelias</div>
-              <div class="stat-value stat-accent-clay">347.3%</div>
-              <div class="mono">3,473 / 1,000 PRUs <span class="badge-warn">⚠ Over entitlement</span></div>
-              <div class="stat-delta negative">+0 vs yesterday</div>
+              <div class="stat-value stat-accent-clay">441%</div>
+              <div class="mono">4,409 / 1,000 PRUs <span class="badge-warn">⚠ Over entitlement</span></div>
+              <div class="stat-delta">+93.6 pts vs yesterday</div>
             </div>
             <div class="stat-block">
               <div class="stat-label">Copilot Cloud Agent</div>
-              <div class="stat-value muted">—</div>
-              <div class="mono" style="font-size: 0.85rem;"> weekend data not available</div>
+              <div class="stat-value">72</div>
+              <div class="mono" style="font-size: 0.85rem;">PRUs (May MTD)</div>
             </div>
           </div>
         </div>
@@ -680,11 +744,11 @@
             <tbody>
               <tr>
                 <td class="mono">nowleadershipgroup.com</td>
-                <td>46</td>
-                <td>77</td>
+                <td>33</td>
+                <td>72</td>
                 <td>0</td>
-                <td class="stat-delta">+13</td>
-                <td class="stat-delta">+20</td>
+                <td class="stat-delta negative">−13</td>
+                <td class="stat-delta negative">−5</td>
               </tr>
               <tr>
                 <td class="mono">setitfreeloop.org</td>
@@ -703,7 +767,7 @@
       <section class="section">
         <h2 class="section-title"><span class="emoji">🤖</span>LLM Models</h2>
 
-        <div class="subsection-title">LMSYS Chatbot Arena Leaderboard <span class="tag tag-olive">Updated 2026-05-10</span></div>
+        <div class="subsection-title">LMSYS Chatbot Arena Leaderboard <span class="tag tag-olive">Carried forward from 2026-05-10</span></div>
         <div class="grid grid-3" style="margin-bottom: var(--space-4);">
           <div class="card">
             <div class="eyebrow" style="font-family: ui-monospace, monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-primary); margin-bottom: var(--space-2);">Overall Top 5</div>
@@ -759,11 +823,11 @@
           <table class="data-table">
             <thead><tr><th>#</th><th>Repository</th><th>Description</th><th>Stars</th></tr></thead>
             <tbody>
-              <tr><td>1</td><td><a href="https://github.com/bytedance/UI-TARS-desktop">bytedance/UI-TARS-desktop</a></td><td>The Open-Source Multimodal AI Agent Stack</td><td class="stars">⭐ 32,174 (+669)</td></tr>
-              <tr><td>2</td><td><a href="https://github.com/anthropics/financial-services">anthropics/financial-services</a></td><td>—</td><td class="stars">⭐ 18,913 (+1,449)</td></tr>
-              <tr><td>3</td><td><a href="https://github.com/addyosmani/agent-skills">addyosmani/agent-skills</a></td><td>Production-grade engineering skills for AI coding agents</td><td class="stars">⭐ 38,489 (+1,065)</td></tr>
-              <tr><td>4</td><td><a href="https://github.com/CloakHQ/CloakBrowser">CloakHQ/CloakBrowser</a></td><td>Stealth Chromium, drop-in Playwright replacement</td><td class="stars">⭐ 4,785 (+496)</td></tr>
-              <tr><td>5</td><td><a href="https://github.com/HKUDS/AI-Trader">HKUDS/AI-Trader</a></td><td>Fully-Automated Agent-Native Trading</td><td class="stars">⭐ 15,605 (+163)</td></tr>
+              <tr><td>1</td><td><a href="https://github.com/bytedance/UI-TARS-desktop">bytedance/UI-TARS-desktop</a></td><td>The Open-Source Multimodal AI Agent Stack</td><td class="stars">⭐ 33,087</td></tr>
+              <tr><td>2</td><td><a href="https://github.com/yikart/AiToEarn">yikart/AiToEarn</a></td><td>AI-powered content creation & social media management</td><td class="stars">⭐ 10,943</td></tr>
+              <tr><td>3</td><td><a href="https://github.com/datawhalechina/easy-vibe">datawhalechina/easy-vibe</a></td><td>Easy Vibe Coding learning repository</td><td class="stars">⭐ 10,013</td></tr>
+              <tr><td>4</td><td><a href="https://github.com/playcanvas/supersplat">playcanvas/supersplat</a></td><td>3D Gaussian Splat Editor</td><td class="stars">⭐ 7,409</td></tr>
+              <tr><td>5</td><td><a href="https://github.com/CloakHQ/CloakBrowser">CloakHQ/CloakBrowser</a></td><td>Stealth Chromium, drop-in Playwright replacement</td><td class="stars">⭐ 6,355</td></tr>
             </tbody>
           </table>
         </div>
@@ -776,16 +840,25 @@
           <table class="data-table">
             <thead><tr><th>Software</th><th>Version</th><th>Released</th><th>Highlights</th></tr></thead>
             <tbody>
-              <tr><td><a href="https://github.com/anthropics/claude-code">Claude Code</a></td><td>v2.1.138</td><td>May 9</td><td>Internal fixes</td></tr>
-              <tr><td><a href="https://github.com/google-gemini/gemini-cli">Gemini CLI</a></td><td>v0.42.0-preview.2</td><td>May 6</td><td>Patch release for v0.42.0-preview.1</td></tr>
+              <tr><td><a href="https://github.com/anthropics/claude-code">Claude Code</a></td><td>v2.1.139</td><td>May 11</td><td><span class="badge-new">NEW</span> Released today</td></tr>
+              <tr><td><a href="https://github.com/google-gemini/gemini-cli">Gemini CLI</a></td><td>v0.41.2</td><td>May 6</td><td>Stable latest release</td></tr>
               <tr><td><a href="https://github.com/cli/cli">GitHub CLI</a></td><td>v2.92.0</td><td>Apr 28</td><td>--allow-hidden-dirs flag, GHEC data residency</td></tr>
-              <tr><td><a href="https://github.com/github/copilot-cli">GitHub Copilot CLI</a></td><td>v1.0.44</td><td>May 8</td><td>Path completion fix, slash commands mid-input</td></tr>
+              <tr><td><a href="https://github.com/github/copilot-cli">GitHub Copilot CLI</a></td><td>v1.0.45</td><td>May 11</td><td><span class="badge-new">NEW</span> Released today</td></tr>
+              <tr><td><a href="https://github.com/github/gh-copilot">Copilot (gh extension)</a></td><td>v1.2.0</td><td>Oct 30</td><td>—</td></tr>
               <tr><td><a href="https://github.com/microsoft/vscode-copilot-chat">Copilot Chat</a></td><td>v0.43.0</td><td>Apr 7</td><td>—</td></tr>
-              <tr><td><a href="https://github.blog/changelog/">GitHub Web</a></td><td>May 8</td><td>May 8</td><td>Grok deprecation, CodeQL Swift 6.3</td></tr>
+              <tr><td><a href="https://github.blog/changelog/">GitHub Web</a></td><td>May 11</td><td>May 11</td><td><span class="badge-new">NEW</span> Create repos on the go with GitHub Mobile</td></tr>
               <tr><td><a href="https://github.com/aaif-goose/goose">Goose CLI</a></td><td>v1.33.1</td><td>Apr 29</td><td>Removed Windows CUDA build variant</td></tr>
               <tr><td><a href="https://github.com/nodejs/node">Node.js</a></td><td>v26.1.0</td><td>May 7</td><td>Buffer end param, crypto.diffieHellman key data</td></tr>
             </tbody>
           </table>
+        </div>
+      </section>
+
+      <!-- Watchlist Updates -->
+      <section class="section">
+        <h2 class="section-title"><span class="emoji">📋</span>Watchlist Updates</h2>
+        <div class="card">
+          <p class="muted" style="font-style: italic;">Anthropic Agent Skills (Active) — no new updates detected today. Repository last updated May 10.</p>
         </div>
       </section>
 
@@ -795,15 +868,15 @@
         <div class="grid grid-4" style="margin-bottom: var(--space-4);">
           <div class="card stat-block">
             <div class="stat-label">Lines of Code</div>
-            <div class="stat-value stat-accent-olive">+21,933</div>
+            <div class="stat-value stat-accent-olive">+11,916</div>
           </div>
           <div class="card stat-block">
             <div class="stat-label">Commits</div>
-            <div class="stat-value">97</div>
+            <div class="stat-value">69</div>
           </div>
           <div class="card stat-block">
             <div class="stat-label">PRs Merged</div>
-            <div class="stat-value">3</div>
+            <div class="stat-value">11</div>
           </div>
           <div class="card stat-block">
             <div class="stat-label">Code Reviews</div>
@@ -811,16 +884,49 @@
           </div>
         </div>
         <div class="card" style="padding: var(--space-3) var(--space-4);">
-          <p class="muted" style="font-size: 0.85rem;"><strong>Repositories:</strong> codexbar, gh-prx, hs-buddy, now-leadership-group, skills &nbsp;·&nbsp; <strong>File Types:</strong> .ts, .tsx, .go, .cs, .ps1</p>
+          <p class="muted" style="font-size: 0.85rem;"><strong>Issues Closed:</strong> 0 &nbsp;·&nbsp; <strong>Active Repos:</strong> Multiple across org</p>
         </div>
       </section>
 
-      <!-- Work / Meetings -->
+      <!-- Meetings -->
       <section class="section">
-        <h2 class="section-title"><span class="emoji">💼</span>Work</h2>
-        <div class="subsection-title">📅 Meetings</div>
-        <div class="card">
-          <p class="muted" style="font-style: italic;">No meetings today (Sunday).</p>
+        <h2 class="section-title"><span class="emoji">💼</span>Meetings</h2>
+
+        <div class="card card-olive" style="margin-bottom: var(--space-4);">
+          <div class="meeting-header">
+            <span class="meeting-title">Prod Eng Standup</span>
+            <span class="meeting-time">11:00 – 11:30 AM</span>
+          </div>
+          <p class="muted" style="font-size: 0.85rem; margin-bottom: var(--space-3);">Slack-based standup (Teams conflict)</p>
+          <ul class="meeting-notes" style="font-size: 0.9rem; list-style: disc; padding-left: 1.5rem;">
+            <li><strong>Snyk:</strong> Access expansion targeting 250 engineers — provisioning in progress</li>
+            <li><strong>PR Hygiene:</strong> GitHub rulesets being evaluated for stricter branch protection</li>
+            <li><strong>Copilot Premium:</strong> Budget discussions around overage (org at 127% of quota)</li>
+            <li><strong>LaunchDarkly:</strong> License limits reached; exploring options</li>
+            <li><strong>AI Skills PRs:</strong> Multiple ready for review — Golden Path, Legacy Release Tool</li>
+            <li><strong>Bitwarden → Entra:</strong> Migration planning underway for service accounts (TOTP needed)</li>
+            <li><strong>Bitbucket → GitHub:</strong> Automation tooling for remaining migration repos</li>
+            <li><strong>Cortex MCP:</strong> Internal Developer Portal integration being explored</li>
+          </ul>
+        </div>
+
+        <div class="card card-accent">
+          <div class="meeting-header">
+            <span class="meeting-title">AI Task Force</span>
+            <span class="meeting-time">4:00 – 4:45 PM</span>
+          </div>
+          <p class="muted" style="font-size: 0.85rem; margin-bottom: var(--space-3);">Teams meeting — strategic pivot discussion</p>
+          <ul class="meeting-notes" style="font-size: 0.9rem; list-style: disc; padding-left: 1.5rem;">
+            <li><strong>Strategic pivot:</strong> Shift from launching new AI initiatives → measuring value of existing ones</li>
+            <li><strong>Success criteria:</strong> Each initiative should define its own metrics (not one-size-fits-all)</li>
+            <li><strong>Adoption signal:</strong> Cross-team adoption is the strongest indicator of value</li>
+            <li><strong>Cost storytelling:</strong> Pair cost data with productivity/quality metrics for leadership presentations</li>
+            <li><strong>Franz proposal:</strong> Dedicated internal Copilot account for agentic workflow tracking and isolation</li>
+            <li><strong>Jeff proposal:</strong> Mutation testing + property testing + auto K8s testing to validate AI-generated code quality</li>
+            <li><strong>Malia:</strong> Drafting best practices document — "guidance not guardrails" philosophy</li>
+            <li><strong>Franz:</strong> Centralized AI playbook repository for all teams</li>
+            <li><strong>Format change:</strong> Moving to async initiative updates between meetings</li>
+          </ul>
         </div>
       </section>
 
@@ -829,12 +935,13 @@
         <h2 class="section-title"><span class="emoji">🏠</span>Personal</h2>
         <div class="subsection-title">💭 Reflections</div>
         <div class="card card-accent" style="min-height: 80px;">
+          <!-- TODO: fill in -->
           <p style="color: var(--text-secondary); font-style: italic;">— Fill in your reflections for the day —</p>
         </div>
       </section>
 
       <footer class="diary-footer">
-        Entry created with diary skill V1.3 · 2026-05-10 · Theme: <span id="currentTheme">paper</span>
+        Entry created with diary skill V1.4 · 2026-05-11 · Theme: <span id="currentTheme">carbon</span>
       </footer>
 
     </article>

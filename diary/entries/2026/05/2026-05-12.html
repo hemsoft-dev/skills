@@ -1,0 +1,531 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tuesday, May 12, 2026 — Diary</title>
+  <style>
+    /* === Theme Definitions === */
+    [data-theme="paper"], :root {
+      --bg-canvas: #080808; --bg-surface: #F5F1E8; --bg-card: #FFFFFF;
+      --text-primary: #141413; --text-secondary: #9A9891; --text-muted: #9A9891;
+      --accent-primary: #D97757; --accent-secondary: #788C5D; --accent-tertiary: #6A8CAF;
+      --border-subtle: rgba(20,20,19,0.08); --link-color: #6A8CAF;
+      --accent-tag-bg: rgba(217,119,87,0.12); --accent-tag-text: #D97757;
+      --sky-tag-bg: rgba(106,140,175,0.12); --sky-tag-text: #6A8CAF;
+      --olive-tag-bg: rgba(120,140,93,0.12); --olive-tag-text: #788C5D;
+      --slate-tag-bg: rgba(20,20,19,0.08); --slate-tag-text: #9A9891;
+      --warn-bg: #D97757; --warn-text: #FFFFFF;
+      --shadow-soft: 0 24px 80px rgba(0,0,0,0.18);
+      --table-header-bg: rgba(20,20,19,0.04); --table-border: rgba(20,20,19,0.06);
+      --stat-positive: #788C5D; --stat-negative: #D97757;
+      --star-color: #E8B931;
+      --hero-gradient-from: #F5F1E8; --hero-gradient-to: #ede7d8;
+    }
+    [data-theme="obsidian"] {
+      --bg-canvas: #0d1117; --bg-surface: #161b22; --bg-card: #21262d;
+      --text-primary: #c9d1d9; --text-secondary: #8b949e; --text-muted: #6e7681;
+      --accent-primary: #58a6ff; --accent-secondary: #3fb950; --accent-tertiary: #d2a8ff;
+      --border-subtle: rgba(240,246,252,0.1); --link-color: #58a6ff;
+      --accent-tag-bg: rgba(88,166,255,0.12); --accent-tag-text: #58a6ff;
+      --sky-tag-bg: rgba(210,168,255,0.12); --sky-tag-text: #d2a8ff;
+      --olive-tag-bg: rgba(63,185,80,0.12); --olive-tag-text: #3fb950;
+      --slate-tag-bg: rgba(139,148,158,0.12); --slate-tag-text: #8b949e;
+      --warn-bg: #f85149; --warn-text: #FFFFFF;
+      --shadow-soft: 0 24px 80px rgba(0,0,0,0.4);
+      --table-header-bg: rgba(240,246,252,0.06); --table-border: rgba(240,246,252,0.08);
+      --stat-positive: #3fb950; --stat-negative: #f85149;
+      --star-color: #e3b341;
+      --hero-gradient-from: #161b22; --hero-gradient-to: #1c2333;
+    }
+    [data-theme="twilight"] {
+      --bg-canvas: #16162a; --bg-surface: #1e1e3f; --bg-card: #2a2a4a;
+      --text-primary: #e0def4; --text-secondary: #908caa; --text-muted: #6c6c89;
+      --accent-primary: #7c5cbf; --accent-secondary: #c4a7e7; --accent-tertiary: #f7c59f;
+      --border-subtle: rgba(200,180,240,0.12); --link-color: #7c5cbf;
+      --accent-tag-bg: rgba(124,92,191,0.15); --accent-tag-text: #7c5cbf;
+      --sky-tag-bg: rgba(247,197,159,0.15); --sky-tag-text: #f7c59f;
+      --olive-tag-bg: rgba(196,167,231,0.15); --olive-tag-text: #c4a7e7;
+      --slate-tag-bg: rgba(144,140,170,0.12); --slate-tag-text: #908caa;
+      --warn-bg: #7c5cbf; --warn-text: #FFFFFF;
+      --shadow-soft: 0 24px 80px rgba(0,0,0,0.5);
+      --table-header-bg: rgba(200,180,240,0.08); --table-border: rgba(200,180,240,0.1);
+      --stat-positive: #c4a7e7; --stat-negative: #f7c59f;
+      --star-color: #f7c59f;
+      --hero-gradient-from: #1e1e3f; --hero-gradient-to: #2a2a52;
+    }
+    [data-theme="carbon"] {
+      --bg-canvas: #111111; --bg-surface: #1a1a1a; --bg-card: #222222;
+      --text-primary: #ececec; --text-secondary: #888888; --text-muted: #666666;
+      --accent-primary: #D97757; --accent-secondary: #788C5D; --accent-tertiary: #6A8CAF;
+      --border-subtle: rgba(255,255,255,0.08); --link-color: #D97757;
+      --accent-tag-bg: rgba(217,119,87,0.15); --accent-tag-text: #D97757;
+      --sky-tag-bg: rgba(106,140,175,0.15); --sky-tag-text: #6A8CAF;
+      --olive-tag-bg: rgba(120,140,93,0.15); --olive-tag-text: #788C5D;
+      --slate-tag-bg: rgba(255,255,255,0.08); --slate-tag-text: #888888;
+      --warn-bg: #D97757; --warn-text: #FFFFFF;
+      --shadow-soft: 0 24px 80px rgba(0,0,0,0.5);
+      --table-header-bg: rgba(255,255,255,0.04); --table-border: rgba(255,255,255,0.06);
+      --stat-positive: #788C5D; --stat-negative: #D97757;
+      --star-color: #E8B931;
+      --hero-gradient-from: #1a1a1a; --hero-gradient-to: #222222;
+    }
+
+    /* === Theme Toggle === */
+    .theme-toggle{position:fixed;top:16px;right:16px;z-index:100;font-family:ui-monospace,"Cascadia Code","Fira Code",monospace}
+    .theme-toggle-btn{background:var(--bg-card);color:var(--text-secondary);border:1px solid var(--border-subtle);border-radius:6px;padding:6px 10px;cursor:pointer;font-size:1.2rem;line-height:1;transition:background .2s,color .2s}
+    .theme-toggle-btn:hover{background:var(--accent-primary);color:var(--bg-canvas)}
+    .theme-menu{display:none;position:absolute;top:100%;right:0;margin-top:4px;background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:8px;box-shadow:var(--shadow-soft);overflow:hidden;min-width:140px}
+    .theme-menu.open{display:block}
+    .theme-menu button{display:block;width:100%;text-align:left;background:none;color:var(--text-primary);border:none;padding:10px 16px;cursor:pointer;font-family:inherit;font-size:0.8rem;transition:background .15s}
+    .theme-menu button:hover{background:var(--accent-tag-bg)}
+    .theme-menu button.active{color:var(--accent-primary);font-weight:600}
+
+    /* === Base Reset & Typography === */
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{font-size:16px;scroll-behavior:smooth}
+    body{font-family:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;background:var(--bg-canvas);color:var(--text-primary);line-height:1.6;min-height:100vh;padding:0}
+
+    /* === Page Shell === */
+    .page-shell{max-width:900px;margin:0 auto;padding:48px 24px 80px}
+
+    /* === Hero Section === */
+    .hero{background:linear-gradient(135deg,var(--hero-gradient-from),var(--hero-gradient-to));border:1px solid var(--border-subtle);border-radius:16px;padding:40px 32px;margin-bottom:40px;box-shadow:var(--shadow-soft)}
+    .hero-date{font-family:ui-monospace,"Cascadia Code","Fira Code",monospace;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-secondary);margin-bottom:8px}
+    .hero-title{font-size:1.8rem;font-weight:700;line-height:1.2;margin-bottom:12px}
+    .hero-subtitle{color:var(--text-secondary);font-size:0.95rem;max-width:600px}
+    .hero-subtitle a{color:var(--link-color);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .2s}
+    .hero-subtitle a:hover{border-bottom-color:var(--link-color)}
+
+    /* === Sections & Cards === */
+    .section{margin-bottom:36px}
+    .section-title{font-size:1.1rem;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+    .section-title .emoji{font-size:1.2rem}
+    .card{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:12px;padding:20px 24px;margin-bottom:16px}
+    .card-accent{border-left:3px solid var(--accent-primary)}
+    .card-sky{border-left:3px solid var(--accent-tertiary)}
+    .card-olive{border-left:3px solid var(--accent-secondary)}
+    .subsection-title{font-weight:600;font-size:0.9rem;margin-bottom:12px;color:var(--text-primary)}
+
+    /* === Grid === */
+    .grid{display:grid;gap:16px}
+    .grid-2{grid-template-columns:repeat(2,1fr)}
+    .grid-3{grid-template-columns:repeat(3,1fr)}
+    @media(max-width:700px){.grid-2,.grid-3{grid-template-columns:1fr}}
+
+    /* === Stat Blocks === */
+    .stat-block{text-align:center;padding:16px 12px}
+    .stat-label{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-secondary);margin-bottom:4px}
+    .stat-value{font-size:1.6rem;font-weight:700;font-family:ui-monospace,"Cascadia Code","Fira Code",monospace}
+    .stat-accent-positive{color:var(--stat-positive)}
+    .stat-accent-negative{color:var(--stat-negative)}
+    .stat-accent-clay{color:var(--accent-primary)}
+    .stat-delta{font-size:0.75rem;color:var(--text-secondary);margin-top:4px;font-family:ui-monospace,monospace}
+    .stat-delta.positive{color:var(--stat-positive)}
+    .stat-delta.negative{color:var(--stat-negative)}
+    .mono{font-family:ui-monospace,"Cascadia Code","Fira Code",monospace;font-size:0.8rem;color:var(--text-secondary)}
+
+    /* === Tags & Badges === */
+    .tag{display:inline-block;font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;padding:2px 8px;border-radius:4px;white-space:nowrap}
+    .tag-accent{background:var(--accent-tag-bg);color:var(--accent-tag-text)}
+    .tag-sky{background:var(--sky-tag-bg);color:var(--sky-tag-text)}
+    .tag-olive{background:var(--olive-tag-bg);color:var(--olive-tag-text)}
+    .tag-slate{background:var(--slate-tag-bg);color:var(--slate-tag-text)}
+    .tag-clay{background:var(--accent-tag-bg);color:var(--accent-tag-text)}
+    .badge-warn{display:inline-block;font-size:0.6rem;font-weight:700;padding:2px 6px;border-radius:3px;background:var(--warn-bg);color:var(--warn-text);margin-left:6px}
+
+    /* === Numbered Lists === */
+    .num-list{list-style:none;counter-reset:item;padding:0;margin:0}
+    .num-list li{position:relative;padding:10px 0 10px 2.5rem;border-bottom:1px solid var(--border-subtle);font-size:0.85rem;line-height:1.5}
+    .num-list li:last-child{border-bottom:none}
+    .num-list li::before{counter-increment:item;content:counter(item);position:absolute;left:0;top:10px;width:1.6rem;height:1.6rem;display:flex;align-items:center;justify-content:center;background:var(--accent-tag-bg);color:var(--accent-tag-text);border-radius:50%;font-size:0.7rem;font-weight:700;font-family:ui-monospace,monospace}
+    .num-list a{color:var(--link-color);text-decoration:none;font-weight:500}
+    .num-list a:hover{text-decoration:underline}
+
+    /* === Data Tables === */
+    .data-table{width:100%;border-collapse:collapse;font-size:0.8rem}
+    .data-table th,.data-table td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--table-border)}
+    .data-table th{background:var(--table-header-bg);font-weight:600;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-secondary)}
+    .data-table td.mono{font-family:ui-monospace,"Cascadia Code","Fira Code",monospace}
+    .data-table td.muted{color:var(--text-secondary)}
+
+    /* === Misc === */
+    .placeholder{padding:20px;border:2px dashed var(--border-subtle);border-radius:8px;text-align:center;color:var(--text-muted);font-style:italic;font-size:0.85rem}
+    .weather-grid{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;font-size:0.85rem}
+    .weather-label{color:var(--text-secondary);font-weight:500}
+    .forecast-row{display:flex;align-items:center;gap:12px;padding:6px 0;font-size:0.85rem}
+    .forecast-row .day{min-width:120px;font-weight:500}
+    .forecast-row .icon{font-size:1.2rem}
+    .forecast-row .temps{font-family:ui-monospace,monospace;color:var(--text-secondary)}
+    .slack-item{padding:8px 0;border-bottom:1px solid var(--border-subtle);font-size:0.85rem}
+    .slack-item:last-child{border-bottom:none}
+    .slack-channel{font-weight:600;color:var(--accent-primary);font-size:0.75rem;text-transform:uppercase;letter-spacing:0.04em}
+    .slack-time{color:var(--text-muted);font-size:0.7rem;font-family:ui-monospace,monospace}
+    .meeting-card{margin-bottom:12px;padding:12px 16px;border-left:3px solid var(--accent-tertiary);background:var(--bg-card);border-radius:0 8px 8px 0}
+    .meeting-time{font-family:ui-monospace,monospace;font-size:0.75rem;color:var(--accent-tertiary)}
+    .meeting-title{font-weight:600;font-size:0.9rem;margin:4px 0}
+    .meeting-attendees{font-size:0.8rem;color:var(--text-secondary)}
+    .eyebrow{font-family:ui-monospace,"Cascadia Code","Fira Code",monospace;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent-primary);margin-bottom:var(--space-2,8px)}
+    .trending-item{display:flex;align-items:baseline;gap:12px;padding:10px 0;border-bottom:1px solid var(--border-subtle);font-size:0.85rem}
+    .trending-item:last-child{border-bottom:none}
+    .trending-stars{color:var(--star-color);font-family:ui-monospace,monospace;font-size:0.8rem;white-space:nowrap}
+    .trending-name{font-weight:600}
+    .trending-name a{color:var(--link-color);text-decoration:none}
+    .trending-name a:hover{text-decoration:underline}
+    .trending-desc{color:var(--text-secondary);font-size:0.8rem;margin-top:2px}
+  </style>
+</head>
+<body data-theme="paper">
+  <!-- Theme Toggle -->
+  <div class="theme-toggle">
+    <button class="theme-toggle-btn" onclick="document.querySelector('.theme-menu').classList.toggle('open')" title="Change theme">🎨</button>
+    <div class="theme-menu">
+      <button onclick="setTheme('paper')" class="active">📜 Paper</button>
+      <button onclick="setTheme('obsidian')">🖤 Obsidian</button>
+      <button onclick="setTheme('twilight')">�� Twilight</button>
+      <button onclick="setTheme('carbon')">⚫ Carbon</button>
+    </div>
+  </div>
+
+  <div class="page-shell">
+    <!-- Hero -->
+    <header class="hero">
+      <div class="hero-date">Tuesday, May 12, 2026</div>
+      <h1 class="hero-title">'This is not Covid': France takes strict measures to contain cruise ship virus</h1>
+      <p class="hero-subtitle">France has implemented strict containment measures after US and French nationals tested positive for hantavirus aboard a cruise ship. Authorities are working to prevent further spread, emphasizing this is a different threat from Covid. <a href="https://www.france24.com/en/tv-shows/press-review/20260512-this-is-not-covid-france-takes-strict-measures-to-contain-cruise-ship-virus">France 24</a></p>
+    </header>
+
+    <!-- 💬 Slack Activity -->
+    <div class="section">
+      <h2 class="section-title"><span class="emoji">💬</span>Slack Activity</h2>
+      <div class="card">
+        <div class="slack-item"><span class="slack-channel">DM</span> <span class="slack-time">16:33</span> — Bryan Halterman: editor no, markdown display, yes</div>
+        <div class="slack-item"><span class="slack-channel">DM</span> <span class="slack-time">16:32–16:43</span> — George DeCherney asking about markdown editor implementation in Electron apps; discussed package options</div>
+        <div class="slack-item"><span class="slack-channel">DM</span> <span class="slack-time">11:34</span> — Geo Rufino: Asking about COPILOT_GITHUB_TOKEN scopes</div>
+        <div class="slack-item"><span class="slack-channel">DM</span> <span class="slack-time">14:03–14:09</span> — Jason Twichell: Wants to extract agents/skills from devcontainer while keeping them team-private; discussed approach for sharing agent rosters</div>
+        <div class="slack-item"><span class="slack-channel">DM</span> <span class="slack-time">08:54</span> — Nick Peterson: "Will do!" (follow-up)</div>
+        <div class="slack-item"><span class="slack-channel">#dev-ex-private</span> <span class="slack-time">14:19–14:20</span> — Banter about Bryan's car service costs ($400 today — alignment + infotainment reload + 40k service)</div>
+        <div class="slack-item"><span class="slack-channel">#dev-tribe</span> <span class="slack-time">16:33</span> — Charlotte Fowler: ECM demoting old Windows Server 2016 Domain Controllers in Dev/Staging</div>
+        <div class="slack-item"><span class="slack-channel">#dev-tribe</span> <span class="slack-time">14:58</span> — Jeff Hannan: De-duplicating something (easy button)</div>
+        <div class="slack-item"><span class="slack-channel">#dev-env-help</span> <span class="slack-time">09:53–12:01</span> — Docker issues reported (Axel, Josh Bowman discussing Git Happens); John Turner reinstalled without success</div>
+        <div class="slack-item"><span class="slack-channel">#nurse-textkernel-replacement</span> <span class="slack-time">15:30</span> — Lakshmi Kondragunta: New channel for Textkernel replacement effort for Nurse Jobs</div>
+        <div class="slack-item"><span class="slack-channel">#prod-eng-devex-private</span> <span class="slack-time">11:27</span> — Franz shared a post by Dave Jeffery on X; Nick found the ending hilarious</div>
+      </div>
+    </div>
+
+    <!-- 🌤 Weather -->
+    <div class="section">
+      <h2 class="section-title"><span class="emoji">🌤</span>Weather</h2>
+      <div class="card">
+        <div class="weather-grid">
+          <span class="weather-label">Location</span><span>Mooresville, NC</span>
+          <span class="weather-label">Current</span><span>☀️ Clear Sky — 70°F (feels 69°F)</span>
+          <span class="weather-label">Wind</span><span>9 mph</span>
+          <span class="weather-label">Humidity</span><span>37%</span>
+        </div>
+        <div style="margin-top:16px">
+          <div class="forecast-row"><span class="day">Today (Tue)</span><span class="icon">☀️</span><span class="temps">66°F — 70°F</span></div>
+          <div class="forecast-row"><span class="day">Wednesday</span><span class="icon">☀️</span><span class="temps">50°F — 77°F</span></div>
+          <div class="forecast-row"><span class="day">Thursday</span><span class="icon">☀️</span><span class="temps">48°F — 70°F</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 📰 News Headlines -->
+    <div class="section">
+      <h2 class="section-title"><span class="emoji">📰</span>News Headlines</h2>
+
+      <div class="card">
+        <div class="subsection-title">🇺🇸 US News</div>
+        <ol class="num-list">
+          <li><a href="https://www.npr.org/2026/05/12/g-s1-121602/up-first-newsletter-trump-china-xi-jinping-inflation-mifepristone-cameron-hamilton">Trump heads to China for state visit. And, how the war in Iran has affected inflation</a> — <span class="tag tag-accent">NPR</span></li>
+          <li><a href="https://www.npr.org/sections/planet-money/2026/05/12/g-s1-121493/the-economic-chilling-effect-of-trumps-immigration-crackdown">The economic chilling effect of Trump's immigration crackdown</a> — <span class="tag tag-accent">NPR</span></li>
+          <li><a href="https://www.pbs.org/newshour/show/trump-rejects-latest-iran-peace-proposal-says-ceasefire-on-life-support">Trump rejects latest Iran peace proposal, says ceasefire on 'life support'</a> — <span class="tag tag-sky">PBS NewsHour</span></li>
+          <li><a href="https://www.pbs.org/newshour/show/robert-kagan-on-why-he-believes-u-s-faces-likely-defeat-in-iran">Robert Kagan on why he believes U.S. faces likely defeat in Iran</a> — <span class="tag tag-sky">PBS NewsHour</span></li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <div class="subsection-title">🌍 World News</div>
+        <ol class="num-list">
+          <li><a href="https://www.theguardian.com/australia-news/live/2026/may/12/budget-2026-live-updates-federal-treasurer-jim-chalmers-speech-time-tonight-latest-news-ntwnfb">Federal budget 2026 live updates: Jim Chalmers delivers Australia budget announcement</a> — <span class="tag tag-olive">The Guardian</span></li>
+          <li><a href="https://www.theguardian.com/politics/live/2026/may/12/keir-starmer-prime-minister-resignation-labour-leadership-cabinet-meeting-yvette-cooper-shabana-mahmood-andy-burnham-wes-streeting-uk-politics-latest-news-updates">Keir Starmer tells cabinet he is not resigning amid growing pressure to stand down</a> — <span class="tag tag-olive">The Guardian</span></li>
+          <li><a href="https://www.aljazeera.com/video/newsfeed/2026/5/12/video-philippine-senator-flees-icc-arrest-over-role-in-drug-war?traffic_source=rss">Philippine senator flees ICC arrest over role in drug war</a> — <span class="tag tag-slate">Al Jazeera</span></li>
+          <li><a href="https://www.bbc.com/news/articles/cx21669452lo?at_medium=RSS&at_campaign=rss">US in closely guarded talks to open new bases in Greenland</a> — <span class="tag tag-accent">BBC</span></li>
+          <li><a href="https://www.aljazeera.com/video/counting-the-cost/2026/5/12/can-china-counter-us-sanctions-with-its-trade-power?traffic_source=rss">Can China counter US sanctions with its trade power?</a> — <span class="tag tag-slate">Al Jazeera</span></li>
+          <li><a href="https://www.bbc.com/news/articles/cqxp23272j3o?at_medium=RSS&at_campaign=rss">Uganda's president sworn in for record seventh term</a> — <span class="tag tag-accent">BBC</span></li>
+          <li><a href="https://www.france24.com/en/tv-shows/press-review/20260512-this-is-not-covid-france-takes-strict-measures-to-contain-cruise-ship-virus">'This is not Covid': France takes strict measures to contain cruise ship virus</a> — <span class="tag tag-sky">France 24</span></li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <div class="subsection-title">🤖 AI News</div>
+        <ol class="num-list">
+          <li><a href="https://simonwillison.net/2026/May/11/gitlab-act-2/#atom-everything">Thoughts on GitLab's workforce reduction and "structural and strategic decisions"</a> — <span class="tag tag-olive">Simon Willison</span></li>
+          <li><a href="https://simonwillison.net/2026/May/11/james-shore/#atom-everything">Quoting James Shore</a> — <span class="tag tag-olive">Simon Willison</span></li>
+          <li><a href="https://techcrunch.com/2026/05/12/vapi-hits-500m-valuation-as-amazon-ring-chose-its-ai-platform-over-40-rivals/">AI voice startup Vapi hits $500M valuation after winning Amazon Ring over 40 rivals</a> — <span class="tag tag-accent">TechCrunch</span></li>
+          <li><a href="https://techcrunch.com/2026/05/11/thinking-machines-wants-to-build-an-ai-that-actually-listens-while-it-talks/">Thinking Machines wants to build an AI that actually listens while it talks</a> — <span class="tag tag-accent">TechCrunch</span></li>
+          <li><a href="https://www.wired.com/story/ilya-sutskever-testifies-musk-v-altman-trial/">Ilya Sutskever Stands by His Role in Sam Altman's OpenAI Ouster</a> — <span class="tag tag-sky">Wired</span></li>
+          <li><a href="https://www.theverge.com/ai-artificial-intelligence/928342/openai-daybreak-security-ai">OpenAI just released its answer to Claude Mythos</a> — <span class="tag tag-sky">The Verge</span></li>
+          <li><a href="https://arstechnica.com/security/2026/05/linux-bitten-by-second-severe-vulnerability-in-as-many-weeks/">Linux bitten by second severe vulnerability in as many weeks</a> — <span class="tag tag-slate">Ars Technica</span></li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <div class="subsection-title">🇩🇰 Danish News</div>
+        <ol class="num-list">
+          <li><a href="https://www.dr.dk/nyheder/seneste/politi-fejl-sendte-mand-466-doegn-bag-tremmer-faar-afvist-tredobbelt-erstatning">Politi-fejl sendte mand 466 døgn bag tremmer: Får afvist tredobbelt erstatning</a> — <span class="tag tag-accent">DR</span></li>
+          <li><a href="https://www.dr.dk/nyheder/seneste/omar-marzouk-dropper-anke-i-sag-om-optagelser-af-sara-omar">Omar Marzouk dropper anke i sag om optagelser af Sara Omar</a> — <span class="tag tag-accent">DR</span></li>
+          <li><a href="https://cphpost.dk/2026-05-12/news/round-up/important-danish-politician-we-should-strengthen-eu-responsibility-for-external-borders/">Important Danish politician: "We should strengthen EU responsibility for external borders"</a> — <span class="tag tag-olive">CPH Post</span></li>
+          <li><a href="https://cphpost.dk/2026-05-12/news/round-up/greenlands-prime-minister-feels-the-pressure-of-missing-danish-government/">Greenland's Prime Minister feels the pressure of missing Danish government</a> — <span class="tag tag-olive">CPH Post</span></li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- 📊 Daily Numbers -->
+    <div class="section">
+      <h2 class="section-title"><span class="emoji">📊</span>Daily Numbers</h2>
+
+      <div class="card card-accent">
+        <div class="subsection-title">Stock Market <span class="tag tag-olive">May 12, 2026</span></div>
+        <div class="grid grid-2">
+          <div class="stat-block">
+            <div class="stat-label">Dow Jones</div>
+            <div class="stat-value stat-accent-positive">49,760.56</div>
+            <div class="stat-delta positive">▲ +56.09 (+0.11%)</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-label">S&P 500</div>
+            <div class="stat-value stat-accent-negative">7,400.96</div>
+            <div class="stat-delta negative">▼ −11.88 (−0.16%)</div>
+          </div>
+        </div>
+        <p style="font-size:0.8rem;color:var(--text-secondary);margin-top:12px;padding:0 12px">Markets were mixed as investors digested Trump's China state visit alongside continued uncertainty over the Iran conflict. The Dow edged higher on trade optimism while the S&P slipped on defense/energy sector drag from ceasefire uncertainty.</p>
+      </div>
+
+      <div class="card card-sky">
+        <div class="subsection-title">Repository Counts</div>
+        <div class="grid grid-2">
+          <div class="stat-block">
+            <div class="stat-label">GitHub (Relias-Engineering)</div>
+            <div class="stat-value">273</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-label">Bitbucket</div>
+            <div class="stat-value">562</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-accent">
+        <div class="subsection-title">GitHub Copilot Usage <span class="tag tag-clay">May billing period</span></div>
+        <div class="grid grid-3">
+          <div class="stat-block">
+            <div class="stat-label">Org-Wide</div>
+            <div class="stat-value">18.8%</div>
+            <div class="mono">53,602 / 285,000 PRUs</div>
+            <div class="stat-delta positive">+1.7 pts vs yesterday</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-label">fhemmerrelias</div>
+            <div class="stat-value stat-accent-clay">468%</div>
+            <div class="mono">4,679 / 1,000 PRUs <span class="badge-warn">⚠ Over entitlement</span></div>
+            <div class="stat-delta">+27.0 pts vs yesterday</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-label">Copilot Cloud Agent</div>
+            <div class="stat-value">74</div>
+            <div class="mono" style="font-size:0.85rem;">PRUs (May MTD)</div>
+            <div class="stat-delta">+2 vs yesterday</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-sky">
+        <div class="subsection-title">Cloudflare Usage <span class="tag tag-sky">May 12, 2026</span></div>
+        <table class="data-table">
+          <thead>
+            <tr><th>Domain</th><th>Page Views</th><th>Unique Visitors</th><th>Emails Fwd</th><th>Delta PV</th><th>Delta UV</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="mono">nowleadershipgroup.com</td>
+              <td>57</td>
+              <td>89</td>
+              <td>0</td>
+              <td class="stat-delta positive">+24</td>
+              <td class="stat-delta positive">+17</td>
+            </tr>
+            <tr>
+              <td class="mono">setitfreeloop.org</td>
+              <td>0</td>
+              <td>0</td>
+              <td>—</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 🤖 LLM Models -->
+    <div class="section">
+      <h2 class="section-title"><span class="emoji">🤖</span>LLM Models</h2>
+      <div class="subsection-title">LMSYS Chatbot Arena Leaderboard <span class="tag tag-olive">Carried forward from 2026-05-10</span></div>
+      <div class="grid grid-3" style="margin-bottom:16px;">
+        <div class="card">
+          <div class="eyebrow" style="color:var(--accent-primary)">Overall Top 5</div>
+          <table class="data-table">
+            <tr><td>1</td><td><strong>claude-opus-4-7-thinking</strong></td><td class="muted">Anthropic</td></tr>
+            <tr><td>2</td><td>claude-opus-4-6-thinking</td><td class="muted">Anthropic</td></tr>
+            <tr><td>3</td><td>claude-opus-4-6</td><td class="muted">Anthropic</td></tr>
+            <tr><td>4</td><td>gemini-3.1-pro-preview</td><td class="muted">Google</td></tr>
+            <tr><td>5</td><td>claude-opus-4-7</td><td class="muted">Anthropic</td></tr>
+          </table>
+        </div>
+        <div class="card">
+          <div class="eyebrow" style="color:var(--accent-tertiary)">Coding Top 5</div>
+          <table class="data-table">
+            <tr><td>1</td><td><strong>claude-opus-4-7-thinking</strong></td></tr>
+            <tr><td>2</td><td>claude-opus-4-6-thinking</td></tr>
+            <tr><td>3</td><td>claude-opus-4-7</td></tr>
+            <tr><td>4</td><td>claude-opus-4-6</td></tr>
+            <tr><td>5</td><td>claude-opus-4-5-thinking-32k</td></tr>
+          </table>
+        </div>
+        <div class="card">
+          <div class="eyebrow" style="color:var(--accent-secondary)">Math Top 5</div>
+          <table class="data-table">
+            <tr><td>1</td><td><strong>claude-opus-4-7-thinking</strong></td></tr>
+            <tr><td>2</td><td>gemini-3.1-pro-preview</td></tr>
+            <tr><td>3</td><td>claude-opus-4-6-thinking</td></tr>
+            <tr><td>4</td><td>o3-full</td></tr>
+            <tr><td>5</td><td>o4-mini-high</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 🔥 Trending GitHub Repos -->
+    <div class="section">
+      <h2 class="section-title"><span class="emoji">🔥</span>Trending GitHub Repos</h2>
+      <div class="card">
+        <div class="trending-item">
+          <span class="trending-stars">⭐ 75,826</span>
+          <div>
+            <div class="trending-name"><a href="https://github.com/mattpocock/skills">mattpocock/skills</a></div>
+            <div class="trending-desc">Skills for Real Engineers. Straight from my .claude directory.</div>
+          </div>
+        </div>
+        <div class="trending-item">
+          <span class="trending-stars">⭐ 20,184</span>
+          <div>
+            <div class="trending-name"><a href="https://github.com/apernet/hysteria">apernet/hysteria</a></div>
+            <div class="trending-desc">Hysteria is a powerful, lightning fast and censorship resistant proxy.</div>
+          </div>
+        </div>
+        <div class="trending-item">
+          <span class="trending-stars">⭐ 7,720</span>
+          <div>
+            <div class="trending-name"><a href="https://github.com/CloakHQ/CloakBrowser">CloakHQ/CloakBrowser</a></div>
+            <div class="trending-desc">Stealth Chromium that passes every bot detection test. Drop-in Playwright replacement with source-level fingerprint patches.</div>
+          </div>
+        </div>
+        <div class="trending-item">
+          <span class="trending-stars">⭐ 5,751</span>
+          <div>
+            <div class="trending-name"><a href="https://github.com/rohitg00/agentmemory">rohitg00/agentmemory</a></div>
+            <div class="trending-desc">#1 Persistent memory for AI coding agents based on real-world benchmarks.</div>
+          </div>
+        </div>
+        <div class="trending-item">
+          <span class="trending-stars">⭐ 2,586</span>
+          <div>
+            <div class="trending-name"><a href="https://github.com/tinyhumansai/openhuman">tinyhumansai/openhuman</a></div>
+            <div class="trending-desc">Your Personal AI super intelligence. Private, Simple and extremely powerful.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 🛠 Software Watchlist -->
+    <div class="section">
+      <h2 class="section-title"><span class="emoji">🛠</span>Software Watchlist</h2>
+      <div class="card">
+        <p style="font-size:0.85rem;color:var(--text-secondary)">No new releases detected today from tracked repositories. GitHub Blog RSS feed was unreachable.</p>
+      </div>
+    </div>
+
+    <!-- 💻 Today's Productivity -->
+    <div class="section">
+      <h2 class="section-title"><span class="emoji">💻</span>Today's Productivity</h2>
+      <div class="card card-olive">
+        <div class="grid grid-3" style="margin-bottom:12px;">
+          <div class="stat-block">
+            <div class="stat-label">Lines of Code</div>
+            <div class="stat-value stat-accent-positive">+3,659</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-label">Commits</div>
+            <div class="stat-value">27</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-label">PRs Merged</div>
+            <div class="stat-value">11</div>
+          </div>
+        </div>
+        <div class="grid grid-2">
+          <div class="stat-block">
+            <div class="stat-label">Code Reviews</div>
+            <div class="stat-value">0</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-label">Issues Closed</div>
+            <div class="stat-value">0</div>
+          </div>
+        </div>
+        <div style="margin-top:12px;padding:0 12px;font-size:0.8rem;color:var(--text-secondary)">
+          <strong>Repos:</strong> hs-buddy, ai-skills, ai-tools, ai-workflows, gh-x<br/>
+          <strong>File types:</strong> .go, .ps1
+        </div>
+      </div>
+    </div>
+
+    <!-- 💼 Meetings -->
+    <div class="section">
+      <h2 class="section-title"><span class="emoji">💼</span>Meetings</h2>
+      <div class="meeting-card">
+        <div class="meeting-time">10:00 AM — 10:45 AM</div>
+        <div class="meeting-title">DevEx Refinement</div>
+        <div class="meeting-attendees">Organizer: Franz Hemmer · Bryan Halterman, Nick Peterson, Malia Paul (optional)</div>
+      </div>
+      <div class="meeting-card">
+        <div class="meeting-time">11:00 AM — 11:30 AM</div>
+        <div class="meeting-title">Prod Eng Standup</div>
+        <div class="meeting-attendees">Organizer: Malia Paul · Scott Motley, Karthika Menon, John Martin, Bryan Halterman, Sid Marti, Daniel Wilson, Nick Peterson, Tyler Deal, Franz Hemmer, Jason Smith +others</div>
+      </div>
+      <div class="meeting-card">
+        <div class="meeting-time">1:30 PM — 2:30 PM</div>
+        <div class="meeting-title">Platform Sprint Demos</div>
+        <div class="meeting-attendees">Organizer: Engineering Communications · Large meeting (200+ invitees) — George DeCherney, Ajith Kallambella, Rob Morawski, Platform PM Team, Architecture, Platform Teams, Productivity Engineering</div>
+      </div>
+    </div>
+
+    <!-- 💭 Personal Reflections -->
+    <div class="section">
+      <h2 class="section-title"><span class="emoji">💭</span>Personal Reflections</h2>
+      <div class="card">
+        <div class="placeholder"><!-- TODO: fill in personal reflections, thoughts, or observations about today --></div>
+      </div>
+    </div>
+
+  </div><!-- /.page-shell -->
+
+  <script>
+    function setTheme(t){document.body.setAttribute('data-theme',t);localStorage.setItem('diary-theme',t);document.querySelectorAll('.theme-menu button').forEach(b=>{b.classList.toggle('active',b.textContent.toLowerCase().includes(t))});document.querySelector('.theme-menu').classList.remove('open')}
+    (function(){const t=localStorage.getItem('diary-theme');if(t)setTheme(t)})();
+    document.addEventListener('click',e=>{if(!e.target.closest('.theme-toggle'))document.querySelector('.theme-menu').classList.remove('open')});
+  </script>
+</body>
+</html>

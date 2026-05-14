@@ -56,6 +56,12 @@ Items being tracked and monitored.
 - [ ] Skills marketplace/discovery
 - [ ] Self-improving agents creating their own Skills
 
+### Latest Movement (2026-05-12)
+
+- Anthropic's engineering article now explicitly points readers to Agent Skills as an open standard, reinforcing that the format is no longer Claude-only.
+- agentskills.io is now the main hub for docs, client showcase, and open development, which is a meaningful maturity step beyond the original announcement phase.
+- Biggest remaining watch items are still formal versioning/releases and broader discovery/marketplace patterns.
+
 ---
 
 ## Claude Code
@@ -76,9 +82,10 @@ Items being tracked and monitored.
 
 ### Latest Updates
 
-- Integrated with VS Code as extended Copilot Chat functionality
-- Part of multi-agent orchestration in v1.107.1+
-- Claude Skills support added in v1.107
+- **Latest Release**: 2.1.140 (May 12, 2026)
+- Recent headline movement: Agent View (research preview) landed in 2.1.139, along with `/goal`, `/scroll-speed`, and richer plugin details.
+- 2.1.140 focused on reliability: better background-session behavior, Windows fixes, hook-related `/goal` fixes, and stronger plugin warnings.
+- Net: Claude Code is still moving very quickly, with both new agent UX and frequent stability improvements.
 
 ---
 
@@ -102,11 +109,16 @@ Items being tracked and monitored.
 
 ### Current Status
 
-- **Latest Stable**: v0.23.0 (Jan 6, 2026)
-- **Release Cadence**: Weekly stable (Tuesdays 20:00 UTC), weekly preview (Tuesdays 23:59 UTC), nightly builds
-- **Total Releases**: 284
-- **License**: Apache 2.0
-- **Stars**: 90.3k
+- **Latest Stable**: v0.41.0 (May 5, 2026)
+- **Release Cadence**: Weekly stable, preview, and nightly channels
+- **Direction**: Rapid feature growth around voice, security, context management, and local model support
+
+### Latest Movement (2026-05-12)
+
+- Real-time Voice Mode is now in stable.
+- Security posture tightened with workspace trust enforcement and safer `.env` loading.
+- Context handling improved with the new `ContextManager`, `AgentChatHistory`, and auto-memory persistence.
+- Experimental Gemma 4 support shows the CLI is continuing to broaden beyond hosted Gemini-only workflows.
 
 ### Key Features
 
@@ -171,6 +183,12 @@ Items being tracked and monitored.
 4. **Speed**: Good tokens/sec on consumer hardware
 5. **Quantization**: Q4_K_M or Q5_K_M for size/quality balance
 
+### Latest Movement (2026-05-12)
+
+- Official Ollama surfaces now prominently feature newer tool-capable families beyond the older qwen2.5-coder generation: `qwen3`, `qwen3.5`, `gemma4`, `gpt-oss`, and `deepseek-r1`.
+- Ollama's January 2026 Codex post is an important signal that local coding/agent workflows are now a first-class use case.
+- Practical takeaway: the recommendation set for a 32GB RTX 5090 has moved forward, and this watch item should increasingly track qwen3/qwen3.5-, gemma4-, and gpt-oss-class models.
+
 ---
 
 ## Apple Siri Assistant
@@ -211,3 +229,72 @@ Items being tracked and monitored.
 ### Competitive Context
 
 Monitoring against: Google Assistant, Amazon Alexa, Claude, ChatGPT, Gemini, Copilot
+
+### Latest Movement (2026-05-12)
+
+- There is still no clear public shipment of the deeper "smarter Siri" / Apple Intelligence Siri experience this watch item is waiting for.
+- Reputable reporting continues to frame the major Siri overhaul as delayed, with WWDC 2026 now the next big checkpoint.
+- Net: roadmap pressure and reporting have moved, but shipped Siri capability has not materially advanced yet.
+
+---
+
+## GitHub Copilot Preview Bill Rollout
+
+- **Status**: Active
+- **Added**: 2026-05-12
+- **Expires**: 2026-06-01
+- **Notes**: Tracking the rollout of the "Preview my bill" / billing preview experience for GitHub Copilot Business and Enterprise customers ahead of the June 1, 2026 usage-based billing transition. Updated on 2026-05-12: GitHub now documents a "Preview your usage" flow, April usage reports are available, and the public billing preview tool is live, but older "preview bill" / "coming weeks" language still exists in Community posts.
+
+### Key Resources to Monitor
+
+| Resource | URL | What to Watch |
+|----------|-----|---------------|
+| **GitHub Docs (orgs/enterprises)** | <https://docs.github.com/en/copilot/how-tos/manage-and-track-spending/prepare-for-usage-based-billing> | Whether wording changes from "coming in early May" to confirmed availability |
+| **GitHub Blog announcement** | <https://github.blog/news-insights/company-news/github-copilot-is-moving-to-usage-based-billing/> | Revised rollout timing or explicit availability confirmation |
+| **GitHub Community FAQ #192948** | <https://github.com/orgs/community/discussions/192948> | Staff replies, ETA changes, and rollout clarifications |
+| **GitHub Changelog** | <https://github.blog/changelog/> | New posts mentioning billing preview rollout |
+| **Billing preview tool** | <https://copilot-billing-preview.github.com/> | Whether the public estimator remains available and how the flow evolves |
+| **r/GithubCopilot** | <https://www.reddit.com/r/GithubCopilot/> | User reports of availability, delays, or Enterprise-only access |
+| **X: @github** | <https://x.com/github> | Official social updates on the billing preview rollout |
+
+### Current Signals
+
+- As of May 12, the org/admin docs no longer say "coming in early May"; they now direct admins to click **Preview your usage** and request the April usage report.
+- GitHub's May 12 changelog says **"Starting today, you can download your usage report"** for Copilot Business and Enterprise admins.
+- The public billing preview tool is live at `copilot-billing-preview.github.com`.
+- The main GitHub Community FAQ still contains older wording that says the preview bill is rolling out **"in the coming weeks,"** so the public messaging remains historically inconsistent.
+- Community reports from earlier on May 12 were conflicting: some users said it was still unavailable, some claimed Enterprise-only access, and at least one reported Enterprise admins still could not find the older in-product experience.
+
+### What is AIC?
+
+**AIC = GitHub AI Credits** — the new billing currency replacing Premium Request Units (PRUs).
+
+| Detail | Value |
+|--------|-------|
+| **1 AIC** | $0.01 USD |
+| **Copilot Pro** | 1,000 AIC/month ($10) |
+| **Copilot Pro+** | 3,900 AIC/month ($39) |
+| **Copilot Business** | 1,900 AIC/user/month ($19) |
+| **Copilot Enterprise** | 3,900 AIC/user/month ($39) |
+
+- Credits are consumed based on **token usage** (input, output, cached) and which **model** is used.
+- **Not billed**: Code completions and Next Edit suggestions remain unlimited.
+- **Billed**: Chat, CLI, cloud agents, Spaces, Spark, code review, third-party agents.
+- Business/Enterprise credits are **pooled** at the org level.
+- June–August 2026: promotional higher credit pools for Business/Enterprise.
+
+### Latest Update (2026-05-13)
+
+- The billing preview tool is live and April usage reports are downloadable for Business and Enterprise admins.
+- GitHub has shifted terminology from "Preview my bill" to a **usage report + billing preview tool** workflow.
+- The June 1, 2026 transition date remains firm — **18 days away**.
+- Fallback mode (dropping to cheaper models when credits run out) has been **removed** — usage is strictly governed by credit budget.
+- Copilot Code Review now consumes both GitHub Actions minutes **and** AI credits.
+- Key concern in community: heavy agentic/long-running workflows will burn through credits much faster than the old flat-rate PRU model.
+
+### Resolution Criteria
+
+- [x] GitHub confirms general availability or publishes revised timing
+- [x] Verified access for Copilot Business admins
+- [x] Verified access for Copilot Enterprise admins
+- [ ] Clear resolution before the June 1, 2026 billing transition

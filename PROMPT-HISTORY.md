@@ -629,3 +629,9 @@ Result: Saved `diary/entries/2026/05/2026-05-08.md` with weather, news, slack ac
 
 2026-05-10 - 00:19 - Scaffold diary entry for 2026-05-09 with cached and live data
 Result: Saved `diary/entries/2026/05/2026-05-09.md` with weekend-aware daily numbers, Slack/weather/news, LLM carry-forward, trending repos, software/watchlist updates, and productivity, while correctly omitting meetings and screenshots for Saturday/no files. Left Today's Highlight and Personal Reflections as user TODOs.
+
+2026-05-11 - 01:36 - Create 'vh' alias for viewing HTML files and switch default theme to Carbon
+Result: Added 'vh' PowerShell function to global profile that opens HTML files in centered Edge app window (1100x900). Changed default theme fallback from 'paper' to 'carbon' in html/SKILL.md and 2026-05-10.html diary entry.
+
+2026-05-11 - 02:18 - Fix vh alias horizontal centering using Win32 API
+Result: Replaced --window-position with EnumWindows/SetWindowPos to reliably find and center the newly opened Edge app window on the primary screen.

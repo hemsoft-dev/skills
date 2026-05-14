@@ -119,7 +119,7 @@ function setTheme(t){document.documentElement.setAttribute('data-theme',t);local
 function toggleThemeMenu(){const m=document.getElementById('themeMenu');const b=document.querySelector('.theme-toggle-btn');const open=m.classList.toggle('open');b.setAttribute('aria-expanded',open)}
 function closeThemeMenu(){document.getElementById('themeMenu').classList.remove('open');document.querySelector('.theme-toggle-btn').setAttribute('aria-expanded','false')}
 document.addEventListener('click',e=>{if(!e.target.closest('.theme-toggle'))closeThemeMenu()});
-(function(){const t=localStorage.getItem('html-theme')||'paper';document.documentElement.setAttribute('data-theme',t)})()
+(function(){const t=localStorage.getItem('html-theme')||'carbon';document.documentElement.setAttribute('data-theme',t)})()
 ```
 
 ### Theme CSS
@@ -387,7 +387,7 @@ Use these building blocks consistently:
   function toggleThemeMenu(){const m=document.getElementById('themeMenu');const b=document.querySelector('.theme-toggle-btn');const open=m.classList.toggle('open');b.setAttribute('aria-expanded',open)}
   function closeThemeMenu(){document.getElementById('themeMenu').classList.remove('open');document.querySelector('.theme-toggle-btn').setAttribute('aria-expanded','false')}
   document.addEventListener('click',e=>{if(!e.target.closest('.theme-toggle'))closeThemeMenu()});
-  (function(){const t=localStorage.getItem('html-theme')||'paper';document.documentElement.setAttribute('data-theme',t)})()
+  (function(){const t=localStorage.getItem('html-theme')||'carbon';document.documentElement.setAttribute('data-theme',t)})()
   </script>
 </body>
 </html>

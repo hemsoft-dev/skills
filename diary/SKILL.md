@@ -1,6 +1,6 @@
 ---
 name: diary
-description: "V1.3 - Commands: create, scaffold, update. Personal diary management with daily entry creation, scaffolding, and updates."
+description: "V1.4 - Commands: create, scaffold, update. Personal diary management with daily entry creation, scaffolding, and updates."
 ---
 
 # Diary
@@ -14,7 +14,7 @@ Personal diary management.
 | Command | Usage | Description |
 |---------|-------|-------------|
 | `create` | `/diary create` or `/diary create 2026-03-01` | Create a new diary entry. Defaults to today. Aborts if entry already exists (use `update` instead). |
-| `scaffold` | `/diary scaffold` or `/diary scaffold 2026-04-13` | Scaffold a diary entry by loading cached/live data, assembling all sections, saving immediately, then telling the user what to fill in. |
+| `scaffold` | `/diary scaffold` or `/diary scaffold 2026-04-13` | Scaffold a diary entry as a standalone HTML file. Loads cached/live data, assembles all sections, saves immediately, then tells the user what to fill in. |
 | `update` | `/diary update` or `/diary update 2026-03-01` | Update an existing diary entry. *(coming soon)* |
 
 ## Scripts
@@ -36,7 +36,7 @@ Follow all steps below in order. Save the entry as soon as automated data is ass
 
 Check each file first. If today's file exists, use it. If not, run the fallback script.
 
-Also load yesterday's diary entry (`diary/entries/YYYY-MM-DD.md` for yesterday) to compute day-over-day deltas.
+Also load yesterday's diary entry (`diary/entries/YYYY/MM/YYYY-MM-DD.html` for yesterday) to compute day-over-day deltas.
 
 #### External skill caches (base path: `~/.agents/skills/`)
 
@@ -69,9 +69,13 @@ Also load yesterday's diary entry (`diary/entries/YYYY-MM-DD.md` for yesterday) 
 
 ### Step 3: Assemble & Save Entry
 
-Use `diary/config/yyyy-mm-dd.md` as the template. Populate every section in this exact order. For user-provided sections, insert `<!-- TODO: fill in -->` placeholders with Todoist data pre-populated where available.
+**Output format: HTML.** Consult the `html` skill (`~/.agents/skills/html/SKILL.md`) for the visual system, theme definitions (Paper/Obsidian/Twilight/Carbon), approved layout variants, component vocabulary, default skeleton, and theme toggle. Use the `dashboard` variant as the base layout. All theme CSS, toggle JS, and component classes defined in the `html` skill MUST be included.
 
-**Save immediately to `diary/entries/YYYY-MM-DD.md`** once all automated sections are populated.
+Use `diary/config/yyyy-mm-dd.md` as the **section reference** for content structure. Translate each markdown section into structured HTML sections and cards using the `html` skill's component vocabulary (`.page-shell`, `.window`, `.section`, `.section-title`, `.card`, `.grid`, `.stat-block`, `.tag`, `.num-list`, etc.).
+
+**News headline lists**: Render as `<ol class="num-list">` with each `<li>` containing the headline link, em dash, and source badge inline. Do NOT use `display: flex` on `<li>` — use `position: relative` with `padding-left` for the counter number and let content flow inline naturally. Add `white-space: nowrap` to `.tag` elements to prevent badge text wrapping.
+
+**Save immediately to `diary/entries/YYYY/MM/YYYY-MM-DD.html`** once all automated sections are populated.
 
 | # | Section | Source | Omit When |
 |---|---------|--------|-----------|
