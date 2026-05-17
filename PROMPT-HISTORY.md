@@ -638,3 +638,6 @@ Result: Replaced --window-position with EnumWindows/SetWindowPos to reliably fin
 
 2026-05-15 - 23:59 - Scaffold diary entry for 2026-05-15 as HTML with cached and live data
 Result: Saved `diary/entries/2026/05/2026-05-15.html` with weather, news, Slack activity, daily numbers with GitHub Copilot and Cloudflare deltas, LLM updates, software/watchlist updates, productivity, and meeting notes. Left Today's Highlight and Personal Reflections as TODOs.
+
+2026-05-17 - 00:12 - Scaffold diary entry for 2026-05-17 with the current HTML skill contract
+Result: Saved `diary/entries/2026/05/2026-05-17.html` with weather, news, weekend-aware daily numbers, LLM updates, trending repos, software/watchlist status, and productivity. Meetings and screenshots were correctly omitted for the weekend/no files, and Today's Highlight plus Personal Reflections were left as TODOs.
