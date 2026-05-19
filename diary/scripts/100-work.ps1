@@ -28,17 +28,20 @@ param(
 $ErrorActionPreference = 'Stop'
 $InformationPreference = 'Continue'
 
+. (Join-Path $PSScriptRoot 'HtmlDiaryHelpers.ps1')
+
 # --- Resolve entry path ---
 if (-not $EntryPath) {
-    $year = $Date.Substring(0, 4)
-    $month = $Date.Substring(5, 2)
-    $EntryPath = Join-Path $PSScriptRoot '..' 'entries' $year $month "$Date.md"
+    $EntryPath = Get-DiaryHtmlEntryPath -ScriptRoot $PSScriptRoot -Date $Date
 }
 
 if (-not (Test-Path $EntryPath)) {
     Write-Error "Diary entry not found: $EntryPath"
     exit 1
 }
+
+Write-Information "`e[90mWork section is legacy markdown-era automation and is not part of the current HTML diary contract. Skipping.`e[0m"
+exit 0
 
 # --- Weekend check ---
 $dateObj = [DateTime]::Parse($Date)
@@ -52,7 +55,7 @@ $entry = Get-Content $EntryPath -Raw
 $friendlyDate = $dateObj.ToString('MMMM d, yyyy')
 
 # --- Helper: Clean WorkIQ output ---
-function Clean-WorkIQOutput {
+function ConvertTo-WorkIqCleanText {
     param([string]$raw)
     if (-not $raw) { return '' }
 
@@ -102,7 +105,7 @@ Output ONLY the formatted bullet list. No introduction, no conclusion.
 If I had no meetings, output exactly: "No meetings scheduled."
 "@
     $rawList = & workiq ask -q $listPrompt 2>&1 | Out-String
-    $meetingsContent = Clean-WorkIQOutput $rawList
+    $meetingsContent = ConvertTo-WorkIqCleanText $rawList
     if ($meetingsContent -and $meetingsContent -notmatch 'No meetings scheduled') {
         Write-Information "`e[1;32mMeetings retrieved. Fetching transcripts per meeting...`e[0m"
 
@@ -114,7 +117,7 @@ If I had no meetings, output exactly: "No meetings scheduled."
             try {
                 $transcriptPrompt = "Show me the transcript or notes from the `"$meetingTitle`" meeting on $friendlyDate. Include key discussion points and action items. Output ONLY the content — no introduction or conclusion."
                 $rawTranscript = & workiq ask -q $transcriptPrompt 2>&1 | Out-String
-                $transcriptClean = Clean-WorkIQOutput $rawTranscript
+                $transcriptClean = ConvertTo-WorkIqCleanText $rawTranscript
                 if ($transcriptClean -and $transcriptClean -notmatch 'no transcript|not available|could not find|no notes|not surfaced|didn.t find') {
                     # Append transcript summary under the meeting entry
                     $escapedTitle = [regex]::Escape($meetingTitle)
@@ -149,7 +152,7 @@ If no important emails, output exactly: "No significant work emails."
 Output ONLY the formatted bullet list. No introduction or conclusion.
 "@
     $rawEmails = & workiq ask -q $emailPrompt 2>&1 | Out-String
-    $emailsContent = Clean-WorkIQOutput $rawEmails
+    $emailsContent = ConvertTo-WorkIqCleanText $rawEmails
     if ($emailsContent) {
         Write-Information "`e[1;32mEmails retrieved.`e[0m"
     }

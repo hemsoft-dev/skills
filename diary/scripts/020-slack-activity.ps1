@@ -5,7 +5,7 @@
 
 .DESCRIPTION
     Reads the Slack daily briefing output file, uses Copilot CLI to curate
-    it into a 5-8 item bulleted summary, and injects it into the diary entry.
+    it into an 8-12 item bulleted summary, and injects it into the diary entry.
     Falls back to raw briefing if LLM curation fails.
 
 .PARAMETER Date
@@ -15,7 +15,7 @@
     The full path to the diary entry file to update.
 
 .EXAMPLE
-    .\020-slack-activity.ps1 -Date 2026-02-28 -EntryPath ..\entries\2026-02-28.md
+    .\020-slack-activity.ps1 -Date 2026-02-28 -EntryPath ..\entries\2026-02-28.html
 #>
 
 [CmdletBinding()]
@@ -27,11 +27,11 @@ param(
 $ErrorActionPreference = 'Stop'
 $InformationPreference = 'Continue'
 
+. (Join-Path $PSScriptRoot 'HtmlDiaryHelpers.ps1')
+
 # Resolve entry path
 if (-not $EntryPath) {
-    $year = $Date.Substring(0, 4)
-    $month = $Date.Substring(5, 2)
-    $EntryPath = Join-Path $PSScriptRoot '..' 'entries' $year $month "$Date.md"
+    $EntryPath = Get-DiaryHtmlEntryPath -ScriptRoot $PSScriptRoot -Date $Date
 }
 
 if (-not (Test-Path $EntryPath)) {
@@ -64,7 +64,7 @@ Write-Information "`e[1;36mCurating Slack activity via Copilot CLI...`e[0m"
 
 # Build the prompt — prescriptive format with example
 $prompt = @"
-You are a concise summarizer. I will give you a raw Slack daily briefing. Produce a markdown bulleted list of the 5-8 most important items from the day. Rules:
+You are a concise summarizer. I will give you a raw Slack daily briefing. Produce a markdown bulleted list of the 8-12 most important items from the day. If there are fewer than 8 genuinely substantive items, return the smaller justified set rather than inventing filler. Rules:
 
 - Each bullet starts with the channel name in bold: **#channel-name**
 - After the channel name, write a brief 1-2 sentence summary of what happened
@@ -129,17 +129,6 @@ else {
     Write-Information "`e[1;33mUsing raw Slack briefing as fallback.`e[0m"
 }
 
-# Replace the Slack Activity section content in the diary entry
-$entry = Get-Content $EntryPath -Raw
-
-# Match the section between "## 💬 Slack Activity" (or "### 💬 Slack Activity") header and the next "---" divider
-$sectionPattern = '(#{2,3}\s+💬\s+Slack Activity\s*\r?\n)\s*\r?\n([\s\S]*?)(\r?\n---)'
-if ($entry -match $sectionPattern) {
-    $entry = $entry -replace $sectionPattern, "`${1}`n$slackContent`n`${3}"
-    $utf8NoBom = [System.Text.UTF8Encoding]::new($false)
-    [System.IO.File]::WriteAllText($EntryPath, $entry, $utf8NoBom)
-    Write-Information "`e[1;32mSlack activity injected into diary entry.`e[0m"
-}
-else {
-    Write-Information "`e[1;31mSlack Activity section not found in entry. Cannot inject.`e[0m"
-}
+$sectionHtml = ConvertTo-DiaryHtmlCard -Markdown $slackContent -Eyebrow "Source: Slack briefing for $Date"
+Set-DiarySectionInnerHtml -EntryPath $EntryPath -SectionTitle '💬 Slack Activity' -InnerHtml $sectionHtml
+Write-Information "`e[1;32mSlack activity injected into diary entry.`e[0m"

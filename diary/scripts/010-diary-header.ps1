@@ -4,7 +4,7 @@
     Creates the diary entry file from the template with the header filled in.
 
 .DESCRIPTION
-    Reads config/yyyy-mm-dd.md, replaces date/weekday placeholders in the header,
+    Reads config/yyyy-mm-dd.html, replaces date/weekday placeholders in the header,
     and writes the scaffolded entry file. Skips if the entry already exists.
 
 .PARAMETER Date
@@ -14,7 +14,7 @@
     The full path to the output diary entry file.
 
 .EXAMPLE
-    .\01-diary-header.ps1 -Date 2026-03-01 -EntryPath ..\entries\2026-03-01.md
+    .\01-diary-header.ps1 -Date 2026-03-01 -EntryPath ..\entries\2026-03-01.html
 #>
 
 [CmdletBinding()]
@@ -28,7 +28,7 @@ $InformationPreference = 'Continue'
 
 # Resolve paths
 $configDir = Join-Path $PSScriptRoot '..' 'config'
-$templatePath = Join-Path $configDir 'yyyy-mm-dd.md'
+$templatePath = Join-Path $configDir 'yyyy-mm-dd.html'
 
 if (-not $EntryPath) {
     $year = $Date.Substring(0, 4)
@@ -37,7 +37,7 @@ if (-not $EntryPath) {
     if (-not (Test-Path $entriesDir)) {
         New-Item -ItemType Directory -Path $entriesDir -Force | Out-Null
     }
-    $EntryPath = Join-Path $entriesDir "$Date.md"
+    $EntryPath = Join-Path $entriesDir "$Date.html"
 }
 
 if (Test-Path $EntryPath) {
@@ -53,13 +53,10 @@ if (-not (Test-Path $templatePath)) {
 # Parse the date
 $parsedDate = [datetime]::ParseExact($Date, 'yyyy-MM-dd', $null)
 $weekday = $parsedDate.ToString('dddd')
-$monthDayYear = $parsedDate.ToString('MMMM d, yyyy')
-
 # Read template and replace header placeholders
 $content = Get-Content $templatePath -Raw
 $content = $content -replace '\{Weekday\}', $weekday
 $content = $content -replace '\{YYYY-MM-DD\}', $Date
-$content = $content -replace '\{Month Day, Year\}', $monthDayYear
 
 # Write the scaffolded entry
 $utf8NoBom = [System.Text.UTF8Encoding]::new($false)

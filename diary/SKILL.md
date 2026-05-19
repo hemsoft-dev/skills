@@ -1,6 +1,6 @@
 ---
 name: diary
-description: "V1.4 - Commands: create, scaffold, update. Personal diary management with daily entry creation, scaffolding, and updates."
+description: "V1.5 - Commands: create, scaffold, update. Personal diary management with daily entry creation, scaffolding, and updates."
 ---
 
 # Diary
@@ -23,14 +23,19 @@ Personal diary management.
 |------|------|
 | `create.ps1` | Entry point — validates no entry exists, then calls orchestrator |
 | `diary-orchestrator.ps1` | Runs all `###-*.ps1` section scripts in order |
-| `010-diary-header.ps1` | Scaffolds entry file from `config/yyyy-mm-dd.md` template |
-| `020-slack-activity.ps1` | Curates Slack briefing into 5-8 bullet summary via Copilot CLI, falls back to raw briefing |
+| `010-diary-header.ps1` | Scaffolds entry file from `config/yyyy-mm-dd.html` template |
+| `020-slack-activity.ps1` | Curates Slack briefing into an 8-12 item bullet summary via Copilot CLI, falls back to raw briefing |
+| `HtmlDiaryHelpers.ps1` | Shared HTML path resolution, section replacement, and markdown-to-HTML helpers |
+
+> **Scripted vs. scaffolded workflow:** The numbered PowerShell scripts power the reusable script-backed sections used by `create.ps1` and `diary-orchestrator.ps1`. The `scaffold` command below is still the authoritative end-to-end workflow for live-only sections such as Watchlist Updates, Today's Productivity, Meetings, Screenshots, and picking Today's Highlight from the news.
 
 ## Command: scaffold
 
 When the user activates this command without specifying a date, default to **today**.
 
 Follow all steps below in order. Save the entry as soon as automated data is assembled, then tell the user what to fill in.
+
+> **HTML only:** Older prompts and legacy notes may still refer to `diary/entries/YYYY-MM-DD.md`. That markdown output path is obsolete. The scaffold flow always targets `diary/entries/YYYY/MM/YYYY-MM-DD.html`.
 
 ### Step 1: Load All Cached Data (Run in Parallel)
 
@@ -71,7 +76,7 @@ Also load yesterday's diary entry (`diary/entries/YYYY/MM/YYYY-MM-DD.html` for y
 
 **Output format: HTML.** Consult the `html` skill (`~/.agents/skills/html/SKILL.md`) for the visual system, theme definitions (Paper/Obsidian/Twilight/Carbon), approved layout variants, component vocabulary, default skeleton, and theme toggle. Use the `dashboard` variant as the base layout. All theme CSS, toggle JS, and component classes defined in the `html` skill MUST be included.
 
-Use `diary/config/yyyy-mm-dd.md` as the **section reference** for content structure. Translate each markdown section into structured HTML sections and cards using the `html` skill's component vocabulary (`.page-shell`, `.window`, `.section`, `.section-title`, `.card`, `.grid`, `.stat-block`, `.tag`, `.num-list`, etc.).
+Use `diary/config/yyyy-mm-dd.html` as the **section reference** for content structure. Translate each section into structured HTML using the `html` skill's component vocabulary (`.page-shell`, `.window`, `.section`, `.section-title`, `.card`, `.grid`, `.stat-block`, `.tag`, `.num-list`, etc.).
 
 **News headline lists**: Render as `<ol class="num-list">` with each `<li>` containing the headline link, em dash, and source badge inline. Do NOT use `display: flex` on `<li>` — use `position: relative` with `padding-left` for the counter number and let content flow inline naturally. Add `white-space: nowrap` to `.tag` elements to prevent badge text wrapping.
 

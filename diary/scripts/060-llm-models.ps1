@@ -19,7 +19,7 @@
     The full path to the diary entry file to update.
 
 .EXAMPLE
-    .\060-llm-models.ps1 -Date 2026-02-28 -EntryPath ..\entries\2026\02\2026-02-28.md
+    .\060-llm-models.ps1 -Date 2026-02-28 -EntryPath ..\entries\2026\02\2026-02-28.html
 #>
 
 [CmdletBinding()]
@@ -31,11 +31,11 @@ param(
 $ErrorActionPreference = 'Stop'
 $InformationPreference = 'Continue'
 
+. (Join-Path $PSScriptRoot 'HtmlDiaryHelpers.ps1')
+
 # --- Resolve entry path ---
 if (-not $EntryPath) {
-    $year = $Date.Substring(0, 4)
-    $month = $Date.Substring(5, 2)
-    $EntryPath = Join-Path $PSScriptRoot '..' 'entries' $year $month "$Date.md"
+    $EntryPath = Get-DiaryHtmlEntryPath -ScriptRoot $PSScriptRoot -Date $Date
 }
 
 if (-not (Test-Path $EntryPath)) {
@@ -51,19 +51,53 @@ if (-not $apiKey) {
 }
 
 # --- Helper: find previous entry with LMSYS data (for carry-forward fallback) ---
+function Get-LMSYSFallbackHtml {
+    param([string]$SectionHtml)
+
+    if (-not $SectionHtml) {
+        return $null
+    }
+
+    $trimmed = $SectionHtml.Trim()
+    if (-not $trimmed) {
+        return $null
+    }
+
+    $boundaryPattern = '(?s)^(.*?)(?=(<div class="section-subtitle">New Model Releases \(Last 7 Days\)</div>|<div class="section-subtitle">Top OpenRouter Apps \(by Token Usage\)</div>|<h3>New Model Releases \(Last 7 Days\)</h3>|<h3>Top OpenRouter Apps \(by Token Usage\)</h3>)|$)'
+    $boundaryMatch = [regex]::Match($trimmed, $boundaryPattern)
+    if (-not $boundaryMatch.Success) {
+        $candidate = $trimmed
+    }
+    else {
+        $candidate = $boundaryMatch.Groups[1].Value.Trim()
+    }
+
+    if (-not $candidate) {
+        return $null
+    }
+
+    if ($candidate -match 'Pending automation') {
+        return $null
+    }
+
+    if ($candidate -notmatch 'LMSYS|Chatbot Arena|Leaderboard|<table') {
+        return $null
+    }
+
+    return $candidate
+}
+
 function Get-LastLMSYSSection {
     $entriesDir = Join-Path $PSScriptRoot '..' 'entries'
-    $entries = Get-ChildItem $entriesDir -Filter '*.md' -Recurse |
+    $entries = Get-ChildItem $entriesDir -Filter '*.html' -Recurse |
         Where-Object { $_.BaseName -lt $Date } |
         Sort-Object Name -Descending
 
     foreach ($entry in $entries) {
-        $content = Get-Content $entry.FullName -Raw
-        if ($content -match '(?s)(### LMSYS Chatbot Arena Leaderboard.+?)(?=\n### New Model|\n### Top Open|\n---|\n## )') {
-            $section = $Matches[1]
-            if ($section -match '\|\s*\d+\s*\|' -or $section -match '\|\s*#\d+\s*\|') {
-                return @{ Date = $entry.BaseName; Section = $section.Trim() }
-            }
+        $section = Get-DiarySectionInnerHtml -EntryPath $entry.FullName -SectionTitle '🤖 LLM Models'
+        $lmsysOnly = Get-LMSYSFallbackHtml -SectionHtml $section
+        if ($lmsysOnly) {
+            return @{ Date = $entry.BaseName; Section = $lmsysOnly }
         }
     }
     return $null
@@ -345,28 +379,30 @@ catch {
 # ============================================================
 # BUILD & INJECT
 # ============================================================
-$fullContent = @"
-$lmsysSection
+function ConvertTo-LlmSubsectionHtml {
+    param(
+        [string]$Content,
+        [string]$Eyebrow
+    )
 
-$modelsSection
+    if (-not $Content -or -not $Content.Trim()) {
+        return ''
+    }
 
-$appsSection
-"@
+    if ($Content.TrimStart().StartsWith('<')) {
+        return $Content.Trim()
+    }
 
-$entry = Get-Content $EntryPath -Raw
-
-$sectionPattern = '(#{2,3}\s+🤖\s+LLM Models\s*\r?\n)([\s\S]*?)(\r?\n---)'
-$regex = [regex]::new($sectionPattern)
-$m = $regex.Match($entry)
-if ($m.Success) {
-    # Manually rebuild replacement to avoid regex $ backreference issues in pricing data
-    $before = $entry.Substring(0, $m.Index)
-    $after = $entry.Substring($m.Index + $m.Length)
-    $entry = $before + $m.Groups[1].Value + "`n" + $fullContent + "`n" + $m.Groups[3].Value + $after
-    $utf8NoBom = [System.Text.UTF8Encoding]::new($false)
-    [System.IO.File]::WriteAllText($EntryPath, $entry, $utf8NoBom)
-    Write-Information "`e[1;32mLLM Models section injected into diary entry.`e[0m"
+    return ConvertTo-DiaryHtmlCard -Markdown $Content -Eyebrow $Eyebrow
 }
-else {
-    Write-Information "`e[1;31mLLM Models section (## 🤖 LLM Models) not found in entry. Cannot inject.`e[0m"
-}
+
+$sectionBlocks = @(
+    ConvertTo-LlmSubsectionHtml -Content $lmsysSection -Eyebrow "LLM snapshot for $Date - LMSYS"
+    ConvertTo-LlmSubsectionHtml -Content $modelsSection -Eyebrow "LLM snapshot for $Date - model releases"
+    ConvertTo-LlmSubsectionHtml -Content $appsSection -Eyebrow "LLM snapshot for $Date - app rankings"
+) | Where-Object { $_ }
+
+$fullSectionHtml = ($sectionBlocks -join "`n`n")
+
+Set-DiarySectionInnerHtml -EntryPath $EntryPath -SectionTitle '🤖 LLM Models' -InnerHtml $fullSectionHtml
+Write-Information "`e[1;32mLLM Models section injected into diary entry.`e[0m"

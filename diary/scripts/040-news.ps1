@@ -15,7 +15,7 @@
     The full path to the diary entry file to update.
 
 .EXAMPLE
-    .\040-news.ps1 -Date 2026-02-28 -EntryPath ..\entries\2026-02-28.md
+    .\040-news.ps1 -Date 2026-02-28 -EntryPath ..\entries\2026-02-28.html
 #>
 
 [CmdletBinding()]
@@ -27,11 +27,11 @@ param(
 $ErrorActionPreference = 'Stop'
 $InformationPreference = 'Continue'
 
+. (Join-Path $PSScriptRoot 'HtmlDiaryHelpers.ps1')
+
 # --- Resolve entry path ---
 if (-not $EntryPath) {
-    $year = $Date.Substring(0, 4)
-    $month = $Date.Substring(5, 2)
-    $EntryPath = Join-Path $PSScriptRoot '..' 'entries' $year $month "$Date.md"
+    $EntryPath = Get-DiaryHtmlEntryPath -ScriptRoot $PSScriptRoot -Date $Date
 }
 
 if (-not (Test-Path $EntryPath)) {
@@ -71,19 +71,7 @@ Write-Information "`e[1;36mInjecting news headlines into diary entry...`e[0m"
 $headlineCount = ([regex]::Matches($newsContent, '^\|\s*\d+\s*\|', 'Multiline')).Count
 $categoryCount = ([regex]::Matches($newsContent, '^###\s+', 'Multiline')).Count
 
-# --- Inject into diary entry ---
-$entry = Get-Content $EntryPath -Raw
-
-# Match the News Headlines section between the header and the next "---" divider
-# The header format is: ## 📰 News Headlines (Month Day, Year)
-$sectionPattern = '(#{2,3}\s+📰\s+News Headlines\s*\([^)]*\)\s*\r?\n)([\s\S]*?)(\r?\n---)'
-if ($entry -match $sectionPattern) {
-    $entry = $entry -replace $sectionPattern, "`${1}`n$newsContent`n`${3}"
-    $utf8NoBom = [System.Text.UTF8Encoding]::new($false)
-    [System.IO.File]::WriteAllText($EntryPath, $entry, $utf8NoBom)
-    Write-Information "`e[1;32mNews headlines injected into diary entry.`e[0m"
-    Write-Information "  Categories: $categoryCount | Headlines: $headlineCount"
-}
-else {
-    Write-Information "`e[1;31mNews Headlines section not found in entry. Cannot inject.`e[0m"
-}
+$sectionHtml = ConvertTo-DiaryHtmlCard -Markdown $newsContent -Eyebrow "News snapshot for $Date"
+Set-DiarySectionInnerHtml -EntryPath $EntryPath -SectionTitle '📰 News Headlines' -InnerHtml $sectionHtml
+Write-Information "`e[1;32mNews headlines injected into diary entry.`e[0m"
+Write-Information "  Categories: $categoryCount | Headlines: $headlineCount"

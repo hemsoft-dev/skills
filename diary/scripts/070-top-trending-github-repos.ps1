@@ -27,11 +27,11 @@ param(
 $ErrorActionPreference = 'Stop'
 $InformationPreference = 'Continue'
 
+. (Join-Path $PSScriptRoot 'HtmlDiaryHelpers.ps1')
+
 # --- Resolve entry path ---
 if (-not $EntryPath) {
-    $year = $Date.Substring(0, 4)
-    $month = $Date.Substring(5, 2)
-    $EntryPath = Join-Path $PSScriptRoot '..' 'entries' $year $month "$Date.md"
+    $EntryPath = Get-DiaryHtmlEntryPath -ScriptRoot $PSScriptRoot -Date $Date
 }
 
 if (-not (Test-Path $EntryPath)) {
@@ -131,7 +131,7 @@ if ($repos.Count -lt 1) {
 }
 
 # --- Format star counts ---
-function Format-Stars([string]$raw) {
+function Format-StarCount([string]$raw) {
     $num = 0
     if ([int]::TryParse($raw, [ref]$num)) {
         if ($num -ge 1000) { return "{0:N0}" -f $num }
@@ -149,13 +149,13 @@ $rank = 0
 foreach ($r in $repos) {
     $rank++
     $link = "[$($r.repo)](https://github.com/$($r.repo))"
-    $desc = $r.description
+    $desc = "$($r.description)"
     # Truncate long descriptions
     if ($desc.Length -gt 100) { $desc = $desc.Substring(0, 97) + '...' }
     # Escape pipe characters in description
     $desc = $desc -replace '\|', '–'
 
-    $totalFormatted = Format-Stars $r.totalStars
+    $totalFormatted = Format-StarCount $r.totalStars
     $todayMatch = if ($r.todayStars -match '([\d,]+)\s*stars?\s*today') { $Matches[1] } else { '' }
     $starDisplay = if ($todayMatch) { "⭐ $totalFormatted (+$todayMatch today)" } else { "⭐ $totalFormatted" }
 
@@ -164,22 +164,9 @@ foreach ($r in $repos) {
 
 $trendingContent = $sb.ToString().TrimEnd()
 
-# --- Inject into diary entry ---
-$entry = Get-Content $EntryPath -Raw
-
-$sectionPattern = '(#{2,3}\s+🔥\s+Top 5 Trending GitHub Repos\s*\r?\n)([\s\S]*?)(\r?\n---)'
-$regex = [regex]::new($sectionPattern)
-$m = $regex.Match($entry)
-if ($m.Success) {
-    $before = $entry.Substring(0, $m.Index)
-    $after = $entry.Substring($m.Index + $m.Length)
-    $entry = $before + $m.Groups[1].Value + "`n" + $trendingContent + "`n" + $m.Groups[3].Value + $after
-    [System.IO.File]::WriteAllText($EntryPath, $entry, $utf8NoBom)
-    Write-Information "`e[1;32mTrending GitHub repos injected into diary entry.`e[0m"
-    foreach ($r in $repos) {
-        Write-Information "`e[90m  $($r.repo) — $(Format-Stars $r.totalStars) stars`e[0m"
-    }
-}
-else {
-    Write-Information "`e[1;31mTrending repos section (## 🔥 Top 5 Trending GitHub Repos) not found in entry. Cannot inject.`e[0m"
+$sectionHtml = ConvertTo-DiaryHtmlCard -Markdown $trendingContent -Eyebrow "GitHub Trending for $Date"
+Set-DiarySectionInnerHtml -EntryPath $EntryPath -SectionTitle '🔥 Trending GitHub Repos' -InnerHtml $sectionHtml
+Write-Information "`e[1;32mTrending GitHub repos injected into diary entry.`e[0m"
+foreach ($r in $repos) {
+    Write-Information "`e[90m  $($r.repo) — $(Format-StarCount $r.totalStars) stars`e[0m"
 }

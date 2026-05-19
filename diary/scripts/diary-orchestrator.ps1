@@ -5,7 +5,9 @@
 
 .DESCRIPTION
     Calls each numbered diary script sequentially to build and populate
-    a complete diary entry for the specified date.
+    the script-backed sections of a diary entry for the specified date.
+    The higher-level scaffold workflow can still add live-only sections
+    outside this script chain.
 
 .PARAMETER Date
     The date to generate the diary entry for. Defaults to today.
@@ -36,7 +38,7 @@ if (-not (Test-Path $entriesDir)) {
     New-Item -ItemType Directory -Path $entriesDir -Force | Out-Null
 }
 
-$entryPath = Join-Path $entriesDir "$Date.md"
+$entryPath = Join-Path $entriesDir "$Date.html"
 
 Write-Information "`e[1;36m=== Diary Entry: $Date ===`e[0m"
 Write-Information ""

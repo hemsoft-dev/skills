@@ -15,7 +15,7 @@
     The full path to the diary entry file to update.
 
 .EXAMPLE
-    .\030-weather.ps1 -Date 2026-02-28 -EntryPath ..\entries\2026-02-28.md
+    .\030-weather.ps1 -Date 2026-02-28 -EntryPath ..\entries\2026-02-28.html
 #>
 
 [CmdletBinding()]
@@ -27,6 +27,8 @@ param(
 $ErrorActionPreference = 'Stop'
 $InformationPreference = 'Continue'
 
+. (Join-Path $PSScriptRoot 'HtmlDiaryHelpers.ps1')
+
 # --- Configuration ---
 $ZipCode = '28117'
 $Units = 'imperial'
@@ -35,9 +37,7 @@ $SpeedUnit = 'mph'
 
 # --- Resolve entry path ---
 if (-not $EntryPath) {
-    $year = $Date.Substring(0, 4)
-    $month = $Date.Substring(5, 2)
-    $EntryPath = Join-Path $PSScriptRoot '..' 'entries' $year $month "$Date.md"
+    $EntryPath = Get-DiaryHtmlEntryPath -ScriptRoot $PSScriptRoot -Date $Date
 }
 
 if (-not (Test-Path $EntryPath)) {
@@ -177,18 +177,7 @@ foreach ($day in $forecastDays) {
 
 $weatherContent = $sb.ToString().TrimEnd()
 
-# --- Inject into diary entry ---
-$entry = Get-Content $EntryPath -Raw
-
-# Match the Weather section between "## 🌤️ Weather" and the next "---" divider
-$sectionPattern = '(#{2,3}\s+🌤️\s+Weather\s*\r?\n)([\s\S]*?)(\r?\n---)'
-if ($entry -match $sectionPattern) {
-    $entry = $entry -replace $sectionPattern, "`${1}`n$weatherContent`n`${3}"
-    $utf8NoBom = [System.Text.UTF8Encoding]::new($false)
-    [System.IO.File]::WriteAllText($EntryPath, $entry, $utf8NoBom)
-    Write-Information "`e[1;32mWeather section injected into diary entry.`e[0m"
-    Write-Information "  Location: $location | Temp: $temp$TempUnit | Condition: $condition"
-}
-else {
-    Write-Information "`e[1;31mWeather section (## 🌤️ Weather) not found in entry. Cannot inject.`e[0m"
-}
+$sectionHtml = ConvertTo-DiaryHtmlCard -Markdown $weatherContent -Eyebrow "OpenWeather snapshot for $Date"
+Set-DiarySectionInnerHtml -EntryPath $EntryPath -SectionTitle '🌤 Weather' -InnerHtml $sectionHtml
+Write-Information "`e[1;32mWeather section injected into diary entry.`e[0m"
+Write-Information "  Location: $location | Temp: $temp$TempUnit | Condition: $condition"

@@ -81,7 +81,8 @@ try {
         }
 
         # Check for next page
-        $nextUrl = $response.next
+        $nextProperty = $response.PSObject.Properties['next']
+        $nextUrl = if ($nextProperty) { "$($nextProperty.Value)" } else { $null }
     }
 
     # Save to output file

@@ -29,11 +29,11 @@ param(
 $ErrorActionPreference = 'Stop'
 $InformationPreference = 'Continue'
 
+. (Join-Path $PSScriptRoot 'HtmlDiaryHelpers.ps1')
+
 # --- Resolve entry path ---
 if (-not $EntryPath) {
-    $year = $Date.Substring(0, 4)
-    $month = $Date.Substring(5, 2)
-    $EntryPath = Join-Path $PSScriptRoot '..' 'entries' $year $month "$Date.md"
+    $EntryPath = Get-DiaryHtmlEntryPath -ScriptRoot $PSScriptRoot -Date $Date
 }
 
 if (-not (Test-Path $EntryPath)) {
@@ -51,46 +51,29 @@ $watchlist = Get-Content $configPath -Raw | ConvertFrom-Json
 
 Write-Information "`e[1;36mChecking software watchlist ($($watchlist.Count) items)...`e[0m"
 
-# --- Get previous entry for version comparison ---
-$entriesDir = Join-Path $PSScriptRoot '..' 'entries'
-$prevEntry = Get-ChildItem $entriesDir -Filter '*.md' |
-    Where-Object { $_.BaseName -lt $Date } |
-    Sort-Object Name -Descending |
-    Select-Object -First 1
-
 $prevVersions = @{}
-if ($prevEntry) {
-    $prevContent = Get-Content $prevEntry.FullName -Raw
-    # Extract only the Software Watchlist section from previous entry
-    $watchlistSectionPattern = '(?:#{2,3}\s+💻\s+Software Watchlist\s*\r?\n)([\s\S]*?)(?:\r?\n---)'
-    if ($prevContent -match $watchlistSectionPattern) {
-        $watchlistSection = $Matches[1]
-        # Parse table rows: | Name | Version | ...
-        $tablePattern = '\|\s*(?:\[([^\]]+)\][^\|]*|([^\|]+?))\s*\|\s*([^\|]+?)\s*\|'
-        foreach ($match in [regex]::Matches($watchlistSection, $tablePattern)) {
-            $name = if ($match.Groups[1].Value) { $match.Groups[1].Value.Trim() } else { $match.Groups[2].Value.Trim() }
-            $version = $match.Groups[3].Value.Trim()
-            foreach ($w in $watchlist) {
-                if ($name -eq $w.name) {
-                    if ($version -match '→\s*(.+)$') { $version = $Matches[1].Trim() }
-                    $prevVersions[$name] = $version
-                    break
-                }
-            }
+try {
+    $prevSnapshot = Get-PreviousDiarySnapshotJson -ScriptRoot $PSScriptRoot -Date $Date -Name 'software-watchlist'
+    if ($prevSnapshot -and $prevSnapshot.versions) {
+        foreach ($property in $prevSnapshot.versions.PSObject.Properties) {
+            $prevVersions[$property.Name] = "$($property.Value)"
         }
     }
 }
+catch {
+    Write-Information "`e[33m  Previous software snapshot unavailable: $_`e[0m"
+}
 
 # --- Helper: extract highlights from release body ---
-function Get-ReleaseHighlights([string]$body, [int]$maxItems = 5) {
+function Get-ReleaseHighlightText([string]$body, [int]$maxItems = 5) {
     if (-not $body) { return '' }
     # Extract bullet points
-    $bullets = ($body -split "`n") | Where-Object { $_ -match '^\s*[-*]\s+\S' } | ForEach-Object {
+    $bullets = @(($body -split "`n") | Where-Object { $_ -match '^\s*[-*]\s+\S' } | ForEach-Object {
         ($_ -replace '^\s*[-*]\s+', '').Trim()
-    }
+    })
     if ($bullets.Count -eq 0) {
         # Fallback: take first non-empty lines
-        $bullets = ($body -split "`n") | Where-Object { $_.Trim().Length -gt 0 } | Select-Object -First $maxItems
+        $bullets = @(($body -split "`n") | Where-Object { $_.Trim().Length -gt 0 } | Select-Object -First $maxItems)
     }
     $selected = $bullets | Select-Object -First $maxItems
     $result = ($selected -join '; ') -replace '\|', '–' -replace '\[([^\]]+)\]\([^\)]+\)', '$1'
@@ -108,6 +91,25 @@ function Format-ReleaseDate([string]$isoDate) {
     } catch { return $isoDate }
 }
 
+function Get-OptionalPropertyValue {
+    param(
+        [object]$InputObject,
+        [string]$PropertyName,
+        $DefaultValue = $null
+    )
+
+    if ($null -eq $InputObject) {
+        return $DefaultValue
+    }
+
+    $property = $InputObject.PSObject.Properties[$PropertyName]
+    if ($null -ne $property) {
+        return $property.Value
+    }
+
+    return $DefaultValue
+}
+
 # --- Fetch data for each watchlist item ---
 $rows = @()
 
@@ -116,10 +118,13 @@ foreach ($item in $watchlist) {
         if ($item.type -eq 'github') {
             # Fetch release via gh CLI
             $jqFilter = '{tag_name, published_at, html_url, body}'
-            if ($item.includePrerelease) {
+            $includePrerelease = [bool](Get-OptionalPropertyValue -InputObject $item -PropertyName 'includePrerelease' -DefaultValue $false)
+            $excludePattern = [string](Get-OptionalPropertyValue -InputObject $item -PropertyName 'excludePattern' -DefaultValue '')
+
+            if ($includePrerelease) {
                 # Get first release (includes pre-releases), optionally filtering by pattern
-                if ($item.excludePattern) {
-                    $json = gh api "repos/$($item.repo)/releases" --jq "([.[] | select(.tag_name | test(`"$($item.excludePattern)`") | not)] | .[0]) | $jqFilter" 2>$null
+                if ($excludePattern) {
+                    $json = gh api "repos/$($item.repo)/releases" --jq "([.[] | select(.tag_name | test(`"$excludePattern`") | not)] | .[0]) | $jqFilter" 2>$null
                 } else {
                     $json = gh api "repos/$($item.repo)/releases" --jq ".[0] | $jqFilter" 2>$null
                 }
@@ -135,7 +140,7 @@ foreach ($item in $watchlist) {
             $release = $json | ConvertFrom-Json
             $version = $release.tag_name
             $releasedDate = Format-ReleaseDate $release.published_at
-            $highlights = Get-ReleaseHighlights $release.body
+            $highlights = Get-ReleaseHighlightText $release.body
 
             # Version comparison
             $prevVer = $prevVersions[$item.name]
@@ -144,14 +149,16 @@ foreach ($item in $watchlist) {
             } else { $version }
 
             # Link
-            $changelogUrl = if ($item.changelogUrl) { $item.changelogUrl } else { $release.html_url }
-            $linkText = if ($item.changelogUrl) { 'Changelog' } else { 'Release' }
+            $configuredChangelogUrl = [string](Get-OptionalPropertyValue -InputObject $item -PropertyName 'changelogUrl' -DefaultValue '')
+            $changelogUrl = if ($configuredChangelogUrl) { $configuredChangelogUrl } else { $release.html_url }
+            $linkText = if ($configuredChangelogUrl) { 'Changelog' } else { 'Release' }
             $link = "[$linkText]($changelogUrl)"
 
             # Software name with repo link
             $nameDisplay = "[$($item.name)](https://github.com/$($item.repo))"
 
             $rows += [PSCustomObject]@{
+                Key        = $item.name
                 Name       = $nameDisplay
                 Version    = $versionDisplay
                 Released   = $releasedDate
@@ -164,20 +171,39 @@ foreach ($item in $watchlist) {
             # Fetch RSS feed for changelog entries
             $feed = Invoke-RestMethod -Uri $item.feedUrl -ErrorAction Stop
             $parsedDate = [datetime]::ParseExact($Date, 'yyyy-MM-dd', $null)
+            $feedRss = Get-OptionalPropertyValue -InputObject $feed -PropertyName 'rss'
+            $feedChannel = if ($feedRss) {
+                Get-OptionalPropertyValue -InputObject $feedRss -PropertyName 'channel'
+            }
+            else {
+                Get-OptionalPropertyValue -InputObject $feed -PropertyName 'channel'
+            }
+            $channelItems = if ($feedChannel) {
+                Get-OptionalPropertyValue -InputObject $feedChannel -PropertyName 'item' -DefaultValue @()
+            }
+            else {
+                @()
+            }
+            $feedItems = if (@($channelItems).Count -gt 0) {
+                @($channelItems)
+            }
+            else {
+                @($feed | Where-Object { Get-OptionalPropertyValue -InputObject $_ -PropertyName 'pubDate' })
+            }
 
             # Get entries from today or the most recent day
-            $todayEntries = $feed | Where-Object {
+            $todayEntries = @($feedItems | Where-Object {
                 $pubDate = [datetime]::Parse($_.pubDate)
                 $pubDate.Date -eq $parsedDate.Date
-            }
+            })
 
             if ($todayEntries.Count -eq 0) {
                 # Get most recent entries (within last 3 days)
                 $cutoff = $parsedDate.AddDays(-3)
-                $todayEntries = $feed | Where-Object {
+                $todayEntries = @($feedItems | Where-Object {
                     $pubDate = [datetime]::Parse($_.pubDate)
                     $pubDate.Date -ge $cutoff.Date -and $pubDate.Date -le $parsedDate.Date
-                } | Select-Object -First 5
+                } | Select-Object -First 5)
             }
 
             if ($todayEntries.Count -gt 0) {
@@ -196,6 +222,7 @@ foreach ($item in $watchlist) {
                 $nameDisplay = "[$($item.name)]($($item.changelogUrl))"
 
                 $rows += [PSCustomObject]@{
+                    Key        = $item.name
                     Name       = $nameDisplay
                     Version    = $versionDisplay
                     Released   = $releasedDate
@@ -218,6 +245,16 @@ if ($rows.Count -eq 0) {
     exit 1
 }
 
+$snapshotVersions = [ordered]@{}
+foreach ($r in $rows) {
+    $rawVersion = if ($r.Version -match '→\s*(.+)$') { $Matches[1].Trim() } else { $r.Version }
+    $snapshotVersions[$r.Key] = $rawVersion
+}
+Save-DiarySnapshotJson -ScriptRoot $PSScriptRoot -Date $Date -Name 'software-watchlist' -Payload @{
+    date = $Date
+    versions = $snapshotVersions
+}
+
 # --- Build markdown table ---
 $sb = [System.Text.StringBuilder]::new()
 [void]$sb.AppendLine("| Software | Version | Released | Highlights | Links |")
@@ -227,20 +264,6 @@ foreach ($r in $rows) {
 }
 $watchlistContent = $sb.ToString().TrimEnd()
 
-# --- Inject into diary entry ---
-$entry = Get-Content $EntryPath -Raw
-
-$sectionPattern = '(#{2,3}\s+💻\s+Software Watchlist\s*\r?\n)([\s\S]*?)(\r?\n---)'
-$regex = [regex]::new($sectionPattern)
-$m = $regex.Match($entry)
-if ($m.Success) {
-    $before = $entry.Substring(0, $m.Index)
-    $after = $entry.Substring($m.Index + $m.Length)
-    $entry = $before + $m.Groups[1].Value + "`n" + $watchlistContent + "`n" + $m.Groups[3].Value + $after
-    $utf8NoBom = [System.Text.UTF8Encoding]::new($false)
-    [System.IO.File]::WriteAllText($EntryPath, $entry, $utf8NoBom)
-    Write-Information "`e[1;32mSoftware watchlist injected into diary entry ($($rows.Count) items).`e[0m"
-}
-else {
-    Write-Information "`e[1;31mSoftware Watchlist section (## 💻 Software Watchlist) not found in entry. Cannot inject.`e[0m"
-}
+$sectionHtml = ConvertTo-DiaryHtmlCard -Markdown $watchlistContent -Eyebrow "Software watchlist snapshot for $Date"
+Set-DiarySectionInnerHtml -EntryPath $EntryPath -SectionTitle '🛠 Software Watchlist' -InnerHtml $sectionHtml
+Write-Information "`e[1;32mSoftware watchlist injected into diary entry ($($rows.Count) items).`e[0m"

@@ -27,11 +27,11 @@ param(
 $ErrorActionPreference = 'Stop'
 $InformationPreference = 'Continue'
 
+. (Join-Path $PSScriptRoot 'HtmlDiaryHelpers.ps1')
+
 # --- Resolve entry path ---
 if (-not $EntryPath) {
-    $year = $Date.Substring(0, 4)
-    $month = $Date.Substring(5, 2)
-    $EntryPath = Join-Path $PSScriptRoot '..' 'entries' $year $month "$Date.md"
+    $EntryPath = Get-DiaryHtmlEntryPath -ScriptRoot $PSScriptRoot -Date $Date
 }
 
 if (-not (Test-Path $EntryPath)) {
@@ -39,34 +39,21 @@ if (-not (Test-Path $EntryPath)) {
     exit 1
 }
 
-$entry = Get-Content $EntryPath -Raw
+$sectionHtml = Get-DiarySectionInnerHtml -EntryPath $EntryPath -SectionTitle '💭 Personal Reflections'
 
 # --- Check if section still has placeholder content ---
-$hasPlaceholder = $entry -match '\{user to provide\}'
-if (-not $hasPlaceholder) {
+if (-not $sectionHtml -or $sectionHtml -notmatch '<!-- TODO: fill in -->') {
     Write-Information "`e[90mPersonal section already has user content — skipping.`e[0m"
     exit 0
 }
 
 # --- Build skeleton ---
-$personalContent = @"
-### 💭 Reflections
+$personalContent = @'
+<div class="card todo-callout">
+  <!-- TODO: fill in -->
+  <strong>TODO:</strong> Add your thoughts, feelings, observations, or anything else worth remembering about today.
+</div>
+'@
 
--${' '}
-"@
-
-# --- Inject into diary entry ---
-$sectionPattern = '(#{2,3}\s+🏠\s+Personal\s*\r?\n)([\s\S]*?)(\r?\n---)'
-$regex = [regex]::new($sectionPattern)
-$m = $regex.Match($entry)
-if ($m.Success) {
-    $before = $entry.Substring(0, $m.Index)
-    $after = $entry.Substring($m.Index + $m.Length)
-    $entry = $before + $m.Groups[1].Value + "`n" + $personalContent + "`n" + $m.Groups[3].Value + $after
-    $utf8NoBom = [System.Text.UTF8Encoding]::new($false)
-    [System.IO.File]::WriteAllText($EntryPath, $entry, $utf8NoBom)
-    Write-Information "`e[1;32mPersonal section skeleton set.`e[0m"
-}
-else {
-    Write-Information "`e[1;31mPersonal section (## 🏠 Personal) not found in entry. Cannot inject.`e[0m"
-}
+Set-DiarySectionInnerHtml -EntryPath $EntryPath -SectionTitle '💭 Personal Reflections' -InnerHtml $personalContent
+Write-Information "`e[1;32mPersonal section skeleton set.`e[0m"

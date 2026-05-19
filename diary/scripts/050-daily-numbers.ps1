@@ -18,7 +18,7 @@
     The full path to the diary entry file to update.
 
 .EXAMPLE
-    .\050-daily-numbers.ps1 -Date 2026-02-28 -EntryPath ..\entries\2026-02-28.md
+    .\050-daily-numbers.ps1 -Date 2026-02-28 -EntryPath ..\entries\2026-02-28.html
 #>
 
 [CmdletBinding()]
@@ -29,6 +29,8 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $InformationPreference = 'Continue'
+
+. (Join-Path $PSScriptRoot 'HtmlDiaryHelpers.ps1')
 
 # --- Configuration ---
 $GitHubOrg = 'relias-engineering'
@@ -42,9 +44,7 @@ $CloudflareDomains = @(
 
 # --- Resolve entry path ---
 if (-not $EntryPath) {
-    $year = $Date.Substring(0, 4)
-    $month = $Date.Substring(5, 2)
-    $EntryPath = Join-Path $PSScriptRoot '..' 'entries' $year $month "$Date.md"
+    $EntryPath = Get-DiaryHtmlEntryPath -ScriptRoot $PSScriptRoot -Date $Date
 }
 
 if (-not (Test-Path $EntryPath)) {
@@ -54,18 +54,6 @@ if (-not (Test-Path $EntryPath)) {
 
 $parsedDate = [datetime]::ParseExact($Date, 'yyyy-MM-dd', $null)
 $isWeekend = $parsedDate.DayOfWeek -eq 'Saturday' -or $parsedDate.DayOfWeek -eq 'Sunday'
-
-# --- Find previous entry for deltas ---
-function Get-DiaryEntryPathByDate {
-    param([datetime]$TargetDate)
-
-    $entriesDir = Join-Path $PSScriptRoot '..' 'entries'
-    $targetFileName = "$($TargetDate.ToString('yyyy-MM-dd')).md"
-
-    return Get-ChildItem -Path $entriesDir -Filter $targetFileName -Recurse -ErrorAction SilentlyContinue |
-        Sort-Object FullName |
-        Select-Object -First 1 -ExpandProperty FullName
-}
 
 function Get-CloudflareStatsFromText {
     param(
@@ -100,40 +88,39 @@ function Get-CloudflareStatsFromText {
     return $null
 }
 
-function Get-PreviousValues {
-    $previousDate = $parsedDate.AddDays(-1)
-    $previousEntryPath = Get-DiaryEntryPathByDate -TargetDate $previousDate
-    if (-not $previousEntryPath) {
-        Write-Information "`e[90m  No diary entry found for yesterday ($($previousDate.ToString('yyyy-MM-dd'))).`e[0m"
+function Get-PreviousDiaryValueSnapshot {
+    $previousSnapshot = Get-PreviousDiarySnapshotJson -ScriptRoot $PSScriptRoot -Date $Date -Name 'daily-numbers'
+    if (-not $previousSnapshot) {
+        Write-Information "`e[90m  No daily numbers snapshot found for yesterday.`e[0m"
         return @{}
     }
 
-    $content = Get-Content $previousEntryPath -Raw
     $prev = @{}
 
-    if ($content -match 'GitHub:\s*(\d+)') {
-        $prev.GitHubRepos = [int]$Matches[1]
+    if ($null -ne $previousSnapshot.githubRepos) {
+        $prev.GitHubRepos = [int]$previousSnapshot.githubRepos
     }
-    if ($content -match 'Bitbucket:\s*(\d+)') {
-        $prev.BitbucketRepos = [int]$Matches[1]
+    if ($null -ne $previousSnapshot.bitbucketRepos) {
+        $prev.BitbucketRepos = [int]$previousSnapshot.bitbucketRepos
     }
-    if ($content -match '\*\*Dow Jones\*\*:\s*([\d,]+\.\d+)') {
-        $prev.Dow = [decimal]($Matches[1] -replace ',', '')
-    }
-    if ($content -match '\*\*S&P 500\*\*:\s*([\d,]+\.\d+)') {
-        $prev.SP500 = [decimal]($Matches[1] -replace ',', '')
-    }
-    if ($content -match '- \*\*GitHub Copilot Usage\*\*: ([\d,]+) / ([\d,]+) premium requests \(([\d.]+)%\)') {
-        $prev.CopilotUsed = [int]($Matches[1] -replace ',', '')
-        $prev.CopilotEntitlement = [int]($Matches[2] -replace ',', '')
-        $prev.CopilotPct = [decimal]$Matches[3]
+    if ($previousSnapshot.copilot) {
+        if ($null -ne $previousSnapshot.copilot.orgPremium -and $null -ne $previousSnapshot.copilot.orgPct) {
+            $prev.OrgCopilotUsed = [decimal]$previousSnapshot.copilot.orgPremium
+            $prev.OrgCopilotPct = [decimal]$previousSnapshot.copilot.orgPct
+        }
     }
 
     $prevCloudflare = @{}
-    foreach ($domain in $CloudflareDomains) {
-        $domainStats = Get-CloudflareStatsFromText -Lines ($content -split "`r?`n") -DomainName $domain.Name -HasEmailRouting $domain.HasEmailRouting
-        if ($null -ne $domainStats) {
-            $prevCloudflare[$domain.Name] = $domainStats
+    if ($previousSnapshot.cloudflare) {
+        foreach ($domain in $CloudflareDomains) {
+            $snapshotStats = $previousSnapshot.cloudflare."$($domain.Name)"
+            if ($snapshotStats) {
+                $prevCloudflare[$domain.Name] = [pscustomobject]@{
+                    PageViews = [int]$snapshotStats.pageViews
+                    UniqueVisitors = [int]$snapshotStats.uniqueVisitors
+                    EmailsForwarded = if ($null -ne $snapshotStats.emailsForwarded) { [int]$snapshotStats.emailsForwarded } else { 0 }
+                }
+            }
         }
     }
     if ($prevCloudflare.Count -gt 0) {
@@ -141,7 +128,7 @@ function Get-PreviousValues {
     }
 
     if ($prev.Count -gt 0) {
-        Write-Information "`e[90m  Previous values from: $([System.IO.Path]::GetFileName($previousEntryPath))`e[0m"
+        Write-Information "`e[90m  Previous values from snapshot date: $($previousSnapshot.date)`e[0m"
     }
 
     return $prev
@@ -173,17 +160,17 @@ function Format-PctPointDelta {
 
 function Get-CopilotDeltaLine {
     param(
-        [int]$CurrentUsed,
+        [decimal]$CurrentUsed,
         [decimal]$CurrentPct,
         [hashtable]$PreviousValues
     )
 
-    if (-not ($PreviousValues.ContainsKey('CopilotUsed') -and $PreviousValues.ContainsKey('CopilotPct'))) {
-        return '  - **Delta vs Yesterday**: unavailable (previous diary entry missing GitHub Copilot usage)'
+    if (-not ($PreviousValues.ContainsKey('OrgCopilotUsed') -and $PreviousValues.ContainsKey('OrgCopilotPct'))) {
+        return '  - **Delta vs Yesterday**: unavailable (previous diary snapshot missing org-wide GitHub Copilot usage)'
     }
 
-    $requestsDelta = Format-IntDelta -Current $CurrentUsed -Previous $PreviousValues.CopilotUsed
-    $pctPointDelta = Format-PctPointDelta -Current $CurrentPct -Previous $PreviousValues.CopilotPct
+    $requestsDelta = Format-IntDelta -Current ([int][math]::Round($CurrentUsed)) -Previous ([int][math]::Round($PreviousValues.OrgCopilotUsed))
+    $pctPointDelta = Format-PctPointDelta -Current $CurrentPct -Previous $PreviousValues.OrgCopilotPct
     return "  - **Delta vs Yesterday**: $requestsDelta requests, $pctPointDelta pct points"
 }
 
@@ -261,6 +248,25 @@ function Get-MarketCommentary {
     return "*$lead $relative*"
 }
 
+function Get-UsageItemQuantitySum {
+    param(
+        [object[]]$Items,
+        [string[]]$Skus
+    )
+
+    $matchingItems = @($Items | Where-Object { $_.sku -in $Skus })
+    if ($matchingItems.Count -eq 0) {
+        return 0.0
+    }
+
+    $sum = ($matchingItems | Measure-Object -Property quantity -Sum).Sum
+    if ($null -eq $sum) {
+        return 0.0
+    }
+
+    return [double]$sum
+}
+
 function Get-RepoSnapshotPath {
     param([string]$SnapshotDate)
     return (Join-Path $RepoSnapshotsDir "$SnapshotDate-$GitHubOrg-repos.json")
@@ -283,29 +289,29 @@ function Save-RepoSnapshot {
 }
 
 function Get-PreviousRepoSnapshot {
-    $snapshotFiles = Get-ChildItem -Path $RepoSnapshotsDir -Filter "*-$GitHubOrg-repos.json" -ErrorAction SilentlyContinue |
-        Where-Object { $_.BaseName -lt "$Date-$GitHubOrg-repos" } |
-        Sort-Object Name -Descending
+    $previousDate = [datetime]::ParseExact($Date, 'yyyy-MM-dd', $null).AddDays(-1).ToString('yyyy-MM-dd')
+    $snapshotPath = Get-RepoSnapshotPath -SnapshotDate $previousDate
+    if (-not (Test-Path $snapshotPath)) {
+        return $null
+    }
 
-    foreach ($snapshotFile in $snapshotFiles) {
-        try {
-            $snapshot = Get-Content -Path $snapshotFile.FullName -Raw | ConvertFrom-Json
-            if ($snapshot.repos) {
-                return [pscustomobject]@{
-                    Date = "$($snapshot.date)"
-                    Repos = @($snapshot.repos | ForEach-Object { "$_" })
-                }
+    try {
+        $snapshot = Get-Content -Path $snapshotPath -Raw | ConvertFrom-Json
+        if ($snapshot.repos) {
+            return [pscustomobject]@{
+                Date = "$($snapshot.date)"
+                Repos = @($snapshot.repos | ForEach-Object { "$_" })
             }
         }
-        catch {
-            Write-Information "`e[1;33mFailed to parse repo snapshot: $($snapshotFile.Name)`e[0m"
-        }
+    }
+    catch {
+        Write-Information "`e[1;33mFailed to parse repo snapshot: $([System.IO.Path]::GetFileName($snapshotPath))`e[0m"
     }
 
     return $null
 }
 
-function Get-CloudflareUsageStats {
+function Get-CloudflareUsageByDomain {
     param([string]$TargetDate)
 
     if (-not (Test-Path $CloudflareScriptPath)) {
@@ -363,9 +369,14 @@ $entry = Get-Content $EntryPath -Raw
 
 # --- Save original gh account (restore at end) ---
 $originalGhUser = $null
-try { $originalGhUser = gh api /user --jq '.login' 2>$null } catch {}
+try {
+    $originalGhUser = gh api /user --jq '.login' 2>$null
+}
+catch {
+    Write-Information "`e[90mUnable to capture the active gh account before fetching daily numbers.`e[0m"
+}
 
-$prev = Get-PreviousValues
+$prev = Get-PreviousDiaryValueSnapshot
 
 # --- Fetch GitHub repo count (use fhemmerrelias which has admin:org scope) ---
 Write-Information "`e[1;36mFetching GitHub repo count ($GitHubOrg)...`e[0m"
@@ -390,37 +401,30 @@ catch {
 }
 
 $ghRepoNames = @($ghRepoNames | Sort-Object -Unique)
-$ghRepoCount = $ghRepoNames.Count
-if ($ghRepoCount -gt 0) {
+$ghRepoFetchSucceeded = $ghRepoNames.Count -gt 0
+$ghRepoCount = if ($ghRepoFetchSucceeded) { $ghRepoNames.Count } else { $null }
+if ($ghRepoFetchSucceeded) {
     Save-RepoSnapshot -SnapshotDate $Date -RepoNames $ghRepoNames
 }
 
 # --- Fetch Bitbucket repo count ---
 Write-Information "`e[1;36mFetching Bitbucket repo count ($BitbucketWorkspace)...`e[0m"
-$bbRepoCount = 0
+$bbRepoCount = $null
+$bbRepoFetchSucceeded = $false
 try {
-    $bbUser = $env:BITBUCKET_USERNAME
-    $bbToken = $env:BITBUCKET_API_TOKEN
-    if ($bbUser -and $bbToken) {
-        $cred = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("${bbUser}:${bbToken}"))
-        $response = Invoke-RestMethod -Uri "https://api.bitbucket.org/2.0/repositories/${BitbucketWorkspace}?pagelen=1" `
-            -Headers @{ Authorization = "Basic $cred" } -ErrorAction Stop
-        $bbRepoCount = $response.size
-    }
-    else {
-        Write-Information "`e[1;33mBitbucket credentials not found. Skipping.`e[0m"
-    }
+    $bbRepoCount = [int](& (Join-Path $PSScriptRoot 'Get-BitbucketRepoCount.ps1'))
+    $bbRepoFetchSucceeded = $true
 }
 catch {
     Write-Information "`e[1;31mFailed to fetch Bitbucket repo count: $_`e[0m"
 }
 
 # --- Compute repo deltas ---
-$ghDelta = if ($prev.ContainsKey('GitHubRepos')) { Format-IntDelta -Current $ghRepoCount -Previous $prev.GitHubRepos } else { '—' }
-$bbDelta = if ($prev.ContainsKey('BitbucketRepos')) { Format-IntDelta -Current $bbRepoCount -Previous $prev.BitbucketRepos } else { '—' }
+$ghDelta = if ($ghRepoFetchSucceeded -and $prev.ContainsKey('GitHubRepos')) { Format-IntDelta -Current $ghRepoCount -Previous $prev.GitHubRepos } elseif ($ghRepoFetchSucceeded) { '—' } else { 'unavailable' }
+$bbDelta = if ($bbRepoFetchSucceeded -and $prev.ContainsKey('BitbucketRepos')) { Format-IntDelta -Current $bbRepoCount -Previous $prev.BitbucketRepos } elseif ($bbRepoFetchSucceeded) { '—' } else { 'unavailable' }
 $ghRepoDeltaDetailText = ''
 
-if ($prev.ContainsKey('GitHubRepos') -and $ghRepoCount -ne $prev.GitHubRepos) {
+if ($ghRepoFetchSucceeded -and $prev.ContainsKey('GitHubRepos') -and $ghRepoCount -ne $prev.GitHubRepos) {
     $previousSnapshot = Get-PreviousRepoSnapshot
     if ($null -ne $previousSnapshot) {
         if ($ghRepoCount -gt $prev.GitHubRepos) {
@@ -485,60 +489,77 @@ else {
 
 # --- Fetch GitHub Copilot Usage ---
 Write-Information "`e[1;36mFetching GitHub Copilot usage...`e[0m"
+$orgPremiumUsed = $null
+$orgQuota = $null
+$orgSeats = $null
+$orgPct = $null
+$cloudAgentRequests = $null
+$personalUsed = $null
+$personalEntitlement = $null
+$personalPct = $null
+$orgCopilotFetchSucceeded = $false
+$personalCopilotFetchSucceeded = $false
 
-$copilotAccounts = @('fhemmerrelias')
-
-$copilotLines = @()
-$grandTotalUsed = 0
-$grandTotalEntitlement = 0
-$grandTotalOverageCost = 0.0
-
-foreach ($username in $copilotAccounts) {
-    try {
-        $switchOutput = gh auth switch -u $username 2>&1
-        if ($LASTEXITCODE -ne 0) {
-            Write-Information "  Skipping $username — gh auth switch failed: $switchOutput"
-            $copilotLines += "  - **$username**: *(not authenticated)*"
-            continue
+try {
+    $billingUsage = gh api "/orgs/Relias-Engineering/settings/billing/usage" | ConvertFrom-Json
+    $billing = gh api "/orgs/Relias-Engineering/copilot/billing" | ConvertFrom-Json
+    $targetBillingMonth = $Date.Substring(0, 7)
+    $monthItems = @(
+        $billingUsage.usageItems | Where-Object {
+            $_.product -eq 'copilot' -and
+            ([datetimeoffset]$_.date).ToString('yyyy-MM') -eq $targetBillingMonth
         }
-        $response = gh api /copilot_internal/user --jq '.quota_snapshots.premium_interactions' 2>&1
-        if ($LASTEXITCODE -eq 0) {
-            $premium = $response | ConvertFrom-Json
-            $entitlement = [int]$premium.entitlement
-            $remaining = [int]$premium.remaining
-            $used = $entitlement - $remaining
-            $pctUsed = if ($entitlement -gt 0) { [math]::Round(100 - $premium.percent_remaining, 1) } else { 0 }
-            $overageCount = [math]::Max(0, [int]$premium.overage_count)
-            $overageCost = $overageCount * 0.04
-            $grandTotalUsed += $used
-            $grandTotalEntitlement += $entitlement
-            $grandTotalOverageCost += $overageCost
-
-            $line = "  - **$username**: $used / $entitlement used ($pctUsed%)"
-            if ($overageCost -gt 0) {
-                $line += " - overage: $overageCount reqs (`$$($overageCost.ToString('N2')))"
-            }
-            $copilotLines += $line
-        }
-        else {
-            $copilotLines += "  - **$username**: *(unavailable)*"
-        }
-    }
-    catch {
-        $copilotLines += "  - **$username**: *(error)*"
-    }
+    )
+    $orgPremiumUsed = Get-UsageItemQuantitySum -Items $monthItems -Skus @('Copilot Premium Request')
+    $cloudAgentRequests = Get-UsageItemQuantitySum -Items $monthItems -Skus @('Copilot Cloud Agent', 'Coding Agent Premium Request')
+    $orgSeats = [int]$billing.seat_breakdown.total
+    $orgQuota = $orgSeats * 1000
+    $orgPct = if ($orgQuota -gt 0) { [math]::Round(($orgPremiumUsed / $orgQuota) * 100, 1) } else { 0.0 }
+    $orgCopilotFetchSucceeded = $true
+}
+catch {
+    Write-Information "`e[1;33mFailed to fetch current org-wide GitHub Copilot usage: $_`e[0m"
 }
 
-$grandPct = if ($grandTotalEntitlement -gt 0) { [math]::Round(($grandTotalUsed / $grandTotalEntitlement) * 100, 1) } else { 0 }
-$copilotSummaryLine = "- **GitHub Copilot Usage**: $grandTotalUsed / $grandTotalEntitlement premium requests ($grandPct%)"
-if ($grandTotalOverageCost -gt 0) {
-    $copilotSummaryLine += " - overage: `$$($grandTotalOverageCost.ToString('N2'))"
+try {
+    $personal = gh api /copilot_internal/user --jq '.quota_snapshots.premium_interactions' | ConvertFrom-Json
+    $personalEntitlement = [int]$personal.entitlement
+    $personalUsed = $personalEntitlement - [int]$personal.remaining
+    $personalPct = if ($personalEntitlement -gt 0) { [math]::Round(($personalUsed / $personalEntitlement) * 100, 1) } else { 0.0 }
+    $personalCopilotFetchSucceeded = $true
 }
-$copilotDeltaLine = Get-CopilotDeltaLine -CurrentUsed $grandTotalUsed -CurrentPct $grandPct -PreviousValues $prev
+catch {
+    Write-Information "`e[1;33mFailed to fetch current personal GitHub Copilot usage: $_`e[0m"
+}
+
+$copilotSummaryLine = if ($orgCopilotFetchSucceeded) {
+    "- **GitHub Copilot Org-Wide**: $([math]::Round($orgPremiumUsed).ToString('N0')) / $($orgQuota.ToString('N0')) premium requests ($orgPct%)"
+}
+else {
+    '- **GitHub Copilot Org-Wide**: unavailable (billing API request failed)'
+}
+$copilotCloudAgentLine = if ($orgCopilotFetchSucceeded) {
+    "  - **Cloud Agent**: $([math]::Round($cloudAgentRequests).ToString('N0')) requests"
+}
+else {
+    '  - **Cloud Agent**: unavailable'
+}
+$copilotDeltaLine = if ($orgCopilotFetchSucceeded) {
+    Get-CopilotDeltaLine -CurrentUsed $orgPremiumUsed -CurrentPct $orgPct -PreviousValues $prev
+}
+else {
+    '  - **Delta vs Yesterday**: unavailable (current org-wide GitHub Copilot usage unavailable)'
+}
+$copilotPersonalLine = if ($personalCopilotFetchSucceeded) {
+    "  - **Personal (fhemmerrelias)**: $($personalUsed.ToString('N0')) / $($personalEntitlement.ToString('N0')) used ($personalPct%)"
+}
+else {
+    '  - **Personal (fhemmerrelias)**: unavailable (personal Copilot quota request failed)'
+}
 
 # --- Fetch Cloudflare usage ---
 Write-Information "`e[1;36mFetching Cloudflare usage...`e[0m"
-$cloudflareUsage = Get-CloudflareUsageStats -TargetDate $Date
+$cloudflareUsage = Get-CloudflareUsageByDomain -TargetDate $Date
 $cloudflareLines = @()
 foreach ($domain in $CloudflareDomains) {
     if ($cloudflareUsage.ContainsKey($domain.Name)) {
@@ -567,12 +588,16 @@ if ($marketCommentaryLine) {
     [void]$sb.AppendLine($marketCommentaryLine)
     [void]$sb.AppendLine('')
 }
-[void]$sb.AppendLine("- **Relias Repo Count**: GitHub: $ghRepoCount ($ghDelta$ghRepoDeltaDetailText), Bitbucket: $bbRepoCount ($bbDelta)")
+[void]$sb.AppendLine((
+        "- **Relias Repo Count**: GitHub: " +
+        $(if ($ghRepoFetchSucceeded) { "$ghRepoCount ($ghDelta$ghRepoDeltaDetailText)" } else { 'unavailable' }) +
+        ", Bitbucket: " +
+        $(if ($bbRepoFetchSucceeded) { "$bbRepoCount ($bbDelta)" } else { 'unavailable' })
+    ))
 [void]$sb.AppendLine($copilotSummaryLine)
+[void]$sb.AppendLine($copilotCloudAgentLine)
 [void]$sb.AppendLine($copilotDeltaLine)
-foreach ($line in $copilotLines) {
-    [void]$sb.AppendLine($line)
-}
+[void]$sb.AppendLine($copilotPersonalLine)
 if ($cloudflareLines.Count -gt 0) {
     [void]$sb.AppendLine('- **Cloudflare Usage**:')
     foreach ($line in $cloudflareLines) {
@@ -582,24 +607,40 @@ if ($cloudflareLines.Count -gt 0) {
 
 $numbersContent = $sb.ToString().TrimEnd()
 
+$snapshotCloudflare = [ordered]@{}
+foreach ($domain in $CloudflareDomains) {
+    if ($cloudflareUsage.ContainsKey($domain.Name)) {
+        $stats = $cloudflareUsage[$domain.Name]
+        $snapshotCloudflare[$domain.Name] = [ordered]@{
+            pageViews = $stats.PageViews
+            uniqueVisitors = $stats.UniqueVisitors
+            emailsForwarded = if ($domain.HasEmailRouting) { $stats.EmailsForwarded } else { $null }
+        }
+    }
+}
+Save-DiarySnapshotJson -ScriptRoot $PSScriptRoot -Date $Date -Name 'daily-numbers' -Payload @{
+    date = $Date
+    githubRepos = if ($ghRepoFetchSucceeded) { $ghRepoCount } else { $null }
+    bitbucketRepos = if ($bbRepoFetchSucceeded) { $bbRepoCount } else { $null }
+    copilot = @{
+        orgPremium = if ($orgCopilotFetchSucceeded) { $orgPremiumUsed } else { $null }
+        orgPct = if ($orgCopilotFetchSucceeded) { $orgPct } else { $null }
+        orgQuota = if ($orgCopilotFetchSucceeded) { $orgQuota } else { $null }
+        cloudAgent = if ($orgCopilotFetchSucceeded) { $cloudAgentRequests } else { $null }
+        personalUsed = if ($personalCopilotFetchSucceeded) { $personalUsed } else { $null }
+        personalEntitlement = if ($personalCopilotFetchSucceeded) { $personalEntitlement } else { $null }
+        personalPct = if ($personalCopilotFetchSucceeded) { $personalPct } else { $null }
+    }
+    cloudflare = $snapshotCloudflare
+}
+
 # --- Inject into diary entry ---
-$sectionPattern = '(#{2,3}\s+📊\s+Daily Numbers\s*\r?\n)([\s\S]*?)(\r?\n---)'
-$regex = [regex]::new($sectionPattern)
-$m = $regex.Match($entry)
-if ($m.Success) {
-    $before = $entry.Substring(0, $m.Index)
-    $after = $entry.Substring($m.Index + $m.Length)
-    $entry = $before + $m.Groups[1].Value + "`n" + $numbersContent + "`n" + $m.Groups[3].Value + $after
-    $utf8NoBom = [System.Text.UTF8Encoding]::new($false)
-    [System.IO.File]::WriteAllText($EntryPath, $entry, $utf8NoBom)
-    Write-Information "`e[1;32mDaily numbers injected into diary entry.`e[0m"
-    if ($dowLine) { Write-Information "  Dow: $($dowPrice.ToString('N2')) | S&P: $($spPrice.ToString('N2'))" }
-    Write-Information "  GitHub: $ghRepoCount ($ghDelta$ghRepoDeltaDetailText) | Bitbucket: $bbRepoCount ($bbDelta)"
-    Write-Information "  Copilot: $grandTotalUsed / $grandTotalEntitlement premium requests"
-}
-else {
-    Write-Information "`e[1;31mDaily Numbers section (## 📊 Daily Numbers) not found in entry. Cannot inject.`e[0m"
-}
+$sectionHtml = ConvertTo-DiaryHtmlCard -Markdown $numbersContent -Eyebrow "Daily numbers snapshot for $Date"
+Set-DiarySectionInnerHtml -EntryPath $EntryPath -SectionTitle '📊 Daily Numbers' -InnerHtml $sectionHtml
+Write-Information "`e[1;32mDaily numbers injected into diary entry.`e[0m"
+if ($dowLine) { Write-Information "  Dow: $($dowPrice.ToString('N2')) | S&P: $($spPrice.ToString('N2'))" }
+Write-Information "  GitHub: $(if ($ghRepoFetchSucceeded) { "$ghRepoCount ($ghDelta$ghRepoDeltaDetailText)" } else { 'unavailable' }) | Bitbucket: $(if ($bbRepoFetchSucceeded) { "$bbRepoCount ($bbDelta)" } else { 'unavailable' })"
+Write-Information "  Copilot org-wide: $(if ($orgCopilotFetchSucceeded) { "$([math]::Round($orgPremiumUsed).ToString('N0')) / $($orgQuota.ToString('N0'))" } else { 'unavailable' })"
 
 # --- Restore original gh account ---
 if ($originalGhUser) {

@@ -5,7 +5,9 @@
 
 .DESCRIPTION
     Validates that no entry exists for the target date, then calls the
-    diary orchestrator to scaffold and populate the entry.
+    diary orchestrator to scaffold and populate the script-backed sections
+    of the entry. The full scaffold workflow still includes additional
+    live/manual sections handled by the CLI command.
     If an entry already exists, aborts and advises using the update command.
 
 .PARAMETER Date
@@ -31,7 +33,7 @@ $InformationPreference = 'Continue'
 $year = $Date.Substring(0, 4)
 $month = $Date.Substring(5, 2)
 $entriesDir = Join-Path $PSScriptRoot '..' 'entries' $year $month
-$entryPath = Join-Path $entriesDir "$Date.md"
+$entryPath = Join-Path $entriesDir "$Date.html"
 
 # Validate: entry must not already exist
 if (Test-Path $entryPath) {

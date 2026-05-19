@@ -641,3 +641,6 @@ Result: Saved `diary/entries/2026/05/2026-05-15.html` with weather, news, Slack 
 
 2026-05-17 - 00:12 - Scaffold diary entry for 2026-05-17 with the current HTML skill contract
 Result: Saved `diary/entries/2026/05/2026-05-17.html` with weather, news, weekend-aware daily numbers, LLM updates, trending repos, software/watchlist status, and productivity. Meetings and screenshots were correctly omitted for the weekend/no files, and Today's Highlight plus Personal Reflections were left as TODOs.
+
+2026-05-18 - 04:45 - Refresh the 2026-05-17 HTML diary entry and refactor diary automation away from markdown assumptions
+Result: Updated `diary/entries/2026/05/2026-05-17.html` with later-day cached/live data and began the larger diary automation refactor by switching core scaffolding scripts to HTML paths/templates and adding shared HTML section helpers.
