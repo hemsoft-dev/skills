@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Monday, 2026-05-18</title>
+  <style>
+    [data-theme="paper"], :root {
+      --bg-canvas: #080808; --bg-surface: #F5F1E8; --bg-card: #FFFFFF;
+      --text-primary: #141413; --text-secondary: #9A9891; --text-muted: #9A9891;
+      --accent-primary: #D97757; --accent-secondary: #788C5D; --accent-tertiary: #6A8CAF;
+      --border-subtle: rgba(20,20,19,0.08); --link-color: #6A8CAF;
+      --accent-tag-bg: rgba(217,119,87,0.12); --accent-tag-text: #D97757;
+      --sky-tag-bg: rgba(106,140,175,0.12); --sky-tag-text: #6A8CAF;
+      --olive-tag-bg: rgba(120,140,93,0.12); --olive-tag-text: #788C5D;
+      --slate-tag-bg: rgba(20,20,19,0.08); --slate-tag-text: #9A9891;
+      --warn-bg: #D97757; --warn-text: #FFFFFF;
+      --shadow-soft: 0 24px 80px rgba(0,0,0,0.18);
+      --table-header-bg: rgba(20,20,19,0.04); --table-border: rgba(20,20,19,0.06);
+      --stat-positive: #788C5D; --stat-negative: #D97757;
+    }
+
+    [data-theme="obsidian"] {
+      --bg-canvas: #0d1117; --bg-surface: #161b22; --bg-card: #21262d;
+      --text-primary: #c9d1d9; --text-secondary: #8b949e; --text-muted: #6e7681;
+      --accent-primary: #58a6ff; --accent-secondary: #3fb950; --accent-tertiary: #d2a8ff;
+      --border-subtle: rgba(240,246,252,0.1); --link-color: #58a6ff;
+      --accent-tag-bg: rgba(88,166,255,0.12); --accent-tag-text: #58a6ff;
+      --sky-tag-bg: rgba(210,168,255,0.12); --sky-tag-text: #d2a8ff;
+      --olive-tag-bg: rgba(63,185,80,0.12); --olive-tag-text: #3fb950;
+      --slate-tag-bg: rgba(139,148,158,0.12); --slate-tag-text: #8b949e;
+      --warn-bg: #f85149; --warn-text: #FFFFFF;
+      --shadow-soft: 0 24px 80px rgba(0,0,0,0.4);
+      --table-header-bg: rgba(240,246,252,0.06); --table-border: rgba(240,246,252,0.08);
+      --stat-positive: #3fb950; --stat-negative: #f85149;
+    }
+
+    [data-theme="twilight"] {
+      --bg-canvas: #16162a; --bg-surface: #1e1e3f; --bg-card: #2a2a4a;
+      --text-primary: #e0def4; --text-secondary: #908caa; --text-muted: #6c6c89;
+      --accent-primary: #7c5cbf; --accent-secondary: #c4a7e7; --accent-tertiary: #f7c59f;
+      --border-subtle: rgba(200,180,240,0.12); --link-color: #7c5cbf;
+      --accent-tag-bg: rgba(124,92,191,0.15); --accent-tag-text: #7c5cbf;
+      --sky-tag-bg: rgba(247,197,159,0.15); --sky-tag-text: #f7c59f;
+      --olive-tag-bg: rgba(196,167,231,0.15); --olive-tag-text: #c4a7e7;
+      --slate-tag-bg: rgba(144,140,170,0.12); --slate-tag-text: #908caa;
+      --warn-bg: #7c5cbf; --warn-text: #FFFFFF;
+      --shadow-soft: 0 24px 80px rgba(0,0,0,0.5);
+      --table-header-bg: rgba(200,180,240,0.08); --table-border: rgba(200,180,240,0.1);
+      --stat-positive: #c4a7e7; --stat-negative: #f7c59f;
+    }
+
+    [data-theme="carbon"] {
+      --bg-canvas: #111111; --bg-surface: #1a1a1a; --bg-card: #222222;
+      --text-primary: #ececec; --text-secondary: #888888; --text-muted: #666666;
+      --accent-primary: #D97757; --accent-secondary: #788C5D; --accent-tertiary: #6A8CAF;
+      --border-subtle: rgba(255,255,255,0.08); --link-color: #D97757;
+      --accent-tag-bg: rgba(217,119,87,0.15); --accent-tag-text: #D97757;
+      --sky-tag-bg: rgba(106,140,175,0.15); --sky-tag-text: #6A8CAF;
+      --olive-tag-bg: rgba(120,140,93,0.15); --olive-tag-text: #788C5D;
+      --slate-tag-bg: rgba(255,255,255,0.08); --slate-tag-text: #888888;
+      --warn-bg: #D97757; --warn-text: #FFFFFF;
+      --shadow-soft: 0 24px 80px rgba(0,0,0,0.5);
+      --table-header-bg: rgba(255,255,255,0.04); --table-border: rgba(255,255,255,0.06);
+      --stat-positive: #788C5D; --stat-negative: #D97757;
+    }
+
+    .theme-toggle{position:fixed;top:16px;right:16px;z-index:100;font-family:ui-monospace,"Cascadia Code","Fira Code",monospace;font-size:0.75rem}
+    .theme-toggle-btn{background:var(--bg-card);color:var(--text-secondary);border:1px solid var(--border-subtle);border-radius:6px;padding:6px 10px;cursor:pointer;font-size:1.2rem;line-height:1;transition:background .2s,color .2s}
+    .theme-toggle-btn:hover{background:var(--accent-primary);color:var(--bg-canvas)}
+    .theme-menu{display:none;position:absolute;top:100%;right:0;margin-top:4px;background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:8px;box-shadow:var(--shadow-soft);overflow:hidden;min-width:140px}
+    .theme-menu.open{display:block}
+    .theme-menu button{display:block;width:100%;text-align:left;background:none;color:var(--text-primary);border:none;padding:10px 16px;cursor:pointer;font-family:inherit;font-size:0.8rem;transition:background .15s}
+    .theme-menu button:hover{background:var(--accent-primary);color:var(--bg-canvas)}
+
+    :root {
+      --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+      --space-5: 24px; --space-6: 32px; --space-7: 48px;
+      --radius-lg: 32px; --radius-md: 20px; --radius-sm: 12px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg-canvas);
+      color: var(--text-primary);
+      font: 400 16px/1.6 Inter, "Segoe UI", Arial, sans-serif;
+    }
+    a { color: var(--link-color); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .page-shell { min-height: 100vh; padding: var(--space-7) var(--space-5); }
+    .window {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: var(--space-6);
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+    }
+
+    h1 { font-family: Georgia, "Times New Roman", serif; font-size: 2.2rem; font-weight: 700; margin: 0 0 var(--space-2) 0; }
+    .subtitle, .mono, .eyebrow { font-family: ui-monospace, "Cascadia Code", "Fira Code", monospace; }
+    .subtitle { color: var(--text-muted); font-size: 0.8rem; margin-bottom: var(--space-6); }
+    .eyebrow { color: var(--text-muted); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: var(--space-2); }
+    .muted { color: var(--text-muted); }
+
+    .section { margin-bottom: var(--space-6); padding-bottom: var(--space-6); border-bottom: 1px solid var(--border-subtle); }
+    .section:last-child { border-bottom: none; }
+    .section-title { font-family: Georgia, "Times New Roman", serif; font-size: 1.3rem; font-weight: 600; margin: 0 0 var(--space-4) 0; }
+    .section-subtitle { font-family: Georgia, "Times New Roman", serif; font-size: 1.05rem; font-weight: 600; margin: var(--space-5) 0 var(--space-3) 0; }
+
+    .card, .stat-block { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-4); }
+    .card + .card { margin-top: var(--space-3); }
+    .grid { display: grid; gap: var(--space-3); }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .stat-block { text-align: center; }
+    .stat-label { color: var(--text-muted); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: var(--space-1); }
+    .stat-value { font-family: Georgia, "Times New Roman", serif; font-size: 1.55rem; font-weight: 700; }
+    .stat-delta { margin-top: var(--space-1); font-size: 0.78rem; }
+
+    .tag { display: inline-block; font-family: ui-monospace, "Cascadia Code", monospace; font-size: 0.65rem; padding: 2px 8px; border-radius: 4px; white-space: nowrap; vertical-align: middle; }
+    .tag-slate { background: var(--slate-tag-bg); color: var(--slate-tag-text); }
+    .tag-accent { background: var(--accent-tag-bg); color: var(--accent-tag-text); }
+    .tag-olive { background: var(--olive-tag-bg); color: var(--olive-tag-text); }
+    .tag-sky { background: var(--sky-tag-bg); color: var(--sky-tag-text); }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+    th { text-align: left; padding: var(--space-2) var(--space-3); background: var(--table-header-bg); border-bottom: 1px solid var(--table-border); font-family: ui-monospace, "Cascadia Code", monospace; font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-muted); }
+    td { padding: var(--space-2) var(--space-3); border-bottom: 1px solid var(--table-border); vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+
+    ol.num-list { list-style: none; counter-reset: nl; margin: 0; padding: 0; }
+    ol.num-list li { counter-increment: nl; position: relative; padding: var(--space-2) 0 var(--space-2) 32px; border-bottom: 1px solid var(--table-border); line-height: 1.5; }
+    ol.num-list li:last-child { border-bottom: none; }
+    ol.num-list li::before { content: counter(nl); position: absolute; left: 0; top: var(--space-2); width: 24px; text-align: right; font-family: ui-monospace, "Cascadia Code", monospace; font-size: 0.75rem; color: var(--text-muted); }
+
+    .todo-callout { border-color: rgba(217,119,87,0.3); background: linear-gradient(135deg, var(--bg-card), rgba(217,119,87,0.08)); }
+    .todo-callout strong { color: var(--accent-primary); }
+    .commentary { margin: var(--space-3) 0 0 0; font-style: italic; }
+
+    .usage-bar-bg { height: 6px; background: var(--border-subtle); border-radius: 3px; margin-top: 6px; }
+    .usage-bar-fill { height: 100%; border-radius: 3px; background: var(--accent-primary); }
+
+    .footer { color: var(--text-muted); font-size: 0.78rem; text-align: center; }
+
+    @media (max-width: 900px) {
+      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+      .page-shell { padding: var(--space-5) var(--space-3); }
+      .window { padding: var(--space-5); }
+    }
+  </style>
+</head>
+<body>
+  <div class="theme-toggle" aria-label="Theme selector">
+    <button class="theme-toggle-btn" onclick="toggleThemeMenu()" aria-haspopup="true" aria-expanded="false">⋮</button>
+    <div class="theme-menu" id="themeMenu">
+      <button onclick="setTheme('paper')">📰 Paper</button>
+      <button onclick="setTheme('obsidian')">🖤 Obsidian</button>
+      <button onclick="setTheme('twilight')">🌆 Twilight</button>
+      <button onclick="setTheme('carbon')">🔲 Carbon</button>
+    </div>
+  </div>
+
+  <main class="page-shell">
+    <article class="window">
+      <header class="section">
+        <div class="eyebrow">Diary scaffold &mdash; HTML dashboard variant</div>
+        <h1>Monday, 2026-05-18</h1>
+        <div class="subtitle">Generated at 9:28 PM ET. Deltas computed against 2026-05-17 entry.</div>
+      </header>
+
+      <!-- 1. TODAY'S HIGHLIGHT -->
+      <section class="section">
+        <div class="section-title">🎯 Today&rsquo;s Highlight</div>
+        <div class="card">
+          <p style="font-size:1.1rem;margin:0"><a href="https://www.technologyreview.com/2026/05/18/1137488/elon-musk-suit-openai-verdict/">Here&rsquo;s why Elon Musk lost his suit against OpenAI</a> &mdash; <span class="tag tag-slate">MIT Technology Review</span></p>
+          <p class="commentary" style="margin-top:8px">A jury sided with Sam Altman and OpenAI after a closely watched trial, finding Musk failed to prove his claims. The verdict closes one of the highest-profile legal battles in AI history and lets OpenAI&rsquo;s for-profit transition proceed unimpeded.</p>
+        </div>
+      </section>
+
+      <!-- 2. SLACK ACTIVITY -->
+      <section class="section">
+        <div class="section-title">💬 Slack Activity</div>
+        <div class="card">
+          <div class="eyebrow">Briefing window: 2026-05-17 to 2026-05-18 &bull; 9 mentions &bull; 30 DMs &bull; 8 announcements &bull; 31 channel messages</div>
+          <ul style="margin:0;padding-left:1.2rem;line-height:1.8">
+            <li><strong>Bryan Halterman</strong> (DM) &mdash; Building a front-end to trigger Zoom POC endpoints; fixing a bug and recording functions for Ashley; debugging hung sessions from Friday.</li>
+            <li><strong>pe-bot-franz</strong> (9 mentions) &mdash; Automated GitHub notifications throughout the day for PR/action status in #pe-bot-franz.</li>
+            <li><strong>Slack Skill Bot</strong> (4 heartbeats) &mdash; CodeRabbit trial ended, LinkedIn salary trends ($110K+ for Principal SWE), Harish network invite, Dr. Alex Wissner-Gross newsletter.</li>
+            <li><strong>Cherie Cutchin</strong> (6 channels) &mdash; Pushed Pradeep&rsquo;s priority issues (must complete by end of June) to Spartans, Power Rangers, Divided By 0, Scrumblebeez, Git Happens, and Frontier channels.</li>
+            <li><strong>Henryk Scheibner</strong> &mdash; Proposed archiving #software-development channel.</li>
+            <li><strong>George DeCherney</strong> &mdash; Shared YouTube link in #ai-chapter; followed by discussion about meeting Microsoft Regional Directors.</li>
+            <li><strong>Bryan Halterman</strong> (#dev-ex-private) &mdash; PR incoming for Zoom docs cleanup, workflow fixes; planning to add a function for up to 4 concurrent sessions.</li>
+            <li><strong>Diep Nguyen</strong> (#productivity-engineering-public) &mdash; SonarCloud analysis bot reporting errors on supernurse-backend PRs despite quality gate passing.</li>
+            <li><strong>Bryan Halterman</strong> (#productivity-engineering-public) &mdash; Diagnosed SonarCloud issue as possible token problem or bad run; 55K-line task throwing errors.</li>
+            <li><strong>Kris Smith</strong> (#dev-tribe) &mdash; CLS .NET 10 update merged to dev this morning.</li>
+            <li><strong>Clark Bonham / Grayson Gould</strong> (#dev-tribe) &mdash; IdentityService migration broken: nurse-client-credentials ClientId doesn&rsquo;t exist in all environments.</li>
+            <li><strong>Shrigowri Hiraskar</strong> (#next-deployment) &mdash; Hotfix for RPLAT-20196 deployed; checklist created.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 3. WEATHER -->
+      <section class="section">
+        <div class="section-title">🌤 Weather</div>
+        <div class="card">
+          <div class="section-subtitle" style="margin-top:0">📍 Mooresville, US</div>
+          <table>
+            <thead><tr><th>Date</th><th>Day</th><th>Time</th></tr></thead>
+            <tbody><tr><td>2026-05-18</td><td>Monday</td><td>9:28 PM Eastern</td></tr></tbody>
+          </table>
+        </div>
+        <div class="grid grid-2" style="margin-top:16px">
+          <div class="card">
+            <div class="section-subtitle" style="margin-top:0">Current Weather</div>
+            <table>
+              <thead><tr><th>Temp</th><th>Feels Like</th><th>Condition</th><th>Wind</th><th>Humidity</th></tr></thead>
+              <tbody><tr><td>78°F</td><td>78°F</td><td>Clear Sky</td><td>5 mph</td><td>67%</td></tr></tbody>
+            </table>
+          </div>
+          <div class="card">
+            <div class="section-subtitle" style="margin-top:0">3-Day Forecast</div>
+            <table>
+              <thead><tr><th>Day</th><th>Condition</th><th>Low</th><th>High</th><th>Wind</th></tr></thead>
+              <tbody>
+                <tr><td>Monday (Today)</td><td>☀️ Clear Sky</td><td>76°F</td><td>76°F</td><td>5 mph</td></tr>
+                <tr><td>Tuesday</td><td>☀️ Clear Sky</td><td>66°F</td><td>90°F</td><td>7 mph</td></tr>
+                <tr><td>Wednesday</td><td>☁️ Broken Clouds</td><td>64°F</td><td>93°F</td><td>6 mph</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. NEWS HEADLINES -->
+      <section class="section">
+        <div class="section-title">📰 News Headlines</div>
+        <div class="eyebrow">May 18, 2026</div>
+
+        <div class="card">
+          <div class="section-subtitle" style="margin-top:0">🇺🇸 US News</div>
+          <ol class="num-list">
+            <li><a href="https://www.pbs.org/newshour/nation/mark-fuhrman-former-la-police-detective-convicted-of-lying-during-oj-simpson-murder-trial-has-died">Mark Fuhrman, former LA police detective convicted of lying during OJ Simpson murder trial, has died</a> &mdash; <span class="tag tag-slate">PBS NewsHour</span></li>
+            <li><a href="https://www.pbs.org/newshour/show/teenage-gunmen-open-fire-on-islamic-center-of-san-diego-police-say">Teenage gunmen open fire on Islamic Center of San Diego, police say</a> &mdash; <span class="tag tag-slate">PBS NewsHour</span></li>
+            <li><a href="https://www.npr.org/2026/05/18/nx-s1-5825871/electricity-prices-nextera-dominion-merger-utilities">Why you should care about 2 power companies merging. Hint: affordability</a> &mdash; <span class="tag tag-slate">NPR</span></li>
+            <li><a href="https://www.npr.org/2026/05/18/g-s1-122235/primary-day-alabama-georgia-idaho-kentucky-oregon-pennsylvania">Tuesday is a big primary day. Here&rsquo;s what you need to know</a> &mdash; <span class="tag tag-slate">NPR</span></li>
+          </ol>
+        </div>
+
+        <div class="card">
+          <div class="section-subtitle" style="margin-top:0">🌍 World News</div>
+          <ol class="num-list">
+            <li><a href="https://www.theguardian.com/australia-news/live/2026/may/19/australia-news-live-queensland-weather-rain-flash-flood-victoria-infrastructure-environment-climate-jim-chalmers-budget-cost-of-living-tax-housing-anthony-albanese-angus-taylor-ntwnfb">Dfat &lsquo;urgently seeking&rsquo; welfare updates for 11 Australians taken from Gaza aid flotilla</a> &mdash; <span class="tag tag-slate">The Guardian</span></li>
+            <li><a href="https://www.theguardian.com/uk-news/2026/may/19/soldier-who-died-in-fall-at-royal-windsor-horse-show">Tributes paid as &lsquo;outstanding&rsquo; soldier who died in fall at Royal Windsor Horse Show is named</a> &mdash; <span class="tag tag-slate">The Guardian</span></li>
+            <li><a href="https://www.bbc.com/news/articles/c5y7q66gq56o?at_medium=RSS&amp;at_campaign=rss">Three killed in suspected hate crime at San Diego mosque</a> &mdash; <span class="tag tag-slate">BBC</span></li>
+            <li><a href="https://www.aljazeera.com/video/newsfeed/2026/5/19/two-teen-gunmen-kill-three-at-san-diego-mosque-in-suspected-hate-crime?traffic_source=rss">Two teen gunmen kill three at San Diego mosque in suspected hate crime</a> &mdash; <span class="tag tag-slate">Al Jazeera</span></li>
+            <li><a href="https://www.aljazeera.com/news/liveblog/2026/5/19/iran-war-live-trump-says-iran-attack-postponed-at-request-of-gulf-allies?traffic_source=rss">Iran war live: Trump says Iran attack postponed at request of Gulf allies</a> &mdash; <span class="tag tag-slate">Al Jazeera</span></li>
+            <li><a href="https://www.france24.com/en/americas/20260518-us-tightens-ebola-precautions-as-outbreak-declared-international-emergency">US tightens Ebola precautions as outbreak declared international emergency</a> &mdash; <span class="tag tag-slate">France 24</span></li>
+            <li><a href="https://www.france24.com/en/americas/20260518-three-killed-in-attack-at-san-diego-islamic-centre-in-suspected-hate-crime">Three killed in attack at San Diego Islamic centre in suspected hate crime</a> &mdash; <span class="tag tag-slate">France 24</span></li>
+          </ol>
+        </div>
+
+        <div class="card">
+          <div class="section-subtitle" style="margin-top:0">🤖 AI News</div>
+          <ol class="num-list">
+            <li><a href="https://simonwillison.net/2026/May/19/5-minute-llms/#atom-everything">The last six months in LLMs in five minutes</a> &mdash; <span class="tag tag-slate">Simon Willison&rsquo;s Weblog</span></li>
+            <li><a href="https://simonwillison.net/2026/May/18/sighting-362781627/#atom-everything">Glaucous-winged Gull, Brown Pelican, Snowy Egret, Canada Goose</a> &mdash; <span class="tag tag-slate">Simon Willison&rsquo;s Weblog</span></li>
+            <li><a href="https://www.technologyreview.com/2026/05/18/1137488/elon-musk-suit-openai-verdict/">Here&rsquo;s why Elon Musk lost his suit against OpenAI</a> &mdash; <span class="tag tag-slate">MIT Technology Review</span></li>
+            <li><a href="https://www.theverge.com/ai-artificial-intelligence/932383/jury-verdict-musk-v-altman-openai-trial">Elon Musk loses his case against Sam Altman</a> &mdash; <span class="tag tag-slate">The Verge</span></li>
+            <li><a href="https://techcrunch.com/2026/05/18/sandboxaq-brings-its-drug-discovery-models-to-claude-no-phd-in-computing-required/">SandboxAQ brings its drug discovery models to Claude &mdash; no PhD in computing required</a> &mdash; <span class="tag tag-slate">TechCrunch</span></li>
+            <li><a href="https://www.theverge.com/ai-artificial-intelligence/932464/musk-v-altman-proved-that-ai-is-led-by-the-wrong-people">Musk v. Altman proved that AI is led by the wrong people</a> &mdash; <span class="tag tag-slate">The Verge</span></li>
+            <li><a href="https://techcrunch.com/2026/05/18/anthropic-has-acquired-the-dev-tools-startup-used-by-openai-google-and-cloudflare/">Anthropic has acquired the dev tools startup used by OpenAI, Google, and Cloudflare</a> &mdash; <span class="tag tag-slate">TechCrunch</span></li>
+          </ol>
+        </div>
+
+        <div class="card">
+          <div class="section-subtitle" style="margin-top:0">🇩🇰 Danish News</div>
+          <ol class="num-list">
+            <li><a href="https://www.dr.dk/nyheder/seneste/cubas-praesident-amerikansk-angreb-vil-udloese-et-blodbad">Cubas pr&aelig;sident: Amerikansk angreb vil udl&oslash;se et blodbad</a> &mdash; <span class="tag tag-slate">DR News</span></li>
+            <li><a href="https://www.dr.dk/nyheder/seneste/11-personer-frihedsberoevet-efter-propalaestinensisk-demonstration">11 personer frihedsber&oslash;vet efter propal&aelig;stinensisk demonstration</a> &mdash; <span class="tag tag-slate">DR News</span></li>
+            <li><a href="https://cphpost.dk/2026-05-18/news/round-up/danish-technology-company-cuts-hundreds-of-jobs/">Danish technology company cuts hundreds of jobs</a> &mdash; <span class="tag tag-slate">CPH Post</span></li>
+            <li><a href="https://cphpost.dk/2026-05-18/news/round-up/greenland-leaders-tell-trumps-envoys-that-greenlands-future-must-be-decided-by-greenlanders/">Greenland leaders tell Trump&rsquo;s envoys that Greenland&rsquo;s future must be decided by Greenlanders</a> &mdash; <span class="tag tag-slate">CPH Post</span></li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- 5. DAILY NUMBERS -->
+      <section class="section">
+        <div class="section-title">📊 Daily Numbers</div>
+
+        <div class="card">
+          <div class="section-subtitle" style="margin-top:0">Markets</div>
+          <div class="grid grid-2">
+            <div class="stat-block">
+              <div class="stat-label">Dow Jones</div>
+              <div class="stat-value">49,686.12</div>
+              <div class="stat-delta" style="color:var(--stat-positive)">&#9650; +159.95 (+0.32%)</div>
+            </div>
+            <div class="stat-block">
+              <div class="stat-label">S&amp;P 500</div>
+              <div class="stat-value">7,403.05</div>
+              <div class="stat-delta" style="color:var(--stat-negative)">&#9660; &minus;5.45 (&minus;0.07%)</div>
+            </div>
+          </div>
+          <p class="commentary">Markets traded in a narrow range. The Dow eked out a modest gain while the S&amp;P 500 finished essentially flat. Geopolitical uncertainty&mdash;Trump postponing the Iran strike at Gulf allies&rsquo; request, the San Diego mosque shooting, and tightened Ebola precautions&mdash;kept sentiment cautious, though Elon Musk&rsquo;s trial loss against OpenAI provided some relief for the AI sector.</p>
+        </div>
+
+        <div class="grid grid-2" style="margin-top:24px">
+          <div class="card">
+            <div class="section-subtitle" style="margin-top:0">Relias Repo Counts</div>
+            <table>
+              <thead><tr><th>Platform</th><th>Count</th><th>Δ vs Yesterday</th></tr></thead>
+              <tbody>
+                <tr><td>GitHub</td><td>278</td><td>0</td></tr>
+                <tr><td>Bitbucket</td><td>562</td><td>0</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="grid" style="gap:12px">
+            <div class="card">
+              <div class="section-subtitle" style="margin-top:0">GitHub Copilot Usage</div>
+              <div class="eyebrow">Org-Wide &mdash; Relias-Engineering (292 seats)</div>
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px">
+                <span><strong>Premium Requests:</strong> 77,610 / 292,000</span>
+                <span class="mono">26.6%</span>
+              </div>
+              <div class="usage-bar-bg"><div class="usage-bar-fill" style="width:26.6%"></div></div>
+              <div style="margin-top:8px"><strong>Cloud Agent:</strong> 115 requests</div>
+              <div class="stat-delta" style="color:var(--stat-positive)">&#9650; +4,413 premium requests vs yesterday</div>
+            </div>
+
+            <div class="card">
+              <div class="eyebrow">Personal &mdash; fhemmerrelias</div>
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px">
+                <span><strong>Used:</strong> 7,476 / 1,000 entitlement</span>
+                <span class="mono" style="color:var(--stat-negative)">747.6% (org pool)</span>
+              </div>
+              <div class="usage-bar-bg"><div class="usage-bar-fill" style="width:100%;background:var(--stat-negative)"></div></div>
+              <div class="stat-delta" style="color:var(--stat-negative)">&#9650; +343 requests vs yesterday (7,133 &rarr; 7,476)</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:24px">
+          <div class="section-subtitle" style="margin-top:0">Cloudflare Usage</div>
+          <div class="grid grid-2">
+            <div class="card">
+              <div class="eyebrow">nowleadershipgroup.com</div>
+              <div style="display:flex;gap:24px;flex-wrap:wrap">
+                <div><strong>47</strong> <span class="muted">page views</span></div>
+                <div><strong>80</strong> <span class="muted">unique visitors</span></div>
+                <div><strong>0</strong> <span class="muted">emails forwarded</span></div>
+              </div>
+              <div class="stat-delta" style="color:var(--stat-negative)">&#9660; PV &minus;7 (54&rarr;47) &bull; UV &minus;12 (92&rarr;80) &bull; Email &Delta; 0</div>
+            </div>
+            <div class="card">
+              <div class="eyebrow">setitfreeloop.org</div>
+              <div style="display:flex;gap:24px;flex-wrap:wrap">
+                <div><strong>0</strong> <span class="muted">page views</span></div>
+                <div><strong>0</strong> <span class="muted">unique visitors</span></div>
+              </div>
+              <div class="stat-delta muted">&Delta; 0 vs yesterday (both zero)</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. LLM MODELS (carried forward from 2026-05-17) -->
+      <section class="section">
+        <div class="section-title">🤖 LLM Models</div>
+        <div class="eyebrow">Carried forward from 2026-05-17 &mdash; no new changes detected</div>
+
+        <div class="grid grid-3">
+          <div class="card">
+            <div class="section-subtitle" style="margin-top:0">LMSYS Overall (Top 5)</div>
+            <table>
+              <thead><tr><th>Rank</th><th>Model</th><th>Org</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>claude-opus-4-6-thinking</td><td>Anthropic</td></tr>
+                <tr><td>2</td><td>claude-opus-4-7-thinking</td><td>Anthropic</td></tr>
+                <tr><td>3</td><td>claude-opus-4-6</td><td>Anthropic</td></tr>
+                <tr><td>4</td><td>claude-opus-4-7</td><td>Anthropic</td></tr>
+                <tr><td>5</td><td>muse-spark</td><td>Meta</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card">
+            <div class="section-subtitle" style="margin-top:0">LMSYS Coding (Top 5)</div>
+            <table>
+              <thead><tr><th>Rank</th><th>Model</th><th>Org</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>claude-opus-4-7-thinking</td><td>Anthropic</td></tr>
+                <tr><td>2</td><td>claude-opus-4-7</td><td>Anthropic</td></tr>
+                <tr><td>3</td><td>claude-opus-4-6-thinking</td><td>Anthropic</td></tr>
+                <tr><td>4</td><td>claude-opus-4-6</td><td>Anthropic</td></tr>
+                <tr><td>5</td><td>claude-opus-4-5-20251101-thinking-32k</td><td>Anthropic</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card">
+            <div class="section-subtitle" style="margin-top:0">LMSYS Vision (Top 5)</div>
+            <table>
+              <thead><tr><th>Rank</th><th>Model</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>claude-opus-4-7-thinking</td></tr>
+                <tr><td>2</td><td>claude-opus-4-7</td></tr>
+                <tr><td>3</td><td>claude-opus-4-6-thinking</td></tr>
+                <tr><td>4</td><td>muse-spark</td></tr>
+                <tr><td>5</td><td>claude-opus-4-6</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="section-subtitle">New Model Releases (Last 7 Days)</div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Model</th><th>Provider</th><th>Released</th><th>Context</th><th>Pricing</th></tr></thead>
+            <tbody>
+              <tr><td><a href="https://openrouter.ai/anthropic/claude-opus-4.7-fast">Claude Opus 4.7 (Fast)</a></td><td>Anthropic</td><td>May 12</td><td>976K</td><td>$30.00 / $150.00</td></tr>
+              <tr><td><a href="https://openrouter.ai/perceptron/perceptron-mk1">Perceptron Mk1</a></td><td>Perceptron</td><td>May 12</td><td>32K</td><td>$0.15 / $1.50</td></tr>
+            </tbody>
+          </table>
+          <div class="stat-delta muted">Total models on OpenRouter: 356</div>
+        </div>
+      </section>
+
+      <!-- 7. TRENDING GITHUB REPOS -->
+      <section class="section">
+        <div class="section-title">🔥 Trending GitHub Repos</div>
+        <div class="eyebrow">github.com/trending &mdash; May 18, 2026</div>
+        <ol class="num-list">
+          <li><a href="https://github.com/HKUDS/CLI-Anything">HKUDS/CLI-Anything</a> &mdash; &ldquo;CLI-Anything: Making ALL Software Agent-Native&rdquo; <span class="tag tag-olive">⭐ 36,670</span></li>
+          <li><a href="https://github.com/K-Dense-AI/scientific-agent-skills">K-Dense-AI/scientific-agent-skills</a> &mdash; Ready-to-use Agent Skills for research, science, engineering, analysis, finance and writing <span class="tag tag-olive">⭐ 24,413</span></li>
+          <li><a href="https://github.com/tinyhumansai/openhuman">tinyhumansai/openhuman</a> &mdash; Your Personal AI super intelligence. Private, Simple and extremely powerful. <span class="tag tag-olive">⭐ 17,367</span></li>
+          <li><a href="https://github.com/Imbad0202/academic-research-skills">Imbad0202/academic-research-skills</a> &mdash; Academic Research Skills for Claude Code: research &rarr; write &rarr; review &rarr; revise &rarr; finalize <span class="tag tag-olive">⭐ 11,829</span></li>
+          <li><a href="https://github.com/supertone-inc/supertonic">supertone-inc/supertonic</a> &mdash; Lightning-Fast, On-Device, Multilingual TTS running natively via ONNX <span class="tag tag-olive">⭐ 8,364</span></li>
+        </ol>
+      </section>
+
+      <!-- 8. SOFTWARE WATCHLIST -->
+      <section class="section">
+        <div class="section-title">🛠 Software Watchlist</div>
+        <div class="eyebrow">Latest releases as of 2026-05-18</div>
+        <table>
+          <thead><tr><th>Software</th><th>Latest Version</th><th>Released</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Claude Code</td><td>v2.1.144</td><td>2026-05-19 (UTC)</td><td><span class="tag tag-accent">NEW TODAY</span></td></tr>
+            <tr><td>GitHub Copilot CLI</td><td>v1.0.49</td><td>2026-05-19 (UTC)</td><td><span class="tag tag-accent">NEW TODAY</span></td></tr>
+            <tr><td>Gemini CLI</td><td>v0.42.0</td><td>2026-05-12</td><td><span class="tag tag-slate">Stable</span></td></tr>
+            <tr><td>GitHub CLI</td><td>v2.92.0</td><td>2026-04-28</td><td><span class="tag tag-slate">Stable</span></td></tr>
+            <tr><td>GitHub Copilot (gh ext)</td><td>v1.2.0</td><td>2025-10-30</td><td><span class="tag tag-slate">Stable</span></td></tr>
+            <tr><td>GitHub Copilot Chat</td><td>v0.43.0</td><td>2026-04-07</td><td><span class="tag tag-slate">Stable</span></td></tr>
+            <tr><td>Goose CLI</td><td>v1.34.1</td><td>2026-05-15</td><td><span class="tag tag-slate">Stable</span></td></tr>
+            <tr><td>Node.js</td><td>v22.22.3 LTS</td><td>2026-05-13</td><td><span class="tag tag-slate">Stable</span></td></tr>
+          </tbody>
+        </table>
+
+        <div class="section-subtitle">GitHub Web Changelog (Today)</div>
+        <div class="card">
+          <ol class="num-list">
+            <li><a href="https://github.blog/changelog/2026-05-18-one-click-fixes-for-failing-actions-with-copilot-cloud-agent">One-click fixes for failing Actions with Copilot cloud agent</a></li>
+            <li><a href="https://github.blog/changelog/2026-05-18-copilot-cloud-agent-fast-cost-efficient-models-for-simple-tasks">Copilot cloud agent: Fast, cost-efficient models for simple tasks</a></li>
+            <li><a href="https://github.blog/changelog/2026-05-18-ask-questions-in-context-with-copilot-on-web">Ask questions in context with Copilot on web</a></li>
+            <li><a href="https://github.blog/changelog/2026-05-18-audit-repository-copilot-cloud-agent-configuration-via-the-rest-api">Audit repository Copilot cloud agent configuration via the REST API</a></li>
+            <li><a href="https://github.blog/changelog/2026-05-18-copilot-spaces-api-now-generally-available">Copilot Spaces API now generally available</a></li>
+            <li><a href="https://github.blog/changelog/2026-05-18-remote-control-for-copilot-cli-sessions-now-generally-available-on-mobile-web-and-vs-code">Remote control for Copilot CLI sessions now GA on mobile, web, and VS Code</a></li>
+            <li><a href="https://github.blog/changelog/2026-05-17-gpt-5-3-codex-is-now-the-base-model-for-copilot-business-and-enterprise">GPT-5.3-Codex is now the base model for Copilot Business and Enterprise</a></li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- 9. WATCHLIST UPDATES -->
+      <section class="section">
+        <div class="section-title">📋 Watchlist Updates</div>
+        <div class="eyebrow">Active items with changes today</div>
+
+        <div class="card">
+          <div class="section-subtitle" style="margin-top:0">Claude Code</div>
+          <p>New release <strong>v2.1.144</strong> published today (2026-05-19 00:48 UTC). Daily patch cadence continues.</p>
+        </div>
+
+        <div class="card">
+          <div class="section-subtitle" style="margin-top:0">GitHub Copilot Preview Bill Rollout</div>
+          <p>Major changelog day with <strong>7 items</strong> published, including:</p>
+          <ul style="margin:0;padding-left:1.2rem">
+            <li>GPT-5.3-Codex is now the base model for Copilot Business and Enterprise</li>
+            <li>Remote control for Copilot CLI sessions GA on mobile, web, and VS Code</li>
+            <li>Copilot Spaces API now generally available</li>
+            <li>Cloud agent gets fast/cheap model tier and one-click fix for failing Actions</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="section-subtitle" style="margin-top:0">Anthropic Agent Skills Technology</div>
+          <p>TechCrunch reports <a href="https://techcrunch.com/2026/05/18/anthropic-has-acquired-the-dev-tools-startup-used-by-openai-google-and-cloudflare/">Anthropic acquired a dev tools startup</a> used by OpenAI, Google, and Cloudflare. Potential implications for the skills ecosystem.</p>
+        </div>
+      </section>
+
+      <!-- 10. TODAY'S PRODUCTIVITY -->
+      <section class="section">
+        <div class="section-title">💻 Today&rsquo;s Productivity</div>
+        <div class="grid grid-4" style="margin-bottom:16px">
+          <div class="stat-block">
+            <div class="stat-label">Lines of Code</div>
+            <div class="stat-value" style="color:var(--stat-positive)">+10,473</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-label">Commits</div>
+            <div class="stat-value">62</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-label">PRs Merged</div>
+            <div class="stat-value">2</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-label">Reviews &amp; Issues</div>
+            <div class="stat-value">2 / 2</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="eyebrow">Repositories</div>
+          <p style="margin:0"><span class="tag tag-sky">codexbar</span> <span class="tag tag-sky">gh-x</span> <span class="tag tag-sky">relias-assistant</span> <span class="tag tag-sky">set-it-free-loop</span> <span class="tag tag-sky">skills</span></p>
+          <div class="eyebrow" style="margin-top:12px">File Types</div>
+          <p style="margin:0"><span class="tag tag-slate">.cs</span> <span class="tag tag-slate">.go</span> <span class="tag tag-slate">.ps1</span></p>
+        </div>
+      </section>
+
+      <!-- 11. MEETINGS -->
+      <section class="section">
+        <div class="section-title">💼 Meetings</div>
+        <table>
+          <thead><tr><th>Time</th><th>Meeting</th><th>Organizer</th><th>Duration</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>11:00&ndash;11:30 AM</td>
+              <td>Prod Eng Standup</td>
+              <td>Malia Paul</td>
+              <td>~23 min</td>
+              <td>Recurring team standup. Attendees: Scott Motley, Karthika Menon, John Martin, Bryan Halterman, Sid Marti, Daniel Wilson, Nick Peterson, Tyler Deal, Franz Hemmer, Jason Smith. No transcript or AI recap available.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 12. PERSONAL REFLECTIONS -->
+      <section class="section">
+        <div class="section-title">💭 Personal Reflections</div>
+        <div class="card todo-callout">
+          <!-- TODO: fill in -->
+          <strong>TODO:</strong> Add your thoughts, feelings, observations, or anything else worth remembering about today.
+        </div>
+      </section>
+
+      <!-- 13. SCREENSHOTS - none today -->
+
+      <div class="footer">Entry created with diary skill V1.5 &mdash; scaffolded 2026-05-18 at 9:28 PM ET</div>
+    </article>
+  </main>
+
+  <script>
+    function setTheme(t){document.documentElement.setAttribute('data-theme',t);localStorage.setItem('html-theme',t);closeThemeMenu()}
+    function toggleThemeMenu(){const m=document.getElementById('themeMenu');const b=document.querySelector('.theme-toggle-btn');const open=m.classList.toggle('open');b.setAttribute('aria-expanded',open)}
+    function closeThemeMenu(){document.getElementById('themeMenu').classList.remove('open');document.querySelector('.theme-toggle-btn').setAttribute('aria-expanded','false')}
+    document.addEventListener('click',e=>{if(!e.target.closest('.theme-toggle'))closeThemeMenu()});
+    (function(){const t=localStorage.getItem('html-theme')||'carbon';document.documentElement.setAttribute('data-theme',t)})()
+  </script>
+</body>
+</html>

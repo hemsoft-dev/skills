@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tuesday, 2026-05-19</title>
+  <style>
+    [data-theme="paper"], :root {
+      --bg-canvas: #080808; --bg-surface: #F5F1E8; --bg-card: #FFFFFF;
+      --text-primary: #141413; --text-secondary: #9A9891; --text-muted: #9A9891;
+      --accent-primary: #D97757; --accent-secondary: #788C5D; --accent-tertiary: #6A8CAF;
+      --border-subtle: rgba(20,20,19,0.08); --link-color: #6A8CAF;
+      --accent-tag-bg: rgba(217,119,87,0.12); --accent-tag-text: #D97757;
+      --sky-tag-bg: rgba(106,140,175,0.12); --sky-tag-text: #6A8CAF;
+      --olive-tag-bg: rgba(120,140,93,0.12); --olive-tag-text: #788C5D;
+      --slate-tag-bg: rgba(20,20,19,0.08); --slate-tag-text: #9A9891;
+      --warn-bg: #D97757; --warn-text: #FFFFFF;
+      --shadow-soft: 0 24px 80px rgba(0,0,0,0.18);
+      --table-header-bg: rgba(20,20,19,0.04); --table-border: rgba(20,20,19,0.06);
+      --stat-positive: #788C5D; --stat-negative: #D97757;
+    }
+    [data-theme="obsidian"] {
+      --bg-canvas: #0d1117; --bg-surface: #161b22; --bg-card: #21262d;
+      --text-primary: #c9d1d9; --text-secondary: #8b949e; --text-muted: #6e7681;
+      --accent-primary: #58a6ff; --accent-secondary: #3fb950; --accent-tertiary: #d2a8ff;
+      --border-subtle: rgba(240,246,252,0.1); --link-color: #58a6ff;
+      --accent-tag-bg: rgba(88,166,255,0.12); --accent-tag-text: #58a6ff;
+      --sky-tag-bg: rgba(210,168,255,0.12); --sky-tag-text: #d2a8ff;
+      --olive-tag-bg: rgba(63,185,80,0.12); --olive-tag-text: #3fb950;
+      --slate-tag-bg: rgba(139,148,158,0.12); --slate-tag-text: #8b949e;
+      --warn-bg: #f85149; --warn-text: #FFFFFF;
+      --shadow-soft: 0 24px 80px rgba(0,0,0,0.4);
+      --table-header-bg: rgba(240,246,252,0.06); --table-border: rgba(240,246,252,0.08);
+      --stat-positive: #3fb950; --stat-negative: #f85149;
+    }
+    [data-theme="twilight"] {
+      --bg-canvas: #16162a; --bg-surface: #1e1e3f; --bg-card: #2a2a4a;
+      --text-primary: #e0def4; --text-secondary: #908caa; --text-muted: #6c6c89;
+      --accent-primary: #7c5cbf; --accent-secondary: #c4a7e7; --accent-tertiary: #f7c59f;
+      --border-subtle: rgba(200,180,240,0.12); --link-color: #7c5cbf;
+      --accent-tag-bg: rgba(124,92,191,0.15); --accent-tag-text: #7c5cbf;
+      --sky-tag-bg: rgba(247,197,159,0.15); --sky-tag-text: #f7c59f;
+      --olive-tag-bg: rgba(196,167,231,0.15); --olive-tag-text: #c4a7e7;
+      --slate-tag-bg: rgba(144,140,170,0.12); --slate-tag-text: #908caa;
+      --warn-bg: #7c5cbf; --warn-text: #FFFFFF;
+      --shadow-soft: 0 24px 80px rgba(0,0,0,0.5);
+      --table-header-bg: rgba(200,180,240,0.08); --table-border: rgba(200,180,240,0.1);
+      --stat-positive: #c4a7e7; --stat-negative: #f7c59f;
+    }
+    [data-theme="carbon"] {
+      --bg-canvas: #111111; --bg-surface: #1a1a1a; --bg-card: #222222;
+      --text-primary: #ececec; --text-secondary: #888888; --text-muted: #666666;
+      --accent-primary: #D97757; --accent-secondary: #788C5D; --accent-tertiary: #6A8CAF;
+      --border-subtle: rgba(255,255,255,0.08); --link-color: #D97757;
+      --accent-tag-bg: rgba(217,119,87,0.15); --accent-tag-text: #D97757;
+      --sky-tag-bg: rgba(106,140,175,0.15); --sky-tag-text: #6A8CAF;
+      --olive-tag-bg: rgba(120,140,93,0.15); --olive-tag-text: #788C5D;
+      --slate-tag-bg: rgba(255,255,255,0.08); --slate-tag-text: #888888;
+      --warn-bg: #D97757; --warn-text: #FFFFFF;
+      --shadow-soft: 0 24px 80px rgba(0,0,0,0.5);
+      --table-header-bg: rgba(255,255,255,0.04); --table-border: rgba(255,255,255,0.06);
+      --stat-positive: #788C5D; --stat-negative: #D97757;
+    }
+    .theme-toggle{position:fixed;top:16px;right:16px;z-index:100;font-family:ui-monospace,"Cascadia Code","Fira Code",monospace;font-size:0.75rem}
+    .theme-toggle-btn{background:var(--bg-card);color:var(--text-secondary);border:1px solid var(--border-subtle);border-radius:6px;padding:6px 10px;cursor:pointer;font-size:1.2rem;line-height:1;transition:background .2s,color .2s}
+    .theme-toggle-btn:hover{background:var(--accent-primary);color:var(--bg-canvas)}
+    .theme-menu{display:none;position:absolute;top:100%;right:0;margin-top:4px;background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:8px;box-shadow:var(--shadow-soft);overflow:hidden;min-width:140px}
+    .theme-menu.open{display:block}
+    .theme-menu button{display:block;width:100%;text-align:left;background:none;color:var(--text-primary);border:none;padding:10px 16px;cursor:pointer;font-family:inherit;font-size:0.8rem;transition:background .15s}
+    .theme-menu button:hover{background:var(--accent-primary);color:var(--bg-canvas)}
+    :root { --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 24px; --space-6: 32px; --space-7: 48px; --radius-lg: 32px; --radius-md: 20px; --radius-sm: 12px; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg-canvas); color: var(--text-primary); font: 400 16px/1.6 Inter, "Segoe UI", Arial, sans-serif; }
+    a { color: var(--link-color); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .page-shell { min-height: 100vh; padding: var(--space-7) var(--space-5); }
+    .window { max-width: 1180px; margin: 0 auto; padding: var(--space-6); background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); }
+    h1 { font-family: Georgia, "Times New Roman", serif; font-size: 2.2rem; font-weight: 700; margin: 0 0 var(--space-2) 0; }
+    .subtitle, .mono, .eyebrow { font-family: ui-monospace, "Cascadia Code", "Fira Code", monospace; }
+    .subtitle { color: var(--text-muted); font-size: 0.8rem; margin-bottom: var(--space-6); }
+    .eyebrow { color: var(--text-muted); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: var(--space-2); }
+    .muted { color: var(--text-muted); }
+    .section { margin-bottom: var(--space-6); padding-bottom: var(--space-6); border-bottom: 1px solid var(--border-subtle); }
+    .section:last-child { border-bottom: none; }
+    .section-title { font-family: Georgia, "Times New Roman", serif; font-size: 1.3rem; font-weight: 600; margin: 0 0 var(--space-4) 0; }
+    .section-subtitle { font-family: Georgia, "Times New Roman", serif; font-size: 1.05rem; font-weight: 600; margin: var(--space-5) 0 var(--space-3) 0; }
+    .card, .stat-block { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-4); }
+    .card + .card { margin-top: var(--space-3); }
+    .grid { display: grid; gap: var(--space-3); }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .stat-block { text-align: center; }
+    .stat-label { color: var(--text-muted); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: var(--space-1); }
+    .stat-value { font-family: Georgia, "Times New Roman", serif; font-size: 1.55rem; font-weight: 700; }
+    .stat-delta { margin-top: var(--space-1); font-size: 0.78rem; }
+    .tag { display: inline-block; font-family: ui-monospace, "Cascadia Code", monospace; font-size: 0.65rem; padding: 2px 8px; border-radius: 4px; white-space: nowrap; vertical-align: middle; }
+    .tag-accent { background: var(--accent-tag-bg); color: var(--accent-tag-text); }
+    .tag-sky { background: var(--sky-tag-bg); color: var(--sky-tag-text); }
+    .tag-olive { background: var(--olive-tag-bg); color: var(--olive-tag-text); }
+    .tag-slate { background: var(--slate-tag-bg); color: var(--slate-tag-text); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+    th { text-align: left; padding: var(--space-2) var(--space-3); background: var(--table-header-bg); border-bottom: 1px solid var(--table-border); font-family: ui-monospace, "Cascadia Code", monospace; font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-muted); }
+    td { padding: var(--space-2) var(--space-3); border-bottom: 1px solid var(--table-border); vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    ol.num-list { list-style: none; counter-reset: nl; margin: 0; padding: 0; }
+    ol.num-list li { counter-increment: nl; position: relative; padding: var(--space-2) 0 var(--space-2) 32px; border-bottom: 1px solid var(--table-border); line-height: 1.5; }
+    ol.num-list li:last-child { border-bottom: none; }
+    ol.num-list li::before { content: counter(nl); position: absolute; left: 0; top: var(--space-2); width: 24px; text-align: right; font-family: ui-monospace, "Cascadia Code", monospace; font-size: 0.75rem; color: var(--text-muted); }
+    .todo-callout { border-color: rgba(217,119,87,0.3); background: linear-gradient(135deg, var(--bg-card), rgba(217,119,87,0.08)); }
+    .todo-callout strong { color: var(--accent-primary); }
+    .diary-generated-markdown h1, .diary-generated-markdown h2, .diary-generated-markdown h3, .diary-generated-markdown h4 { font-family: Georgia, "Times New Roman", serif; margin: var(--space-4) 0 var(--space-2); }
+    .diary-generated-markdown h1:first-child, .diary-generated-markdown h2:first-child, .diary-generated-markdown h3:first-child, .diary-generated-markdown h4:first-child { margin-top: 0; }
+    .diary-generated-markdown ul, .diary-generated-markdown ol { margin: 0; padding-left: 1.2rem; }
+    .diary-generated-markdown p:last-child { margin-bottom: 0; }
+    .footer { color: var(--text-muted); font-size: 0.78rem; text-align: center; }
+    @media (max-width: 900px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } .page-shell { padding: var(--space-5) var(--space-3); } .window { padding: var(--space-5); } }
+  </style>
+</head>
+<body>
+  <div class="theme-toggle" aria-label="Theme selector">
+    <button class="theme-toggle-btn" onclick="toggleThemeMenu()" aria-haspopup="true" aria-expanded="false">&#8942;</button>
+    <div class="theme-menu" id="themeMenu">
+      <button onclick="setTheme('paper')">&#128240; Paper</button>
+      <button onclick="setTheme('obsidian')">&#128420; Obsidian</button>
+      <button onclick="setTheme('twilight')">&#127750; Twilight</button>
+      <button onclick="setTheme('carbon')">&#11036; Carbon</button>
+    </div>
+  </div>
+
+  <main class="page-shell">
+    <article class="window">
+      <header class="section">
+        <div class="eyebrow">Personal diary &mdash; Tuesday</div>
+        <h1>Tuesday, 2026-05-19</h1>
+        <div class="subtitle">Week 21 &bull; Day 139 of 365</div>
+      </header>
+
+      <!-- 1. TODAY'S HIGHLIGHT -->
+      <section class="section">
+        <div class="section-title">&#127919; Today&rsquo;s Highlight</div>
+        <div class="card todo-callout">
+          <!-- TODO: fill in -->
+          <strong>TODO:</strong> Pick the main news headline of the day from the News Headlines section below, add its URL, and optionally add 1&ndash;2 sentences of context.
+        </div>
+      </section>
+
+      <!-- 2. SLACK ACTIVITY -->
+      <section class="section">
+        <div class="section-title">&#128172; Slack Activity</div>
+        <div class="eyebrow">4 mentions &bull; 11 DMs &bull; 6 announcements &bull; 109 channel messages &bull; 1 action item</div>
+        <div class="card diary-generated-markdown">
+          <ul>
+            <li><strong>Bryan asked Franz &amp; Nick to review PR</strong> &mdash; &ldquo;please take a look at the PR above when you have a moment, I&rsquo;m signing off to start heading home&rdquo; (#dev-ex-private)</li>
+            <li><strong>Bryan on PowerBI/Databricks + GitHub integration</strong> &mdash; Spoke with Anuj in D&amp;A about getting reporting integrated; managers will see their reports&rsquo; costs, individuals will see their own</li>
+            <li><strong>Bryan on GitHub org requests</strong> &mdash; GitHub requests blowing up, IT getting involved; pushing back but continuing with current org while getting reporting in place</li>
+            <li><strong>Bryan on agent mode insight</strong> &mdash; &ldquo;one thing I do like about agent mode is that you really get a sense of how big a branch has grown&rdquo;</li>
+            <li><strong>Amha Shiferaw converting to FTE</strong> &mdash; New laptop and account, going through permissions/dotfiles/Slack channel setup process (#ipsee-tech-team)</li>
+            <li><strong>Malia Paul sharing George&rsquo;s team feedback</strong> &mdash; George solicited feedback on what teams aren&rsquo;t using agentic workflows; Malia asking where to dig in and help (#prod-eng-devex-private)</li>
+            <li><strong>George DeCherney demo coming</strong> &mdash; Working on an initiative, should be ready to demo in 1&ndash;2 weeks (#ai-chapter)</li>
+            <li><strong>Geo Rufino shared Antigravity CLI video</strong> &mdash; Posted YouTube link in #ai-chapter</li>
+            <li><strong>Diep Nguyen needs client credentials admin</strong> &mdash; Asked in #dev-tribe who has admin access to manage client credentials (#dev-tribe)</li>
+            <li><strong>Jon Saverda: Physicians &amp; WCEI release tomorrow</strong> &mdash; Craft &amp; Magento release planned (#next-deployment)</li>
+            <li><strong>Abdalla Musa: GitHub access request</strong> &mdash; Asked to be added to relias-engineering group; Malia directed to follow the official process (#productivity-engineering-public)</li>
+            <li><strong>Sonarcloud access change</strong> &mdash; ravindra from Brillmark added by lkondragunta (#sonarcloud-public)</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 3. WEATHER -->
+      <section class="section">
+        <div class="section-title">&#127780; Weather</div>
+        <div class="eyebrow">Mooresville, US &bull; Tuesday 11:44 PM Eastern</div>
+        <div class="grid grid-3">
+          <div class="stat-block">
+            <div class="stat-label">Temperature</div>
+            <div class="stat-value">71&deg;F</div>
+            <div class="stat-delta muted">Feels like 71&deg;F</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-label">Condition</div>
+            <div class="stat-value">&#9729;</div>
+            <div class="stat-delta muted">Broken Clouds</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-label">Wind / Humidity</div>
+            <div class="stat-value">4 mph</div>
+            <div class="stat-delta muted">78% humidity</div>
+          </div>
+        </div>
+        <div class="section-subtitle">3-Day Forecast</div>
+        <table>
+          <thead><tr><th>Day</th><th>Condition</th><th>Low</th><th>High</th><th>Wind</th></tr></thead>
+          <tbody>
+            <tr><td>Wednesday</td><td>&#9728;&#65039; Clear Sky</td><td>67&deg;F</td><td>92&deg;F</td><td>7 mph</td></tr>
+            <tr><td>Thursday</td><td>&#9729;&#65039; Broken Clouds</td><td>61&deg;F</td><td>90&deg;F</td><td>5 mph</td></tr>
+            <tr><td>Friday</td><td>&#127783;&#65039; Light Rain</td><td>58&deg;F</td><td>67&deg;F</td><td>8 mph</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 4. NEWS HEADLINES -->
+      <section class="section">
+        <div class="section-title">&#128240; News Headlines</div>
+        <div class="eyebrow">May 19, 2026</div>
+
+        <div class="section-subtitle">&#127482;&#127480; US News</div>
+        <ol class="num-list">
+          <li><a href="https://www.npr.org/2026/05/19/nx-s1-5805950/artificial-eggs-dodo-moa">To revive an extinct bird, you first need an artificial egg</a> &mdash; <span class="tag tag-sky">NPR</span></li>
+          <li><a href="https://www.pbs.org/newshour/politics/watch-live-acting-attorney-general-blanche-may-be-questioned-on-weaponization-fund-in-budget-hearing">WATCH LIVE: Acting Attorney General Blanche may be questioned on &lsquo;weaponization&rsquo; fund in budget hearing</a> &mdash; <span class="tag tag-sky">PBS NewsHour</span></li>
+          <li><a href="https://www.npr.org/2026/05/19/g-s1-122806/up-first-newsletter-islamic-center-san-diego-primary-elections-trump-irs-elon-musk-openai">California mosque shooting leaves 5 dead. And, judge dismisses Trump&rsquo;s IRS lawsuit</a> &mdash; <span class="tag tag-sky">NPR</span></li>
+          <li><a href="https://www.pbs.org/newshour/nation/mark-fuhrman-former-la-police-detective-convicted-of-lying-during-oj-simpson-murder-trial-has-died">Mark Fuhrman, former LA police detective convicted of lying during OJ Simpson murder trial, has died</a> &mdash; <span class="tag tag-sky">PBS NewsHour</span></li>
+        </ol>
+
+        <div class="section-subtitle">&#127758; World News</div>
+        <ol class="num-list">
+          <li><a href="https://www.theguardian.com/world/live/2026/may/19/us-israel-iran-war-trump-peace-attacks-gulf-allies-strikes-hormuz-latest-news-updates">Middle East crisis live: Iran warns it will &lsquo;open new fronts&rsquo; against US if attacks resume after Trump suspends strikes</a> &mdash; <span class="tag tag-sky">The Guardian</span></li>
+          <li><a href="https://www.bbc.com/news/videos/cx21349w77go?at_medium=RSS&at_campaign=rss">Anti-government demonstrators and police clash in Bolivia</a> &mdash; <span class="tag tag-sky">BBC</span></li>
+          <li><a href="https://www.theguardian.com/politics/live/2026/may/19/labour-leadership-keir-starmer-andy-burnham-iran-hs2-energy-latest-news-updates">Minister to be grilled over Mandelson documents being withheld &ndash; UK politics live</a> &mdash; <span class="tag tag-sky">The Guardian</span></li>
+          <li><a href="https://www.aljazeera.com/news/2026/5/19/thailand-to-slash-tourist-visa-free-stays?traffic_source=rss">Thailand to slash tourist visa-free stays</a> &mdash; <span class="tag tag-sky">Al Jazeera</span></li>
+          <li><a href="https://www.aljazeera.com/news/2026/5/19/gaza-aid-flotilla-organisers-say-41-boats-intercepted-10-still-sailing?traffic_source=rss">Gaza aid flotilla organisers say 41 boats intercepted, 10 still sailing</a> &mdash; <span class="tag tag-sky">Al Jazeera</span></li>
+          <li><a href="https://www.france24.com/en/tv-shows/focus/20260519-india-s-rise-of-rural-cinema-film-productions-turn-to-the-countryside">India&rsquo;s rise of rural cinema: Film productions turn to the countryside</a> &mdash; <span class="tag tag-sky">France 24</span></li>
+          <li><a href="https://www.dw.com/en/czechia-uproar-over-sudeten-german-gathering-in-brno/a-77209816?maca=en-rss-en-world-4025-xml-mrss">Czechia: Uproar over Sudeten German gathering in Brno</a> &mdash; <span class="tag tag-sky">DW News</span></li>
+        </ol>
+
+        <div class="section-subtitle">&#129302; AI News</div>
+        <ol class="num-list">
+          <li><a href="https://simonwillison.net/2026/May/19/5-minute-llms/#atom-everything">The last six months in LLMs in five minutes</a> &mdash; <span class="tag tag-sky">Simon Willison&rsquo;s Weblog</span></li>
+          <li><a href="https://simonwillison.net/2026/May/18/sighting-362781627/#atom-everything">Glaucous-winged Gull, Brown Pelican, Snowy Egret, Canada Goose</a> &mdash; <span class="tag tag-sky">Simon Willison&rsquo;s Weblog</span></li>
+          <li><a href="https://www.wired.com/story/the-big-interview-podcast-tom-steyer/">Tom Steyer Wants to Save California From Billionaires. But Also Doesn&rsquo;t Want Them to Leave</a> &mdash; <span class="tag tag-sky">Wired</span></li>
+          <li><a href="https://www.technologyreview.com/2026/05/18/1137488/elon-musk-suit-openai-verdict/">Here&rsquo;s why Elon Musk lost his suit against OpenAI</a> &mdash; <span class="tag tag-sky">MIT Technology Review</span></li>
+          <li><a href="https://www.theverge.com/ai-artificial-intelligence/932383/jury-verdict-musk-v-altman-openai-trial">Elon Musk loses his case against Sam Altman</a> &mdash; <span class="tag tag-sky">The Verge</span></li>
+          <li><a href="https://techcrunch.com/2026/05/18/sandboxaq-brings-its-drug-discovery-models-to-claude-no-phd-in-computing-required/">SandboxAQ brings its drug discovery models to Claude &mdash; no PhD in computing required</a> &mdash; <span class="tag tag-sky">TechCrunch</span></li>
+          <li><a href="https://www.theverge.com/ai-artificial-intelligence/932464/musk-v-altman-proved-that-ai-is-led-by-the-wrong-people">Musk v. Altman proved that AI is led by the wrong people</a> &mdash; <span class="tag tag-sky">The Verge</span></li>
+        </ol>
+
+        <div class="section-subtitle">&#127465;&#127472; Danish News</div>
+        <ol class="num-list">
+          <li><a href="https://www.dr.dk/nyheder/seneste/nato-fly-nedskyder-ukrainsk-drone-over-estland">Nato-fly nedskyder ukrainsk drone over Estland</a> &mdash; <span class="tag tag-sky">DR News</span></li>
+          <li><a href="https://www.dr.dk/nyheder/seneste/kvinde-doemt-udnytte-sin-samlever-til-prostitution">Kvinde d&oslash;mt for at udnytte sin samlever til prostitution</a> &mdash; <span class="tag tag-sky">DR News</span></li>
+          <li><a href="https://cphpost.dk/2026-05-19/news/round-up/new-security-check-opens-at-copenhagen-airport/">New security check opens at Copenhagen Airport</a> &mdash; <span class="tag tag-sky">CPH Post</span></li>
+          <li><a href="https://cphpost.dk/2026-05-19/business-education/career/expert-insights-belonging-in-the-danish-work-place-a-self-service-process/">Expert Insights: Belonging in the Danish work place: A self service process</a> &mdash; <span class="tag tag-sky">CPH Post</span></li>
+        </ol>
+      </section>
+
+      <!-- 5. DAILY NUMBERS -->
+      <section class="section">
+        <div class="section-title">&#128202; Daily Numbers</div>
+        <div class="eyebrow">Markets &bull; Repos &bull; Copilot &bull; Cloudflare</div>
+
+        <div class="section-subtitle">Stock Market</div>
+        <div class="grid grid-2">
+          <div class="stat-block">
+            <div class="stat-label">Dow Jones</div>
+            <div class="stat-value">49,363.88</div>
+            <div class="stat-delta" style="color:var(--stat-negative)">&#9660; -322.24 (-0.65%)</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-label">S&amp;P 500</div>
+            <div class="stat-value">7,353.61</div>
+            <div class="stat-delta" style="color:var(--stat-negative)">&#9660; -49.44 (-0.67%)</div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:12px">
+          <p style="margin:0;font-size:0.9rem">Markets slipped on Tuesday amid geopolitical uncertainty as Iran warned it would &ldquo;open new fronts&rdquo; against the US if strikes resume, and continued fallout from the Musk v. OpenAI verdict weighed on tech sentiment.</p>
+        </div>
+
+        <div class="section-subtitle">Repository Counts</div>
+        <div class="grid grid-2">
+          <div class="stat-block">
+            <div class="stat-label">GitHub (Relias-Engineering)</div>
+            <div class="stat-value">280</div>
+            <div class="stat-delta" style="color:var(--stat-positive)">&#9650; +2 vs yesterday</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-label">Bitbucket</div>
+            <div class="stat-value">562</div>
+            <div class="stat-delta muted">No change vs yesterday</div>
+          </div>
+        </div>
+
+        <div class="section-subtitle">GitHub Copilot Usage</div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Metric</th><th>Value</th><th>vs Yesterday</th></tr></thead>
+            <tbody>
+              <tr><td>Org Premium Requests (May)</td><td>83,265 / 300,000 (27.8%)</td><td style="color:var(--stat-positive)">&#9650; +5,655</td></tr>
+              <tr><td>Org Cloud Agent (May)</td><td>119</td><td style="color:var(--stat-positive)">&#9650; +4</td></tr>
+              <tr><td>Org Seats</td><td>300</td><td style="color:var(--stat-positive)">&#9650; +8</td></tr>
+              <tr><td>fhemmerrelias (Personal)</td><td>7,728 / 1,000 used (772.8%)</td><td style="color:var(--stat-positive)">&#9650; +252</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section-subtitle">Cloudflare Usage</div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Domain</th><th>Page Views</th><th>Unique Visitors</th><th>Emails</th></tr></thead>
+            <tbody>
+              <tr><td>nowleadershipgroup.com</td><td>75 <span style="color:var(--stat-positive)">(&#9650;+28)</span></td><td>104 <span style="color:var(--stat-positive)">(&#9650;+24)</span></td><td>0 (no change)</td></tr>
+              <tr><td>setitfreeloop.org</td><td>0 (no change)</td><td>0 (no change)</td><td>&mdash;</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 6. LLM MODELS (carried forward from 2026-05-17) -->
+      <section class="section">
+        <div class="section-title">&#129302; LLM Models</div>
+        <div class="eyebrow">Carried forward from 2026-05-17 &mdash; no new changes detected</div>
+
+        <div class="grid grid-3">
+          <div class="card">
+            <div class="section-subtitle" style="margin-top:0">LMSYS Overall (Top 5)</div>
+            <table>
+              <thead><tr><th>Rank</th><th>Model</th><th>Org</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>claude-opus-4-6-thinking</td><td>Anthropic</td></tr>
+                <tr><td>2</td><td>claude-opus-4-7-thinking</td><td>Anthropic</td></tr>
+                <tr><td>3</td><td>claude-opus-4-6</td><td>Anthropic</td></tr>
+                <tr><td>4</td><td>claude-opus-4-7</td><td>Anthropic</td></tr>
+                <tr><td>5</td><td>muse-spark</td><td>Meta</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card">
+            <div class="section-subtitle" style="margin-top:0">LMSYS Coding (Top 5)</div>
+            <table>
+              <thead><tr><th>Rank</th><th>Model</th><th>Org</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>claude-opus-4-7-thinking</td><td>Anthropic</td></tr>
+                <tr><td>2</td><td>claude-opus-4-7</td><td>Anthropic</td></tr>
+                <tr><td>3</td><td>claude-opus-4-6-thinking</td><td>Anthropic</td></tr>
+                <tr><td>4</td><td>claude-opus-4-6</td><td>Anthropic</td></tr>
+                <tr><td>5</td><td>claude-opus-4-5-20251101-thinking-32k</td><td>Anthropic</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card">
+            <div class="section-subtitle" style="margin-top:0">LMSYS Vision (Top 5)</div>
+            <table>
+              <thead><tr><th>Rank</th><th>Model</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>claude-opus-4-7-thinking</td></tr>
+                <tr><td>2</td><td>claude-opus-4-7</td></tr>
+                <tr><td>3</td><td>claude-opus-4-6-thinking</td></tr>
+                <tr><td>4</td><td>muse-spark</td></tr>
+                <tr><td>5</td><td>claude-opus-4-6</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="section-subtitle">New Model Releases (Last 7 Days)</div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Model</th><th>Provider</th><th>Released</th><th>Context</th><th>Pricing</th></tr></thead>
+            <tbody>
+              <tr><td><a href="https://openrouter.ai/anthropic/claude-opus-4.7-fast">Claude Opus 4.7 (Fast)</a></td><td>Anthropic</td><td>May 12</td><td>976K</td><td>$30.00 / $150.00</td></tr>
+              <tr><td><a href="https://openrouter.ai/perceptron/perceptron-mk1">Perceptron Mk1</a></td><td>Perceptron</td><td>May 12</td><td>32K</td><td>$0.15 / $1.50</td></tr>
+            </tbody>
+          </table>
+          <div class="stat-delta muted">Total models on OpenRouter: 356</div>
+        </div>
+      </section>
+
+      <!-- 7. TRENDING GITHUB REPOS -->
+      <section class="section">
+        <div class="section-title">&#128293; Trending GitHub Repos</div>
+        <div class="eyebrow">github.com/trending &mdash; May 19, 2026</div>
+        <ol class="num-list">
+          <li><a href="https://github.com/obra/superpowers">obra/superpowers</a> &mdash; An agentic skills framework &amp; software development methodology that works. <span class="tag tag-olive">&#11088; 198,681</span></li>
+          <li><a href="https://github.com/HKUDS/CLI-Anything">HKUDS/CLI-Anything</a> &mdash; &ldquo;CLI-Anything: Making ALL Software Agent-Native&rdquo; <span class="tag tag-olive">&#11088; 37,860</span></li>
+          <li><a href="https://github.com/tinyhumansai/openhuman">tinyhumansai/openhuman</a> &mdash; Your Personal AI super intelligence. Private, Simple and extremely powerful. <span class="tag tag-olive">&#11088; 21,756</span></li>
+          <li><a href="https://github.com/anthropics/claude-plugins-official">anthropics/claude-plugins-official</a> &mdash; Official, Anthropic-managed directory of high quality Claude Code Plugins. <span class="tag tag-olive">&#11088; 20,302</span></li>
+          <li><a href="https://github.com/Imbad0202/academic-research-skills">Imbad0202/academic-research-skills</a> &mdash; Academic Research Skills for Claude Code: research &rarr; write &rarr; review &rarr; revise &rarr; finalize <span class="tag tag-olive">&#11088; 14,353</span></li>
+        </ol>
+      </section>
+
+      <!-- 8. SOFTWARE WATCHLIST -->
+      <section class="section">
+        <div class="section-title">&#128736; Software Watchlist</div>
+        <div class="eyebrow">Latest releases as of 2026-05-19</div>
+        <table>
+          <thead><tr><th>Software</th><th>Latest Version</th><th>Released</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Claude Code</td><td>v2.1.145</td><td>2026-05-19</td><td><span class="tag tag-accent">NEW TODAY</span></td></tr>
+            <tr><td>GitHub Copilot CLI</td><td>v1.0.49</td><td>2026-05-19</td><td><span class="tag tag-accent">NEW TODAY</span></td></tr>
+            <tr><td>Gemini CLI</td><td>v0.42.0</td><td>2026-05-12</td><td><span class="tag tag-slate">Stable</span></td></tr>
+            <tr><td>GitHub CLI</td><td>v2.92.0</td><td>2026-04-28</td><td><span class="tag tag-slate">Stable</span></td></tr>
+            <tr><td>GitHub Copilot (gh ext)</td><td>v1.2.0</td><td>2025-10-30</td><td><span class="tag tag-slate">Stable</span></td></tr>
+            <tr><td>GitHub Copilot Chat</td><td>v0.43.0</td><td>2026-04-07</td><td><span class="tag tag-slate">Stable</span></td></tr>
+            <tr><td>Goose CLI</td><td>v1.34.1</td><td>2026-05-15</td><td><span class="tag tag-slate">Stable</span></td></tr>
+            <tr><td>Node.js</td><td>v26.1.0</td><td>2026-05-07</td><td><span class="tag tag-slate">Stable</span></td></tr>
+          </tbody>
+        </table>
+
+        <div class="section-subtitle">GitHub Web Changelog (Today)</div>
+        <div class="card">
+          <ol class="num-list">
+            <li><a href="https://github.blog/changelog/">Easily apply Copilot code review feedback with Copilot cloud agent</a></li>
+            <li><a href="https://github.blog/changelog/">Gemini 3.5 Flash is generally available for GitHub Copilot</a></li>
+            <li><a href="https://github.blog/changelog/">Expanded OIDC support for Dependabot and code scanning</a></li>
+            <li><a href="https://github.blog/changelog/">Start a GitHub Advanced Security trial from a risk assessment</a></li>
+            <li><a href="https://github.blog/changelog/">Removal of code_scanning_upload field from rate_limit API endpoint</a></li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- 9. WATCHLIST UPDATES -->
+      <section class="section">
+        <div class="section-title">&#128203; Watchlist Updates</div>
+        <div class="eyebrow">Active items with changes today</div>
+
+        <div class="card">
+          <div class="section-subtitle" style="margin-top:0">Claude Code</div>
+          <p>New release <strong>v2.1.145</strong> published today (2026-05-19 21:31 UTC). Daily patch cadence continues &mdash; up from yesterday&rsquo;s v2.1.144.</p>
+        </div>
+
+        <div class="card">
+          <div class="section-subtitle" style="margin-top:0">GitHub Copilot Preview Bill Rollout</div>
+          <p>5 new changelog items published today, including:</p>
+          <ul style="margin:0;padding-left:1.2rem">
+            <li>Gemini 3.5 Flash is generally available for GitHub Copilot</li>
+            <li>Easily apply Copilot code review feedback with Copilot cloud agent</li>
+            <li>Expanded OIDC support for Dependabot and code scanning</li>
+          </ul>
+          <p style="margin-top:8px;font-size:0.85rem" class="muted">18 days remain until June 1 billing transition. Org seats increased from 292 to 300 today (+8).</p>
+        </div>
+
+        <div class="card">
+          <div class="section-subtitle" style="margin-top:0">Anthropic Agent Skills Technology</div>
+          <p><a href="https://github.com/anthropics/claude-plugins-official">anthropics/claude-plugins-official</a> is trending on GitHub today (&#11088; 20,302) &mdash; the official Anthropic-managed directory of Claude Code Plugins, signaling ecosystem momentum.</p>
+        </div>
+      </section>
+
+      <!-- 10. TODAY'S PRODUCTIVITY -->
+      <section class="section">
+        <div class="section-title">&#128187; Today&rsquo;s Productivity</div>
+        <div class="grid grid-4" style="margin-bottom:16px">
+          <div class="stat-block">
+            <div class="stat-label">Lines of Code</div>
+            <div class="stat-value">+25</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-label">Commits</div>
+            <div class="stat-value">5</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-label">PRs Merged</div>
+            <div class="stat-value">1</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-label">Issues Closed</div>
+            <div class="stat-value">6</div>
+          </div>
+        </div>
+        <div class="card">
+          <p style="margin:0;font-size:0.88rem"><strong>Repositories:</strong> relias-assistant, set-it-free-loop-site</p>
+          <p style="margin:4px 0 0;font-size:0.88rem"><strong>File types:</strong> .ps1</p>
+          <p style="margin:4px 0 0;font-size:0.88rem"><strong>Code Reviews:</strong> 0</p>
+        </div>
+      </section>
+
+      <!-- 11. MEETINGS -->
+      <section class="section">
+        <div class="section-title">&#128188; Meetings</div>
+        <div class="eyebrow">3 meetings &bull; 10:00 AM &ndash; 1:50 PM</div>
+
+        <table>
+          <thead><tr><th>Time</th><th>Title</th><th>Attendees</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>10:00&ndash;10:45</td>
+              <td><strong>DevEx Refinement</strong></td>
+              <td>Bryan Halterman, Nick Peterson, Malia Paul (opt), Franz (org)</td>
+              <td>Transcript available</td>
+            </tr>
+            <tr>
+              <td>11:00&ndash;11:30</td>
+              <td><strong>Prod Eng Standup</strong></td>
+              <td>Scott Motley, Bryan, Daniel Wilson, Sid Marti, John Martin, Tyler Deal, Karthika Menon, Nick, Paul Layne, Franz (org: Malia)</td>
+              <td>Went async/Slack</td>
+            </tr>
+            <tr>
+              <td>1:00&ndash;1:50</td>
+              <td><strong>SFL Introduction</strong></td>
+              <td>Bryan, Jeff Buda, Gio Rufino, Jason Twichell, Malia (opt), Nick (opt), George (opt), Zach Nall (opt), Michelle Barry (opt), Franz (org)</td>
+              <td>Transcript available</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="section-subtitle">DevEx Refinement (10:00&ndash;10:45)</div>
+        <div class="card diary-generated-markdown">
+          <p><strong>Key topics:</strong></p>
+          <ul>
+            <li><strong>Zoom POC:</strong> Bryan close to completing; Copilot dramatically accelerating development (&ldquo;6-month POC reduced to weeks&rdquo;)</li>
+            <li><strong>SFL maturity:</strong> Franz&rsquo;s SFL work considered more mature and deployable; goal is to centralize AI workflow efforts but leadership prefers delayed consolidation (~6 months)</li>
+            <li><strong>Configurator testing:</strong> No easy way to reset test environments; plan to test on Karthika&rsquo;s PC as clean setup</li>
+            <li><strong>RMS Legacy migration:</strong> Combined with .NET upgrades; concern about superficial modernization</li>
+            <li><strong>Contract testing:</strong> POC planned with Hal &amp; Kelly; high-value but under-coordinated</li>
+          </ul>
+          <p><strong>Action items:</strong></p>
+          <ul>
+            <li>Malia: Get developer names from Hal &amp; Kelly, set up contract testing kickoff</li>
+            <li>Nick: Test configurator on Karthika&rsquo;s PC</li>
+            <li>Franz: Create/maintain RMS repo migration tracking list</li>
+          </ul>
+        </div>
+
+        <div class="section-subtitle">Prod Eng Standup (11:00&ndash;11:30)</div>
+        <div class="card diary-generated-markdown">
+          <p>Converted to async/Slack standup due to conflicts. Key themes:</p>
+          <ul>
+            <li><strong>AI productivity:</strong> Big momentum; AI used to generate implementation plans, saving weeks of work</li>
+            <li><strong>Security tooling:</strong> Snyk access provisioning via SSO; expanding to ~250 engineers</li>
+            <li><strong>Architecture:</strong> Dapr evaluated for geo-replication; conclusion: does NOT simplify failover logic</li>
+          </ul>
+          <p><strong>Parking lot:</strong> Bitwarden migration, Cortex MCP, PIM requests, Golden Path ownership, LaunchDarkly license limits, Copilot premium budget</p>
+        </div>
+
+        <div class="section-subtitle">SFL Introduction (1:00&ndash;1:50)</div>
+        <div class="card diary-generated-markdown">
+          <p><strong>Key topics:</strong></p>
+          <ul>
+            <li><strong>SFL overview:</strong> Franz introduced SFL as autonomous workflow system on GitHub agentic workflows (Dispatcher &rarr; Processor &rarr; Review Reactor)</li>
+            <li><strong>Closed loop:</strong> Issue labeled &rarr; PR created &rarr; reviewed &rarr; feedback applied &rarr; repeat until clean; handles Copilot review comments and CI failures automatically</li>
+            <li><strong>Adoption feedback:</strong> Jeff/George raised gap between generic solution and real-world usage; need alignment with Golden Path templates and standard pipelines</li>
+            <li><strong>Positioning agreed:</strong> SFL is a &ldquo;deployment + orchestration layer&rdquo; &mdash; a central catalog of reusable agentic workflows</li>
+          </ul>
+          <p><strong>Action items:</strong></p>
+          <ul>
+            <li>Working session (Franz, Jeff, Geo): Integrate existing workflows with SFL, test deployment into another repo</li>
+            <li>Quick win: Deploy a simple workflow to validate the distribution model</li>
+            <li>Partner with Roman on observability workflow distribution via SFL</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 12. PERSONAL REFLECTIONS -->
+      <section class="section">
+        <div class="section-title">&#128173; Personal Reflections</div>
+        <div class="card todo-callout">
+          <!-- TODO: fill in -->
+          <strong>TODO:</strong> Add your thoughts, feelings, observations, or anything else worth remembering about today.
+        </div>
+      </section>
+
+      <!-- 13. SCREENSHOTS -->
+      <section class="section">
+        <div class="section-title">&#128248; Screenshots</div>
+        <div class="card">
+          <p class="muted" style="margin:0">No screenshots captured today.</p>
+        </div>
+      </section>
+
+      <div class="footer">Entry created with diary skill V1.5 &bull; Generated 2026-05-19 23:45 ET</div>
+    </article>
+  </main>
+
+  <script>
+    function setTheme(t){document.documentElement.setAttribute('data-theme',t);localStorage.setItem('html-theme',t);closeThemeMenu()}
+    function toggleThemeMenu(){const m=document.getElementById('themeMenu');const b=document.querySelector('.theme-toggle-btn');const open=m.classList.toggle('open');b.setAttribute('aria-expanded',open)}
+    function closeThemeMenu(){document.getElementById('themeMenu').classList.remove('open');document.querySelector('.theme-toggle-btn').setAttribute('aria-expanded','false')}
+    document.addEventListener('click',e=>{if(!e.target.closest('.theme-toggle'))closeThemeMenu()});
+    (function(){const t=localStorage.getItem('html-theme')||'carbon';document.documentElement.setAttribute('data-theme',t)})()
+  </script>
+</body>
+</html>
