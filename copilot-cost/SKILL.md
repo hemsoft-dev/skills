@@ -1,6 +1,6 @@
 ---
 name: copilot-cost
-description: "V1.3 - Commands: daily, weekly, monthly, ytd. Track GitHub Copilot usage-based billing costs (AI Credits) for Burlesman enterprise and Relias-Engineering organization. Reports per-day, per-user, and per-org spending with budget tracking. Daily reports include actual CLI token data from NDJSON metrics alongside multiplier-based estimates. Includes comprehensive token/credit data availability matrix."
+description: "V1.4 - Commands: daily, weekly, monthly, ytd, team. Track GitHub Copilot usage-based billing costs (AI Credits) for Burlesman enterprise and Relias-Engineering organization. Reports per-day, per-user, per-team, and per-org spending with budget tracking. Daily reports include actual CLI token data from NDJSON metrics alongside multiplier-based estimates. Includes comprehensive token/credit data availability matrix."
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -218,6 +218,47 @@ Report year-to-date Copilot credit consumption.
 .\scripts\Get-CopilotCost.ps1 -Period YTD -Year 2026
 ```
 
+### team
+
+Report Copilot usage metrics broken down by team. Joins the `user-teams-1-day` NDJSON report with `users-1-day` to produce per-team aggregates.
+
+```powershell
+# Yesterday (default — latest available data)
+.\scripts\Get-CopilotTeamMetrics.ps1
+
+# Specific day
+.\scripts\Get-CopilotTeamMetrics.ps1 -Day "2026-05-20"
+
+# 7-day rolling window
+.\scripts\Get-CopilotTeamMetrics.ps1 -Window 7
+
+# 28-day rolling window, filter to one team
+.\scripts\Get-CopilotTeamMetrics.ps1 -Window 28 -Team "platform-engineering"
+
+# Raw JSON output for downstream processing
+.\scripts\Get-CopilotTeamMetrics.ps1 -Window 7 -Raw
+```
+
+**Output includes per team:**
+
+| Metric | Description |
+|--------|-------------|
+| Active Users | Distinct users with any Copilot usage in the period |
+| Chat Users | Distinct users who used Copilot Chat |
+| Agent Users | Distinct users who used Copilot Agent |
+| CLI Users | Distinct users who used Copilot CLI |
+| Interactions | Total user-initiated interactions |
+| Code Generations | Code generation activity count |
+| Accept Rate | Code acceptance / code generation percentage |
+| LOC Added | Lines of code added from Copilot suggestions |
+
+**Important notes:**
+
+- Users on multiple teams are counted in EACH team — team totals are NOT additive
+- Teams with fewer than 5 Copilot-seated users are excluded by the API (privacy threshold)
+- For multi-day windows, distinct-user counts are deduplicated across the full window
+- Data is typically available after midnight UTC for the previous day
+
 ## API Reference
 
 ### Working Endpoints (Verified)
@@ -239,6 +280,7 @@ These return `download_links` to Azure-hosted NDJSON files with rich per-user/or
 | `GET /orgs/Relias-Engineering/copilot/metrics/reports/users-1-day?day={YYYY-MM-DD}` | Per-user daily metrics (120+ records) — includes CLI token counts |
 | `GET /orgs/Relias-Engineering/copilot/metrics/reports/organization-1-day?day={YYYY-MM-DD}` | Org-level daily aggregate — includes CLI token totals |
 | `GET /orgs/Relias-Engineering/copilot/metrics/reports/users-28-day/latest` | Per-user 28-day rolling window |
+| `GET /orgs/Relias-Engineering/copilot/metrics/reports/user-teams-1-day?day={YYYY-MM-DD}` | User-to-team mapping for the day — join with users-1-day for team metrics |
 
 **CRITICAL**: The URL pattern is `organization-1-day` NOT `org-1-day`.
 
@@ -302,6 +344,7 @@ Reports display:
 | Script | Purpose |
 |--------|---------|
 | `Get-CopilotCost.ps1` | Main reporting script — handles all period queries with dual PRU/AI Credits comparison |
+| `Get-CopilotTeamMetrics.ps1` | Team-level usage metrics — joins user-teams with per-user data, supports rolling windows |
 
 ## Important Notes
 

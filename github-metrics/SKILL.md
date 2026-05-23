@@ -48,6 +48,7 @@ Then return the matching documented endpoint, required scope, and a `gh api` or 
 | --- | --- | --- |
 | "Show Copilot usage for the org or enterprise" | `CopilotUsage` | Signed report download links |
 | "Show usage by user" | `CopilotUsage` users reports | Signed report download links for user-level usage |
+| "Show usage by team" | `CopilotUsage` user-teams + users reports | Join user-teams-1-day with users-1-day, aggregate by team_id |
 | "Show premium request spend or overages" | `PremiumRequests` | JSON usage items with quantities and amounts |
 | "Show model-level premium request consumption" | `PremiumRequests` | Billing rows filterable by `model` |
 | "Show active and engaged users by editor or language" | `LegacyMetrics` | Aggregated daily metrics JSON |
@@ -64,10 +65,12 @@ Use when the request is about Copilot adoption, feature usage, downloadable usag
 | Enterprise, latest 28-day users | `GET /enterprises/{enterprise}/copilot/metrics/reports/users-28-day/latest` | Signed `download_links` for user-level usage report files |
 | Enterprise, specific day aggregate | `GET /enterprises/{enterprise}/copilot/metrics/reports/enterprise-1-day?day={YYYY-MM-DD}` | Signed `download_links` for that day |
 | Enterprise, specific day users | `GET /enterprises/{enterprise}/copilot/metrics/reports/users-1-day?day={YYYY-MM-DD}` | Signed `download_links` for that day |
+| Enterprise, user-teams daily | `GET /enterprises/{enterprise}/copilot/metrics/reports/user-teams-1-day?day={YYYY-MM-DD}` | Signed `download_links` mapping users to enterprise/business teams |
 | Organization, latest 28-day aggregate | `GET /orgs/{org}/copilot/metrics/reports/organization-28-day/latest` | Signed `download_links` plus report date range |
 | Organization, latest 28-day users | `GET /orgs/{org}/copilot/metrics/reports/users-28-day/latest` | Signed `download_links` for org user-level usage |
 | Organization, specific day aggregate | `GET /orgs/{org}/copilot/metrics/reports/organization-1-day?day={YYYY-MM-DD}` | Signed `download_links` for that day |
 | Organization, specific day users | `GET /orgs/{org}/copilot/metrics/reports/users-1-day?day={YYYY-MM-DD}` | Signed `download_links` for that day |
+| Organization, user-teams daily | `GET /orgs/{org}/copilot/metrics/reports/user-teams-1-day?day={YYYY-MM-DD}` | Signed `download_links` mapping users to organization teams |
 
 **Important**
 
@@ -75,6 +78,10 @@ Use when the request is about Copilot adoption, feature usage, downloadable usag
 2. Enterprise reports are available starting from October 10, 2025, with up to one year of history.
 3. Enterprise endpoints usually require `manage_billing:copilot` or `read:enterprise` on classic tokens.
 4. Organization endpoints usually require `read:org` on classic tokens or `Organization Copilot metrics` read permission on fine-grained tokens.
+5. The `user-teams-1-day` report maps users to teams; join with `users-1-day` on `(user_id, day)` then aggregate by `team_id` to produce team-level metrics.
+6. Teams with fewer than 5 Copilot-seated users are excluded from user-teams reports (privacy threshold).
+7. Users on multiple teams appear in multiple rows — one per `(user, team)` pair. Team totals are not additive.
+8. Do NOT join the 28-day user reports with daily user-teams — always join daily-to-daily, then aggregate the window.
 
 **Examples**
 
