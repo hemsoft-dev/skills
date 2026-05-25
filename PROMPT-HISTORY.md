@@ -16,6 +16,9 @@ Result: Updated diary weather, LLM, Bitbucket, and Slack collectors to resolve p
 2026-05-24 - 23:33 - Scaffold diary entry for Sunday 2026-05-24 as HTML
 Result: Saved `diary/entries/2026/05/2026-05-24.html` with daily numbers, Slack, weather, LLM, trending repository, software watchlist, and productivity data; news remains marked unavailable because feed parsing failed independently of credential resolution.
 
+2026-05-23 - 17:46 - Add team-level Copilot usage metrics based on new GitHub API (user-teams-1-day)
+Result: Created Get-CopilotTeamMetrics.ps1 script that joins user-teams + users-1-day NDJSON reports to produce per-team aggregates. Tested successfully against Relias-Engineering (40 teams found). Updated copilot-cost SKILL.md (V1.4) with 'team' command, and github-metrics SKILL.md with new endpoints and guidance.
+
 2026-05-04 - 11:02 - Add Apr 29 meeting takeaways to contract-testing skill (Buda/Hemmer chat)
 Result: Retrieved full transcript via workiq from "Contract Testing Chat" meeting. Added to SKILL.md: Gold-level Pact Nirvana as starting point, Azure Service Bus scope (not REST), Pact Broker mission-critical risk, ADR revalidation need, 3 new concerns, 5 action items. Bumped skill V1.3→V1.4.
 

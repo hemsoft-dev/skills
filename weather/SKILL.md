@@ -497,7 +497,7 @@ Structure responses clearly with ALL required timestamps:
 
 ## Daily Output Files
 
-**Pattern**: All weather reports are automatically saved to `output/YYYY-MM-DD.md` for diary integration.
+**Pattern**: All weather reports are automatically saved to `output/YYYY-MM-DD.json` for diary integration.
 
 ### Generating Daily Weather Report
 
@@ -507,7 +507,7 @@ Run the script to generate today's weather report:
 & "$env:USERPROFILE\.agents\skills\weather\scripts\Get-DailyWeather.ps1"
 ```
 
-This automatically generates a report in `output/YYYY-MM-DD.md` containing:
+This automatically generates a report in `output/YYYY-MM-DD.json` containing:
 
 - Location header with date/day/time
 - Current weather conditions table
@@ -517,11 +517,11 @@ This automatically generates a report in `output/YYYY-MM-DD.md` containing:
 
 - `-Location`: ZIP code (default: 28117)
 
-**Output**: The script always saves to `output/YYYY-MM-DD.md` and displays the formatted weather to console.
+**Output**: The script always saves to `output/YYYY-MM-DD.json` and displays the formatted weather to console.
 
 **Integration with Diary Skill**:
 
-The weather skill outputs are consumed by the diary skill for daily entries. The standardized `output/YYYY-MM-DD.md` format ensures consistent data structure across all contributing skills.
+The weather skill outputs are consumed by the diary skill for daily entries. The standardized `output/YYYY-MM-DD.json` format ensures consistent data structure across all contributing skills.
 
 ## When to Use This Skill
 

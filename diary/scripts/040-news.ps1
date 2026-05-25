@@ -41,7 +41,7 @@ if (-not (Test-Path $EntryPath)) {
 
 # --- Locate news output ---
 $newsOutputDir = Join-Path $env:USERPROFILE '.agents' 'skills' 'news' 'output'
-$newsFile = Join-Path $newsOutputDir "$Date.md"
+$newsFile = Join-Path $newsOutputDir "$Date.json"
 
 if (-not (Test-Path $newsFile)) {
     # Try to generate it
@@ -58,46 +58,33 @@ if (-not (Test-Path $newsFile)) {
 }
 
 # --- Read the news output ---
-$newsContent = (Get-Content $newsFile -Raw).Trim()
+$news = Get-Content $newsFile -Raw | ConvertFrom-Json
 
-if (-not $newsContent) {
+if (-not $news -or -not $news.Categories) {
     Write-Information "`e[1;31mNews output file is empty for $Date. Skipping.`e[0m"
     return
 }
 
 Write-Information "`e[1;36mInjecting news headlines into diary entry...`e[0m"
 
-# --- Count headlines for reporting ---
-$headlineCount = ([regex]::Matches($newsContent, '^\|\s*\d+\s*\|', 'Multiline')).Count
-$categoryCount = ([regex]::Matches($newsContent, '^###\s+', 'Multiline')).Count
-
-$lines = $newsContent -split '\r?\n'
 $htmlLines = @(
     '<div class="card diary-generated-markdown">',
     "  <div class=""eyebrow"">News snapshot for $Date</div>"
 )
-$currentCategoryOpen = $false
+$headlineCount = 0
 
-foreach ($line in $lines) {
-    if ($line -match '^###\s+(.+)$') {
-        if ($currentCategoryOpen) {
-            $htmlLines += '</ol>'
-        }
-        $htmlLines += "<h3>$([System.Net.WebUtility]::HtmlEncode($Matches[1]))</h3>"
-        $htmlLines += '<ol class="num-list">'
-        $currentCategoryOpen = $true
-        continue
-    }
+foreach ($category in @($news.Categories)) {
+    $htmlLines += "<h3>$([System.Net.WebUtility]::HtmlEncode($category.Title))</h3>"
+    $htmlLines += '<ol class="num-list">'
 
-    if ($line -match '^\|\s*\d+\s*\|\s*\[(.+?)\]\((.+?)\)\s*\|\s*(.+?)\s*\|$') {
-        $title = [System.Net.WebUtility]::HtmlEncode($Matches[1])
-        $url = [System.Net.WebUtility]::HtmlEncode($Matches[2])
-        $source = [System.Net.WebUtility]::HtmlEncode($Matches[3])
+    foreach ($article in @($category.Articles)) {
+        $title = [System.Net.WebUtility]::HtmlEncode($article.Title)
+        $url = [System.Net.WebUtility]::HtmlEncode($article.Link)
+        $source = [System.Net.WebUtility]::HtmlEncode($article.Source)
         $htmlLines += "<li><a href=""$url"">$title</a> <span class=""tag tag-slate"">$source</span></li>"
+        $headlineCount++
     }
-}
 
-if ($currentCategoryOpen) {
     $htmlLines += '</ol>'
 }
 
@@ -105,4 +92,4 @@ $htmlLines += '</div>'
 $sectionHtml = $htmlLines -join "`n"
 Set-DiarySectionInnerHtml -EntryPath $EntryPath -SectionTitle '📰 News Headlines' -InnerHtml $sectionHtml
 Write-Information "`e[1;32mNews headlines injected into diary entry.`e[0m"
-Write-Information "  Categories: $categoryCount | Headlines: $headlineCount"
+Write-Information "  Categories: $($news.Categories.Count) | Headlines: $headlineCount"

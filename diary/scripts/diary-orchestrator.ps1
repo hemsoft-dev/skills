@@ -43,6 +43,21 @@ $entryPath = Join-Path $entriesDir "$Date.html"
 Write-Information "`e[1;36m=== Diary Entry: $Date ===`e[0m"
 Write-Information ""
 
+$guardRoots = @(
+    (Join-Path $scriptDir '..' 'entries'),
+    (Join-Path $env:USERPROFILE '.agents' 'skills' 'news' 'output'),
+    (Join-Path $env:USERPROFILE '.agents' 'skills' 'slack' 'output'),
+    (Join-Path $env:USERPROFILE '.agents' 'skills' 'weather' 'output')
+)
+$existingMarkdown = @{}
+foreach ($guardRoot in $guardRoots) {
+    if (Test-Path $guardRoot) {
+        Get-ChildItem -Path $guardRoot -Filter '*.md' -Recurse -File | ForEach-Object {
+            $existingMarkdown[$_.FullName] = $true
+        }
+    }
+}
+
 # Collect all numbered scripts (010-*, 020-*, etc.) and run in order
 $scripts = Get-ChildItem -Path $scriptDir -Filter '*.ps1' |
     Where-Object { $_.Name -match '^\d{3}-' } |
@@ -52,6 +67,21 @@ foreach ($script in $scripts) {
     Write-Information "`e[1;33m--- Running: $($script.Name) ---`e[0m"
     & $script.FullName -Date $Date -EntryPath $entryPath
     Write-Information ""
+}
+
+$newMarkdown = @()
+foreach ($guardRoot in $guardRoots) {
+    if (Test-Path $guardRoot) {
+        Get-ChildItem -Path $guardRoot -Filter '*.md' -Recurse -File | ForEach-Object {
+            if (-not $existingMarkdown.ContainsKey($_.FullName)) {
+                $newMarkdown += $_.FullName
+            }
+        }
+    }
+}
+
+if ($newMarkdown.Count -gt 0) {
+    throw "Diary scaffold generated Markdown cache files unexpectedly: $($newMarkdown -join ', ')"
 }
 
 Write-Information "`e[1;32m=== Diary entry complete: $entryPath ===`e[0m"

@@ -1,6 +1,6 @@
 ---
 name: create-alias
-description: V1.1 - Creates PowerShell aliases in the global profile that work across all terminals. Supports both simple aliases and function-based aliases with arguments.
+description: V1.2 - Creates PowerShell aliases in the global profile that work across all terminals. Supports both simple aliases and function-based aliases with arguments.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -65,7 +65,8 @@ Use the script `scripts/New-Alias.ps1`:
 
 ## Important Notes
 
-- **Never sources the profile** - After creating an alias, tell the user to restart their terminal or open a new one
+- **Never sources the profile** - After creating an alias, tell the user to restart their terminal or open a new tab
+- **`. $PROFILE` does NOT reload aliases** - `$PROFILE` resolves to the host-specific `Microsoft.PowerShell_profile.ps1`, not the `profile.ps1` (CurrentUserAllHosts) where aliases live. Only opening a new terminal/tab loads both profiles.
 - **Works across all terminals** - Uses CurrentUserAllHosts profile location
 - **Functions vs Aliases** - Prefers functions over `New-Alias` for better argument handling and flexibility
 

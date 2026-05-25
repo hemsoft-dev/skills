@@ -48,8 +48,8 @@ Also load yesterday's diary entry (`diary/entries/YYYY/MM/YYYY-MM-DD.html` for y
 | # | Section | Cached File | Fallback Script |
 |---|---------|-------------|------------------|
 | 1 | Weather | **ALWAYS re-run** (weather changes throughout the day) | `weather/scripts/Get-DailyWeather.ps1` |
-| 2 | News | `news/output/YYYY-MM-DD.md` | `news/scripts/Get-AllNews.ps1` |
-| 3 | Slack Activity | `slack/output/YYYY-MM-DD-slack-briefing.md` | `slack/scripts/Get-SlackDailyBriefing.ps1 -OutputFormat Detailed 6>&1` |
+| 2 | News | `news/output/YYYY-MM-DD.json` | `news/scripts/Get-AllNews.ps1` |
+| 3 | Slack Activity | `slack/output/YYYY-MM-DD-slack-briefing.json` | `slack/scripts/Get-SlackDailyBriefing.ps1 -OutputFormat Detailed 6>&1` |
 
 #### Diary skill caches (base path: `~/.agents/skills/diary/output/`)
 

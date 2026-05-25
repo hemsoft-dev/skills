@@ -41,7 +41,7 @@ if (-not (Test-Path $EntryPath)) {
 
 # Locate Slack briefing output
 $slackOutputDir = Join-Path $env:USERPROFILE '.agents' 'skills' 'slack' 'output'
-$slackFile = Join-Path $slackOutputDir "$Date-slack-briefing.md"
+$slackFile = Join-Path $slackOutputDir "$Date-slack-briefing.json"
 
 if (-not (Test-Path $slackFile)) {
     # Try to generate it
@@ -57,8 +57,9 @@ if (-not (Test-Path $slackFile)) {
     }
 }
 
-# Read the raw briefing
-$rawBriefing = Get-Content $slackFile -Raw
+# Read the structured briefing
+$briefing = Get-Content $slackFile -Raw | ConvertFrom-Json
+$rawBriefing = $briefing | ConvertTo-Json -Depth 12
 
 Write-Information "`e[1;36mCurating Slack activity via Copilot CLI...`e[0m"
 
@@ -124,16 +125,36 @@ if ($curated) {
     Write-Information "`e[1;32mSlack activity curated successfully.`e[0m"
 }
 else {
-    # Fallback: inject raw briefing
-    $fallbackLines = $rawBriefing -split '\r?\n' |
-        Where-Object { $_ -notmatch '^\s*-\s.*@Slack Skill Bot:' }
-    $slackContent = (($fallbackLines -join "`n") -replace '(?m)^### .+Slack Briefing\r?\n\r?\n?', '').Trim()
-    if ($slackContent -notmatch '(?m)^\s*-\s') {
-        $slackContent = 'No substantive Slack activity was captured for this date; automated Slack Skill Bot notifications were excluded.'
+    $items = @()
+    foreach ($mention in @($briefing.Mentions)) {
+        $items += "<li><strong>#$([System.Net.WebUtility]::HtmlEncode($mention.Channel))</strong>: $([System.Net.WebUtility]::HtmlEncode($mention.From)) mentioned you: $([System.Net.WebUtility]::HtmlEncode($mention.Text))</li>"
+    }
+    foreach ($announcement in @($briefing.Announcements)) {
+        $items += "<li><strong>#$([System.Net.WebUtility]::HtmlEncode($announcement.Channel))</strong>: $([System.Net.WebUtility]::HtmlEncode($announcement.Text))</li>"
+    }
+    foreach ($channel in $briefing.ChannelActivity.PSObject.Properties) {
+        foreach ($message in @($channel.Value.RecentMessages)) {
+            $items += "<li><strong>#$([System.Net.WebUtility]::HtmlEncode($channel.Name))</strong>: $([System.Net.WebUtility]::HtmlEncode($message.From)) - $([System.Net.WebUtility]::HtmlEncode($message.Text))</li>"
+        }
+    }
+
+    if ($items.Count -gt 0) {
+        $slackContent = '<ul>' + ($items -join "`n") + '</ul>'
+    } else {
+        $slackContent = '<p>No substantive Slack activity was captured for this date; automated Slack Skill Bot notifications were excluded.</p>'
     }
     Write-Information "`e[1;33mUsing raw Slack briefing as fallback.`e[0m"
 }
 
-$sectionHtml = ConvertTo-DiaryHtmlCard -Markdown $slackContent -Eyebrow "Source: Slack briefing for $Date"
+if ($curated) {
+    $sectionHtml = ConvertTo-DiaryHtmlCard -Markdown $slackContent -Eyebrow "Source: Slack briefing for $Date"
+} else {
+    $sectionHtml = @(
+        '<div class="card diary-generated-markdown">',
+        "  <div class=""eyebrow"">Source: Slack briefing for $Date</div>",
+        $slackContent,
+        '</div>'
+    ) -join "`n"
+}
 Set-DiarySectionInnerHtml -EntryPath $EntryPath -SectionTitle '💬 Slack Activity' -InnerHtml $sectionHtml
 Write-Information "`e[1;32mSlack activity injected into diary entry.`e[0m"

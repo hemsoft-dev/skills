@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Thursday, 2026-05-22</title>
+  <style>
+    [data-theme="paper"], :root {
+      --bg-canvas: #080808; --bg-surface: #F5F1E8; --bg-card: #FFFFFF;
+      --text-primary: #141413; --text-secondary: #9A9891; --text-muted: #9A9891;
+      --accent-primary: #D97757; --accent-secondary: #788C5D; --accent-tertiary: #6A8CAF;
+      --border-subtle: rgba(20,20,19,0.08); --link-color: #6A8CAF;
+      --accent-tag-bg: rgba(217,119,87,0.12); --accent-tag-text: #D97757;
+      --sky-tag-bg: rgba(106,140,175,0.12); --sky-tag-text: #6A8CAF;
+      --olive-tag-bg: rgba(120,140,93,0.12); --olive-tag-text: #788C5D;
+      --slate-tag-bg: rgba(20,20,19,0.08); --slate-tag-text: #9A9891;
+      --warn-bg: #D97757; --warn-text: #FFFFFF;
+      --shadow-soft: 0 24px 80px rgba(0,0,0,0.18);
+      --table-header-bg: rgba(20,20,19,0.04); --table-border: rgba(20,20,19,0.06);
+      --stat-positive: #788C5D; --stat-negative: #D97757;
+    }
+    [data-theme="obsidian"] {
+      --bg-canvas: #0d1117; --bg-surface: #161b22; --bg-card: #21262d;
+      --text-primary: #c9d1d9; --text-secondary: #8b949e; --text-muted: #6e7681;
+      --accent-primary: #58a6ff; --accent-secondary: #3fb950; --accent-tertiary: #d2a8ff;
+      --border-subtle: rgba(240,246,252,0.1); --link-color: #58a6ff;
+      --accent-tag-bg: rgba(88,166,255,0.12); --accent-tag-text: #58a6ff;
+      --sky-tag-bg: rgba(210,168,255,0.12); --sky-tag-text: #d2a8ff;
+      --olive-tag-bg: rgba(63,185,80,0.12); --olive-tag-text: #3fb950;
+      --slate-tag-bg: rgba(139,148,158,0.12); --slate-tag-text: #8b949e;
+      --warn-bg: #f85149; --warn-text: #FFFFFF;
+      --shadow-soft: 0 24px 80px rgba(0,0,0,0.4);
+      --table-header-bg: rgba(240,246,252,0.06); --table-border: rgba(240,246,252,0.08);
+      --stat-positive: #3fb950; --stat-negative: #f85149;
+    }
+    [data-theme="twilight"] {
+      --bg-canvas: #16162a; --bg-surface: #1e1e3f; --bg-card: #2a2a4a;
+      --text-primary: #e0def4; --text-secondary: #908caa; --text-muted: #6c6c89;
+      --accent-primary: #7c5cbf; --accent-secondary: #c4a7e7; --accent-tertiary: #f7c59f;
+      --border-subtle: rgba(200,180,240,0.12); --link-color: #7c5cbf;
+      --accent-tag-bg: rgba(124,92,191,0.15); --accent-tag-text: #7c5cbf;
+      --sky-tag-bg: rgba(247,197,159,0.15); --sky-tag-text: #f7c59f;
+      --olive-tag-bg: rgba(196,167,231,0.15); --olive-tag-text: #c4a7e7;
+      --slate-tag-bg: rgba(144,140,170,0.12); --slate-tag-text: #908caa;
+      --warn-bg: #7c5cbf; --warn-text: #FFFFFF;
+      --shadow-soft: 0 24px 80px rgba(0,0,0,0.5);
+      --table-header-bg: rgba(200,180,240,0.08); --table-border: rgba(200,180,240,0.1);
+      --stat-positive: #c4a7e7; --stat-negative: #f7c59f;
+    }
+    [data-theme="carbon"] {
+      --bg-canvas: #111111; --bg-surface: #1a1a1a; --bg-card: #222222;
+      --text-primary: #ececec; --text-secondary: #888888; --text-muted: #666666;
+      --accent-primary: #D97757; --accent-secondary: #788C5D; --accent-tertiary: #6A8CAF;
+      --border-subtle: rgba(255,255,255,0.08); --link-color: #D97757;
+      --accent-tag-bg: rgba(217,119,87,0.15); --accent-tag-text: #D97757;
+      --sky-tag-bg: rgba(106,140,175,0.15); --sky-tag-text: #6A8CAF;
+      --olive-tag-bg: rgba(120,140,93,0.15); --olive-tag-text: #788C5D;
+      --slate-tag-bg: rgba(255,255,255,0.08); --slate-tag-text: #888888;
+      --warn-bg: #D97757; --warn-text: #FFFFFF;
+      --shadow-soft: 0 24px 80px rgba(0,0,0,0.5);
+      --table-header-bg: rgba(255,255,255,0.04); --table-border: rgba(255,255,255,0.06);
+      --stat-positive: #788C5D; --stat-negative: #D97757;
+    }
+    .theme-toggle{position:fixed;top:16px;right:16px;z-index:100;font-family:ui-monospace,"Cascadia Code","Fira Code",monospace;font-size:0.75rem}
+    .theme-toggle-btn{background:var(--bg-card);color:var(--text-secondary);border:1px solid var(--border-subtle);border-radius:6px;padding:6px 10px;cursor:pointer;font-size:1.2rem;line-height:1;transition:background .2s,color .2s}
+    .theme-toggle-btn:hover{background:var(--accent-primary);color:var(--bg-canvas)}
+    .theme-menu{display:none;position:absolute;top:100%;right:0;margin-top:4px;background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:8px;box-shadow:var(--shadow-soft);overflow:hidden;min-width:140px}
+    .theme-menu.open{display:block}
+    .theme-menu button{display:block;width:100%;text-align:left;background:none;color:var(--text-primary);border:none;padding:10px 16px;cursor:pointer;font-family:inherit;font-size:0.8rem;transition:background .15s}
+    .theme-menu button:hover{background:var(--accent-primary);color:var(--bg-canvas)}
+    :root { --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 24px; --space-6: 32px; --space-7: 48px; --radius-lg: 32px; --radius-md: 20px; --radius-sm: 12px; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg-canvas); color: var(--text-primary); font: 400 16px/1.6 Inter, "Segoe UI", Arial, sans-serif; }
+    a { color: var(--link-color); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .page-shell { min-height: 100vh; padding: var(--space-7) var(--space-5); }
+    .window { max-width: 1180px; margin: 0 auto; padding: var(--space-6); background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); }
+    h1 { font-family: Georgia, "Times New Roman", serif; font-size: 2.2rem; font-weight: 700; margin: 0 0 var(--space-2) 0; }
+    .subtitle, .mono, .eyebrow { font-family: ui-monospace, "Cascadia Code", "Fira Code", monospace; }
+    .subtitle { color: var(--text-muted); font-size: 0.8rem; margin-bottom: var(--space-6); }
+    .eyebrow { color: var(--text-muted); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: var(--space-2); }
+    .muted { color: var(--text-muted); }
+    .section { margin-bottom: var(--space-6); padding-bottom: var(--space-6); border-bottom: 1px solid var(--border-subtle); }
+    .section:last-child { border-bottom: none; }
+    .section-title { font-family: Georgia, "Times New Roman", serif; font-size: 1.3rem; font-weight: 600; margin: 0 0 var(--space-4) 0; }
+    .section-subtitle { font-family: Georgia, "Times New Roman", serif; font-size: 1.05rem; font-weight: 600; margin: var(--space-5) 0 var(--space-3) 0; }
+    .card, .stat-block { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-4); }
+    .card + .card { margin-top: var(--space-3); }
+    .grid { display: grid; gap: var(--space-3); }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .stat-block { text-align: center; }
+    .stat-label { color: var(--text-muted); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: var(--space-1); }
+    .stat-value { font-family: Georgia, "Times New Roman", serif; font-size: 1.55rem; font-weight: 700; }
+    .stat-delta { margin-top: var(--space-1); font-size: 0.78rem; }
+    .tag { display: inline-block; font-family: ui-monospace, "Cascadia Code", monospace; font-size: 0.65rem; padding: 2px 8px; border-radius: 4px; white-space: nowrap; vertical-align: middle; }
+    .tag-accent { background: var(--accent-tag-bg); color: var(--accent-tag-text); }
+    .tag-sky { background: var(--sky-tag-bg); color: var(--sky-tag-text); }
+    .tag-olive { background: var(--olive-tag-bg); color: var(--olive-tag-text); }
+    .tag-slate { background: var(--slate-tag-bg); color: var(--slate-tag-text); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+    th { text-align: left; padding: var(--space-2) var(--space-3); background: var(--table-header-bg); border-bottom: 1px solid var(--table-border); font-family: ui-monospace, "Cascadia Code", monospace; font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-muted); }
+    td { padding: var(--space-2) var(--space-3); border-bottom: 1px solid var(--table-border); vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    ol.num-list { list-style: none; counter-reset: nl; margin: 0; padding: 0; }
+    ol.num-list li { counter-increment: nl; position: relative; padding: var(--space-2) 0 var(--space-2) 32px; border-bottom: 1px solid var(--table-border); line-height: 1.5; }
+    ol.num-list li:last-child { border-bottom: none; }
+    ol.num-list li::before { content: counter(nl); position: absolute; left: 0; top: var(--space-2); width: 24px; text-align: right; font-family: ui-monospace, "Cascadia Code", monospace; font-size: 0.75rem; color: var(--text-muted); }
+    .todo-callout { border-color: rgba(217,119,87,0.3); background: linear-gradient(135deg, var(--bg-card), rgba(217,119,87,0.08)); }
+    .todo-callout strong { color: var(--accent-primary); }
+    ul.slack-list { list-style: none; margin: 0; padding: 0; }
+    ul.slack-list li { padding: var(--space-2) 0; border-bottom: 1px solid var(--table-border); line-height: 1.5; font-size: 0.9rem; }
+    ul.slack-list li:last-child { border-bottom: none; }
+    .footer { color: var(--text-muted); font-size: 0.78rem; text-align: center; margin-top: var(--space-6); }
+    @media (max-width: 900px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } .page-shell { padding: var(--space-5) var(--space-3); } .window { padding: var(--space-5); } }
+  </style>
+</head>
+<body>
+  <div class="theme-toggle" aria-label="Theme selector">
+    <button class="theme-toggle-btn" onclick="toggleThemeMenu()" aria-haspopup="true" aria-expanded="false">&#8942;</button>
+    <div class="theme-menu" id="themeMenu">
+      <button onclick="setTheme('paper')">&#x1F4F0; Paper</button>
+      <button onclick="setTheme('obsidian')">&#x1F5A4; Obsidian</button>
+      <button onclick="setTheme('twilight')">&#x1F306; Twilight</button>
+      <button onclick="setTheme('carbon')">&#x1F532; Carbon</button>
+    </div>
+  </div>
+
+  <main class="page-shell">
+    <article class="window">
+      <header class="section">
+        <div class="eyebrow">Diary scaffold &mdash; HTML dashboard variant</div>
+        <h1>Thursday, 2026-05-22</h1>
+        <div class="subtitle">Generated at 22:35 ET. Refresh automated sections, then fill in Today&rsquo;s Highlight and Personal Reflections.</div>
+      </header>
+
+      <!-- &#x1F3AF; TODAY'S HIGHLIGHT -->
+      <section class="section">
+        <div class="section-title">&#x1F3AF; Today's Highlight</div>
+        <div class="card">
+          <p style="margin: 0; font-size: 1.05rem;"><a href="https://www.aljazeera.com/video/newsfeed/2026/5/23/ebola-outbreak-disrupts-life-along-the-drc-uganda-border?traffic_source=rss">Ebola outbreak disrupts life along the DRC-Uganda border</a> &mdash; <span class="tag tag-slate">Al Jazeera</span></p>
+        </div>
+      </section>
+
+      <!-- &#x1F4AC; SLACK ACTIVITY -->
+      <section class="section">
+        <div class="section-title">&#x1F4AC; Slack Activity</div>
+        <div class="card">
+          <ul class="slack-list">
+            <li><strong>SonarCloud incident resolved</strong> &mdash; Bryan Halterman published post-mortem; SonarCloud authentication failures impacted ADO .NET pipelines yesterday. Confirmed fixed today.</li>
+            <li><strong>PR comment resolution rule</strong> &mdash; George DeCherney enabled GitHub rule requiring all PR comments to be resolved before merging. Applies org-wide.</li>
+            <li><strong>Copilot comment guidance</strong> &mdash; Tyler Deal clarified that &ldquo;resolved&rdquo; doesn&rsquo;t mean &ldquo;actioned upon&rdquo; &mdash; sometimes Copilot gives bad advice; marking invalid comments resolved may trigger re-review.</li>
+            <li><strong>PE channel discipline</strong> &mdash; Malia Paul told devs to stop tagging @pe-quality on the public channel for reviews; explicit SET reviewer list available.</li>
+            <li><strong>SonarCloud vendor viability</strong> &mdash; Malia questioned whether SonarCloud is still viable for Relias after repeated incidents; Bryan pushing for advance notice of breaking changes.</li>
+            <li><strong>Cypress PR reporting</strong> &mdash; Tyler Deal configured Cypress to post failed runs for the authorization project to its own channel; developed GitHub CLI/Copilot-based PR participation data harvesting.</li>
+            <li><strong>Incident-service agentic workflow</strong> &mdash; Robert Hutchins building daily error reports agentic workflow for incident-service, similar to policy-pro-alerts-non-prod.</li>
+            <li><strong>ReliasDev account migration</strong> &mdash; George DeCherney told devs not to worry about the ReliasDev account email; more info coming next week after the holiday.</li>
+            <li><strong>External contributor onboarded</strong> &mdash; Matheus Linkewez from TELUS Digital added to learner-mobile-app-bff channel.</li>
+            <li><strong>Pendo track event discussion</strong> &mdash; Sarah Green, Kelly Leeman, and Christopher LaGant discussed org ID naming conventions and Pendo excluded segments for dev environments.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- &#x1F324; WEATHER -->
+      <section class="section">
+        <div class="section-title">&#x1F324;&#xFE0F; Weather</div>
+        <div class="card">
+          <div class="grid grid-2">
+            <div class="stat-block">
+              <div class="stat-label">Current</div>
+              <div class="stat-value">60&deg;F</div>
+              <div class="stat-delta">Feels like 60&deg;F &bull; Moderate Rain</div>
+            </div>
+            <div class="stat-block">
+              <div class="stat-label">Wind / Humidity</div>
+              <div class="stat-value">13 mph</div>
+              <div class="stat-delta">95% humidity</div>
+            </div>
+          </div>
+          <table style="margin-top: var(--space-4);">
+            <tr><th>Day</th><th>Condition</th><th>Low</th><th>High</th><th>Wind</th></tr>
+            <tr><td>Friday (Today)</td><td>&#x1F327;&#xFE0F; Heavy Intensity Rain</td><td>60&deg;F</td><td>60&deg;F</td><td>13 mph</td></tr>
+            <tr><td>Saturday</td><td>&#x1F327;&#xFE0F; Light Rain</td><td>59&deg;F</td><td>62&deg;F</td><td>6 mph</td></tr>
+            <tr><td>Sunday</td><td>&#x1F327;&#xFE0F; Light Rain</td><td>58&deg;F</td><td>77&deg;F</td><td>4 mph</td></tr>
+          </table>
+          <p class="muted" style="margin-top: var(--space-3); font-size: 0.82rem;">&#x1F4CD; Mooresville, NC &bull; 10:35 PM Eastern</p>
+        </div>
+      </section>
+
+      <!-- &#x1F4F0; NEWS HEADLINES -->
+      <section class="section">
+        <div class="section-title">&#x1F4F0; News Headlines</div>
+
+        <div class="section-subtitle">&#x1F1FA;&#x1F1F8; US News</div>
+        <div class="card">
+          <ol class="num-list">
+            <li><a href="https://www.npr.org/2026/05/22/g-s1-124080/new-york-city-shipyard-explosion">1 person died, 36 injured after blast at New York City shipyard, officials say</a> &mdash; <span class="tag tag-slate">NPR</span></li>
+            <li><a href="https://www.npr.org/2026/05/22/g-s1-124082/garden-grove-chemical-tank-leak">40,000 people under evacuation orders after chemical tank leak in Southern California</a> &mdash; <span class="tag tag-slate">NPR</span></li>
+            <li><a href="https://www.pbs.org/newshour/video/compass-points/2026/05/is-it-time-for-the-u-s-to-reassess-its-iran-strategy">Is it time for the U.S. to reassess its Iran strategy?</a> &mdash; <span class="tag tag-slate">PBS NewsHour</span></li>
+            <li><a href="https://www.pbs.org/newshour/show/tulsi-gabbards-record-and-impact-on-the-u-s-intelligence-community">Tulsi Gabbard&rsquo;s record and impact on the U.S. intelligence community</a> &mdash; <span class="tag tag-slate">PBS NewsHour</span></li>
+          </ol>
+        </div>
+
+        <div class="section-subtitle">&#x1F30D; World News</div>
+        <div class="card">
+          <ol class="num-list">
+            <li><a href="https://www.bbc.com/news/articles/c3w2l249j8go">More than 40,000 Californians evacuated due to chemical tank leak</a> &mdash; <span class="tag tag-sky">BBC</span></li>
+            <li><a href="https://www.theguardian.com/us-news/live/2026/may/22/donald-trump-ai-china-iran-war-powers-hormuz-latest-news-updates">Sunrise Movement takes credit for disrupting Trump&rsquo;s New York state rally</a> &mdash; <span class="tag tag-sky">The Guardian</span></li>
+            <li><a href="https://www.bbc.com/news/articles/c62d65y16nno">SpaceX launches massive Starship V3 rocket on test flight</a> &mdash; <span class="tag tag-sky">BBC</span></li>
+            <li><a href="https://www.theguardian.com/australia-news/2026/may/23/three-die-in-horrific-south-sydney-vehicle-crash-after-police-welfare-check">Three die in &lsquo;horrific&rsquo; south Sydney vehicle crash after police welfare check</a> &mdash; <span class="tag tag-sky">The Guardian</span></li>
+            <li><a href="https://www.aljazeera.com/video/newsfeed/2026/5/23/ebola-outbreak-disrupts-life-along-the-drc-uganda-border">Ebola outbreak disrupts life along the DRC-Uganda border</a> &mdash; <span class="tag tag-sky">Al Jazeera</span></li>
+            <li><a href="https://www.aljazeera.com/news/liveblog/2026/5/23/iran-war-live-tehran-says-diplomacy-continues-but-no-deal-yet-with-us">Iran war live: Tehran says diplomacy continues but no deal yet with US</a> &mdash; <span class="tag tag-sky">Al Jazeera</span></li>
+            <li><a href="https://www.france24.com/en/video/20260522-hope-can-help-you-find-your-way-through-the-fog-ang%C3%A9lique-kidjo-unveils-new-album">Hope can help you &lsquo;find your way through the fog&rsquo;, Ang&eacute;lique Kidjo unveils new album</a> &mdash; <span class="tag tag-sky">France 24</span></li>
+          </ol>
+        </div>
+
+        <div class="section-subtitle">&#x1F916; AI News</div>
+        <div class="card">
+          <ol class="num-list">
+            <li><a href="https://simonwillison.net/2026/May/22/memory-shortage/#atom-everything">The memory shortage is causing a repricing of consumer electronics</a> &mdash; <span class="tag tag-olive">Simon Willison</span></li>
+            <li><a href="https://simonwillison.net/2026/May/22/ftc-active-listening/#atom-everything">FTC to Require Cox Media Group to Pay Nearly $1 Million Over &ldquo;Active Listening&rdquo; AI Marketing</a> &mdash; <span class="tag tag-olive">Simon Willison</span></li>
+            <li><a href="https://www.theverge.com/tech/936176/google-ai-overviews-search-disregard">Google&rsquo;s AI search is so broken it can &lsquo;disregard&rsquo; what you&rsquo;re looking for</a> &mdash; <span class="tag tag-olive">The Verge</span></li>
+            <li><a href="https://techcrunch.com/2026/05/22/ai-is-being-used-to-resurrect-the-voices-of-dead-pilots/">AI is being used to resurrect the voices of dead pilots</a> &mdash; <span class="tag tag-olive">TechCrunch</span></li>
+            <li><a href="https://techcrunch.com/2026/05/22/google-goes-for-the-glitter-with-disco-ball-icons-are-yall-sure-you-still-want-this/">Google goes for the glitter with disco-ball icons: &lsquo;Are y&rsquo;all sure you still want this?&rsquo;</a> &mdash; <span class="tag tag-olive">TechCrunch</span></li>
+            <li><a href="https://arstechnica.com/security/2026/05/texas-ag-sues-meta-over-claims-that-whatsapp-doesnt-provide-end-to-end-encryption/">Texas AG sues Meta over claims that WhatsApp doesn&rsquo;t provide end-to-end encryption</a> &mdash; <span class="tag tag-olive">Ars Technica</span></li>
+            <li><a href="https://www.theverge.com/ai-artificial-intelligence/936072/spotify-umg-ai-music-remix-cover-superfan">Spotify says its AI remix tool is for superfans, but I&rsquo;m not convinced</a> &mdash; <span class="tag tag-olive">The Verge</span></li>
+          </ol>
+        </div>
+
+        <div class="section-subtitle">&#x1F1E9;&#x1F1F0; Danish News</div>
+        <div class="card">
+          <ol class="num-list">
+            <li><a href="https://www.dr.dk/nyheder/seneste/eu-og-mexico-har-underskrevet-en-udvidet-handelsaftale">EU og Mexico har underskrevet en udvidet handelsaftale</a> &mdash; <span class="tag tag-accent">DR News</span></li>
+            <li><a href="https://www.dr.dk/nyheder/seneste/slovenien-faar-ny-premierminister">Slovenien f&aring;r ny premierminister</a> &mdash; <span class="tag tag-accent">DR News</span></li>
+            <li><a href="https://cphpost.dk/2026-05-22/news/round-up/watch-out-whit-monday-and-royal-run-will-affect-shops-and-traffic-across-copenhagen-and-other-cities/">Watch out: Whit Monday and Royal Run will affect shops and traffic across Copenhagen</a> &mdash; <span class="tag tag-accent">CPH Post</span></li>
+            <li><a href="https://cphpost.dk/2026-05-22/news/round-up/warm-and-mostly-dry-weather-expected-in-copenhagen-this-weekend/">Warm and mostly dry weather expected in Copenhagen this weekend</a> &mdash; <span class="tag tag-accent">CPH Post</span></li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- &#x1F4CA; DAILY NUMBERS -->
+      <section class="section">
+        <div class="section-title">&#x1F4CA; Daily Numbers</div>
+
+        <div class="section-subtitle">Markets</div>
+        <div class="card">
+          <div class="grid grid-2">
+            <div class="stat-block">
+              <div class="stat-label">Dow Jones</div>
+              <div class="stat-value">50,579.70</div>
+              <div class="stat-delta" style="color: var(--stat-positive);">&#x25B2; +0.58%</div>
+            </div>
+            <div class="stat-block">
+              <div class="stat-label">S&amp;P 500</div>
+              <div class="stat-value">7,473.47</div>
+              <div class="stat-delta" style="color: var(--stat-positive);">&#x25B2; +0.37%</div>
+            </div>
+          </div>
+          <p style="margin: var(--space-3) 0 0; font-size: 0.88rem;">Markets rose modestly as SpaceX&rsquo;s Starship V3 launch boosted aerospace sentiment and US-Iran diplomatic signals kept geopolitical tensions in check.</p>
+        </div>
+
+        <div class="section-subtitle">Relias Repos</div>
+        <div class="card">
+          <div class="grid grid-2">
+            <div class="stat-block">
+              <div class="stat-label">GitHub</div>
+              <div class="stat-value">281</div>
+            </div>
+            <div class="stat-block">
+              <div class="stat-label">Bitbucket</div>
+              <div class="stat-value">562</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-subtitle">GitHub Copilot Usage</div>
+        <div class="card">
+          <div class="grid grid-3">
+            <div class="stat-block">
+              <div class="stat-label">Org Premium Requests</div>
+              <div class="stat-value">410,445</div>
+              <div class="stat-delta">/ 317,000 quota (317 seats)</div>
+              <div class="stat-delta" style="color: var(--stat-negative);">&#x25B2; +4,730 vs yesterday</div>
+            </div>
+            <div class="stat-block">
+              <div class="stat-label">fhemmerrelias (Personal)</div>
+              <div class="stat-value">8,794</div>
+              <div class="stat-delta">/ 1,000 entitlement (879.4%)</div>
+              <div class="stat-delta" style="color: var(--stat-negative);">&#x25B2; +515 vs yesterday</div>
+            </div>
+            <div class="stat-block">
+              <div class="stat-label">Cloud Agent</div>
+              <div class="stat-value">303</div>
+              <div class="stat-delta">Coding Agent Premium</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-subtitle">Cloudflare Usage</div>
+        <div class="card">
+          <table>
+            <tr><th>Site</th><th>Page Views</th><th>Unique Visitors</th><th>Emails</th></tr>
+            <tr>
+              <td>nextlevguide.com</td>
+              <td>37 <span class="muted" style="font-size:0.78rem;">(&minus;21 vs yesterday)</span></td>
+              <td>94 <span class="muted" style="font-size:0.78rem;">(+11 vs yesterday)</span></td>
+              <td>0 <span class="muted" style="font-size:0.78rem;">(+0)</span></td>
+            </tr>
+            <tr>
+              <td>setitfreeloop.com</td>
+              <td>0</td>
+              <td>0</td>
+              <td>&mdash;</td>
+            </tr>
+          </table>
+        </div>
+      </section>
+
+      <!-- &#x1F916; LLM MODELS -->
+      <section class="section">
+        <div class="section-title">&#x1F916; LLM Models</div>
+        <div class="card">
+          <p class="muted" style="margin: 0;">No new LLM model updates detected today. Carried forward from yesterday &mdash; no changes.</p>
+        </div>
+      </section>
+
+      <!-- &#x1F525; TRENDING GITHUB REPOS -->
+      <section class="section">
+        <div class="section-title">&#x1F525; Trending GitHub Repos</div>
+        <div class="card">
+          <ol class="num-list">
+            <li><a href="https://github.com/ruvnet/RuView">ruvnet/RuView</a> &mdash; Turns commodity WiFi signals into real-time spatial intelligence, vital sign monitoring, and presence detection &mdash; <span class="tag tag-olive">&#x2B50; 64,081</span></li>
+            <li><a href="https://github.com/ChromeDevTools/chrome-devtools-mcp">ChromeDevTools/chrome-devtools-mcp</a> &mdash; Chrome DevTools for coding agents &mdash; <span class="tag tag-olive">&#x2B50; 41,005</span></li>
+            <li><a href="https://github.com/anthropics/claude-plugins-official">anthropics/claude-plugins-official</a> &mdash; Official, Anthropic-managed directory of high quality Claude Code Plugins &mdash; <span class="tag tag-olive">&#x2B50; 25,069</span></li>
+            <li><a href="https://github.com/colbymchenry/codegraph">colbymchenry/codegraph</a> &mdash; Pre-indexed code knowledge graph for Claude Code, Codex, Cursor, OpenCode, and Hermes Agent &mdash; <span class="tag tag-olive">&#x2B50; 16,710</span></li>
+            <li><a href="https://github.com/rohitg00/ai-engineering-from-scratch">rohitg00/ai-engineering-from-scratch</a> &mdash; Learn it. Build it. Ship it for others. &mdash; <span class="tag tag-olive">&#x2B50; 12,017</span></li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- &#x1F6E0; SOFTWARE WATCHLIST -->
+      <section class="section">
+        <div class="section-title">&#x1F6E0;&#xFE0F; Software Watchlist</div>
+        <div class="card">
+          <p class="muted" style="margin: 0;">No new releases detected today for watched repositories (Claude Code, Gemini CLI, GitHub CLI, GitHub Copilot CLI, gh-copilot, Copilot Chat, Goose CLI, Node.js).</p>
+        </div>
+      </section>
+
+      <!-- &#x1F4CB; WATCHLIST UPDATES -->
+      <section class="section">
+        <div class="section-title">&#x1F4CB; Watchlist Updates</div>
+        <div class="card">
+          <p class="muted" style="margin: 0;">No updates found today for Active watchlist items. The <strong>Anthropic Agent Skills</strong> spec (<a href="https://agentskills.io">agentskills.io</a>) and related repos had no new activity.</p>
+        </div>
+      </section>
+
+      <!-- &#x1F4BB; TODAY'S PRODUCTIVITY -->
+      <section class="section">
+        <div class="section-title">&#x1F4BB; Today&rsquo;s Productivity</div>
+        <div class="card">
+          <div class="grid grid-4">
+            <div class="stat-block">
+              <div class="stat-label">Lines of Code</div>
+              <div class="stat-value">+44,804</div>
+            </div>
+            <div class="stat-block">
+              <div class="stat-label">Commits</div>
+              <div class="stat-value">136</div>
+            </div>
+            <div class="stat-block">
+              <div class="stat-label">PRs Merged</div>
+              <div class="stat-value">9</div>
+            </div>
+            <div class="stat-block">
+              <div class="stat-label">Reviews / Issues</div>
+              <div class="stat-value">1 / 7</div>
+            </div>
+          </div>
+          <p style="margin: var(--space-3) 0 0; font-size: 0.85rem;"><strong>Repositories:</strong> codexbar, hs-buddy, ai-tools &bull; <strong>File types:</strong> .tsx, .ts, .cs, .ps1</p>
+          <p class="muted" style="margin: var(--space-2) 0 0; font-size: 0.82rem;">&#x26A0;&#xFE0F; 6 large commits detected (&gt;1000 line changes)</p>
+        </div>
+      </section>
+
+      <!-- &#x1F4BC; MEETINGS -->
+      <section class="section">
+        <div class="section-title">&#x1F4BC; Meetings</div>
+        <div class="card">
+          <table>
+            <tr><th>Time</th><th>Meeting</th><th>Attendees</th></tr>
+            <tr>
+              <td>11:00 &ndash; 11:50 AM</td>
+              <td><strong>DevEx Huddle</strong></td>
+              <td>Franz Hemmer (organizer), Bryan Halterman, Nick Peterson</td>
+            </tr>
+            <tr>
+              <td>1:00 &ndash; 2:00 PM</td>
+              <td><strong>Copilot Studio</strong></td>
+              <td>Giovanni Rufino (organizer), Franz Hemmer, Todd Webster</td>
+            </tr>
+          </table>
+        </div>
+      </section>
+
+      <!-- &#x1F4AD; PERSONAL REFLECTIONS -->
+      <section class="section">
+        <div class="section-title">&#x1F4AD; Personal Reflections</div>
+        <div class="card todo-callout">
+          <!-- TODO: fill in -->
+          <strong>TODO:</strong> Add thoughts, feelings, or observations about today.
+        </div>
+      </section>
+
+    </article>
+    <div class="footer">Generated by diary scaffold &bull; 2026-05-22 22:35 ET</div>
+  </main>
+
+  <script>
+    function setTheme(t){document.documentElement.setAttribute('data-theme',t);localStorage.setItem('diary-theme',t);document.getElementById('themeMenu').classList.remove('open')}
+    function toggleThemeMenu(){document.getElementById('themeMenu').classList.toggle('open')}
+    (function(){var t=localStorage.getItem('diary-theme');if(t)document.documentElement.setAttribute('data-theme',t)})();
+    document.addEventListener('click',function(e){if(!e.target.closest('.theme-toggle'))document.getElementById('themeMenu').classList.remove('open')});
+  </script>
+</body>
+</html>

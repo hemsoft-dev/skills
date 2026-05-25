@@ -1,6 +1,6 @@
 ---
 name: crap
-description: "V1.1 - Commands: report, improve, log, status. CRAP (Change Risk Anti-Patterns) score management for .NET, TypeScript, and Python projects. Generates reports, identifies risky methods, guides improvements, and tracks score progress. Integrated with org-metrics scorecard as a conditional Gold rule (10 pts). Use when analyzing code quality, reducing change risk, or tracking CRAP score trends."
+description: "V1.2 - Commands: report, improve, log, status. CRAP (Change Risk Anti-Patterns) score management for .NET, TypeScript, and Python projects. Generates reports, identifies risky methods, guides improvements, and tracks score progress. Integrated with org-metrics scorecard as a conditional Gold rule (10 pts). Use when analyzing code quality, reducing change risk, or tracking CRAP score trends."
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -54,6 +54,40 @@ A method with complexity=1 always has CRAP=1. A method with complexity=10 and 0%
 ## Commands
 
 ### `report` — Generate CRAP Score Report
+
+**Deterministic multi-stack script** (auto-detects project type):
+
+```powershell
+& "~/.agents/skills/crap/scripts/crap-report.ps1" [-Threshold 6] [-Top 20] [-Format table|json|csv] [-Stack auto|ts|dotnet|python] [-SkipCoverage]
+```
+
+Flags:
+- `-Threshold 6` — CRAP cutoff (default: 6, functions >= this are flagged)
+- `-Top 30` — Show top N worst scores (default: 30)
+- `-Format json` — Machine-readable output for CI/logging
+- `-Stack auto` — Force stack detection (default: auto-detects from project files)
+- `-SkipCoverage` — Reuse existing coverage data (skip test run)
+
+**Stack detection** (checked in order):
+| File Present | Stack | Coverage Source | Complexity Source |
+|-------------|-------|----------------|-------------------|
+| `*.sln` / `*.csproj` | dotnet | Coverlet Cobertura XML | `complexity` attr in XML |
+| `pyproject.toml` / `setup.py` | python | pytest-cov `coverage.xml` | radon JSON |
+| `package.json` | ts | vitest/jest `coverage-summary.json` | eslint complexity rule |
+
+**Per-stack flow:**
+- **ts**: vitest coverage → eslint `complexity: [warn, 1]` → cross-reference
+- **dotnet**: `dotnet test --collect:"XPlat Code Coverage"` → parse Cobertura XML (has per-method complexity + line-rate natively)
+- **python**: pytest-cov → radon cyclomatic complexity → merge
+
+**Prerequisites by stack:**
+- ts: `coverage-summary.json` reporter + eslint
+- dotnet: coverlet generating Cobertura XML
+- python: `radon` installed (`pip install radon`)
+
+---
+
+**Manual approach** (when script prerequisites aren't met):
 
 Generate a CRAP score report for the current repository. Detect the ecosystem and run the appropriate tooling.
 

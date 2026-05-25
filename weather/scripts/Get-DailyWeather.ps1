@@ -53,8 +53,14 @@ if (-not (Test-Path $outputDir)) {
     New-Item -Path $outputDir -ItemType Directory -Force | Out-Null
 }
 
-$outputFile = Join-Path $outputDir "$date.md"
-$output | Out-File -FilePath $outputFile -Encoding UTF8
+$outputFile = Join-Path $outputDir "$date.json"
+$payload = [pscustomobject]@{
+    Date        = $date
+    GeneratedAt = (Get-Date).ToString('o')
+    Location    = $Location
+    Report      = $output
+}
+$payload | ConvertTo-Json -Depth 6 | Set-Content -Path $outputFile -Encoding UTF8
 
 # Output to console
 $output | ForEach-Object { Write-Output $_ }

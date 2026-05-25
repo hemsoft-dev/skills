@@ -1,0 +1,96 @@
+{
+  "Date": "2026-05-24",
+  "GeneratedAt": "2026-05-25T01:42:00-04:00",
+  "Categories": [
+    {
+      "Title": "🇺🇸 US News",
+      "Articles": [
+        {
+          "Title": "Secret Service fatally shoots suspect outside White House checkpoint, bystander wounded",
+          "Link": "https://www.npr.org/2026/05/23/g-s1-124148/secret-service-shooting-white-house",
+          "Source": "NPR"
+        },
+        {
+          "Title": "Trump says a deal with Iran and opening of Strait of Hormuz are 'largely negotiated'",
+          "Link": "https://tera.fm/episodes/npr-news/2026-05-24",
+          "Source": "NPR"
+        },
+        {
+          "Title": "Romanian director Cristian Mungiu's 'Fjord' wins top prize at Cannes",
+          "Link": "https://www.npr.org/2026/05/23/nx-s1-5832564/palme-dor-cannes-film-festival",
+          "Source": "NPR"
+        },
+        {
+          "Title": "U.S. passengers flying from Ebola-affected countries rerouted",
+          "Link": "https://tera.fm/episodes/npr-news/2026-05-24",
+          "Source": "NPR"
+        }
+      ]
+    },
+    {
+      "Title": "🌍 World News",
+      "Articles": [
+        {
+          "Title": "US and Iran inch closer to peace deal as Trump faces criticism from GOP hawks",
+          "Link": "https://www.theguardian.com/world/2026/may/24/iran-leader-and-security-council-still-need-to-approve-peace-deal-with-us",
+          "Source": "The Guardian"
+        },
+        {
+          "Title": "Russia hits Kyiv with hypersonic ballistic missile in ‘deranged’ attack",
+          "Link": "https://www.theguardian.com/world/2026/may/24/russia-hits-kyiv-ukraine-hypersonic-ballistic-missile",
+          "Source": "The Guardian"
+        },
+        {
+          "Title": "Xi Jinping urges 'all-out rescue' after coal mine explosion kills 82",
+          "Link": "https://www.euronews.com/video/2026/05/24/latest-news-bulletin-may-24th-2026-midday",
+          "Source": "Euronews"
+        },
+        {
+          "Title": "At least four killed after massive Russian drone and missile attack on Kyiv",
+          "Link": "https://www.euronews.com/video/2026/05/24/latest-news-bulletin-may-24th-2026-midday",
+          "Source": "Euronews"
+        }
+      ]
+    },
+    {
+      "Title": "🤖 AI News",
+      "Articles": [
+        {
+          "Title": "datasette 1.0a30",
+          "Link": "https://github.com/simonw/datasette/releases/tag/1.0a30",
+          "Source": "Simon Willison's Weblog"
+        },
+        {
+          "Title": "datasette-agent 0.1a4",
+          "Link": "https://github.com/datasette/datasette-agent/releases/tag/0.1a4",
+          "Source": "Simon Willison's Weblog"
+        },
+        {
+          "Title": "Armin Ronacher on AI-generated issue report slop",
+          "Link": "https://lucumr.pocoo.org/2026/5/24/pi-oss/",
+          "Source": "Simon Willison's Weblog"
+        }
+      ]
+    },
+    {
+      "Title": "🇩🇰 Danish News",
+      "Articles": [
+        {
+          "Title": "Ukraine ramt af massive russiske angreb - én meldes dræbt og mindst 13 er sårede",
+          "Link": "https://www.dr.dk/nyheder/seneste/ukraine-ramt-af-massive-russiske-angreb",
+          "Source": "DR News"
+        },
+        {
+          "Title": "Mistænkt for skudepisode nær Det Hvide Hus er skudt og dræbt af Secret Service",
+          "Link": "https://www.dr.dk/nyheder/seneste/fbi-er-til-stede-ved-det-hvide-hus-efter-skud",
+          "Source": "DR News"
+        },
+        {
+          "Title": "Trump again shares photo with greeting to Greenland",
+          "Link": "https://cphpost.dk/2026-05-23/news/round-up/trump-again-shares-photo-with-greeting-to-greenland/",
+          "Source": "CPH Post"
+        }
+      ]
+    }
+  ]
+}

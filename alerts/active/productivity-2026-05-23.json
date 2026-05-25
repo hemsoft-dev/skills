@@ -1,0 +1,16 @@
+[
+  {
+    "File": "src/CodexBar.Core.Tests/CrapScoreImprovementTests.cs",
+    "Deleted": 0,
+    "Added": 1065,
+    "Repo": "codexbar",
+    "Hash": "bb893a7e6b24adff0a291b1797e407f13d57c4da"
+  },
+  {
+    "File": "src/components/sidebar/github-sidebar/useGitHubSidebarData.ts",
+    "Deleted": 1065,
+    "Added": 449,
+    "Repo": "hs-buddy",
+    "Hash": "7085be53b7cc1d201d8ba8abcac8269b6760a271"
+  }
+]
