@@ -71,7 +71,38 @@ Write-Information "`e[1;36mInjecting news headlines into diary entry...`e[0m"
 $headlineCount = ([regex]::Matches($newsContent, '^\|\s*\d+\s*\|', 'Multiline')).Count
 $categoryCount = ([regex]::Matches($newsContent, '^###\s+', 'Multiline')).Count
 
-$sectionHtml = ConvertTo-DiaryHtmlCard -Markdown $newsContent -Eyebrow "News snapshot for $Date"
+$lines = $newsContent -split '\r?\n'
+$htmlLines = @(
+    '<div class="card diary-generated-markdown">',
+    "  <div class=""eyebrow"">News snapshot for $Date</div>"
+)
+$currentCategoryOpen = $false
+
+foreach ($line in $lines) {
+    if ($line -match '^###\s+(.+)$') {
+        if ($currentCategoryOpen) {
+            $htmlLines += '</ol>'
+        }
+        $htmlLines += "<h3>$([System.Net.WebUtility]::HtmlEncode($Matches[1]))</h3>"
+        $htmlLines += '<ol class="num-list">'
+        $currentCategoryOpen = $true
+        continue
+    }
+
+    if ($line -match '^\|\s*\d+\s*\|\s*\[(.+?)\]\((.+?)\)\s*\|\s*(.+?)\s*\|$') {
+        $title = [System.Net.WebUtility]::HtmlEncode($Matches[1])
+        $url = [System.Net.WebUtility]::HtmlEncode($Matches[2])
+        $source = [System.Net.WebUtility]::HtmlEncode($Matches[3])
+        $htmlLines += "<li><a href=""$url"">$title</a> <span class=""tag tag-slate"">$source</span></li>"
+    }
+}
+
+if ($currentCategoryOpen) {
+    $htmlLines += '</ol>'
+}
+
+$htmlLines += '</div>'
+$sectionHtml = $htmlLines -join "`n"
 Set-DiarySectionInnerHtml -EntryPath $EntryPath -SectionTitle '📰 News Headlines' -InnerHtml $sectionHtml
 Write-Information "`e[1;32mNews headlines injected into diary entry.`e[0m"
 Write-Information "  Categories: $categoryCount | Headlines: $headlineCount"

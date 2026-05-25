@@ -4,6 +4,9 @@ This file tracks meaningful prompts and their outcomes for the Claude Skills rep
 
 ---
 
+2026-05-25 - 01:42 - Replace failed May 24 diary news card with linked headlines
+Result: Added a dated `news/output/2026-05-24.md` cache, rendered the diary News Headlines section as source-badged lists instead of a failure callout or raw Markdown table, and regenerated `diary/entries/2026/05/2026-05-24.html`.
+
 2026-05-25 - 01:20 - Fix malformed Slack Activity rendering in the May 24 diary entry
 Result: Replaced literal Unicode escape headings, filtered Slack emoji shortcodes and automated bot-only fallback noise, and regenerated `diary/entries/2026/05/2026-05-24.html` with a concise Slack Activity card.
 
