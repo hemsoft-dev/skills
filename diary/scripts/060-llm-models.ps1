@@ -44,7 +44,7 @@ if (-not (Test-Path $EntryPath)) {
 }
 
 # --- Validate API key ---
-$apiKey = $env:OPENROUTER_API_KEY
+$apiKey = Get-DiaryEnvironmentVariable -Name 'OPENROUTER_API_KEY'
 if (-not $apiKey) {
     Write-Error "OPENROUTER_API_KEY environment variable is not set."
     exit 1

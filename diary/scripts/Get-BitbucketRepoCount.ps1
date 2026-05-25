@@ -32,15 +32,22 @@ param(
     [string]$Username,
 
     [Parameter(Mandatory = $false)]
-    [string]$ApiKey
+    [string]$ApiKey,
+
+    [Parameter(Mandatory = $false)]
+    [ValidatePattern('^\d{4}-\d{2}-\d{2}$')]
+    [string]$OutputDate = (Get-Date -Format 'yyyy-MM-dd')
 )
 
 # Load credentials from environment if not provided
-# Check Process scope first (current session), then User scope (persistent)
+# Check inherited Process scope first, then persistent User and Machine scopes.
 if (-not $Username) {
     $Username = [System.Environment]::GetEnvironmentVariable('BITBUCKET_USERNAME', 'Process')
     if (-not $Username) {
         $Username = [System.Environment]::GetEnvironmentVariable('BITBUCKET_USERNAME', 'User')
+    }
+    if (-not $Username) {
+        $Username = [System.Environment]::GetEnvironmentVariable('BITBUCKET_USERNAME', 'Machine')
     }
 }
 
@@ -48,6 +55,9 @@ if (-not $ApiKey) {
     $ApiKey = [System.Environment]::GetEnvironmentVariable('BITBUCKET_API_KEY', 'Process')
     if (-not $ApiKey) {
         $ApiKey = [System.Environment]::GetEnvironmentVariable('BITBUCKET_API_KEY', 'User')
+    }
+    if (-not $ApiKey) {
+        $ApiKey = [System.Environment]::GetEnvironmentVariable('BITBUCKET_API_KEY', 'Machine')
     }
 }
 
@@ -91,8 +101,7 @@ try {
     if (-not (Test-Path $outputDir)) {
         New-Item -ItemType Directory -Path $outputDir -Force | Out-Null
     }
-    $today = Get-Date -Format "yyyy-MM-dd"
-    $outputFile = Join-Path $outputDir "$today-bitbucket-repocount.txt"
+    $outputFile = Join-Path $outputDir "$OutputDate-bitbucket-repocount.txt"
     $repoCount | Set-Content $outputFile -Encoding UTF8
     Write-Information "Output saved to: $outputFile" -InformationAction Continue
 

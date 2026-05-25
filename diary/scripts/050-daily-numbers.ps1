@@ -412,7 +412,7 @@ Write-Information "`e[1;36mFetching Bitbucket repo count ($BitbucketWorkspace)..
 $bbRepoCount = $null
 $bbRepoFetchSucceeded = $false
 try {
-    $bbRepoCount = [int](& (Join-Path $PSScriptRoot 'Get-BitbucketRepoCount.ps1'))
+    $bbRepoCount = [int](& (Join-Path $PSScriptRoot 'Get-BitbucketRepoCount.ps1') -OutputDate $Date)
     $bbRepoFetchSucceeded = $true
 }
 catch {

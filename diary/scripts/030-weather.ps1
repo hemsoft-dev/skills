@@ -46,7 +46,7 @@ if (-not (Test-Path $EntryPath)) {
 }
 
 # --- Validate API key ---
-$apiKey = $env:OPENWEATHER_API_KEY
+$apiKey = Get-DiaryEnvironmentVariable -Name 'OPENWEATHER_API_KEY'
 if (-not $apiKey) {
     Write-Error "OPENWEATHER_API_KEY environment variable is not set."
     exit 1

@@ -1,5 +1,22 @@
 Set-StrictMode -Version Latest
 
+function Get-DiaryEnvironmentVariable {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Name
+    )
+
+    foreach ($scope in 'Process', 'User', 'Machine') {
+        $value = [System.Environment]::GetEnvironmentVariable($Name, $scope)
+        if (-not [string]::IsNullOrWhiteSpace($value)) {
+            return $value
+        }
+    }
+
+    return $null
+}
+
 function Get-DiaryHtmlEntryPath {
     [CmdletBinding()]
     param(

@@ -48,7 +48,7 @@ if (-not (Test-Path $slackFile)) {
     $slackScript = Join-Path $env:USERPROFILE '.agents' 'skills' 'slack' 'scripts' 'Get-SlackDailyBriefing.ps1'
     if (Test-Path $slackScript) {
         Write-Information "`e[1;33mSlack briefing not found for $Date. Generating...`e[0m"
-        & $slackScript -OutputFormat Detailed 6>&1 | Out-Null
+        & $slackScript -Date $Date -OutputFormat Detailed 6>&1 | Out-Null
     }
 
     if (-not (Test-Path $slackFile)) {

@@ -1,6 +1,6 @@
 ---
 name: diary
-description: "V1.5 - Commands: create, scaffold, update. Personal diary management with daily entry creation, scaffolding, and updates."
+description: "V1.6 - Commands: create, scaffold, update. Personal diary management with credential-resilient automated collection and HTML entries."
 ---
 
 # Diary
@@ -24,8 +24,8 @@ Personal diary management.
 | `create.ps1` | Entry point — validates no entry exists, then calls orchestrator |
 | `diary-orchestrator.ps1` | Runs all `###-*.ps1` section scripts in order |
 | `010-diary-header.ps1` | Scaffolds entry file from `config/yyyy-mm-dd.html` template |
-| `020-slack-activity.ps1` | Curates Slack briefing into an 8-12 item bullet summary via Copilot CLI, falls back to raw briefing |
-| `HtmlDiaryHelpers.ps1` | Shared HTML path resolution, section replacement, and markdown-to-HTML helpers |
+| `020-slack-activity.ps1` | Generates date-scoped Slack briefing, curates it into an 8-12 item summary via Copilot CLI, and falls back to raw briefing |
+| `HtmlDiaryHelpers.ps1` | Shared HTML path resolution, environment credential fallback, section replacement, and markdown-to-HTML helpers |
 
 > **Scripted vs. scaffolded workflow:** The numbered PowerShell scripts power the reusable script-backed sections used by `create.ps1` and `diary-orchestrator.ps1`. The `scaffold` command below is still the authoritative end-to-end workflow for live-only sections such as Watchlist Updates, Today's Productivity, Meetings, Screenshots, and picking Today's Highlight from the news.
 

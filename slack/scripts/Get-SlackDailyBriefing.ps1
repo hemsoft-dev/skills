@@ -63,6 +63,10 @@ param(
     [string]$Username = 'fhemmer',
 
     [Parameter(Mandatory = $false)]
+    [ValidatePattern('^\d{4}-\d{2}-\d{2}$')]
+    [string]$Date = (Get-Date -Format 'yyyy-MM-dd'),
+
+    [Parameter(Mandatory = $false)]
     [ValidateRange(1, 30)]
     [int]$DaysBack = 1,
 
@@ -88,9 +92,6 @@ param(
     ),
 
     [Parameter(Mandatory = $false)]
-    [string[]]$DeploymentChannelPattern = "platform-deployment-*",
-
-    [Parameter(Mandatory = $false)]
     [bool]$IncludeDMs = $true,
 
     [Parameter(Mandatory = $false)]
@@ -111,6 +112,19 @@ param(
 $InformationPreference = 'Continue'
 
 #region Helper Functions
+
+function Get-SlackEnvironmentVariable {
+    param([string]$Name)
+
+    foreach ($scope in 'Process', 'User', 'Machine') {
+        $value = [System.Environment]::GetEnvironmentVariable($Name, $scope)
+        if (-not [string]::IsNullOrWhiteSpace($value)) {
+            return $value
+        }
+    }
+
+    return $null
+}
 
 function Write-Section {
     param([string]$Title, [string]$Emoji = "📌")
@@ -181,7 +195,7 @@ function Initialize-UserCache {
     #>
 
     $botHeaders = @{
-        "Authorization" = "Bearer $env:SLACK_TOKEN"
+        "Authorization" = "Bearer $script:slackBotToken"
         "Content-Type"  = "application/json"
     }
     
@@ -244,8 +258,11 @@ function Get-SlackUserRealName {
 
 #region Initialization
 
-# Check for user token
-if (-not $env:SLACK_USER_TOKEN) {
+# Load tokens from the process snapshot or persistent Windows environment.
+$script:slackUserToken = Get-SlackEnvironmentVariable -Name 'SLACK_USER_TOKEN'
+$script:slackBotToken = Get-SlackEnvironmentVariable -Name 'SLACK_TOKEN'
+
+if (-not $script:slackUserToken) {
     Write-Error "SLACK_USER_TOKEN environment variable not set. Please set it with your user token (xoxp-)."
     exit 1
 }
@@ -253,15 +270,17 @@ if (-not $env:SLACK_USER_TOKEN) {
 Add-Type -AssemblyName System.Web
 
 $script:headers = @{
-    "Authorization" = "Bearer $env:SLACK_USER_TOKEN"
+    "Authorization" = "Bearer $script:slackUserToken"
     "Content-Type"  = "application/json"
 }
 
 # Load all users into cache (single API call instead of per-user lookups)
 Initialize-UserCache
 
-$startDate = (Get-Date).AddDays(-$DaysBack).ToString("yyyy-MM-dd")
-$todayStr = (Get-Date).ToString("yyyy-MM-dd")
+$targetDate = [datetime]::ParseExact($Date, 'yyyy-MM-dd', $null)
+$startDate = $targetDate.AddDays(-$DaysBack).ToString("yyyy-MM-dd")
+$todayStr = $targetDate.ToString("yyyy-MM-dd")
+$queryBeforeDate = $targetDate.AddDays(1).ToString("yyyy-MM-dd")
 
 # Results collection for JSON output
 $briefingData = @{
@@ -299,7 +318,7 @@ if ($OutputFormat -ne 'JSON') {
 if ($IncludeMentions) {
     if ($OutputFormat -ne 'JSON') { Write-Section "Direct @Mentions" "🔔" }
     
-    $mentionQuery = "@$Username -from:$Username after:$startDate"
+    $mentionQuery = "@$Username -from:$Username after:$startDate before:$queryBeforeDate"
     $mentionResults = Invoke-SlackSearch -Query $mentionQuery -Count 30
     
     if ($mentionResults -and $mentionResults.messages.total -gt 0) {
@@ -360,7 +379,7 @@ if ($IncludeMentions) {
 if ($IncludeDMs) {
     if ($OutputFormat -ne 'JSON') { Write-Section "Direct Messages" "💬" }
     
-    $dmQuery = "to:me after:$startDate"
+    $dmQuery = "to:me after:$startDate before:$queryBeforeDate"
     $dmResults = Invoke-SlackSearch -Query $dmQuery -Count 30
     
     if ($dmResults -and $dmResults.messages.total -gt 0) {
@@ -429,7 +448,7 @@ if ($IncludeAnnouncements) {
     if ($OutputFormat -ne 'JSON') { Write-Section "Announcements (@channel/@here)" "📢" }
     
     # Search for @channel and @here announcements
-    $announcementQuery = "<!channel> OR <!here> after:$startDate"
+    $announcementQuery = "<!channel> OR <!here> after:$startDate before:$queryBeforeDate"
     $announcementResults = Invoke-SlackSearch -Query $announcementQuery -Count 20
     
     if ($announcementResults -and $announcementResults.messages.total -gt 0) {
@@ -475,7 +494,7 @@ if ($IncludeAnnouncements) {
 if ($OutputFormat -ne 'JSON') { Write-Section "Channel Activity" "📁" }
 
 # Also search for deployment channels matching pattern
-$deploymentQuery = "in:#platform-deployment after:$startDate"
+$deploymentQuery = "in:#platform-deployment after:$startDate before:$queryBeforeDate"
 $deployResults = Invoke-SlackSearch -Query $deploymentQuery -Count 5
 
 # Find the most recent deployment channel
@@ -498,7 +517,7 @@ if ($activeDeployChannel -and $activeDeployChannel -notin $channelsToCheck) {
 }
 
 foreach ($channel in $channelsToCheck) {
-    $channelQuery = "in:#$channel after:$startDate -from:@email -from:@datadog -from:@pagerduty"
+    $channelQuery = "in:#$channel after:$startDate before:$queryBeforeDate -from:@email -from:@datadog -from:@pagerduty"
     $channelResults = Invoke-SlackSearch -Query $channelQuery -Count $MaxMessagesPerChannel
     
     if ($channelResults -and $channelResults.messages.total -gt 0) {
