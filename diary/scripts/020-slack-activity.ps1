@@ -88,7 +88,7 @@ $rawBriefing
 $curated = $null
 try {
     # Write prompt to temp file to avoid command-line length/escaping issues
-    $tempPromptFile = Join-Path ([System.IO.Path]::GetTempPath()) "diary-slack-prompt-$Date.md"
+$tempPromptFile = Join-Path ([System.IO.Path]::GetTempPath()) "diary-slack-prompt-$Date.txt"
     $utf8NoBom = [System.Text.UTF8Encoding]::new($false)
     [System.IO.File]::WriteAllText($tempPromptFile, $prompt, $utf8NoBom)
 

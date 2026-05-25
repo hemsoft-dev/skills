@@ -40,15 +40,15 @@ hooks:
 
 **Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
-Fetches news headlines from multiple sources without requiring LLM sub-agents. Outputs to standardized `output/YYYY-MM-DD.md` format for diary integration.
+Fetches news headlines from multiple sources without requiring LLM sub-agents. Outputs to standardized `output/YYYY-MM-DD.json` format for diary integration.
 
 ## Daily Output Files
 
-**Pattern**: All news reports are automatically saved to `output/YYYY-MM-DD.md` for diary integration.
+**Pattern**: All news reports are automatically saved to `output/YYYY-MM-DD.json` for diary integration.
 
 ## News Categories
 
-The skill provides 4 independent scripts for fetching different news categories:
+The skill provides a master script plus compatibility wrappers for the individual categories:
 
 ### Master Script: Get All News
 
@@ -59,6 +59,8 @@ The skill provides 4 independent scripts for fetching different news categories:
 **This is the recommended way to fetch news** - it orchestrates all 4 categories and overwrites any existing output for the day.
 
 ### Individual Category Scripts
+
+The individual scripts call `Get-AllNews.ps1` so the cache stays a single structured JSON document.
 
 ### 1. US News
 
@@ -94,15 +96,7 @@ The skill provides 4 independent scripts for fetching different news categories:
 
 ## Output Format
 
-Each script appends to `output/YYYY-MM-DD.md` in the following format:
-
-```markdown
-### 🇺🇸 US News
-| # | Headline | Source |
-|---|----------|--------|
-| 1 | [Headline text](url) | Source |
-...
-```
+Each run writes `output/YYYY-MM-DD.json` with structured category and article data for diary integration.
 
 ## Usage
 
@@ -128,7 +122,7 @@ This will:
 $date = Get-Date -Format "yyyy-MM-dd"
 
 # Clear any existing output file for today
-$outputFile = "$env:USERPROFILE\.agents\skills\news\output\$date.md"
+$outputFile = "$env:USERPROFILE\.agents\skills\news\output\$date.json"
 if (Test-Path $outputFile) { Remove-Item $outputFile }
 
 # Fetch each category
@@ -137,13 +131,13 @@ if (Test-Path $outputFile) { Remove-Item $outputFile }
 & "$env:USERPROFILE\.agents\skills\news\scripts\Get-AINews.ps1"
 & "$env:USERPROFILE\.agents\skills\news\scripts\Get-DanishNews.ps1"
 
-# Output file now contains all 4 news sections
+# Output file now contains all 4 news categories
 Get-Content $outputFile
 ```
 
 ## Integration with Diary Skill
 
-The diary skill consumes the `output/YYYY-MM-DD.md` file to include news headlines in daily diary entries.
+The diary skill consumes the `output/YYYY-MM-DD.json` file to include news headlines in daily HTML entries.
 
 ## Source Diversification
 

@@ -4,6 +4,9 @@ This file tracks meaningful prompts and their outcomes for the Claude Skills rep
 
 ---
 
+2026-05-25 - 02:27 - Stop diary scaffolding from generating Markdown support files
+Result: Migrated Slack, news, and weather support caches to JSON, updated diary consumers and guardrails so diary output remains HTML-only, and kept 2026-05-24 rendering on structured cache data.
+
 2026-05-25 - 01:42 - Replace failed May 24 diary news card with linked headlines
 Result: Added a dated `news/output/2026-05-24.md` cache, rendered the diary News Headlines section as source-badged lists instead of a failure callout or raw Markdown table, and regenerated `diary/entries/2026/05/2026-05-24.html`.
 

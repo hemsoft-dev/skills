@@ -164,7 +164,7 @@ Output ONLY the formatted bullet list. No introduction or conclusion.
 Write-Information "`e[1;36mParsing Slack briefing...`e[0m"
 $slackSummary = ''
 $slackOutputDir = Join-Path $env:USERPROFILE '.agents' 'skills' 'slack' 'output'
-$slackFile = Join-Path $slackOutputDir "$Date-slack-briefing.md"
+$slackFile = Join-Path $slackOutputDir "$Date-slack-briefing.json"
 
 if (Test-Path $slackFile) {
     $slackContent = Get-Content $slackFile -Raw
