@@ -4,6 +4,9 @@ This file tracks meaningful prompts and their outcomes for the Claude Skills rep
 
 ---
 
+2026-05-25 - 01:20 - Fix malformed Slack Activity rendering in the May 24 diary entry
+Result: Replaced literal Unicode escape headings, filtered Slack emoji shortcodes and automated bot-only fallback noise, and regenerated `diary/entries/2026/05/2026-05-24.html` with a concise Slack Activity card.
+
 2026-05-25 - 00:49 - Fix automated collectors missing Windows System credentials
 Result: Updated diary weather, LLM, Bitbucket, and Slack collectors to resolve persistent Windows credentials and preserve historical target dates; regenerated `diary/entries/2026/05/2026-05-24.html` with authenticated source data.
 

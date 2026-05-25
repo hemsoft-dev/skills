@@ -178,7 +178,7 @@ function Get-MessagePreview {
         [string]$Text,
         [int]$MaxLength = 200
     )
-    $clean = $Text -replace '\n', ' ' -replace '\s+', ' '
+    $clean = (($Text -replace ':[a-zA-Z0-9_+-]+:', '') -replace '\s+', ' ').Trim()
     if ($clean.Length -gt $MaxLength) {
         return $clean.Substring(0, $MaxLength) + "..."
     }
@@ -596,14 +596,14 @@ if (-not (Test-Path $outputDir)) {
 $outputFile = Join-Path $outputDir "$todayStr-slack-briefing.md"
 
 $mdLines = @()
-$mdLines += "### \ud83d\udcac Slack Briefing"
+$mdLines += "### 💬 Slack Briefing"
 $mdLines += ""
-$mdLines += "*Generated: $(Get-Date -Format 'yyyy-MM-dd HH:mm') | Date range: $startDate to $todayStr | User: @$Username*"
+$mdLines += "*Generated: $(Get-Date -Format 'yyyy-MM-dd HH:mm') | Activity date: $todayStr | User: @$Username*"
 $mdLines += ""
 
 # Mentions section
 if ($briefingData.Mentions.Count -gt 0) {
-    $mdLines += "#### \ud83d\udd14 Direct @Mentions ($($briefingData.Mentions.Count))"
+    $mdLines += "#### 🔔 Direct @Mentions ($($briefingData.Mentions.Count))"
     $mdLines += ""
     foreach ($m in $briefingData.Mentions) {
         $mdLines += "- **[$($m.Timestamp)] #$($m.Channel)** - @$($m.From): $($m.Text)"
@@ -613,7 +613,7 @@ if ($briefingData.Mentions.Count -gt 0) {
 
 # DMs section
 if ($briefingData.DirectMessages.Count -gt 0) {
-    $mdLines += "#### \ud83d\udcac Direct Messages ($($briefingData.DirectMessages.Count))"
+    $mdLines += "#### 💬 Direct Messages ($($briefingData.DirectMessages.Count))"
     $mdLines += ""
     foreach ($dm in $briefingData.DirectMessages) {
         $mdLines += "- **[$($dm.Timestamp)]** @$($dm.From): $($dm.Text)"
@@ -623,7 +623,7 @@ if ($briefingData.DirectMessages.Count -gt 0) {
 
 # Announcements section
 if ($briefingData.Announcements.Count -gt 0) {
-    $mdLines += "#### \ud83d\udce2 Announcements ($($briefingData.Announcements.Count))"
+    $mdLines += "#### 📢 Announcements ($($briefingData.Announcements.Count))"
     $mdLines += ""
     foreach ($ann in $briefingData.Announcements) {
         $mdLines += "- **[$($ann.Timestamp)] #$($ann.Channel)** - @$($ann.From): $($ann.Text)"
@@ -634,7 +634,7 @@ if ($briefingData.Announcements.Count -gt 0) {
 # Channel Activity section
 $activeChannels = $briefingData.ChannelActivity.GetEnumerator() | Where-Object { $_.Value.TotalMessages -gt 0 } | Sort-Object { $_.Value.TotalMessages } -Descending
 if ($activeChannels) {
-    $mdLines += "#### \ud83d\udcc1 Channel Activity"
+    $mdLines += "#### 📁 Channel Activity"
     $mdLines += ""
     foreach ($ch in $activeChannels) {
         $mdLines += "**#$($ch.Key)** ($($ch.Value.TotalMessages) messages)"
@@ -648,7 +648,7 @@ if ($activeChannels) {
 
 # Action Items section
 if ($briefingData.ActionItems.Count -gt 0) {
-    $mdLines += "#### \u26a1 Potential Action Items ($($briefingData.ActionItems.Count))"
+    $mdLines += "#### ⚡ Potential Action Items ($($briefingData.ActionItems.Count))"
     $mdLines += ""
     foreach ($item in $briefingData.ActionItems) {
         $link = if ($item.Link) { " ([link]($($item.Link)))" } else { "" }

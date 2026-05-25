@@ -125,7 +125,12 @@ if ($curated) {
 }
 else {
     # Fallback: inject raw briefing
-    $slackContent = $rawBriefing.Trim()
+    $fallbackLines = $rawBriefing -split '\r?\n' |
+        Where-Object { $_ -notmatch '^\s*-\s.*@Slack Skill Bot:' }
+    $slackContent = (($fallbackLines -join "`n") -replace '(?m)^### .+Slack Briefing\r?\n\r?\n?', '').Trim()
+    if ($slackContent -notmatch '(?m)^\s*-\s') {
+        $slackContent = 'No substantive Slack activity was captured for this date; automated Slack Skill Bot notifications were excluded.'
+    }
     Write-Information "`e[1;33mUsing raw Slack briefing as fallback.`e[0m"
 }
 
