@@ -4,6 +4,12 @@ This file tracks meaningful prompts and their outcomes for the Claude Skills rep
 
 ---
 
+2026-05-26 - 00:16 - Improve diary news collection and regenerate May 25 news section
+Result: Hardened `news/scripts/Get-AllNews.ps1` for target-date runs and resilient RSS/Atom parsing, updated diary news generation to pass the intended date, regenerated `news/output/2026-05-25.json`, and replaced the May 25 diary News Headlines section with 21 linked headlines.
+
+2026-05-26 - 23:42 - Scaffold diary entry for Monday 2026-05-25 as HTML
+Result: Saved `diary/entries/2026/05/2026-05-25.html` with weather, Slack, daily numbers, LLM models, trending repos, software watchlist, and fallback notes for news, productivity, meetings, watchlist updates, and screenshots. Left Today's Highlight and Personal Reflections as TODOs.
+
 2026-05-25 - 02:27 - Stop diary scaffolding from generating Markdown support files
 Result: Migrated Slack, news, and weather support caches to JSON, updated diary consumers and guardrails so diary output remains HTML-only, and kept 2026-05-24 rendering on structured cache data.
 

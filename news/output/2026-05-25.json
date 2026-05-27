@@ -1,0 +1,152 @@
+{
+  "Date": "2026-05-25",
+  "GeneratedAt": "2026-05-26T00:19:14.4914902-04:00",
+  "Categories": [
+    {
+      "Title": "🇺🇸 US News",
+      "Articles": [
+        {
+          "Title": "U.S. says it carried out 'self-defense' strikes in Iran, including missile sites and boats placing mines",
+          "Link": "https://www.pbs.org/newshour/world/u-s-says-it-carried-out-self-defense-strikes-in-iran-including-missile-sites-and-boats-placing-mines",
+          "Source": "PBS NewsHour",
+          "Published": "2026-05-25T20:41:52.0000000-04:00"
+        },
+        {
+          "Title": "Ahead of the World Cup, pressure to win and grow American soccer is on Tim Ream's mind",
+          "Link": "https://www.npr.org/2026/05/25/g-s1-124246/world-cup-usmnt-tim-ream",
+          "Source": "NPR",
+          "Published": "2026-05-25T19:03:41.0000000-04:00"
+        },
+        {
+          "Title": "U.S. and Iran suggest progress on peace talks, but deal 'not imminent'",
+          "Link": "https://www.pbs.org/newshour/show/u-s-and-iran-suggest-progress-on-peace-talks-but-deal-not-imminent",
+          "Source": "PBS NewsHour",
+          "Published": "2026-05-25T18:55:15.0000000-04:00"
+        },
+        {
+          "Title": "After Stephen Colbert's viral talk show parody, CBS backs down from copyright action",
+          "Link": "https://www.npr.org/2026/05/25/nx-s1-5833860/colbert-only-in-monroe-viral-cbs-paramount",
+          "Source": "NPR",
+          "Published": "2026-05-25T15:58:37.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🌍 World News",
+      "Articles": [
+        {
+          "Title": "US strikes Iran missile sites and mine laying vessels as Trump’s promised peace deal remains elusive",
+          "Link": "https://www.theguardian.com/world/2026/may/26/us-strikes-iran-missile-sites-vessels-trump-peace-deal-elusive",
+          "Source": "The Guardian",
+          "Published": "2026-05-25T23:28:18.0000000-04:00"
+        },
+        {
+          "Title": "Netanyahu vows to ‘smite’ Hezbollah with ‘overwhelming’ force",
+          "Link": "https://www.aljazeera.com/video/newsfeed/2026/5/26/netanyahu-vows-to-smite-hezbollah-with-overwhelming-force?traffic_source=rss",
+          "Source": "Al Jazeera",
+          "Published": "2026-05-25T23:12:14.0000000-04:00"
+        },
+        {
+          "Title": "Russia threatens more Kyiv strikes and tells foreign nationals to leave",
+          "Link": "https://www.bbc.com/news/articles/c1e22n55zn4o?at_medium=RSS&at_campaign=rss",
+          "Source": "BBC",
+          "Published": "2026-05-25T23:06:06.0000000-04:00"
+        },
+        {
+          "Title": "Sonny Rollins, towering jazz innovator known as 'Saxophone Colossus,' dies at 95",
+          "Link": "https://www.france24.com/en/culture/20260526-sonny-rollins-towering-jazz-innovator-known-as-saxophone-colossus-dies-at-95",
+          "Source": "France 24",
+          "Published": "2026-05-25T23:00:39.0000000-04:00"
+        },
+        {
+          "Title": "Istanbul’s Bilgi University reopened after police crackdown",
+          "Link": "https://www.aljazeera.com/video/newsfeed/2026/5/26/istanbuls-bilgi-university-reopened-after-police-crackdown?traffic_source=rss",
+          "Source": "Al Jazeera",
+          "Published": "2026-05-25T22:48:49.0000000-04:00"
+        },
+        {
+          "Title": "US military says it has launched new strikes on southern Iran",
+          "Link": "https://www.bbc.com/news/articles/cvgzzn4y1n8o?at_medium=RSS&at_campaign=rss",
+          "Source": "BBC",
+          "Published": "2026-05-25T22:44:19.0000000-04:00"
+        },
+        {
+          "Title": "Iran national football team to stay in Mexico during 2026 World Cup",
+          "Link": "https://www.france24.com/en/video/20260526-iran-national-football-team-to-stay-in-mexico-during-2026-world-cup",
+          "Source": "France 24",
+          "Published": "2026-05-25T22:30:18.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🤖 AI News",
+      "Articles": [
+        {
+          "Title": "Quoting Corey Quinn",
+          "Link": "https://simonwillison.net/2026/May/26/corey-quinn/#atom-everything",
+          "Source": "Simon Willison's Weblog",
+          "Published": "2026-05-25T22:28:54.0000000-04:00"
+        },
+        {
+          "Title": "Notes on Pope Leo XIV's encyclical on AI",
+          "Link": "https://simonwillison.net/2026/May/25/encyclical-on-ai/#atom-everything",
+          "Source": "Simon Willison's Weblog",
+          "Published": "2026-05-25T19:58:17.0000000-04:00"
+        },
+        {
+          "Title": "What ClickUp’s mass layoff tells us about the future of work",
+          "Link": "https://techcrunch.com/2026/05/25/what-clickups-mass-layoff-tells-us-about-the-future-of-work/",
+          "Source": "TechCrunch",
+          "Published": "2026-05-25T12:00:00.0000000-04:00"
+        },
+        {
+          "Title": "The pope’s AI encyclical isn’t really about AI",
+          "Link": "https://techcrunch.com/2026/05/25/the-popes-ai-encyclical-isnt-really-about-ai/",
+          "Source": "TechCrunch",
+          "Published": "2026-05-25T11:09:41.0000000-04:00"
+        },
+        {
+          "Title": "Pope Leo calls for being ‘profoundly human’ in the age of AI",
+          "Link": "https://www.theverge.com/news/936945/pope-leo-letter-encyclical-ai-anthropic-labor-warfare",
+          "Source": "The Verge",
+          "Published": "2026-05-25T11:05:07.0000000-04:00"
+        },
+        {
+          "Title": "US's big bet on quantum computing may not be entirely legal",
+          "Link": "https://arstechnica.com/tech-policy/2026/05/uss-big-bet-on-quantum-computing-may-not-be-entirely-legal/",
+          "Source": "Ars Technica",
+          "Published": "2026-05-25T08:00:15.0000000-04:00"
+        },
+        {
+          "Title": "The AI Era Is Creating a Bug Hunting Arms Race",
+          "Link": "https://www.wired.com/story/the-ai-era-is-creating-a-bug-hunting-arms-race/",
+          "Source": "Wired",
+          "Published": "2026-05-25T06:30:00.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🇩🇰 Danish News",
+      "Articles": [
+        {
+          "Title": "Danish pharma giant steps up obesity campaign in the Philippines - Scandasia",
+          "Link": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQMG5xWjkwT1JtdHljaGxzX2l4dVRyZTUxbjBZdVNLQkdyMm96TFVGaGs5RGN4eERVVkZ0ajJOYWlsZGd2NXF2NWo0NjR5UXdoRnBFTzE3b3Z0WEl6UWtwNlB2VHd2c19JNkdmN2xkMmZabVROOWtkbEtSZDVULXQwU0tCYnVLN3lxak1fTTlydmQ?oc=5",
+          "Source": "Google News Denmark",
+          "Published": "2026-05-25T23:54:21.0000000-04:00"
+        },
+        {
+          "Title": "The Top Storylines To Follow At BLAST Slam 7 Copenhagen - Hotspawn",
+          "Link": "https://news.google.com/rss/articles/CBMiekFVX3lxTE1fbEdHbThUcXNGNmQtVVBGbXZ6MnVvbHJfZWNtd1VNUGktWWlua3hvV0xFdlpuMUtpRVpyYnhld3lqXy1YYkUxS3draVNXX1NUS1hPRjlOUWtjYy02T25yYlIyeXFfU0NkRFJZdE1tcmFkSW0zWFR6S2d3?oc=5",
+          "Source": "Google News Denmark",
+          "Published": "2026-05-25T23:36:37.0000000-04:00"
+        },
+        {
+          "Title": "Rubio har haft samtale med Lavrov om krigen i Ukraine",
+          "Link": "https://www.dr.dk/nyheder/seneste/rubio-har-haft-samtale-med-lavrov-om-krigen-i-ukraine",
+          "Source": "DR News",
+          "Published": "2026-05-25T19:02:00.0000000-04:00"
+        }
+      ]
+    }
+  ]
+}

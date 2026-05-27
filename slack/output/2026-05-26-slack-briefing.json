@@ -1,0 +1,274 @@
+{
+  "Mentions": [],
+  "GeneratedAt": "2026-05-27 00:33:54",
+  "Username": "fhemmer",
+  "Summary": {
+    "DirectMessages": 10,
+    "ActionItems": 0,
+    "Mentions": 0,
+    "Channels": 5,
+    "Announcements": 5,
+    "ChannelMessages": 30.0
+  },
+  "DirectMessages": [
+    {
+      "Text": "Do you ever sign off? lol",
+      "Timestamp": "2026-05-26 21:32",
+      "From": "Bryan Halterman"
+    },
+    {
+      "Text": "",
+      "Timestamp": "2026-05-26 21:33",
+      "From": "Bryan Halterman"
+    },
+    {
+      "Text": "",
+      "Timestamp": "2026-05-26 14:30",
+      "From": "Jira"
+    },
+    {
+      "Text": "",
+      "Timestamp": "2026-05-26 14:30",
+      "From": "Jira"
+    },
+    {
+      "Text": "",
+      "Timestamp": "2026-05-26 14:15",
+      "From": "Jira"
+    },
+    {
+      "Text": "_Heartbeat — 9:11 PM_ _New email:_ LinkedIn — Franz, add Sean Kramer",
+      "Timestamp": "2026-05-26 21:13",
+      "From": "Slack Skill Bot"
+    },
+    {
+      "Text": "_Heartbeat — 8:11 PM_ _New email:_ LinkedIn — You have 3 new messages",
+      "Timestamp": "2026-05-26 20:13",
+      "From": "Slack Skill Bot"
+    },
+    {
+      "Text": "_Heartbeat — 3:11 PM_ _New email:_ Grok xAI — Your receipt from Grok xAI #2533-4916 _New email:_ Link — New login from iOS (Chrome Mobile iOS)",
+      "Timestamp": "2026-05-26 15:14",
+      "From": "Slack Skill Bot"
+    },
+    {
+      "Text": "_Heartbeat — 2:11 PM_ _New email:_ LinkedIn — Your connection, Nathalia, just started a new job! Check in with them and 2 others",
+      "Timestamp": "2026-05-26 14:13",
+      "From": "Slack Skill Bot"
+    },
+    {
+      "Text": "_Heartbeat — 1:11 PM_ _New email:_ Google Store — Train better with Google Fitbit Air _New email:_ Republic — This job search platform has 93% accurac...",
+      "Timestamp": "2026-05-26 13:14",
+      "From": "Slack Skill Bot"
+    }
+  ],
+  "ChannelActivity": {
+    "ai-chapter": {
+      "TotalMessages": 12,
+      "RecentMessages": [
+        {
+          "Text": "Man I would love to see something using aspire instead of start core. The built in telemetry alone is worth so much in terms of local debug and tracing.",
+          "Timestamp": "2026-05-26 20:58",
+          "From": "David Driscoll"
+        },
+        {
+          "Text": "Possible I was just on the cusp anyway, but I don't recall the indicator even being orange prior",
+          "Timestamp": "2026-05-26 14:25",
+          "From": "Josh Bowman"
+        },
+        {
+          "Text": "Interesting - I dropped down to 4.5 to continue a session and the indicator for context window went to full and it had to compact.",
+          "Timestamp": "2026-05-26 14:25",
+          "From": "Josh Bowman"
+        },
+        {
+          "Text": "Context windows across claude products in vs code are identical.",
+          "Timestamp": "2026-05-26 13:02",
+          "From": "Geo Rufino"
+        },
+        {
+          "Text": "Looks like it's back up",
+          "Timestamp": "2026-05-26 12:33",
+          "From": "Josh Bowman"
+        },
+        {
+          "Text": "I hope 4.6 comes back. The biggest thing I'm noticing about 4.5 is the context window size is dramatically smaller (apparently 200k vs 1M between 4.5 and 4.6). Which is more than enough for some tasks...",
+          "Timestamp": "2026-05-26 12:20",
+          "From": "Josh Bowman"
+        },
+        {
+          "Text": "Going to ask Opus 4.6 if it knows what's going o- wait.",
+          "Timestamp": "2026-05-26 12:02",
+          "From": "Josh Bowman"
+        },
+        {
+          "Text": "They might have pulled the models to recover?",
+          "Timestamp": "2026-05-26 12:02",
+          "From": "Franz Hemmer"
+        },
+        {
+          "Text": "I think it's a bug. <https://www.githubstatus.com/>",
+          "Timestamp": "2026-05-26 12:01",
+          "From": "Geo Rufino"
+        },
+        {
+          "Text": "Opus 4.5 should be fine. Opus 4.6 is better but Opus 4.5 is still very capable. Make sure that if you have GitHub Agentic Workflows to adjust your model specs in case you have them hardcoded.",
+          "Timestamp": "2026-05-26 11:57",
+          "From": "Franz Hemmer"
+        }
+      ]
+    },
+    "sonarcloud-public": {
+      "TotalMessages": 4,
+      "RecentMessages": [
+        {
+          "Text": "there is a global SONAR_TOKEN secret available to help with Auth. I'm also happy to help with getting things setup as well, just throw something on my calendar",
+          "Timestamp": "2026-05-26 17:12",
+          "From": "Bryan Halterman"
+        },
+        {
+          "Text": "<@U01RRQXEEG5|Halterman> Thanks. I will take a look into that. I might need help.",
+          "Timestamp": "2026-05-26 17:10",
+          "From": "Mike Toothaker"
+        },
+        {
+          "Text": "We default all repos to require sonar analysis. SonarCloud does do analysis of yaml files to check for secret leakage and other anti-patterns. I would recommend a simple github action to validate it.",
+          "Timestamp": "2026-05-26 17:09",
+          "From": "Bryan Halterman"
+        },
+        {
+          "Text": "<!here> Does sonarQube have knowledge of ADF Pipelines? Does it make sense for this repo to require SonarCloud analysis? <https://github.com/relias-engineering/communities-content-extractor/pull/1>",
+          "Timestamp": "2026-05-26 13:08",
+          "From": "Mike Toothaker"
+        }
+      ]
+    },
+    "prod-eng-devex-private": {
+      "TotalMessages": 7,
+      "RecentMessages": [
+        {
+          "Text": "Copilot, but it might have been a hiccup.",
+          "Timestamp": "2026-05-26 13:57",
+          "From": "Franz Hemmer"
+        },
+        {
+          "Text": "or are you talking about M365?",
+          "Timestamp": "2026-05-26 13:20",
+          "From": "Bryan Halterman"
+        },
+        {
+          "Text": "gone from Copilot?",
+          "Timestamp": "2026-05-26 13:19",
+          "From": "Bryan Halterman"
+        },
+        {
+          "Text": "Yes GPT 5.3 and up are gone too.",
+          "Timestamp": "2026-05-26 11:33",
+          "From": "Franz Hemmer"
+        },
+        {
+          "Text": "Ugh, looks like Microsoft just removed Opus 4.6 from the list, possible others.",
+          "Timestamp": "2026-05-26 11:32",
+          "From": "Franz Hemmer"
+        },
+        {
+          "Text": "<https://fortune.com/2026/04/22/ai-ownership-c-suite-board-disagree-pearl-meyer-survey-brad-jayne/|A Pearl Meyer survey of more than 100 executives and board members> published in April found that whi...",
+          "Timestamp": "2026-05-26 10:02",
+          "From": "Malia Paul"
+        },
+        {
+          "Text": "<https://www.nctech.org/resources/blog/2026/data-to-decisions-gregboone.html>",
+          "Timestamp": "2026-05-26 10:02",
+          "From": "Malia Paul"
+        }
+      ]
+    },
+    "dev-ex-private": {
+      "TotalMessages": 1,
+      "RecentMessages": [
+        {
+          "Text": "Copilot really wants me to fix this before I zip up the release (v2.3.2): <https://github.com/relias-engineering/configurator/pull/57>",
+          "Timestamp": "2026-05-26 16:49",
+          "From": "Nick Peterson"
+        }
+      ]
+    },
+    "dev-tribe": {
+      "TotalMessages": 6,
+      "RecentMessages": [
+        {
+          "Text": "set the channel topic: Fix Version for current monolith sprint work: 26.Q2.4 RPLAT Deployment Current monolith deployment: <#C0B56P1SWJD>",
+          "Timestamp": "2026-05-26 18:44",
+          "From": "Clark Bonham"
+        },
+        {
+          "Text": "FYI: When i say host related items, I mean items merged into develop that fall under the following folders: • apps/rlms • apps/assignments • libs/rlms • libs/app-shell • libs/ai-agent • libs/help • li...",
+          "Timestamp": "2026-05-26 13:39",
+          "From": "Clark Bonham"
+        },
+        {
+          "Text": "<!here> Hey folks! Re: Monolith items: this is your reminder that if you have items that are not complete that involve the monolith, and if they are part of 26.Q2.3, I will need them completed or reve...",
+          "Timestamp": "2026-05-26 13:28",
+          "From": "Clark Bonham"
+        },
+        {
+          "Text": "please post in <#C85Q48HTM>",
+          "Timestamp": "2026-05-26 11:02",
+          "From": "Beth Dodd"
+        },
+        {
+          "Text": "Hey <!here>, I am also having some issues with deployments. The Shared-DataFactory pipeline is failing in the prod environment. Do you know who I should reach out to for help with this? <https://dev.a...",
+          "Timestamp": "2026-05-26 11:01",
+          "From": "Furkan Karabulut"
+        },
+        {
+          "Text": "Hi <!here> - The pipeline for the PR-2576 (RPLAT-20641) is failing as shown in below screenshot, can you please help me on this?",
+          "Timestamp": "2026-05-26 10:30",
+          "From": "Revati Nikumbh"
+        }
+      ]
+    }
+  },
+  "DateRange": {
+    "To": "2026-05-26",
+    "From": "2026-05-25"
+  },
+  "ActionItems": [],
+  "Announcements": [
+    {
+      "Text": "set the channel topic: Fix Version for current monolith sprint work: 26.Q2.4 RPLAT Deployment Current monolith deployment: <#C0B56P1SWJD>",
+      "Timestamp": "2026-05-26 18:44",
+      "From": "Clark Bonham",
+      "Permalink": "https://relias-engineering.slack.com/archives/C1KAF274N/p1779835497691169",
+      "Channel": "dev-tribe"
+    },
+    {
+      "Text": "<@UAPJ9T0E9|tamila> <@UR79LK36G|Shilpa> - Gonna do a huddle in this channel to see if we can determine something about Academy",
+      "Timestamp": "2026-05-26 16:35",
+      "From": "Clark Bonham",
+      "Permalink": "https://relias-engineering.slack.com/archives/C0B3G7NNS64/p1779827744333159?thread_ts=1779827744.333159",
+      "Channel": "platform-deployment-26-q2-02"
+    },
+    {
+      "Text": "Thanks <@U66AF226Q|Warren>, I was working in the back channels on getting you a name",
+      "Timestamp": "2026-05-26 15:53",
+      "From": "Wes Wood",
+      "Permalink": "https://relias-engineering.slack.com/archives/C08KXDC3C8G/p1779825236271679",
+      "Channel": "mobile_monsters_inc_public"
+    },
+    {
+      "Text": "<!channel>, can we have a cloud engineer to help troubleshoot some DLQ issues in production?",
+      "Timestamp": "2026-05-26 10:16",
+      "From": "Yuhua Zhong",
+      "Permalink": "https://relias-engineering.slack.com/archives/C85Q48HTM/p1779804983284629",
+      "Channel": "systems-management"
+    },
+    {
+      "Text": "<@U0AHW0XM1ST|Hal Lee> <@U1LLCS4MP|rakhtar> I have created a ticket for setup window container on dev environment to work around, I already share the ticket on the system-management slack channel, you can refer the details added into ticket. Let me k...",
+      "Timestamp": "2026-05-26 08:58",
+      "From": "Hemant Patil",
+      "Permalink": "https://relias-engineering.slack.com/archives/C0AQ2UM3J8P/p1779800320996219",
+      "Channel": "hg-novaguard-public"
+    }
+  ]
+}

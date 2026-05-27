@@ -1,6 +1,6 @@
 ---
 name: news
-description: V1.0 - Fetches news headlines from US, World, AI, and Danish sources via direct web scraping. Use when gathering daily news for diary entries.
+description: V1.1 - Fetches news headlines from US, World, AI, and Danish sources via resilient RSS parsing. Use when gathering daily news for diary entries.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -68,7 +68,7 @@ The individual scripts call `Get-AllNews.ps1` so the cache stays a single struct
 & "$env:USERPROFILE\.agents\skills\news\scripts\Get-USNews.ps1"
 ```
 
-**Sources**: Associated Press, Reuters, NPR, PBS NewsHour, Politico, USA Today
+**Sources**: Associated Press, NPR, PBS NewsHour, Politico, USA Today
 
 ### 2. World News
 
@@ -76,7 +76,7 @@ The individual scripts call `Get-AllNews.ps1` so the cache stays a single struct
 & "$env:USERPROFILE\.agents\skills\news\scripts\Get-WorldNews.ps1"
 ```
 
-**Sources**: Associated Press, Reuters, BBC, Al Jazeera, France 24, The Guardian
+**Sources**: BBC, Al Jazeera, France 24, The Guardian, DW News
 
 ### 3. AI News
 
@@ -92,7 +92,7 @@ The individual scripts call `Get-AllNews.ps1` so the cache stays a single struct
 & "$env:USERPROFILE\.agents\skills\news\scripts\Get-DanishNews.ps1"
 ```
 
-**Sources**: Reuters, The Local Denmark, CPH Post, DR News, Politiken
+**Sources**: The Local Denmark, CPH Post, DR News, Politiken, Google News Denmark fallback
 
 ## Output Format
 
@@ -151,8 +151,15 @@ Scripts automatically enforce:
 
 All scripts accept:
 
+- `-Date`: Target day in `yyyy-MM-dd` format. Use this after midnight when scaffolding the prior day.
 - `-Count`: Number of headlines to fetch (default: 7)
 - `-HoursBack`: How far back to search (default: 24)
+
+## Reliability Rules
+
+- Missing RSS fields must skip only the affected item, never the whole source.
+- Atom feeds with `entry`/`link href` must be parsed alongside RSS `item` feeds.
+- Diary regeneration after midnight must call `Get-AllNews.ps1 -Date YYYY-MM-DD` for the intended diary day.
 
 ## When to Use This Skill
 

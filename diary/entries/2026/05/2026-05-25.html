@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Monday, 2026-05-25</title>
+  <style>
+    [data-theme="paper"], :root {
+      --bg-canvas: #080808; --bg-surface: #F5F1E8; --bg-card: #FFFFFF;
+      --text-primary: #141413; --text-secondary: #9A9891; --text-muted: #9A9891;
+      --accent-primary: #D97757; --accent-secondary: #788C5D; --accent-tertiary: #6A8CAF;
+      --border-subtle: rgba(20,20,19,0.08); --link-color: #6A8CAF;
+      --accent-tag-bg: rgba(217,119,87,0.12); --accent-tag-text: #D97757;
+      --sky-tag-bg: rgba(106,140,175,0.12); --sky-tag-text: #6A8CAF;
+      --olive-tag-bg: rgba(120,140,93,0.12); --olive-tag-text: #788C5D;
+      --slate-tag-bg: rgba(20,20,19,0.08); --slate-tag-text: #9A9891;
+      --warn-bg: #D97757; --warn-text: #FFFFFF;
+      --shadow-soft: 0 24px 80px rgba(0,0,0,0.18);
+      --table-header-bg: rgba(20,20,19,0.04); --table-border: rgba(20,20,19,0.06);
+      --stat-positive: #788C5D; --stat-negative: #D97757;
+    }
+    [data-theme="obsidian"] {
+      --bg-canvas: #0d1117; --bg-surface: #161b22; --bg-card: #21262d;
+      --text-primary: #c9d1d9; --text-secondary: #8b949e; --text-muted: #6e7681;
+      --accent-primary: #58a6ff; --accent-secondary: #3fb950; --accent-tertiary: #d2a8ff;
+      --border-subtle: rgba(240,246,252,0.1); --link-color: #58a6ff;
+      --accent-tag-bg: rgba(88,166,255,0.12); --accent-tag-text: #58a6ff;
+      --sky-tag-bg: rgba(210,168,255,0.12); --sky-tag-text: #d2a8ff;
+      --olive-tag-bg: rgba(63,185,80,0.12); --olive-tag-text: #3fb950;
+      --slate-tag-bg: rgba(139,148,158,0.12); --slate-tag-text: #8b949e;
+      --warn-bg: #f85149; --warn-text: #FFFFFF;
+      --shadow-soft: 0 24px 80px rgba(0,0,0,0.4);
+      --table-header-bg: rgba(240,246,252,0.06); --table-border: rgba(240,246,252,0.08);
+      --stat-positive: #3fb950; --stat-negative: #f85149;
+    }
+    [data-theme="twilight"] {
+      --bg-canvas: #16162a; --bg-surface: #1e1e3f; --bg-card: #2a2a4a;
+      --text-primary: #e0def4; --text-secondary: #908caa; --text-muted: #6c6c89;
+      --accent-primary: #7c5cbf; --accent-secondary: #c4a7e7; --accent-tertiary: #f7c59f;
+      --border-subtle: rgba(200,180,240,0.12); --link-color: #7c5cbf;
+      --accent-tag-bg: rgba(124,92,191,0.15); --accent-tag-text: #7c5cbf;
+      --sky-tag-bg: rgba(247,197,159,0.15); --sky-tag-text: #f7c59f;
+      --olive-tag-bg: rgba(196,167,231,0.15); --olive-tag-text: #c4a7e7;
+      --slate-tag-bg: rgba(144,140,170,0.12); --slate-tag-text: #908caa;
+      --warn-bg: #7c5cbf; --warn-text: #FFFFFF;
+      --shadow-soft: 0 24px 80px rgba(0,0,0,0.5);
+      --table-header-bg: rgba(200,180,240,0.08); --table-border: rgba(200,180,240,0.1);
+      --stat-positive: #c4a7e7; --stat-negative: #f7c59f;
+    }
+    [data-theme="carbon"] {
+      --bg-canvas: #111111; --bg-surface: #1a1a1a; --bg-card: #222222;
+      --text-primary: #ececec; --text-secondary: #888888; --text-muted: #666666;
+      --accent-primary: #D97757; --accent-secondary: #788C5D; --accent-tertiary: #6A8CAF;
+      --border-subtle: rgba(255,255,255,0.08); --link-color: #D97757;
+      --accent-tag-bg: rgba(217,119,87,0.15); --accent-tag-text: #D97757;
+      --sky-tag-bg: rgba(106,140,175,0.15); --sky-tag-text: #6A8CAF;
+      --olive-tag-bg: rgba(120,140,93,0.15); --olive-tag-text: #788C5D;
+      --slate-tag-bg: rgba(255,255,255,0.08); --slate-tag-text: #888888;
+      --warn-bg: #D97757; --warn-text: #FFFFFF;
+      --shadow-soft: 0 24px 80px rgba(0,0,0,0.5);
+      --table-header-bg: rgba(255,255,255,0.04); --table-border: rgba(255,255,255,0.06);
+      --stat-positive: #788C5D; --stat-negative: #D97757;
+    }
+    .theme-toggle{position:fixed;top:16px;right:16px;z-index:100;font-family:ui-monospace,"Cascadia Code","Fira Code",monospace;font-size:0.75rem}
+    .theme-toggle-btn{background:var(--bg-card);color:var(--text-secondary);border:1px solid var(--border-subtle);border-radius:6px;padding:6px 10px;cursor:pointer;font-size:1.2rem;line-height:1;transition:background .2s,color .2s}
+    .theme-toggle-btn:hover{background:var(--accent-primary);color:var(--bg-canvas)}
+    .theme-menu{display:none;position:absolute;top:100%;right:0;margin-top:4px;background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:8px;box-shadow:var(--shadow-soft);overflow:hidden;min-width:140px}
+    .theme-menu.open{display:block}
+    .theme-menu button{display:block;width:100%;text-align:left;background:none;color:var(--text-primary);border:none;padding:10px 16px;cursor:pointer;font-family:inherit;font-size:0.8rem;transition:background .15s}
+    .theme-menu button:hover{background:var(--accent-primary);color:var(--bg-canvas)}
+    :root { --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 24px; --space-6: 32px; --space-7: 48px; --radius-lg: 32px; --radius-md: 20px; --radius-sm: 12px; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg-canvas); color: var(--text-primary); font: 400 16px/1.6 Inter, "Segoe UI", Arial, sans-serif; }
+    a { color: var(--link-color); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .page-shell { min-height: 100vh; padding: var(--space-7) var(--space-5); }
+    .window { max-width: 1180px; margin: 0 auto; padding: var(--space-6); background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); }
+    h1 { font-family: Georgia, "Times New Roman", serif; font-size: 2.2rem; font-weight: 700; margin: 0 0 var(--space-2) 0; }
+    .subtitle, .mono, .eyebrow { font-family: ui-monospace, "Cascadia Code", "Fira Code", monospace; }
+    .subtitle { color: var(--text-muted); font-size: 0.8rem; margin-bottom: var(--space-6); }
+    .eyebrow { color: var(--text-muted); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: var(--space-2); }
+    .muted { color: var(--text-muted); }
+    .section { margin-bottom: var(--space-6); padding-bottom: var(--space-6); border-bottom: 1px solid var(--border-subtle); }
+    .section:last-child { border-bottom: none; }
+    .section-title { font-family: Georgia, "Times New Roman", serif; font-size: 1.3rem; font-weight: 600; margin: 0 0 var(--space-4) 0; }
+    .section-subtitle { font-family: Georgia, "Times New Roman", serif; font-size: 1.05rem; font-weight: 600; margin: var(--space-5) 0 var(--space-3) 0; }
+    .card, .stat-block { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-4); }
+    .card + .card { margin-top: var(--space-3); }
+    .grid { display: grid; gap: var(--space-3); }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .stat-block { text-align: center; }
+    .stat-label { color: var(--text-muted); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: var(--space-1); }
+    .stat-value { font-family: Georgia, "Times New Roman", serif; font-size: 1.55rem; font-weight: 700; }
+    .stat-delta { margin-top: var(--space-1); font-size: 0.78rem; }
+    .tag { display: inline-block; font-family: ui-monospace, "Cascadia Code", monospace; font-size: 0.65rem; padding: 2px 8px; border-radius: 4px; white-space: nowrap; vertical-align: middle; }
+    .tag-slate { background: var(--slate-tag-bg); color: var(--slate-tag-text); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+    th { text-align: left; padding: var(--space-2) var(--space-3); background: var(--table-header-bg); border-bottom: 1px solid var(--table-border); font-family: ui-monospace, "Cascadia Code", monospace; font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-muted); }
+    td { padding: var(--space-2) var(--space-3); border-bottom: 1px solid var(--table-border); vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    ol.num-list { list-style: none; counter-reset: nl; margin: 0; padding: 0; }
+    ol.num-list li { counter-increment: nl; position: relative; padding: var(--space-2) 0 var(--space-2) 32px; border-bottom: 1px solid var(--table-border); line-height: 1.5; }
+    ol.num-list li:last-child { border-bottom: none; }
+    ol.num-list li::before { content: counter(nl); position: absolute; left: 0; top: var(--space-2); width: 24px; text-align: right; font-family: ui-monospace, "Cascadia Code", monospace; font-size: 0.75rem; color: var(--text-muted); }
+    .todo-callout { border-color: rgba(217,119,87,0.3); background: linear-gradient(135deg, var(--bg-card), rgba(217,119,87,0.08)); }
+    .todo-callout strong { color: var(--accent-primary); }
+    .diary-generated-markdown h1, .diary-generated-markdown h2, .diary-generated-markdown h3, .diary-generated-markdown h4 { font-family: Georgia, "Times New Roman", serif; margin: var(--space-4) 0 var(--space-2); }
+    .diary-generated-markdown h1:first-child, .diary-generated-markdown h2:first-child, .diary-generated-markdown h3:first-child, .diary-generated-markdown h4:first-child { margin-top: 0; }
+    .diary-generated-markdown ul, .diary-generated-markdown ol { margin: 0; padding-left: 1.2rem; }
+    .diary-generated-markdown p:last-child { margin-bottom: 0; }
+    .footer { color: var(--text-muted); font-size: 0.78rem; text-align: center; }
+    @media (max-width: 900px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } .page-shell { padding: var(--space-5) var(--space-3); } .window { padding: var(--space-5); } }
+  </style>
+</head>
+<body>
+  <div class="theme-toggle" aria-label="Theme selector">
+    <button class="theme-toggle-btn" onclick="toggleThemeMenu()" aria-haspopup="true" aria-expanded="false">⋮</button>
+    <div class="theme-menu" id="themeMenu">
+      <button onclick="setTheme('paper')">📰 Paper</button>
+      <button onclick="setTheme('obsidian')">🖤 Obsidian</button>
+      <button onclick="setTheme('twilight')">🌆 Twilight</button>
+      <button onclick="setTheme('carbon')">🔲 Carbon</button>
+    </div>
+  </div>
+
+  <main class="page-shell">
+    <article class="window">
+      <header class="section">
+        <div class="eyebrow">Diary scaffold &mdash; HTML dashboard variant</div>
+        <h1>Monday, 2026-05-25</h1>
+        <div class="subtitle">Generated with the current diary HTML scaffold. Refresh automated sections, then fill in Today&rsquo;s Highlight and Personal Reflections.</div>
+      </header>
+
+      <section class="section">
+        <div class="section-title">🎯 Today's Highlight</div>
+        <div class="card todo-callout">
+          <!-- TODO: fill in -->
+          <strong>TODO:</strong> Pick the main news headline of the day from the News Headlines section below, add its URL, and optionally add 1-2 sentences of context.
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-title">💬 Slack Activity</div>
+<div class="card diary-generated-markdown">
+  <div class="eyebrow">Source: Slack briefing for 2026-05-25</div>
+<p>No substantive Slack activity was captured for this date; automated Slack Skill Bot notifications were excluded.</p>
+</div>
+
+      </section>
+
+      <section class="section">
+        <div class="section-title">🌤 Weather</div>
+<div class="card diary-generated-markdown">
+  <div class="eyebrow">OpenWeather snapshot for 2026-05-25</div>
+<h3 id="mooresville-us">📍 Mooresville, US</h3>
+<table>
+<thead>
+<tr>
+<th>📅 Date</th>
+<th>📆 Day</th>
+<th>🕐 Time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2026-05-25</td>
+<td>Monday</td>
+<td>11:40 PM Eastern</td>
+</tr>
+</tbody>
+</table>
+<h3 id="current-weather">Current Weather</h3>
+<table>
+<thead>
+<tr>
+<th>🌡️ Temp</th>
+<th>🤔 Feels Like</th>
+<th>☁️ Condition</th>
+<th>💨 Wind</th>
+<th>💧 Humidity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>71°F</td>
+<td>72°F</td>
+<td>Overcast Clouds</td>
+<td>11 mph</td>
+<td>90%</td>
+</tr>
+</tbody>
+</table>
+<h3 id="day-forecast">3-Day Forecast</h3>
+<table>
+<thead>
+<tr>
+<th>Day</th>
+<th>Icon</th>
+<th>Condition</th>
+<th>Low</th>
+<th>High</th>
+<th>Wind</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Monday (Today)</td>
+<td>🌧️</td>
+<td>Light Rain</td>
+<td>71°F</td>
+<td>80°F</td>
+<td>11 mph</td>
+</tr>
+<tr>
+<td>Wednesday</td>
+<td>🌧️</td>
+<td>Light Rain</td>
+<td>67°F</td>
+<td>83°F</td>
+<td>9 mph</td>
+</tr>
+<tr>
+<td>Thursday</td>
+<td>☁️</td>
+<td>Overcast Clouds</td>
+<td>66°F</td>
+<td>87°F</td>
+<td>6 mph</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+      </section>
+
+      <section class="section">
+        <div class="section-title">📰 News Headlines</div>
+<div class="card diary-generated-markdown">
+  <div class="eyebrow">News snapshot for 2026-05-25</div>
+<h3>&#127482;&#127480; US News</h3>
+<ol class="num-list">
+<li><a href="https://www.pbs.org/newshour/world/u-s-says-it-carried-out-self-defense-strikes-in-iran-including-missile-sites-and-boats-placing-mines">U.S. says it carried out &#39;self-defense&#39; strikes in Iran, including missile sites and boats placing mines</a> <span class="tag tag-slate">PBS NewsHour</span></li>
+<li><a href="https://www.npr.org/2026/05/25/g-s1-124246/world-cup-usmnt-tim-ream">Ahead of the World Cup, pressure to win and grow American soccer is on Tim Ream&#39;s mind</a> <span class="tag tag-slate">NPR</span></li>
+<li><a href="https://www.pbs.org/newshour/show/u-s-and-iran-suggest-progress-on-peace-talks-but-deal-not-imminent">U.S. and Iran suggest progress on peace talks, but deal &#39;not imminent&#39;</a> <span class="tag tag-slate">PBS NewsHour</span></li>
+<li><a href="https://www.npr.org/2026/05/25/nx-s1-5833860/colbert-only-in-monroe-viral-cbs-paramount">After Stephen Colbert&#39;s viral talk show parody, CBS backs down from copyright action</a> <span class="tag tag-slate">NPR</span></li>
+</ol>
+<h3>&#127757; World News</h3>
+<ol class="num-list">
+<li><a href="https://www.theguardian.com/world/2026/may/26/us-strikes-iran-missile-sites-vessels-trump-peace-deal-elusive">US strikes Iran missile sites and mine laying vessels as Trump’s promised peace deal remains elusive</a> <span class="tag tag-slate">The Guardian</span></li>
+<li><a href="https://www.aljazeera.com/video/newsfeed/2026/5/26/netanyahu-vows-to-smite-hezbollah-with-overwhelming-force?traffic_source=rss">Netanyahu vows to ‘smite’ Hezbollah with ‘overwhelming’ force</a> <span class="tag tag-slate">Al Jazeera</span></li>
+<li><a href="https://www.bbc.com/news/articles/c1e22n55zn4o?at_medium=RSS&amp;at_campaign=rss">Russia threatens more Kyiv strikes and tells foreign nationals to leave</a> <span class="tag tag-slate">BBC</span></li>
+<li><a href="https://www.france24.com/en/culture/20260526-sonny-rollins-towering-jazz-innovator-known-as-saxophone-colossus-dies-at-95">Sonny Rollins, towering jazz innovator known as &#39;Saxophone Colossus,&#39; dies at 95</a> <span class="tag tag-slate">France 24</span></li>
+<li><a href="https://www.aljazeera.com/video/newsfeed/2026/5/26/istanbuls-bilgi-university-reopened-after-police-crackdown?traffic_source=rss">Istanbul’s Bilgi University reopened after police crackdown</a> <span class="tag tag-slate">Al Jazeera</span></li>
+<li><a href="https://www.bbc.com/news/articles/cvgzzn4y1n8o?at_medium=RSS&amp;at_campaign=rss">US military says it has launched new strikes on southern Iran</a> <span class="tag tag-slate">BBC</span></li>
+<li><a href="https://www.france24.com/en/video/20260526-iran-national-football-team-to-stay-in-mexico-during-2026-world-cup">Iran national football team to stay in Mexico during 2026 World Cup</a> <span class="tag tag-slate">France 24</span></li>
+</ol>
+<h3>&#129302; AI News</h3>
+<ol class="num-list">
+<li><a href="https://simonwillison.net/2026/May/26/corey-quinn/#atom-everything">Quoting Corey Quinn</a> <span class="tag tag-slate">Simon Willison&#39;s Weblog</span></li>
+<li><a href="https://simonwillison.net/2026/May/25/encyclical-on-ai/#atom-everything">Notes on Pope Leo XIV&#39;s encyclical on AI</a> <span class="tag tag-slate">Simon Willison&#39;s Weblog</span></li>
+<li><a href="https://techcrunch.com/2026/05/25/what-clickups-mass-layoff-tells-us-about-the-future-of-work/">What ClickUp’s mass layoff tells us about the future of work</a> <span class="tag tag-slate">TechCrunch</span></li>
+<li><a href="https://techcrunch.com/2026/05/25/the-popes-ai-encyclical-isnt-really-about-ai/">The pope’s AI encyclical isn’t really about AI</a> <span class="tag tag-slate">TechCrunch</span></li>
+<li><a href="https://www.theverge.com/news/936945/pope-leo-letter-encyclical-ai-anthropic-labor-warfare">Pope Leo calls for being ‘profoundly human’ in the age of AI</a> <span class="tag tag-slate">The Verge</span></li>
+<li><a href="https://arstechnica.com/tech-policy/2026/05/uss-big-bet-on-quantum-computing-may-not-be-entirely-legal/">US&#39;s big bet on quantum computing may not be entirely legal</a> <span class="tag tag-slate">Ars Technica</span></li>
+<li><a href="https://www.wired.com/story/the-ai-era-is-creating-a-bug-hunting-arms-race/">The AI Era Is Creating a Bug Hunting Arms Race</a> <span class="tag tag-slate">Wired</span></li>
+</ol>
+<h3>&#127465;&#127472; Danish News</h3>
+<ol class="num-list">
+<li><a href="https://news.google.com/rss/articles/CBMikAFBVV95cUxQMG5xWjkwT1JtdHljaGxzX2l4dVRyZTUxbjBZdVNLQkdyMm96TFVGaGs5RGN4eERVVkZ0ajJOYWlsZGd2NXF2NWo0NjR5UXdoRnBFTzE3b3Z0WEl6UWtwNlB2VHd2c19JNkdmN2xkMmZabVROOWtkbEtSZDVULXQwU0tCYnVLN3lxak1fTTlydmQ?oc=5">Danish pharma giant steps up obesity campaign in the Philippines - Scandasia</a> <span class="tag tag-slate">Google News Denmark</span></li>
+<li><a href="https://news.google.com/rss/articles/CBMiekFVX3lxTE1fbEdHbThUcXNGNmQtVVBGbXZ6MnVvbHJfZWNtd1VNUGktWWlua3hvV0xFdlpuMUtpRVpyYnhld3lqXy1YYkUxS3draVNXX1NUS1hPRjlOUWtjYy02T25yYlIyeXFfU0NkRFJZdE1tcmFkSW0zWFR6S2d3?oc=5">The Top Storylines To Follow At BLAST Slam 7 Copenhagen - Hotspawn</a> <span class="tag tag-slate">Google News Denmark</span></li>
+<li><a href="https://www.dr.dk/nyheder/seneste/rubio-har-haft-samtale-med-lavrov-om-krigen-i-ukraine">Rubio har haft samtale med Lavrov om krigen i Ukraine</a> <span class="tag tag-slate">DR News</span></li>
+</ol>
+</div>
+
+
+
+
+
+      </section>
+
+      <section class="section">
+        <div class="section-title">📊 Daily Numbers</div>
+<div class="card diary-generated-markdown">
+  <div class="eyebrow">Daily numbers snapshot for 2026-05-25</div>
+<ul>
+<li><strong>Dow Jones</strong>: 50,579.70 (+570.35, +1.14%)</li>
+<li><strong>S&amp;P 500</strong>: 7,473.47 (+40.50, +0.54%)</li>
+</ul>
+<p><em>Markets pushed higher as investors digested the day's macro headlines. The Dow's 1.14% move was steeper than the S&amp;P's 0.54%, suggesting heavier pressure in blue-chip names.</em></p>
+<ul>
+<li><strong>Relias Repo Count</strong>: GitHub: 282 (—), Bitbucket: 562 (—)</li>
+<li><strong>GitHub Copilot Org-Wide</strong>: 105,572 / 317,000 premium requests (33.3%)
+<ul>
+<li><strong>Cloud Agent</strong>: 144 requests</li>
+<li><strong>Delta vs Yesterday</strong>: unavailable (previous diary snapshot missing org-wide GitHub Copilot usage)</li>
+<li><strong>Personal (fhemmerrelias)</strong>: 9,578 / 1,000 used (957.8%)</li>
+</ul>
+</li>
+<li><strong>Cloudflare Usage</strong>:
+<ul>
+<li><strong>nowleadershipgroup.com</strong>: 4 page views, 10 unique visitors, 0 emails forwarded
+<ul>
+<li><strong>Delta vs Yesterday</strong>: unavailable (previous diary entry missing Cloudflare metrics)</li>
+</ul>
+</li>
+<li><strong>setitfreeloop.org</strong>: 0 page views, 0 unique visitors
+<ul>
+<li><strong>Delta vs Yesterday</strong>: unavailable (previous diary entry missing Cloudflare metrics)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+
+      </section>
+
+      <section class="section">
+        <div class="section-title">🤖 LLM Models</div>
+<div class="eyebrow">Carried forward from 2026-05-17 &mdash; no new changes detected</div>
+
+        <div class="grid grid-3">
+          <div class="card">
+            <div class="section-subtitle" style="margin-top:0">LMSYS Overall (Top 5)</div>
+            <table>
+              <thead><tr><th>Rank</th><th>Model</th><th>Org</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>claude-opus-4-6-thinking</td><td>Anthropic</td></tr>
+                <tr><td>2</td><td>claude-opus-4-7-thinking</td><td>Anthropic</td></tr>
+                <tr><td>3</td><td>claude-opus-4-6</td><td>Anthropic</td></tr>
+                <tr><td>4</td><td>claude-opus-4-7</td><td>Anthropic</td></tr>
+                <tr><td>5</td><td>muse-spark</td><td>Meta</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card">
+            <div class="section-subtitle" style="margin-top:0">LMSYS Coding (Top 5)</div>
+            <table>
+              <thead><tr><th>Rank</th><th>Model</th><th>Org</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>claude-opus-4-7-thinking</td><td>Anthropic</td></tr>
+                <tr><td>2</td><td>claude-opus-4-7</td><td>Anthropic</td></tr>
+                <tr><td>3</td><td>claude-opus-4-6-thinking</td><td>Anthropic</td></tr>
+                <tr><td>4</td><td>claude-opus-4-6</td><td>Anthropic</td></tr>
+                <tr><td>5</td><td>claude-opus-4-5-20251101-thinking-32k</td><td>Anthropic</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card">
+            <div class="section-subtitle" style="margin-top:0">LMSYS Vision (Top 5)</div>
+            <table>
+              <thead><tr><th>Rank</th><th>Model</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>claude-opus-4-7-thinking</td></tr>
+                <tr><td>2</td><td>claude-opus-4-7</td></tr>
+                <tr><td>3</td><td>claude-opus-4-6-thinking</td></tr>
+                <tr><td>4</td><td>muse-spark</td></tr>
+                <tr><td>5</td><td>claude-opus-4-6</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+<div class="card diary-generated-markdown">
+  <div class="eyebrow">LLM snapshot for 2026-05-24 - model releases</div>
+<h3 id="new-model-releases-last-7-days">New Model Releases (Last 7 Days)</h3>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Provider</th>
+<th>Released</th>
+<th>Context</th>
+<th>Pricing (in/out per 1M)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://openrouter.ai/qwen/qwen3.7-max">Qwen3.7 Max</a></td>
+<td>Qwen</td>
+<td>May 21</td>
+<td>976K</td>
+<td>$2.50 / $7.50</td>
+</tr>
+<tr>
+<td><a href="https://openrouter.ai/x-ai/grok-build-0.1">xAI: Grok Build 0.1</a></td>
+<td>X Ai</td>
+<td>May 20</td>
+<td>250K</td>
+<td>$1.00 / $2.00</td>
+</tr>
+<tr>
+<td><a href="https://openrouter.ai/google/gemini-3.5-flash">Gemini 3.5 Flash</a></td>
+<td>Google</td>
+<td>May 19</td>
+<td>1024K</td>
+<td>$1.50 / $9.00</td>
+</tr>
+</tbody>
+</table>
+<p><em>Total models on OpenRouter: 358</em></p>
+</div>
+
+<div class="card diary-generated-markdown">
+  <div class="eyebrow">LLM snapshot for 2026-05-24 - app rankings</div>
+<h3 id="top-openrouter-apps-by-token-usage">Top OpenRouter Apps (by Token Usage)</h3>
+<p><em>Failed to fetch app rankings.</em></p>
+</div>
+
+<div class="card diary-generated-markdown">
+  <div class="eyebrow">LLM snapshot for 2026-05-25 - model releases</div>
+<h3 id="new-model-releases-last-7-days">New Model Releases (Last 7 Days)</h3>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Provider</th>
+<th>Released</th>
+<th>Context</th>
+<th>Pricing (in/out per 1M)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://openrouter.ai/qwen/qwen3.7-max">Qwen3.7 Max</a></td>
+<td>Qwen</td>
+<td>May 21</td>
+<td>976K</td>
+<td>$2.50 / $7.50</td>
+</tr>
+<tr>
+<td><a href="https://openrouter.ai/x-ai/grok-build-0.1">xAI: Grok Build 0.1</a></td>
+<td>X Ai</td>
+<td>May 20</td>
+<td>250K</td>
+<td>$1.00 / $2.00</td>
+</tr>
+<tr>
+<td><a href="https://openrouter.ai/google/gemini-3.5-flash">Gemini 3.5 Flash</a></td>
+<td>Google</td>
+<td>May 19</td>
+<td>1024K</td>
+<td>$1.50 / $9.00</td>
+</tr>
+</tbody>
+</table>
+<p><em>Total models on OpenRouter: 357</em></p>
+</div>
+
+<div class="card diary-generated-markdown">
+  <div class="eyebrow">LLM snapshot for 2026-05-25 - app rankings</div>
+<h3 id="top-openrouter-apps-by-token-usage">Top OpenRouter Apps (by Token Usage)</h3>
+<p><em>Failed to fetch app rankings.</em></p>
+</div>
+
+      </section>
+
+      <section class="section">
+        <div class="section-title">🔥 Trending GitHub Repos</div>
+<div class="card diary-generated-markdown">
+  <div class="eyebrow">GitHub Trending for 2026-05-25</div>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Repository</th>
+<th>Description</th>
+<th>Stars</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><a href="https://github.com/Lum1104/Understand-Anything">Lum1104/Understand-Anything</a></td>
+<td>Graphs that teach &gt; graphs that impress. Turn any code into an interactive knowledge graph you ca...</td>
+<td>⭐ 31,859 (+5,604 today)</td>
+</tr>
+<tr>
+<td>2</td>
+<td><a href="https://github.com/anthropics/knowledge-work-plugins">anthropics/knowledge-work-plugins</a></td>
+<td>Open source repository of plugins primarily intended for knowledge workers to use in Claude Cowork</td>
+<td>⭐ 15,687 (+1,441 today)</td>
+</tr>
+<tr>
+<td>3</td>
+<td><a href="https://github.com/rohitg00/ai-engineering-from-scratch">rohitg00/ai-engineering-from-scratch</a></td>
+<td>Learn it. Build it. Ship it for others.</td>
+<td>⭐ 18,961 (+3,154 today)</td>
+</tr>
+<tr>
+<td>4</td>
+<td><a href="https://github.com/affaan-m/ECC">affaan-m/ECC</a></td>
+<td>The agent harness performance optimization system. Skills, instincts, memory, security, and resea...</td>
+<td>⭐ 192,697 (+2,025 today)</td>
+</tr>
+<tr>
+<td>5</td>
+<td><a href="https://github.com/mukul975/Anthropic-Cybersecurity-Skills">mukul975/Anthropic-Cybersecurity-Skills</a></td>
+<td>754 structured cybersecurity skills for AI agents · Mapped to 5 frameworks: MITRE ATT&amp;CK, NIST CS...</td>
+<td>⭐ 9,374 (+1,004 today)</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+      </section>
+
+      <section class="section">
+        <div class="section-title">🛠 Software Watchlist</div>
+<div class="card diary-generated-markdown">
+  <div class="eyebrow">Software watchlist snapshot for 2026-05-25</div>
+<table>
+<thead>
+<tr>
+<th>Software</th>
+<th>Version</th>
+<th>Released</th>
+<th>Highlights</th>
+<th>Links</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/anthropics/claude-code">Claude Code</a></td>
+<td>v2.1.150</td>
+<td>May 23</td>
+<td>Internal infrastructure improvements (no user-facing changes)</td>
+<td><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.150">Release</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/google-gemini/gemini-cli">Gemini CLI</a></td>
+<td>v0.44.0-preview.0</td>
+<td>May 22</td>
+<td>chore(release): bump version to 0.44.0-nightly.20260512.g022e8baef by @gemini-cli-robot in <a href="https://github.com/google-gemini/gemini-cli/pull/26957;">https://github.com/google-gemini/gemini-cli/pull/26957;</a> Changelog for v0.42.0 by @gemini-cli-robot in <a href="https://github.com/google-gemini/gemini-cli/pull/26958..">https://github.com/google-gemini/gemini-cli/pull/26958..</a>.</td>
+<td><a href="https://github.com/google-gemini/gemini-cli/releases/tag/v0.44.0-preview.0">Release</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/cli/cli">GitHub CLI</a></td>
+<td>v2.92.0</td>
+<td>Apr 28</td>
+<td>feat(skills): add --allow-hidden-dirs flag to preview command by @SamMorrowDrums in <a href="https://github.com/cli/cli/pull/13265;">https://github.com/cli/cli/pull/13265;</a> feat(skills): support GHEC with data residency hosts by @SamMorrowDrums in <a href="https://github.com/cli/cli/pull/13264;">https://github.com/cli/cli/pull/13264;</a> Fix SetSam...</td>
+<td><a href="https://github.com/cli/cli/releases/tag/v2.92.0">Release</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/github/copilot-cli">GitHub Copilot CLI</a></td>
+<td>v1.0.54</td>
+<td>May 24</td>
+<td>2026-05-24; Fixes and changes</td>
+<td><a href="https://github.com/github/copilot-cli/releases/tag/v1.0.54">Release</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/github/gh-copilot">GitHub Copilot (gh extension)</a></td>
+<td>v1.2.0</td>
+<td>Oct 30</td>
+<td>Give Copilot CLI a try the next time you code in the terminal.; Experiment with the new <code>gh agent-task</code> command set to help you kick off or monitor agent tasks running on GitHub.</td>
+<td><a href="https://github.com/github/gh-copilot/releases/tag/v1.2.0">Release</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/microsoft/vscode-copilot-chat">GitHub Copilot Chat</a></td>
+<td>v0.43.0</td>
+<td>Apr 7</td>
+<td></td>
+<td><a href="https://github.com/microsoft/vscode-copilot-chat/blob/main/CHANGELOG.md">Changelog</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/block/goose">Goose CLI</a></td>
+<td>v1.35.0</td>
+<td>May 22</td>
+<td>Hooks system for extensible pre/post tool execution #9093; PreToolUse denial hook support #9304; <code>/goal</code> command for agent self-evaluation before finishing #9069; <code>goose review</code> local code review command #9114; Diff viewer in TUI #9260</td>
+<td><a href="https://github.com/aaif-goose/goose/releases/tag/v1.35.0">Release</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/nodejs/node">Node.js</a></td>
+<td>v26.2.0</td>
+<td>May 20</td>
+<td>[<code>189d43a193</code>] - <strong>doc</strong>: mark <code>stream.compose</code> stable (Matteo Collina) #62562; [<code>f858c6140e</code>] - <strong>(SEMVER-MINOR)</strong> <strong>fs</strong>: add <code>Temporal.Instant</code> support to <code>Stats</code> and <code>BigIntStats</code> (Livia Medeiros) #60789; [<code>0cbb3895df</code>] - <strong>(SEMVER-MINOR)</strong>...</td>
+<td><a href="https://github.com/nodejs/node/releases/tag/v26.2.0">Release</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+      </section>
+
+      <section class="section">
+        <div class="section-title">📋 Watchlist Updates</div>
+<div class="card diary-generated-markdown">
+  <div class="eyebrow">Watchlist check for 2026-05-25</div>
+  <p>No watchlist-specific updates from today were confirmed during scaffold. Release movement found by the automated software watchlist is captured in the Software Watchlist section above.</p>
+</div>
+
+      </section>
+
+      <section class="section">
+        <div class="section-title">💻 Today's Productivity</div>
+<div class="card diary-generated-markdown">
+  <div class="eyebrow">Productivity snapshot for 2026-05-25</div>
+  <table>
+    <thead><tr><th>Metric</th><th>Count</th></tr></thead>
+    <tbody>
+      <tr><td>Lines of Code</td><td>+0</td></tr>
+      <tr><td>Commits</td><td>0</td></tr>
+      <tr><td>Pull Requests Merged</td><td>0</td></tr>
+      <tr><td>Code Reviews</td><td>0</td></tr>
+      <tr><td>Issues Closed</td><td>0</td></tr>
+    </tbody>
+  </table>
+  <p class="muted">Warning: weekday productivity returned all zeros after an explicit-date run. D:\github roots are accessible, so metrics may be incomplete rather than truly zero.</p>
+</div>
+
+      </section>
+
+      <section class="section">
+        <div class="section-title">💼 Meetings</div>
+<div class="card diary-generated-markdown">
+  <div class="eyebrow">Meetings for 2026-05-25</div>
+  <p>No meeting details were returned by <code>workiq</code> for this date during scaffold.</p>
+</div>
+
+      </section>
+
+      <section class="section">
+        <div class="section-title">💭 Personal Reflections</div>
+<div class="card todo-callout">
+  <!-- TODO: fill in -->
+  <strong>TODO:</strong> Add your thoughts, feelings, observations, or anything else worth remembering about today.
+</div>
+
+      </section>
+
+      <section class="section">
+        <div class="section-title">📸 Screenshots</div>
+<div class="card diary-generated-markdown">
+  <div class="eyebrow">Screenshot library for 2026-05-25</div>
+  <p>No screenshot folder was found for this date.</p>
+</div>
+
+      </section>
+
+        <div class="footer">Entry created with diary skill V1.6</div>
+    </article>
+  </main>
+
+  <script>
+    function setTheme(t){document.documentElement.setAttribute('data-theme',t);localStorage.setItem('html-theme',t);closeThemeMenu()}
+    function toggleThemeMenu(){const m=document.getElementById('themeMenu');const b=document.querySelector('.theme-toggle-btn');const open=m.classList.toggle('open');b.setAttribute('aria-expanded',open)}
+    function closeThemeMenu(){document.getElementById('themeMenu').classList.remove('open');document.querySelector('.theme-toggle-btn').setAttribute('aria-expanded','false')}
+    document.addEventListener('click',e=>{if(!e.target.closest('.theme-toggle'))closeThemeMenu()});
+    (function(){const t=localStorage.getItem('html-theme')||'carbon';document.documentElement.setAttribute('data-theme',t)})()
+  </script>
+</body>
+</html>

@@ -48,7 +48,7 @@ if (-not (Test-Path $newsFile)) {
     $allNewsScript = Join-Path $env:USERPROFILE '.agents' 'skills' 'news' 'scripts' 'Get-AllNews.ps1'
     if (Test-Path $allNewsScript) {
         Write-Information "`e[1;33mNews output not found for $Date. Generating...`e[0m"
-        & $allNewsScript 6>&1 | Out-Null
+        & $allNewsScript -Date $Date 6>&1 | Out-Null
     }
 
     if (-not (Test-Path $newsFile)) {

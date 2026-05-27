@@ -36,6 +36,9 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 | Shortcut | Key | Action |
 |----------|-----|--------|
 | CTRL+SHIFT+/ | `^+/` | Insert date stamp (YYYY-MM-DD - ) |
+| CTRL+SHIFT+1 | `^+1` | Activate/launch Codex |
+| CTRL+SHIFT+2 | `^+2` | Activate/launch Cursor |
+| CTRL+SHIFT+3 | `^+3` | Activate/launch GitHub Copilot |
 | CTRL+SHIFT+E | `^+e` | Edit AutoHotkey.ahk in default editor |
 | CTRL+SHIFT+R | `^+r` | Reload AHK script |
 | CTRL+SHIFT+G | `^+g` | Activate/launch Claude |
