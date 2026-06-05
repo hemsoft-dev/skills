@@ -15,12 +15,18 @@ param(
     [string]$CustomDescription = "",
     
     [Parameter(Mandatory=$false)]
-    [string]$SuggestedFilename = ""
+    [string]$SuggestedFilename = "",
+
+    [Parameter(Mandatory=$false)]
+    [string]$Source = "SnagIt",
+
+    [Parameter(Mandatory=$false)]
+    [string]$SourceLibrary = "D:\OneDrive\Snagit"
 )
 
 $ErrorActionPreference = "Stop"
 
-Write-Host "`n=== SnagIt Screenshot Import ===" -ForegroundColor Cyan
+Write-Host "`n=== Screenshot Import ===" -ForegroundColor Cyan
 
 # Validate image exists
 if (-not (Test-Path $ImagePath)) {
@@ -45,7 +51,6 @@ if (-not (Test-Path $libraryPath)) {
 
 # Get original file info
 $originalFile = Get-Item $ImagePath
-$timestamp = Get-Date -Format "yyyyMMdd-HHmmss"
 
 # Generate clean filename
 if ($SuggestedFilename) {
@@ -143,8 +148,8 @@ if ($AutoDescription) {
 # Create metadata JSON
 $metadata = @{
     filename = $webpName
-    source = "SnagIt"
-    snagit_library = "D:\OneDrive\Snagit"
+    source = $Source
+    source_library = $SourceLibrary
     imported_date = $today
     imported_time = (Get-Date -Format "HH:mm:ss")
     description = $description.Trim()
@@ -172,3 +177,4 @@ Write-Host "Description: $($description.Substring(0, [Math]::Min(80, $descriptio
 
 Write-Host "`nTo reference in SKILL.md:" -ForegroundColor Cyan
 Write-Host "![Description](./images/library/$today/$webpName)" -ForegroundColor Gray
+

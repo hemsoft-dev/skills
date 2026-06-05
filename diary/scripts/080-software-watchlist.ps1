@@ -42,7 +42,7 @@ if (-not (Test-Path $EntryPath)) {
 }
 
 # --- Load watchlist config ---
-$configPath = Join-Path $PSScriptRoot '..' 'config' 'software-watchlist.json'
+$configPath = Join-Path $PSScriptRoot (Join-Path '..' (Join-Path 'config' 'software-watchlist.json'))
 if (-not (Test-Path $configPath)) {
     Write-Error "Watchlist config not found: $configPath"
     exit 1

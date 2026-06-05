@@ -29,7 +29,7 @@ function Get-DiaryHtmlEntryPath {
 
     $year = $Date.Substring(0, 4)
     $month = $Date.Substring(5, 2)
-    $entriesDir = Join-Path $ScriptRoot '..' 'entries' $year $month
+    $entriesDir = Join-Path $ScriptRoot (Join-Path '..' (Join-Path 'entries' (Join-Path $year $month)))
     if (-not (Test-Path $entriesDir)) {
         New-Item -ItemType Directory -Path $entriesDir -Force | Out-Null
     }
@@ -147,7 +147,7 @@ function Get-DiaryOutputSnapshotPath {
         [string]$Name
     )
 
-    $outputDir = Join-Path $ScriptRoot '..' 'output'
+    $outputDir = Join-Path $ScriptRoot (Join-Path '..' 'output')
     if (-not (Test-Path $outputDir)) {
         New-Item -ItemType Directory -Path $outputDir -Force | Out-Null
     }
@@ -189,7 +189,7 @@ function Get-PreviousDiarySnapshotJson {
         [string]$Name
     )
 
-    $outputDir = Join-Path $ScriptRoot '..' 'output'
+    $outputDir = Join-Path $ScriptRoot (Join-Path '..' 'output')
     if (-not (Test-Path $outputDir)) {
         return $null
     }

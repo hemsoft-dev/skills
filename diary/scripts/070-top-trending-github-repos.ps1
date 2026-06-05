@@ -42,8 +42,8 @@ if (-not (Test-Path $EntryPath)) {
 Write-Information "`e[1;36mFetching top trending GitHub repos...`e[0m"
 
 # --- Resolve Playwright package and chromium executable ---
-$npmRoot = Join-Path $env:APPDATA 'npm' 'node_modules'
-$pwPkg = Join-Path $npmRoot '@playwright' 'cli' 'node_modules' 'playwright'
+$npmRoot = Join-Path $env:APPDATA (Join-Path 'npm' 'node_modules')
+$pwPkg = Join-Path $npmRoot (Join-Path '@playwright' (Join-Path 'cli' (Join-Path 'node_modules' 'playwright')))
 if (-not (Test-Path $pwPkg)) {
     Write-Error "Playwright npm package not found at $pwPkg"
     exit 1
@@ -56,7 +56,7 @@ if (-not $chromiumDir) {
     Write-Error "No chromium browser installed in $msPlaywright"
     exit 1
 }
-$chromeExe = Join-Path $chromiumDir.FullName 'chrome-win64' 'chrome.exe'
+$chromeExe = Join-Path $chromiumDir.FullName (Join-Path 'chrome-win64' 'chrome.exe')
 if (-not (Test-Path $chromeExe)) {
     Write-Error "Chrome executable not found at $chromeExe"
     exit 1

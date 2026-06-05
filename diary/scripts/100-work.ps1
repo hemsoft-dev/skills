@@ -163,7 +163,7 @@ Output ONLY the formatted bullet list. No introduction or conclusion.
 # --- 3. Parse Slack briefing for work activity ---
 Write-Information "`e[1;36mParsing Slack briefing...`e[0m"
 $slackSummary = ''
-$slackOutputDir = Join-Path $env:USERPROFILE '.agents' 'skills' 'slack' 'output'
+$slackOutputDir = Join-Path $env:USERPROFILE (Join-Path '.agents' (Join-Path 'skills' (Join-Path 'slack' 'output')))
 $slackFile = Join-Path $slackOutputDir "$Date-slack-briefing.json"
 
 if (Test-Path $slackFile) {

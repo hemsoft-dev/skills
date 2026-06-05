@@ -1,0 +1,164 @@
+{
+  "Date": "2026-06-04",
+  "GeneratedAt": "2026-06-04T22:17:51.7392994-04:00",
+  "Categories": [
+    {
+      "Title": "🇺🇸 US News",
+      "Articles": [
+        {
+          "Title": "House passes bill to provide more Ukraine aid and impose new sanctions on Russia",
+          "Link": "https://www.pbs.org/newshour/politics/house-passes-bill-to-provide-more-ukraine-aid-and-impose-new-sanctions-on-russia",
+          "Source": "PBS Politics",
+          "Published": "2026-06-04T20:36:56.0000000-04:00"
+        },
+        {
+          "Title": "Some Republican governors are rebranding Pride Month with conservative alternatives",
+          "Link": "https://www.pbs.org/newshour/nation/some-republican-governors-are-rebranding-pride-month-with-conservative-alternatives",
+          "Source": "PBS Politics",
+          "Published": "2026-06-04T20:23:05.0000000-04:00"
+        },
+        {
+          "Title": "Republicans' sweeping election overhaul fails in the Senate",
+          "Link": "https://www.npr.org/2026/06/04/nx-s1-5751145/save-act-senate-vote-trump",
+          "Source": "NPR Politics",
+          "Published": "2026-06-04T19:19:56.0000000-04:00"
+        },
+        {
+          "Title": "Trump's attacks on the press often focus on women reporters who challenge him",
+          "Link": "https://www.npr.org/2026/06/04/nx-s1-5846590/trumps-attacks-on-the-press-often-focus-on-women-reporters-who-challenge-him",
+          "Source": "NPR Politics",
+          "Published": "2026-06-04T16:02:56.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🌍 World News",
+      "Articles": [
+        {
+          "Title": "Australia news live: NDIA spent $170m over three years on legal fees fighting participants, Senate estimates hears",
+          "Link": "https://www.theguardian.com/australia-news/live/2026/jun/05/tax-changes-labor-coalition-politics-housing-prices-nsw-pharmacists-trump-tariffs-ntwnfb",
+          "Source": "The Guardian",
+          "Published": "2026-06-04T22:04:11.0000000-04:00"
+        },
+        {
+          "Title": "Graham Platner says allegations of physical abuse of former partner ‘are simply not true’ – as it happened",
+          "Link": "https://www.theguardian.com/us-news/live/2026/jun/04/us-politics-latest-news-midterm-elections-california-governor-results",
+          "Source": "The Guardian",
+          "Published": "2026-06-04T22:03:39.0000000-04:00"
+        },
+        {
+          "Title": "Hezbollah rejects renewed ceasefire agreed by Israel and Lebanon",
+          "Link": "https://www.bbc.com/news/articles/c052343r812o?at_medium=RSS&at_campaign=rss",
+          "Source": "BBC",
+          "Published": "2026-06-04T21:44:16.0000000-04:00"
+        },
+        {
+          "Title": "US throws support behind Bolivia's president as unrest grows",
+          "Link": "https://www.france24.com/en/americas/20260605-us-throws-support-behind-bolivia-s-president-as-unrest-grows",
+          "Source": "France 24",
+          "Published": "2026-06-04T21:33:10.0000000-04:00"
+        },
+        {
+          "Title": "Why Mogadishu clashes are deepening Somalia’s political crisis again",
+          "Link": "https://www.aljazeera.com/news/2026/6/5/why-mogadishu-clashes-are-deepening-somalias-political-crisis-again?traffic_source=rss",
+          "Source": "Al Jazeera",
+          "Published": "2026-06-04T21:12:02.0000000-04:00"
+        },
+        {
+          "Title": "US plans to fight flesh-eating screwworm outbreak with flies and dogs",
+          "Link": "https://www.bbc.com/news/articles/c7v9vz1gd76o?at_medium=RSS&at_campaign=rss",
+          "Source": "BBC",
+          "Published": "2026-06-04T20:56:42.0000000-04:00"
+        },
+        {
+          "Title": "Iran war live: Hezbollah rejects truce as Israel continues Lebanon strikes",
+          "Link": "https://www.aljazeera.com/news/liveblog/2026/6/5/iran-war-live-hezbollah-rejects-truce-as-israel-continues-lebanon-strikes?traffic_source=rss",
+          "Source": "Al Jazeera",
+          "Published": "2026-06-04T20:00:00.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🤖 AI News",
+      "Articles": [
+        {
+          "Title": "AI enthusiasts are in a race against time, AI skeptics are in a race against entropy",
+          "Link": "https://simonwillison.net/2026/Jun/4/ai-enthusiasts-ai-skeptics/#atom-everything",
+          "Source": "Simon Willison's Weblog",
+          "Published": "2026-06-04T19:55:27.0000000-04:00"
+        },
+        {
+          "Title": "Quoting Emanuel Maiberg, 404 Media",
+          "Link": "https://simonwillison.net/2026/Jun/4/a-slightly-different-version/#atom-everything",
+          "Source": "Simon Willison's Weblog",
+          "Published": "2026-06-04T12:38:29.0000000-04:00"
+        },
+        {
+          "Title": "Ahead of its IPO, Anthropic’s Daniela Amodei shrugs off doubts about AI’s returns",
+          "Link": "https://techcrunch.com/2026/06/04/ahead-of-its-ipo-anthropics-daniela-amodei-shrugs-off-doubts-about-ais-returns/",
+          "Source": "TechCrunch",
+          "Published": "2026-06-04T18:43:26.0000000-04:00"
+        },
+        {
+          "Title": "Airbnb’s Brian Chesky plans to launch a new AI lab",
+          "Link": "https://techcrunch.com/2026/06/04/airbnbs-brian-chesky-plans-to-launch-a-new-ai-lab/",
+          "Source": "TechCrunch",
+          "Published": "2026-06-04T18:29:50.0000000-04:00"
+        },
+        {
+          "Title": "Dashlane explains how attackers managed to download encrypted password vaults",
+          "Link": "https://arstechnica.com/security/2026/06/dashlane-explains-how-attackers-managed-to-download-encrypted-password-vaults/",
+          "Source": "Ars Technica",
+          "Published": "2026-06-04T16:02:04.0000000-04:00"
+        },
+        {
+          "Title": "The AI IPO Race Heats Up, DOGE Whistleblower Sues Elon Musk, and Instagram Gets Hacked",
+          "Link": "https://www.wired.com/story/uncanny-valley-podcast-ai-ipo-race-elon-musk-doge-whistleblower-instagram-hacking-incident/",
+          "Source": "Wired",
+          "Published": "2026-06-04T14:44:49.0000000-04:00"
+        },
+        {
+          "Title": "TSMC struggles to keep up with AI demand: &#8216;We can only support so much&#8217;",
+          "Link": "https://www.theverge.com/tech/943066/tsmc-ai-demand-struggles",
+          "Source": "The Verge",
+          "Published": "2026-06-04T10:15:44.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🇩🇰 Danish News",
+      "Articles": [
+        {
+          "Title": "Danish Govt to lower drinking water nitrate limit, Greenpeace calls on NZ to follow - greenpeace.org",
+          "Link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNeDJHcFRoUHpnUm1kY1duelFfR0p3MHdHMDVQVHdpQUphX2pWS0tfRjlHWS1qNi1jZXV1QWZqWnJUV3d2ODFOOXdFckZsWWo4cTZOcWJvVmZKeG9RUGdTZnJZRU4xR2E3Y1ZEeVpIY0tTbXA0cEJwYUxNbWVCZGw0dGlXS0NNRE5fYVBvTW1jYXI1WWNfWDQ0aFhGdnBLSDVPSlZ0S2h6WDBuei0tMkhYQ25UTW50QQ?oc=5",
+          "Source": "Google News Denmark",
+          "Published": "2026-06-04T19:43:45.0000000-04:00"
+        },
+        {
+          "Title": "Copenhagen community kicks off America’s 250th anniversary year - nny360.com",
+          "Link": "https://news.google.com/rss/articles/CBMi-AFBVV95cUxOQzBFS0RfSkJwdVZWWklqQ0o4bnQ0dGJkTGctOE9TTS1aREdSMnV4Nk9VYlVwdlNNTGQwVWdldmxuYkFTYjM2MDVWMVlTMnlpWFNoTEJTeDhsbmM3LVh6WDd1RmkwYi1KM196MXZ6M2gtdzRnd3k4Yko4VlQzR1dURXFsOUNRbW9yMGdEMkh6MXNaaVdBamcyNFRRQ0I4VGs1dXRPWDJFSFJEQlcxZFFJUVJhamVrcVMzbUpKS2E5dlRHa2VCYnREMTFGdW54Umx5b0g4SHJRUkxzWExxRTFHM3psSlZBYWZNNnpXdmtpdHFvT2Jaallsbg?oc=5",
+          "Source": "Google News Denmark",
+          "Published": "2026-06-04T19:37:04.0000000-04:00"
+        },
+        {
+          "Title": "Danish Immigration Minister: First return center outside the EU has moved closer",
+          "Link": "https://cphpost.dk/2026-06-04/news/round-up/danish-immigration-minister-first-return-center-outside-the-eu-has-moved-closer/",
+          "Source": "CPH Post",
+          "Published": "2026-06-04T10:00:00.0000000-04:00"
+        },
+        {
+          "Title": "86% of Copenhagen residents feel safe in their neighborhoods, but safety has fallen slightly",
+          "Link": "https://cphpost.dk/2026-06-04/news/round-up/86-of-copenhagen-residents-feel-safe-in-their-neighborhoods-but-safety-has-fallen-slightly/",
+          "Source": "CPH Post",
+          "Published": "2026-06-04T09:59:00.0000000-04:00"
+        },
+        {
+          "Title": "USA's udenrigsminister: Grønland er en del af Danmark - indtil videre",
+          "Link": "https://www.dr.dk/nyheder/seneste/usa-s-udenrigsminister-groenland-er-en-del-af-danmark-indtil-videre",
+          "Source": "DR News",
+          "Published": "2026-06-03T13:58:01.0000000-04:00"
+        }
+      ]
+    }
+  ]
+}

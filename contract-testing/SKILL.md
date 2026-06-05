@@ -1,6 +1,6 @@
 ---
 name: contract-testing
-description: "V1.4 - Expert in contract testing for .NET/C# microservices using PactNet (consumer-driven). Covers Pact Broker, CI/CD gating, ADO pipeline patterns, and implementation. Includes Relias production broker credentials, service inventory, organizational context, meeting takeaways, and a complete 'implement in your repo' workflow. Use when implementing, reviewing, or discussing contract testing."
+description: "V1.6 - Expert in contract testing for .NET/C# microservices using PactNet (consumer-driven). Covers Pact Broker, CI/CD gating, ADO/GHA pipeline patterns, and implementation. Includes Relias production broker credentials, service inventory, organizational context, meeting takeaways, PactNet 5.x FFI publish bug workaround (REST API), and a complete 'implement in your repo' workflow. Use when implementing, reviewing, or discussing contract testing."
 ---
 
 # Contract Testing for .NET
@@ -135,7 +135,10 @@ public void VerifyPacts()
             options.ConsumerVersionSelectors(
                 new ConsumerVersionSelector { MainBranch = true }
             );
-            options.PublishResults(gitCommitSha);
+            options.EnablePending();
+            // ⚠️ Do NOT use options.PublishResults() — PactNet 5.x FFI silently
+            // fails to publish (pact-net#486). Publish via broker REST API instead.
+            // See "PactNet 5.x FFI Publish Bug" section below.
         })
         .WithProviderStateUrl(new Uri("http://localhost:5000/provider-states"))
         .Verify();
@@ -206,7 +209,8 @@ When reviewing contract tests, check for these — they are the top reasons cont
 | Testing implementation details in consumer tests | Contract tests verify the interface, not internals. Don't assert on headers, timing, or internal IDs that consumers don't actually use | Only assert on fields the consumer reads |
 | Missing provider states | Consumer test says `Given("user 1 exists")` but provider has no state handler → verification fails | Implement `/provider-states` endpoint that seeds test data |
 | Hardcoded URLs/ports in provider verification | Tests break when port is in use | Use random port assignment and pass URI dynamically |
-| Not publishing verification results back to broker | `can-i-deploy` can't work without verification results | Add `options.PublishResults(gitSha)` in provider verification |
+| Not publishing verification results back to broker | `can-i-deploy` can't work without verification results | **Do NOT use `options.PublishResults()`** — PactNet 5.x FFI silently fails (pact-net#486). Use broker REST API in CI instead (see workaround section) |
+| Using `options.PublishResults()` in PactNet 5.x | FFI silently fails to POST results to broker — logs "published" but nothing arrives. Tests pass green regardless | Remove `PublishResults()` from PactNet config. Publish via broker REST API `pb:publish-verification-results` HAL link in CI workflow |
 | Testing too much in contracts | Contract tests are NOT integration tests — don't test business logic, auth flows, or multi-step workflows | One interaction = one request/response pair. Keep it thin |
 | Pact file checked into source control | Pact files are generated artifacts — committing them creates merge conflicts and staleness | Publish to Pact Broker instead, `.gitignore` the pacts directory |
 
@@ -331,10 +335,111 @@ public void VerifyUserCreatedEvent()
 | Provider verification hangs | Using `TestServer` instead of real socket | Switch to Kestrel hosting (see pattern above) |
 | "No interactions found" | Consumer test didn't run or pact file not generated | Check consumer test output, look for pact JSON in output directory |
 | Provider state not found | State string mismatch between consumer and provider | Compare `.Given()` strings exactly — they're case-sensitive |
-| Can-i-deploy says "no results" | Verification results not published to broker | Add `options.PublishResults()` with git SHA |
+| Can-i-deploy says "no results" | Verification results not published to broker | **Do NOT use `PublishResults()`** — it silently fails in PactNet 5.x. Publish via broker REST API in CI (see workaround below) |
+| PactNet logs "published" but broker shows no verification | PactNet 5.x FFI publish bug (pact-net#486) | Remove `PublishResults()`, use REST API workaround in CI |
+| Broker REST API returns 404 on verification publish | Using wrong URL — `_links.self.href` is the consumer-version URL, not the publish endpoint | Use `_links."pb:publish-verification-results".href` from the HAL response (includes correct pact-version hash + metadata segment) |
 | Pact verification fails on fields consumer doesn't use | Provider response has extra fields | This is OK — Pact uses "Postel's law" (be liberal in what you accept). Check if you're using strict matching by accident |
 | Port conflict in CI | Hardcoded port already in use | Use `UseUrls("http://localhost:0")` for random port |
 | Flaky provider tests | Test data not isolated or provider state leaks between tests | Ensure each provider state handler resets to a clean state |
+| `github.sha` doesn't match head commit on PR events | PR events use merge commit SHA, not head SHA | For provider version registration, this is acceptable — push events use the correct SHA. Address if `can-i-deploy` becomes inconsistent |
+| `github.ref_name` returns `1/merge` on PR events | PR events use merge ref, not source branch | Use `github.head_ref` for PR events or accept that push events provide the correct branch name |
+
+## PactNet 5.x FFI Publish Bug (CRITICAL)
+
+**Status:** Known bug as of PactNet 5.0.1. Issues: [pact-net#486](https://github.com/pact-foundation/pact-net/issues/486), [pact-net#401](https://github.com/pact-foundation/pact-net/issues/401).
+
+**Symptom:** `options.PublishResults()` tells the Rust FFI to publish verification results. The FFI logs "a successful verification result has been published" — but NO version or verification appears in the Pact Broker. Tests always pass green regardless.
+
+**Root cause:** The FFI's HTTP call to the broker either silently fails or never executes. The log message is misleading — it's emitted by the FFI as part of the verification flow, not as confirmation of actual HTTP success.
+
+**Impact:** Without verification results in the broker, `can-i-deploy` always returns "no results" and the contract matrix stays empty.
+
+### Workaround: Publish via Broker REST API in CI
+
+Remove `PublishResults()` from PactNet config. Instead, add a CI workflow step that:
+
+1. Creates the provider version with branch metadata via `PUT /pacticipants/{name}/versions/{sha}`
+2. Fetches the publish URL from the broker's HAL response (`pb:publish-verification-results` link)
+3. POSTs the verification result (success/failure) to that URL
+
+**Key detail:** You MUST use the `pb:publish-verification-results` HAL link from the broker's `/latest` pact response. Do NOT construct the URL manually or use `_links.self.href` + `/verification-results` — that points to the consumer-version URL (`/version/{sha}`) which returns 404. The correct HAL link includes the pact-version hash and a metadata segment.
+
+**PactNet config (remove PublishResults):**
+
+```csharp
+options.EnablePending();
+// ⚠️ PublishResults intentionally omitted — PactNet 5.x FFI silently
+// fails to publish (see pact-net#486). The CI workflow publishes
+// verification results via the broker REST API instead.
+```
+
+**CI workflow step (GitHub Actions example):**
+
+```yaml
+- name: Publish verification result to broker
+  if: vars.PACTBROKER_URL != ''
+  env:
+    PACT_BROKER_URL: ${{ vars.PACTBROKER_URL }}
+    PACT_BROKER_USERNAME: ${{ vars.PACTBROKER_USERNAME }}
+    PACT_BROKER_PASSWORD: ${{ secrets.PACTBROKER_PASSWORD }}
+    GIT_SHA: ${{ github.sha }}
+    GIT_BRANCH: ${{ github.ref_name }}
+    VERIFY_RESULT: ${{ steps.verify.outcome }}
+    BUILD_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+  run: |
+    # Register the provider version with branch metadata
+    curl -s -X PUT \
+      -u "${PACT_BROKER_USERNAME}:${PACT_BROKER_PASSWORD}" \
+      -H "Content-Type: application/json" \
+      -d "{\"branch\":\"${GIT_BRANCH}\",\"buildUrl\":\"${BUILD_URL}\"}" \
+      "${PACT_BROKER_URL}/pacticipants/${PROVIDER_NAME}/versions/${GIT_SHA}" \
+      -o /dev/null -w "Create version: HTTP %{http_code}\n"
+
+    if [ "$VERIFY_RESULT" = "success" ]; then SUCCESS=true; else SUCCESS=false; fi
+
+    # Get the publish URL from the broker's HAL response
+    PACT_RESPONSE=$(curl -s \
+      -u "${PACT_BROKER_USERNAME}:${PACT_BROKER_PASSWORD}" \
+      -H "Accept: application/hal+json" \
+      "${PACT_BROKER_URL}/pacts/provider/${PROVIDER_NAME}/consumer/${CONSUMER_NAME}/latest")
+
+    PUBLISH_URL=$(echo "$PACT_RESPONSE" | jq -r '._links."pb:publish-verification-results".href')
+
+    if [ "$PUBLISH_URL" = "null" ] || [ -z "$PUBLISH_URL" ]; then
+      echo "::warning title=Publish Failed::Could not find publish URL from broker"
+      exit 0
+    fi
+
+    # Publish the verification result
+    HTTP_CODE=$(curl -s -X POST \
+      -u "${PACT_BROKER_USERNAME}:${PACT_BROKER_PASSWORD}" \
+      -H "Content-Type: application/json" \
+      -d "{\"success\":${SUCCESS},\"providerApplicationVersion\":\"${GIT_SHA}\",\"buildUrl\":\"${BUILD_URL}\"}" \
+      "${PUBLISH_URL}" \
+      -o /tmp/publish-response.json -w "%{http_code}")
+
+    echo "Publish verification result: HTTP ${HTTP_CODE} (success=${SUCCESS})"
+    if [ "$HTTP_CODE" -ge 400 ]; then
+      echo "::warning title=Publish Failed::Broker returned HTTP ${HTTP_CODE}"
+      cat /tmp/publish-response.json
+    fi
+```
+
+**For ADO pipelines**, adapt the same curl calls into a PowerShell or bash script task.
+
+**Verification step must use `continue-on-error: true` and `id: verify`** so the publish step can:
+
+- Always run (even on verification failure)
+- Read the outcome via `${{ steps.verify.outcome }}`
+- A subsequent "Check verification result" step then fails the job if needed
+
+### Broker REST API Endpoints Reference
+
+| Endpoint | Method | Purpose |
+|----------|--------|---------|
+| `/pacticipants/{name}/versions/{sha}` | PUT | Create/update provider version with branch metadata |
+| `/pacts/provider/{P}/consumer/{C}/latest` | GET | Get latest pact (HAL response with `pb:publish-verification-results` link) |
+| `{pb:publish-verification-results href}` | POST | Publish verification result (`{"success": bool, "providerApplicationVersion": "sha"}`) |
 
 ## Alternative: Specmatic (Spec-Driven)
 
@@ -387,6 +492,7 @@ If the team already maintains OpenAPI specs and wants zero consumer-side test au
 
 ### POC and Reference Repos
 
+- [`relias-engineering/contract-testing`](https://github.com/relias-engineering/contract-testing) — **Primary POC repo** with working GHA workflows (consumer + provider CI), PactNet 5.x FFI publish bug workaround, kill switch, and break-contract demo scenario. Uses org-level vars/secrets. Created by @fhemmer (2026-05-29).
 - [`relias-engineering/best-practices`](https://github.com/relias-engineering/best-practices) — `Contract Testing/` folder with Users.API PactNet consumer/provider example
 - [`relias-engineering/slide-decks`](https://github.com/relias-engineering/slide-decks) — [`pact-contract-testing-is-it-worth-it.md`](https://github.com/relias-engineering/slide-decks/blob/main/decks/pact-contract-testing-is-it-worth-it.md) — Marp presentation deck
 - [Best Practices Repo - PactNet POC (Bitbucket)](https://bitbucket.org/relias/relias-best-practices/pull-requests/39) — Original self-contained PactNet consumer/provider POC
@@ -488,6 +594,7 @@ Each broker instance provides:
 | **ADR may be outdated** — existing architecture decision record may be partially incorrect | @jbuda/@fhemmer (Apr 29 meeting) | Open — needs Architecture Review Board revalidation |
 | **Golden Path scaffolding cleanup** — adding templates means teams must clean up examples | @bhalterman | Resolved — only add CI/CD wiring, not test scaffolding |
 | **Pact Broker version** — old version can't parse v4 pact specs | @jbuda | Resolved — version bump PR submitted |
+| **PactNet 5.x FFI silently fails to publish verification results** — `PublishResults()` logs success but HTTP never reaches broker | @fhemmer (May 29 POC) | **Resolved** — workaround: publish via broker REST API in CI workflow. See "PactNet 5.x FFI Publish Bug" section. Issues: pact-net#486, pact-net#401 |
 | **Pact Broker deployment** — deployed via ADO pipeline (definition 427) in Bitbucket `relias/pactbroker` | @grufino | Documented |
 
 ### Pact AI Tools (mentioned by @grufino)
@@ -531,6 +638,66 @@ Docs: [https://docs.pact.io/ai_tools/installation](https://docs.pact.io/ai_tools
 3. Consult Clark (legacy deployment manager) for deployment insights
 4. Share findings with Malia to determine proceed/validate decision
 5. Plan Pact Broker backup & recovery strategy before broader rollout
+
+### Meeting: GRC Pilot Kickoff (2026-05-27)
+
+**Attendees:** Malia Paul (organizer), Jeff Buda, Franz Hemmer, Warren Sutherland (GRC team lead), Nick Peterson, Giovanni Rufino
+
+**Recording:** `Contract Testing - GRC Pilot-20260527` (Teams recording, VTT transcript in skill assets)
+
+**Context:** First working meeting with the GRC team to align on next steps for merging Jeff's existing PRs and getting contract testing live in Policy Manager and GRC Library Service.
+
+**Key decisions:**
+
+- **Start at Gold-level (warm)** — pipeline logs results as **warning only** (yellow ADO icon), does NOT block deployments
+- **Policy Manager PR (#243)** is the recommended starting point — low risk, no production code changes, just pipeline wiring + contract test assembly
+- **Gradual escalation plan:** warning → monitoring → gating (once team understands failure scenarios)
+- **Working session approach** — Franz/Gio/Jeff collaborate together vs. hand-off
+- **Org-level "kill switch" variable** proposed to disable contract testing org-wide if broker goes down (prevents SonarCloud-style outage impact)
+- **Repo-level variable override** as team-level bypass option (GitHub variable precedence: repo overrides org)
+- **Capitalizable work** — Malia confirmed user stories for this can be capitalized
+
+**Warren's approval:**
+
+- On board if basic MVP with logging runs by **end of quarter**
+- Capacity caveat: Jeff/Gio can help, but team has competing priorities (Policy Plan cleanup, Magic Strings)
+- No additional buy-in needed — Policy Manager and GRC repos are within Warren's area of responsibility
+
+**Gio's critical points:**
+
+- If contract gating is enabled later, teams **must** know how to use Pact (can't opt out of learning)
+- Pact Broker shows "broken" if producer deploys before consumer — deployment order matters
+- This is fundamentally an **upskilling** challenge, not just a tooling challenge
+- "Contract matrix" is built into PactNet for per-environment version tracking
+
+**Nick Peterson:**
+
+- Playing assist role in working group meetings
+- Will review PRs (on his to-do list)
+
+**Pipeline risk mitigation details (Jeff):**
+
+- New contract testing stages use `continueOnError: true` — pipeline never blocks on contract failures
+- PR pipeline (`policy-manager-pr.yaml`) is completely safe to experiment on — no deployment side effects
+- Build pipeline: worst case is a warning icon, never a red/blocked status
+- Secrets already set at repo level; org-level move enables cross-repo consistency
+
+**Value positioning (for socializing):**
+
+- Contract testing = **AI guardrail** — enables more AI-generated code with confidence
+- Enables more **frequent and confident deployments** (deployment bottleneck reduction)
+- Franz: "The more autonomous goals we have, the more guardrails we need"
+
+**Action items:**
+
+1. ✅ Franz: Create org-level variables/secrets + kill switch — **DONE (2026-05-29)**
+2. Jeff: Write 2 user stories (Policy Manager + GRC) in Jira
+3. Jeff: Refresh memory on PRs, run pipeline on branch to validate
+4. Franz: Schedule working sessions for next week with Jeff/Gio
+5. Everyone: Review Jeff's PRs async (linked in meeting chat) — don't wait for next meeting
+6. Malia: Schedule follow-up meeting in 1-2 weeks
+7. Franz + Malia: Brainstorm roadmap items (debugging broken contracts, downstream scenarios)
+8. Franz: Build FAQ in contract-testing repo as issues surface
 
 ## NuGet Packages
 
@@ -842,10 +1009,10 @@ public class YourServiceProviderTests(YourServiceFixture fixture, ITestOutputHel
                     new ConsumerVersionSelector { DeployedOrReleased = true }
                 );
                 options.EnablePending();
-                options.PublishResults(PactBrokerConfig.GitCommitSha, cfg =>
-                {
-                    cfg.ProviderBranch(PactBrokerConfig.GitBranch);
-                });
+                // ⚠️ PublishResults intentionally omitted — PactNet 5.x FFI silently
+                // fails to publish (see pact-net#486). The CI workflow publishes
+                // verification results via the broker REST API instead.
+                // See "PactNet 5.x FFI Publish Bug" section.
             });
         }
         else
@@ -864,13 +1031,31 @@ public class YourServiceProviderTests(YourServiceFixture fixture, ITestOutputHel
 
 ### Step 4: Wire CI/CD Pipeline
 
-**For Azure DevOps** (primary at Relias), add a ContractTests stage to your existing pipeline. Copy from the POC repo's `pipelines/` directory:
+**For GitHub Actions**, the POC repo [`relias-engineering/contract-testing`](https://github.com/relias-engineering/contract-testing) has working reference workflows:
+
+- **Consumer:** `.github/workflows/consumer-ci.yml` — publishes pacts to broker
+- **Provider:** `.github/workflows/provider-ci.yml` — verifies pacts, publishes results via REST API workaround, advisory `can-i-deploy`, record-deployment
+
+**Critical:** The provider workflow includes a REST API step to publish verification results because PactNet 5.x `PublishResults()` silently fails. See "PactNet 5.x FFI Publish Bug" section. The verification step must use `continue-on-error: true` and `id: verify` so the publish step can always run and read the outcome.
+
+**For Azure DevOps** (primary at Relias), adapt the same patterns into ADO pipeline stages. Copy from the POC repo's `pipelines/` directory:
 
 - **Consumer:** Use `pipelines/consumer-ci.yml` as reference — add the ContractTests stage
 - **Provider:** Use `pipelines/provider-ci.yml` as reference — add the ContractVerification stage
 - **Post-deploy:** Use `pipelines/templates/pact-record-deployment.yml` to record deployments
 
-**Required ADO pipeline variables** (set via Variable Group or pipeline settings):
+**GitHub org-level variables/secrets** (already configured for `relias-engineering`):
+
+| Variable/Secret | Value | Type |
+|-----------------|-------|------|
+| `PACTBROKER_URL` | `https://relias-pactbroker.reliaslearning.com/` | Org variable (all repos) |
+| `PACTBROKER_USERNAME` | `pactbroker` | Org variable (all repos) |
+| `PACTBROKER_USERNAME_R` | `pactbrokerRO` | Org variable (all repos) |
+| `PACTBROKER_PASSWORD` | (from Key Vault) | Org secret (all repos) |
+| `PACTBROKER_PASSWORD_R` | (read-only password) | Org secret (all repos) |
+| `PACTBROKER_ENABLED` | `true` | Org variable — kill switch (set to `false` to disable) |
+
+**ADO pipeline variables** (set via Variable Group or pipeline settings):
 
 | Variable | Value | Secret? |
 |----------|-------|---------|
@@ -885,6 +1070,7 @@ public class YourServiceProviderTests(YourServiceFixture fixture, ITestOutputHel
 - `can-i-deploy` in CI should use `--dry-run` (advisory). The real gate goes in the deploy pipeline
 - `record-deployment` runs AFTER successful deployment, not in CI
 - Pipeline examples target **Linux hosted agents** (`vmImage: ubuntu-latest`)
+- **Kill switch:** Org-level `PACTBROKER_ENABLED` variable. Set to `false` to disable all contract testing org-wide (e.g., if broker goes down). Repos can override with a repo-level variable.
 
 ### Step 5: Add .gitignore Entry
 

@@ -1,78 +1,98 @@
 ---
 name: screenshot
-description: Import screenshots from SnagIt into skill image libraries with AI description and OCR text extraction.
+description: Capture screenshots from the Windows clipboard or import SnagIt captures for AI description and OCR text extraction.
 ---
 
 # Screenshot
 
-Import screenshots from SnagIt into skill image libraries.
+Capture screenshots from the Windows clipboard, or import screenshots from SnagIt into skill image libraries.
 
 ## Default Behavior
 
 When user activates this skill without specifying an action:
 
-1. Look for latest .snagx file in `D:\OneDrive\Snagit`
-2. **If none found**: Report "No SnagIt captures found" and stop (do not search other locations)
-3. **If found**: Process it with Script 1
+1. Try the Windows clipboard first with Script 0.
+2. If the clipboard contains an image, save it only as a temporary PNG for agent inspection.
+3. Inspect the temporary PNG with `view_image`.
+4. Delete the temporary PNG immediately after it is understood or referenced in the reply.
+5. If the clipboard has no image, fall back to the latest `.snagx` file in `D:\OneDrive\Snagit` and process it with Script 1.
+6. If neither exists, report "No image found on clipboard and no SnagIt captures found" and stop.
 
-## Scripts (Execute in Order)
+Do not persist clipboard screenshots into `images/library` unless the user explicitly asks to import, save, archive, or add the screenshot to the library.
+
+## Scripts
 
 | # | Script | Purpose | When to Use |
-|---|--------|---------|-------------|
-| 1 | `1-Extract-SnagX.ps1` | Extract PNG from .snagx, detect app/window, call script 2 | **Always start here** for .snagx files |
-| 2 | `2-Process-Image.ps1` | Compress to WebP, generate AI description, extract OCR text, save metadata | Called automatically by script 1 |
+|---|---|---|---|
+| 0 | `0-Capture-Clipboard.ps1` | Save clipboard image to temp PNG; optionally import it | **Always start here by default** |
+| 1 | `1-Extract-SnagX.ps1` | Extract PNG from `.snagx`, detect app/window, call script 2 | Use for SnagIt fallback or explicit `.snagx` import |
+| 2 | `2-Process-Image.ps1` | Compress to WebP, generate AI description, extract OCR text, save metadata | Called by import workflows |
 | 3 | `3-Search-Library.ps1` | Search existing screenshots by skill, tags, or text | Only for searching |
 
-## Workflow: Import Latest Screenshot
+## Workflow: Inspect Current Clipboard Screenshot
 
 Execute these steps in order:
 
-### Step 1: Find Latest .snagx File
+### Step 1: Capture Clipboard Image
 
 ```powershell
-$latestSnagx = Get-ChildItem "D:\OneDrive\Snagit" -Filter "*.snagx" | 
-    Sort-Object LastWriteTime -Descending | 
-    Select-Object -First 1
-Write-Host "Found: $($latestSnagx.Name) - Captured: $($latestSnagx.LastWriteTime)"
+& $env:USERPROFILE\.agents\skills\screenshot\scripts\0-Capture-Clipboard.ps1
 ```
 
-### Step 2: Run Script 1-Extract-SnagX.ps1
+If the script prints `CLIPBOARD_IMAGE_PATH=...`, inspect that file with `view_image`.
+
+### Step 2: Clean Up Temporary Image
+
+After inspection, delete the temporary file:
 
 ```powershell
-& ~/.claude/skills/screenshot/scripts/1-Extract-SnagX.ps1 `
+Remove-Item -LiteralPath "<CLIPBOARD_IMAGE_PATH>" -Force
+```
+
+### Step 3: Fall Back to SnagIt When Clipboard Is Empty
+
+If Script 0 reports no clipboard image, run:
+
+```powershell
+$latestSnagx = Get-ChildItem "D:\OneDrive\Snagit" -Filter "*.snagx" |
+    Sort-Object LastWriteTime -Descending |
+    Select-Object -First 1
+
+if (-not $latestSnagx) {
+    Write-Host "No image found on clipboard and no SnagIt captures found"
+    return
+}
+
+& $env:USERPROFILE\.agents\skills\screenshot\scripts\1-Extract-SnagX.ps1 `
     -SnagItFileName $latestSnagx.Name `
     -DestinationSkill "screenshot" `
     -Tags @()
 ```
 
-**Parameters:**
+## Workflow: Import Clipboard Screenshot To Library
 
-| Parameter | Required | Default | Description |
-|-----------|----------|---------|-------------|
-| `-SnagItFileName` | Yes | - | Filename from SnagIt library |
-| `-DestinationSkill` | Yes | - | Target skill name |
-| `-Tags` | No | `@()` | Array of tags |
-| `-AutoDescription` | No | `$true` | Generate AI description |
-| `-CustomDescription` | No | `""` | Skip AI, use this description |
+Only use this when the user explicitly asks to save/import/archive the clipboard screenshot.
 
-### Step 3: Verify Output
+```powershell
+& $env:USERPROFILE\.agents\skills\screenshot\scripts\0-Capture-Clipboard.ps1 `
+    -DestinationSkill "screenshot" `
+    -Tags @() `
+    -PersistToLibrary
+```
 
-Check `{skill}/images/library/{date}/` for:
-
-- `{filename}.webp` - Compressed image
-- `{filename}.webp.meta.json` - Description + OCR text + metadata
+Script 0 deletes its temporary PNG after importing it into the library.
 
 ## Workflow: Search Existing Screenshots
 
 ```powershell
 # All screenshots
-& ~/.claude/skills/screenshot/scripts/3-Search-Library.ps1
+& $env:USERPROFILE\.agents\skills\screenshot\scripts\3-Search-Library.ps1
 
 # Filter by skill
-& ~/.claude/skills/screenshot/scripts/3-Search-Library.ps1 -Skill "architect"
+& $env:USERPROFILE\.agents\skills\screenshot\scripts\3-Search-Library.ps1 -Skill "architect"
 
 # Search by text
-& ~/.claude/skills/screenshot/scripts/3-Search-Library.ps1 -SearchText "workflow"
+& $env:USERPROFILE\.agents\skills\screenshot\scripts\3-Search-Library.ps1 -SearchText "workflow"
 ```
 
 ## Filename Conventions
@@ -80,10 +100,12 @@ Check `{skill}/images/library/{date}/` for:
 Script 1 auto-detects source and prefixes filenames:
 
 | Source | Detection | Prefix | Example |
-|--------|-----------|--------|---------|
+|---|---|---|---|
 | Slack | AppName="Slack" or window contains "\|" | `slack-` | `slack-dm-bryan.webp` |
 | Twitter/X | Short window title + browser app | `tweet-` | `tweet-timeline.webp` |
 | Other | - | None | `vscode-editor.webp` |
+
+Clipboard imports use `clipboard-{timestamp}.webp` unless explicitly renamed later.
 
 ## Output Structure
 
@@ -100,9 +122,10 @@ Script 1 auto-detects source and prefixes filenames:
 
 ```json
 {
-  "filename": "slack-channel-name.webp",
-  "source": "SnagIt",
-  "imported_date": "2026-02-02",
+  "filename": "clipboard-20260601-203000.webp",
+  "source": "Clipboard",
+  "source_library": "Windows Clipboard",
+  "imported_date": "2026-06-01",
   "description": "AI-generated description of image content",
   "text_content": "Full OCR text extraction",
   "tags": ["tag1", "tag2"],
@@ -112,8 +135,8 @@ Script 1 auto-detects source and prefixes filenames:
 
 ## Dependencies
 
-- **FFmpeg** - WebP compression
-- **text-read-image skill** - AI description and OCR
+- **FFmpeg** - WebP compression for library imports
+- **text-read-image skill** - AI description and OCR for library imports
 
 ## ALWAYS: Log This Interaction
 
@@ -122,6 +145,4 @@ After completing work, append to `History/{YYYY-MM-DD}.md`:
 ```markdown
 ## {HH:MM} - {Action Taken}
 {One-line summary}
-```
-
 ```

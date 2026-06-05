@@ -25,17 +25,10 @@
     "includePrerelease": false
   },
   {
-    "name": "GitHub Copilot (gh extension)",
-    "repo": "github/gh-copilot",
+    "name": "Codex CLI",
+    "repo": "openai/codex",
     "type": "github",
     "includePrerelease": false
-  },
-  {
-    "name": "GitHub Copilot Chat",
-    "repo": "microsoft/vscode-copilot-chat",
-    "type": "github",
-    "includePrerelease": true,
-    "changelogUrl": "https://github.com/microsoft/vscode-copilot-chat/blob/main/CHANGELOG.md"
   },
   {
     "name": "GitHub Web",

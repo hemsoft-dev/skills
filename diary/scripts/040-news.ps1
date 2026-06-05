@@ -29,6 +29,39 @@ $InformationPreference = 'Continue'
 
 . (Join-Path $PSScriptRoot 'HtmlDiaryHelpers.ps1')
 
+function Test-NewsOutputQuality {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true)]
+        [object]$News,
+
+        [Parameter(Mandatory = $true)]
+        [string]$Date
+    )
+
+    if (-not $News -or -not $News.Categories) { return $false }
+
+    $headlineCount = 0
+    foreach ($category in @($News.Categories)) {
+        $articleCount = @($category.Articles).Count
+        $headlineCount += $articleCount
+        if ($articleCount -lt 3) { return $false }
+    }
+
+    if ($headlineCount -lt 16) { return $false }
+
+    if ($News.GeneratedAt) {
+        $generatedAt = [datetimeoffset]::Parse([string]$News.GeneratedAt)
+        $targetDate = [datetime]::ParseExact($Date, 'yyyy-MM-dd', $null)
+        $targetEnd = [datetimeoffset]::new($targetDate.AddDays(1))
+        if ($generatedAt.Date -eq $targetDate.Date -and $generatedAt.Hour -lt 6 -and [datetimeoffset]::Now -ge $targetEnd) {
+            return $false
+        }
+    }
+
+    return $true
+}
+
 # --- Resolve entry path ---
 if (-not $EntryPath) {
     $EntryPath = Get-DiaryHtmlEntryPath -ScriptRoot $PSScriptRoot -Date $Date
@@ -40,21 +73,28 @@ if (-not (Test-Path $EntryPath)) {
 }
 
 # --- Locate news output ---
-$newsOutputDir = Join-Path $env:USERPROFILE '.agents' 'skills' 'news' 'output'
+$newsOutputDir = Join-Path $env:USERPROFILE (Join-Path '.agents' (Join-Path 'skills' (Join-Path 'news' 'output')))
 $newsFile = Join-Path $newsOutputDir "$Date.json"
 
-if (-not (Test-Path $newsFile)) {
-    # Try to generate it
-    $allNewsScript = Join-Path $env:USERPROFILE '.agents' 'skills' 'news' 'scripts' 'Get-AllNews.ps1'
-    if (Test-Path $allNewsScript) {
-        Write-Information "`e[1;33mNews output not found for $Date. Generating...`e[0m"
-        & $allNewsScript -Date $Date 6>&1 | Out-Null
-    }
+$allNewsScript = Join-Path $env:USERPROFILE (Join-Path '.agents' (Join-Path 'skills' (Join-Path 'news' (Join-Path 'scripts' 'Get-AllNews.ps1'))))
+$shouldGenerate = -not (Test-Path $newsFile)
 
-    if (-not (Test-Path $newsFile)) {
-        Write-Information "`e[1;31mNo news output available for $Date. Skipping.`e[0m"
-        return
+if (-not $shouldGenerate) {
+    $existingNews = Get-Content $newsFile -Raw | ConvertFrom-Json
+    $shouldGenerate = -not (Test-NewsOutputQuality -News $existingNews -Date $Date)
+    if ($shouldGenerate) {
+        Write-Information "`e[1;33mNews output for $Date failed quality checks. Regenerating...`e[0m"
     }
+}
+
+if ($shouldGenerate -and (Test-Path $allNewsScript)) {
+    Write-Information "`e[1;33mGenerating news output for $Date...`e[0m"
+    & $allNewsScript -Date $Date -Count 7 -HoursBack 48 6>&1 | Out-Null
+}
+
+if (-not (Test-Path $newsFile)) {
+    Write-Information "`e[1;31mNo news output available for $Date. Skipping.`e[0m"
+    return
 }
 
 # --- Read the news output ---
@@ -62,6 +102,11 @@ $news = Get-Content $newsFile -Raw | ConvertFrom-Json
 
 if (-not $news -or -not $news.Categories) {
     Write-Information "`e[1;31mNews output file is empty for $Date. Skipping.`e[0m"
+    return
+}
+
+if (-not (Test-NewsOutputQuality -News $news -Date $Date)) {
+    Write-Information "`e[1;31mNews output for $Date is still below quality threshold. Skipping injection.`e[0m"
     return
 }
 

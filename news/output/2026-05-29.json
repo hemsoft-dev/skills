@@ -1,0 +1,170 @@
+{
+  "Date": "2026-05-29",
+  "GeneratedAt": "2026-05-29T23:11:53.7491496-04:00",
+  "Categories": [
+    {
+      "Title": "🇺🇸 US News",
+      "Articles": [
+        {
+          "Title": "News Wrap: Judge orders Kennedy Center to remove Trump's name from building",
+          "Link": "https://www.pbs.org/newshour/show/news-wrap-judge-orders-kennedy-center-to-remove-trumps-name-from-building",
+          "Source": "PBS Politics",
+          "Published": "2026-05-29T18:50:26.0000000-04:00"
+        },
+        {
+          "Title": "Capehart and Continetti on Talarico's chances against Paxton in Texas",
+          "Link": "https://www.pbs.org/newshour/show/capehart-and-continetti-on-talaricos-chances-against-paxton-in-texas",
+          "Source": "PBS Politics",
+          "Published": "2026-05-29T18:35:50.0000000-04:00"
+        },
+        {
+          "Title": "How primaries are shaping Congress",
+          "Link": "https://www.npr.org/2026/05/29/nx-s1-5836616/how-primaries-are-shaping-congress",
+          "Source": "NPR Politics",
+          "Published": "2026-05-29T16:45:22.0000000-04:00"
+        },
+        {
+          "Title": "Trump's name must come off of the Kennedy Center, judge rules",
+          "Link": "https://www.npr.org/2026/05/29/nx-s1-5839349/president-trump-kennedy-center-name-judge-order",
+          "Source": "NPR Politics",
+          "Published": "2026-05-29T16:33:21.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🌍 World News",
+      "Articles": [
+        {
+          "Title": "'Gifts' from a lover and 'botched' cocaine raids: Police inquiry grips South Africa",
+          "Link": "https://www.bbc.com/news/articles/ce9p5e1jg72o?at_medium=RSS&at_campaign=rss",
+          "Source": "BBC",
+          "Published": "2026-05-29T22:56:40.0000000-04:00"
+        },
+        {
+          "Title": "‘Significant’ storm to hammer millions in WA and bring icy weather to NSW, Victoria and SA",
+          "Link": "https://www.theguardian.com/australia-news/2026/may/30/western-australia-storm-to-affect-millions-icy-weather-for-nsw-victoria-sa",
+          "Source": "The Guardian",
+          "Published": "2026-05-29T22:49:20.0000000-04:00"
+        },
+        {
+          "Title": "Exam fail: Indian students complain en masse about marking errors in key final exams",
+          "Link": "https://www.theguardian.com/world/2026/may/30/exam-fail-indian-students-complain-en-masse-about-marking-errors-in-key-final-exams",
+          "Source": "The Guardian",
+          "Published": "2026-05-29T22:36:30.0000000-04:00"
+        },
+        {
+          "Title": "Spain's Sánchez digs in after eight years as PM as wave of scandals threatens survival",
+          "Link": "https://www.bbc.com/news/articles/c1w21gn340xo?at_medium=RSS&at_campaign=rss",
+          "Source": "BBC",
+          "Published": "2026-05-29T22:09:47.0000000-04:00"
+        },
+        {
+          "Title": "Louisiana lawmakers pass congressional map favouring Republicans",
+          "Link": "https://www.aljazeera.com/news/2026/5/30/louisiana-lawmakers-pass-congressional-map-favouring-republicans?traffic_source=rss",
+          "Source": "Al Jazeera",
+          "Published": "2026-05-29T20:27:54.0000000-04:00"
+        },
+        {
+          "Title": "First survivor rescued from flooded cave in Laos",
+          "Link": "https://www.aljazeera.com/video/newsfeed/2026/5/30/aje-onl-nf_clip_first-survivor-rescued-from-cave-in-laos-290526?traffic_source=rss",
+          "Source": "Al Jazeera",
+          "Published": "2026-05-29T20:04:15.0000000-04:00"
+        },
+        {
+          "Title": "WHO chief lands in Kinshasa",
+          "Link": "https://www.france24.com/en/who-chief-lands-in-kinshasa",
+          "Source": "France 24",
+          "Published": "2026-05-29T16:59:34.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🤖 AI News",
+      "Articles": [
+        {
+          "Title": "Anthropic's run-rate revenue hits $47 billion",
+          "Link": "https://simonwillison.net/2026/May/29/anthropic/#atom-everything",
+          "Source": "Simon Willison's Weblog",
+          "Published": "2026-05-28T21:23:08.0000000-04:00"
+        },
+        {
+          "Title": "Claude Opus 4.8: \"a modest but tangible improvement\"",
+          "Link": "https://simonwillison.net/2026/May/28/claude-opus-4-8/#atom-everything",
+          "Source": "Simon Willison's Weblog",
+          "Published": "2026-05-28T19:59:50.0000000-04:00"
+        },
+        {
+          "Title": "Coders are refusing to work without AI — and that could come back to bite them ",
+          "Link": "https://techcrunch.com/2026/05/29/coders-are-refusing-to-work-without-ai-and-that-could-come-back-to-bite-them/",
+          "Source": "TechCrunch",
+          "Published": "2026-05-29T18:14:22.0000000-04:00"
+        },
+        {
+          "Title": "Amazon Is Making an AI-Animated ‘Good Advice Cupcake’ TV Show. Its Original Creator Is Furious",
+          "Link": "https://www.wired.com/story/story/amazon-is-making-an-ai-animated-good-advice-cupcake-tv-show-its-original-creator-is-furious/",
+          "Source": "Wired",
+          "Published": "2026-05-29T16:56:59.0000000-04:00"
+        },
+        {
+          "Title": "Hands-On With Gemini Spark: I Gave It Access to My Life and It Friend-Zoned My Boyfriend",
+          "Link": "https://www.wired.com/story/google-gemini-spark-ai-agent-hands-on/",
+          "Source": "Wired",
+          "Published": "2026-05-29T15:07:46.0000000-04:00"
+        },
+        {
+          "Title": "So you’ve heard these AI terms and nodded along; let’s fix that",
+          "Link": "https://techcrunch.com/2026/05/29/artificial-intelligence-definition-glossary-hallucinations-guide-to-common-ai-terms/",
+          "Source": "TechCrunch",
+          "Published": "2026-05-29T14:49:19.0000000-04:00"
+        },
+        {
+          "Title": "This AI startup will clean your home for free to train future robots",
+          "Link": "https://www.theverge.com/ai-artificial-intelligence/939765/ai-training-data-startup-shift-free-cleaning",
+          "Source": "The Verge",
+          "Published": "2026-05-29T07:58:40.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🇩🇰 Danish News",
+      "Articles": [
+        {
+          "Title": "Travelers Face Delays Across Stockholm, Copenhagen, and Oslo as 81 SAS Flights Are Delayed and 12 Canceled Disrupting Domestic and International Routes Across Scandinavia, Europe, and North America - Travel And Tour World",
+          "Link": "https://news.google.com/rss/articles/CBMibkFVX3lxTFBDdEZMbkF1NjRtNjJTcVBDM1U5R05mcWRFR0xwcjlvdEpFQlJxSkxwMHJJQVEzM3lGcWx0d2tIc18zZnF2bFZCNmczaFdwOEV6QmFSTFNMR2hSR0RNSzdEYXByQ0p4SWdZRnhTMktn?oc=5",
+          "Source": "Google News Denmark",
+          "Published": "2026-05-29T21:18:45.0000000-04:00"
+        },
+        {
+          "Title": "France U17 vs Denmark U17: UEFA U17 Championship stats & head-to-head - BBC",
+          "Link": "https://news.google.com/rss/articles/CBMiZEFVX3lxTFBHRDZPZkFqY0x0QnQ3VnN3TzBxZEJZVWEyUUtKTW5sVE9XcDFlNGR3dnFLR1A1emdGTmY3aG51YWluNURwLXF4WG5KNjhFVHJHSWJZbGdiNExIRDJEcUs5Sy1ZdlU?oc=5",
+          "Source": "Google News Denmark",
+          "Published": "2026-05-29T21:00:10.0000000-04:00"
+        },
+        {
+          "Title": "Grøn fjerner dansk rapper fra plakaten efter dom ",
+          "Link": "https://www.dr.dk/nyheder/seneste/groen-fjerner-dansk-rapper-fra-plakaten-efter-dom",
+          "Source": "DR News",
+          "Published": "2026-05-29T08:17:41.0000000-04:00"
+        },
+        {
+          "Title": "“I felt like an eight-year-old when speaking Danish”: Coaches say imposter syndrome disproportionately affects internationals",
+          "Link": "https://cphpost.dk/2026-05-29/business-education/career/i-felt-like-an-eight-year-old-when-speaking-danish-coaches-say-imposter-syndrome-disproportionately-affects-internationals/",
+          "Source": "CPH Post",
+          "Published": "2026-05-29T08:09:13.0000000-04:00"
+        },
+        {
+          "Title": "Danish defense firm profits from war and global unrest",
+          "Link": "https://cphpost.dk/2026-05-29/news/round-up/danish-defense-firm-profits-from-war-and-global-unrest/",
+          "Source": "CPH Post",
+          "Published": "2026-05-29T05:55:25.0000000-04:00"
+        },
+        {
+          "Title": "Dansk James Bond-spil har solgt 1,5 millioner eksemplarer på ét døgn",
+          "Link": "https://www.dr.dk/nyheder/seneste/dansk-james-bond-spil-har-solgt-1-5-millioner-eksemplarer-paa-et-doegn",
+          "Source": "DR News",
+          "Published": "2026-05-29T05:22:24.0000000-04:00"
+        }
+      ]
+    }
+  ]
+}

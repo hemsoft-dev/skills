@@ -1,0 +1,333 @@
+{
+  "Mentions": [
+    {
+      "Timestamp": "2026-05-29 12:50",
+      "From": "Malia Paul",
+      "Channel": "prod-eng-devex-private",
+      "Text": "<@U01RRQXEEG5|Halterman> <@U2XMZDPJ7|Franz> <@U69NKFZ9A|Nick> please don't forget to submit Tempo before the end of today - April and May - if you haven't yet!",
+      "Permalink": "https://relias-engineering.slack.com/archives/C09LB1CM1BK/p1780073435319919"
+    }
+  ],
+  "Announcements": [
+    {
+      "Timestamp": "2026-05-29 14:13",
+      "From": "Ashwini Wani",
+      "Channel": "policy-plans-cypress",
+      "Text": "set the channel topic: <https://dev.azure.com/ReliasEngineering/PlatformDevelopment/_build?definitionId=565>",
+      "Permalink": "https://relias-engineering.slack.com/archives/C08RLJKJUBF/p1780078438122789"
+    },
+    {
+      "Timestamp": "2026-05-29 12:10",
+      "From": "Warren Sutherland",
+      "Channel": "content-archived-bug-rplat-19440",
+      "Text": "set the channel topic: <https://relias.atlassian.net/browse/RPLAT-19440>",
+      "Permalink": "https://relias-engineering.slack.com/archives/C0B6L7QNCCF/p1780071040103449"
+    },
+    {
+      "Timestamp": "2026-05-29 12:10",
+      "From": "Warren Sutherland",
+      "Channel": "content-archived-bug-rplat-19440",
+      "Text": "has renamed the channel from \"content-archived-bug-rplat-21719\" to \"content-archived-bug-rplat-19440\"",
+      "Permalink": "https://relias-engineering.slack.com/archives/C0B6L7QNCCF/p1780071032653359"
+    },
+    {
+      "Timestamp": "2026-05-29 12:08",
+      "From": "Warren Sutherland",
+      "Channel": "content-archived-bug-rplat-19440",
+      "Text": "I'm starting this channel to centralize to conversation around the archival issues. I have created a ticket with my agent to help start the conversation - please add to it as you see you have information. <https://relias.atlassian.net/browse/RPLAT-21...",
+      "Permalink": "https://relias-engineering.slack.com/archives/C0B6L7QNCCF/p1780070919803059"
+    },
+    {
+      "Timestamp": "2026-05-29 11:35",
+      "From": "Clark Bonham",
+      "Channel": "platform-deployment-26-q2-02",
+      "Text": "archived the channel",
+      "Permalink": "https://relias-engineering.slack.com/archives/C0B3G7NNS64/p1780068929527909"
+    },
+    {
+      "Timestamp": "2026-05-29 10:36",
+      "From": "Dawn Alexander",
+      "Channel": "target-data-migrations",
+      "Text": "Response in LD channel was either manager or PM can flip, however if it's a personal test org Warren can help.",
+      "Permalink": "https://relias-engineering.slack.com/archives/C0B329TU26S/p1780065400836749?thread_ts=1780064751.082819"
+    },
+    {
+      "Timestamp": "2026-05-29 10:34",
+      "From": "Dawn Alexander",
+      "Channel": "target-data-migrations",
+      "Text": "I'm checking in <#C03TFSRU6M9> channel",
+      "Permalink": "https://relias-engineering.slack.com/archives/C0B329TU26S/p1780065250403739?thread_ts=1780064751.082819"
+    },
+    {
+      "Timestamp": "2026-05-29 10:31",
+      "From": "Dawn Alexander",
+      "Channel": "launch-darkly",
+      "Text": "Hello, whom should we reach out to get FF flipped for a new org in STG-US? Is this the correct channel for this ask?",
+      "Permalink": "https://relias-engineering.slack.com/archives/C03TFSRU6M9/p1780065085677489?thread_ts=1780065085.677489"
+    },
+    {
+      "Timestamp": "2026-05-29 09:02",
+      "From": "Vritti Gautam",
+      "Channel": "dev-tribe",
+      "Text": "<!here> Hi teams, kindly request you to make sure your team’s public Slack channel name matches your Jira Team Name, and that spaces are avoided in both places. This will help ensure the platform notifications automation runs smoothly and can map tea...",
+      "Permalink": "https://relias-engineering.slack.com/archives/C1KAF274N/p1780059778554889"
+    }
+  ],
+  "ChannelActivity": {
+    "dev-env-help": {
+      "TotalMessages": 2,
+      "RecentMessages": [
+        {
+          "Timestamp": "2026-05-29 08:24",
+          "From": "Warren Sutherland",
+          "Text": "Cc <@U032050R2TY|Malia Paul>"
+        },
+        {
+          "Timestamp": "2026-05-29 02:16",
+          "From": "Jannik Groeger",
+          "Text": "Hi, does anybody know how to gain access to our <http://Mailtrap.io|Mailtrap.io> instance? I already opened a ticket (ITHC-24662) but it was ignored so far."
+        }
+      ]
+    },
+    "dev-tribe": {
+      "TotalMessages": 1,
+      "RecentMessages": [
+        {
+          "Timestamp": "2026-05-29 09:02",
+          "From": "Vritti Gautam",
+          "Text": "<!here> Hi teams, kindly request you to make sure your team’s public Slack channel name matches your Jira Team Name, and that spaces are avoided in both places. This will help ensure the platform noti..."
+        }
+      ]
+    },
+    "productivity-engineering-public": {
+      "TotalMessages": 5,
+      "RecentMessages": [
+        {
+          "Timestamp": "2026-05-29 16:27",
+          "From": "Nick Peterson",
+          "Text": "Once that is complete I can configure the webhook within sonarcloud"
+        },
+        {
+          "Timestamp": "2026-05-29 16:27",
+          "From": "Nick Peterson",
+          "Text": "<https://engineering.reliaslearning.com/developer-documentation/docs/how-to/bitbucket-to-github-migration-guide.html#migrating-sonarcloud-integration|Migrating SonarCloud Integration> Take a look at t..."
+        },
+        {
+          "Timestamp": "2026-05-29 16:18",
+          "From": "Manoj Yarramreddy",
+          "Text": "<@S09S4NM3DJ9|productivity-engineers> Can someone setup the SonarCloud for this new repo <https://github.com/relias-engineering/learner-app-bff>"
+        },
+        {
+          "Timestamp": "2026-05-29 14:11",
+          "From": "Malia Paul",
+          "Text": "This tool is owned by Info Sec. Please reach out to the appsec email for help."
+        },
+        {
+          "Timestamp": "2026-05-29 13:53",
+          "From": "Casey Twine",
+          "Text": "<@S09S4NM3DJ9|productivity-engineers> Good afternoon. I was wondering if I could access to the org in snyk? I already have the tile in myapps, I'm just org-less (and trying to troubleshoot some entitl..."
+        }
+      ]
+    },
+    "ai-chapter": {
+      "TotalMessages": 8,
+      "RecentMessages": [
+        {
+          "Timestamp": "2026-05-29 17:24",
+          "From": "Gray Anthony",
+          "Text": "Someone might have, but not me and now I want the cool toys"
+        },
+        {
+          "Timestamp": "2026-05-29 17:23",
+          "From": "Franz Hemmer",
+          "Text": "You sure it isn't something injecting a hint towards that into your context? (skills/agents.md/copilot-instructions.md/etc) I would simply ask Copilot why its trying to use ripgrep. And yes, ripgrep i..."
+        },
+        {
+          "Timestamp": "2026-05-29 16:45",
+          "From": "Gray Anthony",
+          "Text": "I noticed that copilot has been wanting to use <https://github.com/BurntSushi/ripgrep/|Ripgrep> for searches, and then falling back. Does anyone have any experience with it, and if so (or not ) is it ..."
+        },
+        {
+          "Timestamp": "2026-05-29 09:43",
+          "From": "Emma Dickinson",
+          "Text": "lol. Love emojis - don't want them in my writing"
+        },
+        {
+          "Timestamp": "2026-05-29 09:43",
+          "From": "George DeCherney",
+          "Text": "Who hurt you?!"
+        },
+        {
+          "Timestamp": "2026-05-29 09:43",
+          "From": "George DeCherney",
+          "Text": "<@U02DGDZD57S|Emma Dickinson> that NO emojis ever hurts the soul"
+        },
+        {
+          "Timestamp": "2026-05-29 09:39",
+          "From": "Emma Dickinson",
+          "Text": "In addition to being clear and concise I ask them for the formatting I like - • bullet points • short paragraphs • headings where needed • NO emojis ever • No spaces on either side of an em-dash and t..."
+        },
+        {
+          "Timestamp": "2026-05-29 09:20",
+          "From": "George DeCherney",
+          "Text": "I have been experimenting with two additions to my system prompt that I thought I would share in case it helps anyone: ```When reporting information to me, be extremely concise and sacrifice grammar f..."
+        }
+      ]
+    },
+    "next-deployment": {
+      "TotalMessages": 12,
+      "RecentMessages": [
+        {
+          "Timestamp": "2026-05-29 17:07",
+          "From": "Jira-Deployment-Automation",
+          "Text": "*HG-PowerRangers:* 1 <https://relias.atlassian.net/issues/?jql=filter%20%3D%2041347%20AND%20cf%5B15700%5D%20%3D%20%2284a111b2-442a-451d-ae91-0d79a2a7f7eb%22|tickets>"
+        },
+        {
+          "Timestamp": "2026-05-29 17:07",
+          "From": "Jira-Deployment-Automation",
+          "Text": "*Divum - DE:* 6 <https://relias.atlassian.net/issues/?jql=filter%20%3D%2041347%20AND%20cf%5B15700%5D%20%3D%20%229782e983-7051-473a-9a9e-0535ed4bd042%22|tickets>"
+        },
+        {
+          "Timestamp": "2026-05-29 17:07",
+          "From": "Jira-Deployment-Automation",
+          "Text": "*HG-Avengers:* 1 <https://relias.atlassian.net/issues/?jql=filter%20%3D%2041347%20AND%20cf%5B15700%5D%20%3D%20%224e18b229-fd25-4b23-a1f9-8bde9645cf9a%22|tickets>"
+        },
+        {
+          "Timestamp": "2026-05-29 17:07",
+          "From": "Jira-Deployment-Automation",
+          "Text": "*Frontier:* 4 <https://relias.atlassian.net/issues/?jql=filter%20%3D%2041347%20AND%20cf%5B15700%5D%20%3D%20%2221b63aab-b2cf-4af9-a305-7d1169af5770%22|tickets>"
+        },
+        {
+          "Timestamp": "2026-05-29 17:07",
+          "From": "Jira-Deployment-Automation",
+          "Text": "*HG-Spartans:* 2 <https://relias.atlassian.net/issues/?jql=filter%20%3D%2041347%20AND%20cf%5B15700%5D%20%3D%20%223357dcf1-0d9a-4e79-afac-e41e4178db9c%22|tickets>"
+        },
+        {
+          "Timestamp": "2026-05-29 17:07",
+          "From": "Jira-Deployment-Automation",
+          "Text": "*Byte Knights:* 2 <https://relias.atlassian.net/issues/?jql=filter%20%3D%2041347%20AND%20cf%5B15700%5D%20%3D%20%222bde41cd-14de-44d0-83d7-5f1401d8d3ff%22|tickets>"
+        },
+        {
+          "Timestamp": "2026-05-29 17:07",
+          "From": "Jira-Deployment-Automation",
+          "Text": "*HG-Guardians:* 2 <https://relias.atlassian.net/issues/?jql=filter%20%3D%2041347%20AND%20cf%5B15700%5D%20%3D%20%2255d975cc-93df-44e0-a05e-e9fd207a7d18%22|tickets>"
+        },
+        {
+          "Timestamp": "2026-05-29 17:07",
+          "From": "Jira-Deployment-Automation",
+          "Text": "*HG-NovaGuard:* 2 <https://relias.atlassian.net/issues/?jql=filter%20%3D%2041347%20AND%20cf%5B15700%5D%20%3D%20%227a10b27e-1b8c-4bf1-a11a-87947d6b36d9%22|tickets>"
+        },
+        {
+          "Timestamp": "2026-05-29 17:07",
+          "From": "Jira-Deployment-Automation",
+          "Text": "*HG-Gladiators:* 2 <https://relias.atlassian.net/issues/?jql=filter%20%3D%2041347%20AND%20cf%5B15700%5D%20%3D%20%22b5c562c5-5d4e-4e19-b721-7b20c5a42750%22|tickets>"
+        },
+        {
+          "Timestamp": "2026-05-29 17:07",
+          "From": "Jira-Deployment-Automation",
+          "Text": "*HG-Titans:* 1 <https://relias.atlassian.net/issues/?jql=filter%20%3D%2041347%20AND%20cf%5B15700%5D%20%3D%20%22063e27a7-868d-48f7-a452-6c77dfd481ca%22|tickets>"
+        }
+      ]
+    },
+    "prod-eng-devex-private": {
+      "TotalMessages": 2,
+      "RecentMessages": [
+        {
+          "Timestamp": "2026-05-29 15:01",
+          "From": "Bryan Halterman",
+          "Text": "When I get home this evening I will log in and take care of mine."
+        },
+        {
+          "Timestamp": "2026-05-29 12:50",
+          "From": "Malia Paul",
+          "Text": "<@U01RRQXEEG5|Halterman> <@U2XMZDPJ7|Franz> <@U69NKFZ9A|Nick> please don't forget to submit Tempo before the end of today - April and May - if you haven't yet!"
+        }
+      ]
+    }
+  },
+  "DirectMessages": [
+    {
+      "Timestamp": "2026-05-29 16:34",
+      "From": "Malia Paul",
+      "Text": "One was of course that he take over contract testing implementation (like Sagar did with Integration testing)."
+    },
+    {
+      "Timestamp": "2026-05-29 16:34",
+      "From": "Malia Paul",
+      "Text": "Thanks for the update! I'm about to leave to go take my mom to see my step-dad. There's going to be a lot of that until Wed next week when my sister c..."
+    },
+    {
+      "Timestamp": "2026-05-29 16:15",
+      "From": "Nick Peterson",
+      "Text": "Back"
+    },
+    {
+      "Timestamp": "2026-05-29 16:05",
+      "From": "Nick Peterson",
+      "Text": "Yes eating a quick snack, be back soon"
+    },
+    {
+      "Timestamp": "2026-05-29 15:16",
+      "From": "Nick Peterson",
+      "Text": "!!"
+    },
+    {
+      "Timestamp": "2026-05-29 15:16",
+      "From": "Nick Peterson",
+      "Text": "how epic"
+    },
+    {
+      "Timestamp": "2026-05-29 15:16",
+      "From": "Nick Peterson",
+      "Text": "my mistake. 1303 is an epic"
+    },
+    {
+      "Timestamp": "2026-05-29 21:12",
+      "From": "Slack Skill Bot",
+      "Text": "_Heartbeat — 9:11 PM_ _New email:_ Dr. Alex Wissner-Gross from The Innermost Loop — Welcome to May 29, 2026"
+    },
+    {
+      "Timestamp": "2026-05-29 20:13",
+      "From": "Slack Skill Bot",
+      "Text": "_Heartbeat — 8:11 PM_ _New email:_ Ulada Haranina via LinkedIn — Ulada accepted your invitation, explore their network"
+    },
+    {
+      "Timestamp": "2026-05-29 14:13",
+      "From": "Slack Skill Bot",
+      "Text": "_Heartbeat — 2:13 PM_ _New email:_ LinkedIn — Omar Shahine, Corporate Vice President, is popular in your network"
+    },
+    {
+      "Timestamp": "2026-05-29 12:10",
+      "From": "Slack Skill Bot",
+      "Text": "Could not extract GitHub username from Copilot request (ts: 1780070945.985289) in <#C05BRPSNNRW>. Requester has been asked to clarify."
+    },
+    {
+      "Timestamp": "2026-05-29 11:13",
+      "From": "Slack Skill Bot",
+      "Text": "_Heartbeat — 11:11 AM_ _New email:_ TLDR AI — Opus 4.8 , Anthropic at $965B , Microsoft’s coding model"
+    }
+  ],
+  "GeneratedAt": "2026-05-29 23:12:18",
+  "Summary": {
+    "ActionItems": 1,
+    "Channels": 6,
+    "Announcements": 9,
+    "Mentions": 1,
+    "DirectMessages": 12,
+    "ChannelMessages": 30.0
+  },
+  "ActionItems": [
+    {
+      "Link": "https://relias-engineering.slack.com/archives/C09LB1CM1BK/p1780073435319919",
+      "Type": "Mention",
+      "Channel": "prod-eng-devex-private",
+      "From": "Malia Paul",
+      "Text": "<@U01RRQXEEG5|Halterman> <@U2XMZDPJ7|Franz> <@U69NKFZ9A|Nick> please don't forget to submit Tempo before the end of today - April and May - if you haven't yet!"
+    }
+  ],
+  "Username": "fhemmer",
+  "DateRange": {
+    "To": "2026-05-29",
+    "From": "2026-05-28"
+  }
+}

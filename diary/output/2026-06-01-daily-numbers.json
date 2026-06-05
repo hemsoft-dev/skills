@@ -1,0 +1,26 @@
+{
+  "date": "2026-06-01",
+  "bitbucketRepos": 562,
+  "copilot": {
+    "personalUsed": 851,
+    "personalEntitlement": 7000,
+    "orgPremium": 0.0,
+    "orgPct": 0.0,
+    "personalPct": 12.2,
+    "cloudAgent": 656.609725,
+    "orgQuota": 318000
+  },
+  "githubRepos": 286,
+  "cloudflare": {
+    "nowleadershipgroup.com": {
+      "pageViews": 49,
+      "uniqueVisitors": 93,
+      "emailsForwarded": 0
+    },
+    "setitfreeloop.org": {
+      "pageViews": 0,
+      "uniqueVisitors": 0,
+      "emailsForwarded": null
+    }
+  }
+}

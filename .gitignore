@@ -41,6 +41,10 @@ browser-use/venv/
 
 youtube-processor/output/
 
+# Large meeting recordings
+
+contract-testing/assets/*.mp4
+
 # ChatGPT export files (including large HTML/JSON exports)
 
 me/gpt-export/**/*.html

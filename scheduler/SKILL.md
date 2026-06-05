@@ -1,6 +1,6 @@
 ---
 name: scheduler
-description: V1.2 - Expert in managing Windows Scheduled Tasks using PowerShell cmdlets (Get, Register, Unregister, Start, Stop).
+description: V1.4 - Expert in managing Windows Scheduled Tasks; `list` runs the chronological task status script.
 ---
 
 # Scheduler
@@ -18,6 +18,20 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 {One-line summary of what was done}
 ```
 
+## Commands
+
+| Command | Action |
+| --- | --- |
+| `list` | Run `scripts/Get-ScheduledTaskStatus.ps1` and show the chronological task status table. |
+
+When the user invokes `$scheduler list` or asks to list scheduled tasks, run:
+
+```powershell
+& "$env:USERPROFILE\.agents\skills\scheduler\scripts\Get-ScheduledTaskStatus.ps1"
+```
+
+Do not substitute raw `Get-ScheduledTask` output for `list`; the script provides the expected chronological table with last-run status.
+
 ## Core Cmdlets
 
 - `Get-ScheduledTask`: List all or specific tasks.
@@ -33,11 +47,22 @@ After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
 
 ### Listing Tasks
 
-```powershell
-# List all tasks in the root folder
-Get-ScheduledTask -TaskPath "\"
+Use the skill's status script for the standard listing. It lists scheduled tasks
+chronologically by next run time and includes the last run status.
 
-# Find a specific task by name
+```powershell
+& "$env:USERPROFILE\.agents\skills\scheduler\scripts\Get-ScheduledTaskStatus.ps1"
+```
+
+The default task path is `\HemSoft\`. To list another path:
+
+```powershell
+& "$env:USERPROFILE\.agents\skills\scheduler\scripts\Get-ScheduledTaskStatus.ps1" -TaskPath "\"
+```
+
+Find a specific task by name:
+
+```powershell
 Get-ScheduledTask -TaskName "MyTask"
 ```
 
@@ -104,8 +129,8 @@ Write-Host 'Done - press Enter'; Read-Host
 8. **Modifying Tasks Requires Elevation**: `Set-ScheduledTask` often silently fails without admin rights. Use `Start-Process powershell -Verb RunAs` to launch an elevated session for modifications.
 9. **Trigger Updates**: To reliably change a task's schedule, unregister and re-register the task rather than using `Set-ScheduledTask` on the trigger. The trigger's `StartBoundary` timestamp can be stubborn.
 10. **Avoid schtasks.exe**: The legacy `schtasks /change` command requires password input. Prefer PowerShell cmdlets with elevation.
-11. **ALWAYS List Schedule After Changes**: After creating, modifying, or deleting any scheduled task, **always** run the schedule listing script to confirm the change and show the user the full schedule:
+11. **ALWAYS List Schedule After Changes**: After creating, modifying, or deleting any scheduled task, **always** run the chronological schedule status script to confirm the change and show the user the full schedule:
 
 ```powershell
-& "c:\Users\User\.claude\skills\scheduler\scripts\Get-HemSoftSchedule.ps1"
+& "c:\Users\User\.agents\skills\scheduler\scripts\Get-ScheduledTaskStatus.ps1"
 ```

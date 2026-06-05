@@ -1,6 +1,6 @@
 ---
 name: news
-description: V1.1 - Fetches news headlines from US, World, AI, and Danish sources via resilient RSS parsing. Use when gathering daily news for diary entries.
+description: V1.2 - Fetches quality-gated news headlines from US, World, AI, and Danish sources via resilient RSS parsing with Google News fallbacks. Use when gathering daily news for diary entries.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -68,7 +68,7 @@ The individual scripts call `Get-AllNews.ps1` so the cache stays a single struct
 & "$env:USERPROFILE\.agents\skills\news\scripts\Get-USNews.ps1"
 ```
 
-**Sources**: Associated Press, NPR, PBS NewsHour, Politico, USA Today
+**Sources**: Associated Press, NPR Politics, PBS Politics, Politico, USA Today, Google News US fallback
 
 ### 2. World News
 
@@ -144,8 +144,10 @@ The diary skill consumes the `output/YYYY-MM-DD.json` file to include news headl
 Scripts automatically enforce:
 
 - Maximum 2 items per source (30% cap)
-- Minimum 3-4 different sources per category
-- Last 24 hours only
+- Minimum 3 useful headlines per category for diary injection
+- Google News fallback feeds when primary RSS sources are thin or blocked
+- De-duplication by normalized headline text
+- Target-day filtering from midnight to midnight; diary regeneration may use a 48-hour lookback to refill prior-day entries after feeds have rolled forward
 
 ## Parameters
 
@@ -160,6 +162,9 @@ All scripts accept:
 - Missing RSS fields must skip only the affected item, never the whole source.
 - Atom feeds with `entry`/`link href` must be parsed alongside RSS `item` feeds.
 - Diary regeneration after midnight must call `Get-AllNews.ps1 -Date YYYY-MM-DD` for the intended diary day.
+- A category with fewer than 3 headlines is not diary-ready; regenerate with `-HoursBack 48` before injecting.
+- Do not trust just-after-midnight news caches for a prior-day diary. If `GeneratedAt` is before 06:00 on the target date and the day has ended, regenerate the cache.
+- Keep category intent tight: US should use politics/domestic sources or US-filtered fallback, World should exclude media/business one-offs, AI should match AI/model/company terms, and Danish should match Denmark/Danish/Copenhagen/Greenland terms.
 
 ## When to Use This Skill
 

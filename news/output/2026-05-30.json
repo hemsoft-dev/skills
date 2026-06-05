@@ -1,0 +1,170 @@
+{
+  "Date": "2026-05-30",
+  "GeneratedAt": "2026-05-30T21:53:33.1483839-04:00",
+  "Categories": [
+    {
+      "Title": "🇺🇸 US News",
+      "Articles": [
+        {
+          "Title": "Immigrant detainees sue over 'horrific' conditions at Texas ICE facility",
+          "Link": "https://www.npr.org/2026/05/30/nx-s1-5841359/immigrant-detainees-sue-texas-camp-east-montana",
+          "Source": "NPR Politics",
+          "Published": "2026-05-30T20:55:06.0000000-04:00"
+        },
+        {
+          "Title": "Judge agrees to review Trump's $1.8 billion 'anti-weaponization' fund",
+          "Link": "https://www.npr.org/2026/05/30/nx-s1-5839989/judge-review-trump-anti-weaponization-fund",
+          "Source": "NPR Politics",
+          "Published": "2026-05-30T17:32:28.0000000-04:00"
+        },
+        {
+          "Title": "News Wrap: Judge orders Kennedy Center to remove Trump's name from building",
+          "Link": "https://www.pbs.org/newshour/show/news-wrap-judge-orders-kennedy-center-to-remove-trumps-name-from-building",
+          "Source": "PBS Politics",
+          "Published": "2026-05-29T18:50:26.0000000-04:00"
+        },
+        {
+          "Title": "Capehart and Continetti on Talarico's chances against Paxton in Texas",
+          "Link": "https://www.pbs.org/newshour/show/capehart-and-continetti-on-talaricos-chances-against-paxton-in-texas",
+          "Source": "PBS Politics",
+          "Published": "2026-05-29T18:35:50.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🌍 World News",
+      "Articles": [
+        {
+          "Title": "Australia news live: Marles predicts ‘significant’ Aukus savings through new plan to buy only second-hand US subs",
+          "Link": "https://www.theguardian.com/australia-news/live/2026/may/31/clare-oneil-labor-tax-changes-richard-marles-shangri-la-dialogue-aukus-deal-politics-reactions-labor-coalition-tax-changes-housing-one-nation-ntwnfb",
+          "Source": "The Guardian",
+          "Published": "2026-05-30T21:48:58.0000000-04:00"
+        },
+        {
+          "Title": "Rescues in eastern Syria after the Euphrates River bursts its banks",
+          "Link": "https://www.aljazeera.com/video/newsfeed/2026/5/31/rescues-in-eastern-syria-after-the-euphrates-river-bursts-its-banks?traffic_source=rss",
+          "Source": "Al Jazeera",
+          "Published": "2026-05-30T20:27:27.0000000-04:00"
+        },
+        {
+          "Title": "Cuba’s blackouts leave high-rise residents with constant uncertainty",
+          "Link": "https://www.bbc.com/news/videos/c809nj57drxo?at_medium=RSS&at_campaign=rss",
+          "Source": "BBC",
+          "Published": "2026-05-30T20:11:56.0000000-04:00"
+        },
+        {
+          "Title": "Venezuela opposition candidate Gonzalez urges new elections",
+          "Link": "https://www.dw.com/en/venezuela-opposition-candidate-gonzalez-urges-new-elections/a-77361030?maca=en-rss-en-world-4025-xml-mrss",
+          "Source": "DW News",
+          "Published": "2026-05-30T20:11:00.0000000-04:00"
+        },
+        {
+          "Title": "Iran war live: Lebanon’s PM slams Israel attacks; US-Tehran deal in limbo",
+          "Link": "https://www.aljazeera.com/news/liveblog/2026/5/31/iran-war-live-lebanon-accuses-israel-of-scorched-earth-policy?traffic_source=rss",
+          "Source": "Al Jazeera",
+          "Published": "2026-05-30T20:00:50.0000000-04:00"
+        },
+        {
+          "Title": "The household battery revolution that could change energy bills … and the world",
+          "Link": "https://www.theguardian.com/environment/ng-interactive/2026/may/31/cheaper-energy-bills-battery-revolution-climate-crisis",
+          "Source": "The Guardian",
+          "Published": "2026-05-30T20:00:33.0000000-04:00"
+        },
+        {
+          "Title": "How Putin became master of the image",
+          "Link": "https://www.bbc.com/news/articles/cddpl33v247o?at_medium=RSS&at_campaign=rss",
+          "Source": "BBC",
+          "Published": "2026-05-30T19:17:26.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🤖 AI News",
+      "Articles": [
+        {
+          "Title": "How we contain Claude across products",
+          "Link": "https://simonwillison.net/2026/May/30/how-we-contain-claude/#atom-everything",
+          "Source": "Simon Willison's Weblog",
+          "Published": "2026-05-30T17:36:24.0000000-04:00"
+        },
+        {
+          "Title": "‘What a joke’: Github Copilot’s new token-based billing spurs consternation among devs",
+          "Link": "https://techcrunch.com/2026/05/30/what-a-joke-github-copilots-new-token-based-billing-spurs-consternation-among-devs/",
+          "Source": "TechCrunch",
+          "Published": "2026-05-30T12:30:00.0000000-04:00"
+        },
+        {
+          "Title": "Meta is reportedly developing an AI pendant",
+          "Link": "https://techcrunch.com/2026/05/30/meta-is-reportedly-developing-an-ai-pendant/",
+          "Source": "TechCrunch",
+          "Published": "2026-05-30T11:59:58.0000000-04:00"
+        },
+        {
+          "Title": "AI grifters are creating fake Black people to sell Shein junk",
+          "Link": "https://www.theverge.com/ai-artificial-intelligence/938844/ai-tiktok-shop-blackface-shein-dropshipping",
+          "Source": "The Verge",
+          "Published": "2026-05-30T09:00:00.0000000-04:00"
+        },
+        {
+          "Title": "Amazon Is Making an AI-Animated ‘Good Advice Cupcake’ TV Show. Its Original Creator Is Furious",
+          "Link": "https://www.wired.com/story/story/amazon-is-making-an-ai-animated-good-advice-cupcake-tv-show-its-original-creator-is-furious/",
+          "Source": "Wired",
+          "Published": "2026-05-29T16:56:59.0000000-04:00"
+        },
+        {
+          "Title": "Hands-On With Gemini Spark: I Gave It Access to My Life and It Friend-Zoned My Boyfriend",
+          "Link": "https://www.wired.com/story/google-gemini-spark-ai-agent-hands-on/",
+          "Source": "Wired",
+          "Published": "2026-05-29T15:07:46.0000000-04:00"
+        },
+        {
+          "Title": "This AI startup will clean your home for free to train future robots",
+          "Link": "https://www.theverge.com/ai-artificial-intelligence/939765/ai-training-data-startup-shift-free-cleaning",
+          "Source": "The Verge",
+          "Published": "2026-05-29T07:58:40.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🇩🇰 Danish News",
+      "Articles": [
+        {
+          "Title": "Highlighting Greenland’s Strategic Importance Is Good; Threatening To Invade Is Not – Analysis - Eurasia Review",
+          "Link": "https://news.google.com/rss/articles/CBMiygFBVV95cUxPRHFKQkxJX3o5eGozUTUxeTdBaEw0MG84N01jQktudUtCNDZPcmNHQThYVFctaGtBQ19IWFVQWXQ4ODNQdmFkbm8xXzZpWmtwUGVLM0tmb2ZXRGFWQmpFWGU0M2lrLVVBWEt1OUdiNDdNaUZIeV9uc3RLSmNHWlhlY0pnSm9uZE5Id2ViTzVGVnpFdi1aNGZaOGNvdFhwdEVtTlZMRDVldHREb0lka1cyQmlDbnVVWXNMMllZYVZhWU9oOTJfdDFZRkhB?oc=5",
+          "Source": "Google News Denmark",
+          "Published": "2026-05-30T20:42:11.0000000-04:00"
+        },
+        {
+          "Title": "Athletics: Danish misses out on medal but gains valuable experience in Hong Kong - The Star | Malaysia",
+          "Link": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxNc1FRVHRFY0tna0xiaExhTjdSeFdRVEpzbkd3X1EtYktBclNvcHgzUjkzYjJuUFV4dXlzekJES3d2Z241OHZsREppRnN1WmJnZ3FFWEFTNDlXRkZsamk1NC13T2pvSHVMOU1PLUUtZ3dpd3BuZnZidl9OSjlYbEJLRU1ob1c0bGNyYUpjanZROFZxejdHRkt3YTkxMHpKb2dobTVLWlp2dDdoTHdLSklWa2VVR1pCR1JCMlAzTmM5YzQ?oc=5",
+          "Source": "Google News Denmark",
+          "Published": "2026-05-30T19:49:24.0000000-04:00"
+        },
+        {
+          "Title": "Trump deler igen billede af sig selv over Grønland",
+          "Link": "https://www.dr.dk/nyheder/seneste/trump-deler-igen-billede-af-sig-selv-over-groenland",
+          "Source": "DR News",
+          "Published": "2026-05-30T17:45:15.0000000-04:00"
+        },
+        {
+          "Title": "Dansk orienteringsløber napper World Cup-sølv",
+          "Link": "https://www.dr.dk/nyheder/seneste/dansk-orienteringsloeber-napper-world-cup-soelv",
+          "Source": "DR News",
+          "Published": "2026-05-30T12:55:34.0000000-04:00"
+        },
+        {
+          "Title": "Long translations delay Greenland IUD report again",
+          "Link": "https://cphpost.dk/2026-05-30/news/round-up/long-translations-delay-greenland-iud-report-again/",
+          "Source": "CPH Post",
+          "Published": "2026-05-30T02:13:38.0000000-04:00"
+        },
+        {
+          "Title": "Three more Danish hydrogen projects awarded billions",
+          "Link": "https://cphpost.dk/2026-05-30/business-education/business-business-education/three-more-danish-hydrogen-projects-awarded-billions/",
+          "Source": "CPH Post",
+          "Published": "2026-05-30T01:50:55.0000000-04:00"
+        }
+      ]
+    }
+  ]
+}

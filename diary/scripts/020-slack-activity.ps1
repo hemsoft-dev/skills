@@ -40,12 +40,12 @@ if (-not (Test-Path $EntryPath)) {
 }
 
 # Locate Slack briefing output
-$slackOutputDir = Join-Path $env:USERPROFILE '.agents' 'skills' 'slack' 'output'
+$slackOutputDir = Join-Path $env:USERPROFILE (Join-Path '.agents' (Join-Path 'skills' (Join-Path 'slack' 'output')))
 $slackFile = Join-Path $slackOutputDir "$Date-slack-briefing.json"
 
 if (-not (Test-Path $slackFile)) {
     # Try to generate it
-    $slackScript = Join-Path $env:USERPROFILE '.agents' 'skills' 'slack' 'scripts' 'Get-SlackDailyBriefing.ps1'
+    $slackScript = Join-Path $env:USERPROFILE (Join-Path '.agents' (Join-Path 'skills' (Join-Path 'slack' (Join-Path 'scripts' 'Get-SlackDailyBriefing.ps1'))))
     if (Test-Path $slackScript) {
         Write-Information "`e[1;33mSlack briefing not found for $Date. Generating...`e[0m"
         & $slackScript -Date $Date -OutputFormat Detailed 6>&1 | Out-Null

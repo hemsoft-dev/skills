@@ -1,0 +1,164 @@
+{
+  "Date": "2026-05-28",
+  "GeneratedAt": "2026-05-28T23:12:34.5314545-04:00",
+  "Categories": [
+    {
+      "Title": "🇺🇸 US News",
+      "Articles": [
+        {
+          "Title": "Progressive El-Sayed goes on offensive as Michigan Democrats clash in U.S. Senate debate",
+          "Link": "https://www.pbs.org/newshour/politics/progressive-el-sayed-goes-on-offensive-as-michigan-democrats-clash-in-u-s-senate-debate",
+          "Source": "PBS Politics",
+          "Published": "2026-05-28T19:12:21.0000000-04:00"
+        },
+        {
+          "Title": "Trump stock trades fuel accusations of corruption and profiting off presidency",
+          "Link": "https://www.pbs.org/newshour/show/trump-stock-trades-fuel-accusations-of-corruption-and-profiting-off-presidency",
+          "Source": "PBS Politics",
+          "Published": "2026-05-28T18:40:34.0000000-04:00"
+        },
+        {
+          "Title": "Treasury Department prepares $250 bill with Trump's face on it",
+          "Link": "https://www.npr.org/2026/05/28/nx-s1-5838002/treasury-department-prepares-250-bill-with-trumps-face-on-it",
+          "Source": "NPR Politics",
+          "Published": "2026-05-28T16:36:11.0000000-04:00"
+        },
+        {
+          "Title": "A federal judge in D.C. declines to block Trump's executive order on voting by mail",
+          "Link": "https://www.npr.org/2026/05/28/nx-s1-5797889/trump-mail-in-voting-order",
+          "Source": "NPR Politics",
+          "Published": "2026-05-28T07:13:55.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🌍 World News",
+      "Articles": [
+        {
+          "Title": "Moment Blue Origin rocket explodes during test in Florida",
+          "Link": "https://www.bbc.com/news/videos/cvgz0pdg32mo?at_medium=RSS&at_campaign=rss",
+          "Source": "BBC",
+          "Published": "2026-05-28T23:02:48.0000000-04:00"
+        },
+        {
+          "Title": "KPMG Australia’s CEO Andrew Yates quits over whistleblower scandal",
+          "Link": "https://www.theguardian.com/business/2026/may/29/kpmg-australia-ceo-andrew-yates-quits-whistleblower-scandal-ntwnfb",
+          "Source": "The Guardian",
+          "Published": "2026-05-28T22:56:47.0000000-04:00"
+        },
+        {
+          "Title": "Australia news live: Entertainment elite gather to farewell James Valentine; Angus Taylor challenged on ‘arrogant prick’ comment about PM",
+          "Link": "https://www.theguardian.com/australia-news/live/2026/may/29/australia-news-live-senate-estimates-capital-gains-tax-anthony-albanese-angus-taylor-housing-weather-floods-ntwnfb",
+          "Source": "The Guardian",
+          "Published": "2026-05-28T22:54:46.0000000-04:00"
+        },
+        {
+          "Title": "Russian drone hits apartment building in Romania near Ukraine border",
+          "Link": "https://www.france24.com/en/europe/20260529-russian-drone-hits-apartment-building-in-romania-near-ukraine-border",
+          "Source": "France 24",
+          "Published": "2026-05-28T22:45:59.0000000-04:00"
+        },
+        {
+          "Title": "US Treasury secretary confirms plans for banknote featuring Trump’s face",
+          "Link": "https://www.aljazeera.com/news/2026/5/29/us-treasury-secretary-confirms-plans-for-banknote-featuring-trumps-face?traffic_source=rss",
+          "Source": "Al Jazeera",
+          "Published": "2026-05-28T22:13:18.0000000-04:00"
+        },
+        {
+          "Title": "Italy restores lucky testicles on bull mosaic worn down by tourists ",
+          "Link": "https://www.bbc.com/news/articles/c1m215npjp2o?at_medium=RSS&at_campaign=rss",
+          "Source": "BBC",
+          "Published": "2026-05-28T22:01:44.0000000-04:00"
+        },
+        {
+          "Title": "Middle East war live: Vance says US and Iran close to agreement as ceasefire deal reported",
+          "Link": "https://www.france24.com/en/middle-east/20260529-middle-east-war-live-vance-says-us-and-iran-close-to-agreement-as-ceasefire-deal-reported",
+          "Source": "France 24",
+          "Published": "2026-05-28T21:39:31.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🤖 AI News",
+      "Articles": [
+        {
+          "Title": "Anthropic's run-rate revenue hits $47 billion",
+          "Link": "https://simonwillison.net/2026/May/29/anthropic/#atom-everything",
+          "Source": "Simon Willison's Weblog",
+          "Published": "2026-05-28T21:23:08.0000000-04:00"
+        },
+        {
+          "Title": "Claude Opus 4.8: \"a modest but tangible improvement\"",
+          "Link": "https://simonwillison.net/2026/May/28/claude-opus-4-8/#atom-everything",
+          "Source": "Simon Willison's Weblog",
+          "Published": "2026-05-28T19:59:50.0000000-04:00"
+        },
+        {
+          "Title": "Glean’s top line crosses $300M as AI budget-cutting becomes its major selling point",
+          "Link": "https://techcrunch.com/2026/05/28/gleans-top-line-crosses-300m-as-ai-budget-cutting-becomes-its-major-selling-point/",
+          "Source": "TechCrunch",
+          "Published": "2026-05-28T20:44:37.0000000-04:00"
+        },
+        {
+          "Title": "Microsoft 365 Copilot gets a speed boost and cleaner design",
+          "Link": "https://www.theverge.com/tech/939273/microsoft-365-copilot-redesign",
+          "Source": "The Verge",
+          "Published": "2026-05-28T16:14:07.0000000-04:00"
+        },
+        {
+          "Title": "Asana acquires no-code agent-builder StackAI",
+          "Link": "https://techcrunch.com/2026/05/28/asana-acquires-no-code-agent-builder-stack-ai/",
+          "Source": "TechCrunch",
+          "Published": "2026-05-28T16:06:07.0000000-04:00"
+        },
+        {
+          "Title": "Claude’s new model is more ‘honest’ when it messes up",
+          "Link": "https://www.theverge.com/ai-artificial-intelligence/939094/anthropic-claude-4-8-opus-honesty-effort",
+          "Source": "The Verge",
+          "Published": "2026-05-28T13:00:00.0000000-04:00"
+        },
+        {
+          "Title": "Here Comes Ojai, Waymo’s New Chinese-Made Robotaxi",
+          "Link": "https://www.wired.com/story/here-comes-ojai-waymos-new-chinese-made-robotaxi/",
+          "Source": "Wired",
+          "Published": "2026-05-28T11:00:00.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🇩🇰 Danish News",
+      "Articles": [
+        {
+          "Title": "Copenhagen launches free global risk management toolkit for MICE industry - TTGmice",
+          "Link": "https://news.google.com/rss/articles/CBMirgFBVV95cUxNTFozOUNFWXJHMENoaWh4d1QtWHR1c0FsalU5MXBLM0FFcGlEQmlCbGoyUEhDZF9sNDVzM3NYY0dFT2FnOWIyRVdwZ29YMWtnRmo2ZHJXb0MxdXp0OU5wUWx1dU1pckFNMDJFNUJxaldEbUR5eGdEaFVCby1QajIzREYwbDlXN3U4SmV6QzBLWW5mVVI3T0NLN2I2c3FoUUFKTzZzN1EwczVHZ1E2OVE?oc=5",
+          "Source": "Google News Denmark",
+          "Published": "2026-05-28T21:06:44.0000000-04:00"
+        },
+        {
+          "Title": "Cross-cultural project focuses on parenting traditions among Greenland and Nunavut Inuit - CBC",
+          "Link": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE41eW9lTEo3RDhZUGpwZzlKSU5HRjlxSVVpMVlSbk5iOWFOOTVibWVTem54cG5QbnI3ZUQ5S3I0YjROLXlVaGJKMVVBcllRR1Mya3ZIMElsaDV2Zw?oc=5",
+          "Source": "Google News Denmark",
+          "Published": "2026-05-28T20:47:33.0000000-04:00"
+        },
+        {
+          "Title": "266 Danske Bank employees fired in new cuts: 199 laid off in Denmark",
+          "Link": "https://cphpost.dk/2026-05-28/news/round-up/266-danske-bank-employees-fired-in-new-cuts-199-laid-off-in-denmark/",
+          "Source": "CPH Post",
+          "Published": "2026-05-28T10:00:00.0000000-04:00"
+        },
+        {
+          "Title": "Danish health staff to help Greenland cover full-time hospital positions",
+          "Link": "https://cphpost.dk/2026-05-28/news/round-up/danish-health-staff-to-help-greenland-cover-full-time-hospital-positions/",
+          "Source": "CPH Post",
+          "Published": "2026-05-28T09:58:00.0000000-04:00"
+        },
+        {
+          "Title": "Dansk Erhverv og Dansk Industri kritiserer Temu efter milliardbøde",
+          "Link": "https://www.dr.dk/nyheder/seneste/dansk-erhverv-og-dansk-industri-kritiserer-temu-efter-milliardboede",
+          "Source": "DR News",
+          "Published": "2026-05-28T07:25:58.0000000-04:00"
+        }
+      ]
+    }
+  ]
+}

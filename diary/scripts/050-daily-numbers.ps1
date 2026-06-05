@@ -6,7 +6,7 @@
 .DESCRIPTION
     Fetches stock market data (Dow Jones, S&P 500) from Yahoo Finance,
     repo counts from GitHub (relias-engineering) and Bitbucket (relias),
-    GitHub Copilot premium request usage for all accounts, and Cloudflare
+    GitHub Copilot AI credit and token-billing usage, and Cloudflare
     web/email metrics for managed domains.
     Computes deltas against yesterday's diary entry values.
     Skips stock data on weekends (markets closed).
@@ -35,8 +35,11 @@ $InformationPreference = 'Continue'
 # --- Configuration ---
 $GitHubOrg = 'relias-engineering'
 $BitbucketWorkspace = 'relias'
-$RepoSnapshotsDir = Join-Path $PSScriptRoot '..' 'output'
-$CloudflareScriptPath = Join-Path $PSScriptRoot '..' '..' 'cloudflare' 'scripts' 'Get-CloudflareUsage.ps1'
+$RepoSnapshotsDir = Join-Path $PSScriptRoot (Join-Path '..' 'output')
+$CodexBarCopilotMetricsScriptPath = 'D:\github\HemSoft\codexbar\scripts\copilot-metrics.ps1'
+$CodexBarCopilotMetricsCachePath = 'D:\github\HemSoft\codexbar\data\copilot-metrics.json'
+$CopilotPersonalLogin = 'fhemmerrelias'
+$CloudflareScriptPath = Join-Path $PSScriptRoot (Join-Path '..' (Join-Path '..' (Join-Path 'cloudflare' (Join-Path 'scripts' 'Get-CloudflareUsage.ps1'))))
 $CloudflareDomains = @(
     [pscustomobject]@{ Name = 'nowleadershipgroup.com'; HasEmailRouting = $true },
     [pscustomobject]@{ Name = 'setitfreeloop.org'; HasEmailRouting = $false }
@@ -104,7 +107,19 @@ function Get-PreviousDiaryValueSnapshot {
         $prev.BitbucketRepos = [int]$previousSnapshot.bitbucketRepos
     }
     if ($previousSnapshot.copilot) {
-        if ($null -ne $previousSnapshot.copilot.orgPremium -and $null -ne $previousSnapshot.copilot.orgPct) {
+        if ($previousSnapshot.copilot.PSObject.Properties['orgAICredits'] -and $null -ne $previousSnapshot.copilot.orgAICredits) {
+            $prev.OrgCopilotAICredits = [decimal]$previousSnapshot.copilot.orgAICredits
+        }
+        if ($previousSnapshot.copilot.PSObject.Properties['orgGrossCostUsd'] -and $null -ne $previousSnapshot.copilot.orgGrossCostUsd) {
+            $prev.OrgCopilotGrossCostUsd = [decimal]$previousSnapshot.copilot.orgGrossCostUsd
+        }
+        if ($previousSnapshot.copilot.PSObject.Properties['personalAICredits'] -and $null -ne $previousSnapshot.copilot.personalAICredits) {
+            $prev.PersonalCopilotAICredits = [decimal]$previousSnapshot.copilot.personalAICredits
+        }
+        if ($previousSnapshot.copilot.PSObject.Properties['personalGrossCostUsd'] -and $null -ne $previousSnapshot.copilot.personalGrossCostUsd) {
+            $prev.PersonalCopilotGrossCostUsd = [decimal]$previousSnapshot.copilot.personalGrossCostUsd
+        }
+        if ($previousSnapshot.copilot.PSObject.Properties['orgPremium'] -and $previousSnapshot.copilot.PSObject.Properties['orgPct'] -and $null -ne $previousSnapshot.copilot.orgPremium -and $null -ne $previousSnapshot.copilot.orgPct) {
             $prev.OrgCopilotUsed = [decimal]$previousSnapshot.copilot.orgPremium
             $prev.OrgCopilotPct = [decimal]$previousSnapshot.copilot.orgPct
         }
@@ -158,20 +173,203 @@ function Format-PctPointDelta {
     return "$sign$($delta.ToString('0.0'))"
 }
 
-function Get-CopilotDeltaLine {
+function Format-DecimalDelta {
     param(
-        [decimal]$CurrentUsed,
-        [decimal]$CurrentPct,
-        [hashtable]$PreviousValues
+        [decimal]$Current,
+        [decimal]$Previous,
+        [int]$Decimals = 3
     )
 
-    if (-not ($PreviousValues.ContainsKey('OrgCopilotUsed') -and $PreviousValues.ContainsKey('OrgCopilotPct'))) {
-        return '  - **Delta vs Yesterday**: unavailable (previous diary snapshot missing org-wide GitHub Copilot usage)'
+    $delta = [math]::Round($Current - $Previous, $Decimals)
+    $sign = if ($delta -ge 0) { '+' } else { '' }
+    return "$sign$($delta.ToString("N$Decimals"))"
+}
+
+function Format-CurrencyDelta {
+    param(
+        [decimal]$Current,
+        [decimal]$Previous
+    )
+
+    $delta = [math]::Round($Current - $Previous, 2)
+    $sign = if ($delta -ge 0) { '+' } else { '-' }
+    return "$sign`$$([math]::Abs($delta).ToString('N2'))"
+}
+
+function Get-CopilotTokenDeltaLine {
+    param(
+        [string]$Prefix,
+        [decimal]$CurrentAICredits,
+        [decimal]$CurrentGrossCostUsd,
+        [hashtable]$PreviousValues,
+        [string]$UsageMetricName,
+        [string]$CostMetricName
+    )
+
+    if (-not ($PreviousValues.ContainsKey($UsageMetricName) -and $PreviousValues.ContainsKey($CostMetricName))) {
+        return "${Prefix}: unavailable (previous diary snapshot missing Copilot token-billing metrics)"
     }
 
-    $requestsDelta = Format-IntDelta -Current ([int][math]::Round($CurrentUsed)) -Previous ([int][math]::Round($PreviousValues.OrgCopilotUsed))
-    $pctPointDelta = Format-PctPointDelta -Current $CurrentPct -Previous $PreviousValues.OrgCopilotPct
-    return "  - **Delta vs Yesterday**: $requestsDelta requests, $pctPointDelta pct points"
+    $creditsDelta = Format-DecimalDelta -Current $CurrentAICredits -Previous $PreviousValues[$UsageMetricName] -Decimals 3
+    $grossCostDelta = Format-CurrencyDelta -Current $CurrentGrossCostUsd -Previous $PreviousValues[$CostMetricName]
+    return "${Prefix}: $creditsDelta AI credits, $grossCostDelta gross cost"
+}
+
+function Get-CopilotBillingUsageItem {
+    param([object]$Response)
+
+    if ($null -eq $Response) { return @() }
+    if ($Response -is [array]) { return @($Response) }
+
+    foreach ($propertyName in @('items', 'usageItems', 'usage_items', 'data', 'results')) {
+        $property = $Response.PSObject.Properties[$propertyName]
+        if ($property -and $property.Value) {
+            return @($property.Value)
+        }
+    }
+
+    return @($Response)
+}
+
+function ConvertTo-CopilotTokenUsage {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Login,
+
+        [object[]]$Responses
+    )
+
+    $aiCredits = 0.0
+    $grossCostUsd = 0.0
+    $netCostUsd = 0.0
+    $daysWithUsage = 0
+    $models = [System.Collections.Generic.HashSet[string]]::new()
+
+    foreach ($response in @($Responses)) {
+        if ($response.PSObject.Properties['Success'] -and -not $response.Success) {
+            continue
+        }
+
+        $payload = $response.Response
+        if (-not $payload -and $response.RawJson) {
+            try {
+                $payload = $response.RawJson | ConvertFrom-Json
+            }
+            catch {
+                $payload = $null
+            }
+        }
+
+        $dayCredits = 0.0
+        foreach ($item in @(Get-CopilotBillingUsageItem -Response $payload)) {
+            if ($item.PSObject.Properties['grossQuantity'] -and $null -ne $item.grossQuantity) {
+                $quantity = [double]$item.grossQuantity
+                $aiCredits += $quantity
+                $dayCredits += $quantity
+            }
+            if ($item.PSObject.Properties['grossAmount'] -and $null -ne $item.grossAmount) {
+                $grossCostUsd += [double]$item.grossAmount
+            }
+            if ($item.PSObject.Properties['netAmount'] -and $null -ne $item.netAmount) {
+                $netCostUsd += [double]$item.netAmount
+            }
+            if ($item.PSObject.Properties['model'] -and $item.model) {
+                [void]$models.Add([string]$item.model)
+            }
+        }
+
+        if ($dayCredits -gt 0) {
+            $daysWithUsage++
+        }
+    }
+
+    return [pscustomobject]@{
+        User          = $Login
+        AICredits     = [math]::Round($aiCredits, 3)
+        GrossCostUsd  = [math]::Round($grossCostUsd, 2)
+        NetCostUsd    = [math]::Round($netCostUsd, 2)
+        DaysWithUsage = $daysWithUsage
+        Models        = ($models | Sort-Object) -join ', '
+    }
+}
+
+function Get-CopilotMetricsSummary {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Path,
+
+        [string]$User
+    )
+
+    if (-not (Test-Path -LiteralPath $Path)) {
+        return $null
+    }
+
+    $cache = Get-Content -Path $Path -Raw | ConvertFrom-Json
+    $runUsers = @($cache.Users)
+    if ($User) {
+        $runUsers = @($runUsers | Where-Object { $_.User -eq $User })
+    }
+    if ($runUsers.Count -eq 0) {
+        return $null
+    }
+
+    $userUsage = @($runUsers | ForEach-Object {
+            ConvertTo-CopilotTokenUsage -Login ([string]$_.User) -Responses @($_.Responses)
+        })
+
+    return [pscustomobject]@{
+        AICredits     = [math]::Round((($userUsage | Measure-Object -Property AICredits -Sum).Sum), 3)
+        GrossCostUsd  = [math]::Round((($userUsage | Measure-Object -Property GrossCostUsd -Sum).Sum), 2)
+        NetCostUsd    = [math]::Round((($userUsage | Measure-Object -Property NetCostUsd -Sum).Sum), 2)
+        UserCount      = $userUsage.Count
+        DaysWithUsage  = (($userUsage | Measure-Object -Property DaysWithUsage -Maximum).Maximum)
+        Models         = (($userUsage | ForEach-Object { $_.Models } | Where-Object { $_ }) -join ', ')
+        GeneratedAt    = if ($cache.GeneratedAtUtc) { [string]$cache.GeneratedAtUtc } else { '' }
+        Days           = if ($cache.Days) { (@($cache.Days) -join ',') } else { '' }
+        SourcePath     = $Path
+        TopUsers       = @($userUsage | Sort-Object -Property AICredits -Descending | Select-Object -First 5)
+    }
+}
+
+function Invoke-PersonalCopilotMetricsRefresh {
+    param(
+        [Parameter(Mandatory = $true)]
+        [datetime]$TargetDate,
+
+        [Parameter(Mandatory = $true)]
+        [string]$Login
+    )
+
+    if (-not (Test-Path -LiteralPath $CodexBarCopilotMetricsScriptPath)) {
+        throw "CodexBar Copilot metrics script not found: $CodexBarCopilotMetricsScriptPath"
+    }
+
+    $personalDataDir = Join-Path $RepoSnapshotsDir 'copilot-personal'
+    $targetDay = [int]$TargetDate.Day
+    $powerShellCommand = Get-Command pwsh -ErrorAction SilentlyContinue
+    if (-not $powerShellCommand) {
+        $powerShellCommand = Get-Command powershell -ErrorAction Stop
+    }
+
+    $arguments = @(
+        '-NoProfile',
+        '-File', $CodexBarCopilotMetricsScriptPath,
+        '-Refresh',
+        '-User', $Login,
+        '-Year', ([string]$TargetDate.Year),
+        '-Month', ([string]$TargetDate.Month),
+        '-StartDay', '1',
+        '-EndDay', ([string]$targetDay),
+        '-Top', '1',
+        '-DataDir', $personalDataDir
+    )
+    & $powerShellCommand.Source @arguments | Out-Null
+    if ($LASTEXITCODE -ne 0) {
+        throw "CodexBar personal Copilot metrics refresh failed with exit code $LASTEXITCODE"
+    }
+
+    return Get-CopilotMetricsSummary -Path (Join-Path $personalDataDir 'copilot-metrics.json') -User $Login
 }
 
 function Get-MarketDriverText {
@@ -487,74 +685,84 @@ else {
     Write-Information "`e[90mWeekend - skipping stock market data (markets closed).`e[0m"
 }
 
-# --- Fetch GitHub Copilot Usage ---
-Write-Information "`e[1;36mFetching GitHub Copilot usage...`e[0m"
-$orgPremiumUsed = $null
-$orgQuota = $null
-$orgSeats = $null
-$orgPct = $null
-$cloudAgentRequests = $null
-$personalUsed = $null
-$personalEntitlement = $null
-$personalPct = $null
+# --- Fetch GitHub Copilot Token Billing ---
+Write-Information "`e[1;36mFetching GitHub Copilot token billing metrics...`e[0m"
+$orgCopilotUsage = $null
+$personalCopilotUsage = $null
 $orgCopilotFetchSucceeded = $false
 $personalCopilotFetchSucceeded = $false
 
 try {
-    $billingUsage = gh api "/orgs/Relias-Engineering/settings/billing/usage" | ConvertFrom-Json
-    $billing = gh api "/orgs/Relias-Engineering/copilot/billing" | ConvertFrom-Json
-    $targetBillingMonth = $Date.Substring(0, 7)
-    $monthItems = @(
-        $billingUsage.usageItems | Where-Object {
-            $_.product -eq 'copilot' -and
-            ([datetimeoffset]$_.date).ToString('yyyy-MM') -eq $targetBillingMonth
-        }
-    )
-    $orgPremiumUsed = Get-UsageItemQuantitySum -Items $monthItems -Skus @('Copilot Premium Request')
-    $cloudAgentRequests = Get-UsageItemQuantitySum -Items $monthItems -Skus @('Copilot Cloud Agent', 'Coding Agent Premium Request')
-    $orgSeats = [int]$billing.seat_breakdown.total
-    $orgQuota = $orgSeats * 1000
-    $orgPct = if ($orgQuota -gt 0) { [math]::Round(($orgPremiumUsed / $orgQuota) * 100, 1) } else { 0.0 }
+    $orgCopilotUsage = Get-CopilotMetricsSummary -Path $CodexBarCopilotMetricsCachePath
+    if ($null -eq $orgCopilotUsage) {
+        throw "No CodexBar Copilot metrics cache found at $CodexBarCopilotMetricsCachePath"
+    }
     $orgCopilotFetchSucceeded = $true
 }
 catch {
-    Write-Information "`e[1;33mFailed to fetch current org-wide GitHub Copilot usage: $_`e[0m"
+    Write-Information "`e[1;33mFailed to load org-wide GitHub Copilot token billing metrics: $_`e[0m"
 }
 
 try {
-    $personal = gh api /copilot_internal/user --jq '.quota_snapshots.premium_interactions' | ConvertFrom-Json
-    $personalEntitlement = [int]$personal.entitlement
-    $personalUsed = $personalEntitlement - [int]$personal.remaining
-    $personalPct = if ($personalEntitlement -gt 0) { [math]::Round(($personalUsed / $personalEntitlement) * 100, 1) } else { 0.0 }
+    $personalCopilotUsage = Invoke-PersonalCopilotMetricsRefresh -TargetDate $parsedDate -Login $CopilotPersonalLogin
+    if ($null -eq $personalCopilotUsage) {
+        throw "No personal Copilot token billing metrics returned for $CopilotPersonalLogin"
+    }
     $personalCopilotFetchSucceeded = $true
 }
 catch {
-    Write-Information "`e[1;33mFailed to fetch current personal GitHub Copilot usage: $_`e[0m"
+    Write-Information "`e[1;33mFailed to refresh personal GitHub Copilot token billing metrics: $_`e[0m"
+    $personalCopilotUsage = Get-CopilotMetricsSummary -Path $CodexBarCopilotMetricsCachePath -User $CopilotPersonalLogin
+    if ($null -ne $personalCopilotUsage) {
+        Write-Information "`e[90m  Falling back to CodexBar cached personal Copilot metrics.`e[0m"
+        $personalCopilotFetchSucceeded = $true
+    }
 }
 
 $copilotSummaryLine = if ($orgCopilotFetchSucceeded) {
-    "- **GitHub Copilot Org-Wide**: $([math]::Round($orgPremiumUsed).ToString('N0')) / $($orgQuota.ToString('N0')) premium requests ($orgPct%)"
+    "- **GitHub Copilot Org-Wide AI Credits**: $($orgCopilotUsage.AICredits.ToString('N3')) credits, `$$($orgCopilotUsage.GrossCostUsd.ToString('N2')) gross, `$$($orgCopilotUsage.NetCostUsd.ToString('N2')) net ($($orgCopilotUsage.UserCount) users; cache generated $($orgCopilotUsage.GeneratedAt); days $($orgCopilotUsage.Days))"
 }
 else {
-    '- **GitHub Copilot Org-Wide**: unavailable (billing API request failed)'
+    '- **GitHub Copilot Org-Wide AI Credits**: unavailable (CodexBar billing cache unavailable)'
 }
-$copilotCloudAgentLine = if ($orgCopilotFetchSucceeded) {
-    "  - **Cloud Agent**: $([math]::Round($cloudAgentRequests).ToString('N0')) requests"
+$copilotTopUsersLine = if ($orgCopilotFetchSucceeded -and $orgCopilotUsage.TopUsers.Count -gt 0) {
+    $topUserText = @($orgCopilotUsage.TopUsers | ForEach-Object {
+            "$($_.User): $($_.AICredits.ToString('N3')) credits (`$$($_.GrossCostUsd.ToString('N2')) gross)"
+        }) -join '; '
+    "  - **Top Users**: $topUserText"
 }
 else {
-    '  - **Cloud Agent**: unavailable'
+    '  - **Top Users**: unavailable'
 }
 $copilotDeltaLine = if ($orgCopilotFetchSucceeded) {
-    Get-CopilotDeltaLine -CurrentUsed $orgPremiumUsed -CurrentPct $orgPct -PreviousValues $prev
+    Get-CopilotTokenDeltaLine `
+        -Prefix '  - **Delta vs Yesterday**' `
+        -CurrentAICredits $orgCopilotUsage.AICredits `
+        -CurrentGrossCostUsd $orgCopilotUsage.GrossCostUsd `
+        -PreviousValues $prev `
+        -UsageMetricName 'OrgCopilotAICredits' `
+        -CostMetricName 'OrgCopilotGrossCostUsd'
 }
 else {
-    '  - **Delta vs Yesterday**: unavailable (current org-wide GitHub Copilot usage unavailable)'
+    '  - **Delta vs Yesterday**: unavailable (current org-wide GitHub Copilot token billing metrics unavailable)'
 }
 $copilotPersonalLine = if ($personalCopilotFetchSucceeded) {
-    "  - **Personal (fhemmerrelias)**: $($personalUsed.ToString('N0')) / $($personalEntitlement.ToString('N0')) used ($personalPct%)"
+    "  - **Personal ($CopilotPersonalLogin)**: $($personalCopilotUsage.AICredits.ToString('N3')) AI credits, `$$($personalCopilotUsage.GrossCostUsd.ToString('N2')) gross, `$$($personalCopilotUsage.NetCostUsd.ToString('N2')) net ($($personalCopilotUsage.DaysWithUsage) days with usage)"
 }
 else {
-    '  - **Personal (fhemmerrelias)**: unavailable (personal Copilot quota request failed)'
+    "  - **Personal ($CopilotPersonalLogin)**: unavailable (personal Copilot token billing metrics unavailable)"
+}
+$copilotPersonalDeltaLine = if ($personalCopilotFetchSucceeded) {
+    Get-CopilotTokenDeltaLine `
+        -Prefix '  - **Personal Delta vs Yesterday**' `
+        -CurrentAICredits $personalCopilotUsage.AICredits `
+        -CurrentGrossCostUsd $personalCopilotUsage.GrossCostUsd `
+        -PreviousValues $prev `
+        -UsageMetricName 'PersonalCopilotAICredits' `
+        -CostMetricName 'PersonalCopilotGrossCostUsd'
+}
+else {
+    '  - **Personal Delta vs Yesterday**: unavailable (current personal Copilot token billing metrics unavailable)'
 }
 
 # --- Fetch Cloudflare usage ---
@@ -595,9 +803,10 @@ if ($marketCommentaryLine) {
         $(if ($bbRepoFetchSucceeded) { "$bbRepoCount ($bbDelta)" } else { 'unavailable' })
     ))
 [void]$sb.AppendLine($copilotSummaryLine)
-[void]$sb.AppendLine($copilotCloudAgentLine)
+[void]$sb.AppendLine($copilotTopUsersLine)
 [void]$sb.AppendLine($copilotDeltaLine)
 [void]$sb.AppendLine($copilotPersonalLine)
+[void]$sb.AppendLine($copilotPersonalDeltaLine)
 if ($cloudflareLines.Count -gt 0) {
     [void]$sb.AppendLine('- **Cloudflare Usage**:')
     foreach ($line in $cloudflareLines) {
@@ -623,13 +832,17 @@ Save-DiarySnapshotJson -ScriptRoot $PSScriptRoot -Date $Date -Name 'daily-number
     githubRepos = if ($ghRepoFetchSucceeded) { $ghRepoCount } else { $null }
     bitbucketRepos = if ($bbRepoFetchSucceeded) { $bbRepoCount } else { $null }
     copilot = @{
-        orgPremium = if ($orgCopilotFetchSucceeded) { $orgPremiumUsed } else { $null }
-        orgPct = if ($orgCopilotFetchSucceeded) { $orgPct } else { $null }
-        orgQuota = if ($orgCopilotFetchSucceeded) { $orgQuota } else { $null }
-        cloudAgent = if ($orgCopilotFetchSucceeded) { $cloudAgentRequests } else { $null }
-        personalUsed = if ($personalCopilotFetchSucceeded) { $personalUsed } else { $null }
-        personalEntitlement = if ($personalCopilotFetchSucceeded) { $personalEntitlement } else { $null }
-        personalPct = if ($personalCopilotFetchSucceeded) { $personalPct } else { $null }
+        billingModel = 'ai-credits-token-billing'
+        orgAICredits = if ($orgCopilotFetchSucceeded) { $orgCopilotUsage.AICredits } else { $null }
+        orgGrossCostUsd = if ($orgCopilotFetchSucceeded) { $orgCopilotUsage.GrossCostUsd } else { $null }
+        orgNetCostUsd = if ($orgCopilotFetchSucceeded) { $orgCopilotUsage.NetCostUsd } else { $null }
+        orgUserCount = if ($orgCopilotFetchSucceeded) { $orgCopilotUsage.UserCount } else { $null }
+        orgGeneratedAt = if ($orgCopilotFetchSucceeded) { $orgCopilotUsage.GeneratedAt } else { $null }
+        personalLogin = $CopilotPersonalLogin
+        personalAICredits = if ($personalCopilotFetchSucceeded) { $personalCopilotUsage.AICredits } else { $null }
+        personalGrossCostUsd = if ($personalCopilotFetchSucceeded) { $personalCopilotUsage.GrossCostUsd } else { $null }
+        personalNetCostUsd = if ($personalCopilotFetchSucceeded) { $personalCopilotUsage.NetCostUsd } else { $null }
+        personalGeneratedAt = if ($personalCopilotFetchSucceeded) { $personalCopilotUsage.GeneratedAt } else { $null }
     }
     cloudflare = $snapshotCloudflare
 }
@@ -640,7 +853,7 @@ Set-DiarySectionInnerHtml -EntryPath $EntryPath -SectionTitle '📊 Daily Number
 Write-Information "`e[1;32mDaily numbers injected into diary entry.`e[0m"
 if ($dowLine) { Write-Information "  Dow: $($dowPrice.ToString('N2')) | S&P: $($spPrice.ToString('N2'))" }
 Write-Information "  GitHub: $(if ($ghRepoFetchSucceeded) { "$ghRepoCount ($ghDelta$ghRepoDeltaDetailText)" } else { 'unavailable' }) | Bitbucket: $(if ($bbRepoFetchSucceeded) { "$bbRepoCount ($bbDelta)" } else { 'unavailable' })"
-Write-Information "  Copilot org-wide: $(if ($orgCopilotFetchSucceeded) { "$([math]::Round($orgPremiumUsed).ToString('N0')) / $($orgQuota.ToString('N0'))" } else { 'unavailable' })"
+Write-Information "  Copilot org-wide: $(if ($orgCopilotFetchSucceeded) { "$($orgCopilotUsage.AICredits.ToString('N3')) AI credits / `$$($orgCopilotUsage.GrossCostUsd.ToString('N2')) gross" } else { 'unavailable' })"
 
 # --- Restore original gh account ---
 if ($originalGhUser) {

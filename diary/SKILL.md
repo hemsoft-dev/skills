@@ -1,6 +1,6 @@
 ---
 name: diary
-description: "V1.6 - Commands: create, scaffold, update. Personal diary management with credential-resilient automated collection and HTML entries."
+description: "V1.9 - Commands: create, scaffold, update. Personal diary management with credential-resilient automated collection, quality-gated news, DeepSWE-first LLM benchmarks, token-based Copilot billing, and HTML entries."
 ---
 
 # Diary
@@ -41,6 +41,11 @@ Follow all steps below in order. Save the entry as soon as automated data is ass
 
 Check each file first. If today's file exists, use it. If not, run the fallback script.
 
+**News cache exception:** Do not blindly trust an existing news cache. If any category has fewer than 3
+headlines, total headlines are below 16, or `GeneratedAt` is before 06:00 on the target date and the day
+has already ended, regenerate it with `news/scripts/Get-AllNews.ps1 -Date YYYY-MM-DD -Count 7 -HoursBack 48`
+before injecting the section.
+
 Also load yesterday's diary entry (`diary/entries/YYYY/MM/YYYY-MM-DD.html` for yesterday) to compute day-over-day deltas.
 
 #### External skill caches (base path: `~/.agents/skills/`)
@@ -48,7 +53,7 @@ Also load yesterday's diary entry (`diary/entries/YYYY/MM/YYYY-MM-DD.html` for y
 | # | Section | Cached File | Fallback Script |
 |---|---------|-------------|------------------|
 | 1 | Weather | **ALWAYS re-run** (weather changes throughout the day) | `weather/scripts/Get-DailyWeather.ps1` |
-| 2 | News | `news/output/YYYY-MM-DD.json` | `news/scripts/Get-AllNews.ps1` |
+| 2 | News | `news/output/YYYY-MM-DD.json` | `news/scripts/Get-AllNews.ps1 -Date YYYY-MM-DD -Count 7 -HoursBack 48` |
 | 3 | Slack Activity | `slack/output/YYYY-MM-DD-slack-briefing.json` | `slack/scripts/Get-SlackDailyBriefing.ps1 -OutputFormat Detailed 6>&1` |
 
 #### Diary skill caches (base path: `~/.agents/skills/diary/output/`)
@@ -57,10 +62,23 @@ Also load yesterday's diary entry (`diary/entries/YYYY/MM/YYYY-MM-DD.html` for y
 |---|---------|-------------|----------|
 | 4 | Stock Market | `YYYY-MM-DD-daily-financial-numbers.txt` | Yahoo Finance API: `Invoke-RestMethod "https://query1.finance.yahoo.com/v8/finance/chart/%5EDJI?interval=1d&range=1d"` (and `%5EGSPC` for S&P 500) — extract `meta.regularMarketPrice` and `meta.chartPreviousClose` to compute delta |
 | 5 | Relias Repo Counts | `YYYY-MM-DD-relias-repo-counts.txt` | GitHub: `gh api orgs/Relias-Engineering/repos --paginate --jq 'length'` (sum all pages). Bitbucket: `diary/scripts/Get-BitbucketRepoCount.ps1` |
-| 6 | GitHub Copilot Usage | *(no cache — always live)* | **Always show BOTH org-wide AND personal stats.** Org-wide: `gh api "/orgs/Relias-Engineering/settings/billing/usage"` → filter for `product=="copilot"` and `sku=="Copilot Premium Request"` where `date` matches current billing month. Also get Cloud Agent (`sku=="Coding Agent Premium Request"`). Org quota = seats × 1000 (get seat count from `/orgs/Relias-Engineering/copilot/billing` → `seat_breakdown.total`). Personal: `gh api /copilot_internal/user --jq '.quota_snapshots.premium_interactions'` → returns `{entitlement, remaining, ...}`. Calculate: `used = entitlement - remaining`. Display as: `fhemmerrelias: {used} / {entitlement} used ({pct}%)`. **⚠️ Do NOT use** `/orgs/.../copilot/usage` or `/copilot/metrics` — these return 404. |
-| 7 | LLM Model Updates | `YYYY-MM-DD-llm-updates.txt` | Carry forward yesterday's LLM section. No automated script exists — check LMSYS and OpenRouter manually if needed. |
+| 6 | GitHub Copilot Billing | CodexBar cache: `D:\github\HemSoft\codexbar\data\copilot-metrics.json`; personal refresh: `D:\github\HemSoft\codexbar\scripts\copilot-metrics.ps1 -Refresh -User fhemmerrelias -DataDir diary/output/copilot-personal` | **As of 2026-06-01, do not report premium requests, request quotas, or percent-used entitlement.** Copilot billing is token/AI-credit based. Org-wide: read the CodexBar cached run and display AI credits, gross cost, net cost, user count, generated timestamp, days covered, and top users. The org cache is normally refreshed around 04:00, so label it with its generated timestamp. Personal: refresh `fhemmerrelias` at scaffold time into a diary-owned data dir, then display AI credits, gross cost, net cost, and days with usage. If the live personal refresh fails, fall back to the CodexBar cache and say so in logs. |
+| 7 | LLM Model Updates | `YYYY-MM-DD-llm-updates.txt` | Always check DeepSWE first, then LMSYS/OpenRouter if useful. Carry forward yesterday's LLM section only when DeepSWE has no new data and no other model changes are found. |
 | 8 | Software Updates | `YYYY-MM-DD-software-updates.txt` | For each repo in `diary/config/software-watchlist.json`: `gh api "repos/{owner}/{repo}/releases/latest" --jq '"\(.tag_name) \| \(.published_at) \| \(.name)"'`. For GitHub Web (RSS type): `Invoke-RestMethod "https://github.blog/changelog/feed/"` and filter by today's date. |
 | 9 | Cloudflare Usage | `YYYY-MM-DD-cloudflare-usage.txt` | `~/.agents/skills/cloudflare/scripts/Get-CloudflareUsage.ps1 -Date YYYY-MM-DD` |
+
+#### LLM Benchmark Priority
+
+DeepSWE is the most important LLM benchmark for diary scaffolding.
+
+1. Always fetch or inspect `https://deepswe.datacurve.ai/` before writing the `🤖 LLM Models` section.
+2. Treat DeepSWE as the primary signal for frontier coding-agent capability.
+3. Capture the page's `Updated` date, model count, top-ranked model, Pass@1, average cost, average time,
+   and output tokens.
+4. If the DeepSWE leaderboard changed today, put that update first in `🤖 LLM Models`.
+5. If DeepSWE did not change today, still mention that it was checked and carry forward the latest known
+   top result.
+6. Use LMSYS, OpenRouter, and other leaderboards only as secondary context after DeepSWE.
 
 ### Step 2: Gather Live Data (No Cache — Run in Order)
 
@@ -88,8 +106,8 @@ Use `diary/config/yyyy-mm-dd.html` as the **section reference** for content stru
 | 2 | 💬 Slack Activity | Cache #3 — curate 8–12 items | Never |
 | 3 | 🌤 Weather | Cache #1 — copy verbatim | Never |
 | 4 | 📰 News Headlines | Cache #2 — copy verbatim, all links intact, no paraphrasing | Never |
-| 5 | 📊 Daily Numbers | Cache #4 + #5 + #6 + #9. **After injecting numbers, write 1–2 sentences explaining why markets moved using today's news headlines as context.** On weekends, note markets were closed. Include Cloudflare usage from cache #9 and GitHub Copilot usage from cache #6 — **always show BOTH org-wide totals AND personal (fhemmerrelias) stats**. **Always compute and show deltas vs yesterday for GitHub Copilot usage and Cloudflare usage (page views, unique visitors, emails forwarded where applicable). If yesterday's value is unavailable, explicitly state delta unavailable.** | Weekends (market only) |
-| 6 | 🤖 LLM Models | Cache #7 — carry forward yesterday's section if no changes | Never |
+| 5 | 📊 Daily Numbers | Cache #4 + #5 + #6 + #9. **After injecting numbers, write 1–2 sentences explaining why markets moved using today's news headlines as context.** On weekends, note markets were closed. Include Cloudflare usage from cache #9 and GitHub Copilot token billing from cache #6 — **always show BOTH org-wide totals AND personal (fhemmerrelias) stats**. **Always compute and show deltas vs yesterday for Copilot AI credits/gross cost and Cloudflare usage (page views, unique visitors, emails forwarded where applicable). If yesterday's value is unavailable, explicitly state delta unavailable.** | Weekends (market only) |
+| 6 | 🤖 LLM Models | Cache #7 — DeepSWE first, then secondary model sources; carry forward yesterday's section only if DeepSWE and other sources have no changes | Never |
 | 7 | 🔥 Trending GitHub Repos | Live #12 | Never |
 | 8 | 🛠 Software Watchlist | Cache #8 | Never |
 | 9 | 📋 Watchlist Updates | Live #11 — only if ≥1 Active item has updates today | No updates found |
@@ -113,8 +131,8 @@ Print this checklist in the output so the user can see what was populated:
 - [ ] Today's Highlight left as a placeholder for the user, but clearly framed as the news headline of the day
 - [ ] News populated — all headlines verbatim with links intact
 - [ ] Slack Activity has 8–12 curated items
-- [ ] Daily Numbers: Dow, S&P, GitHub repo count, Bitbucket repo count, Cloudflare usage, plus GitHub Copilot (org-wide AND personal/fhemmerrelias) + Cloudflare deltas vs yesterday
-- [ ] LLM Models present (new data or carried forward from yesterday)
+- [ ] Daily Numbers: Dow, S&P, GitHub repo count, Bitbucket repo count, Cloudflare usage, plus GitHub Copilot token billing (org-wide AND personal/fhemmerrelias) + Copilot/Cloudflare deltas vs yesterday
+- [ ] LLM Models present with DeepSWE checked first, then new data or carried forward context
 - [ ] Top 5 Trending GitHub Repos with real star counts
 - [ ] Software Watchlist populated from script output
 - [ ] Watchlist Updates: Active items checked — section present OR explicitly noted "no updates today"
@@ -133,18 +151,24 @@ finishing** — do not leave known-bad data in the entry.
 | 2 | **Weekday productivity must not be all zeros.** On weekdays (Mon–Fri), if LOC, Commits, PRs, Reviews, and Issues are ALL zero, treat this as a data collection failure — not a valid result. | Re-run the script with `-Date` parameter. Check that `D:\github` search roots are accessible. If still zero after retries, add a note: *"⚠️ Productivity data collection failed — metrics may be incomplete."* |
 | 3 | **Weekend zero is acceptable.** On Sat/Sun, all-zero productivity is valid — no retry needed. |  |
 | 4 | **Trending repos must have star counts.** All 5 repos must show `⭐ {number}` — not blank or zero. | Re-fetch star counts via `gh repo view {owner/repo} --json stargazerCount`. |
-| 5 | **News section must have headlines.** Each news category (US, World, AI, Danish) must have at least 1 headline. | Re-run news script or flag as data collection failure. |
+| 5 | **News section must pass quality checks.** Each category (US, World, AI, Danish) must have at least 3 headlines and the section should have at least 16 total headlines. Do not accept just-after-midnight caches for a completed prior day. | Re-run `news/scripts/Get-AllNews.ps1 -Date YYYY-MM-DD -Count 7 -HoursBack 48`, then re-run `diary/scripts/040-news.ps1`. If still weak, flag as data collection failure. |
 | 6 | **Cloudflare deltas must be computed.** If yesterday's entry exists, deltas must show actual numbers — not "unavailable." | Re-read yesterday's entry and compute manually. |
+| 7 | **DeepSWE must be checked for LLM Models.** The `🤖 LLM Models` section must either include today's DeepSWE change or explicitly state the latest checked DeepSWE top result. | Fetch `https://deepswe.datacurve.ai/` and update the LLM section before finishing. |
 
 ## Scaffolding Defaults
 
 - `🎯 Today's Highlight` is not a work summary, task summary, or personal accomplishment.
 - It must always be the main news headline of the day, chosen from the same day's `📰 News Headlines` section.
 - If the entry is saved with a placeholder, the placeholder should still tell the user to provide a news headline plus source URL, not a work-related update.
+- `🤖 LLM Models` must treat DeepSWE (`https://deepswe.datacurve.ai/`) as the primary coding-agent benchmark.
+- DeepSWE context should include the latest checked top model, Pass@1, average cost, average time, output tokens,
+  and page updated date when available.
 - In `📊 Daily Numbers`, always include day-over-day deltas versus yesterday for:
-  - GitHub Copilot usage (org-wide)
+  - GitHub Copilot token billing (org-wide AI credits and gross cost; personal AI credits and gross cost when available)
   - Cloudflare usage metrics (page views, unique visitors, and emails forwarded where applicable)
 - **GitHub Copilot must always show BOTH**:
-  - **Org-wide**: Total premium requests / quota from billing API
-  - **Personal (fhemmerrelias)**: `gh api /copilot_internal/user --jq '.quota_snapshots.premium_interactions'` → show as `{used} / {entitlement} used ({pct}%)`
+  - **Org-wide**: AI credits, gross cost, net cost, users counted, cache generated timestamp, days covered, and top users from CodexBar `copilot-metrics.json`
+  - **Personal (fhemmerrelias)**: AI credits, gross cost, net cost, and days with usage from a scaffold-time CodexBar script refresh
+- **Never use the old premium-request quota model after 2026-06-01.** Do not report `premium requests`,
+  `entitlement`, `remaining`, `used / quota`, or percent-used Copilot request quotas in new diary entries.
 - If a prior-day value is missing, explicitly state that the delta is unavailable.

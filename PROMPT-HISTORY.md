@@ -668,3 +668,81 @@ Result: Saved `diary/entries/2026/05/2026-05-17.html` with weather, news, weeken
 
 2026-05-18 - 04:45 - Refresh the 2026-05-17 HTML diary entry and refactor diary automation away from markdown assumptions
 Result: Updated `diary/entries/2026/05/2026-05-17.html` with later-day cached/live data and began the larger diary automation refactor by switching core scaffolding scripts to HTML paths/templates and adding shared HTML section helpers.
+
+2026-05-27 - 23:19 - Scaffold diary entry for 2026-05-27 and fix diary script compatibility
+Result: Saved `diary/entries/2026/05/2026-05-27.html` with Slack, weather, news, daily numbers, LLM models, trending repos, software watchlist, watchlist updates, productivity, meetings, and screenshots. Fixed diary script path joining for the local scaffold run and left Today's Highlight plus Personal Reflections as TODOs.
+
+2026-05-28 - 01:02 - Improve diary news quality gates and regenerate 2026-05-27 news
+Result: Updated the news collector with fallback sources, category filters, de-duplication, and diary-ready quality checks. Updated diary scaffold guidance to reject weak just-after-midnight news caches, regenerated `news/output/2026-05-27.json`, and re-injected the News Headlines section in `diary/entries/2026/05/2026-05-27.html`.
+
+2026-05-28 - 23:16 - Scaffold diary entry for 2026-05-28
+Result: Saved `diary/entries/2026/05/2026-05-28.html` with Slack, weather, quality-gated news, daily numbers, LLM models, trending repos, software watchlist, watchlist updates, productivity, meetings, and screenshots. Left Today's Highlight and Personal Reflections as TODOs.
+
+2026-05-31 - 20:02 - Create skill-archive skill for moving inactive skills out of active discovery
+Result: Created `skill-archive` with a bundled PowerShell script that archives a named skill to `~/.agents/skills-archived` or scans History folders for long-unused candidates when no skill is provided.
+
+2026-05-31 - 20:09 - Archive stackprobe-scaffold skill
+Result: Moved `stackprobe-scaffold` from `C:\Users\User\.agents\skills\_archived` to the canonical archive root `C:\Users\User\.agents\skills-archived`.
+
+2026-05-31 - 20:33 - Scaffold diary entry for Sunday 2026-05-31
+Result: Saved `diary/entries/2026/05/2026-05-31.html` with weather, Slack, quality-gated news, daily numbers with Copilot and Cloudflare deltas, LLM models, trending repos, software watchlist, watchlist updates, productivity, weekend meeting omission, and screenshot status. Left Today's Highlight and Personal Reflections as TODOs.
+
+2026-05-31 - 22:18 - Set May 31 diary story of the day
+Result: Updated `diary/entries/2026/05/2026-05-31.html` so Today's Highlight is `US Bets on Greenland Acquisition - StartupHub.ai` from the Danish news section.
+
+2026-05-31 - 22:59 - Add Codex CLI to diary software watchlist
+Result: Added `Codex CLI` with repo `openai/codex` to `diary/config/software-watchlist.json` and verified the latest GitHub release metadata resolves.
+
+2026-06-01 - 10:54 - Archive unused skills from active discovery
+Result: Moved `pokemon`, `self-reflection`, `bio`, `patreon`, and `ping` from `C:\Users\User\.agents\skills` to `C:\Users\User\.agents\skills-archived`.
+
+2026-06-01 - 11:04 - Remove obsolete prompt-saving skills from active discovery
+Result: Moved `prompt-db` and `save-prompt` from `C:\Users\User\.agents\skills` to `C:\Users\User\.agents\skills-archived`.
+
+2026-06-01 - 11:07 - Archive obsolete frontend support skills
+Result: Moved `testing-vitest-react` and `ui-ux-pro-max` from `C:\Users\User\.agents\skills` to `C:\Users\User\.agents\skills-archived`.
+
+2026-06-01 - 12:06 - Add DeepSWE as the primary diary LLM benchmark
+Result: Updated `diary/SKILL.md` to V1.8 so daily scaffolds check `https://deepswe.datacurve.ai/` first for the LLM Models section, include top-model benchmark details, and validate that DeepSWE was checked.
+
+2026-06-01 - 21:09 - Scaffold diary entry for Monday 2026-06-01
+Result: Saved `diary/entries/2026/06/2026-06-01.html` with curated Slack, weather, quality-gated news, daily numbers with Copilot and Cloudflare deltas, DeepSWE-first LLM models, trending repos, software watchlist, watchlist updates, productivity, meetings fallback, and screenshots. Left Today's Highlight and Personal Reflections as TODOs.
+
+2026-06-01 - 21:24 - Remove obsolete Copilot rows from diary software watchlist
+Result: Removed `GitHub Copilot (gh extension)` and `GitHub Copilot Chat` from `diary/config/software-watchlist.json` so future diary scaffolds no longer include those Software Watchlist rows.
+
+2026-06-01 - 21:29 - Remove Copilot preview billing item from watchlist
+Result: Removed the `GitHub Copilot Preview Bill Rollout` item from `watchlist/WATCHLIST.md` now that the June 1 usage-based billing transition has passed.
+
+2026-06-01 - 22:22 - Add personal reflections to June 1 diary entry
+Result: Filled `diary/entries/2026/06/2026-06-01.html` Personal Reflections with notes on sleep, contract testing follow-through, billing tooling, Codex/Copilot usage, family, Frankfurt travel, and active projects.
+
+2026-06-01 - 22:48 - Attempt AI Chapter Confluence meeting notes continuation
+Result: Attempted to read and copy the AI Chapter meeting notes page in Confluence, but all Atlassian MCP calls returned `401: Reauthentication required` and no local `ATLASSIAN_EMAIL` or `ATLASSIAN_API_TOKEN` credentials were configured.
+
+2026-06-01 - 22:52 - Continue AI Chapter Confluence meeting notes series
+Result: Loaded machine-scoped Atlassian API credentials and created 15 biweekly AI Chapter 2026 meeting notes pages in Confluence from 2026-06-17 through 2026-12-30, copying the 2026-06-03 page body and updating the embedded date for each page.
+
+2026-06-02 - 22:23 - Scaffold diary entry for Tuesday 2026-06-02
+Result: Saved `diary/entries/2026/06/2026-06-02.html` with Slack, weather, quality-gated news, daily numbers with GitHub Copilot and Cloudflare deltas, DeepSWE-first LLM models, trending repos, software watchlist, watchlist updates, productivity, and WorkIQ meetings. Left Today's Highlight and Personal Reflections as TODOs.
+
+2026-06-03 - 01:22 - Set June 2 diary story of the day
+Result: Updated `diary/entries/2026/06/2026-06-02.html` so Today's Highlight is `New Microsoft tool lets devs spin up AI behavior tests using text descriptions` from TechCrunch.
+
+2026-06-03 - 01:38 - Replace diary Copilot premium-request reporting with token billing
+Result: Updated `diary/scripts/050-daily-numbers.ps1`, `diary/SKILL.md`, and `diary/config/yyyy-mm-dd.md` to use CodexBar Copilot AI-credit and cost metrics instead of obsolete premium-request quotas. Rebuilt June 2 Daily Numbers with org-wide and personal token-billing values.
+
+2026-06-03 - 11:23 - Find PR where Bryan commented on Sonar issues
+Result: Searched Slack for Bryan/Sonar PR references, identified `relias-engineering/configurator` PR #49, and verified Bryan's June 1 GitHub comment plus the later SonarQube clean status.
+
+2026-06-03 - 21:43 - Test local Ollama models with Codex and Copilot CLI
+Result: Confirmed Codex CLI exposes an Ollama local provider but local runs hung; installed `qwen3:14b` and verified standalone Copilot CLI BYOK mode works with Ollama when using a clean `COPILOT_HOME`.
+
+2026-06-04 - 22:30 - Scaffold diary entry for Thursday 2026-06-04
+Result: Saved `diary/entries/2026/06/2026-06-04.html` with curated Slack, weather, quality-gated news, token-billing daily numbers, DeepSWE-first LLM models, trending repos, software/watchlist updates, productivity, meetings, and screenshot status. Left Today's Highlight and Personal Reflections as TODOs.
+
+2026-06-05 - 15:18 - Read-only Miasma exposure scan across relias-engineering
+Result: Used GitHub API and GraphQL branch-tip metadata to count repositories with `.github/setup.js`, found 158 affected non-archived repositories out of 282, and confirmed no repositories were cloned or executed.
+
+2026-06-05 - 16:44 - Create Miasma skill and scan local repos
+Result: Created `miasma` skill with SafeDep, Semgrep, Microsoft, and Deepwatch takeaways plus a read-only scanner, then checked `D:\github` for known Miasma indicators without executing repository code.

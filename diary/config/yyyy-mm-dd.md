@@ -76,7 +76,7 @@
 
 ## 📊 Daily Numbers
 
-<!-- Script: 050-daily-numbers.ps1 | Sources: Yahoo Finance, GitHub API, Bitbucket API, GitHub Copilot API, Cloudflare API -->
+<!-- Script: 050-daily-numbers.ps1 | Sources: Yahoo Finance, GitHub API, Bitbucket API, CodexBar Copilot token billing, Cloudflare API -->
 
 - **Dow Jones**: {price} ({delta})
 - **S&P 500**: {price} ({delta})
@@ -84,8 +84,11 @@
 *{1-2 sentence market commentary — written by agent using today's news headlines to explain why markets moved}*
 
 - **Relias Repo Count**: GitHub: {count} ({+/- n}), Bitbucket: {count} ({+/- n})
-- **GitHub Copilot Usage**: {used} / {total} premium requests ({pct}%)
-  - **Delta vs Yesterday**: {+/- used requests}, {+/- pct points}
+- **GitHub Copilot Org-Wide AI Credits**: {credits} credits, ${gross} gross, ${net} net ({users} users; cache generated {timestamp}; days {days})
+  - **Top Users**: {user}: {credits} credits (${gross} gross)
+  - **Delta vs Yesterday**: {+/- credits} AI credits, {+/- gross cost} gross cost
+  - **Personal (fhemmerrelias)**: {credits} AI credits, ${gross} gross, ${net} net ({days} days with usage)
+  - **Personal Delta vs Yesterday**: {+/- credits} AI credits, {+/- gross cost} gross cost
   - **{account}**: {used} / {quota} used ({pct}%)
 - **Cloudflare Usage**:
   - **nowleadershipgroup.com**: {page views} page views, {unique visitors} unique visitors, {emails forwarded} emails forwarded

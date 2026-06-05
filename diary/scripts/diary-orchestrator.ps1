@@ -32,7 +32,7 @@ $InformationPreference = 'Continue'
 $scriptDir = $PSScriptRoot
 $year = $Date.Substring(0, 4)
 $month = $Date.Substring(5, 2)
-$entriesDir = Join-Path $scriptDir '..' 'entries' $year $month
+$entriesDir = Join-Path $scriptDir (Join-Path '..' (Join-Path 'entries' (Join-Path $year $month)))
 
 if (-not (Test-Path $entriesDir)) {
     New-Item -ItemType Directory -Path $entriesDir -Force | Out-Null
@@ -44,10 +44,10 @@ Write-Information "`e[1;36m=== Diary Entry: $Date ===`e[0m"
 Write-Information ""
 
 $guardRoots = @(
-    (Join-Path $scriptDir '..' 'entries'),
-    (Join-Path $env:USERPROFILE '.agents' 'skills' 'news' 'output'),
-    (Join-Path $env:USERPROFILE '.agents' 'skills' 'slack' 'output'),
-    (Join-Path $env:USERPROFILE '.agents' 'skills' 'weather' 'output')
+    (Join-Path $scriptDir (Join-Path '..' 'entries')),
+    (Join-Path $env:USERPROFILE (Join-Path '.agents' (Join-Path 'skills' (Join-Path 'news' 'output')))),
+    (Join-Path $env:USERPROFILE (Join-Path '.agents' (Join-Path 'skills' (Join-Path 'slack' 'output')))),
+    (Join-Path $env:USERPROFILE (Join-Path '.agents' (Join-Path 'skills' (Join-Path 'weather' 'output'))))
 )
 $existingMarkdown = @{}
 foreach ($guardRoot in $guardRoots) {

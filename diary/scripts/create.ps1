@@ -32,7 +32,7 @@ $InformationPreference = 'Continue'
 
 $year = $Date.Substring(0, 4)
 $month = $Date.Substring(5, 2)
-$entriesDir = Join-Path $PSScriptRoot '..' 'entries' $year $month
+$entriesDir = Join-Path $PSScriptRoot (Join-Path '..' (Join-Path 'entries' (Join-Path $year $month)))
 $entryPath = Join-Path $entriesDir "$Date.html"
 
 # Validate: entry must not already exist

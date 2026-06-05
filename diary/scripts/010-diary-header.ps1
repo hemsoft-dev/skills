@@ -27,13 +27,13 @@ $ErrorActionPreference = 'Stop'
 $InformationPreference = 'Continue'
 
 # Resolve paths
-$configDir = Join-Path $PSScriptRoot '..' 'config'
+$configDir = Join-Path $PSScriptRoot (Join-Path '..' 'config')
 $templatePath = Join-Path $configDir 'yyyy-mm-dd.html'
 
 if (-not $EntryPath) {
     $year = $Date.Substring(0, 4)
     $month = $Date.Substring(5, 2)
-    $entriesDir = Join-Path $PSScriptRoot '..' 'entries' $year $month
+    $entriesDir = Join-Path $PSScriptRoot (Join-Path '..' (Join-Path 'entries' (Join-Path $year $month)))
     if (-not (Test-Path $entriesDir)) {
         New-Item -ItemType Directory -Path $entriesDir -Force | Out-Null
     }
@@ -41,7 +41,7 @@ if (-not $EntryPath) {
 }
 
 if (Test-Path $EntryPath) {
-    Write-Information "`e[1;33mEntry already exists: $EntryPath — skipping header scaffold.`e[0m"
+    Write-Information "Entry already exists: $EntryPath - skipping header scaffold."
     return
 }
 
@@ -62,5 +62,5 @@ $content = $content -replace '\{YYYY-MM-DD\}', $Date
 $utf8NoBom = [System.Text.UTF8Encoding]::new($false)
 [System.IO.File]::WriteAllText($EntryPath, $content, $utf8NoBom)
 
-Write-Information "`e[1;32mCreated diary entry: $EntryPath`e[0m"
+Write-Information "Created diary entry: $EntryPath"
 Write-Information "  Date: $weekday, $Date"

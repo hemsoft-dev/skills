@@ -88,7 +88,7 @@ function Get-LMSYSFallbackHtml {
 }
 
 function Get-LastLMSYSSection {
-    $entriesDir = Join-Path $PSScriptRoot '..' 'entries'
+    $entriesDir = Join-Path $PSScriptRoot (Join-Path '..' 'entries')
     $entries = Get-ChildItem $entriesDir -Filter '*.html' -Recurse |
         Where-Object { $_.BaseName -lt $Date } |
         Sort-Object Name -Descending

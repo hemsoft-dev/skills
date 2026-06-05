@@ -1,0 +1,30 @@
+{
+  "copilot": {
+    "orgAICredits": 509388.437,
+    "personalAICredits": 19801.144,
+    "orgGrossCostUsd": 5093.87,
+    "billingModel": "ai-credits-token-billing",
+    "orgGeneratedAt": "06/04/2026 19:47:41",
+    "personalNetCostUsd": 0.0,
+    "personalGrossCostUsd": 198.01,
+    "personalGeneratedAt": "06/04/2026 22:19:47",
+    "personalLogin": "fhemmerrelias",
+    "orgNetCostUsd": 0.0,
+    "orgUserCount": 319
+  },
+  "date": "2026-06-04",
+  "bitbucketRepos": 562,
+  "githubRepos": 286,
+  "cloudflare": {
+    "nowleadershipgroup.com": {
+      "pageViews": 36,
+      "uniqueVisitors": 95,
+      "emailsForwarded": 0
+    },
+    "setitfreeloop.org": {
+      "pageViews": 0,
+      "uniqueVisitors": 0,
+      "emailsForwarded": null
+    }
+  }
+}

@@ -93,6 +93,29 @@ function Get-FeedLink {
     return Get-FeedValue -Value $linkValue
 }
 
+function Invoke-NewsFeed {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Uri
+    )
+
+    $headers = @{
+        'User-Agent' = 'Mozilla/5.0 (compatible; diary-news-scaffold/1.0; +https://agentskills.io)'
+        'Accept'     = 'application/rss+xml, application/atom+xml, application/xml, text/xml, */*'
+    }
+
+    return Invoke-RestMethod -Uri $Uri -Headers $headers -ErrorAction Stop
+}
+
+function Get-NormalizedHeadline {
+    param(
+        [string]$Title
+    )
+
+    if ([string]::IsNullOrWhiteSpace($Title)) { return '' }
+    return ($Title -replace '\s+-\s+[^-]+$', '' -replace '\s+', ' ').Trim().ToLowerInvariant()
+}
+
 function Get-NewsCategory {
     param(
         [Parameter(Mandatory = $true)]
@@ -101,15 +124,29 @@ function Get-NewsCategory {
         [Parameter(Mandatory = $true)]
         [array]$Sources,
 
+        [array]$FallbackSources = @(),
+
+        [int]$MinArticles = 4,
+
         [string]$PrioritySource,
 
         [scriptblock]$Filter
     )
 
     $articles = @()
-    foreach ($source in $Sources) {
+    $sourceGroups = @(
+        @{ Name = 'primary'; Sources = $Sources },
+        @{ Name = 'fallback'; Sources = $FallbackSources }
+    )
+
+    foreach ($sourceGroup in $sourceGroups) {
+        if ($sourceGroup.Name -eq 'fallback' -and $articles.Count -ge $MinArticles) {
+            continue
+        }
+
+        foreach ($source in $sourceGroup.Sources) {
         try {
-            $feed = Invoke-RestMethod -Uri $source.Url -ErrorAction Stop
+            $feed = Invoke-NewsFeed -Uri $source.Url
 
             foreach ($item in (Get-FeedItem -Feed $feed)) {
                 $published = $null
@@ -144,13 +181,18 @@ function Get-NewsCategory {
         } catch {
             Write-Warning "Failed to fetch from $($source.Name): $($_.Exception.Message)"
         }
+        }
     }
 
     $selected = @()
     $sourceCounts = @{}
+    $seenHeadlines = @{}
 
     if ($PrioritySource) {
         foreach ($article in ($articles | Where-Object Source -eq $PrioritySource | Sort-Object Published -Descending | Select-Object -First 2)) {
+            $normalized = Get-NormalizedHeadline -Title $article.Title
+            if ($seenHeadlines.ContainsKey($normalized)) { continue }
+            $seenHeadlines[$normalized] = $true
             $selected += $article
             $current = if ($sourceCounts.ContainsKey($article.Source)) { $sourceCounts[$article.Source] } else { 0 }
             $sourceCounts[$article.Source] = $current + 1
@@ -158,8 +200,11 @@ function Get-NewsCategory {
     }
 
     foreach ($article in ($articles | Where-Object { $_.Source -ne $PrioritySource } | Sort-Object Published -Descending)) {
+        $normalized = Get-NormalizedHeadline -Title $article.Title
+        if ($seenHeadlines.ContainsKey($normalized)) { continue }
         $current = if ($sourceCounts.ContainsKey($article.Source)) { $sourceCounts[$article.Source] } else { 0 }
         if ($current -ge 2) { continue }
+        $seenHeadlines[$normalized] = $true
         $selected += $article
         $sourceCounts[$article.Source] = $current + 1
         if ($selected.Count -ge $script:headlineLimit) { break }
@@ -182,23 +227,35 @@ $script:endTime = $targetDate.AddDays(1)
 $script:cutoffTime = $script:endTime.AddHours(-$HoursBack)
 
 $categories = @(
-    Get-NewsCategory -Title '🇺🇸 US News' -Sources @(
-        @{ Name = 'Associated Press'; Url = 'https://rss.app.com/api/v1/feeds/apnews-us.rss' },
-        @{ Name = 'NPR'; Url = 'https://feeds.npr.org/1001/rss.xml' },
-        @{ Name = 'PBS NewsHour'; Url = 'https://www.pbs.org/newshour/feeds/rss/headlines' },
+    Get-NewsCategory -Title '🇺🇸 US News' -MinArticles 6 -Sources @(
+        @{ Name = 'Associated Press'; Url = 'https://apnews.com/hub/ap-top-news?output=rss' },
+        @{ Name = 'NPR Politics'; Url = 'https://feeds.npr.org/1014/rss.xml' },
+        @{ Name = 'PBS Politics'; Url = 'https://www.pbs.org/newshour/feeds/rss/politics' },
         @{ Name = 'Politico'; Url = 'https://www.politico.com/rss/politics08.xml' },
         @{ Name = 'USA Today'; Url = 'https://rssfeeds.usatoday.com/usatoday-NewsTopStories' }
-    )
+    ) -FallbackSources @(
+        @{ Name = 'Google News US'; Url = 'https://news.google.com/rss?hl=en-US&gl=US&ceid=US:en' },
+        @{ Name = 'Google News US Search'; Url = 'https://news.google.com/rss/search?q=United%20States%20OR%20Congress%20OR%20White%20House%20OR%20Supreme%20Court%20when%3A2d&hl=en-US&gl=US&ceid=US:en' }
+    ) -Filter {
+        param($Title)
+        $Title -match 'US|U\.S\.|United States|America|American|Trump|White House|Congress|Senate|House|Supreme Court|SCOTUS|DOJ|FBI|federal|governor|Pentagon|immigration|ICE|California|Texas|Florida|New York|Washington'
+    }
 
-    Get-NewsCategory -Title '🌍 World News' -Sources @(
+    Get-NewsCategory -Title '🌍 World News' -MinArticles 6 -Sources @(
         @{ Name = 'BBC'; Url = 'http://feeds.bbci.co.uk/news/world/rss.xml' },
         @{ Name = 'Al Jazeera'; Url = 'https://www.aljazeera.com/xml/rss/all.xml' },
         @{ Name = 'France 24'; Url = 'https://www.france24.com/en/rss' },
         @{ Name = 'The Guardian'; Url = 'https://www.theguardian.com/world/rss' },
         @{ Name = 'DW News'; Url = 'https://rss.dw.com/xml/rss-en-world' }
-    )
+    ) -FallbackSources @(
+        @{ Name = 'Google News World'; Url = 'https://news.google.com/rss/headlines/section/topic/WORLD?hl=en-US&gl=US&ceid=US:en' },
+        @{ Name = 'Google News World Search'; Url = 'https://news.google.com/rss/search?q=world%20OR%20international%20OR%20Europe%20OR%20Middle%20East%20OR%20Asia%20when%3A2d&hl=en-US&gl=US&ceid=US:en' }
+    ) -Filter {
+        param($Title)
+        $Title -notmatch 'Reuters executive|ABC news director|Google employee charged|Polymarket'
+    }
 
-    Get-NewsCategory -Title '🤖 AI News' -PrioritySource "Simon Willison's Weblog" -Sources @(
+    Get-NewsCategory -Title '🤖 AI News' -MinArticles 5 -PrioritySource "Simon Willison's Weblog" -Sources @(
         @{ Name = "Simon Willison's Weblog"; Url = 'https://simonwillison.net/atom/everything/' },
         @{ Name = 'The Verge'; Url = 'https://www.theverge.com/rss/ai-artificial-intelligence/index.xml' },
         @{ Name = 'TechCrunch'; Url = 'https://techcrunch.com/category/artificial-intelligence/feed/' },
@@ -206,17 +263,24 @@ $categories = @(
         @{ Name = 'Wired'; Url = 'https://www.wired.com/feed/tag/ai/latest/rss' },
         @{ Name = 'VentureBeat'; Url = 'https://venturebeat.com/category/ai/feed/' },
         @{ Name = 'MIT Technology Review'; Url = 'https://www.technologyreview.com/feed/' }
-    )
+    ) -FallbackSources @(
+        @{ Name = 'Google News AI'; Url = 'https://news.google.com/rss/search?q=artificial%20intelligence%20OR%20OpenAI%20OR%20Anthropic%20OR%20Gemini%20OR%20AI%20model%20when%3A2d&hl=en-US&gl=US&ceid=US:en' }
+    ) -Filter {
+        param($Title)
+        $Title -match 'AI|artificial intelligence|OpenAI|Anthropic|Gemini|ChatGPT|Claude|Copilot|LLM|model|machine learning|Nvidia'
+    }
 
-    Get-NewsCategory -Title '🇩🇰 Danish News' -Sources @(
+    Get-NewsCategory -Title '🇩🇰 Danish News' -MinArticles 4 -Sources @(
         @{ Name = 'The Local'; Url = 'https://www.thelocal.dk/feed' },
         @{ Name = 'CPH Post'; Url = 'https://cphpost.dk/feed/' },
         @{ Name = 'DR News'; Url = 'https://www.dr.dk/nyheder/service/feeds/allenyheder' },
         @{ Name = 'Politiken'; Url = 'https://politiken.dk/rss/' },
         @{ Name = 'Google News Denmark'; Url = 'https://news.google.com/rss/search?q=Denmark%20OR%20Danish%20OR%20Copenhagen%20OR%20Greenland%20when%3A1d&hl=en-US&gl=US&ceid=US:en' }
+    ) -FallbackSources @(
+        @{ Name = 'Google News Denmark Search'; Url = 'https://news.google.com/rss/search?q=Denmark%20OR%20Danish%20OR%20Copenhagen%20OR%20Greenland%20OR%20Danmark%20OR%20K%C3%B8benhavn%20when%3A2d&hl=en-US&gl=US&ceid=US:en' }
     ) -Filter {
         param($Title)
-        $Title -match 'Denmark|Danish|Greenland|Copenhagen|Nordic|Scandinavia|Danmark|dansk|Grønland|København|Ukraine|Trump'
+        $Title -match 'Denmark|Danish|Greenland|Copenhagen|Nordic|Scandinavia|Danmark|dansk|Grønland|København'
     }
 )
 
