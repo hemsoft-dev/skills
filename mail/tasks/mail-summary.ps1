@@ -67,7 +67,7 @@ foreach ($acct in $Accounts) {
 }
 
 # Output in TOON format
-$configuredResults = $Results | Where-Object { $_.configured }
+$configuredResults = @($Results | Where-Object { $_.configured })
 $todayDate = (Get-Date).ToString("yyyy-MM-dd")
 
 Write-Output "date: $todayDate"
@@ -91,12 +91,12 @@ if ($HighlightMessages.Count -gt 0) {
     foreach ($m in $HighlightMessages) {
         $from = ($m.from -replace ',', ';' -replace '"', '') -replace '^(.{35}).*', '$1...'
         $subject = ($m.subject -replace ',', ';') -replace '^(.{45}).*', '$1...'
-        $dateShort = if ($m.date -match '(\d+/\d+)\s+(\d+:\d+)') { "$($Matches[1]) $($Matches[2])" } else { $m.date }
+        $dateShort = if ($m.date -match '(\d+/\d+/\d+)\s+(\d+:\d+)') { "$($Matches[1]) $($Matches[2])" } elseif ($m.date -match '(\d+/\d+)\s+(\d+:\d+)') { "$($Matches[1]) $($Matches[2])" } else { $m.date }
         Write-Output "  $($m.status)`t$dateShort`t$from`t$subject`t$($m.account)"
     }
 }
 
-$unconfigured = $Results | Where-Object { -not $_.configured }
+$unconfigured = @($Results | Where-Object { -not $_.configured })
 if ($unconfigured.Count -gt 0) {
     Write-Output ""
     Write-Output "unconfigured: $(($unconfigured.account) -join ',')"

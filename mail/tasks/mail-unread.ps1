@@ -65,7 +65,7 @@ foreach ($acct in $Accounts) {
 }
 
 # Output in TOON format
-$configuredResults = $Results | Where-Object { $_.configured }
+$configuredResults = @($Results | Where-Object { $_.configured })
 $totalUnread = ($configuredResults | Measure-Object -Property count -Sum).Sum
 
 Write-Output "summary[$($configuredResults.Count)]{account,count}:"
@@ -85,7 +85,7 @@ if ($AllMessages.Count -gt 0) {
 }
 
 # Show unconfigured accounts
-$unconfigured = $Results | Where-Object { -not $_.configured }
+$unconfigured = @($Results | Where-Object { -not $_.configured })
 if ($unconfigured.Count -gt 0) {
     Write-Output ""
     Write-Output "unconfigured: $(($unconfigured.account) -join ',')"

@@ -136,14 +136,16 @@ function Get-AccessTokenFromRefresh {
         $response = Invoke-RestMethod -Uri $script:TokenUrl -Method POST -Body $body
         $cache = Get-CachedToken
         $expiresAt = (Get-Date).AddSeconds($response.expires_in)
-        Save-TokenCache -AccessToken $response.access_token -RefreshToken ($response.refresh_token ?? $RefreshToken) -ExpiresAt $expiresAt -AccountEmail $cache.Account
+        $newRefreshToken = $response.refresh_token
+        if (-not $newRefreshToken) { $newRefreshToken = $RefreshToken }
+        Save-TokenCache -AccessToken $response.access_token -RefreshToken $newRefreshToken -ExpiresAt $expiresAt -AccountEmail $cache.Account
         return $response.access_token
     }
     catch { return $null }
 }
 
 function Get-OutlookAccessToken {
-    $cache = Get-CachedTokens
+    $cache = Get-CachedToken
     if ($cache) {
         $expiresAt = [datetime]::Parse($cache.ExpiresAt)
         if ($expiresAt -gt (Get-Date).AddMinutes(5)) { return $cache.AccessToken }
@@ -156,10 +158,84 @@ function Get-OutlookAccessToken {
 }
 
 function Invoke-OutlookApi {
-    param([string]$AccessToken, [string]$Uri, [string]$Method = "GET", [object]$Body = $null)
+    param(
+        [string]$AccessToken,
+        [string]$Uri,
+        [string]$Method = "GET",
+        [object]$Body = $null,
+        [hashtable]$ExtraHeaders = @{}
+    )
     if (-not $Uri.StartsWith("https://")) { $Uri = "$script:ApiBaseUrl$Uri" }
     $headers = @{ Authorization = "Bearer $AccessToken"; "Content-Type" = "application/json" }
+    foreach ($key in $ExtraHeaders.Keys) { $headers[$key] = $ExtraHeaders[$key] }
     $params = @{ Uri = $Uri; Method = $Method; Headers = $headers }
     if ($Body) { $params.Body = $Body | ConvertTo-Json -Depth 10 }
     Invoke-RestMethod @params
+}
+
+function ConvertFrom-OutlookMessage {
+    param([object]$Message)
+
+    $from = $Message.from.emailAddress.address
+    if ($Message.from.emailAddress.name) {
+        $from = "$($Message.from.emailAddress.name) <$from>"
+    }
+    if (-not $from) { $from = 'Unknown' }
+
+    return @{
+        id      = $Message.id
+        status  = if ($Message.isRead) { 'Read' } else { 'NEW' }
+        from    = $from
+        subject = if ($Message.subject) { $Message.subject } else { '(No subject)' }
+        date    = ([DateTime]::Parse($Message.receivedDateTime)).ToLocalTime().ToString("MM/dd/yyyy HH:mm")
+    }
+}
+
+function Get-OutlookInboxStatistic {
+    param([string]$AccessToken)
+    Invoke-OutlookApi -AccessToken $AccessToken -Uri "/me/mailFolders/Inbox?`$select=totalItemCount,unreadItemCount"
+}
+
+function Get-OutlookMessageCount {
+    param([string]$AccessToken, [string]$Filter)
+
+    $encodedFilter = [Uri]::EscapeDataString($Filter)
+    $response = Invoke-OutlookApi `
+        -AccessToken $AccessToken `
+        -Uri "/me/mailFolders/Inbox/messages?`$filter=$encodedFilter&`$count=true&`$top=1&`$select=id" `
+        -ExtraHeaders @{ ConsistencyLevel = 'eventual' }
+
+    $count = $response.'@odata.count'
+    if (-not $count) { return 0 }
+    return $count
+}
+
+function Get-OutlookInboxMessage {
+    param(
+        [string]$AccessToken,
+        [int]$Count = 10,
+        [string]$Filter,
+        [string]$Search
+    )
+
+    $select = 'id,receivedDateTime,from,subject,isRead'
+    if ($Search) {
+        $cleanSearch = $Search.Replace('"', '')
+        $encodedSearch = [Uri]::EscapeDataString("`"$cleanSearch`"")
+        $uri = "/me/mailFolders/Inbox/messages?`$search=$encodedSearch&`$top=$Count&`$select=$select"
+    }
+    else {
+        $uri = "/me/mailFolders/Inbox/messages?`$top=$Count&`$select=$select&`$orderby=receivedDateTime desc"
+        if ($Filter) {
+            $encodedFilter = [Uri]::EscapeDataString($Filter)
+            $uri = "/me/mailFolders/Inbox/messages?`$filter=$encodedFilter&`$top=$Count&`$select=$select&`$orderby=receivedDateTime desc"
+        }
+    }
+
+    $response = Invoke-OutlookApi -AccessToken $AccessToken -Uri $uri
+    $messages = @()
+    foreach ($message in $response.value) {
+        $messages += ConvertFrom-OutlookMessage -Message $message
+    }
+    return $messages
 }

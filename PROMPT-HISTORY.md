@@ -746,3 +746,12 @@ Result: Used GitHub API and GraphQL branch-tip metadata to count repositories wi
 
 2026-06-05 - 16:44 - Create Miasma skill and scan local repos
 Result: Created `miasma` skill with SafeDep, Semgrep, Microsoft, and Deepwatch takeaways plus a read-only scanner, then checked `D:\github` for known Miasma indicators without executing repository code.
+
+2026-06-06 - 02:13 - Scaffold diary entry for Friday 2026-06-05
+Result: Saved `diary/entries/2026/06/2026-06-05.html` with weather, Slack, quality-gated news, token-billing daily numbers, DeepSWE-first LLM models, trending repos, software watchlist, watchlist updates, productivity, WorkIQ meeting summary, and screenshot status. Left Today's Highlight and Personal Reflections as TODOs.
+
+2026-06-07 - 22:10 - Scaffold diary entry for Sunday 2026-06-07
+Result: Saved `diary/entries/2026/06/2026-06-07.html` with weather, Slack, quality-gated news, weekend daily numbers, DeepSWE-first LLM models, trending repos, software/watchlist updates, productivity, weekend meeting omission, and screenshot status. Fixed the news collector backfill so source-capped categories can still meet diary quality thresholds.
+
+2026-06-12 - 21:15 - Configure Hotmail access for the mail skill
+Result: Created and authorized a personal Microsoft Graph app for `franz_hemmer@hotmail.com`, added read-only Outlook child scripts, fixed Outlook token refresh, and verified OpenAI/ChatGPT Hotmail searches.

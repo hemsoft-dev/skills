@@ -75,7 +75,7 @@ foreach ($acct in $Accounts) {
 }
 
 # Output in TOON format
-$configuredResults = $Results | Where-Object { $_.configured }
+$configuredResults = @($Results | Where-Object { $_.configured })
 Write-Output "counts[$($configuredResults.Count)]{account,today,unread}:"
 foreach ($r in $configuredResults) {
     Write-Output "  $($r.account),$($r.today),$($r.unread)"
@@ -84,7 +84,7 @@ Write-Output "total: $TotalCount"
 Write-Output "unread: $TotalUnread"
 
 if ($List -and $AllMessages.Count -gt 0) {
-    $AllMessages = $AllMessages | Select-Object -First $Count
+    $AllMessages = @($AllMessages | Select-Object -First $Count)
     Write-Output ""
     Write-Output "emails[$($AllMessages.Count)]{status,date,from,subject,id,account}:"
     foreach ($m in $AllMessages) {
@@ -96,7 +96,7 @@ if ($List -and $AllMessages.Count -gt 0) {
 }
 
 # Show unconfigured accounts
-$unconfigured = $Results | Where-Object { -not $_.configured }
+$unconfigured = @($Results | Where-Object { -not $_.configured })
 if ($unconfigured.Count -gt 0) {
     Write-Output ""
     Write-Output "unconfigured: $(($unconfigured.account) -join ',')"
