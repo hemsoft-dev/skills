@@ -1,0 +1,578 @@
+{
+  "GeneratedAtUtc": "2026-06-12T01:19:30.8391670+00:00",
+  "Enterprise": "bertelsmann",
+  "Organization": "Relias-Engineering",
+  "Year": 2026,
+  "Month": 6,
+  "Days": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "ApiVersion": "2026-03-10",
+  "Users": [
+    {
+      "User": "fhemmerrelias",
+      "Success": true,
+      "Responses": [
+        {
+          "Day": 1,
+          "Path": "/enterprises/bertelsmann/settings/billing/premium_request/usage?year=2026&month=6&day=1&user=fhemmerrelias",
+          "StatusCode": 200,
+          "Success": true,
+          "RawJson": "{\"timePeriod\":{\"year\":2026,\"month\":6,\"day\":1},\"enterprise\":\"Bertelsmann\",\"user\":\"fhemmerrelias\",\"usageItems\":[{\"product\":\"Copilot\",\"sku\":\"Copilot AI Credits\",\"model\":\"Auto: GPT-5.3-Codex\",\"unitType\":\"ai-credits\",\"pricePerUnit\":0.01,\"grossQuantity\":8.882811,\"grossAmount\":0.08882811,\"discountQuantity\":8.882811,\"discountAmount\":0.08882811,\"netQuantity\":0.0,\"netAmount\":0.0},{\"product\":\"Copilot\",\"sku\":\"Copilot AI Credits\",\"model\":\"Claude Opus 4.6\",\"unitType\":\"ai-credits\",\"pricePerUnit\":0.01,\"grossQuantity\":1855.4177,\"grossAmount\":18.554177,\"discountQuantity\":1855.4177,\"discountAmount\":18.554177,\"netQuantity\":0.0,\"netAmount\":0.0},{\"product\":\"Copilot\",\"sku\":\"Copilot AI Credits\",\"model\":\"Claude Opus 4.7\",\"unitType\":\"ai-credits\",\"pricePerUnit\":0.01,\"grossQuantity\":57.67625,\"grossAmount\":0.5767625,\"discountQuantity\":57.67625,\"discountAmount\":0.5767625,\"netQuantity\":0.0,\"netAmount\":0.0},{\"product\":\"Copilot\",\"sku\":\"Copilot AI Credits\",\"model\":\"Claude Opus 4.8\",\"unitType\":\"ai-credits\",\"pricePerUnit\":0.01,\"grossQuantity\":7084.4563,\"grossAmount\":70.844563,\"discountQuantity\":7084.4563,\"discountAmount\":70.844563,\"netQuantity\":0.0,\"netAmount\":0.0},{\"product\":\"Copilot\",\"sku\":\"Copilot AI Credits\",\"model\":\"Code Review model\",\"unitType\":\"ai-credits\",\"pricePerUnit\":0.01,\"grossQuantity\":2113.973555,\"grossAmount\":21.13973555,\"discountQuantity\":2113.973555,\"discountAmount\":21.13973555,\"netQuantity\":0.0,\"netAmount\":0.0},{\"product\":\"Copilot\",\"sku\":\"Copilot AI Credits\",\"model\":\"GPT-5.4\",\"unitType\":\"ai-credits\",\"pricePerUnit\":0.01,\"grossQuantity\":709.63805,\"grossAmount\":7.0963805,\"discountQuantity\":709.63805,\"discountAmount\":7.0963805,\"netQuantity\":0.0,\"netAmount\":0.0},{\"product\":\"Copilot\",\"sku\":\"Copilot AI Credits\",\"model\":\"GPT-5.4 mini\",\"unitType\":\"ai-credits\",\"pricePerUnit\":0.01,\"grossQuantity\":9.144825,\"grossAmount\":0.09144825,\"discountQuantity\":9.144825,\"discountAmount\":0.09144825,\"netQuantity\":0.0,\"netAmount\":0.0},{\"product\":\"Copilot\",\"sku\":\"Copilot AI Credits\",\"model\":\"GPT-5.5\",\"unitType\":\"ai-credits\",\"pricePerUnit\":0.01,\"grossQuantity\":42.2677,\"grossAmount\":0.422677,\"discountQuantity\":42.2677,\"discountAmount\":0.422677,\"netQuantity\":0.0,\"netAmount\":0.0}]}",
+          "Response": {
+            "timePeriod": {
+              "year": 2026,
+              "month": 6,
+              "day": 1
+            },
+            "enterprise": "Bertelsmann",
+            "user": "fhemmerrelias",
+            "usageItems": [
+              {
+                "product": "Copilot",
+                "sku": "Copilot AI Credits",
+                "model": "Auto: GPT-5.3-Codex",
+                "unitType": "ai-credits",
+                "pricePerUnit": 0.01,
+                "grossQuantity": 8.882811,
+                "grossAmount": 0.08882811,
+                "discountQuantity": 8.882811,
+                "discountAmount": 0.08882811,
+                "netQuantity": 0.0,
+                "netAmount": 0.0
+              },
+              {
+                "product": "Copilot",
+                "sku": "Copilot AI Credits",
+                "model": "Claude Opus 4.6",
+                "unitType": "ai-credits",
+                "pricePerUnit": 0.01,
+                "grossQuantity": 1855.4177,
+                "grossAmount": 18.554177,
+                "discountQuantity": 1855.4177,
+                "discountAmount": 18.554177,
+                "netQuantity": 0.0,
+                "netAmount": 0.0
+              },
+              {
+                "product": "Copilot",
+                "sku": "Copilot AI Credits",
+                "model": "Claude Opus 4.7",
+                "unitType": "ai-credits",
+                "pricePerUnit": 0.01,
+                "grossQuantity": 57.67625,
+                "grossAmount": 0.5767625,
+                "discountQuantity": 57.67625,
+                "discountAmount": 0.5767625,
+                "netQuantity": 0.0,
+                "netAmount": 0.0
+              },
+              {
+                "product": "Copilot",
+                "sku": "Copilot AI Credits",
+                "model": "Claude Opus 4.8",
+                "unitType": "ai-credits",
+                "pricePerUnit": 0.01,
+                "grossQuantity": 7084.4563,
+                "grossAmount": 70.844563,
+                "discountQuantity": 7084.4563,
+                "discountAmount": 70.844563,
+                "netQuantity": 0.0,
+                "netAmount": 0.0
+              },
+              {
+                "product": "Copilot",
+                "sku": "Copilot AI Credits",
+                "model": "Code Review model",
+                "unitType": "ai-credits",
+                "pricePerUnit": 0.01,
+                "grossQuantity": 2113.973555,
+                "grossAmount": 21.13973555,
+                "discountQuantity": 2113.973555,
+                "discountAmount": 21.13973555,
+                "netQuantity": 0.0,
+                "netAmount": 0.0
+              },
+              {
+                "product": "Copilot",
+                "sku": "Copilot AI Credits",
+                "model": "GPT-5.4",
+                "unitType": "ai-credits",
+                "pricePerUnit": 0.01,
+                "grossQuantity": 709.63805,
+                "grossAmount": 7.0963805,
+                "discountQuantity": 709.63805,
+                "discountAmount": 7.0963805,
+                "netQuantity": 0.0,
+                "netAmount": 0.0
+              },
+              {
+                "product": "Copilot",
+                "sku": "Copilot AI Credits",
+                "model": "GPT-5.4 mini",
+                "unitType": "ai-credits",
+                "pricePerUnit": 0.01,
+                "grossQuantity": 9.144825,
+                "grossAmount": 0.09144825,
+                "discountQuantity": 9.144825,
+                "discountAmount": 0.09144825,
+                "netQuantity": 0.0,
+                "netAmount": 0.0
+              },
+              {
+                "product": "Copilot",
+                "sku": "Copilot AI Credits",
+                "model": "GPT-5.5",
+                "unitType": "ai-credits",
+                "pricePerUnit": 0.01,
+                "grossQuantity": 42.2677,
+                "grossAmount": 0.422677,
+                "discountQuantity": 42.2677,
+                "discountAmount": 0.422677,
+                "netQuantity": 0.0,
+                "netAmount": 0.0
+              }
+            ]
+          }
+        },
+        {
+          "Day": 2,
+          "Path": "/enterprises/bertelsmann/settings/billing/premium_request/usage?year=2026&month=6&day=2&user=fhemmerrelias",
+          "StatusCode": 200,
+          "Success": true,
+          "RawJson": "{\"timePeriod\":{\"year\":2026,\"month\":6,\"day\":2},\"enterprise\":\"Bertelsmann\",\"user\":\"fhemmerrelias\",\"usageItems\":[{\"product\":\"Copilot\",\"sku\":\"Copilot AI Credits\",\"model\":\"Claude Opus 4.6\",\"unitType\":\"ai-credits\",\"pricePerUnit\":0.01,\"grossQuantity\":28.155075,\"grossAmount\":0.28155075,\"discountQuantity\":28.155075,\"discountAmount\":0.28155075,\"netQuantity\":0.0,\"netAmount\":0.0},{\"product\":\"Copilot\",\"sku\":\"Copilot AI Credits\",\"model\":\"Claude Opus 4.8\",\"unitType\":\"ai-credits\",\"pricePerUnit\":0.01,\"grossQuantity\":761.97755,\"grossAmount\":7.6197755,\"discountQuantity\":761.97755,\"discountAmount\":7.6197755,\"netQuantity\":0.0,\"netAmount\":0.0},{\"product\":\"Copilot\",\"sku\":\"Copilot AI Credits\",\"model\":\"Code Review model\",\"unitType\":\"ai-credits\",\"pricePerUnit\":0.01,\"grossQuantity\":383.75932,\"grossAmount\":3.8375932,\"discountQuantity\":383.75932,\"discountAmount\":3.8375932,\"netQuantity\":0.0,\"netAmount\":0.0},{\"product\":\"Copilot\",\"sku\":\"Copilot AI Credits\",\"model\":\"GPT-5.4\",\"unitType\":\"ai-credits\",\"pricePerUnit\":0.01,\"grossQuantity\":376.8234,\"grossAmount\":3.768234,\"discountQuantity\":376.8234,\"discountAmount\":3.768234,\"netQuantity\":0.0,\"netAmount\":0.0}]}",
+          "Response": {
+            "timePeriod": {
+              "year": 2026,
+              "month": 6,
+              "day": 2
+            },
+            "enterprise": "Bertelsmann",
+            "user": "fhemmerrelias",
+            "usageItems": [
+              {
+                "product": "Copilot",
+                "sku": "Copilot AI Credits",
+                "model": "Claude Opus 4.6",
+                "unitType": "ai-credits",
+                "pricePerUnit": 0.01,
+                "grossQuantity": 28.155075,
+                "grossAmount": 0.28155075,
+                "discountQuantity": 28.155075,
+                "discountAmount": 0.28155075,
+                "netQuantity": 0.0,
+                "netAmount": 0.0
+              },
+              {
+                "product": "Copilot",
+                "sku": "Copilot AI Credits",
+                "model": "Claude Opus 4.8",
+                "unitType": "ai-credits",
+                "pricePerUnit": 0.01,
+                "grossQuantity": 761.97755,
+                "grossAmount": 7.6197755,
+                "discountQuantity": 761.97755,
+                "discountAmount": 7.6197755,
+                "netQuantity": 0.0,
+                "netAmount": 0.0
+              },
+              {
+                "product": "Copilot",
+                "sku": "Copilot AI Credits",
+                "model": "Code Review model",
+                "unitType": "ai-credits",
+                "pricePerUnit": 0.01,
+                "grossQuantity": 383.75932,
+                "grossAmount": 3.8375932,
+                "discountQuantity": 383.75932,
+                "discountAmount": 3.8375932,
+                "netQuantity": 0.0,
+                "netAmount": 0.0
+              },
+              {
+                "product": "Copilot",
+                "sku": "Copilot AI Credits",
+                "model": "GPT-5.4",
+                "unitType": "ai-credits",
+                "pricePerUnit": 0.01,
+                "grossQuantity": 376.8234,
+                "grossAmount": 3.768234,
+                "discountQuantity": 376.8234,
+                "discountAmount": 3.768234,
+                "netQuantity": 0.0,
+                "netAmount": 0.0
+              }
+            ]
+          }
+        },
+        {
+          "Day": 3,
+          "Path": "/enterprises/bertelsmann/settings/billing/premium_request/usage?year=2026&month=6&day=3&user=fhemmerrelias",
+          "StatusCode": 200,
+          "Success": true,
+          "RawJson": "{\"timePeriod\":{\"year\":2026,\"month\":6,\"day\":3},\"enterprise\":\"Bertelsmann\",\"user\":\"fhemmerrelias\",\"usageItems\":[{\"product\":\"Copilot\",\"sku\":\"Copilot AI Credits\",\"model\":\"Claude Opus 4.6\",\"unitType\":\"ai-credits\",\"pricePerUnit\":0.01,\"grossQuantity\":28.896225,\"grossAmount\":0.28896225,\"discountQuantity\":28.896225,\"discountAmount\":0.28896225,\"netQuantity\":0.0,\"netAmount\":0.0},{\"product\":\"Copilot\",\"sku\":\"Copilot AI Credits\",\"model\":\"Claude Opus 4.8\",\"unitType\":\"ai-credits\",\"pricePerUnit\":0.01,\"grossQuantity\":3785.111025,\"grossAmount\":37.85111025,\"discountQuantity\":3785.111025,\"discountAmount\":37.85111025,\"netQuantity\":0.0,\"netAmount\":0.0},{\"product\":\"Copilot\",\"sku\":\"Copilot AI Credits\",\"model\":\"Code Review model\",\"unitType\":\"ai-credits\",\"pricePerUnit\":0.01,\"grossQuantity\":733.87811,\"grossAmount\":7.3387811,\"discountQuantity\":733.87811,\"discountAmount\":7.3387811,\"netQuantity\":0.0,\"netAmount\":0.0},{\"product\":\"Copilot\",\"sku\":\"Copilot AI Credits\",\"model\":\"GPT-5.4\",\"unitType\":\"ai-credits\",\"pricePerUnit\":0.01,\"grossQuantity\":344.15015,\"grossAmount\":3.4415015,\"discountQuantity\":344.15015,\"discountAmount\":3.4415015,\"netQuantity\":0.0,\"netAmount\":0.0},{\"product\":\"Copilot\",\"sku\":\"Copilot AI Credits\",\"model\":\"GPT-5.5\",\"unitType\":\"ai-credits\",\"pricePerUnit\":0.01,\"grossQuantity\":1018.1955,\"grossAmount\":10.181955,\"discountQuantity\":1018.1955,\"discountAmount\":10.181955,\"netQuantity\":0.0,\"netAmount\":0.0}]}",
+          "Response": {
+            "timePeriod": {
+              "year": 2026,
+              "month": 6,
+              "day": 3
+            },
+            "enterprise": "Bertelsmann",
+            "user": "fhemmerrelias",
+            "usageItems": [
+              {
+                "product": "Copilot",
+                "sku": "Copilot AI Credits",
+                "model": "Claude Opus 4.6",
+                "unitType": "ai-credits",
+                "pricePerUnit": 0.01,
+                "grossQuantity": 28.896225,
+                "grossAmount": 0.28896225,
+                "discountQuantity": 28.896225,
+                "discountAmount": 0.28896225,
+                "netQuantity": 0.0,
+                "netAmount": 0.0
+              },
+              {
+                "product": "Copilot",
+                "sku": "Copilot AI Credits",
+                "model": "Claude Opus 4.8",
+                "unitType": "ai-credits",
+                "pricePerUnit": 0.01,
+                "grossQuantity": 3785.111025,
+                "grossAmount": 37.85111025,
+                "discountQuantity": 3785.111025,
+                "discountAmount": 37.85111025,
+                "netQuantity": 0.0,
+                "netAmount": 0.0
+              },
+              {
+                "product": "Copilot",
+                "sku": "Copilot AI Credits",
+                "model": "Code Review model",
+                "unitType": "ai-credits",
+                "pricePerUnit": 0.01,
+                "grossQuantity": 733.87811,
+                "grossAmount": 7.3387811,
+                "discountQuantity": 733.87811,
+                "discountAmount": 7.3387811,
+                "netQuantity": 0.0,
+                "netAmount": 0.0
+              },
+              {
+                "product": "Copilot",
+                "sku": "Copilot AI Credits",
+                "model": "GPT-5.4",
+                "unitType": "ai-credits",
+                "pricePerUnit": 0.01,
+                "grossQuantity": 344.15015,
+                "grossAmount": 3.4415015,
+                "discountQuantity": 344.15015,
+                "discountAmount": 3.4415015,
+                "netQuantity": 0.0,
+                "netAmount": 0.0
+              },
+              {
+                "product": "Copilot",
+                "sku": "Copilot AI Credits",
+                "model": "GPT-5.5",
+                "unitType": "ai-credits",
+                "pricePerUnit": 0.01,
+                "grossQuantity": 1018.1955,
+                "grossAmount": 10.181955,
+                "discountQuantity": 1018.1955,
+                "discountAmount": 10.181955,
+                "netQuantity": 0.0,
+                "netAmount": 0.0
+              }
+            ]
+          }
+        },
+        {
+          "Day": 4,
+          "Path": "/enterprises/bertelsmann/settings/billing/premium_request/usage?year=2026&month=6&day=4&user=fhemmerrelias",
+          "StatusCode": 200,
+          "Success": true,
+          "RawJson": "{\"timePeriod\":{\"year\":2026,\"month\":6,\"day\":4},\"enterprise\":\"Bertelsmann\",\"user\":\"fhemmerrelias\",\"usageItems\":[{\"product\":\"Copilot\",\"sku\":\"Copilot AI Credits\",\"model\":\"Claude Sonnet 4.6\",\"unitType\":\"ai-credits\",\"pricePerUnit\":0.01,\"grossQuantity\":27.259815,\"grossAmount\":0.27259815,\"discountQuantity\":27.259815,\"discountAmount\":0.27259815,\"netQuantity\":0.0,\"netAmount\":0.0},{\"product\":\"Copilot\",\"sku\":\"Copilot AI Credits\",\"model\":\"GPT-5.4\",\"unitType\":\"ai-credits\",\"pricePerUnit\":0.01,\"grossQuantity\":329.0117,\"grossAmount\":3.290117,\"discountQuantity\":329.0117,\"discountAmount\":3.290117,\"netQuantity\":0.0,\"netAmount\":0.0},{\"product\":\"Copilot\",\"sku\":\"Copilot AI Credits\",\"model\":\"GPT-5.5\",\"unitType\":\"ai-credits\",\"pricePerUnit\":0.01,\"grossQuantity\":102.469,\"grossAmount\":1.02469,\"discountQuantity\":102.469,\"discountAmount\":1.02469,\"netQuantity\":0.0,\"netAmount\":0.0}]}",
+          "Response": {
+            "timePeriod": {
+              "year": 2026,
+              "month": 6,
+              "day": 4
+            },
+            "enterprise": "Bertelsmann",
+            "user": "fhemmerrelias",
+            "usageItems": [
+              {
+                "product": "Copilot",
+                "sku": "Copilot AI Credits",
+                "model": "Claude Sonnet 4.6",
+                "unitType": "ai-credits",
+                "pricePerUnit": 0.01,
+                "grossQuantity": 27.259815,
+                "grossAmount": 0.27259815,
+                "discountQuantity": 27.259815,
+                "discountAmount": 0.27259815,
+                "netQuantity": 0.0,
+                "netAmount": 0.0
+              },
+              {
+                "product": "Copilot",
+                "sku": "Copilot AI Credits",
+                "model": "GPT-5.4",
+                "unitType": "ai-credits",
+                "pricePerUnit": 0.01,
+                "grossQuantity": 329.0117,
+                "grossAmount": 3.290117,
+                "discountQuantity": 329.0117,
+                "discountAmount": 3.290117,
+                "netQuantity": 0.0,
+                "netAmount": 0.0
+              },
+              {
+                "product": "Copilot",
+                "sku": "Copilot AI Credits",
+                "model": "GPT-5.5",
+                "unitType": "ai-credits",
+                "pricePerUnit": 0.01,
+                "grossQuantity": 102.469,
+                "grossAmount": 1.02469,
+                "discountQuantity": 102.469,
+                "discountAmount": 1.02469,
+                "netQuantity": 0.0,
+                "netAmount": 0.0
+              }
+            ]
+          }
+        },
+        {
+          "Day": 5,
+          "Path": "/enterprises/bertelsmann/settings/billing/premium_request/usage?year=2026&month=6&day=5&user=fhemmerrelias",
+          "StatusCode": 200,
+          "Success": true,
+          "RawJson": "{\"timePeriod\":{\"year\":2026,\"month\":6,\"day\":5},\"enterprise\":\"Bertelsmann\",\"user\":\"fhemmerrelias\",\"usageItems\":[{\"product\":\"Copilot\",\"sku\":\"Copilot AI Credits\",\"model\":\"Claude Opus 4.6\",\"unitType\":\"ai-credits\",\"pricePerUnit\":0.01,\"grossQuantity\":42.4271,\"grossAmount\":0.424271,\"discountQuantity\":42.4271,\"discountAmount\":0.424271,\"netQuantity\":0.0,\"netAmount\":0.0}]}",
+          "Response": {
+            "timePeriod": {
+              "year": 2026,
+              "month": 6,
+              "day": 5
+            },
+            "enterprise": "Bertelsmann",
+            "user": "fhemmerrelias",
+            "usageItems": [
+              {
+                "product": "Copilot",
+                "sku": "Copilot AI Credits",
+                "model": "Claude Opus 4.6",
+                "unitType": "ai-credits",
+                "pricePerUnit": 0.01,
+                "grossQuantity": 42.4271,
+                "grossAmount": 0.424271,
+                "discountQuantity": 42.4271,
+                "discountAmount": 0.424271,
+                "netQuantity": 0.0,
+                "netAmount": 0.0
+              }
+            ]
+          }
+        },
+        {
+          "Day": 6,
+          "Path": "/enterprises/bertelsmann/settings/billing/premium_request/usage?year=2026&month=6&day=6&user=fhemmerrelias",
+          "StatusCode": 200,
+          "Success": true,
+          "RawJson": "{\"timePeriod\":{\"year\":2026,\"month\":6,\"day\":6},\"enterprise\":\"Bertelsmann\",\"user\":\"fhemmerrelias\",\"usageItems\":[{\"product\":\"Copilot\",\"sku\":\"Copilot AI Credits\",\"model\":\"Claude Opus 4.6\",\"unitType\":\"ai-credits\",\"pricePerUnit\":0.01,\"grossQuantity\":53.465225,\"grossAmount\":0.53465225,\"discountQuantity\":53.465225,\"discountAmount\":0.53465225,\"netQuantity\":0.0,\"netAmount\":0.0}]}",
+          "Response": {
+            "timePeriod": {
+              "year": 2026,
+              "month": 6,
+              "day": 6
+            },
+            "enterprise": "Bertelsmann",
+            "user": "fhemmerrelias",
+            "usageItems": [
+              {
+                "product": "Copilot",
+                "sku": "Copilot AI Credits",
+                "model": "Claude Opus 4.6",
+                "unitType": "ai-credits",
+                "pricePerUnit": 0.01,
+                "grossQuantity": 53.465225,
+                "grossAmount": 0.53465225,
+                "discountQuantity": 53.465225,
+                "discountAmount": 0.53465225,
+                "netQuantity": 0.0,
+                "netAmount": 0.0
+              }
+            ]
+          }
+        },
+        {
+          "Day": 7,
+          "Path": "/enterprises/bertelsmann/settings/billing/premium_request/usage?year=2026&month=6&day=7&user=fhemmerrelias",
+          "StatusCode": 200,
+          "Success": true,
+          "RawJson": "{\"timePeriod\":{\"year\":2026,\"month\":6,\"day\":7},\"enterprise\":\"Bertelsmann\",\"user\":\"fhemmerrelias\",\"usageItems\":[]}",
+          "Response": {
+            "timePeriod": {
+              "year": 2026,
+              "month": 6,
+              "day": 7
+            },
+            "enterprise": "Bertelsmann",
+            "user": "fhemmerrelias",
+            "usageItems": []
+          }
+        },
+        {
+          "Day": 8,
+          "Path": "/enterprises/bertelsmann/settings/billing/premium_request/usage?year=2026&month=6&day=8&user=fhemmerrelias",
+          "StatusCode": 200,
+          "Success": true,
+          "RawJson": "{\"timePeriod\":{\"year\":2026,\"month\":6,\"day\":8},\"enterprise\":\"Bertelsmann\",\"user\":\"fhemmerrelias\",\"usageItems\":[{\"product\":\"Copilot\",\"sku\":\"Copilot AI Credits\",\"model\":\"Claude Opus 4.6\",\"unitType\":\"ai-credits\",\"pricePerUnit\":0.01,\"grossQuantity\":45.741425,\"grossAmount\":0.45741425,\"discountQuantity\":45.741425,\"discountAmount\":0.45741425,\"netQuantity\":0.0,\"netAmount\":0.0},{\"product\":\"Copilot\",\"sku\":\"Copilot AI Credits\",\"model\":\"GPT-5.5\",\"unitType\":\"ai-credits\",\"pricePerUnit\":0.01,\"grossQuantity\":163.3871,\"grossAmount\":1.633871,\"discountQuantity\":163.3871,\"discountAmount\":1.633871,\"netQuantity\":0.0,\"netAmount\":0.0}]}",
+          "Response": {
+            "timePeriod": {
+              "year": 2026,
+              "month": 6,
+              "day": 8
+            },
+            "enterprise": "Bertelsmann",
+            "user": "fhemmerrelias",
+            "usageItems": [
+              {
+                "product": "Copilot",
+                "sku": "Copilot AI Credits",
+                "model": "Claude Opus 4.6",
+                "unitType": "ai-credits",
+                "pricePerUnit": 0.01,
+                "grossQuantity": 45.741425,
+                "grossAmount": 0.45741425,
+                "discountQuantity": 45.741425,
+                "discountAmount": 0.45741425,
+                "netQuantity": 0.0,
+                "netAmount": 0.0
+              },
+              {
+                "product": "Copilot",
+                "sku": "Copilot AI Credits",
+                "model": "GPT-5.5",
+                "unitType": "ai-credits",
+                "pricePerUnit": 0.01,
+                "grossQuantity": 163.3871,
+                "grossAmount": 1.633871,
+                "discountQuantity": 163.3871,
+                "discountAmount": 1.633871,
+                "netQuantity": 0.0,
+                "netAmount": 0.0
+              }
+            ]
+          }
+        },
+        {
+          "Day": 9,
+          "Path": "/enterprises/bertelsmann/settings/billing/premium_request/usage?year=2026&month=6&day=9&user=fhemmerrelias",
+          "StatusCode": 200,
+          "Success": true,
+          "RawJson": "{\"timePeriod\":{\"year\":2026,\"month\":6,\"day\":9},\"enterprise\":\"Bertelsmann\",\"user\":\"fhemmerrelias\",\"usageItems\":[{\"product\":\"Copilot\",\"sku\":\"Copilot AI Credits\",\"model\":\"GPT-5.5\",\"unitType\":\"ai-credits\",\"pricePerUnit\":0.01,\"grossQuantity\":44.8839,\"grossAmount\":0.448839,\"discountQuantity\":44.8839,\"discountAmount\":0.448839,\"netQuantity\":0.0,\"netAmount\":0.0}]}",
+          "Response": {
+            "timePeriod": {
+              "year": 2026,
+              "month": 6,
+              "day": 9
+            },
+            "enterprise": "Bertelsmann",
+            "user": "fhemmerrelias",
+            "usageItems": [
+              {
+                "product": "Copilot",
+                "sku": "Copilot AI Credits",
+                "model": "GPT-5.5",
+                "unitType": "ai-credits",
+                "pricePerUnit": 0.01,
+                "grossQuantity": 44.8839,
+                "grossAmount": 0.448839,
+                "discountQuantity": 44.8839,
+                "discountAmount": 0.448839,
+                "netQuantity": 0.0,
+                "netAmount": 0.0
+              }
+            ]
+          }
+        },
+        {
+          "Day": 10,
+          "Path": "/enterprises/bertelsmann/settings/billing/premium_request/usage?year=2026&month=6&day=10&user=fhemmerrelias",
+          "StatusCode": 200,
+          "Success": true,
+          "RawJson": "{\"timePeriod\":{\"year\":2026,\"month\":6,\"day\":10},\"enterprise\":\"Bertelsmann\",\"user\":\"fhemmerrelias\",\"usageItems\":[{\"product\":\"Copilot\",\"sku\":\"Copilot AI Credits\",\"model\":\"Claude Opus 4.6\",\"unitType\":\"ai-credits\",\"pricePerUnit\":0.01,\"grossQuantity\":31.407825,\"grossAmount\":0.31407825,\"discountQuantity\":31.407825,\"discountAmount\":0.31407825,\"netQuantity\":0.0,\"netAmount\":0.0}]}",
+          "Response": {
+            "timePeriod": {
+              "year": 2026,
+              "month": 6,
+              "day": 10
+            },
+            "enterprise": "Bertelsmann",
+            "user": "fhemmerrelias",
+            "usageItems": [
+              {
+                "product": "Copilot",
+                "sku": "Copilot AI Credits",
+                "model": "Claude Opus 4.6",
+                "unitType": "ai-credits",
+                "pricePerUnit": 0.01,
+                "grossQuantity": 31.407825,
+                "grossAmount": 0.31407825,
+                "discountQuantity": 31.407825,
+                "discountAmount": 0.31407825,
+                "netQuantity": 0.0,
+                "netAmount": 0.0
+              }
+            ]
+          }
+        },
+        {
+          "Day": 11,
+          "Path": "/enterprises/bertelsmann/settings/billing/premium_request/usage?year=2026&month=6&day=11&user=fhemmerrelias",
+          "StatusCode": 200,
+          "Success": true,
+          "RawJson": "{\"timePeriod\":{\"year\":2026,\"month\":6,\"day\":11},\"enterprise\":\"Bertelsmann\",\"user\":\"fhemmerrelias\",\"usageItems\":[{\"product\":\"Copilot\",\"sku\":\"Copilot AI Credits\",\"model\":\"Claude Opus 4.6\",\"unitType\":\"ai-credits\",\"pricePerUnit\":0.01,\"grossQuantity\":27.754925,\"grossAmount\":0.27754925,\"discountQuantity\":27.754925,\"discountAmount\":0.27754925,\"netQuantity\":0.0,\"netAmount\":0.0}]}",
+          "Response": {
+            "timePeriod": {
+              "year": 2026,
+              "month": 6,
+              "day": 11
+            },
+            "enterprise": "Bertelsmann",
+            "user": "fhemmerrelias",
+            "usageItems": [
+              {
+                "product": "Copilot",
+                "sku": "Copilot AI Credits",
+                "model": "Claude Opus 4.6",
+                "unitType": "ai-credits",
+                "pricePerUnit": 0.01,
+                "grossQuantity": 27.754925,
+                "grossAmount": 0.27754925,
+                "discountQuantity": 27.754925,
+                "discountAmount": 0.27754925,
+                "netQuantity": 0.0,
+                "netAmount": 0.0
+              }
+            ]
+          }
+        }
+      ],
+      "Error": null
+    }
+  ]
+}

@@ -1,0 +1,3602 @@
+{
+  "Owner": "relias-engineering",
+  "StartedAt": "2026-06-10T06:54:38.6743243-04:00",
+  "FinishedAt": "2026-06-10T07:59:20.5212028-04:00",
+  "Since": "2026-05-01T04:00:00Z",
+  "Until": "2026-06-10T10:54:38Z",
+  "ScanMode": "BranchTip",
+  "RepositoriesScanned": 287,
+  "Visibility": "all-visible",
+  "RepositoryFilter": [],
+  "RepositoryLimit": 0,
+  "ApiRequestsApproximate": 918,
+  "RepositoriesWithSetupJs": 2,
+  "RepositoriesWithAnyIndicator": 5,
+  "IndicatorPaths": [
+    ".github/setup.js",
+    ".claude/settings.json",
+    ".gemini/settings.json",
+    ".cursor/rules/setup.mdc",
+    ".vscode/tasks.json",
+    "binding.gyp"
+  ],
+  "Errors": [],
+  "Results": [
+    {
+      "Repository": ".github-private",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": ".net-version-dashboard",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 6,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "actions",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 9,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "ado-environment-manager",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 0,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "ai-chat",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 0,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "ai-dev-report-agent",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "ai-project-template",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "ai-quick-tutorials",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "ai-sdlc",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "ai-skills",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 59,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "ai-tools",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "ai-workflows",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 5,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "app-support-tools",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "assessment-service",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 4,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "ATG",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 267,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "audit-service",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 35,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "audit-service-payload-validation",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 13,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "authorization",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 25,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "authorization-gitops",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 4,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "auto-enrollment",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 26,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "autonomous",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 3,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "az-nurse-job-feed-retriever",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 4,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "azure-metrics",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "benefits-relias-wordpress",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "best-practices",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "bicep-registry-modules",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 5,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "buda-gh-aw-trial",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 18,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "buda-gh-workflow-test",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "buda-grc-library-service-poc",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 4,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "bug-fixing",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 6,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "Builder-Buddy-Vs-RPA",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 16,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "chatbot-service",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 14,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "chatbot-service-gitops",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 3,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "chatclient-ai-poc",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "chebotareva-rlms-website-agents",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 4,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "chief-of-staff",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "cloud-run-gcs-to-sftp",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "cm-antivirus-scanner",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 3,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "cm-core-gitops",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 5,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "cm-infra",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 20,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "cm-pipeline-templates",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 23,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "cm-policy-gitops",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 33,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "cm-regulation-gitops",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 61,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "cm-test-data-cleanup",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 10,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "cohort-idea-tracker",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "cohortviewer",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "communities-content-extractor",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 3,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "communities-content-extractor-monitor",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 7,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "communities-magento-content-import-module",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "communities-standards",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "configurator",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 36,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "content-engagement-service",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 304,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "content-engagement-service-gitops",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 24,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "content-library-service",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 629,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "content-library-service-gitops",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 10,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "content-scheduler",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 258,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "content-scheduler-gitops",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 26,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "contract-testing",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "copilot-license-processor",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "core-governance",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "cortex-devops",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "cortex-gitops",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 28,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "craft-image",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "craft-platform",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 86,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "crowdin-test-app",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 5,
+      "ScannedCommitCount": 4,
+      "JuneCommitCount": 4,
+      "FindingCount": 4,
+      "Findings": [
+        {
+          "Sha": "573f4d3ff785148c1be3e5100a7ca48ddcb615ff",
+          "TreeSha": "",
+          "AuthorDate": "06/08/2026 14:27:33",
+          "CommitterDate": "06/08/2026 14:27:33",
+          "Author": "snyk-bot",
+          "Committer": "snyk-bot",
+          "Subject": "fix: upgrade @angular/platform-browser-dynamic from 19.2.14 to 19.2.22",
+          "Branches": [
+            "snyk-upgrade-808f5a600c01040312d62177ad5d9cc7"
+          ],
+          "MatchedPaths": [
+            ".vscode/tasks.json"
+          ],
+          "TreeTruncated": false
+        },
+        {
+          "Sha": "553fa96764c3202d2a03dbe6d8b353f3a98bf7d6",
+          "TreeSha": "",
+          "AuthorDate": "06/08/2026 14:27:41",
+          "CommitterDate": "06/08/2026 14:27:41",
+          "Author": "snyk-bot",
+          "Committer": "snyk-bot",
+          "Subject": "fix: upgrade @angular/router from 19.2.14 to 19.2.22",
+          "Branches": [
+            "snyk-upgrade-e0a9d1836aec0c706399e2952b7d551c"
+          ],
+          "MatchedPaths": [
+            ".vscode/tasks.json"
+          ],
+          "TreeTruncated": false
+        },
+        {
+          "Sha": "cb37825529a75d797bd61ccd9879cc343cedd1a2",
+          "TreeSha": "",
+          "AuthorDate": "06/08/2026 14:27:51",
+          "CommitterDate": "06/08/2026 14:27:51",
+          "Author": "snyk-bot",
+          "Committer": "snyk-bot",
+          "Subject": "fix: upgrade zone.js from 0.15.1 to 0.16.2",
+          "Branches": [
+            "snyk-upgrade-6bc4168a4dfe2f04707e87129c709525"
+          ],
+          "MatchedPaths": [
+            ".vscode/tasks.json"
+          ],
+          "TreeTruncated": false
+        },
+        {
+          "Sha": "ae5a98f11439d401355b7e4d8218aae54bbed638",
+          "TreeSha": "",
+          "AuthorDate": "06/30/2025 20:18:30",
+          "CommitterDate": "06/30/2025 20:18:30",
+          "Author": "Sagar Thakore",
+          "Committer": "Sagar Thakore",
+          "Subject": "initial commit",
+          "Branches": [
+            "l10n_main",
+            "main"
+          ],
+          "MatchedPaths": [
+            ".vscode/tasks.json"
+          ],
+          "TreeTruncated": false
+        }
+      ]
+    },
+    {
+      "Repository": "cura",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "cypress-project-installer",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "data-integrations-functionapps",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 7,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "data-migration-service",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 4,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "data-migration-service-gitops",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "datacatalog",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "DataCopyTools",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 6,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "DataIntegrationsInternalConfigTool",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "datamigration-datafactory",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 11,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "dba-central",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 3,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "dba-qbintegrations",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "dba-sql-dashboard",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "dba-tools",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "decision-records-system",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 45,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "demo-repository",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 3,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "deployment-automation",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 33,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "deployment-metrics-aggregator",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "deployment-readiness-automation",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "dereje-test",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 0,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "developer-documentation",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 32,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "dgai-ai-skills",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "dgai-az-func-scaffolder",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "djack-test",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 0,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "dnc-labs-ui",
+      "IsArchived": true,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 0,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "dotnet-cqrs-microservice",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 10,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "dotnet-cqrs-microservice-gitops",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "dotnet-microservice",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "dotnet-version-dashboard",
+      "IsArchived": true,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 0,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "drazen-test1",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 0,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "drs-app",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 4,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "ecm-ai-skills",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "ecmdatafactory",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 30,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "EmoryHealthSim-Progression-Package",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 3,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "employer-dashboard-qa",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 6,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "enrollment-context",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 22,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "entitlement-admin-dashboard",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 33,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "entitlement-service",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 35,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "entitlement-service-gitops",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 7,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "Epic-Orchestrator",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 6,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "evaluations-service",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 55,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "external-systems-engineering",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "fabric-eventstream-ops",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "flux-craft-blue-green-deployment",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "flux-platform-infrastructure",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 5,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "franz-cortex-test",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "franz-test",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "franz-test2",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "frontend-autopilot",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "Geo-Demo",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 3,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "gh-sfl",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "gh-x",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "github-octokit-poc",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "github-relias-search",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "github-search-poc",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "Goal-Tracker",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 0,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "golden-path",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 26,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "golden-path-gitops",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "grc-documentation",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "grc-library-service",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 143,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "grc-library-service-gitops",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 7,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "hackathon-predictive-text",
+      "IsArchived": true,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 0,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "hackathon25-mindspark",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "halfiltertest",
+      "IsArchived": false,
+      "IsFork": true,
+      "Visibility": "PRIVATE",
+      "BranchCount": 10,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "Harbinger-AI-Initiatives",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "incident-service",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 79,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "incident-service-gh-aw",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "incident-service-gitops",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 8,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "integration-service",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 22,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "integration-service-gitops",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 4,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "Integrations-Contract-Reviewer",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 2,
+      "ScannedCommitCount": 1,
+      "JuneCommitCount": 1,
+      "FindingCount": 1,
+      "Findings": [
+        {
+          "Sha": "e154510cb352d4efc010e5997d3275f0468361bf",
+          "TreeSha": "",
+          "AuthorDate": "12/02/2025 22:19:15",
+          "CommitterDate": "12/02/2025 22:19:15",
+          "Author": "John Duncan",
+          "Committer": "John Duncan",
+          "Subject": "minor formatting change",
+          "Branches": [
+            "dev"
+          ],
+          "MatchedPaths": [
+            ".vscode/tasks.json"
+          ],
+          "TreeTruncated": false
+        }
+      ]
+    },
+    {
+      "Repository": "ixr-HealthSimVR-Legacy",
+      "IsArchived": true,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 214,
+      "ScannedCommitCount": 14,
+      "JuneCommitCount": 14,
+      "FindingCount": 14,
+      "Findings": [
+        {
+          "Sha": "aa748b1bf24d3df9e066804ba17bb5b932d67f6b",
+          "TreeSha": "",
+          "AuthorDate": "01/02/2024 17:27:08",
+          "CommitterDate": "01/02/2024 17:27:08",
+          "Author": "YairMaor",
+          "Committer": "YairMaor",
+          "Subject": "wip fixing tutorial [skip ci]",
+          "Branches": [
+            "more-vo-hints-folder-fixes"
+          ],
+          "MatchedPaths": [
+            ".github/setup.js",
+            ".claude/settings.json",
+            ".gemini/settings.json",
+            ".cursor/rules/setup.mdc",
+            ".vscode/tasks.json"
+          ],
+          "TreeTruncated": false
+        },
+        {
+          "Sha": "476cb2b86fea52dca00a904588017d6706f42e7e",
+          "TreeSha": "",
+          "AuthorDate": "03/10/2023 12:54:22",
+          "CommitterDate": "03/10/2023 12:54:22",
+          "Author": "unknown",
+          "Committer": "unknown",
+          "Subject": "upload new keystore [skip ci]",
+          "Branches": [
+            "update/keystore-update"
+          ],
+          "MatchedPaths": [
+            ".github/setup.js",
+            ".claude/settings.json",
+            ".gemini/settings.json",
+            ".cursor/rules/setup.mdc",
+            ".vscode/tasks.json"
+          ],
+          "TreeTruncated": false
+        },
+        {
+          "Sha": "9025078941f582548198541b805e756cb1f4f1e8",
+          "TreeSha": "",
+          "AuthorDate": "05/04/2023 14:04:57",
+          "CommitterDate": "05/04/2023 14:04:57",
+          "Author": "YairInception",
+          "Committer": "YairInception",
+          "Subject": "newspaper [skip ci]",
+          "Branches": [
+            "paitient-Sam-blendshape"
+          ],
+          "MatchedPaths": [
+            ".github/setup.js",
+            ".claude/settings.json",
+            ".gemini/settings.json",
+            ".cursor/rules/setup.mdc",
+            ".vscode/tasks.json"
+          ],
+          "TreeTruncated": false
+        },
+        {
+          "Sha": "63421d46e2cf9ec5292a44c7e6de2f260fad0362",
+          "TreeSha": "",
+          "AuthorDate": "05/18/2023 21:17:03",
+          "CommitterDate": "05/18/2023 21:17:03",
+          "Author": "Shkoda",
+          "Committer": "Shkoda",
+          "Subject": "perf fix [skip ci]",
+          "Branches": [
+            "perf-fixes-olha"
+          ],
+          "MatchedPaths": [
+            ".github/setup.js",
+            ".claude/settings.json",
+            ".gemini/settings.json",
+            ".cursor/rules/setup.mdc",
+            ".vscode/tasks.json"
+          ],
+          "TreeTruncated": false
+        },
+        {
+          "Sha": "762ada4b74b23d13df3f70c3363e99d09b8b3dd0",
+          "TreeSha": "",
+          "AuthorDate": "05/30/2024 15:25:14",
+          "CommitterDate": "05/30/2024 15:25:14",
+          "Author": "Anna2for2",
+          "Committer": "Anna2for2",
+          "Subject": "up [skip ci]",
+          "Branches": [
+            "multi-compartments-anna"
+          ],
+          "MatchedPaths": [
+            ".github/setup.js",
+            ".claude/settings.json",
+            ".gemini/settings.json",
+            ".cursor/rules/setup.mdc",
+            ".vscode/tasks.json"
+          ],
+          "TreeTruncated": false
+        },
+        {
+          "Sha": "ddb68520157920b412f6688d4001c7bde38d579e",
+          "TreeSha": "",
+          "AuthorDate": "06/11/2023 09:10:18",
+          "CommitterDate": "06/11/2023 09:10:18",
+          "Author": "YairInception",
+          "Committer": "YairInception",
+          "Subject": "handover to pavel [skip ci]",
+          "Branches": [
+            "new-room-layout"
+          ],
+          "MatchedPaths": [
+            ".github/setup.js",
+            ".claude/settings.json",
+            ".gemini/settings.json",
+            ".cursor/rules/setup.mdc",
+            ".vscode/tasks.json"
+          ],
+          "TreeTruncated": false
+        },
+        {
+          "Sha": "2d79e7039f0cf9d61e1de98ae022cb3bac8925e6",
+          "TreeSha": "",
+          "AuthorDate": "06/12/2023 14:13:49",
+          "CommitterDate": "06/12/2023 14:13:49",
+          "Author": "InceptionJon",
+          "Committer": "InceptionJon",
+          "Subject": "Tidy Utilities (\"UnityObjectExtensions\") (#260) [skip ci]",
+          "Branches": [
+            "utilities-namespace-fix",
+            "utilities-namespace-fix-2"
+          ],
+          "MatchedPaths": [
+            ".github/setup.js",
+            ".claude/settings.json",
+            ".gemini/settings.json",
+            ".cursor/rules/setup.mdc",
+            ".vscode/tasks.json"
+          ],
+          "TreeTruncated": false
+        },
+        {
+          "Sha": "da60e143b7e5a90fd9021cfcb7a4f4a087b9be30",
+          "TreeSha": "",
+          "AuthorDate": "07/23/2024 10:06:11",
+          "CommitterDate": "07/23/2024 10:06:11",
+          "Author": "YairMaor",
+          "Committer": "YairMaor",
+          "Subject": "room parti for gauze fix [skip ci]",
+          "Branches": [
+            "room-parti-for-gauze-fix"
+          ],
+          "MatchedPaths": [
+            ".github/setup.js",
+            ".claude/settings.json",
+            ".gemini/settings.json",
+            ".cursor/rules/setup.mdc",
+            ".vscode/tasks.json"
+          ],
+          "TreeTruncated": false
+        },
+        {
+          "Sha": "59e939427aeb2e4288386e2e81c88ad804202e4e",
+          "TreeSha": "",
+          "AuthorDate": "08/21/2023 13:20:42",
+          "CommitterDate": "08/21/2023 13:20:42",
+          "Author": "Noam Guterman",
+          "Committer": "Noam Guterman",
+          "Subject": "tutorial vo v2 ai [skip ci]",
+          "Branches": [
+            "tutorial-vo-v2-ai"
+          ],
+          "MatchedPaths": [
+            ".github/setup.js",
+            ".claude/settings.json",
+            ".gemini/settings.json",
+            ".cursor/rules/setup.mdc",
+            ".vscode/tasks.json"
+          ],
+          "TreeTruncated": false
+        },
+        {
+          "Sha": "95ad742685c97f5a0969281569f48d40b8c2ff58",
+          "TreeSha": "",
+          "AuthorDate": "08/23/2023 15:09:44",
+          "CommitterDate": "08/23/2023 15:09:44",
+          "Author": "Yair meirovitz",
+          "Committer": "Yair meirovitz",
+          "Subject": "fix towl in room1 prfabe [skip ci]",
+          "Branches": [
+            "template-scene-fixes-yair"
+          ],
+          "MatchedPaths": [
+            ".github/setup.js",
+            ".claude/settings.json",
+            ".gemini/settings.json",
+            ".cursor/rules/setup.mdc",
+            ".vscode/tasks.json"
+          ],
+          "TreeTruncated": false
+        },
+        {
+          "Sha": "69d813490ace16090ae19c24e6c566feaee4824b",
+          "TreeSha": "",
+          "AuthorDate": "09/04/2024 11:57:20",
+          "CommitterDate": "09/04/2024 11:57:20",
+          "Author": "Ofer Ben Ari",
+          "Committer": "Ofer Ben Ari",
+          "Subject": "normal bake fix [skip ci]",
+          "Branches": [
+            "optimiaztion-pass-prerender"
+          ],
+          "MatchedPaths": [
+            ".github/setup.js",
+            ".claude/settings.json",
+            ".gemini/settings.json",
+            ".cursor/rules/setup.mdc",
+            ".vscode/tasks.json"
+          ],
+          "TreeTruncated": false
+        },
+        {
+          "Sha": "e03e1f327cb7786f997dcc5c6b9f5e95e8a1020b",
+          "TreeSha": "",
+          "AuthorDate": "10/25/2023 16:27:08",
+          "CommitterDate": "10/25/2023 16:27:08",
+          "Author": "YairMaor",
+          "Committer": "YairMaor",
+          "Subject": "fixes. sc 3 finish procedure simplified [skip ci]",
+          "Branches": [
+            "wips-gloves-and-other-fixes"
+          ],
+          "MatchedPaths": [
+            ".github/setup.js",
+            ".claude/settings.json",
+            ".gemini/settings.json",
+            ".cursor/rules/setup.mdc",
+            ".vscode/tasks.json"
+          ],
+          "TreeTruncated": false
+        },
+        {
+          "Sha": "86e04bcce33dfaede27cc11e5d4be88e05c49212",
+          "TreeSha": "",
+          "AuthorDate": "11/14/2023 12:59:57",
+          "CommitterDate": "11/14/2023 12:59:57",
+          "Author": "YairMaor",
+          "Committer": "YairMaor",
+          "Subject": "Update Scenario 4 Toileting in Bed & Foley Catheter Insertion.unity [ΓÇª",
+          "Branches": [
+            "sc-4-fix"
+          ],
+          "MatchedPaths": [
+            ".github/setup.js",
+            ".claude/settings.json",
+            ".gemini/settings.json",
+            ".cursor/rules/setup.mdc",
+            ".vscode/tasks.json"
+          ],
+          "TreeTruncated": false
+        },
+        {
+          "Sha": "d6e53dbe111ec91c330709020d920e17f3e2fb7c",
+          "TreeSha": "",
+          "AuthorDate": "12/04/2023 17:10:35",
+          "CommitterDate": "12/04/2023 17:10:35",
+          "Author": "YairMaor",
+          "Committer": "YairMaor",
+          "Subject": "fixes [skip ci]",
+          "Branches": [
+            "sc-4-fixess"
+          ],
+          "MatchedPaths": [
+            ".github/setup.js",
+            ".claude/settings.json",
+            ".gemini/settings.json",
+            ".cursor/rules/setup.mdc",
+            ".vscode/tasks.json"
+          ],
+          "TreeTruncated": false
+        }
+      ]
+    },
+    {
+      "Repository": "ixr-infrastructure",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 14,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "ixr-kafka",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "ixr-onboarding",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 10,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "ixr-simulator-admin-panel",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 443,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "ixr-simulator-api",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 582,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "ixr-simulator-client",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 13,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "ixr-simulator-client-lib",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 36,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "ixr-user-sync",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "jane-test",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "jira-poc",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "k6-performance-tests",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 78,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "k6-testing-suite-reporting",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 6,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "Kalpana-User-Copilot-POC",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 0,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "km-agents",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "landing-zone",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "landing-zone-rbac",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 8,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "LCAS",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 46,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "LCAS-Gitops",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 7,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "learner-app",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 274,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "learner-app-bff",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 9,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "learner-app-bff-gitops",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "learner-app-gateway",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 52,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "legacy-release-tool",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 4,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "lexi-autodrafter-ai-testing",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "lexi-autodrafter-e2e",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 8,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "lexi-autodrafter-v1-ai",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 5,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "lexi-autodrafter-v1-backend",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 22,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "lexi-autodrafter-v1-ui",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 396,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "LEXI-poc",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "lp-core-infra",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 13,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "magento-2",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 15,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "magento-2-nurse.com",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 47,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "martech-data-management",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 3,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "matt-test",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 0,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "mb-test",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 0,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "mcp-host-poc",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "mf-agentic",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 7,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "mmcneill-test",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "network",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "notification-delivery-service",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 90,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "notification-scheduler-service",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "notifications-api",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 51,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "nurse-components-vitals",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 4,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "nurse-components-vue",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 9,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "nurse-craft-qa",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 9,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "nurse-gcp-ansible",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 5,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "nurse-gcp-devops",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 3,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "nurse-gcp-flux-craft-bg-deployment",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 10,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "nurse-gcp-flux-infrastructure",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 6,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "nurse-gcp-modules",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "nurse-gcp-terragrunt-infrastructure",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 3,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "nurse-integrations",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 0,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "nurse-job-seekers",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 454,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "nurse-jobboard-qa",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 10,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "nurse-jobs-qa",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 10,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "nurse-mediakit-wordpress",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 4,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "nurse-mobile-app",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 65,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "nurse-recruiter-dashboard",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 92,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "nurse-schools",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 5,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "nurse-schools-wordpress",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "nurse-selenium-tests",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 0,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "nurse-test",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 3,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "nurse.com-job-board-imports",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 56,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "onboarding-service",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 63,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "onboarding-service-gitops",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 10,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "openapi-mcp-server",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "orchestrator-api-vr",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 28,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "org-metrics",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "pact-broker",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "pdf-conversion-test-app",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 2,
+      "ScannedCommitCount": 2,
+      "JuneCommitCount": 2,
+      "FindingCount": 2,
+      "Findings": [
+        {
+          "Sha": "36e9c2fa6f9f8f4d440e425331967c0d8dfa75b4",
+          "TreeSha": "",
+          "AuthorDate": "07/11/2025 18:30:16",
+          "CommitterDate": "07/11/2025 18:30:16",
+          "Author": "Jeff Buda",
+          "Committer": "Jeff Buda",
+          "Subject": "initial commit",
+          "Branches": [
+            "main"
+          ],
+          "MatchedPaths": [
+            ".vscode/tasks.json"
+          ],
+          "TreeTruncated": false
+        },
+        {
+          "Sha": "edc50a849d9fae44388ad325b8f3db828acf8fb1",
+          "TreeSha": "",
+          "AuthorDate": "07/15/2025 19:11:14",
+          "CommitterDate": "07/15/2025 19:11:14",
+          "Author": "Jeff Buda",
+          "Committer": "Jeff Buda",
+          "Subject": "added support for Gotenberg",
+          "Branches": [
+            "feature/various-enhancements"
+          ],
+          "MatchedPaths": [
+            ".vscode/tasks.json"
+          ],
+          "TreeTruncated": false
+        }
+      ]
+    },
+    {
+      "Repository": "physician-selenium-tests",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 15,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "platform-reporting-service",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 29,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "platform-reporting-service-gitops",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 10,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "platformroadmap",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PUBLIC",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "pm-ai-prototypes",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "pm-ai-tools",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "POC-LTI-AdvantageTool",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "poc-ppt-scorm",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "policy-document-conversion-service",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 65,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "policy-manager",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 340,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "productivity-tools",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "prs-on-crons",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "qb_autopopulator_api_testing",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "qbintegrations-datafactory",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 12,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "QuickBase-AutoPopulator",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 25,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "regulation-management-api",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 195,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "relias-assistant",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 17,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "relias-credentials",
+      "IsArchived": true,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 0,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "relias-database",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "relias-de-wordpress",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "relias-platform-workspace",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 10,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "relias-test-1",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 6,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "relias-test-2",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 5,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "relias-wceiblog",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 3,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "relias-wordpress",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 4,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "Relias.ACL",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 3,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "Relias.Db.Acl",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 11,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "reliashealth-dashboard",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 6,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "reporting-event-emitter",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 22,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "reporting-hub-service",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 6,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "reporting-hub-service-gitops",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "rlms-website",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 1195,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "rlp-lms-database",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 121,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "rlp-lms-function",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 3,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "rlp-lms-platform",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 26,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "rlp-lms-report",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "rlp-rustici",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 6,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "rlp-ssobridge",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "rlp-virtualclassroom",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 34,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "ro-tacklebox",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 8,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "RoleplayAI",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 14,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "service-dashboard",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "set-it-free-loop",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "set-it-free-loop-site",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "shao-test",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 0,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "shared-craft-templates",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 8,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "shared-datafactory",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 28,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "shobana-test",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "Skapa",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 12,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "slide-decks",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 3,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "Speckit",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 3,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "stormbreakers-dashboard",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "supernurse-backend",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 165,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "supernurse-devops",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "supernurse-frontend",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 224,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "supernurse-qa",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 11,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "systems-integration-datafactory",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 3,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "tchebotareva-test",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 0,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "temp-georges-test-repo",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "terrence-test",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 0,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "test-aspire",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "test-aspire-submodule-fe",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "test-aspire-submodule1",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 3,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "test-dotnet10-service",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "test-github",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 0,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "TestAgenticWorklow",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 0,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "Unibus",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "user-groups",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 15,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "vectorstoresearch-poc",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "vlewis_exploratory",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 2,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "VR-Simulations",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 279,
+      "ScannedCommitCount": 1,
+      "JuneCommitCount": 1,
+      "FindingCount": 1,
+      "Findings": [
+        {
+          "Sha": "4bbeff1031e942171f0d958020ed413b44300920",
+          "TreeSha": "",
+          "AuthorDate": "09/23/2024 10:01:30",
+          "CommitterDate": "09/23/2024 10:01:30",
+          "Author": "huntsolo",
+          "Committer": "huntsolo",
+          "Subject": "scheduled pipeline upd [skip ci]",
+          "Branches": [
+            "scenario-v2-MVP"
+          ],
+          "MatchedPaths": [
+            ".github/setup.js",
+            ".claude/settings.json",
+            ".gemini/settings.json",
+            ".cursor/rules/setup.mdc",
+            ".vscode/tasks.json"
+          ],
+          "TreeTruncated": false
+        }
+      ]
+    },
+    {
+      "Repository": "VR-Simulations-MP",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 21,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "VR-Simulations-V2",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 15,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "wcei-craft",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 17,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "wellbeing-relias-wordpress",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "wopi-service",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 61,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "workflow-service",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 80,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "xm-app",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 9,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "xm-gitops",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 1,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "yzhong-test1",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 5,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    },
+    {
+      "Repository": "zoom-integration-poc",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "PRIVATE",
+      "BranchCount": 5,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    }
+  ]
+}

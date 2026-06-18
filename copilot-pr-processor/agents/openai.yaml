@@ -1,0 +1,4 @@
+interface:
+  display_name: "Copilot PR Processor"
+  short_description: "Drive existing PRs through Copilot review"
+  default_prompt: "Use $copilot-pr-processor to process an existing pull request until GitHub Copilot PR Reviewer has no actionable comments."

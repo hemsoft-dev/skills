@@ -1,0 +1,208 @@
+{
+  "DateRange": {
+    "From": "2026-06-10",
+    "To": "2026-06-11"
+  },
+  "GeneratedAt": "2026-06-11 21:18:33",
+  "Username": "fhemmer",
+  "ActionItems": [],
+  "ChannelActivity": {
+    "dev-tribe": {
+      "RecentMessages": [
+        {
+          "Text": "<!channel> ACTION ITEMS: • We have reactivated GitHub access for 19 individuals who recently lost access. Please reach out to your manager if your account is still disabled. New Updates • We successfu...",
+          "Timestamp": "2026-06-11 16:30",
+          "From": "Sharada Tanikella"
+        },
+        {
+          "Text": "<!channel> I am planning to reboot <http://stg-us-util01.reliasdev.int|stg-us-util01.reliasdev.int> to troubleshoot some IIS issues.",
+          "Timestamp": "2026-06-11 15:27",
+          "From": "Michael McCormick"
+        },
+        {
+          "Text": "<@U051KE2U003|stanikella>, <@U032050R2TY|Malia Paul>, with: > FYI that Runners are disabled and you will need to reach out to your managers if you need it once we resume activities. Are we expecting C...",
+          "Timestamp": "2026-06-11 09:44",
+          "From": "Wes Wood"
+        },
+        {
+          "Text": "I don't recommend turning on SMS as an additional 2FA option, I'm assuming it goes against whatever Relias constraints are configured because it locked me into a loop asking me to update my 2FA and wo...",
+          "Timestamp": "2026-06-11 09:38",
+          "From": "Jason Goodyke"
+        }
+      ],
+      "TotalMessages": 4
+    },
+    "dev-ex-private": {
+      "RecentMessages": [
+        {
+          "Text": "Pending review on relias-engineering/rlms-website - <https://github.com/orgs/relias-engineering/teams/productivity-engineering/settings/reminders/92327|Manage reminder> [#1844] <https://github.com/rel...",
+          "Timestamp": "2026-06-11 09:13",
+          "From": "github"
+        }
+      ],
+      "TotalMessages": 1
+    },
+    "prod-eng-devex-private": {
+      "RecentMessages": [
+        {
+          "Text": "Just taking care of business while Bryan is on PTO",
+          "Timestamp": "2026-06-11 16:59",
+          "From": "Nick Peterson"
+        },
+        {
+          "Text": "",
+          "Timestamp": "2026-06-11 16:59",
+          "From": "Nick Peterson"
+        }
+      ],
+      "TotalMessages": 2
+    }
+  },
+  "DirectMessages": [
+    {
+      "Text": "If we do go down that route, ECM would prefer it all gets documented by SYS tickets.",
+      "Timestamp": "2026-06-11 15:06",
+      "From": "Charlotte Fowler"
+    },
+    {
+      "Text": "We could do that, knowing we'll have to undo it all later.",
+      "Timestamp": "2026-06-11 15:05",
+      "From": "Charlotte Fowler"
+    },
+    {
+      "Text": "I have no access to Github at all at the moment (I was on PTO when the \"remediate or lose your access\" deadline passed), so maybe don't go pinning you...",
+      "Timestamp": "2026-06-11 15:03",
+      "From": "Charlotte Fowler"
+    },
+    {
+      "Text": "It shouldn't. Those are other projects that have been allowed to share the service connection.",
+      "Timestamp": "2026-06-11 15:02",
+      "From": "Charlotte Fowler"
+    },
+    {
+      "Text": "We should set it on the GitHub app",
+      "Timestamp": "2026-06-11 15:09",
+      "From": "Kyle McDaniel"
+    },
+    {
+      "Text": "Is that the right repo <@U087SA5AE1H|Yuhua>?",
+      "Timestamp": "2026-06-11 15:26",
+      "From": "Malia Paul"
+    },
+    {
+      "Text": "We'll be fixing this all up right on Monday when John and Bryan are back",
+      "Timestamp": "2026-06-11 15:08",
+      "From": "Malia Paul"
+    },
+    {
+      "Text": "I think that's why my quality group is reporting the connection was all setup via John. We'll redo it all on Monday.",
+      "Timestamp": "2026-06-11 15:04",
+      "From": "Malia Paul"
+    },
+    {
+      "Text": "Sounds good! I'm hoping to go unblock my sister (long sad story) by helping her with some financials soon so I will be offline as well. If you want to...",
+      "Timestamp": "2026-06-11 15:03",
+      "From": "Malia Paul"
+    },
+    {
+      "Text": "Yeah Charlotte you are now holding the whole organization together.",
+      "Timestamp": "2026-06-11 15:02",
+      "From": "Malia Paul"
+    },
+    {
+      "Text": "I updated the github app to only allow these two",
+      "Timestamp": "2026-06-11 15:21",
+      "From": "Nick Peterson"
+    },
+    {
+      "Text": "I joined our previous teams link",
+      "Timestamp": "2026-06-11 15:17",
+      "From": "Nick Peterson"
+    },
+    {
+      "Text": "Can I start a huddle so we have eyes on this?",
+      "Timestamp": "2026-06-11 15:10",
+      "From": "Nick Peterson"
+    },
+    {
+      "Text": "<@U01GHAS5A8L|Kyle McDaniel> <@U2XMZDPJ7|Franz> thoughts on the GitHub App repo restriction vs the Service Account restriction?",
+      "Timestamp": "2026-06-11 15:09",
+      "From": "Nick Peterson"
+    },
+    {
+      "Text": "They'll truly be thankful",
+      "Timestamp": "2026-06-11 15:08",
+      "From": "Nick Peterson"
+    },
+    {
+      "Text": "_Heartbeat — 9:11 PM_ _New email:_ LinkedIn &lt;messages-noreply@linkedin.com&gt; — View Bjørn Bredahl’s post and your next steps",
+      "Timestamp": "2026-06-11 21:12",
+      "From": "Slack Skill Bot"
+    },
+    {
+      "Text": "_Heartbeat — 8:11 PM_ _New email:_ LinkedIn &lt;notifications-noreply@linkedin.com&gt; — You have 1 new message",
+      "Timestamp": "2026-06-11 20:12",
+      "From": "Slack Skill Bot"
+    },
+    {
+      "Text": "_Heartbeat — 7:11 PM_ _New email:_ Discord &lt;noreply@discord.com&gt; — synthparadox mentioned you in Egg, Inc.",
+      "Timestamp": "2026-06-11 19:12",
+      "From": "Slack Skill Bot"
+    },
+    {
+      "Text": "_Heartbeat — 5:11 PM_ _New email:_ Google AI Studio &lt;googleaistudio-noreply@google.com&gt; — [Reminder] [Action Required] Secure your Gemini API ac...",
+      "Timestamp": "2026-06-11 17:12",
+      "From": "Slack Skill Bot"
+    },
+    {
+      "Text": "_Heartbeat — 4:11 PM_ _New email:_ Aria @ HeyGen — Join us for HeyGen Hangouts - A happy hour &amp; networking event coming to Los Angeles!",
+      "Timestamp": "2026-06-11 16:12",
+      "From": "Slack Skill Bot"
+    },
+    {
+      "Text": "yes, thanks!",
+      "Timestamp": "2026-06-11 15:26",
+      "From": "Yuhua Zhong"
+    }
+  ],
+  "Announcements": [
+    {
+      "Text": "<!channel> ACTION ITEMS: • We have reactivated GitHub access for 19 individuals who recently lost access. Please reach out to your manager if your account is still disabled. New Updates • We successfully completed a build for the Platform Reporting S...",
+      "Timestamp": "2026-06-11 16:30",
+      "Permalink": "https://relias-engineering.slack.com/archives/C1KAF274N/p1781209832436239",
+      "From": "Sharada Tanikella",
+      "Channel": "dev-tribe"
+    },
+    {
+      "Text": "<!channel> I am planning to reboot <http://stg-us-util01.reliasdev.int|stg-us-util01.reliasdev.int> to troubleshoot some IIS issues.",
+      "Timestamp": "2026-06-11 15:27",
+      "Permalink": "https://relias-engineering.slack.com/archives/C1KAF274N/p1781206050046909",
+      "From": "Michael McCormick",
+      "Channel": "dev-tribe"
+    },
+    {
+      "Text": "Pending review on relias-engineering/rlms-website - <https://github.com/orgs/relias-engineering/teams/productivity-engineering/settings/reminders/92327|Manage reminder> [#1844] <https://github.com/relias-engineering/rlms-website/pull/1844|Testing for...",
+      "Timestamp": "2026-06-11 09:13",
+      "Permalink": "https://relias-engineering.slack.com/archives/C066QPRDTLJ/p1781183618768859",
+      "From": "github",
+      "Channel": "dev-ex-private"
+    }
+  ],
+  "Mentions": [
+    {
+      "Text": "<@U01GHAS5A8L|Kyle McDaniel> <@U2XMZDPJ7|Franz> thoughts on the GitHub App repo restriction vs the Service Account restriction?",
+      "Timestamp": "2026-06-11 15:09",
+      "Permalink": "https://relias-engineering.slack.com/archives/C0B9WB5F4A1/p1781204957713009",
+      "From": "Nick Peterson",
+      "Channel": "mpdm-cfowler--fhemmer--npeterson--kmcdaniel--mapaul--yzhong-1"
+    }
+  ],
+  "Summary": {
+    "Mentions": 1,
+    "ChannelMessages": 7.0,
+    "ActionItems": 0,
+    "Channels": 3,
+    "DirectMessages": 21,
+    "Announcements": 3
+  }
+}

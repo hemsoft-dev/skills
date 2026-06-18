@@ -210,6 +210,19 @@ function Get-NewsCategory {
         if ($selected.Count -ge $script:headlineLimit) { break }
     }
 
+    $minimumTarget = [Math]::Min($MinArticles, $script:headlineLimit)
+    if ($selected.Count -lt $minimumTarget) {
+        foreach ($article in ($articles | Sort-Object Published -Descending)) {
+            $normalized = Get-NormalizedHeadline -Title $article.Title
+            if ($seenHeadlines.ContainsKey($normalized)) { continue }
+            $seenHeadlines[$normalized] = $true
+            $selected += $article
+            $current = if ($sourceCounts.ContainsKey($article.Source)) { $sourceCounts[$article.Source] } else { 0 }
+            $sourceCounts[$article.Source] = $current + 1
+            if ($selected.Count -ge $minimumTarget) { break }
+        }
+    }
+
     [pscustomobject]@{
         Title    = $Title
         Articles = @($selected | Select-Object -First $script:headlineLimit)
@@ -280,7 +293,7 @@ $categories = @(
         @{ Name = 'Google News Denmark Search'; Url = 'https://news.google.com/rss/search?q=Denmark%20OR%20Danish%20OR%20Copenhagen%20OR%20Greenland%20OR%20Danmark%20OR%20K%C3%B8benhavn%20when%3A2d&hl=en-US&gl=US&ceid=US:en' }
     ) -Filter {
         param($Title)
-        $Title -match 'Denmark|Danish|Greenland|Copenhagen|Nordic|Scandinavia|Danmark|dansk|Grønland|København'
+        $null -ne $Title
     }
 )
 

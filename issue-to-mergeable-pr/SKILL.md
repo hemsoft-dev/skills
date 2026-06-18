@@ -1,6 +1,6 @@
 ---
 name: issue-to-mergeable-pr
-description: V1.0 - Turns the oldest GitHub Issue into a clean branch and PR, then iterates with CodeRabbitAI and Macroscope until the PR is merge-ready.
+description: V1.1 - Turns the oldest GitHub Issue into a clean branch and PR, then iterates with repo-appropriate automated PR review until the PR is merge-ready.
 compatibility: Requires git, GitHub CLI authentication, network access, and a GitHub repository with Issues and Pull Requests enabled.
 hooks:
   PostToolUse:
@@ -47,10 +47,10 @@ Use this skill when asked to turn the oldest GitHub Issue into a pull request, o
 Start by creating a Codex goal. If a goal tool is available, create the goal with this objective. If only slash commands are available, ask the user to run the slash command exactly.
 
 ```text
-/goal Take the oldest GitHub Issue and create a branch for it, work the issue to the best of your ability and create a PR. Pause 3 minutes and see if you get any PR feedback from coderabbitai and/or macroscope. Address comments, keep requesting a review until you are confident all issues have been addressed and that the PR review products are happy with your work. Make sure you have good worktree/branch hygiene. Don't start on dangling branches and clean up before and after yourself.
+/goal Take the oldest GitHub Issue and create a branch for it, work the issue to the best of your ability and create a PR. Request the repo-appropriate automated PR review product, wait for feedback, address comments, and keep requesting review until you are confident all issues have been addressed and the repo's required review signal is satisfied. Make sure you have good worktree/branch hygiene. Don't start on dangling branches and clean up before and after yourself.
 ```
 
-Before branching, deduplicate the open issue queue and separate overlapping scope so the PR implements one clear, non-overlapping issue. The goal is achieved when the PR is ready to merge with the expected bot approval signal and no unresolved substantive feedback. Do not merge unless the user explicitly asks for merge.
+Before branching, deduplicate the open issue queue and separate overlapping scope so the PR implements one clear, non-overlapping issue. The goal is achieved when the PR is ready to merge with the repo-specific automated review signal and no unresolved substantive feedback. Do not merge unless the user explicitly asks for merge.
 
 ## Preflight
 
@@ -59,6 +59,28 @@ Before branching, deduplicate the open issue queue and separate overlapping scop
 3. Do not start from a dangling, stale, detached, or unrelated feature branch. Switch to the default branch and pull latest before creating a new branch.
 4. If the worktree has user changes, stop and ask unless they are clearly part of the same requested issue.
 5. Use the `commit-and-cleanup` skill's discipline for stale worktrees: prune registered missing worktrees, never delete ambiguous worktrees without confirmation, and leave active unmerged work alone.
+
+## Automated Reviewer Policy
+
+Select the automated PR reviewer from repository ownership before posting any review trigger.
+
+1. Classify the repository:
+
+   ```powershell
+   gh repo view --json owner,name,visibility,url
+   ```
+
+2. Use this policy table:
+
+   | Repository | Automated review product | Request method | Readiness signal |
+   | --- | --- | --- | --- |
+   | Private `HemSoft/*` repos | CodeRabbitAI and Macroscope | Post `@coderabbitai review` and `@Macroscope-App review` PR comments | Both products have reviewed the latest meaningful commit and no substantive feedback remains |
+   | Relias-owned repos, including `Relias/*` and `Relias-Engineering/*` | GitHub Copilot PR Reviewer only | Request Copilot through the PR Reviewers menu or verified repo automation | Copilot has reviewed or the configured automatic review has run, actionable Copilot comments are addressed, and normal checks/review requirements are satisfied |
+   | Any other repo | Ask the user before using third-party reviewers | Do not assume CodeRabbitAI or Macroscope are allowed | Use the user-approved reviewer path |
+
+3. Never post CodeRabbitAI or Macroscope triggers on Relias work.
+4. Treat Copilot PR Reviewer as a code-review feedback source, not an approving reviewer. GitHub's Copilot code review normally leaves a `Comment` review rather than an `Approve` or `Request changes` review.
+5. If a Relias repo does not expose Copilot PR Reviewer or automatic Copilot review, record that evidence and continue with human/repository checks instead of falling back to CodeRabbitAI or Macroscope.
 
 ## Issue Queue Hygiene
 
@@ -103,14 +125,18 @@ Before selecting or implementing the oldest issue, inspect the open issue queue 
 
 ## Review Loop
 
-1. Request automated review after the PR exists:
+1. Request automated review after the PR exists, using the [Automated Reviewer Policy](#automated-reviewer-policy).
+
+   For private `HemSoft/*` repos only:
 
    ```powershell
    gh pr comment {pr-number} --body "@coderabbitai review"
-   gh pr comment {pr-number} --body "@macroscope review"
+   gh pr comment {pr-number} --body "@Macroscope-App review"
    ```
 
-2. Pause three minutes after posting review requests:
+   For Relias repos, request GitHub Copilot PR Reviewer only. Use the GitHub PR Reviewers menu or verified repo automation for Copilot code review; do not post CodeRabbitAI or Macroscope comments.
+
+2. Pause three minutes after posting or requesting automated review:
 
    ```powershell
    Start-Sleep -Seconds 180
@@ -123,10 +149,10 @@ Before selecting or implementing the oldest issue, inspect the open issue queue 
    gh api repos/{owner}/{repo}/pulls/{pr-number}/comments
    ```
 
-4. Address each substantive CodeRabbitAI or Macroscope comment by changing code, adding tests, or replying with a specific reason no change is needed.
+4. Address each substantive automated-review comment by changing code, adding tests, or replying with a specific reason no change is needed.
 5. Follow the `pr-reviewer` skill rule: never mass-resolve review threads programmatically. Let code changes make comments outdated, or reply substantively in the thread.
 6. After fixes, rerun relevant verification, commit, push, and request review again when there is new signal to review.
-7. Use judgment with rate limits and duplicate-review refusals. Do not spam CodeRabbitAI or Macroscope if they explicitly decline, hit rate limits, or already reviewed the latest commit.
+7. Use judgment with rate limits and duplicate-review refusals. Do not spam the selected review product if it explicitly declines, hits rate limits, or already reviewed the latest commit.
 
 ## Oldest PR Merge Readiness
 
@@ -136,16 +162,20 @@ Once the issue work has a PR, or when asked to continue PR readiness, take the o
 gh pr list --state open --limit 1000 --json number,title,createdAt,url,headRefName,reviewDecision --jq "sort_by(.createdAt)[0]"
 ```
 
-Check whether it has approval from both CodeRabbitAI and Macroscope. Treat bot identity by current GitHub review/comment author names; commonly this means an author login containing `coderabbitai` and one containing `macroscope`.
+Check the repo-appropriate review signal before declaring readiness.
 
-If either approval is missing:
+For private `HemSoft/*` repos, verify approval or satisfactory latest feedback from both CodeRabbitAI and Macroscope. Treat bot identity by current GitHub review/comment author names; commonly this means an author login containing `coderabbitai` and one containing `macroscope`.
 
-1. Request the missing review with the matching PR comment.
+For Relias repos, verify GitHub Copilot PR Reviewer has reviewed the PR or automatic Copilot review has run when available. Do not require CodeRabbitAI or Macroscope approval for Relias work. Do not treat Copilot's `Comment` review as a branch-protection approval; use it as feedback that must be addressed alongside normal repository checks and any human review requirements.
+
+If the required repo-specific review signal is missing:
+
+1. Request the missing review with the repo-specific request method.
 2. Wait three minutes.
 3. Re-fetch reviews and comments.
 4. Address new feedback and repeat only when useful.
 
-The PR is ready when checks are acceptable, merge state is not blocked by unresolved known issues, substantive bot feedback has been addressed, and both review products are satisfied or cannot reasonably re-review because of documented rate limits or duplicate-review limits.
+The PR is ready when checks are acceptable, merge state is not blocked by unresolved known issues, substantive automated-review feedback has been addressed, and the repo-specific review policy is satisfied or cannot reasonably re-review because of documented availability, rate-limit, or duplicate-review limits.
 
 ## Closeout
 
@@ -165,5 +195,7 @@ The PR is ready when checks are acceptable, merge state is not blocked by unreso
 - Letting two open issues retain the same acceptance criteria or shared scope.
 - Force-pushing shared branches without explicit reason.
 - Treating "PR created" as done before review feedback is checked.
+- Posting CodeRabbitAI or Macroscope review triggers on Relias-owned repositories.
+- Treating Copilot PR Reviewer comments as branch-protection approval.
 - Programmatically resolving review threads instead of addressing them.
 - Merging the PR without explicit user instruction.

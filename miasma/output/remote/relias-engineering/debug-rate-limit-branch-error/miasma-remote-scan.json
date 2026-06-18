@@ -1,0 +1,48 @@
+{
+  "Owner": "relias-engineering",
+  "StartedAt": "2026-06-08T21:21:22.9984487-04:00",
+  "FinishedAt": "2026-06-08T21:21:25.9088116-04:00",
+  "Since": "2026-06-01T04:00:00Z",
+  "Until": "2026-06-09T01:21:22Z",
+  "ScanMode": "BranchTip",
+  "RepositoriesScanned": 1,
+  "Visibility": "all-visible",
+  "RepositoryFilter": [
+    "supernurse-backend"
+  ],
+  "RepositoryLimit": 0,
+  "ApiRequestsApproximate": 2,
+  "RepositoriesWithSetupJs": 0,
+  "RepositoriesWithAnyIndicator": 0,
+  "IndicatorPaths": [
+    ".github/setup.js",
+    ".claude/settings.json",
+    ".gemini/settings.json",
+    ".cursor/rules/setup.mdc",
+    ".vscode/tasks.json",
+    "binding.gyp"
+  ],
+  "Errors": [
+    {
+      "Repository": "supernurse-backend",
+      "Branch": "",
+      "Type": "branch-list-failed",
+      "Path": "repos/relias-engineering/supernurse-backend/branches?per_page=100",
+      "ExitCode": 1,
+      "Message": "gh: API rate limit exceeded for user ID 198812684. If you reach out to GitHub Support for help, please include the request ID F167:32A224:CAAF6A:2FBC967:6A276A95 and timestamp 2026-06-09 01:21:25 UTC. For more on scraping GitHub and how it may affect your rights, please review our Terms of Service (https://docs.github.com/en/site-policy/github-terms/github-terms-of-service) (HTTP 403)"
+    }
+  ],
+  "Results": [
+    {
+      "Repository": "supernurse-backend",
+      "IsArchived": false,
+      "IsFork": false,
+      "Visibility": "INTERNAL",
+      "BranchCount": 0,
+      "ScannedCommitCount": 0,
+      "JuneCommitCount": 0,
+      "FindingCount": 0,
+      "Findings": []
+    }
+  ]
+}

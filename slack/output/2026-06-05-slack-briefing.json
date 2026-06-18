@@ -1,0 +1,419 @@
+{
+  "Username": "fhemmer",
+  "DateRange": {
+    "From": "2026-06-04",
+    "To": "2026-06-05"
+  },
+  "ChannelActivity": {
+    "dev-tribe": {
+      "TotalMessages": 27,
+      "RecentMessages": [
+        {
+          "From": "Yuhua Zhong",
+          "Text": "UPDATE: IT are still working on this. No change in the action plan",
+          "Timestamp": "2026-06-05 18:06"
+        },
+        {
+          "From": "Yuhua Zhong",
+          "Text": "If it is not accessible to our repos it may be ok.",
+          "Timestamp": "2026-06-05 13:02"
+        },
+        {
+          "From": "Samuel Renkert",
+          "Text": "Being super cautious, things like notepad++ and Is MSSQL Manager are allowed?",
+          "Timestamp": "2026-06-05 12:40"
+        },
+        {
+          "From": "Malia Paul",
+          "Text": "Todd said not to touch a thing while they scan.",
+          "Timestamp": "2026-06-05 12:40"
+        },
+        {
+          "From": "Yuhua Zhong",
+          "Text": "Not sure Malia. IT(led by Todd) is running the operations and I haven't been following closely.",
+          "Timestamp": "2026-06-05 12:37"
+        },
+        {
+          "From": "Jeff Hannan",
+          "Text": "IMO- there's no downside of rotating one's personal access token",
+          "Timestamp": "2026-06-05 12:33"
+        },
+        {
+          "From": "Malia Paul",
+          "Text": "<@U087SA5AE1H|Yuhua> has this been discussed (Jason's question on PATS)?",
+          "Timestamp": "2026-06-05 12:32"
+        },
+        {
+          "From": "Jason Twichell",
+          "Text": "Should we proactively invalidate our PATS?",
+          "Timestamp": "2026-06-05 12:30"
+        },
+        {
+          "From": "Yuhua Zhong",
+          "Text": "<!channel> IMPORTANT: We are currently seeing instability issues in our repositories and actively working to identify the cause. As part of this identification and assist with trouble shooting, all en...",
+          "Timestamp": "2026-06-05 12:25"
+        },
+        {
+          "From": "Grayson Gould",
+          "Text": "I've been perusing repos, and it seems to have affected nearly every active branch in every github repo around 9 or 10 last night",
+          "Timestamp": "2026-06-05 12:25"
+        }
+      ]
+    },
+    "ai-chapter": {
+      "TotalMessages": 6,
+      "RecentMessages": [
+        {
+          "From": "Darren Jack",
+          "Text": "Yep, especially b/c that setup.js is now deleted",
+          "Timestamp": "2026-06-05 10:59"
+        },
+        {
+          "From": "John Martin",
+          "Text": "Looks like it could be part of a fairly new supply chain attack, miasma worm? <https://safedep.io/miasma-worm-ai-coding-agent-config-injection/>",
+          "Timestamp": "2026-06-05 10:55"
+        },
+        {
+          "From": "Lakshmi Kondragunta",
+          "Text": "see <@U66AF226Q|Warren> message in dev-tribe",
+          "Timestamp": "2026-06-05 10:50"
+        },
+        {
+          "From": "Charlette Bauer",
+          "Text": "It is in authorization repo as well",
+          "Timestamp": "2026-06-05 10:48"
+        },
+        {
+          "From": "Darren Jack",
+          "Text": "there seem to be some IDE scripts as well as .github/setup.js. It's been force pushed to every branch in our repo. Can someone tell us the purpose?",
+          "Timestamp": "2026-06-05 10:39"
+        },
+        {
+          "From": "Gray Anthony",
+          "Text": "",
+          "Timestamp": "2026-06-05 09:51"
+        }
+      ]
+    },
+    "next-deployment": {
+      "TotalMessages": 3,
+      "RecentMessages": [
+        {
+          "From": "Samuel Renkert",
+          "Text": "<@U0AS26FMH4N|Wes Wood> This is the process we follow: <https://relias.atlassian.net/wiki/spaces/RLPD/pages/5136646145/Content+Scheduler+Service+Deployment+Procedure+Guidelines>",
+          "Timestamp": "2026-06-05 17:27"
+        },
+        {
+          "From": "Wes Wood",
+          "Text": "<@U042C8XQV0F|cmoore> , <@UB6J3MF71> , <@U04PPKTNQBE|Samuel> , apologies for the direct ping on this, is there guidance on this topic documented that myself and the team can refer to for standard prac...",
+          "Timestamp": "2026-06-05 08:22"
+        },
+        {
+          "From": "Anushweta Balsaraf",
+          "Text": "Hi <!here> Good morning, Have one query regarding reverting code strategy from DEV1. If ticket is not marked as DONE till branch cut day at the sprint end. Which repos needs to consider for this rever...",
+          "Timestamp": "2026-06-05 02:02"
+        }
+      ]
+    },
+    "prod-eng-devex-private": {
+      "TotalMessages": 17,
+      "RecentMessages": [
+        {
+          "From": "Franz Hemmer",
+          "Text": "Done supernurse-backend branches=159 juneCommits=36 findings=2 MATCH supernurse-backend cb94373e9c7b paths=[.github/setup.js, .claude/settings.json, .gemini/settings.json, .cursor/rules/setup.mdc, .vs...",
+          "Timestamp": "2026-06-05 22:50"
+        },
+        {
+          "From": "Franz Hemmer",
+          "Text": "Going to take many hours to complete the scan. Regardless, I could have the script kill the commits as it goes, or after the scan or whatever.",
+          "Timestamp": "2026-06-05 22:44"
+        },
+        {
+          "From": "Franz Hemmer",
+          "Text": "I have a script that can find the worm commit in our repos. I'd recommend we kill those commits but want to get consensus. Anybody checking out those branches with VSCode will trigger the worm. It may...",
+          "Timestamp": "2026-06-05 22:44"
+        },
+        {
+          "From": "Bryan Halterman",
+          "Text": "Do we still need the rule on",
+          "Timestamp": "2026-06-05 22:14"
+        },
+        {
+          "From": "Malia Paul",
+          "Text": "I'm also blocking force pushes because that's what the worm does - it impersonates and does a force push of the bad code (and forces it)",
+          "Timestamp": "2026-06-05 20:23"
+        },
+        {
+          "From": "Malia Paul",
+          "Text": "I think I got it. thanks <@U69NKFZ9A|Nick>",
+          "Timestamp": "2026-06-05 20:20"
+        },
+        {
+          "From": "Nick Peterson",
+          "Text": "after restart",
+          "Timestamp": "2026-06-05 20:12"
+        },
+        {
+          "From": "Nick Peterson",
+          "Text": "my github ui is working better now",
+          "Timestamp": "2026-06-05 20:12"
+        },
+        {
+          "From": "Nick Peterson",
+          "Text": "^-- this would let us control the gating org-wide",
+          "Timestamp": "2026-06-05 19:16"
+        },
+        {
+          "From": "Nick Peterson",
+          "Text": "```Recommended next step Create a new org-level ruleset mirroring the SonarCloud one but for Snyk. Go to: github.com/organizations/relias-engineering/settings/rules → New ruleset Add the three require...",
+          "Timestamp": "2026-06-05 19:15"
+        }
+      ]
+    },
+    "relias-engineering": {
+      "TotalMessages": 2,
+      "RecentMessages": [
+        {
+          "From": "Yuhua Zhong",
+          "Text": "<!channel>",
+          "Timestamp": "2026-06-05 12:26"
+        },
+        {
+          "From": "Yuhua Zhong",
+          "Text": "",
+          "Timestamp": "2026-06-05 12:26"
+        }
+      ]
+    }
+  },
+  "Mentions": [
+    {
+      "From": "Malia Paul",
+      "Text": "Anyone remember how to turn gating back on for Snyk in github? <@U01RRQXEEG5|Halterman> <@U2XMZDPJ7|Franz> <@U69NKFZ9A|Nick>?",
+      "Timestamp": "2026-06-05 19:01",
+      "Permalink": "https://relias-engineering.slack.com/archives/C09LB1CM1BK/p1780700482398499?thread_ts=1780700482.398499",
+      "Channel": "prod-eng-devex-private"
+    },
+    {
+      "From": "Malia Paul",
+      "Text": "I just shared that on this call that they dragged me into. Thanks <@U2XMZDPJ7|Franz>",
+      "Timestamp": "2026-06-05 16:52",
+      "Permalink": "https://relias-engineering.slack.com/archives/C0B8LCKSTQW/p1780692754898949",
+      "Channel": "mpdm-mapaul--jomartin--fhemmer--npeterson-1"
+    }
+  ],
+  "ActionItems": [],
+  "DirectMessages": [
+    {
+      "From": "John Martin",
+      "Text": "<https://safedep.io/miasma-worm-ai-coding-agent-config-injection/> yeah I'm not sure. and idk what the scope of credentials can be harvested once thes...",
+      "Timestamp": "2026-06-05 16:26"
+    },
+    {
+      "From": "John Martin",
+      "Text": "but yeah, having everyone reset all their credentials is probably a realistic next step",
+      "Timestamp": "2026-06-05 16:24"
+    },
+    {
+      "From": "John Martin",
+      "Text": "yeah, and we probably need some way to mass revert the commits that added those files",
+      "Timestamp": "2026-06-05 16:23"
+    },
+    {
+      "From": "John Martin",
+      "Text": "yeah so I'm not sure if there's any way to find people who have been abusing the source push or not, but that's probably the best way to find the mali...",
+      "Timestamp": "2026-06-05 16:17"
+    },
+    {
+      "From": "John Martin",
+      "Text": "yeah, it's not just mine - it's in a lot of branches across github",
+      "Timestamp": "2026-06-05 16:16"
+    },
+    {
+      "From": "Malia Paul",
+      "Text": "Rotate these credentials: GitHub personal access tokens SSH keys Azure credentials",
+      "Timestamp": "2026-06-05 17:00"
+    },
+    {
+      "From": "Malia Paul",
+      "Text": "I just shared that on this call that they dragged me into. Thanks <@U2XMZDPJ7|Franz>",
+      "Timestamp": "2026-06-05 16:52"
+    },
+    {
+      "From": "Malia Paul",
+      "Text": "Yeah, that's part of the problem",
+      "Timestamp": "2026-06-05 16:16"
+    },
+    {
+      "From": "Malia Paul",
+      "Text": "But no FOMO if they need us they'll let us know",
+      "Timestamp": "2026-06-05 15:53"
+    },
+    {
+      "From": "Malia Paul",
+      "Text": "I'm clearly not in it",
+      "Timestamp": "2026-06-05 15:53"
+    },
+    {
+      "From": "Nick Peterson",
+      "Text": "I'll be here to help soon as we have an idea of the impact",
+      "Timestamp": "2026-06-05 15:36"
+    },
+    {
+      "From": "Nick Peterson",
+      "Text": "Wanna have a devex huddle?",
+      "Timestamp": "2026-06-05 15:08"
+    },
+    {
+      "From": "Nick Peterson",
+      "Text": "What you up to?",
+      "Timestamp": "2026-06-05 15:08"
+    },
+    {
+      "From": "Nick Peterson",
+      "Text": "Yeah but I am technically off today, I took it off to work with my bro on a separate passion project. But he is busy atm, so I'm free for the next hou...",
+      "Timestamp": "2026-06-05 15:07"
+    },
+    {
+      "From": "Nick Peterson",
+      "Text": "Going to take this next week to settle in everybody into the house",
+      "Timestamp": "2026-06-05 15:06"
+    },
+    {
+      "From": "Slack Skill Bot",
+      "Text": "_Heartbeat — 8:11 PM_ _New email:_ Descript — Still importing recordings into Descript? There's a faster way. _New email:_ LinkedIn — Mark Russinovich...",
+      "Timestamp": "2026-06-05 20:12"
+    },
+    {
+      "From": "Slack Skill Bot",
+      "Text": "_Heartbeat — 7:11 PM_ _New email:_ Discord &lt;noreply@discord.com&gt; — Egg, Inc. Bot mentioned you in Egg, Inc. _New email:_ Dr. Alex Wissner-Gross ...",
+      "Timestamp": "2026-06-05 19:12"
+    },
+    {
+      "From": "Slack Skill Bot",
+      "Text": "_Heartbeat — 5:11 PM_ _New email:_ Sarah &lt;sarah@letta.ai&gt; — Letta Code Product Updates (6/5) _New email:_ Vercel &lt;ship@info.vercel.com&gt; — ...",
+      "Timestamp": "2026-06-05 17:12"
+    },
+    {
+      "From": "Slack Skill Bot",
+      "Text": "_Heartbeat - 4:11 PM_ _New email:_ Greptile &lt;hello@greptile.com&gt; - Introducing Greptile CLI",
+      "Timestamp": "2026-06-05 16:12"
+    }
+  ],
+  "Announcements": [
+    {
+      "From": "John Martin",
+      "Text": "there's a teams channel they're investigating in",
+      "Timestamp": "2026-06-05 15:44",
+      "Permalink": "https://relias-engineering.slack.com/archives/C0B8LCKSTQW/p1780688654152069",
+      "Channel": "mpdm-mapaul--jomartin--fhemmer--npeterson-1"
+    },
+    {
+      "From": "Malia Paul",
+      "Text": "",
+      "Timestamp": "2026-06-05 14:48",
+      "Permalink": "https://relias-engineering.slack.com/archives/D03BACQH6GG/p1780685288892709",
+      "Channel": "U032050R2TY"
+    },
+    {
+      "From": "Yuhua Zhong",
+      "Text": "<!channel>",
+      "Timestamp": "2026-06-05 12:26",
+      "Permalink": "https://relias-engineering.slack.com/archives/G019Q7P5J73/p1780676789256999",
+      "Channel": "relias-engineering"
+    },
+    {
+      "From": "Malia Paul",
+      "Text": "",
+      "Timestamp": "2026-06-05 12:26",
+      "Permalink": "https://relias-engineering.slack.com/archives/C09LB1CM1BK/p1780676786751639",
+      "Channel": "prod-eng-devex-private"
+    },
+    {
+      "From": "Yuhua Zhong",
+      "Text": "",
+      "Timestamp": "2026-06-05 12:26",
+      "Permalink": "https://relias-engineering.slack.com/archives/G019Q7P5J73/p1780676777038059",
+      "Channel": "relias-engineering"
+    },
+    {
+      "From": "Malia Paul",
+      "Text": "",
+      "Timestamp": "2026-06-05 12:25",
+      "Permalink": "https://relias-engineering.slack.com/archives/C065W8AUL8P/p1780676732549339?thread_ts=1780676732.549339",
+      "Channel": "productivity-engineering-all-private"
+    },
+    {
+      "From": "Yuhua Zhong",
+      "Text": "<!channel> IMPORTANT: We are currently seeing instability issues in our repositories and actively working to identify the cause. As part of this identification and assist with trouble shooting, all engineers/developers are requested to immediately st...",
+      "Timestamp": "2026-06-05 12:25",
+      "Permalink": "https://relias-engineering.slack.com/archives/C1KAF274N/p1780676713032309?thread_ts=1780676713.032309",
+      "Channel": "dev-tribe"
+    },
+    {
+      "From": "Lakshmi Kondragunta",
+      "Text": "<!here> IMPORTANT: We are currently seeing instability issues in our repositories and actively working to identify the cause. As part of this identification and assist with trouble shooting, all engineers/developers are requested to immediately stop ...",
+      "Timestamp": "2026-06-05 12:23",
+      "Permalink": "https://relias-engineering.slack.com/archives/C08PAV8C6MQ/p1780676604122559",
+      "Channel": "technical-willowtree-discussions"
+    },
+    {
+      "From": "Bhagyashree Kurunkar",
+      "Text": "<@U0ALZCY4KQC|c.cutchin> please add me as well in the channel",
+      "Timestamp": "2026-06-05 10:36",
+      "Permalink": "https://relias-engineering.slack.com/archives/C099FU5FUQG/p1780670198130939?thread_ts=1780578515.709489",
+      "Channel": "hg-spartans-public"
+    },
+    {
+      "From": "Chuck Waltz",
+      "Text": "FYI - This channel is going to continue to be noisy for the next couple days. Feel free to mute it for now.",
+      "Timestamp": "2026-06-05 10:27",
+      "Permalink": "https://relias-engineering.slack.com/archives/C0A118BCK45/p1780669656098269",
+      "Channel": "entitlement-svc-alerts-non-prod"
+    },
+    {
+      "From": "Christopher LaGant",
+      "Text": "Relaying this message from <@U011DM4B9FW|Sarah Verte> on a different channel. every now and then I get this error for when trying to use direct assign - is this already being worked on somehwere? ```{ \"type\": \"<https://tools.ietf.org/html/rfc7231#sec...",
+      "Timestamp": "2026-06-05 09:18",
+      "Permalink": "https://relias-engineering.slack.com/archives/C098RV8P6CD/p1780665489328989?thread_ts=1780665489.328989",
+      "Channel": "hg-guardians-public"
+    },
+    {
+      "From": "Clark Bonham",
+      "Text": "I saw that <@U0AS26FMH4N|Wes Wood> is shadowing this release so added him to the channel.",
+      "Timestamp": "2026-06-05 09:05",
+      "Permalink": "https://relias-engineering.slack.com/archives/C0B56P1SWJD/p1780664725880399",
+      "Channel": "platform-deployment-26-q2-03"
+    },
+    {
+      "From": "Mike Toothaker",
+      "Text": "I noticed this too in my repositories. I asked in the ai channel, since the new files/folders seem to be ai related, but did not get a response.",
+      "Timestamp": "2026-06-05 08:46",
+      "Permalink": "https://relias-engineering.slack.com/archives/C08PAV8C6MQ/p1780663604450439?thread_ts=1780663105.433679",
+      "Channel": "technical-willowtree-discussions"
+    },
+    {
+      "From": "Cherie Cutchin",
+      "Text": "Gray Anthony has completed one. You can post in the .net channel if you have any questions Thanks!",
+      "Timestamp": "2026-06-05 07:24",
+      "Permalink": "https://relias-engineering.slack.com/archives/C0AQMPAHTTP/p1780658691673249?thread_ts=1780648397.548979",
+      "Channel": "hg-gladiators-public"
+    },
+    {
+      "From": "Bhagyashree Kurunkar",
+      "Text": "Hi <@U0ALZCY4KQC|c.cutchin>, could you please add <@U08NQNE9T96|r.kolluru> to slack channel. As its a private channel, we are unable to join.",
+      "Timestamp": "2026-06-05 01:58",
+      "Permalink": "https://relias-engineering.slack.com/archives/C099FU5FUQG/p1780639132433729?thread_ts=1780578515.709489",
+      "Channel": "hg-spartans-public"
+    }
+  ],
+  "GeneratedAt": "2026-06-06 02:07:25",
+  "Summary": {
+    "Mentions": 2,
+    "ChannelMessages": 55.0,
+    "ActionItems": 0,
+    "Announcements": 15,
+    "Channels": 5,
+    "DirectMessages": 19
+  }
+}

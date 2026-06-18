@@ -1,0 +1,182 @@
+{
+  "Date": "2026-06-17",
+  "GeneratedAt": "2026-06-17T23:14:04.9302561-04:00",
+  "Categories": [
+    {
+      "Title": "🇺🇸 US News",
+      "Articles": [
+        {
+          "Title": "Trump wants 'control of everything,' GOP strategist says as Congress faces pressure",
+          "Link": "https://www.pbs.org/newshour/show/trump-wants-control-of-everything-gop-strategist-says-as-congress-faces-pressure",
+          "Source": "PBS Politics",
+          "Published": "2026-06-17T18:45:00.0000000-04:00"
+        },
+        {
+          "Title": "Georgia Republican legislative leaders reject governor's call for 2028 redistricting",
+          "Link": "https://www.pbs.org/newshour/politics/georgia-republican-legislative-leaders-reject-governors-call-for-2028-redistricting",
+          "Source": "PBS Politics",
+          "Published": "2026-06-17T18:18:38.0000000-04:00"
+        },
+        {
+          "Title": "Trump touts preliminary deal to end the war with Iran in press conference",
+          "Link": "https://www.npr.org/2026/06/17/nx-s1-5861693/trump-touts-preliminary-deal-to-end-the-war-with-iran-in-press-conference",
+          "Source": "NPR Politics",
+          "Published": "2026-06-17T17:46:17.0000000-04:00"
+        },
+        {
+          "Title": "What Wisconsin swing voters say about Trump, the Iran war and America at 250",
+          "Link": "https://www.npr.org/2026/06/17/nx-s1-5861714/what-wisconsin-swing-voters-say-about-trump-the-iran-war-and-america-at-250",
+          "Source": "NPR Politics",
+          "Published": "2026-06-17T16:38:39.0000000-04:00"
+        },
+        {
+          "Title": "All detainees from immigration facility 'Alligator Alcatraz' have been transferred, DHS says",
+          "Link": "https://www.pbs.org/newshour/politics/all-detainees-from-immigration-facility-alligator-alcatraz-have-been-transferred-dhs-says",
+          "Source": "PBS Politics",
+          "Published": "2026-06-17T18:09:47.0000000-04:00"
+        },
+        {
+          "Title": "Takeaways from the G7: Trump's new attitude toward allies buoyed by their praise for Iran deal",
+          "Link": "https://www.pbs.org/newshour/world/takeaways-from-the-g7-trumps-new-attitude-toward-allies-buoyed-by-their-praise-for-iran-deal",
+          "Source": "PBS Politics",
+          "Published": "2026-06-17T17:54:29.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🌍 World News",
+      "Articles": [
+        {
+          "Title": "Australia news live: press gallery ‘strongly objects’ to One Nation threats to ban journalists",
+          "Link": "https://www.theguardian.com/australia-news/live/2026/jun/18/australia-news-live-non-stop-sydney-london-flights-qantas-one-nation-pauline-hanson-labor-anthony-albanese-economy-cost-of-living-ntwnfb",
+          "Source": "The Guardian",
+          "Published": "2026-06-17T23:08:36.0000000-04:00"
+        },
+        {
+          "Title": "Middle East crisis live: agreement signed by US-Iran presidents; Tehran claims it will charge ships to transit strait of Hormuz",
+          "Link": "https://www.theguardian.com/world/live/2026/jun/17/middle-east-war-iran-israel-us-donald-trump-hezbollah-lebanon-peace-deal-netanyahu-latest-news-updated",
+          "Source": "The Guardian",
+          "Published": "2026-06-17T22:50:05.0000000-04:00"
+        },
+        {
+          "Title": "Netanyahu under pressure in Israel after US-Iran agreement",
+          "Link": "https://www.aljazeera.com/video/newsfeed/2026/6/18/netanyahu-under-pressure-in-israel-after-us-iran-agreement?traffic_source=rss",
+          "Source": "Al Jazeera",
+          "Published": "2026-06-17T22:27:44.0000000-04:00"
+        },
+        {
+          "Title": "Who benefits from Zimbabwe’s lithium boom?",
+          "Link": "https://www.aljazeera.com/news/2026/6/18/who-benefits-from-zimbabwes-lithium-boom?traffic_source=rss",
+          "Source": "Al Jazeera",
+          "Published": "2026-06-17T22:26:51.0000000-04:00"
+        },
+        {
+          "Title": "G7 hails unity on Russia as Trump signals tougher line on Moscow",
+          "Link": "https://www.france24.com/en/europe/20260618-g7-unity-russia-trump-tougher-line-moscow",
+          "Source": "France 24",
+          "Published": "2026-06-17T22:15:41.0000000-04:00"
+        },
+        {
+          "Title": "Moment Trump signs US-Iran agreement at Palace of Versailles",
+          "Link": "https://www.bbc.com/news/videos/crm03y1xx2no?at_medium=RSS&at_campaign=rss",
+          "Source": "BBC",
+          "Published": "2026-06-17T21:59:38.0000000-04:00"
+        },
+        {
+          "Title": "Lula warns Trump against meddling in Brazil election after criticism of judiciary",
+          "Link": "https://www.france24.com/en/americas/20260618-lula-warns-trump-against-meddling-in-brazil-election",
+          "Source": "France 24",
+          "Published": "2026-06-17T21:48:05.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🤖 AI News",
+      "Articles": [
+        {
+          "Title": "GLM-5.2 is probably the most powerful text-only open weights LLM",
+          "Link": "https://simonwillison.net/2026/Jun/17/glm-52/#atom-everything",
+          "Source": "Simon Willison's Weblog",
+          "Published": "2026-06-17T19:58:39.0000000-04:00"
+        },
+        {
+          "Title": "datasette-tailscale 0.1a0",
+          "Link": "https://simonwillison.net/2026/Jun/16/datasette-tailscale/#atom-everything",
+          "Source": "Simon Willison's Weblog",
+          "Published": "2026-06-16T12:18:20.0000000-04:00"
+        },
+        {
+          "Title": "How to turn off AI in your Google Docs",
+          "Link": "https://techcrunch.com/2026/06/17/how-to-turn-off-ai-in-your-google-docs/",
+          "Source": "TechCrunch",
+          "Published": "2026-06-17T21:23:51.0000000-04:00"
+        },
+        {
+          "Title": "The Korean Telecom Giant at the Center of Anthropic’s Mythos Controversy",
+          "Link": "https://www.wired.com/story/sk-telecom-anthropic-mythos-export-controls/",
+          "Source": "Wired",
+          "Published": "2026-06-17T18:52:00.0000000-04:00"
+        },
+        {
+          "Title": "NEA’s Tiffany Luck says enterprises are still figuring out their AI ROI",
+          "Link": "https://techcrunch.com/video/neas-tiffany-luck-says-enterprises-are-still-figuring-out-their-ai-roi/",
+          "Source": "TechCrunch",
+          "Published": "2026-06-17T16:17:38.0000000-04:00"
+        },
+        {
+          "Title": "Anthropic got hit by export rules nobody understands",
+          "Link": "https://www.theverge.com/ai-artificial-intelligence/951703/anthropic-shutdown-export-controls",
+          "Source": "The Verge",
+          "Published": "2026-06-17T14:28:50.0000000-04:00"
+        },
+        {
+          "Title": "\"Dangerous\" AI models are coming no matter what",
+          "Link": "https://arstechnica.com/ai/2026/06/dangerous-ai-models-are-coming-no-matter-what/",
+          "Source": "Ars Technica",
+          "Published": "2026-06-17T13:50:46.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🇩🇰 Danish News",
+      "Articles": [
+        {
+          "Title": "Laid off and locked out: How a boardroom decision threatens my path to Danish citizenship",
+          "Link": "https://cphpost.dk/2026-06-18/opinion/laid-off-and-locked-out-how-a-boardroom-decision-threatens-my-path-to-danish-citizenship/",
+          "Source": "CPH Post",
+          "Published": "2026-06-17T23:00:00.0000000-04:00"
+        },
+        {
+          "Title": "CATL (03750.HK) executives visited Greenland Group to discuss advancing innovative collaboration in new energy and other fields. - 富途牛牛",
+          "Link": "https://news.google.com/rss/articles/CBMirwFBVV95cUxNVW5MM2poNzdqbmpPNjUxYkpmeWVBZDNMQkpuNXV3YUFWRGs1OWd1ZkNmdDUxNHBWYWZ3VGxwSUNTV1NQZ0ZNdTY2bFhOWExmNlI5WEkydmM0di1hX190anppU0RNc25ub3lpY3VBdEtwYXRYaEpheTFidElqQU96LWtXVmVGR1drYVhrZHJNek5nZ3BnNGJSWTdSOVpXRUFybWhSRmUwY09TcVpDaThZ?oc=5",
+          "Source": "Google News Denmark",
+          "Published": "2026-06-17T22:23:34.0000000-04:00"
+        },
+        {
+          "Title": "Microbes frozen in rubbish heaps reveal early life in Greenland - KTEN",
+          "Link": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxPaFNTVWI0RWZ6TXExM3lrVndFV1lsVmhtOXJsd2NoYjZMTWFrdmtwYTJKTXF0UXVKeGdjZ3dEYlRPUDVGX3FEb3Z4MWNZVnpRS2l3TTYwMWdGS2kzTVdpUjhoUDRidHVRVkhHTm40Yy1PRmpYb1hBREJ6MGdhMl9ZZEF4WFJvcWhaZk1EbTZwWjVsZ3FhTjJBdlh5UERjM1dOYWRQZmlvSi1PU1Fwem9idlQ5bFdXOXd2WXNTY09ZX29mTUpLVDNIYVJIRkxPZjVySkZsR3lR?oc=5",
+          "Source": "Google News Denmark",
+          "Published": "2026-06-17T22:00:18.0000000-04:00"
+        },
+        {
+          "Title": "USA og Iran har nu underskrevet rammeaftalen elektronisk",
+          "Link": "https://www.dr.dk/nyheder/seneste/medier-usa-og-iran-har-nu-underskrevet-rammeaftalen-elektronisk",
+          "Source": "DR News",
+          "Published": "2026-06-17T17:52:05.0000000-04:00"
+        },
+        {
+          "Title": "Svenske og finske betjente får grønt lys til at rykke ud i begge lande",
+          "Link": "https://www.dr.dk/nyheder/seneste/svenske-og-finske-betjente-faar-groent-lys-til-rykke-ud-i-begge-lande",
+          "Source": "DR News",
+          "Published": "2026-06-17T15:23:20.0000000-04:00"
+        },
+        {
+          "Title": "Denmark heads for a warm end to the working week",
+          "Link": "https://cphpost.dk/2026-06-17/news/round-up/denmark-heads-for-a-warm-end-to-the-working-week/",
+          "Source": "CPH Post",
+          "Published": "2026-06-17T10:00:00.0000000-04:00"
+        }
+      ]
+    }
+  ]
+}

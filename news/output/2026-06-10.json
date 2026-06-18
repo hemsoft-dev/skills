@@ -1,0 +1,182 @@
+{
+  "Date": "2026-06-10",
+  "GeneratedAt": "2026-06-11T00:01:26.6626004-04:00",
+  "Categories": [
+    {
+      "Title": "🇺🇸 US News",
+      "Articles": [
+        {
+          "Title": "WATCH LIVE: Senate Banking Committee holds hearing on artificial intelligence",
+          "Link": "https://www.pbs.org/newshour/politics/watch-live-senate-banking-committee-holds-hearing-on-artificial-intelligence",
+          "Source": "PBS Politics",
+          "Published": "2026-06-10T19:55:13.0000000-04:00"
+        },
+        {
+          "Title": "Trump administration warns hundreds of hospitals to increase price transparency or face fines",
+          "Link": "https://www.pbs.org/newshour/health/trump-administration-warns-hundreds-of-hospitals-to-increase-price-transparency-or-face-fines",
+          "Source": "PBS Politics",
+          "Published": "2026-06-10T19:27:44.0000000-04:00"
+        },
+        {
+          "Title": "Veterans and relatives see no place for Trump's arch near Arlington National Cemetery",
+          "Link": "https://www.npr.org/2026/06/10/nx-s1-5851587/trump-arch-veterans-arlington-national-cemetery",
+          "Source": "NPR Politics",
+          "Published": "2026-06-10T16:26:00.0000000-04:00"
+        },
+        {
+          "Title": "ICE denies having a protester database. But a letter to Congress sheds more light",
+          "Link": "https://www.npr.org/2026/06/10/nx-s1-5843159/ice-protester-database-dhs",
+          "Source": "NPR Politics",
+          "Published": "2026-06-10T06:00:00.0000000-04:00"
+        },
+        {
+          "Title": "Pulte unqualified for DNI role, but FISA must be extended, Rep. McCaul says",
+          "Link": "https://www.pbs.org/newshour/show/pulte-unqualified-for-dni-role-but-fisa-must-be-extended-rep-mccaul-says",
+          "Source": "PBS Politics",
+          "Published": "2026-06-10T18:40:18.0000000-04:00"
+        },
+        {
+          "Title": "Trump sticks with Pulte for intel job as risk grows of lapse in spy powers",
+          "Link": "https://www.pbs.org/newshour/politics/trump-sticks-with-pulte-for-intel-job-as-risk-grows-of-lapse-in-spy-powers",
+          "Source": "PBS Politics",
+          "Published": "2026-06-10T18:10:12.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🌍 World News",
+      "Articles": [
+        {
+          "Title": "New York Knicks stage biggest comeback in NBA finals history",
+          "Link": "https://www.france24.com/en/sport/20260611-new-york-knicks-stage-biggest-comeback-in-nba-finals-history",
+          "Source": "France 24",
+          "Published": "2026-06-10T23:59:48.0000000-04:00"
+        },
+        {
+          "Title": "Australia news live: PM casts doubt on One Nation’s $1.9m donation claim; radio listeners abandon Kiis after Kyle and Jackie O exit",
+          "Link": "https://www.theguardian.com/australia-news/live/2026/jun/11/australia-news-live-labor-coalition-one-nation-anthony-albanese-pauline-hanson-capital-gains-housing-peptides-arthritis-ntwnfb",
+          "Source": "The Guardian",
+          "Published": "2026-06-10T23:43:58.0000000-04:00"
+        },
+        {
+          "Title": "Middle East crisis live: US says second day of Iran strikes ‘completed’; Tehran claims it has targeted US base in Bahrain",
+          "Link": "https://www.theguardian.com/world/live/2026/jun/10/iran-war-updates-missile-strikes-trump-us-retaliation-middle-east-crisis-war-live",
+          "Source": "The Guardian",
+          "Published": "2026-06-10T23:39:54.0000000-04:00"
+        },
+        {
+          "Title": "FIFA’s Infantino defends US as World Cup host amid visa row, entry denials",
+          "Link": "https://www.aljazeera.com/sports/2026/6/11/fifas-infantino-defends-us-as-world-cup-host-amid-visa-row-entry-denials?traffic_source=rss",
+          "Source": "Al Jazeera",
+          "Published": "2026-06-10T23:07:23.0000000-04:00"
+        },
+        {
+          "Title": "Which World Cup teams, players and officials were denied US visas, entry?",
+          "Link": "https://www.aljazeera.com/sports/2026/6/11/which-world-cup-teams-players-and-officials-were-denied-us-visas-entry?traffic_source=rss",
+          "Source": "Al Jazeera",
+          "Published": "2026-06-10T22:24:07.0000000-04:00"
+        },
+        {
+          "Title": "Israeli strikes kill 12 in Lebanon as Netanyahu urges fight against Hezbollah",
+          "Link": "https://www.france24.com/en/middle-east/20260611-israeli-strikes-kill-12-in-lebanon-as-netanyahu-urges-fight-against-hezbollah",
+          "Source": "France 24",
+          "Published": "2026-06-10T22:11:36.0000000-04:00"
+        },
+        {
+          "Title": "Tehran targets US Gulf bases after American forces launch new strikes on Iran",
+          "Link": "https://www.bbc.com/news/articles/c4gyp9v0e93o?at_medium=RSS&at_campaign=rss",
+          "Source": "BBC",
+          "Published": "2026-06-10T21:46:18.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🤖 AI News",
+      "Articles": [
+        {
+          "Title": "Anthropic Walks Back Policy That Could Have ‘Sabotaged’ AI Researchers Using Claude",
+          "Link": "https://simonwillison.net/2026/Jun/11/anthropic-walks-back-policy/#atom-everything",
+          "Source": "Simon Willison's Weblog",
+          "Published": "2026-06-10T23:45:49.0000000-04:00"
+        },
+        {
+          "Title": "If Claude Fable stops helping you, you'll never know",
+          "Link": "https://simonwillison.net/2026/Jun/10/if-claude-fable-stops-helping-you/#atom-everything",
+          "Source": "Simon Willison's Weblog",
+          "Published": "2026-06-09T20:37:25.0000000-04:00"
+        },
+        {
+          "Title": "Anthropic’s Dario Amodei has just one direct report",
+          "Link": "https://techcrunch.com/2026/06/10/anthropics-dario-amodei-has-just-one-direct-report/",
+          "Source": "TechCrunch",
+          "Published": "2026-06-10T23:53:06.0000000-04:00"
+        },
+        {
+          "Title": "xAI fired an engineer who raised alarms about Grok safety, new lawsuit claims",
+          "Link": "https://techcrunch.com/2026/06/10/xai-fired-an-engineer-who-raised-alarms-about-grok-safety-new-lawsuit-claims/",
+          "Source": "TechCrunch",
+          "Published": "2026-06-10T18:31:19.0000000-04:00"
+        },
+        {
+          "Title": "Claude Fable won’t answer basic biology questions",
+          "Link": "https://www.theverge.com/ai-artificial-intelligence/947973/fable-wont-answer-basic-biology-questions",
+          "Source": "The Verge",
+          "Published": "2026-06-10T14:43:34.0000000-04:00"
+        },
+        {
+          "Title": "Microsoft, like, totally gets why students are booing AI-pilled graduation speakers",
+          "Link": "https://www.theverge.com/news/947831/college-speakers-booed-ai-microsoft",
+          "Source": "The Verge",
+          "Published": "2026-06-10T13:45:11.0000000-04:00"
+        },
+        {
+          "Title": "Wrongful Arrest Exposes Failures in One of the Oldest Police Face-Recognition Tools in the US",
+          "Link": "https://www.wired.com/story/wrongful-arrest-tests-one-of-the-oldest-police-face-recognition-tools-in-the-us/",
+          "Source": "Wired",
+          "Published": "2026-06-10T10:00:00.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🇩🇰 Danish News",
+      "Articles": [
+        {
+          "Title": "Full list: The highest- and lowest-paying degrees in Denmark, according to official figures",
+          "Link": "https://cphpost.dk/2026-06-11/business-education/career/full-list-the-highest-and-lowest-paying-degrees-in-denmark-according-to-official-figures/",
+          "Source": "CPH Post",
+          "Published": "2026-06-10T23:00:00.0000000-04:00"
+        },
+        {
+          "Title": "Fem betjente skuddræbt i Mexico dagen før VM-fest",
+          "Link": "https://www.dr.dk/nyheder/seneste/fem-betjente-skuddraebt-i-mexico-dagen-foer-vm-fest",
+          "Source": "DR News",
+          "Published": "2026-06-10T22:39:43.0000000-04:00"
+        },
+        {
+          "Title": "Stine Goya - FashionNetwork USA",
+          "Link": "https://news.google.com/rss/articles/CBMidkFVX3lxTE1ESi1CdUI3anRFRnRPZ254NmE5TGVRWXJWMUxyb1E4SGtUWVdzUmxSRGwxelE4bE0zTldkUm5LWFBDRW9tdjdtYWhNU1ZPcHVYSG94aFdjcGxtMTI0dDFJbHdHMkk1Y1RhTEltOHVycldMeW02Y2c?oc=5",
+          "Source": "Google News Denmark",
+          "Published": "2026-06-10T21:58:12.0000000-04:00"
+        },
+        {
+          "Title": "Kim Min-ha's Introspective Gaze Graces 'One Korea' Poster - 조선일보",
+          "Link": "https://news.google.com/rss/articles/CBMijgFBVV95cUxNN3ZEcUVPM3YyN251c0ZMZDRfQ0FUdVBoU01IN2RfX2JKbHBiUmtHN3FBVHZ3bE9BSlFGalcyTXhfdmx6cjk3dVNaSFhHc3ROVWRYRk91LUU2aWp0TVczUUR4eEUya2xuMGdFUnJNUnZQc1ltY1NMRzNTZXkzMldUZE4tS01SVmU1X0VQRnB3?oc=5",
+          "Source": "Google News Denmark",
+          "Published": "2026-06-10T21:17:04.0000000-04:00"
+        },
+        {
+          "Title": "Pave Leo: Man kan ikke tro på Jesus og promovere krig",
+          "Link": "https://www.dr.dk/nyheder/seneste/pave-leo-man-kan-ikke-tro-paa-jesus-og-promovere-krig",
+          "Source": "DR News",
+          "Published": "2026-06-10T16:03:59.0000000-04:00"
+        },
+        {
+          "Title": "EU migration pact takes effect, but several countries keep border controls",
+          "Link": "https://cphpost.dk/2026-06-10/news/round-up/eu-migration-pact-takes-effect-but-several-countries-keep-border-controls/",
+          "Source": "CPH Post",
+          "Published": "2026-06-10T10:00:00.0000000-04:00"
+        }
+      ]
+    }
+  ]
+}

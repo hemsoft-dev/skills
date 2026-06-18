@@ -1,0 +1,385 @@
+{
+  "ActionItems": [],
+  "ChannelActivity": {
+    "swatteam": {
+      "RecentMessages": [
+        {
+          "Timestamp": "2026-06-09 19:34",
+          "Text": "Yeah it should be back on CF now",
+          "From": "Mark Earl"
+        },
+        {
+          "Timestamp": "2026-06-09 19:33",
+          "Text": "Support is confirming that it's loading well for them too",
+          "From": "Emily Doyle"
+        },
+        {
+          "Timestamp": "2026-06-09 19:30",
+          "Text": "THANK YOU so much",
+          "From": "Emily Doyle"
+        },
+        {
+          "Timestamp": "2026-06-09 19:30",
+          "Text": "oh wow, it's night and day!!!",
+          "From": "Emily Doyle"
+        },
+        {
+          "Timestamp": "2026-06-09 19:29",
+          "Text": "Mark, I believe we are back on CF right. The site instantly is very responsive. So it's something definitely with Akamai",
+          "From": "Lakshmi Kondragunta"
+        },
+        {
+          "Timestamp": "2026-06-09 19:27",
+          "Text": "I guess we'll find out. new relic really doesn't look too bad so I'm not entirely sure but it wouldn't hurt to check deeper",
+          "From": "Mark Earl"
+        },
+        {
+          "Timestamp": "2026-06-09 19:24",
+          "Text": "Mark, it's at the Akamai level right, and thing I need to check at application level?",
+          "From": "Lakshmi Kondragunta"
+        },
+        {
+          "Timestamp": "2026-06-09 19:24",
+          "Text": "I'm going to cut it back to CF as it appears Akamai isn't blocking as well as we expected it to",
+          "From": "Mark Earl"
+        },
+        {
+          "Timestamp": "2026-06-09 19:24",
+          "Text": "Ahh okay. I was testing on my phone too but things aren't loading",
+          "From": "Emily Doyle"
+        },
+        {
+          "Timestamp": "2026-06-09 19:23",
+          "Text": "it's not a block. it would be access denied. I believe the origin server is becoming overwhelmed and unable to serve requests",
+          "From": "Mark Earl"
+        }
+      ],
+      "TotalMessages": 30
+    },
+    "productivity-engineering-public": {
+      "RecentMessages": [
+        {
+          "Timestamp": "2026-06-09 08:17",
+          "Text": "",
+          "From": "Malia Paul"
+        },
+        {
+          "Timestamp": "2026-06-09 05:13",
+          "Text": "Hi <@U0B28MKDMB4|ko.thite> here, I’m reaching out for assistance with a GitHub SAML account issue. My Relias SAML identity (<mailto:ko.thite@relias.com|ko.thite@relias.com>) is currently linked to my ...",
+          "From": "Komal Thite"
+        }
+      ],
+      "TotalMessages": 2
+    },
+    "prod-eng-devex-private": {
+      "RecentMessages": [
+        {
+          "Timestamp": "2026-06-09 10:19",
+          "Text": "Yes! Go to bed, throw your laptop in the closet and forget about this place until you feel better",
+          "From": "Franz Hemmer"
+        },
+        {
+          "Timestamp": "2026-06-09 10:02",
+          "Text": "I'm gonna be in and out. I have a fever and I feel awful and really should be resting.",
+          "From": "Malia Paul"
+        },
+        {
+          "Timestamp": "2026-06-09 10:02",
+          "Text": "Yes - but the calendar invite is in your name!",
+          "From": "Malia Paul"
+        },
+        {
+          "Timestamp": "2026-06-09 09:45",
+          "Text": "Malia, I'm not sure you're around but assuming we're cancelling refinement today.",
+          "From": "Franz Hemmer"
+        }
+      ],
+      "TotalMessages": 4
+    },
+    "dev-tribe": {
+      "RecentMessages": [
+        {
+          "Timestamp": "2026-06-09 21:08",
+          "Text": "We have now made Two-Factor authentication required for our GitHub organization relias-engineering. Please see the message earlier from Sharada. You need to turn on MFA for your GitHub account to acce...",
+          "From": "Franz Hemmer"
+        },
+        {
+          "Timestamp": "2026-06-09 17:50",
+          "Text": "IMPORTANT ACTION ITEMS • Please enable MFA on your GitHub account if you have not already done so. • I have reached out to everyone who still has .git files on their device. Thank you to those who act...",
+          "From": "Sharada Tanikella"
+        },
+        {
+          "Timestamp": "2026-06-09 16:19",
+          "Text": ". I want to highlight that, given the sensitivity of the ongoing investigation and mitigation, please avoid speculating about what we might be dealing with based on limited information from peers. Dis...",
+          "From": "Ajith Kallambella"
+        },
+        {
+          "Timestamp": "2026-06-09 15:39",
+          "Text": "blame Microsoft for not supporting multiple AD logins in the application",
+          "From": "Michael McCormick"
+        },
+        {
+          "Timestamp": "2026-06-09 15:38",
+          "Text": "nope, there isn't. you are crossing domains and logging in. entering a password is basically part of the process.",
+          "From": "Michael McCormick"
+        },
+        {
+          "Timestamp": "2026-06-09 14:20",
+          "Text": "There will be more updates sent on open PR's",
+          "From": "Sharada Tanikella"
+        },
+        {
+          "Timestamp": "2026-06-09 14:08",
+          "Text": "Thank you for the suggestion <@U09QT2FTHFZ|Pavel Herasimov>. We are looking at a different way to tackle open PRs",
+          "From": "Shobana Sampath"
+        },
+        {
+          "Timestamp": "2026-06-09 14:04",
+          "Text": "I think ^ is a good practice, can be painful sometimes, but may be worth it.",
+          "From": "Wes Wood"
+        },
+        {
+          "Timestamp": "2026-06-09 13:46",
+          "Text": "<@U051KE2U003|stanikella> One suggestion as we review the recent incident: should we enable a branch protection rule that dismisses stale PR approvals when new commits are pushed? So, if a PR was appr...",
+          "From": "Pavel Herasimov"
+        },
+        {
+          "Timestamp": "2026-06-09 13:23",
+          "Text": "NEW UPDATES: We are still on hold for all coding activities. 1. Immediately enable MFA for your Github account if you haven't done yet. 2. PR's can be viewed online in browser and can make comments on...",
+          "From": "Sharada Tanikella"
+        }
+      ],
+      "TotalMessages": 20
+    },
+    "ai-chapter": {
+      "RecentMessages": [
+        {
+          "Timestamp": "2026-06-09 21:01",
+          "Text": "Also not blown away by it in my own use",
+          "From": "George DeCherney"
+        },
+        {
+          "Timestamp": "2026-06-09 20:58",
+          "Text": "Yes indeed, and we don't really need to either. Opus and GPT are more than capable of what we need right now. Its more like a question of should we drive 110 or 120 mph on the German Autobahn I read t...",
+          "From": "Franz Hemmer"
+        },
+        {
+          "Timestamp": "2026-06-09 20:52",
+          "Text": "FWIW we probably wont have Fable enabled for a while because, for right now, it requires surrendering your prompts and outputs to anthropic as part of the TOS",
+          "From": "George DeCherney"
+        },
+        {
+          "Timestamp": "2026-06-09 17:02",
+          "Text": "Ah gotcha - I noticed something similar when I was looking into copilot sdk. You could give gpt typed output and it would adhere to it, but sonnet would fail fairly often, like 1/3 times.",
+          "From": "Jason Twichell"
+        },
+        {
+          "Timestamp": "2026-06-09 16:48",
+          "Text": "The reason I like GPT models so much more over Anthropic models is how strict GPT models follow guidelines. Here is a Fable 5 example of it still not being very good at following guidelines. I will sa...",
+          "From": "Franz Hemmer"
+        },
+        {
+          "Timestamp": "2026-06-09 14:47",
+          "Text": "Yep - several people that I trust has gone through it. Uses less tokens and is smarter. Again there is no \"one\" universal measurement but by the analysis of many sources I trust they say this is the h...",
+          "From": "Franz Hemmer"
+        },
+        {
+          "Timestamp": "2026-06-09 14:46",
+          "Text": "Oh wow is GPT really better AND cheaper than Opus?",
+          "From": "Jason Twichell"
+        },
+        {
+          "Timestamp": "2026-06-09 14:45",
+          "Text": "Forget about any benchmarks. Wait until it gets onto this one - this is the only one that counts and the only one that is done right. <https://deepswe.datacurve.ai/>",
+          "From": "Franz Hemmer"
+        },
+        {
+          "Timestamp": "2026-06-09 14:37",
+          "Text": "Are the scores not linear? Do they not tell the whole story? If not, whats the rest of the story?",
+          "From": "Jason Twichell"
+        },
+        {
+          "Timestamp": "2026-06-09 14:37",
+          "Text": "Another thing I dont understand is - how does a 6-10% uplift (terminal-bench 2.1/ SWE-Bench Pro) yield results like in this claim: ```Software engineering. During early testing, Stripe reported that F...",
+          "From": "Jason Twichell"
+        }
+      ],
+      "TotalMessages": 20
+    },
+    "product-engineering": {
+      "RecentMessages": [
+        {
+          "Timestamp": "2026-06-09 10:17",
+          "Text": "",
+          "From": "Warren Sutherland"
+        }
+      ],
+      "TotalMessages": 1
+    }
+  },
+  "Announcements": [
+    {
+      "Permalink": "https://relias-engineering.slack.com/archives/C08KKNTV1V2/p1781026963664149?thread_ts=1781026616.353749",
+      "Timestamp": "2026-06-09 13:42",
+      "From": "Sarah Green",
+      "Text": "try <#C0A602R1G91> channel",
+      "Channel": "training-plans-ta-tribe"
+    },
+    {
+      "Permalink": "https://relias-engineering.slack.com/archives/C08PAV8C6MQ/p1781018379367049?thread_ts=1781018379.367049",
+      "Timestamp": "2026-06-09 11:19",
+      "From": "Darren Jack",
+      "Text": "A couple more steps to complete including removing Applications from Github",
+      "Channel": "technical-willowtree-discussions"
+    },
+    {
+      "Permalink": "https://relias-engineering.slack.com/archives/C1KAF274N/p1781017036590929?thread_ts=1781017036.590929",
+      "Timestamp": "2026-06-09 10:57",
+      "From": "Sharada Tanikella",
+      "Text": "<!channel> IMPORTANT UPDATES: Thank you everyone for all your support and following the instructions that are being asked. Please watch for updates from me in this channel for any steps to be followed. We are still on hold for all coding activities a...",
+      "Channel": "dev-tribe"
+    }
+  ],
+  "Username": "fhemmer",
+  "Mentions": [],
+  "GeneratedAt": "2026-06-09 23:28:22",
+  "DirectMessages": [
+    {
+      "Timestamp": "2026-06-09 14:38",
+      "Text": "Do you know anything about how the Github Team assignments get made? I am trying to track down why when a user signs in with sso they are being auto a...",
+      "From": "George DeCherney"
+    },
+    {
+      "Timestamp": "2026-06-09 14:36",
+      "Text": "Hello!",
+      "From": "George DeCherney"
+    },
+    {
+      "Timestamp": "2026-06-09 14:18",
+      "Text": "OMG it's going to be expensive: • From today through June 22, Fable 5 is included on Pro, Max, Team, and seat-based Enterprise plans at no extra cost....",
+      "From": "Geo Rufino"
+    },
+    {
+      "Timestamp": "2026-06-09 14:13",
+      "Text": "Yeah, that's what I was thinking.",
+      "From": "Geo Rufino"
+    },
+    {
+      "Timestamp": "2026-06-09 14:11",
+      "Text": "Also, over at AI Fest... 5 layers of security needs 6 boxes.",
+      "From": "Geo Rufino"
+    },
+    {
+      "Timestamp": "2026-06-09 14:10",
+      "Text": "It's $50 output. I would think Microsoft would match the billing but . > Fable 5 and Mythos 5 are being offered at $10 per million input tokens and $5...",
+      "From": "Geo Rufino"
+    },
+    {
+      "Timestamp": "2026-06-09 14:04",
+      "Text": "First line of code I've ever written in PS was this weekend.",
+      "From": "Geo Rufino"
+    },
+    {
+      "Timestamp": "2026-06-09 15:10",
+      "Text": "Thank you!",
+      "From": "Kyle McDaniel"
+    },
+    {
+      "Timestamp": "2026-06-09 15:05",
+      "Text": "I requested access to the link Franz sent me",
+      "From": "Kyle McDaniel"
+    },
+    {
+      "Timestamp": "2026-06-09 15:04",
+      "Text": "Ah I think this is the wrong document, I don't see a mention of signing commits anywhere",
+      "From": "Kyle McDaniel"
+    },
+    {
+      "Timestamp": "2026-06-09 15:01",
+      "Text": "Thank you Franz! I just requested access to it <@U07TZ3GDKGR|ssampath>. It's timed well because the reporting team can be the first team to test the s...",
+      "From": "Kyle McDaniel"
+    },
+    {
+      "Timestamp": "2026-06-09 14:25",
+      "Text": "This should give us some consistency across the organization that people can follow so we can avoid things like global signings and reusing the same s...",
+      "From": "Kyle McDaniel"
+    },
+    {
+      "Timestamp": "2026-06-09 17:43",
+      "Text": "I see people are up and running in limited groups again?",
+      "From": "Malia Paul"
+    },
+    {
+      "Timestamp": "2026-06-09 13:32",
+      "Text": "But is that necessary when SSO is already enforced? Bryan and I discussed that and SSO already requires auth.",
+      "From": "Malia Paul"
+    },
+    {
+      "Timestamp": "2026-06-09 13:16",
+      "Text": "Why is everyone so focused on 2FA when we have SSO enforced which requires 2FA",
+      "From": "Malia Paul"
+    },
+    {
+      "Timestamp": "2026-06-09 12:48",
+      "Text": "What is the security group trying to get from Nick?",
+      "From": "Malia Paul"
+    },
+    {
+      "Timestamp": "2026-06-09 15:18",
+      "Text": "this this one : ASlabkovRelias",
+      "From": "Michelle Barry"
+    },
+    {
+      "Timestamp": "2026-06-09 15:15",
+      "Text": "asked to get the username for the last one -",
+      "From": "Michelle Barry"
+    },
+    {
+      "Timestamp": "2026-06-09 15:09",
+      "Text": "haha! thank you!",
+      "From": "Michelle Barry"
+    },
+    {
+      "Timestamp": "2026-06-09 15:03",
+      "Text": "Can you add the following people back: relias-mpuyol nbarbosa-relias AleSlabkovRelias They need access to LEXI repo",
+      "From": "Michelle Barry"
+    },
+    {
+      "Timestamp": "2026-06-09 15:10",
+      "Text": "<https://reliaslearning-my.sharepoint.com//g/personal/ssampath_relias_com/IQB2cDU9Nig9SbvzvREwMgbbAV896pfdHbifDeyPNjWMjrE?email=kmcdaniel%40relias.com...",
+      "From": "Shobana Sampath"
+    },
+    {
+      "Timestamp": "2026-06-09 15:08",
+      "Text": "yes you are right, sorry",
+      "From": "Shobana Sampath"
+    },
+    {
+      "Timestamp": "2026-06-09 15:03",
+      "Text": "<@U01GHAS5A8L|Kyle McDaniel>: I just copied the one Christian R had in chatGPT to a doc since Franz did not have chatGPT access",
+      "From": "Shobana Sampath"
+    },
+    {
+      "Timestamp": "2026-06-09 14:36",
+      "Text": "<https://reliaslearning-my.sharepoint.com//g/personal/ssampath_relias_com/IQB2cDU9Nig9SbvzvREwMgbbAV896pfdHbifDeyPNjWMjrE?e=W8WGe2|Signed Commit Instr...",
+      "From": "Shobana Sampath"
+    },
+    {
+      "Timestamp": "2026-06-09 14:35",
+      "Text": "you have to login to chatGPT for access",
+      "From": "Shobana Sampath"
+    }
+  ],
+  "Summary": {
+    "Channels": 6,
+    "Announcements": 3,
+    "ChannelMessages": 77.0,
+    "DirectMessages": 25,
+    "ActionItems": 0,
+    "Mentions": 0
+  },
+  "DateRange": {
+    "To": "2026-06-09",
+    "From": "2026-06-08"
+  }
+}

@@ -278,7 +278,8 @@ KeyHistory
 | Action | Command |
 |--------|---------|
 | Edit Script | `notepad "$env:USERPROFILE\Documents\AutoHotkey.ahk"` |
-| Reload Script | `Start-Process "$env:USERPROFILE\Documents\AutoHotkey.ahk"` |
+| Validate Script (before reload!) | `$p = Start-Process "C:\Program Files\AutoHotkey\v2\AutoHotkey64.exe" -ArgumentList '/ErrorStdOut','/validate','"$env:USERPROFILE\Documents\AutoHotkey.ahk"' -Wait -PassThru -NoNewWindow; $p.ExitCode` (0 = OK; catches syntax + duplicate hotkeys; plain `&` won't set `$LASTEXITCODE` — GUI exe) |
+| Reload Script | `Get-Process AutoHotkey64_UIA -EA SilentlyContinue \| Stop-Process -Force; Start-Process "C:\Program Files\AutoHotkey\v2\AutoHotkey64_UIA.exe" -ArgumentList "`"$env:USERPROFILE\Documents\AutoHotkey.ahk`""` — the script runs under the **UIA** exe; plain `Start-Process script.ahk` launches a normal-privilege instance that UIPI blocks from replacing the UIA one, so it dies silently and the old code keeps running. ALWAYS verify reload took: `Get-Process AutoHotkey* \| Select StartTime` must be newer than the script's LastWriteTime. (Manual alternative: Ctrl+Shift+R reloads in-place.) |
 | Open Help | `Start-Process "C:\Program Files\AutoHotkey\v2\AutoHotkey.chm"` |
 | Window Spy | `Start-Process "C:\Program Files\AutoHotkey\WindowSpy.ahk"` |
 

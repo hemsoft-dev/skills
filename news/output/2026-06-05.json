@@ -1,0 +1,152 @@
+{
+  "Date": "2026-06-05",
+  "GeneratedAt": "2026-06-06T02:08:08.9040194-04:00",
+  "Categories": [
+    {
+      "Title": "🇺🇸 US News",
+      "Articles": [
+        {
+          "Title": "Trump says he wants Pulte to further slash staffing at national intelligence office",
+          "Link": "https://www.pbs.org/newshour/politics/trump-says-he-wants-pulte-to-further-slash-staffing-at-national-intelligence-office",
+          "Source": "PBS Politics",
+          "Published": "2026-06-05T21:25:04.0000000-04:00"
+        },
+        {
+          "Title": "Democrat Xavier Becerra wins the top spot in November's race for California governor",
+          "Link": "https://www.npr.org/2026/06/05/nx-s1-5845847/xavier-becerra-california-governor-hilton-steyer-newsom",
+          "Source": "NPR Politics",
+          "Published": "2026-06-05T20:42:57.0000000-04:00"
+        },
+        {
+          "Title": "News Wrap: Senate passes $70 billion immigration enforcement bill",
+          "Link": "https://www.pbs.org/newshour/show/news-wrap-senate-passes-70-billion-immigration-enforcement-bill",
+          "Source": "PBS Politics",
+          "Published": "2026-06-05T18:45:12.0000000-04:00"
+        },
+        {
+          "Title": "Could Trump become an early lame duck?",
+          "Link": "https://www.npr.org/2026/06/05/nx-s1-5846765/could-trump-become-an-early-lame-duck",
+          "Source": "NPR Politics",
+          "Published": "2026-06-05T16:16:11.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🌍 World News",
+      "Articles": [
+        {
+          "Title": "Doctor’s ‘grossly irresponsible prescribing’ played direct role in two deaths, Tasmanian coroner finds",
+          "Link": "https://www.theguardian.com/australia-news/2026/jun/06/doctors-grossly-irresponsible-prescribing-played-direct-role-in-two-deaths-tasmanian-coroner-finds-ntwnfb",
+          "Source": "The Guardian",
+          "Published": "2026-06-05T23:41:03.0000000-04:00"
+        },
+        {
+          "Title": "Arrests of critics in Ghana provokes alarm over free speech under Mahama",
+          "Link": "https://www.aljazeera.com/news/2026/6/6/arrests-of-critics-in-ghana-provokes-alarm-over-free-speech-under-mahama?traffic_source=rss",
+          "Source": "Al Jazeera",
+          "Published": "2026-06-05T22:01:27.0000000-04:00"
+        },
+        {
+          "Title": "In LA mayor’s race, Nithya Raman makes up ground on Spencer Pratt in contest to face Karen Bass – as it happened",
+          "Link": "https://www.theguardian.com/us-news/live/2026/jun/05/us-politics-latest-news-updates-donald-trump-republicans-democrats",
+          "Source": "The Guardian",
+          "Published": "2026-06-05T22:00:27.0000000-04:00"
+        },
+        {
+          "Title": "US plans to fight flesh-eating screwworm outbreak with flies and dogs",
+          "Link": "https://www.bbc.com/news/articles/c7v9vz1gd76o?at_medium=RSS&at_campaign=rss",
+          "Source": "BBC",
+          "Published": "2026-06-05T21:55:03.0000000-04:00"
+        },
+        {
+          "Title": "Ronaldo joins Portugal training ahead of sixth World Cup appearance",
+          "Link": "https://www.aljazeera.com/video/newsfeed/2026/6/6/aje-onl-nf_clip_-ronaldo-trains-with-portugal-ahead-of-fifa-050626?traffic_source=rss",
+          "Source": "Al Jazeera",
+          "Published": "2026-06-05T21:34:49.0000000-04:00"
+        },
+        {
+          "Title": "Why are devastating mice plagues happening in Australia?",
+          "Link": "https://www.bbc.com/news/videos/cn9p9y07d94o?at_medium=RSS&at_campaign=rss",
+          "Source": "BBC",
+          "Published": "2026-06-05T18:01:20.0000000-04:00"
+        },
+        {
+          "Title": "Misinformation complicates Ebola efforts",
+          "Link": "https://www.france24.com/en/misinformation-complicates-ebola-efforts",
+          "Source": "France 24",
+          "Published": "2026-06-05T16:48:01.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🤖 AI News",
+      "Articles": [
+        {
+          "Title": "OpenAI Help: Lockdown Mode",
+          "Link": "https://simonwillison.net/2026/Jun/5/openai-help-lockdown-mode/#atom-everything",
+          "Source": "Simon Willison's Weblog",
+          "Published": "2026-06-05T19:56:40.0000000-04:00"
+        },
+        {
+          "Title": "AI enthusiasts are in a race against time, AI skeptics are in a race against entropy",
+          "Link": "https://simonwillison.net/2026/Jun/4/ai-enthusiasts-ai-skeptics/#atom-everything",
+          "Source": "Simon Willison's Weblog",
+          "Published": "2026-06-04T19:55:27.0000000-04:00"
+        },
+        {
+          "Title": "This is your laptop… on AI",
+          "Link": "https://www.theverge.com/podcast/944058/ai-laptop-nvidia-build-gemini-spark-vergecast",
+          "Source": "The Verge",
+          "Published": "2026-06-05T12:39:07.0000000-04:00"
+        },
+        {
+          "Title": "Has Microsoft Lost Its Mojo (Again)?",
+          "Link": "https://www.wired.com/story/has-microsoft-lost-its-mojo-again/",
+          "Source": "Wired",
+          "Published": "2026-06-05T11:00:00.0000000-04:00"
+        },
+        {
+          "Title": "The token bill comes due: Inside the industry scramble to manage AI’s runaway costs",
+          "Link": "https://techcrunch.com/2026/06/05/the-token-bill-comes-due-inside-the-industry-scramble-to-manage-ais-runaway-costs/",
+          "Source": "TechCrunch",
+          "Published": "2026-06-05T10:49:12.0000000-04:00"
+        },
+        {
+          "Title": "This AI startup says it can tell if a script will make a hit film",
+          "Link": "https://www.theverge.com/ai-artificial-intelligence/943531/ai-script-quilty-simon-horsman-daniel-wood",
+          "Source": "The Verge",
+          "Published": "2026-06-05T09:57:31.0000000-04:00"
+        },
+        {
+          "Title": "AirTrunk commits $30B to build 5GW of AI data centers in India",
+          "Link": "https://techcrunch.com/2026/06/05/airtrunk-commits-30b-to-build-5gw-of-ai-data-centers-in-india/",
+          "Source": "TechCrunch",
+          "Published": "2026-06-05T09:03:10.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🇩🇰 Danish News",
+      "Articles": [
+        {
+          "Title": "US clears nearly 3 billion dollars in military sales to UK, Denmark and Kuwait - Telangana Today",
+          "Link": "https://news.google.com/rss/articles/CBMipwFBVV95cUxPVFEwYzBSZm4wVjE4ejR4a193V3JNdnlFRmpnaTJpYTlLR2NNVlh1QWJhdGtEdF9KaElMNUNXQTVLeEpZMFcwMERiNHZILXctVjhHUThWckt4b2hPUzNXWUtHZmRZMTJOY1hwQWxEQjlNNTBMVUpWUWhMNTZ5WHh4aWpNNVo1T21yVU9DU3NSSDZ4QzRDcUtVWmpTVkM0LWpBV2VYeklLaw?oc=5",
+          "Source": "Google News Denmark",
+          "Published": "2026-06-05T23:06:21.0000000-04:00"
+        },
+        {
+          "Title": "Danish String Quartet: Listen Up! at Cape Cod Chamber Music Festival Boston (Jul 31, 2026) - BroadwayWorld",
+          "Link": "https://news.google.com/rss/articles/CBMijgFBVV95cUxPNUViSXBLNDlfU2tWVFJoUkdBYXFmZXFhd0FVWndPak0yTXZkUl8zVzktMmpibnRjbGM5REQyYlBVdVZ5RmdLYmNJTVlBcjVhTlpfQUhVYm54QVNibzBBVVhtaDlrTTMxVEx6X09PZnhYZ1Y5c0tESVBFQXR3TWVNZXRFZHFlallick9kMGZR?oc=5",
+          "Source": "Google News Denmark",
+          "Published": "2026-06-05T21:08:51.0000000-04:00"
+        },
+        {
+          "Title": "Grønlands parlament støtter krav om at hjemtage meteorit ",
+          "Link": "https://www.dr.dk/nyheder/seneste/groenlands-parlament-stoetter-krav-om-hjemtage-meteorit",
+          "Source": "DR News",
+          "Published": "2026-06-05T09:44:51.0000000-04:00"
+        }
+      ]
+    }
+  ]
+}

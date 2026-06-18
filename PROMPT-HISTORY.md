@@ -4,6 +4,21 @@ This file tracks meaningful prompts and their outcomes for the Claude Skills rep
 
 ---
 
+2026-06-18 - 00:08 - Create copilot-pr-processor skill from PR review loop
+Result: Created `copilot-pr-processor` from the PR-processing portion of `issue-to-mergeable-pr`, with GitHub API-based Copilot PR Reviewer requests and helpers for unresolved Copilot review-thread state.
+
+2026-06-17 - 23:56 - Restrict issue-to-mergeable-pr review bots by repo owner
+Result: Updated `issue-to-mergeable-pr/SKILL.md` so CodeRabbitAI and Macroscope are private HemSoft-only review products, while Relias repos use GitHub Copilot PR Reviewer only and do not wait for CodeRabbit/Macroscope approval.
+
+2026-06-17 - 23:53 - Add personal reflections and LensCrafters visit memory
+Result: Updated the 2026-06-17 diary Personal Reflections section with family notes and the LensCrafters visit summary, and added an ad hoc memory note with the provided prescription details and follow-up timing.
+
+2026-06-17 - 23:21 - Scaffold diary entry for Wednesday 2026-06-17
+Result: Saved `diary/entries/2026/06/2026-06-17.html` with Slack, weather, quality-gated news, token-billing daily numbers, DeepSWE-first LLM models, trending repos, software/watchlist updates, productivity, WorkIQ meeting status, and screenshot status. Left Today's Highlight and Personal Reflections as TODOs.
+
+2026-06-15 - 19:07 - Investigate Slack Tempo-ticket search path for security incident billing
+Result: Checked the Slack search tooling for #dev-tribe and #productivity-engineering-private, confirmed no dedicated Tempo-ticket discovery script exists, and verified `slack/scripts/Search-SlackMessages.ps1` works directly while lean-ctx blocks that script path via allowlist.
+
 2026-05-26 - 00:16 - Improve diary news collection and regenerate May 25 news section
 Result: Hardened `news/scripts/Get-AllNews.ps1` for target-date runs and resilient RSS/Atom parsing, updated diary news generation to pass the intended date, regenerated `news/output/2026-05-25.json`, and replaced the May 25 diary News Headlines section with 21 linked headlines.
 
@@ -755,3 +770,12 @@ Result: Saved `diary/entries/2026/06/2026-06-07.html` with weather, Slack, quali
 
 2026-06-12 - 21:15 - Configure Hotmail access for the mail skill
 Result: Created and authorized a personal Microsoft Graph app for `franz_hemmer@hotmail.com`, added read-only Outlook child scripts, fixed Outlook token refresh, and verified OpenAI/ChatGPT Hotmail searches.
+
+2026-06-15 - 22:48 - Scaffold diary entry for Monday 2026-06-15
+Result: Saved `diary/entries/2026/06/2026-06-15.html` with weather, Slack, quality-gated news, token-billing daily numbers, DeepSWE-first LLM models, trending repos, software/watchlist updates, productivity, WorkIQ meeting status, and screenshots. Left Today's Highlight and Personal Reflections as TODOs.
+
+2026-06-16 - 01:27 - Create Headroom skill for trending GitHub project
+Result: Created `headroom` skill with install, uninstall, and upgrade commands for `chopratejas/headroom`, including live release/package checks and current Codex, Windows, Docker, and Claude MCP caveats.
+
+2026-06-16 - 03:34 - Install Headroom for Codex CLI as MCP-only integration
+Result: Started Docker Desktop, pulled `ghcr.io/chopratejas/headroom:latest`, registered a Docker-backed `headroom` MCP server with `codex mcp add`, and verified no `model_provider = "headroom"` entry was added to Codex config.

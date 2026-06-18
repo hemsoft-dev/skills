@@ -199,6 +199,41 @@ $body = @{
 - Alert: `⚠️ header → section → fields → actions`
 - Report: `📊 header → context (dates) → section → divider → context`
 
+### Avoid Slack Show More/Less UI
+
+For PSA, announcement, or forwarding-ready messages where the user does not
+want expandable sections:
+
+- Do not use `expand = $true`. It can prevent initial `Show more`, but long
+  rendered sections may still show `Show less`.
+- Keep each `section.text.text` short; target 150 characters or less.
+- Split paragraphs into multiple `section` blocks instead of one long section.
+- Prefer short command lines as plain mrkdwn text over large code fences.
+- Use dividers and headers for grouping. Slack messages support up to 50 blocks.
+- If the content cannot fit cleanly without expandable UI, shorten it or link to
+  a document instead of posting a long Slack message.
+
+### PowerShell Mrkdwn Text Rules
+
+When building Block Kit payloads in PowerShell:
+
+- Do not put literal `\n` in single-quoted strings. Slack will render `\n`
+  literally.
+- Use single-quoted here-strings for text that needs real line breaks or
+  literal backticks:
+
+```powershell
+$text = @'
+*If your push fails*
+Read the exact git push error.
+'@
+```
+
+- If using double-quoted strings, PowerShell newline is `` `n ``. Avoid this
+  for strings that also need literal Slack backticks.
+- For command examples, prefer plain text or bold labels unless code formatting
+  is truly needed.
+
 ---
 
 ## Authentication

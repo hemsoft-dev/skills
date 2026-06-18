@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tailscale"
+  short_description: "Resume and manage private Tailscale SSH"
+  default_prompt: "Use $tailscale to resume the Windows/Mac Tailscale SSH setup."

@@ -1,0 +1,44 @@
+Remote Miasma scan for relias-engineering
+Window: 2026-05-01T04:00:00Z through 2026-06-11T16:47:09Z
+Scan mode: BranchTip
+Repositories scanned: 287
+Approximate gh/GitHub API calls: 916
+Repositories with .github/setup.js: 2
+Repositories with any checked indicator path: 5
+Errors: 1
+Error type graphql-path-check-failed: 1
+
+== crowdin-test-app ==
+branches=2 commits=1 findings=1 archived=False fork=False
+MATCH ae5a98f11439 paths=[.vscode/tasks.json] committerDate=06/30/2025 20:18:30 author=Sagar Thakore committer=Sagar Thakore branches=[l10n_main, main] subject=initial commit
+
+== Integrations-Contract-Reviewer ==
+branches=2 commits=1 findings=1 archived=False fork=False
+MATCH e154510cb352 paths=[.vscode/tasks.json] committerDate=12/02/2025 22:19:15 author=John Duncan committer=John Duncan branches=[dev] subject=minor formatting change
+
+== ixr-HealthSimVR-Legacy ==
+branches=214 commits=14 findings=14 archived=False fork=False
+MATCH aa748b1bf24d paths=[.github/setup.js, .claude/settings.json, .gemini/settings.json, .cursor/rules/setup.mdc, .vscode/tasks.json] committerDate=01/02/2024 17:27:08 author=YairMaor committer=YairMaor branches=[more-vo-hints-folder-fixes] subject=wip fixing tutorial [skip ci]
+MATCH 476cb2b86fea paths=[.github/setup.js, .claude/settings.json, .gemini/settings.json, .cursor/rules/setup.mdc, .vscode/tasks.json] committerDate=03/10/2023 12:54:22 author=unknown committer=unknown branches=[update/keystore-update] subject=upload new keystore [skip ci]
+MATCH 9025078941f5 paths=[.github/setup.js, .claude/settings.json, .gemini/settings.json, .cursor/rules/setup.mdc, .vscode/tasks.json] committerDate=05/04/2023 14:04:57 author=YairInception committer=YairInception branches=[paitient-Sam-blendshape] subject=newspaper [skip ci]
+MATCH 63421d46e2cf paths=[.github/setup.js, .claude/settings.json, .gemini/settings.json, .cursor/rules/setup.mdc, .vscode/tasks.json] committerDate=05/18/2023 21:17:03 author=Shkoda committer=Shkoda branches=[perf-fixes-olha] subject=perf fix [skip ci]
+MATCH 762ada4b74b2 paths=[.github/setup.js, .claude/settings.json, .gemini/settings.json, .cursor/rules/setup.mdc, .vscode/tasks.json] committerDate=05/30/2024 15:25:14 author=Anna2for2 committer=Anna2for2 branches=[multi-compartments-anna] subject=up [skip ci]
+MATCH ddb685201579 paths=[.github/setup.js, .claude/settings.json, .gemini/settings.json, .cursor/rules/setup.mdc, .vscode/tasks.json] committerDate=06/11/2023 09:10:18 author=YairInception committer=YairInception branches=[new-room-layout] subject=handover to pavel [skip ci]
+MATCH 2d79e7039f0c paths=[.github/setup.js, .claude/settings.json, .gemini/settings.json, .cursor/rules/setup.mdc, .vscode/tasks.json] committerDate=06/12/2023 14:13:49 author=InceptionJon committer=InceptionJon branches=[utilities-namespace-fix, utilities-namespace-fix-2] subject=Tidy Utilities ("UnityObjectExtensions") (#260) [skip ci]
+MATCH da60e143b7e5 paths=[.github/setup.js, .claude/settings.json, .gemini/settings.json, .cursor/rules/setup.mdc, .vscode/tasks.json] committerDate=07/23/2024 10:06:11 author=YairMaor committer=YairMaor branches=[room-parti-for-gauze-fix] subject=room parti for gauze fix [skip ci]
+MATCH 59e939427aeb paths=[.github/setup.js, .claude/settings.json, .gemini/settings.json, .cursor/rules/setup.mdc, .vscode/tasks.json] committerDate=08/21/2023 13:20:42 author=Noam Guterman committer=Noam Guterman branches=[tutorial-vo-v2-ai] subject=tutorial vo v2 ai [skip ci]
+MATCH 95ad742685c9 paths=[.github/setup.js, .claude/settings.json, .gemini/settings.json, .cursor/rules/setup.mdc, .vscode/tasks.json] committerDate=08/23/2023 15:09:44 author=Yair meirovitz committer=Yair meirovitz branches=[template-scene-fixes-yair] subject=fix towl in room1 prfabe [skip ci]
+MATCH 69d813490ace paths=[.github/setup.js, .claude/settings.json, .gemini/settings.json, .cursor/rules/setup.mdc, .vscode/tasks.json] committerDate=09/04/2024 11:57:20 author=Ofer Ben Ari committer=Ofer Ben Ari branches=[optimiaztion-pass-prerender] subject=normal bake fix [skip ci]
+MATCH e03e1f327cb7 paths=[.github/setup.js, .claude/settings.json, .gemini/settings.json, .cursor/rules/setup.mdc, .vscode/tasks.json] committerDate=10/25/2023 16:27:08 author=YairMaor committer=YairMaor branches=[wips-gloves-and-other-fixes] subject=fixes. sc 3 finish procedure simplified [skip ci]
+MATCH 86e04bcce33d paths=[.github/setup.js, .claude/settings.json, .gemini/settings.json, .cursor/rules/setup.mdc, .vscode/tasks.json] committerDate=11/14/2023 12:59:57 author=YairMaor committer=YairMaor branches=[sc-4-fix] subject=Update Scenario 4 Toileting in Bed & Foley Catheter Insertion.unity [ΓÇª
+MATCH d6e53dbe111e paths=[.github/setup.js, .claude/settings.json, .gemini/settings.json, .cursor/rules/setup.mdc, .vscode/tasks.json] committerDate=12/04/2023 17:10:35 author=YairMaor committer=YairMaor branches=[sc-4-fixess] subject=fixes [skip ci]
+
+== pdf-conversion-test-app ==
+branches=2 commits=2 findings=2 archived=False fork=False
+MATCH 36e9c2fa6f9f paths=[.vscode/tasks.json] committerDate=07/11/2025 18:30:16 author=Jeff Buda committer=Jeff Buda branches=[main] subject=initial commit
+MATCH edc50a849d9f paths=[.vscode/tasks.json] committerDate=07/15/2025 19:11:14 author=Jeff Buda committer=Jeff Buda branches=[feature/various-enhancements] subject=added support for Gotenberg
+
+== VR-Simulations ==
+branches=279 commits=1 findings=1 archived=False fork=False
+MATCH 4bbeff1031e9 paths=[.github/setup.js, .claude/settings.json, .gemini/settings.json, .cursor/rules/setup.mdc, .vscode/tasks.json] committerDate=09/23/2024 10:01:30 author=huntsolo committer=huntsolo branches=[scenario-v2-MVP] subject=scheduled pipeline upd [skip ci]
+

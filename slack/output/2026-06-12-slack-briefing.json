@@ -1,0 +1,180 @@
+{
+  "DirectMessages": [
+    {
+      "Timestamp": "2026-06-12 10:06",
+      "Text": "Sure. Send me an invite when you're ready.",
+      "From": "Charlotte Fowler"
+    },
+    {
+      "Timestamp": "2026-06-12 09:59",
+      "Text": "Do you know the name of the SP('s) that need to have their credentials updated?",
+      "From": "Charlotte Fowler"
+    },
+    {
+      "Timestamp": "2026-06-12 09:53",
+      "Text": "I would love to assist, however: I was not one of the users Sharada said had been restored access to GitHub in her last update. I'm also unsure of whe...",
+      "From": "Charlotte Fowler"
+    },
+    {
+      "Timestamp": "2026-06-12 10:03",
+      "Text": "I'm actually not entirely sure, can you huddle with Nick and I?",
+      "From": "Kyle McDaniel"
+    },
+    {
+      "Timestamp": "2026-06-12 10:02",
+      "Text": "There are some automated triggers definitely running, I had to shut off a couple manually but we're also trying to get rlms-website build reviewed",
+      "From": "Kyle McDaniel"
+    },
+    {
+      "Timestamp": "2026-06-12 09:54",
+      "Text": "Yes, I think we just need to rotate the service principal creds in Azure DevOps. No GitHub changes required.",
+      "From": "Kyle McDaniel"
+    },
+    {
+      "Timestamp": "2026-06-12 09:50",
+      "Text": "I will need some assistance from ECM to get those re-established.",
+      "From": "Kyle McDaniel"
+    },
+    {
+      "Timestamp": "2026-06-12 09:49",
+      "Text": "I've been reviewing the logs for the builds and seeing a few automated rlms-website builds running. I've disabled them for now, but the next hurdle fo...",
+      "From": "Kyle McDaniel"
+    },
+    {
+      "Timestamp": "2026-06-12 10:02",
+      "Text": "<@U01GHAS5A8L|Kyle McDaniel> huddle for a min?",
+      "From": "Nick Peterson"
+    },
+    {
+      "Timestamp": "2026-06-12 10:01",
+      "Text": "Looks intentional by us. No PR's have merged since",
+      "From": "Nick Peterson"
+    },
+    {
+      "Timestamp": "2026-06-12 10:01",
+      "Text": "<https://dev.azure.com/ReliasDevelopment/ReliasPlatform/_build?definitionId=79>",
+      "From": "Nick Peterson"
+    },
+    {
+      "Timestamp": "2026-06-12 10:00",
+      "Text": "last PR pipeline was on Sunday",
+      "From": "Nick Peterson"
+    },
+    {
+      "Timestamp": "2026-06-12 09:57",
+      "Text": "there may be some automated triggers, but let's go ahead and close any loophole",
+      "From": "Nick Peterson"
+    },
+    {
+      "Timestamp": "2026-06-12 18:12",
+      "Text": "_Heartbeat — 6:11 PM_ _New email:_ LinkedIn &lt;messages-noreply@linkedin.com&gt; — Principal Software Engineer: Intuit and Ally hired roles near you",
+      "From": "Slack Skill Bot"
+    },
+    {
+      "Timestamp": "2026-06-12 17:12",
+      "Text": "_Heartbeat — 5:11 PM_ _New email:_ Discord &lt;noreply@discord.com&gt; — synthparadox mentioned you in Egg, Inc.",
+      "From": "Slack Skill Bot"
+    },
+    {
+      "Timestamp": "2026-06-12 16:12",
+      "Text": "_Heartbeat — 4:11 PM_ _New email:_ LinkedIn &lt;messages-noreply@linkedin.com&gt; — Charles Lamanna, EVP, Copilot, Agents and Platform, is popular in ...",
+      "From": "Slack Skill Bot"
+    },
+    {
+      "Timestamp": "2026-06-12 15:12",
+      "Text": "_Heartbeat — 3:11 PM_ _New email:_ Google Store &lt;googlestore-noreply@google.com&gt; — Final call: Special offers end soon",
+      "From": "Slack Skill Bot"
+    },
+    {
+      "Timestamp": "2026-06-12 13:12",
+      "Text": "_Heartbeat — 1:11 PM_ _New email:_ Republic &lt;team@republic.co&gt; — You have 3 notifications _New email:_ Relias via LinkedIn &lt;newsletters-norep...",
+      "From": "Slack Skill Bot"
+    },
+    {
+      "Timestamp": "2026-06-12 09:57",
+      "Text": "no one should be committing to that repo",
+      "From": "Yuhua Zhong"
+    },
+    {
+      "Timestamp": "2026-06-12 09:56",
+      "Text": "who's triggering those?",
+      "From": "Yuhua Zhong"
+    }
+  ],
+  "ActionItems": [],
+  "ChannelActivity": {
+    "dev-ex-private": {
+      "TotalMessages": 1,
+      "RecentMessages": [
+        {
+          "Timestamp": "2026-06-12 09:10",
+          "Text": "Pending review on relias-engineering/rlms-website - <https://github.com/orgs/relias-engineering/teams/productivity-engineering/settings/reminders/92327|Manage reminder> [#1844] <https://github.com/rel...",
+          "From": "github"
+        }
+      ]
+    },
+    "ai-chapter": {
+      "TotalMessages": 2,
+      "RecentMessages": [
+        {
+          "Timestamp": "2026-06-12 11:01",
+          "Text": "<https://github.com/github/awesome-copilot/blob/main/skills/lsp-setup/references/lsp-servers.md>",
+          "From": "Jason Twichell"
+        },
+        {
+          "Timestamp": "2026-06-12 11:01",
+          "Text": "I'm really surprised <https://github.blog/ai-and-ml/github-copilot/give-github-copilot-cli-real-code-intelligence-with-language-servers/|this> wasnt a thing already",
+          "From": "Jason Twichell"
+        }
+      ]
+    },
+    "dev-tribe": {
+      "TotalMessages": 1,
+      "RecentMessages": [
+        {
+          "Timestamp": "2026-06-12 18:00",
+          "Text": "<!channel> ACTION ITEMS We have been reactivating GitHub access for individuals who recently lost access. If your GitHub account is still disabled, please reach out to your manager for assistance. Upd...",
+          "From": "Sharada Tanikella"
+        }
+      ]
+    }
+  },
+  "Username": "fhemmer",
+  "DateRange": {
+    "To": "2026-06-12",
+    "From": "2026-06-11"
+  },
+  "GeneratedAt": "2026-06-12 22:41:44",
+  "Mentions": [],
+  "Summary": {
+    "Mentions": 0,
+    "Channels": 3,
+    "ActionItems": 0,
+    "Announcements": 3,
+    "DirectMessages": 20,
+    "ChannelMessages": 4.0
+  },
+  "Announcements": [
+    {
+      "Channel": "dev-tribe",
+      "Permalink": "https://relias-engineering.slack.com/archives/C1KAF274N/p1781301607333109",
+      "Timestamp": "2026-06-12 18:00",
+      "Text": "<!channel> ACTION ITEMS We have been reactivating GitHub access for individuals who recently lost access. If your GitHub account is still disabled, please reach out to your manager for assistance. Updates • Both pilot teams continue testing with a li...",
+      "From": "Sharada Tanikella"
+    },
+    {
+      "Channel": "dev-ex-private",
+      "Permalink": "https://relias-engineering.slack.com/archives/C066QPRDTLJ/p1781269843586269",
+      "Timestamp": "2026-06-12 09:10",
+      "Text": "Pending review on relias-engineering/rlms-website - <https://github.com/orgs/relias-engineering/teams/productivity-engineering/settings/reminders/92327|Manage reminder> [#1844] <https://github.com/relias-engineering/rlms-website/pull/1844|Testing for...",
+      "From": "github"
+    },
+    {
+      "Channel": "reliasalerts",
+      "Permalink": "https://relias-engineering.slack.com/archives/C9UKH0XMH/p1781257414507699?thread_ts=1781257414.507699",
+      "Timestamp": "2026-06-12 05:43",
+      "Text": "",
+      "From": "PagerDuty"
+    }
+  ]
+}

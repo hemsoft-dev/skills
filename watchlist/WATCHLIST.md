@@ -237,3 +237,33 @@ Monitoring against: Google Assistant, Amazon Alexa, Claude, ChatGPT, Gemini, Cop
 - There is still no clear public shipment of the deeper "smarter Siri" / Apple Intelligence Siri experience this watch item is waiting for.
 - Reputable reporting continues to frame the major Siri overhaul as delayed, with WWDC 2026 now the next big checkpoint.
 - Net: roadmap pressure and reporting have moved, but shipped Siri capability has not materially advanced yet.
+
+---
+
+## Codex CLI Clipboard Image Paste
+
+- **Status**: Watching
+- **Added**: 2026-06-15
+- **Expires**: Never
+- **Notes**: Track whether Codex CLI gets reliable clipboard image paste into the interactive composer, plus movement on related GitHub issues/PRs and changelog.
+
+### Key Resources to Monitor
+
+| Resource | URL | What to Watch |
+|----------|-----|---------------|
+| **GitHub: openai/codex** | <https://github.com/openai/codex> | Releases, changelog commits |
+| **Codex CLI Changelog** | <https://github.com/openai/codex/blob/main/CHANGELOG.md> | Version history and feature releases |
+| **CLI Features Docs** | <https://developers.openai.com/codex/cli/features> | Image inputs documentation updates |
+| **CLI Reference** | <https://developers.openai.com/codex/cli/reference> | `--image` / `-i` flag changes |
+| **Issue #19143** | <https://github.com/openai/codex/issues/19143> | Support pasting images directly into Codex CLI |
+| **Issue #24322** | <https://github.com/openai/codex/issues/24322> | macOS Cmd+V paste support |
+| **Issue #24908** | <https://github.com/openai/codex/issues/24908> | GNOME Wayland paste failure |
+| **Issue #23611** | <https://github.com/openai/codex/issues/23611> | WSL image paste fallback |
+| **Issue #19698** | <https://github.com/openai/codex/issues/19698> | Plain-text paste incorrectly reports no image on clipboard |
+| **Issue #27811** | <https://github.com/openai/codex/issues/27811> | macOS/Warp Ctrl+V freeze |
+
+### Current Status
+
+- Docs claim clipboard image paste works in the interactive composer, but real-world reliability is spotty across terminals and platforms.
+- Reliable fallback today is the command-line flag: `codex -i screenshot.png "prompt"`.
+- Watch for changelog entries or closed issues that signal the paste path is stable.
