@@ -8,8 +8,6 @@
     .\Update-Software.ps1
 .EXAMPLE
     .\Update-Software.ps1 -ListProducts
-.EXAMPLE
-    .\Update-Software.ps1 -ProductName "lean-ctx" -WhatIf
 #>
 [CmdletBinding(SupportsShouldProcess = $true)]
 param(
@@ -282,13 +280,6 @@ $products = @(
         -Arguments @('install', '-g', '@openai/codex@latest') `
         -WorkingDirectory 'D:\' `
         -TimeoutMinutes 30
-
-    Get-SoftwareProductDefinition `
-        -Name 'lean-ctx' `
-        -Command (Join-Path -Path $env:USERPROFILE -ChildPath 'bin\lean-ctx.exe') `
-        -Arguments @('update') `
-        -WorkingDirectory 'D:\' `
-        -TimeoutMinutes 10
 )
 
 if ($ListProducts) {

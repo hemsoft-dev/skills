@@ -1,6 +1,6 @@
 ---
 name: copilot-pr-processor
-description: V1.1 - Process an existing GitHub pull request through GitHub Copilot PR Reviewer feedback until the latest Copilot API-requested review has no actionable comments and all Copilot review threads are explicitly resolved. Use for PR readiness loops that must request Copilot through the GitHub API instead of posting chat-style trigger comments such as @copilot review.
+description: V1.2 - Process an existing GitHub pull request through GitHub Copilot PR Reviewer feedback until the latest Copilot API-requested review has no actionable comments and all Copilot review threads are explicitly resolved. Requires resolving addressed Copilot comments before requesting another review. Use for PR readiness loops that must request Copilot through the GitHub API instead of posting chat-style trigger comments such as @copilot review.
 ---
 
 # Copilot PR Processor
@@ -91,23 +91,25 @@ The default reviewer login is `copilot-pull-request-reviewer`. The script uses G
 3. Implement the smallest defensible code change that answers the feedback.
 4. Run the repository's relevant checks: tests, lint, typecheck, build, and any PR-specific diagnostics.
 5. Commit and push only the intended changes.
-6. Request a new Copilot review through the API:
+6. Explicitly resolve every addressed Copilot review thread in GitHub before requesting another Copilot review.
+   This is mandatory even when a thread is outdated: `isOutdated: true` with `isResolved: false` is still
+   incomplete. Use GraphQL `resolveReviewThread` (or the MCP `resolve_thread` operation) on each fixed thread ID.
+7. Re-query `reviewThreads` and require `isResolved: true` for every addressed Copilot-authored thread before
+   moving on. Do not request another Copilot review while any previously addressed Copilot comment remains
+   unresolved.
+8. Request a new Copilot review through the API:
 
    ```powershell
    .\copilot-pr-processor\scripts\Request-CopilotPrReview.ps1 -Url "https://github.com/OWNER/REPO/pull/123"
    ```
 
-7. Wait three minutes:
+9. Wait three minutes:
 
    ```powershell
    Start-Sleep -Seconds 180
    ```
 
-8. Re-fetch state and repeat while Copilot leaves new actionable comments.
-9. After fixes are committed, pushed, verified, and re-reviewed, explicitly resolve every addressed Copilot review
-   thread in GitHub. Outdated is not resolved: `isOutdated: true` with `isResolved: false` is still incomplete.
-   Use GraphQL `resolveReviewThread` (or the MCP `resolve_thread` operation) on each fixed thread ID, then re-query
-   `reviewThreads` and require `isResolved: true` for every Copilot-authored thread before moving on.
+10. Re-fetch state and repeat while Copilot leaves new actionable comments.
 
 ## Readiness Check
 
