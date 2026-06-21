@@ -41,13 +41,13 @@ PactNet chosen for:
 - .NET implementation of the Pact framework
 - Consumer and provider support
 - Open source, available on NuGet
-- GitHub: https://github.com/pact-foundation/pact-net
+- GitHub: <https://github.com/pact-foundation/pact-net>
 
 **Learning resources referenced:**
 
-- https://www.c-sharpcorner.com/article/consumer-driven-contract-testing-using-pactnet/
-- https://github.com/DiUS/pact-workshop-dotnet-core-v3/
-- https://github.com/pact-foundation/pact-workshop-dotnet-core-v1/blob/master/readme.md#step-41---creating-a-provider-state-http-server
+- <https://www.c-sharpcorner.com/article/consumer-driven-contract-testing-using-pactnet/>
+- <https://github.com/DiUS/pact-workshop-dotnet-core-v3/>
+- <https://github.com/pact-foundation/pact-workshop-dotnet-core-v1/blob/master/readme.md#step-41---creating-a-provider-state-http-server>
 
 ### Recommendation 3: Dockerized Pact Broker
 
@@ -59,7 +59,7 @@ Pact Broker serves as centralized hub for managing contracts:
 - Visualization tools for service dependency mapping
 - Publishing verification results
 
-GitHub: https://github.com/pact-foundation/pact-broker-docker/tree/master
+GitHub: <https://github.com/pact-foundation/pact-broker-docker/tree/master>
 
 ### Recommendation 4: Pact CLI
 
@@ -71,8 +71,8 @@ The Pact CLI automates:
 - Webhook management
 - Version tagging of pacticipants
 
-Docs: https://docs.pact.io/implementation_guides/cli
-Docker: https://hub.docker.com/r/pactfoundation/pact-cli
+Docs: <https://docs.pact.io/implementation_guides/cli>
+Docker: <https://hub.docker.com/r/pactfoundation/pact-cli>
 
 **Security approval**: REA-54
 
@@ -88,9 +88,9 @@ Docker: https://hub.docker.com/r/pactfoundation/pact-cli
 
 ### POC Repositories
 
-- **Self-contained POC**: https://bitbucket.org/relias/relias-best-practices/pull-requests/39
-- **RLMS Website JS POC**: https://bitbucket.org/relias/rlms-website/branch/rthomas/develop/RLPD-49997_pact_proof-of_concept_tests
-- **Assessment Service Consumer POC**: https://bitbucket.org/relias/assessmentservice/branch/rthomas/develop/RLPD-49996_pact_api_to_api_consumer_example_test
+- **Self-contained POC**: <https://bitbucket.org/relias/relias-best-practices/pull-requests/39>
+- **RLMS Website JS POC**: <https://bitbucket.org/relias/rlms-website/branch/rthomas/develop/RLPD-49997_pact_proof-of_concept_tests>
+- **Assessment Service Consumer POC**: <https://bitbucket.org/relias/assessmentservice/branch/rthomas/develop/RLPD-49996_pact_api_to_api_consumer_example_test>
 
 ## 4. Appendix
 

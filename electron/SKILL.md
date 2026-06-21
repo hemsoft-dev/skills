@@ -52,28 +52,28 @@ If you can start the Electron app from source, Playwright is usually the best op
 import { test, _electron as electron, expect } from '@playwright/test';
 
 test('debug electron ui flow', async () => {
-	const electronApp = await electron.launch({ args: ['.'] });
+ const electronApp = await electron.launch({ args: ['.'] });
 
-	electronApp.on('console', async message => {
-		const values = [];
-		for (const arg of message.args()) {
-			values.push(await arg.jsonValue());
-		}
-		console.log('[main]', ...values);
-	});
+ electronApp.on('console', async message => {
+  const values = [];
+  for (const arg of message.args()) {
+   values.push(await arg.jsonValue());
+  }
+  console.log('[main]', ...values);
+ });
 
-	const window = await electronApp.firstWindow();
+ const window = await electronApp.firstWindow();
 
-	window.on('console', message => {
-		console.log('[renderer]', message.text());
-	});
+ window.on('console', message => {
+  console.log('[renderer]', message.text());
+ });
 
-	window.on('pageerror', error => {
-		console.log('[renderer-error]', error.message);
-	});
+ window.on('pageerror', error => {
+  console.log('[renderer-error]', error.message);
+ });
 
-	await window.screenshot({ path: 'electron-debug.png' });
-	await electronApp.close();
+ await window.screenshot({ path: 'electron-debug.png' });
+ await electronApp.close();
 });
 ```
 
@@ -298,11 +298,11 @@ agent-browser snapshot -i
 
 ```ts
 const isPackaged = await electronApp.evaluate(async ({ app }) => {
-	return app.isPackaged;
+ return app.isPackaged;
 });
 
 const appPath = await electronApp.evaluate(async ({ app }) => {
-	return app.getAppPath();
+ return app.getAppPath();
 });
 ```
 

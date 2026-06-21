@@ -1,6 +1,6 @@
 ---
 name: issue-to-mergeable-pr
-description: V1.1 - Turns the oldest GitHub Issue into a clean branch and PR, then iterates with repo-appropriate automated PR review until the PR is merge-ready.
+description: V1.2 - Turns GitHub Issues into clean branches and PRs, with no-argument backlog orchestration across isolated worktrees when parallel agent tooling is available.
 compatibility: Requires git, GitHub CLI authentication, network access, and a GitHub repository with Issues and Pull Requests enabled.
 hooks:
   PostToolUse:
@@ -40,14 +40,30 @@ hooks:
 
 # Issue to Mergeable PR
 
-Use this skill when asked to turn the oldest GitHub Issue into a pull request, or to continue the oldest open pull request until it is ready to merge.
+Use this skill when asked to turn a GitHub Issue into a pull request, to continue the oldest open pull request until it is ready to merge, or to work the issue backlog.
+
+## Invocation Modes
+
+- **Explicit issue mode**: when the user supplies an issue number, work only that issue through a focused branch, PR, verification, and review loop.
+- **No-parameter backlog mode**: when the user invokes the skill without an issue number, act as a parent backlog orchestrator. Inspect the queue, deduplicate and split overlap first, then assign multiple independent issues to bounded parallel worker sessions when safe.
+- **PR readiness mode**: when the user asks to continue PR readiness, work the oldest open PR or the PR they identify.
+
+Never let a spawned worker rediscover the backlog by invoking no-parameter mode. Workers must receive an explicit issue number, branch name, and worktree path.
 
 ## Goal Start
 
-Start by creating a Codex goal. If a goal tool is available, create the goal with this objective. If only slash commands are available, ask the user to run the slash command exactly.
+Start by creating a Codex goal. If a goal tool is available, create the goal with the objective that matches the invocation mode. If only slash commands are available, ask the user to run the slash command exactly.
+
+For explicit issue mode:
 
 ```text
-/goal Take the oldest GitHub Issue and create a branch for it, work the issue to the best of your ability and create a PR. Request the repo-appropriate automated PR review product, wait for feedback, address comments, and keep requesting review until you are confident all issues have been addressed and the repo's required review signal is satisfied. Make sure you have good worktree/branch hygiene. Don't start on dangling branches and clean up before and after yourself.
+/goal Take the specified GitHub Issue and create a branch for it, work the issue to the best of your ability and create a PR. Request the repo-appropriate automated PR review product, wait for feedback, address comments, and keep requesting review until you are confident all issues have been addressed and the repo's required review signal is satisfied. Make sure you have good worktree/branch hygiene. Don't start on dangling branches and clean up before and after yourself.
+```
+
+For no-parameter backlog mode:
+
+```text
+/goal Orchestrate the GitHub Issue backlog: inspect and clean up duplicate or overlapping issues first, then choose a bounded set of independent issues and assign each one to an isolated branch and worktree. Use parallel worker sessions only when their scopes are disjoint and the available tools support sub-agents. Each worker must produce a PR that is verified and reviewed according to the repo policy. Do not merge PRs. Keep worktree, branch, and issue hygiene clean.
 ```
 
 Before branching, deduplicate the open issue queue and separate overlapping scope so the PR implements one clear, non-overlapping issue. The goal is achieved when the PR is ready to merge with the repo-specific automated review signal and no unresolved substantive feedback. Do not merge unless the user explicitly asks for merge.
@@ -57,7 +73,7 @@ Before branching, deduplicate the open issue queue and separate overlapping scop
 1. Verify repository context: `git rev-parse --show-toplevel`, `git remote -v`, and `gh repo view`.
 2. Check worktree hygiene before editing: `git status --short --branch`, `git branch --show-current`, `git worktree list`, and `git fetch --prune`.
 3. Do not start from a dangling, stale, detached, or unrelated feature branch. Switch to the default branch and pull latest before creating a new branch.
-4. If the worktree has user changes, stop and ask unless they are clearly part of the same requested issue.
+4. If the main worktree has user changes, do not edit it. In explicit issue mode, stop and ask unless the changes are clearly part of the same requested issue. In backlog mode, a dirty main worktree does not block planning or isolated worker worktrees created from the fetched default branch, but the parent must not mutate the dirty main files.
 5. Use the `commit-and-cleanup` skill's discipline for stale worktrees: prune registered missing worktrees, never delete ambiguous worktrees without confirmation, and leave active unmerged work alone.
 
 ## Automated Reviewer Policy
@@ -104,16 +120,73 @@ Before selecting or implementing the oldest issue, inspect the open issue queue 
    - Add a short cross-reference comment explaining where the removed common scope now lives.
 6. After closing duplicates or editing overlap, re-fetch the affected issues and verify the remaining open issues are distinct before selecting the oldest issue.
 
-## Oldest Issue to PR
+## No-Parameter Backlog Orchestrator Mode
 
-1. Find the oldest remaining open issue after issue queue hygiene:
+No-parameter mode is a parent orchestration workflow. Its job is to choose safe parallel work, launch or instruct workers, and integrate their results. It should not implement all issues itself unless sub-agent tooling is unavailable or parallelism is unsafe.
+
+1. Build a live backlog inventory:
+
+   ```powershell
+   gh issue list --state open --limit 1000 --json number,title,createdAt,labels,body,url
+   gh pr list --state open --limit 1000 --json number,title,createdAt,headRefName,body,url,labels
+   gh repo view --json owner,name,defaultBranchRef,visibility,url
+   ```
+
+2. Run [Issue Queue Hygiene](#issue-queue-hygiene) serially before spawning workers. Do not let parallel workers close duplicate issues, rewrite overlapping scope, or independently choose owners for shared requirements.
+3. Remove from the candidate pool any issue that is already covered by an open PR, blocked on external input, labeled as blocked/on-hold/wontfix, or likely to require secrets, production credentials, destructive data changes, payments, auth, crypto, schema migrations, concurrency primitives, or broad public API changes unless the user explicitly authorized that class of work.
+4. Group remaining issues by likely conflict area using labels, title/body keywords, referenced paths, linked issues, and acceptance criteria. Treat unknown or broad scope as conflicting.
+5. Choose the oldest actionable issue from each independent group. Prefer issues with clear acceptance criteria, low coupling, and tests that can run locally.
+6. Pick a concurrency limit dynamically:
+   - Default maximum is 3 workers.
+   - Use 1 worker for red-risk domains, heavy overlap, unclear scope, or repositories where tests/builds cannot run independently.
+   - Use 2 workers for medium overlap, expensive test suites, or broad shared modules.
+   - Use up to 3 workers only when issues are clearly independent and the machine, API rate limits, and review products can handle it.
+   - Never spawn more workers than independent issue groups.
+7. For each chosen issue, assign a lease before spawning:
+   - Issue number and URL.
+   - Branch name, preferably `fix/issue-{number}-{short-slug}` for bugs and `feature/issue-{number}-{short-slug}` for features.
+   - Worktree path under a sibling directory such as `{repo}.worktrees/issue-{number}-{short-slug}`.
+   - Expected ownership boundaries and files or modules to avoid if known.
+8. Spawn workers only if a multi-agent tool is available. With the current Codex multi-agent tools, use `multi_agent_v1.spawn_agent` with `agent_type: "worker"` and a self-contained prompt. Omit model overrides unless the user explicitly requested a different model.
+9. If no sub-agent tool is available, report the planned issue batches and proceed serially with the highest-priority issue unless the user asked to wait.
+10. Monitor worker results. Collect PR URLs, issue numbers, branches, worktrees, verification commands, review status, blockers, and any cleanup needed. Do not merge PRs.
+
+Worker prompt template:
+
+```text
+You are working one assigned GitHub issue from a parent issue-to-mergeable-pr backlog orchestration run.
+
+Repository: {owner}/{repo}
+Base path: {repo-root}
+Issue: #{issue-number} - {issue-title}
+Assigned branch: {branch-name}
+Assigned worktree: {absolute-worktree-path}
+Default branch: {default-branch}
+Reviewer policy: {repo-specific-reviewer-policy}
+
+Rules:
+- Work only issue #{issue-number}; do not inspect or claim the backlog.
+- Create or reuse only the assigned worktree and branch.
+- Start from the fetched default branch, not from a dirty main worktree.
+- Do not edit files outside the issue scope except tests/docs needed for the issue.
+- Do not close, rewrite, or deduplicate other issues.
+- Run the repo's relevant verification and capture exact commands and outcomes.
+- Commit intended changes, push the branch, create a PR that closes #{issue-number}, and request the repo-appropriate automated review.
+- Address substantive automated-review feedback when available.
+- Leave the PR open and do not merge.
+- Final response must include issue number, PR URL, branch, worktree path, changed files, verification evidence, review state, blockers, and cleanup notes.
+```
+
+## Assigned or Oldest Issue to PR
+
+1. If the user supplied an issue number, or a parent orchestrator assigned one, use that issue exactly. Otherwise find the oldest remaining open issue after issue queue hygiene:
 
    ```powershell
    gh issue list --state open --limit 1000 --json number,title,createdAt,labels,url --jq "sort_by(.createdAt)[0]"
    ```
 
 2. Read the issue, linked discussions, nearby issues, and relevant code before branching. Re-check that the selected issue is not a duplicate and does not still overlap with another open issue.
-3. Create a focused branch from the default branch. Prefer `fix/issue-{number}-{short-slug}` for bugs and `feature/issue-{number}-{short-slug}` for features.
+3. Create a focused branch from the default branch, or use the branch/worktree assigned by the parent orchestrator. Prefer `fix/issue-{number}-{short-slug}` for bugs and `feature/issue-{number}-{short-slug}` for features.
 4. Implement the smallest defensible change that satisfies the issue.
 5. Run the repo's relevant diagnostics, tests, lint, typecheck, and build. If a check is unavailable or pre-existing failures block verification, capture exact evidence.
 6. Commit only the intended changes and push the branch.

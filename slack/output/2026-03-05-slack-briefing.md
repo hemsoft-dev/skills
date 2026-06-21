@@ -4,18 +4,18 @@
 
 #### \ud83d\udcac Direct Messages (7)
 
-- **[2026-03-05 09:42]** @Bitbucket Cloud: 
-- **[2026-03-05 09:39]** @Bitbucket Cloud: 
-- **[2026-03-05 09:39]** @Bitbucket Cloud: 
-- **[2026-03-05 09:28]** @Bitbucket Cloud: 
-- **[2026-03-05 09:13]** @Bitbucket Cloud: 
-- **[2026-03-05 08:01]** @Slack Skill Bot: :sunrise: _Morning Briefing — Thursday, March 5th_ :clipboard: _Tasks_ _Timed:_ • 9:00 AM — Doctor Appointment: Office Visit with Clayton Starnes, NP ...
+- **[2026-03-05 09:42]** @Bitbucket Cloud:
+- **[2026-03-05 09:39]** @Bitbucket Cloud:
+- **[2026-03-05 09:39]** @Bitbucket Cloud:
+- **[2026-03-05 09:28]** @Bitbucket Cloud:
+- **[2026-03-05 09:13]** @Bitbucket Cloud:
+- **[2026-03-05 08:01]** @Slack Skill Bot: :sunrise: *Morning Briefing — Thursday, March 5th* :clipboard: *Tasks* *Timed:* • 9:00 AM — Doctor Appointment: Office Visit with Clayton Starnes, NP ...
 - **[2026-03-05 12:50]** @Warren Sutherland: Thanks for the invite. I'm battling a fever so won't make it today :pensive:
 
 #### \ud83d\udce2 Announcements (2)
 
 - **[2026-03-05 12:01] #technical-willowtree-discussions** - @Darren Jack: While waiting on the new triforce slack channel thought I'd reach out here. I saw the email from Google Play store that the appeal was approved :whoo-hoo-homer: It outlines some steps so are we good to go? Let me know if you need any more help
-- **[2026-03-05 10:54] #pe-bot-test** - @RAE (Relias Asistant for Engineering): 
+- **[2026-03-05 10:54] #pe-bot-test** - @RAE (Relias Asistant for Engineering):
 
 #### \ud83d\udcc1 Channel Activity
 
@@ -28,14 +28,14 @@
 - [2026-03-05 10:46] @Bryan Halterman: its happening because the repo has ADO as the first stop for nuget packages. try an explicit source call in your action: ```- name: Install EF Tools run: dotnet tool install --global dotnet-ef --add-s...
 - [2026-03-05 10:43] @Josh Bowman: But for now, I'll explore getting a service account setup with PAT. Thanks for help!
 - [2026-03-05 10:43] @Josh Bowman: I don't even know if we're hosting the ef tooling from azure
-- [2026-03-05 10:42] @Bryan Halterman: 
+- [2026-03-05 10:42] @Bryan Halterman:
 - [2026-03-05 10:42] @Josh Bowman: It didn't on my test repo, but does from here yea
 - [2026-03-05 10:42] @Bryan Halterman: ooh the auth error
 
 **#prod-eng-devex-private** (11 messages)
 
 - [2026-03-05 10:53] @Nick Peterson: :roll_safe:
-- [2026-03-05 10:52] @Bryan Halterman: 
+- [2026-03-05 10:52] @Bryan Halterman:
 - [2026-03-05 10:52] @Franz Hemmer: Why fix your own problems when you can have PE do it for you? Huh?
 - [2026-03-05 10:51] @Bryan Halterman: I was just thinking that with me just using AI to troubleshoot his problem
 - [2026-03-05 10:51] @Nick Peterson: But what if the cost incurred compels the non-AI engineer to start using AI? ==> Net Savings :money_with_wings:
@@ -65,7 +65,7 @@
 
 **#sonarcloud-public** (1 messages)
 
-- [2026-03-05 13:50] @Nitin Malhotra: Hi Team, I'm currently experiencing the same SonarCloud check pending issue in policy-manager repo. It has been stuck for over 4 hours now. PR: <https://github.com/relias-engineering/policy-manager/pu...
+- [2026-03-05 13:50] @Nitin Malhotra: Hi Team, I'm currently experiencing the same SonarCloud check pending issue in policy-manager repo. It has been stuck for over 4 hours now. PR: <<https://github.com/relias-engineering/policy-manager/pu>...
 
 **#ai-chapter** (1 messages)
 

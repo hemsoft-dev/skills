@@ -9,11 +9,11 @@
 - **[2026-03-12 13:57]** @Malia Paul: IT has added the tile. <@U06DJTAFNDR|mbarry> I can walk you through the setup today at 4:30 or we can wait for our 1:1 on Monday.
 - **[2026-03-12 13:37]** @Malia Paul: I'll add a ticket to get it on myApps and walk you through the rest.
 - **[2026-03-12 13:36]** @Malia Paul: <@U06DJTAFNDR|mbarry> we need to add you as a user in GitHub!
-- **[2026-03-12 15:50]** @Michelle Barry: I have access!! Bryan helped me out - I had a login and such - just needed to refresh!! Woot woot. Now I’m dangerous. 
-- **[2026-03-12 14:26]** @Michelle Barry: Thank you! 
-- **[2026-03-12 12:22]** @Michelle Barry: 
-- **[2026-03-12 10:50]** @RAE (Relias Asistant for Engineering): 
-- **[2026-03-12 08:01]** @Slack Skill Bot: :sunrise: _Morning Briefing — Thursday, March 12th_ :clipboard: _Tasks_ _Timed:_ • 8:00 AM — Take morning meds • 12:00 PM — Exercise • 6:00 PM — Egg I...
+- **[2026-03-12 15:50]** @Michelle Barry: I have access!! Bryan helped me out - I had a login and such - just needed to refresh!! Woot woot. Now I’m dangerous.
+- **[2026-03-12 14:26]** @Michelle Barry: Thank you!
+- **[2026-03-12 12:22]** @Michelle Barry:
+- **[2026-03-12 10:50]** @RAE (Relias Asistant for Engineering):
+- **[2026-03-12 08:01]** @Slack Skill Bot: :sunrise: *Morning Briefing — Thursday, March 12th* :clipboard: *Tasks* *Timed:* • 8:00 AM — Take morning meds • 12:00 PM — Exercise • 6:00 PM — Egg I...
 
 #### \ud83d\udce2 Announcements (1)
 
@@ -41,8 +41,8 @@
 
 **#dev-tribe** (18 messages)
 
-- [2026-03-12 16:18] @Chuck Waltz: 
-- [2026-03-12 15:54] @Chuck Waltz: There's a revert PR here for the change that seemingly caused the issue. cc <SB3GH6USY> <https://bit...
+- [2026-03-12 16:18] @Chuck Waltz:
+- [2026-03-12 15:54] @Chuck Waltz: There's a revert PR here for the change that seemingly caused the issue. cc <SB3GH6USY> <<https://bit>...
 - [2026-03-12 15:45] @Charlotte Fowler: <!here> I am currently testing an NSG and App Restriction script in Dev2. App services in Dev2 will ...
 
 **#prod-eng-devex-private** (16 messages)

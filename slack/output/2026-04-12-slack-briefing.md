@@ -9,7 +9,7 @@
 - **[2026-04-12 14:31]** @Bryan Halterman: 2.5 for a month, then go up to 5
 - **[2026-04-12 14:24]** @Bryan Halterman: I took it yesterday and now Im light headed and sick to my stomach today
 - **[2026-04-12 14:23]** @Bryan Halterman: How sick did you get after your first shot of zepbound?
-- **[2026-04-12 08:01]** @Slack Skill Bot: :sunrise: _Morning Briefing — Sunday, April 12th_ :clipboard: _Tasks_ Timed: • 8:00 AM — Take morning meds • 6:00 PM — Put laundry back • 10:00 PM — T...
+- **[2026-04-12 08:01]** @Slack Skill Bot: :sunrise: *Morning Briefing — Sunday, April 12th* :clipboard: *Tasks* Timed: • 8:00 AM — Take morning meds • 6:00 PM — Put laundry back • 10:00 PM — T...
 
 ---
 *Mentions: 0 | DMs: 6 | Announcements: 0 | Channel Messages: 0 (across 0 channels) | Action Items: 0*

@@ -12,10 +12,10 @@
 - **[2026-03-23 10:35]** @Jeff Buda: I'd like the AI/workflow to see those scan results and adjust its code changes accordingly
 - **[2026-03-23 10:34]** @Jeff Buda: do you already know how I can integrate Snyk and SonarCloud into my GitHub Workflow, or is that something that I should research?
 - **[2026-03-23 07:26]** @Jeff Buda: I have github agents working on a simple task (enable dotnet profiler) and a complex task (add more tests to the k8s e2e test suite). I'm curious to s...
-- **[2026-03-23 07:24]** @Jeff Buda: good morning :coffee: Yesterday I made an attempt at the "set it free" AI agent loop you introduced me to. You can see it here: <https://github.com/re...
-- **[2026-03-23 14:59]** @RAE (Relias Asistant for Engineering): 
-- **[2026-03-23 14:58]** @RAE (Relias Asistant for Engineering): 
-- **[2026-03-23 08:01]** @Slack Skill Bot: :sunrise: _Morning Briefing — Monday, March 23rd, 2026_ :warning: _Needs attention_ • Personal Google services unavailable (calendar + Gmail need re-a...
+- **[2026-03-23 07:24]** @Jeff Buda: good morning :coffee: Yesterday I made an attempt at the "set it free" AI agent loop you introduced me to. You can see it here: <<https://github.com/re>...
+- **[2026-03-23 14:59]** @RAE (Relias Asistant for Engineering):
+- **[2026-03-23 14:58]** @RAE (Relias Asistant for Engineering):
+- **[2026-03-23 08:01]** @Slack Skill Bot: :sunrise: *Morning Briefing — Monday, March 23rd, 2026* :warning: *Needs attention* • Personal Google services unavailable (calendar + Gmail need re-a...
 
 #### \ud83d\udce2 Announcements (1)
 
@@ -66,7 +66,7 @@
 
 **#prod-eng-devex-private** (1 messages)
 
-- [2026-03-23 15:57] @Malia Paul: Henryk is putting in a request for Mermaid extension to Atlassian <https://marketplace.atlassian.com...
+- [2026-03-23 15:57] @Malia Paul: Henryk is putting in a request for Mermaid extension to Atlassian <<https://marketplace.atlassian.com>...
 
 ---
 *Mentions: 0 | DMs: 12 | Announcements: 1 | Channel Messages: 41 (across 8 channels) | Action Items: 0*

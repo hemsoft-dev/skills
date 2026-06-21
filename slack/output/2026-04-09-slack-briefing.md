@@ -9,14 +9,14 @@
 #### \ud83d\udcac Direct Messages (9)
 
 - **[2026-04-09 16:51]** @Bryan Halterman: 1 k in parts this month, her car is 17 years old and has 200k miles on it
-- **[2026-04-09 16:51]** @Bryan Halterman: 
+- **[2026-04-09 16:51]** @Bryan Halterman:
 - **[2026-04-09 16:50]** @Bryan Halterman: Got it for 22k after taxes and fees
 - **[2026-04-09 16:50]** @Bryan Halterman: I bought her a 2021 Volvo ev, similar to mine lol
 - **[2026-04-09 16:49]** @Bryan Halterman: I was looking at over 1k in parts so told her I'd just pick up a cheap used car and we'll sell or junk her car
 - **[2026-04-09 15:38]** @Malia Paul: Our overage is only $124 right now, correct?
 - **[2026-04-09 15:32]** @Malia Paul: It's up to you! I was going to be in and out of the readouts so that I can make up for lost time.
 - **[2026-04-09 15:29]** @Malia Paul: I should just permanently move our 1:1 to Friday :disappointed: There's an ice cream social thing today at the end of BRP that I'd like to go to since...
-- **[2026-04-09 08:01]** @Slack Skill Bot: :sunrise: _Morning Briefing — Thursday, April 9th_ :clipboard: _Tasks_ Timed: • 8:00 AM — Take morning meds • 12:00 PM — Exercise • 6:00 PM — Egg Inc:...
+- **[2026-04-09 08:01]** @Slack Skill Bot: :sunrise: *Morning Briefing — Thursday, April 9th* :clipboard: *Tasks* Timed: • 8:00 AM — Take morning meds • 12:00 PM — Exercise • 6:00 PM — Egg Inc:...
 
 #### \ud83d\udce2 Announcements (4)
 
@@ -53,7 +53,7 @@
 
 **#dev-tribe** (1 messages)
 
-- [2026-04-09 09:40] @Charan MV: <!here> Divum-US is planning RC for Rlms-Legacy release 26.Q1.06 RC Ticket: <https://relias.atlassia...
+- [2026-04-09 09:40] @Charan MV: <!here> Divum-US is planning RC for Rlms-Legacy release 26.Q1.06 RC Ticket: <<https://relias.atlassia>...
 
 #### \u26a1 Potential Action Items (1)
 

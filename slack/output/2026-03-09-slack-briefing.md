@@ -14,12 +14,12 @@
 - **[2026-03-09 11:59]** @John Martin: Ooooh, ok will do! I'm already at like 65% of my credits :sweat_smile: - and that's only using opus for planning and the initial implementation, and t...
 - **[2026-03-09 11:53]** @John Martin: And this is all thanks to your skills chapter btw - idk why, but that got the ball rolling, and I can't stop :rofl: my brain is constantly thinking ab...
 - **[2026-03-09 11:52]** @John Martin: And now every new pass it reads the code, and builds it's own fresh project markdown file, outlining the application specifics, and a checklist of eve...
-- **[2026-03-09 09:16]** @RAE (Relias Asistant for Engineering): 
-- **[2026-03-09 09:15]** @RAE (Relias Asistant for Engineering): 
+- **[2026-03-09 09:16]** @RAE (Relias Asistant for Engineering):
+- **[2026-03-09 09:15]** @RAE (Relias Asistant for Engineering):
 
 #### \ud83d\udce2 Announcements (1)
 
-- **[2026-03-09 15:44] #reliasalerts-ssl** - @datadog: 
+- **[2026-03-09 15:44] #reliasalerts-ssl** - @datadog:
 
 #### \ud83d\udcc1 Channel Activity
 
@@ -31,7 +31,7 @@
 
 **#dev-ex-private** (18 messages)
 
-- [2026-03-09 14:46] @Franz Hemmer: 
+- [2026-03-09 14:46] @Franz Hemmer:
 - [2026-03-09 14:46] @Bryan Halterman: :joy:
 - [2026-03-09 14:46] @Nick Peterson: Looks like it was used to sweep a barber shop :laughing:
 
@@ -49,18 +49,18 @@
 
 **#prod-eng-devex-private** (5 messages)
 
-- [2026-03-09 14:51] @Bryan Halterman: 
+- [2026-03-09 14:51] @Bryan Halterman:
 - [2026-03-09 14:51] @Bryan Halterman: Also, accounts with no SSO association:
 - [2026-03-09 14:35] @Franz Hemmer: Why is Sagar still in there?
 
 **#ai-chapter** (2 messages)
 
 - [2026-03-09 13:09] @Franz Hemmer: Problem: Nobody has any suggestions on what to work on next - 41 one of you had 0 feedback on the su...
-- [2026-03-09 13:06] @Franz Hemmer: <!here> Agenda for AI Engineering Chapter Wednesday 3/11: <https://relias.atlassian.net/wiki/spaces/...
+- [2026-03-09 13:06] @Franz Hemmer: <!here> Agenda for AI Engineering Chapter Wednesday 3/11: <<https://relias.atlassian.net/wiki/spaces/>...
 
 **#relias-engineering** (1 messages)
 
-- [2026-03-09 12:04] @George DeCherney: <!channel> Relias Spring Day Out RSVPs are live! <https://reliaslearning.sharepoint.com/sites/HROper...
+- [2026-03-09 12:04] @George DeCherney: <!channel> Relias Spring Day Out RSVPs are live! <<https://reliaslearning.sharepoint.com/sites/HROper>...
 
 **#dev-env-help** (1 messages)
 

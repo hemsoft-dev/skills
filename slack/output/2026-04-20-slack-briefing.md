@@ -7,11 +7,11 @@
 - **[2026-04-20 16:34] #prod-eng-devex-private** - @Nick Peterson: Setup was a breeze, now I can see how behind I am in real time! /s Good call <@U2XMZDPJ7|Franz> This is already a fantastic companion app
 - **[2026-04-20 14:12] #github-copilot** - @Avinash Pradhan: I see it now, it's all good!!.. Thank you <@U2XMZDPJ7|Franz> and <@U032050R2TY|Malia Paul>
 - **[2026-04-20 13:35] #github-copilot** - @Malia Paul: <@U2XMZDPJ7|Franz> any idea what the problem was? His GH account exists.
-- **[2026-04-20 10:29] #contract-testing** - @Jeff Buda: <@U2XMZDPJ7|Franz> which level of pact were you trying to implement in the Golden Path? Silver? Gold? <https://docs.pact.io/pact_nirvana|CI/CD Setup Guide | Pact Docs>
+- **[2026-04-20 10:29] #contract-testing** - @Jeff Buda: <@U2XMZDPJ7|Franz> which level of pact were you trying to implement in the Golden Path? Silver? Gold? <<https://docs.pact.io/pact_nirvana|CI/CD> Setup Guide | Pact Docs>
 - **[2026-04-20 09:38] #contract-testing** - @Jeff Buda: <@U2XMZDPJ7|Franz> any objections to be putting in a ticket to have Sys Ops update the pactbroker server? My feature branches are using v4 but the server can only properly parse v1/v2
 - **[2026-04-20 09:17] #contract-testing** - @Jeff Buda: yeah <@U2XMZDPJ7|Franz>, I'm looking for someone to take this over as well
-- **[2026-04-20 01:56] #pe-bot-franz** - @github: 
-- **[2026-04-20 01:34] #pe-bot-franz** - @github: 
+- **[2026-04-20 01:56] #pe-bot-franz** - @github:
+- **[2026-04-20 01:34] #pe-bot-franz** - @github:
 
 #### \ud83d\udcac Direct Messages (19)
 
@@ -38,11 +38,11 @@
 #### \ud83d\udce2 Announcements (8)
 
 - **[2026-04-20 11:22] #xm-sso** - @Atlassian Home: :wave: Thanks for adding me to your channel, <@U08DAGFQFEG>! I'll keep you updated on what's happening. To see what I can do, type `/atlassian help`
-- **[2026-04-20 11:01] #pe-bot-test** - @RAE (Relias Asistant for Engineering): 
-- **[2026-04-20 10:59] #pe-bot-test** - @RAE (Relias Asistant for Engineering): 
-- **[2026-04-20 10:59] #pe-bot-test** - @RAE (Relias Asistant for Engineering): 
-- **[2026-04-20 10:59] #pe-bot-test** - @RAE (Relias Asistant for Engineering): 
-- **[2026-04-20 10:09] #angular-hotline** - @Rahul Chopra: <!channel> Please review this pr for global component: <https://github.com/relias-engineering/rlms-website/pull/2025|RPLAT-18824: UI: Numeric Time Input Question Component - Global Compo… by chopra-rahul · Pull Request #2025 · relias-engineering/rlms...
+- **[2026-04-20 11:01] #pe-bot-test** - @RAE (Relias Asistant for Engineering):
+- **[2026-04-20 10:59] #pe-bot-test** - @RAE (Relias Asistant for Engineering):
+- **[2026-04-20 10:59] #pe-bot-test** - @RAE (Relias Asistant for Engineering):
+- **[2026-04-20 10:59] #pe-bot-test** - @RAE (Relias Asistant for Engineering):
+- **[2026-04-20 10:09] #angular-hotline** - @Rahul Chopra: <!channel> Please review this pr for global component: <<https://github.com/relias-engineering/rlms-website/pull/2025|RPLAT-18824>: UI: Numeric Time Input Question Component - Global Compo… by chopra-rahul · Pull Request #2025 · relias-engineering/rlms...
 - **[2026-04-20 09:17] #contract-testing** - @Gray Anthony: Ok, I added some links to the channel
 - **[2026-04-20 09:13] #contract-testing** - @Jeff Buda: Hello :wave-animated: I heard a rumor that we were all exploring contract testing and wanted to start this channel to share our thoughts and experiences
 
@@ -56,8 +56,8 @@
 
 **#ai-chapter** (7 messages)
 
-- [2026-04-20 17:54] @George DeCherney: <https://www.a16z.news/p/institutional-ai-vs-individual-ai?utm_campaign=post&utm_medium=web|https://...
-- [2026-04-20 15:05] @Franz Hemmer: Good old "Clean Code" Uncle Bob going strong ... <https://x.com/unclebobmartin/status/20462061455979...
+- [2026-04-20 17:54] @George DeCherney: <<https://www.a16z.news/p/institutional-ai-vs-individual-ai?utm_campaign=post&utm_medium=web|https://>...
+- [2026-04-20 15:05] @Franz Hemmer: Good old "Clean Code" Uncle Bob going strong ... <<https://x.com/unclebobmartin/status/20462061455979>...
 - [2026-04-20 14:00] @Franz Hemmer: Ralphing is great! ```[increase-coverage] ==================================== [increase-coverage] R...
 
 **#dev-ex-private** (5 messages)
@@ -70,7 +70,7 @@
 
 - [2026-04-20 16:47] @Franz Hemmer: Nice! Note you can toggle that view into a list view which helps a lot for overview.
 - [2026-04-20 16:34] @Nick Peterson: Setup was a breeze, now I can see how behind I am in real time! /s Good call <@U2XMZDPJ7|Franz> This...
-- [2026-04-20 15:51] @Franz Hemmer: Would appreciate someone looking at this soon: <https://github.com/relias-engineering/ai-skills/pull...
+- [2026-04-20 15:51] @Franz Hemmer: Would appreciate someone looking at this soon: <<https://github.com/relias-engineering/ai-skills/pull>...
 
 **#dev-env-help** (1 messages)
 

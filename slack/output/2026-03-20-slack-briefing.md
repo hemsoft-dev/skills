@@ -8,13 +8,13 @@
 
 #### \ud83d\udcac Direct Messages (7)
 
-- **[2026-03-20 18:50]** @Bryan Halterman: weird, the dev docs to not match the cqrs readme steps. <https://github.com/relias-engineering/dotnet-cqrs-microservice|relias-engineering/dotnet-cqrs...
+- **[2026-03-20 18:50]** @Bryan Halterman: weird, the dev docs to not match the cqrs readme steps. <<https://github.com/relias-engineering/dotnet-cqrs-microservice|relias-engineering/dotnet-cqrs>...
 - **[2026-03-20 13:51]** @Bryan Halterman: yea I'm going to work on that after my meeting with Todd Webster about these ENG accounts
 - **[2026-03-20 13:50]** @Bryan Halterman: I think I have most things under control, I just made a PR to add the scaffold-service skill to the ai-skills repo
 - **[2026-03-20 13:50]** @Bryan Halterman: mmm not sure yet lol
 - **[2026-03-20 13:23]** @Bryan Halterman: How's your day going sir?
 - **[2026-03-20 13:14]** @Malia Paul: Sarah Shotton
-- **[2026-03-20 08:01]** @Slack Skill Bot: :sunrise: _Morning Briefing — Friday, March 20th, 2026_ :clipboard: _Tasks_ _Timed:_ • 8:00 AM — Take morning meds • 12:00 PM — Run cm command • 10:00...
+- **[2026-03-20 08:01]** @Slack Skill Bot: :sunrise: *Morning Briefing — Friday, March 20th, 2026* :clipboard: *Tasks* *Timed:* • 8:00 AM — Take morning meds • 12:00 PM — Run cm command • 10:00...
 
 #### \ud83d\udce2 Announcements (1)
 
@@ -36,7 +36,7 @@
 
 **#dev-tribe** (16 messages)
 
-- [2026-03-20 16:01] @George DeCherney: 
+- [2026-03-20 16:01] @George DeCherney:
 - [2026-03-20 12:04] @Jason Twichell: <!here> hello Dev Tribe! I apologize for the grim reminder on this happy Friday morning, but BRP is ...
 - [2026-03-20 11:50] @Darren Jack: Thank you so much! I knew there was someone out there who had worked on this recently.
 
@@ -44,7 +44,7 @@
 
 - [2026-03-20 09:59] @Jane Hou: Thank you!!! Terrence invited me back to the Teams channel, and Geo granted me access to the recordi...
 - [2026-03-20 09:54] @Malia Paul: I don't know which one was this week :slightly_smiling_face:
-- [2026-03-20 09:54] @Malia Paul: Or <https://reliaslearning.sharepoint.com/:f:/r/sites/ProductivityEngineering/Shared%20Documents/AI%...
+- [2026-03-20 09:54] @Malia Paul: Or <<https://reliaslearning.sharepoint.com/:f:/r/sites/ProductivityEngineering/Shared%20Documents/AI%>...
 
 **#dev-env-help** (1 messages)
 

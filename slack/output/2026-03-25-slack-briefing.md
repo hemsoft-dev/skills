@@ -4,7 +4,7 @@
 
 #### \ud83d\udd14 Direct @Mentions (3)
 
-- **[2026-03-25 14:36] #U08GJU7S7BM** - @RAE (Relias Asistant for Engineering): 
+- **[2026-03-25 14:36] #U08GJU7S7BM** - @RAE (Relias Asistant for Engineering):
 - **[2026-03-25 12:23] #ai-assisted-engineering** - @Ruchita Kothari: Hello <@U032050R2TY|Malia Paul>, <@U2XMZDPJ7|Franz> Good morning.. We have not scheduled call for today as Ajith has visited Pune office and team dinner was also planned.. we will continue our weekly ...
 - **[2026-03-25 11:31] #prod-eng-devex-private** - @Bryan Halterman: <@U2XMZDPJ7|Franz> I know you're heads down prepping for AI chapter, but do you think we should go the beta deployment route for Configurator or just throw it out there and focus on fixing issues as t...
 
@@ -21,10 +21,10 @@
 - **[2026-03-25 17:24]** @John Martin: and just fyi we might need to exempt the repo from sonarcloud and snyk scans - but we're both admins and can bypass :slightly_smiling_face:
 - **[2026-03-25 17:23]** @John Martin: Pull Request :mana-1:! <https://github.com/relias-engineering/org-metrics/pull/1>
 - **[2026-03-25 17:16]** @John Martin: sounds good! even tomorrow is good, as long as I can get that index file regenerated to show in pages :slightly_smiling_face:
-- **[2026-03-25 14:37]** @RAE (Relias Asistant for Engineering): 
-- **[2026-03-25 14:37]** @RAE (Relias Asistant for Engineering): 
-- **[2026-03-25 14:36]** @RAE (Relias Asistant for Engineering): 
-- **[2026-03-25 08:01]** @Slack Skill Bot: :sunrise: _Morning Briefing — Wednesday, March 25th_ :warning: _Needs attention_ • Personal Google services unavailable (calendar + Gmail need re-auth...
+- **[2026-03-25 14:37]** @RAE (Relias Asistant for Engineering):
+- **[2026-03-25 14:37]** @RAE (Relias Asistant for Engineering):
+- **[2026-03-25 14:36]** @RAE (Relias Asistant for Engineering):
+- **[2026-03-25 08:01]** @Slack Skill Bot: :sunrise: *Morning Briefing — Wednesday, March 25th* :warning: *Needs attention* • Personal Google services unavailable (calendar + Gmail need re-auth...
 
 #### \ud83d\udce2 Announcements (1)
 
@@ -46,7 +46,7 @@
 
 **#ai-chapter** (11 messages)
 
-- [2026-03-25 14:11] @Franz Hemmer: Agenda for today's AI Engineering Chapter: <https://relias.atlassian.net/wiki/spaces/AIPE/pages/6012...
+- [2026-03-25 14:11] @Franz Hemmer: Agenda for today's AI Engineering Chapter: <<https://relias.atlassian.net/wiki/spaces/AIPE/pages/6012>...
 - [2026-03-25 13:59] @Jason Twichell: Thats generally true! Who knows, we could go net positive on fusion flip the whole paradigm on its h...
 - [2026-03-25 13:45] @Christian Mutaba: I’m hopeful AI will follow the same pattern we have seen in other technologies. Early computers were...
 

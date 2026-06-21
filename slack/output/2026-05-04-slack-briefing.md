@@ -6,8 +6,8 @@
 
 - **[2026-05-04 10:21] #ai-chapter** - @Yuhua Zhong: <@U2XMZDPJ7|Franz>, is there an option to use some of those open sourced models as supplement?
 - **[2026-05-04 10:13] #prod-eng-devex-private** - @Bryan Halterman: <@U2XMZDPJ7|Franz> I'm going to wire up Aspire into the Zoom POC, :evil-pat-close:
-- **[2026-05-04 01:50] #pe-bot-franz** - @github: 
-- **[2026-05-04 01:43] #pe-bot-franz** - @github: 
+- **[2026-05-04 01:50] #pe-bot-franz** - @github:
+- **[2026-05-04 01:43] #pe-bot-franz** - @github:
 
 #### \ud83d\udcac Direct Messages (14)
 
@@ -18,12 +18,12 @@
 - **[2026-05-04 16:20]** @Bryan Halterman: Ashley was having login issues this morning
 - **[2026-05-04 16:19]** @Bryan Halterman: its definitely been slow today
 - **[2026-05-04 16:19]** @Bryan Halterman: dude, they've been struggling bad since last week
-- **[2026-05-04 15:57]** @Jira: 
-- **[2026-05-04 16:19]** @Slack Skill Bot: :bell: _Heartbeat — 4:17 PM_ :e-mail: _New email:_ Billy McCormick via LinkedIn — Billy just messaged you
-- **[2026-05-04 14:13]** @Slack Skill Bot: :bell: _Heartbeat — 2:12 PM_ :e-mail: _New email:_ Republic — You have 4 notifications
-- **[2026-05-04 13:10]** @Slack Skill Bot: :bell: _Heartbeat — 1:08 PM_ :e-mail: _New email:_ Instagram — We can help you log into Instagram :office: _Work:_ Watercooler: Warren &amp; Franz at ...
-- **[2026-05-04 12:08]** @Slack Skill Bot: :bell: _Heartbeat — 12:07 PM_ :e-mail: _New email:_ Republic Support — Action Required | Your investment in Lumida Wealth
-- **[2026-05-04 11:06]** @Slack Skill Bot: :bell: _Heartbeat — 11:05 AM_ :e-mail: _New email:_ Republic — :warning: LAST REMINDER - avoid cancellation of your investment in Lumida Wealth
+- **[2026-05-04 15:57]** @Jira:
+- **[2026-05-04 16:19]** @Slack Skill Bot: :bell: *Heartbeat — 4:17 PM* :e-mail: *New email:* Billy McCormick via LinkedIn — Billy just messaged you
+- **[2026-05-04 14:13]** @Slack Skill Bot: :bell: *Heartbeat — 2:12 PM* :e-mail: *New email:* Republic — You have 4 notifications
+- **[2026-05-04 13:10]** @Slack Skill Bot: :bell: *Heartbeat — 1:08 PM* :e-mail: *New email:* Instagram — We can help you log into Instagram :office: *Work:* Watercooler: Warren &amp; Franz at ...
+- **[2026-05-04 12:08]** @Slack Skill Bot: :bell: *Heartbeat — 12:07 PM* :e-mail: *New email:* Republic Support — Action Required | Your investment in Lumida Wealth
+- **[2026-05-04 11:06]** @Slack Skill Bot: :bell: *Heartbeat — 11:05 AM* :e-mail: *New email:* Republic — :warning: LAST REMINDER - avoid cancellation of your investment in Lumida Wealth
 - **[2026-05-04 13:49]** @Terrence Meikle: Hi Franz, wanted to follow up on tomorrow's meeting and see if you needed anything else from us? Do you have a specific agenda / format that you usual...
 
 #### \ud83d\udce2 Announcements (7)
@@ -40,13 +40,13 @@
 
 **#platform** (41 messages)
 
-- [2026-05-04 16:23] @Sarah Green: 
+- [2026-05-04 16:23] @Sarah Green:
 - [2026-05-04 16:17] @Todd Southwell: ty !
 - [2026-05-04 16:17] @Todd Southwell: that's absolutely good enough for my sizing purposes
 
 **#dev-tribe** (13 messages)
 
-- [2026-05-04 13:33] @Ulada Haranina: It might be realted to this: <https://relias-engineering.slack.com/archives/C0A602R1G91/p17779123361...
+- [2026-05-04 13:33] @Ulada Haranina: It might be realted to this: <<https://relias-engineering.slack.com/archives/C0A602R1G91/p17779123361>...
 - [2026-05-04 13:25] @Micahan Burgess: It's making a POST call to <https://dev1-users.reliaslearning.com/v1/users> endpoint to create the u...
 - [2026-05-04 13:21] @Christopher LaGant: Confirming, this is a user created through the UI not making it to IDP?
 

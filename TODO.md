@@ -25,4 +25,3 @@
 ## Progress
 
 **Completed: 19 / 19** (100%)
-

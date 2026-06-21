@@ -65,4 +65,3 @@ The admin script:
 - Sorts by login for deterministic output.
 - Supports `-Format Table|Json|Csv`.
 - Does not modify GitHub state.
-

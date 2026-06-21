@@ -9,11 +9,11 @@
 - **[2026-03-16 10:05]** @Bryan Halterman: haha
 - **[2026-03-16 10:04]** @Bryan Halterman: I just won't turn off the gate for that repo until someone takes the time to look at the PR then
 - **[2026-03-16 10:02]** @Bryan Halterman: and I'm like its a PR build pipeline not a code change nor a deployment change
-- **[2026-03-16 16:46]** @Bryan Halterman: 
+- **[2026-03-16 16:46]** @Bryan Halterman:
 - **[2026-03-16 10:57]** @Malia Paul: Knowing this context now, I think we can do a better job of flagging things like spec driven dev that might pose a problem for us to support when they...
 - **[2026-03-16 10:46]** @Malia Paul: So, essentially, let 'em go and do their thing for their own internal usage. Collaborate so we can share ideas. Enforce our own standards.
 - **[2026-03-16 10:43]** @Malia Paul: I had a conversation with Ajith on Friday (yeah, while I was on PTO) about that Harbinger AI team and duplicated efforts. He gave me more context: "Th...
-- **[2026-03-16 08:01]** @Slack Skill Bot: :sunrise: _Morning Briefing — Monday, March 16th, 2026_ :clipboard: _Tasks_ _Timed:_ • 8:00 AM — Take morning meds • 12:00 PM — Run cm command to sche...
+- **[2026-03-16 08:01]** @Slack Skill Bot: :sunrise: *Morning Briefing — Monday, March 16th, 2026* :clipboard: *Tasks* *Timed:* • 8:00 AM — Take morning meds • 12:00 PM — Run cm command to sche...
 - **[2026-03-16 09:00]** @Shobana Sampath: Good Morning Franz, What are the recommendations we are providing to engineers who wants to use Claude since we do not have enterprise on company docu...
 - **[2026-03-16 10:47]** @Yuhua Zhong: btw, I did add a few more comments to the SKILL.md per your suggestions to clarify target users
 - **[2026-03-16 10:45]** @Yuhua Zhong: I don't see a way to manually do that
@@ -55,7 +55,7 @@
 
 **#platform** (10 messages)
 
-- [2026-03-16 14:47] @Abdalla Musa: Thanks everyone. Very excited to be part of the team and looking forward to working with you. 
+- [2026-03-16 14:47] @Abdalla Musa: Thanks everyone. Very excited to be part of the team and looking forward to working with you.
 - [2026-03-16 14:43] @Christopher LaGant: <@U0ALVJ0P24W|amusa> has joined us on Slack :)
 - [2026-03-16 14:07] @Jessica Ryan: I believe this is intended functionality!
 - [2026-03-16 14:03] @Matthew Wilson: This includes marked as missed or excused absences. You can still mark online courses as complete for on leave users
@@ -71,7 +71,7 @@
 - [2026-03-16 10:27] @Shobana Sampath: thanks! I am here
 - [2026-03-16 09:50] @Dawn Alexander: Office is open, however closing at noon today
 - [2026-03-16 09:34] @Selyusha Jasti: <@U07TZ3GDKGR|ssampath> It is opened as per conversation in random chat <https://relias-engineering.slack.com/archives/C6313JCDC/p1773664589972999|link>
-- [2026-03-16 08:30] @Shobana Sampath: Can someone confirm if the office is open? I’m on my way 
+- [2026-03-16 08:30] @Shobana Sampath: Can someone confirm if the office is open? I’m on my way
 
 **#prod-eng-devex-private** (3 messages)
 

@@ -16,11 +16,11 @@
 - **[2026-05-05 16:01]** @Nick Peterson: Will do, appreciate it
 - **[2026-05-05 16:00]** @Nick Peterson: Bryan reached out too, seems like I've been a little too quiet today
 - **[2026-05-05 15:59]** @Nick Peterson: Going good, kinda a mixed bag today, had an early docs appointment but I'm settling into my week
-- **[2026-05-05 15:25]** @Slack Skill Bot: :bell: _Heartbeat — 3:24 PM_ :e-mail: _New email:_ <http://Chess.com|Chess.com> — Queen_Friday, play something different today! :chess_pawn:
-- **[2026-05-05 14:23]** @Slack Skill Bot: :bell: _Heartbeat — 2:22 PM_ :e-mail: _New email:_ Republic — :bangbang: FINAL NOTICE - your investment in Lumida Wealth will be cancelled in 4 days :...
-- **[2026-05-05 12:21]** @Slack Skill Bot: :bell: _Heartbeat — 12:20 PM_ :e-mail: _New email:_ Google Store — Franz, don’t miss the savings
-- **[2026-05-05 11:19]** @Slack Skill Bot: :bell: _Heartbeat — 11:17 AM_ :e-mail: _New email:_ Republic — :bangbang: FINAL NOTICE - your investment in Lumida Wealth will be cancelled in 4 days ...
-- **[2026-05-05 10:14]** @Slack Skill Bot: :bell: _Heartbeat — 10:13 AM_ :e-mail: _New email:_ TLDR AI — YC’s OpenAI stake :moneybag:, Gemini API Webhooks :adult::computer:, AI PE partnerships ...
+- **[2026-05-05 15:25]** @Slack Skill Bot: :bell: *Heartbeat — 3:24 PM* :e-mail: *New email:* <http://Chess.com|Chess.com> — Queen_Friday, play something different today! :chess_pawn:
+- **[2026-05-05 14:23]** @Slack Skill Bot: :bell: *Heartbeat — 2:22 PM* :e-mail: *New email:* Republic — :bangbang: FINAL NOTICE - your investment in Lumida Wealth will be cancelled in 4 days :...
+- **[2026-05-05 12:21]** @Slack Skill Bot: :bell: *Heartbeat — 12:20 PM* :e-mail: *New email:* Google Store — Franz, don’t miss the savings
+- **[2026-05-05 11:19]** @Slack Skill Bot: :bell: *Heartbeat — 11:17 AM* :e-mail: *New email:* Republic — :bangbang: FINAL NOTICE - your investment in Lumida Wealth will be cancelled in 4 days ...
+- **[2026-05-05 10:14]** @Slack Skill Bot: :bell: *Heartbeat — 10:13 AM* :e-mail: *New email:* TLDR AI — YC’s OpenAI stake :moneybag:, Gemini API Webhooks :adult::computer:, AI PE partnerships ...
 - **[2026-05-05 12:10]** @Terrence Meikle: Need anything else? need to step away for about 30 min.
 - **[2026-05-05 12:09]** @Terrence Meikle: thank you. I'll definitely look into that, if only for my own education.
 - **[2026-05-05 12:08]** @Terrence Meikle: just run the api project, saw the same errors but appears to run normally.
@@ -32,7 +32,7 @@
 - **[2026-05-05 16:31] #q2-grc-integration** - @Warren Sutherland: has renamed the channel from "q2-grc-integration-planning" to "q2-grc-integration"
 - **[2026-05-05 16:30] #q2-grc-integration** - @Warren Sutherland: Now that the core of q2 planning is done I'm renaming this channel and will continue to pivot it's focus to dependency conversation.
 - **[2026-05-05 15:57] #ces-deployments** - @Micahan Burgess: Yeah smoke tests will not pass until that issue is resolved. The conversation moved to the <#C0A602R1G91> channel and I presented additional info that nothing seems to be leaving the UM Outbox table.
-- **[2026-05-05 15:56] #reliasalerts** - @PagerDuty: 
+- **[2026-05-05 15:56] #reliasalerts** - @PagerDuty:
 - **[2026-05-05 15:54] #technical-willowtree-discussions** - @Lakshmi Kondragunta: <@U094F17J05R> you are in this channel :slightly_smiling_face:
 - **[2026-05-05 15:04] #content-library-cypress** - @Vritti Gautam: I am posting on the productivity channel to know on why is cy.clear() not working
 - **[2026-05-05 15:03] #content-library-cypress** - @Vritti Gautam: The preview custom course is failing because cy.clear() is not working . There is a thread going on for it in the test-engineer channel
@@ -50,7 +50,7 @@
 
 **#prod-eng-devex-private** (9 messages)
 
-- [2026-05-05 16:55] @Bryan Halterman: 
+- [2026-05-05 16:55] @Bryan Halterman:
 - [2026-05-05 16:49] @Franz Hemmer: Best practice violations in the last 100 merged Copilot reviewed PR's in rlms-website:
 - [2026-05-05 09:59] @Franz Hemmer: Well, in that case maybe its better to setup a dedicated meeting on this. It takes a while to wrap y...
 
@@ -62,7 +62,7 @@
 
 **#dev-tribe** (3 messages)
 
-- [2026-05-05 13:09] @Swetha B: Hi, The Divum-US is planning an RC for RLMS-Legacy release 26.Q2.01. RC Checklist : <https://relias....
+- [2026-05-05 13:09] @Swetha B: Hi, The Divum-US is planning an RC for RLMS-Legacy release 26.Q2.01. RC Checklist : <<https://relias>....
 - [2026-05-05 11:11] @Grayson Gould: I see the API build pipeline scripts out and publishes the migration, but not sure atm where they ar...
 - [2026-05-05 11:06] @Grayson Gould: I am noticing that umapi in dev2 has fallen behind on EF migrations. Comparing to dev1 the following...
 
@@ -72,7 +72,7 @@
 
 **#next-deployment** (1 messages)
 
-- [2026-05-05 13:08] @Swetha B: Hi, The Divum-US is planning an RC for RLMS-Legacy release 26.Q2.01. RC Checklist : <https://relias....
+- [2026-05-05 13:08] @Swetha B: Hi, The Divum-US is planning an RC for RLMS-Legacy release 26.Q2.01. RC Checklist : <<https://relias>....
 
 ---
 *Mentions: 1 | DMs: 18 | Announcements: 10 | Channel Messages: 34 (across 6 channels) | Action Items: 0*

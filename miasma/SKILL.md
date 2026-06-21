@@ -280,7 +280,6 @@ Report in this order:
 - Deepwatch: <https://www.deepwatch.com/labs/ca-26-018-miasma-mini-shai-hulud-compromise-of-red-hat-npm-packages/>
 - Relias internal PDF: `Git Commit Signing for Relias Engineering 1.pdf`
 
-
 ### Remote Org Date-Window Commit Scan Pattern
 
 When the user asks for org-wide exposure across repositories and branches, prefer a GitHub API-only scan. Do not

@@ -25,7 +25,7 @@
 
 #### \ud83d\udce2 Announcements (1)
 
-- **[2026-03-04 14:44] #reliasalerts-ssl** - @datadog: 
+- **[2026-03-04 14:44] #reliasalerts-ssl** - @datadog:
 
 #### \ud83d\udcc1 Channel Activity
 
@@ -49,7 +49,7 @@
 
 **#dev-tribe** (14 messages)
 
-- [2026-03-04 16:58] @Jeff Buda: Keep me posted I might be able to merge this evening 
+- [2026-03-04 16:58] @Jeff Buda: Keep me posted I might be able to merge this evening
 - [2026-03-04 16:57] @Sam Hensley: I've informed the dev. Thank you!
 - [2026-03-04 16:54] @Jeff Buda: merged first one second one has conflicts :disappointed:
 
@@ -72,7 +72,7 @@
 
 **#ai-chapter** (2 messages)
 
-- [2026-03-04 20:13] @Geo Rufino: Another day, <https://code.visualstudio.com/updates/v1_110|another update>. VS Code now supports age...
+- [2026-03-04 20:13] @Geo Rufino: Another day, <<https://code.visualstudio.com/updates/v1_110|another> update>. VS Code now supports age...
 - [2026-03-04 10:27] @Austin Gilmore: Dear AI: make a paper clip company and make it the most profitable possible. AI: Okay. I will make a...
 
 ---

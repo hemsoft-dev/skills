@@ -13,13 +13,13 @@
 - **[2026-03-13 11:04]** @George DeCherney: You do mean GH Copilot right?
 - **[2026-03-13 11:04]** @George DeCherney: Welll actually just to be sure
 - **[2026-03-13 11:04]** @George DeCherney: Probably a good enough indicator that your metric is accurate
-- **[2026-03-13 11:03]** @George DeCherney: 
-- **[2026-03-13 08:01]** @Slack Skill Bot: :sunrise: _Morning Briefing — Friday, March 13th_ :clipboard: _Tasks_ _Timed:_ • 8:00 AM — Take morning meds • 12:00 PM — Run cm command • 10:00 PM — ...
+- **[2026-03-13 11:03]** @George DeCherney:
+- **[2026-03-13 08:01]** @Slack Skill Bot: :sunrise: *Morning Briefing — Friday, March 13th* :clipboard: *Tasks* *Timed:* • 8:00 AM — Take morning meds • 12:00 PM — Run cm command • 10:00 PM — ...
 
 #### \ud83d\udce2 Announcements (2)
 
-- **[2026-03-13 11:14] #reliasalerts-ssl** - @datadog: 
-- **[2026-03-13 10:29] #dibz-jira-events** - @Jira: 
+- **[2026-03-13 11:14] #reliasalerts-ssl** - @datadog:
+- **[2026-03-13 10:29] #dibz-jira-events** - @Jira:
 
 #### \ud83d\udcc1 Channel Activity
 
@@ -43,24 +43,24 @@
 
 **#platform** (3 messages)
 
-- [2026-03-13 14:53] @Sarah Pomeroy: 
+- [2026-03-13 14:53] @Sarah Pomeroy:
 - [2026-03-13 14:53] @Sarah Pomeroy: <!here> After 6 incredible years, it’s time for me to say goodbye. I want to thank everyone here for...
 - [2026-03-13 07:31] @Hannah Correll: Thanks so much for the summary. Germany PM has received ISRs a few times in the past.
 
 **#product-engineering** (2 messages)
 
-- [2026-03-13 14:56] @Sarah Pomeroy: 
+- [2026-03-13 14:56] @Sarah Pomeroy:
 - [2026-03-13 14:55] @Sarah Pomeroy: <!here> After 6 incredible years, it’s time for me to say goodbye. I want to thank everyone here for...
 
 **#prod-eng-devex-private** (2 messages)
 
-- [2026-03-13 12:06] @Bryan Halterman: 
+- [2026-03-13 12:06] @Bryan Halterman:
 - [2026-03-13 10:33] @Malia Paul: Let's pitch this to Michelle!
 
 **#sonarcloud-public** (2 messages)
 
 - [2026-03-13 08:22] @Bryan Halterman: <https://relias-engineering.slack.com/archives/C02NH6WJ81M/p1772433553299199> See the above thread. ...
-- [2026-03-13 01:57] @Sachin Vairagi: Hi <!here>, SonarCloud check is pending from last couple of days for audit service PR-<https://githu...
+- [2026-03-13 01:57] @Sachin Vairagi: Hi <!here>, SonarCloud check is pending from last couple of days for audit service PR-<<https://githu>...
 
 **#next-deployment** (1 messages)
 

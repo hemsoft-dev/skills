@@ -13,11 +13,11 @@
 - **[2026-05-14 17:41]** @Malia Paul: Thinking about disbanding it. George and I are frustrated.
 - **[2026-05-14 17:27]** @Malia Paul: Ugh. Yes, I'm aware. Yuhua asked him to work on that and I was very frustrated. What are we even doing if GRC keeps doing their own thing?
 - **[2026-05-14 13:07]** @Malia Paul: Sorry - I'm here now. Had to get a room and earbuds and all that stuff that happens in the office
-- **[2026-05-14 20:13]** @Slack Skill Bot: :bell: _Heartbeat — 8:13 PM_ :e-mail: _New email:_ LinkedIn — You have 1 new message
-- **[2026-05-14 19:12]** @Slack Skill Bot: :bell: _Heartbeat — 7:11 PM_ :e-mail: _New email:_ Kilo Team — Kilo Weekly: Kilo for Slack + Cerebras IPO
-- **[2026-05-14 18:12]** @Slack Skill Bot: :bell: _Heartbeat — 6:11 PM_ :e-mail: _New email:_ LinkedIn — job openings in the past week :e-mail: _New email:_ Enterprise Plus — Welcome to Enterpr...
-- **[2026-05-14 16:12]** @Slack Skill Bot: :bell: _Heartbeat — 4:11 PM_ :e-mail: _New email:_ Dr. Alex Wissner-Gross from The Innermost Loop — Welcome to May 14, 2026
-- **[2026-05-14 15:23]** @Slack Skill Bot: :bell: _Heartbeat — 3:22 PM_ :e-mail: _New email:_ Google Store — More reasons to switch to Pixel 10a from iPhone®
+- **[2026-05-14 20:13]** @Slack Skill Bot: :bell: *Heartbeat — 8:13 PM* :e-mail: *New email:* LinkedIn — You have 1 new message
+- **[2026-05-14 19:12]** @Slack Skill Bot: :bell: *Heartbeat — 7:11 PM* :e-mail: *New email:* Kilo Team — Kilo Weekly: Kilo for Slack + Cerebras IPO
+- **[2026-05-14 18:12]** @Slack Skill Bot: :bell: *Heartbeat — 6:11 PM* :e-mail: *New email:* LinkedIn — job openings in the past week :e-mail: *New email:* Enterprise Plus — Welcome to Enterpr...
+- **[2026-05-14 16:12]** @Slack Skill Bot: :bell: *Heartbeat — 4:11 PM* :e-mail: *New email:* Dr. Alex Wissner-Gross from The Innermost Loop — Welcome to May 14, 2026
+- **[2026-05-14 15:23]** @Slack Skill Bot: :bell: *Heartbeat — 3:22 PM* :e-mail: *New email:* Google Store — More reasons to switch to Pixel 10a from iPhone®
 - **[2026-05-14 14:18]** @Steven Olszanowski: Does Agents open in a new window for you, or open inside of the same VS Code instance you opened it from?
 - **[2026-05-14 13:44]** @Steven Olszanowski: Hi Franz, hope you are doing well. I have been watching/listening to some of theo t3's videos. I was wondering if you have tried using t3 Code yet?
 - **[2026-05-14 11:30]** @Tyler Deal: Sure
@@ -53,12 +53,12 @@
 
 - [2026-05-14 15:49] @Bryan Halterman: Im going to cancel it once 2-6 are donr
 - [2026-05-14 15:49] @Bryan Halterman: Pr 1 is what these 5 were based from and I used it so AI could piece everything back together
-- [2026-05-14 15:48] @Nick Peterson: This one as well <@U01RRQXEEG5|Halterman> <https://github.com/relias-engineering/zoom-integration-po...
+- [2026-05-14 15:48] @Nick Peterson: This one as well <@U01RRQXEEG5|Halterman> <<https://github.com/relias-engineering/zoom-integration-po>...
 
 **#ai-chapter** (2 messages)
 
 - [2026-05-14 14:25] @David Driscoll: I've been running a private preview of it (as a Microsoft MVP), it's been pretty cool so far.
-- [2026-05-14 14:21] @Geo Rufino: The agents standalone app. <https://github.com/github/app|https://github.com/github/app> 
+- [2026-05-14 14:21] @Geo Rufino: The agents standalone app. <https://github.com/github/app|https://github.com/github/app>
 
 **#productivity-engineering-public** (1 messages)
 

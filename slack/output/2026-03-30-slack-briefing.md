@@ -10,13 +10,13 @@
 - **[2026-03-30 09:49]** @Bryan Halterman: and I grill flank steak with Chimichurri yesterday mmm so good
 - **[2026-03-30 09:49]** @Bryan Halterman: IT was good, had a nice brunch with friends
 - **[2026-03-30 11:13]** @John Martin: this should fix the stats
-- **[2026-03-30 08:01]** @Slack Skill Bot: :sunrise: _Morning Briefing — Monday, March 30th_ :clipboard: _Tasks_ Overdue: • Put laundry back (yesterday 6 PM) • Take evening meds (yesterday 10 P...
+- **[2026-03-30 08:01]** @Slack Skill Bot: :sunrise: *Morning Briefing — Monday, March 30th* :clipboard: *Tasks* Overdue: • Put laundry back (yesterday 6 PM) • Take evening meds (yesterday 10 P...
 
 #### \ud83d\udce2 Announcements (3)
 
 - **[2026-03-30 15:22] #fcme-reliasmedia-rearch** - @Ben Chussid: <@UGVMA912P|mearl> I'm not seeing anything run on 3/24 in the <#C09HS2Z72UB> channel or here: <https://dev.azure.com/ReliasEngineering/CommunitiesDevelopment/_build?definitionId=529>
 - **[2026-03-30 07:59] #magento-patches-and-security** - @Jon Saverda: <!here> Just a heads up I'll be working on a patch this morning to address the Magento cloud file upload exploit. I'll work with the team to figure out when we can get this pushed out and update the channel at that time. Please reach out if you have ...
-- **[2026-03-30 02:10] #pe-bot-test** - @RAE (Relias Asistant for Engineering): 
+- **[2026-03-30 02:10] #pe-bot-test** - @RAE (Relias Asistant for Engineering):
 
 #### \ud83d\udcc1 Channel Activity
 
@@ -34,7 +34,7 @@
 
 **#productivity-engineering-public** (1 messages)
 
-- [2026-03-30 06:15] @cortex: 
+- [2026-03-30 06:15] @cortex:
 
 **#dev-env-help** (1 messages)
 

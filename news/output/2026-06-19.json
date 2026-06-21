@@ -1,0 +1,182 @@
+{
+  "Date": "2026-06-19",
+  "GeneratedAt": "2026-06-19T23:57:00.6916981-04:00",
+  "Categories": [
+    {
+      "Title": "🇺🇸 US News",
+      "Articles": [
+        {
+          "Title": "Brooks and Capehart on Trump's record-low economic approval rating",
+          "Link": "https://www.pbs.org/newshour/show/brooks-and-capehart-on-trumps-record-low-economic-approval-rating",
+          "Source": "PBS Politics",
+          "Published": "2026-06-19T18:30:05.0000000-04:00"
+        },
+        {
+          "Title": "Comparing the mood of America's 250th anniversary with its 200th in 1976",
+          "Link": "https://www.pbs.org/newshour/politics/comparing-the-mood-of-americas-250th-anniversary-with-its-200th-in-1976",
+          "Source": "PBS Politics",
+          "Published": "2026-06-19T18:04:56.0000000-04:00"
+        },
+        {
+          "Title": "In a New York district, a fight for the future of the left",
+          "Link": "https://www.npr.org/2026/06/19/nx-s1-5857161/in-a-new-york-district-a-fight-for-the-future-of-the-left",
+          "Source": "NPR Politics",
+          "Published": "2026-06-19T17:25:12.0000000-04:00"
+        },
+        {
+          "Title": "Air Force One, gifted to Trump from Qatar, arrives at Joint Base Andrews",
+          "Link": "https://www.npr.org/2026/06/19/nx-s1-5864503/air-force-one-trump-qatar",
+          "Source": "NPR Politics",
+          "Published": "2026-06-19T17:01:21.0000000-04:00"
+        },
+        {
+          "Title": "WATCH: Trump unveils new Air Force One plane gifted by Qatar at Joint Base Andrews",
+          "Link": "https://www.pbs.org/newshour/politics/watch-trump-unveils-new-air-force-one-plane-gifted-by-qatar-at-joint-base-andrews",
+          "Source": "PBS Politics",
+          "Published": "2026-06-19T17:09:03.0000000-04:00"
+        },
+        {
+          "Title": "Italy's Meloni, once Trump's closest ally in Europe, says he made up a story about her",
+          "Link": "https://www.npr.org/2026/06/19/nx-s1-5864264/meloni-trump-fight-beg",
+          "Source": "NPR Politics",
+          "Published": "2026-06-19T16:32:35.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🌍 World News",
+      "Articles": [
+        {
+          "Title": "One dead and 89 injured following train collision in Bedford, UK",
+          "Link": "https://www.aljazeera.com/video/newsfeed/2026/6/20/one-dead-and-89-injured-following-train-collision-in-bedford-uk?traffic_source=rss",
+          "Source": "Al Jazeera",
+          "Published": "2026-06-19T23:04:21.0000000-04:00"
+        },
+        {
+          "Title": "First case of H5 bird flu confirmed in Australia",
+          "Link": "https://www.dw.com/en/first-case-of-h5-bird-flu-confirmed-in-australia/a-77633767?maca=en-rss-en-world-4025-xml-mrss",
+          "Source": "DW News",
+          "Published": "2026-06-19T23:00:00.0000000-04:00"
+        },
+        {
+          "Title": "Anthony Albanese says Australia’s first mainland case of deadly H5N1 bird flu ‘concerning’",
+          "Link": "https://www.theguardian.com/australia-news/2026/jun/20/australia-confirms-first-case-of-h5n1-bird-flu",
+          "Source": "The Guardian",
+          "Published": "2026-06-19T22:55:13.0000000-04:00"
+        },
+        {
+          "Title": "Vinícius and Cunha fire Brazil past Haiti and into World Cup contention",
+          "Link": "https://www.france24.com/en/sport/20260620-vin%C3%ADcius-and-cunha-fire-brazil-past-haiti-and-into-world-cup-contention",
+          "Source": "France 24",
+          "Published": "2026-06-19T22:50:55.0000000-04:00"
+        },
+        {
+          "Title": "Cunha hits Brazil double against Haiti to seal first World Cup 2026 win",
+          "Link": "https://www.aljazeera.com/sports/2026/6/20/cunha-hits-brazil-double-against-haiti-to-seal-first-world-cup-2026-win?traffic_source=rss",
+          "Source": "Al Jazeera",
+          "Published": "2026-06-19T22:42:34.0000000-04:00"
+        },
+        {
+          "Title": "Israel and Hezbollah renew ceasefire after deadly flareup disrupts opening of Iran talks",
+          "Link": "https://www.theguardian.com/world/2026/jun/19/israel-hezbollah-renew-ceasefire-lebanon-us-iran-agreement",
+          "Source": "The Guardian",
+          "Published": "2026-06-19T21:42:01.0000000-04:00"
+        },
+        {
+          "Title": "Saibari strike sends Morocco past Scotland and towards World Cup knockout stage",
+          "Link": "https://www.france24.com/en/sport/20260620-saibari-strike-sends-morocco-past-scotland-and-towards-world-cup-knockout-stage",
+          "Source": "France 24",
+          "Published": "2026-06-19T20:21:17.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🤖 AI News",
+      "Articles": [
+        {
+          "Title": "Is the US government’s Anthropic ban accidentally helping the brand?",
+          "Link": "https://techcrunch.com/video/is-the-us-governments-anthropic-ban-accidentally-helping-the-brand/",
+          "Source": "TechCrunch",
+          "Published": "2026-06-19T12:08:17.0000000-04:00"
+        },
+        {
+          "Title": "The US banned Anthropic’s Fable 5 release, but the numbers don’t seem to care",
+          "Link": "https://techcrunch.com/podcast/the-us-banned-anthropics-fable-5-release-but-the-numbers-dont-seem-to-care/",
+          "Source": "TechCrunch",
+          "Published": "2026-06-19T12:01:03.0000000-04:00"
+        },
+        {
+          "Title": "The Download: AI bottleneck debates, and BCI trials take off",
+          "Link": "https://www.technologyreview.com/2026/06/19/1139327/the-download-llms-bottleneck-breakthrough-bci-trials-take-off/",
+          "Source": "MIT Technology Review",
+          "Published": "2026-06-19T08:10:00.0000000-04:00"
+        },
+        {
+          "Title": "A startup claims it broke through a bottleneck that’s holding back LLMs",
+          "Link": "https://www.technologyreview.com/2026/06/19/1139313/a-startup-claims-it-broke-through-a-bottleneck-thats-holding-back-llms/",
+          "Source": "MIT Technology Review",
+          "Published": "2026-06-19T06:40:24.0000000-04:00"
+        },
+        {
+          "Title": "Barret Zoph is out at OpenAI again after just five months",
+          "Link": "https://www.theverge.com/ai-artificial-intelligence/952837/barret-zoph-openai-thinking-machines-lab",
+          "Source": "The Verge",
+          "Published": "2026-06-19T00:49:33.0000000-04:00"
+        },
+        {
+          "Title": "The White House Is Making Up Its Rules for AI in Real Time",
+          "Link": "https://www.wired.com/story/anthropic-mythos-export-controls-ai-regulations/",
+          "Source": "Wired",
+          "Published": "2026-06-18T17:03:43.0000000-04:00"
+        },
+        {
+          "Title": "Meta’s AI Workers Are Revolting, Peter Thiel’s Secret Society, and SBF’s Plea to Trump",
+          "Link": "https://www.wired.com/story/uncanny-valley-podcast-meta-ai-workers-revolting-peter-thiel-secret-society-sbf-plea-to-trump/",
+          "Source": "Wired",
+          "Published": "2026-06-18T15:29:51.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🇩🇰 Danish News",
+      "Articles": [
+        {
+          "Title": "Ganni - FashionNetwork USA",
+          "Link": "https://news.google.com/rss/articles/CBMib0FVX3lxTFBwWV9Kb2ljZEt4R0pSenR2cGRhYUlkUk90SzJ2T2hnd0hQY0k2ZHJCLWxzdjJLZ2ZDUmNuZTlaNUtieEwySVpQLVRTV2JPU0xRQURZR056b1NZWjA5X2dFVWZ6RjNmTmxwMWRBTXF6MA?oc=5",
+          "Source": "Google News Denmark",
+          "Published": "2026-06-19T23:35:39.0000000-04:00"
+        },
+        {
+          "Title": "Board priorities: moving from what to how - EY",
+          "Link": "https://news.google.com/rss/articles/CBMitwFBVV95cUxQQjBWN0NBNEVmREVyekJ1U3l4cGttRW9sclhqUUU0aHhHOFRxVzE1S01lYklvaW44SUttTjBIaHVpelVxYzlaSVl5UVR5RnFGWGtPdkxta3Vhdl9YNk5oVDdWY1UxaVpQdHBtNHlINUM1a01NMi1QREs0bjFXdHE2Zkx0TVZBeDBlOHR0OXhtUWEyNUJSM1hlbXpCeHJVa2QwYWVGNXdpbnBOYXRfazhhNXVXaFk0NW8?oc=5",
+          "Source": "Google News Denmark",
+          "Published": "2026-06-19T23:35:36.0000000-04:00"
+        },
+        {
+          "Title": "245 personer er døde af Ebola i DR Congo",
+          "Link": "https://www.dr.dk/nyheder/seneste/250-personer-er-doede-af-ebola-i-dr-congo",
+          "Source": "DR News",
+          "Published": "2026-06-19T22:08:41.0000000-04:00"
+        },
+        {
+          "Title": "Polens præsident tager orden fra Zelenskyj",
+          "Link": "https://www.dr.dk/nyheder/seneste/polens-praesident-tager-orden-fra-zelenskyj",
+          "Source": "DR News",
+          "Published": "2026-06-19T14:37:47.0000000-04:00"
+        },
+        {
+          "Title": "You can swim in many places in Denmark – including the big cities",
+          "Link": "https://cphpost.dk/2026-06-19/life-in-denmark/you-can-swim-in-many-places-in-denmark-including-the-big-cities/",
+          "Source": "CPH Post",
+          "Published": "2026-06-19T10:09:27.0000000-04:00"
+        },
+        {
+          "Title": "One of Denmark’s largest unions, Dansk Metal, is lowering its membership fees",
+          "Link": "https://cphpost.dk/2026-06-19/news/round-up/one-of-denmarks-largest-unions-dansk-metal-is-lowering-its-membership-fees/",
+          "Source": "CPH Post",
+          "Published": "2026-06-19T10:00:00.0000000-04:00"
+        }
+      ]
+    }
+  ]
+}

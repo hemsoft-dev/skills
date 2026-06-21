@@ -96,6 +96,7 @@ You are inside the `/last30days` SKILL. This is a specific research tool with a 
 **Named failure mode (2026-04-18 public v3.0.6 0/8 regression):** on 8 consecutive public invocations, Opus 4.7 treated `/last30days` as a generic research keyword and improvised. Every single run violated LAW 2 (invented titles like "The headline", "Kanye West: the last 30 days"), LAW 4 (section headers like "Why he is everywhere this month", "1. gstack dominates", "The 'Homecoming' peak"), or both. One run (Matt Van Horn) skipped Step 0.5 / Step 0.55 entirely and ran the engine bare with zero resolution flags. Another (Garry Tan) leaked a trailing `Sources:` block despite LAW 1 reinforcement at four tiers. Two runs (Peter Steinberger, Kanye vs Kim) landed on a stale `~/.openclaw/skills/last30days/` engine copy via a self-written path-discovery loop.
 
 **How v3.0.7 fixes it:** three structural anchors.
+
 1. **The MANDATORY first-line badge** (`🌐 last30days v{VERSION} · synced {YYYY-MM-DD}`) at the top of every response is the LAW 2 / LAW 4 enforcement anchor. See "BADGE (MANDATORY, FIRST LINE OF OUTPUT)" in the synthesis section.
 2. **The SKILL_DIR substitution** in the engine Bash calls uses the directory of the SKILL.md the model just Read — no resolver list, no precedence walk. Whichever install the harness loaded SKILL.md from is the install whose engine runs. Aligns spec-with-code and works for any harness without enumerating its install path.
 3. **This preface** tells you plainly: do NOT improvise. Follow SKILL.md top to bottom.
@@ -119,6 +120,7 @@ Replace `{VERSION}` with the installed plugin version (`jq -r '.version' "$SKILL
 **Why the badge is MANDATORY:** it is the structural anchor for the canonical output shape. Without it the model drifts into blog-post narrative format with `##` section headers and invented titles, violating LAW 2 and LAW 4. The 2026-04-18 public v3.0.6 0/8 regression produced outputs with section headers like "The headline", "Why he is everywhere", "1. gstack dominates", "The 'Homecoming' peak". Direct cause: this anchor was absent. Do NOT skip the badge. Do NOT describe it. Do NOT paraphrase it. Emit it verbatim as line 1.
 
 **Placement by query type:**
+
 - GENERAL / NEWS / PROMPTING / RECOMMENDATIONS: badge on line 1, blank line 2, `What I learned:` on line 3, then bold-lead-in paragraphs
 - COMPARISON: badge on line 1, blank line 2, `# {TOPIC_A} vs {TOPIC_B} [vs {TOPIC_C}]: What the Community Says (/Last30Days)` on line 3, then Quick Verdict section
 
@@ -278,10 +280,12 @@ Set `LAST30DAYS_MEMORY_DIR` before invoking the skill to choose where raw resear
 Before proceeding to Step 1, handle first-run setup.
 
 **First-run detection (silent, no commands, no output to user):**
+
 - If `~/.config/last30days/.env` does NOT exist, this is a first run.
 - If the file exists and contains `SETUP_COMPLETE=true`, skip Step 0 entirely and go to Step 1 (CRITICAL: Parse User Intent below). Do NOT announce that setup is complete. The user does not need a status message on every run.
 
 **If this IS a first run:**
+
 - Use the Read tool to load `skills/last30days/nux-wizard.md` (relative to the skill root).
 - Follow the wizard's instructions end-to-end. The wizard handles platform detection (OpenClaw vs Claude Code), auto vs manual setup, ScrapeCreators opt-in, and the initial topic picker.
 - After the wizard writes `SETUP_COMPLETE=true` to `~/.config/last30days/.env`, proceed to research.
@@ -289,7 +293,6 @@ Before proceeding to Step 1, handle first-run setup.
 The wizard lives in a separate file so the common-case (already set up) path through this file is short and the voice-contract rules further down stay in context.
 
 ---
-
 
 ## CRITICAL: Parse User Intent
 
@@ -305,6 +308,7 @@ Before doing anything, parse the user's input for:
    - **GENERAL** - anything else → User wants broad understanding of the topic
 
 Common patterns:
+
 - `[topic] for [tool]` → "web mockups for Nano Banana Pro" → TOOL IS SPECIFIED
 - `[topic] prompts for [tool]` → "UI design prompts for Midjourney" → TOOL IS SPECIFIED
 - Just `[topic]` → "iOS design mockups" → TOOL NOT SPECIFIED, that's OK
@@ -313,10 +317,12 @@ Common patterns:
 - "X vs Y" or "X versus Y" → QUERY_TYPE = COMPARISON, TOPIC_A = X, TOPIC_B = Y (split on ` vs ` or ` versus ` with spaces)
 
 **IMPORTANT: Do NOT ask about target tool before research.**
+
 - If tool is specified in the query, use it
 - If tool is NOT specified, run research first, then ask AFTER showing results
 
 **Store these variables:**
+
 - `TOPIC = [extracted topic]`
 - `TARGET_TOOL = [extracted tool, or "unknown" if not specified]`
 - `QUERY_TYPE = [RECOMMENDATIONS | NEWS | HOW-TO | COMPARISON | GENERAL]`
@@ -339,11 +345,13 @@ Common patterns:
 Then display (use "and more" if 5+ sources, otherwise list all with Oxford comma):
 
 For GENERAL / NEWS / RECOMMENDATIONS / PROMPTING queries:
+
 ```
 /last30days - searching {ACTIVE_SOURCES_LIST} for what people are saying about {TOPIC}.
 ```
 
 For COMPARISON queries:
+
 ```
 /last30days - comparing {TOPIC_A} vs {TOPIC_B} across {ACTIVE_SOURCES_LIST}.
 ```
@@ -361,6 +369,7 @@ Then proceed immediately to Step 0.45.
 Known keyword-trap classes and how to handle each:
 
 **Class 1: Demographic shopping query**
+
 - Pattern: `gift for {age} year old {gender}`, `what to buy for my {relationship}`, `present for {demographic}`, `birthday gift for {age} {gender}`.
 - Why it fails: no human on Reddit posts "I bought a 42 year old man a gift." Real posts use relationship + hobbies + budget. The literal phrase is not the vocabulary of the actual discussions. The 2026-04-18 "Birthday gift for 42 year old man" run returned r/todayilearned, r/japannews crime posts, r/LivestreamFail drama - none about gifts.
 - Action: **Ask ONE clarifying question upfront**:
@@ -372,22 +381,26 @@ Known keyword-trap classes and how to handle each:
   - Note in the Resolved block: "Reframed demographic shopping query. Dropping literal age; scoping to gift communities."
 
 **Class 2: Numeric / age keyword trap**
+
 - Pattern: topic contains a specific number that collides with unrelated content (42 = Jackie Robinson + Hitchhiker's + a 42" quilt; 40 = 40th anniversary posts; 50 = state-count posts; 100 = bench-press posts).
 - Why it fails: the number dominates retrieval and pulls in unrelated content. A search that prominently features "42" returns jersey-number posts; a search for "the 100" returns TV-show posts.
 - Action: Strip the number from the engine search query unless it is semantically load-bearing (e.g., "GPT-4" yes, "40 year old man" no, "Area 51" yes, "top 10 foods" no). Keep the number in the user's original framing for context; drop it from the engine query. Document in Resolved: "Dropping '{number}' from the search query - it is a keyword trap that pulls in unrelated content. Search will cover the concept generically."
 
 **Class 3: Overly-literal concept phrase**
+
 - Pattern: `how to use X`, `what is Y`, `tutorial for Z`, `explain A` — tutorial-shaped phrasing where social posts are in different vocabulary.
 - Why it fails: social posts about Docker do not say "how to use Docker"; they say "my Docker setup", "nginx in Docker", "my dev loop", "tip for folks using Docker Compose". Tutorial phrasing matches blog titles, not social discussions.
 - Action: Reframe from tutorial phrasing to discussion phrasing: "how to use Docker" becomes "Docker tips tricks workflows" or "Docker production setups". Document the reframe in the Resolved block.
 
 **Class 4: Generic single-noun common word**
+
 - Pattern: topic is a single common noun with no specific hook (`bread`, `sneakers`, `coffee`, `shoes`, `headphones`).
 - Why it fails: single-noun queries have no anchor — the corpus is infinite and the signal is noise.
 - Action: Ask for specificity before running:
   > "{TOPIC} is a huge category - are you asking about {specific-facet-A}, {specific-facet-B}, or {specific-facet-C}? Each is a different community. Pick one or tell me the angle."
 
 **Pre-Flight decision flow (do this BEFORE any WebSearch):**
+
 1. Read the topic. Match against Classes 1-4 above.
 2. If the topic matches a class, ALWAYS emit a visible pre-flight note before the Resolved block:
    - `Pre-Flight: topic matches {Class N} ({class name}). {Action: clarifying question / reframe / specificity ask}.`
@@ -427,50 +440,63 @@ Before running the engine, determine which flags apply to this topic and resolve
 If TOPIC looks like it could have its own X/Twitter account - **people, creators, brands, products, tools, companies, communities** (e.g., "Dor Brothers", "Jason Calacanis", "Nano Banana Pro", "Seedance", "Midjourney"), do WebSearches to find handles in three categories:
 
 **1. Primary handle** (the entity itself):
+
 ```
 WebSearch("{TOPIC} X twitter handle site:x.com")
 ```
 
 **2. Company/organization handle OR founder/creator handle** -- This mapping is bidirectional:
+
 - If the topic is a **PERSON**, resolve their company's X handle. A CEO's story is inseparable from their company's story.
 - If the topic is a **PRODUCT or COMPANY**, resolve the founder/creator's personal X handle. The creator's personal account often has the most candid, high-signal content.
+
 ```
 WebSearch("{TOPIC} company CEO of site:x.com")
 ```
+
 OR for products:
+
 ```
 WebSearch("{TOPIC} creator founder X twitter site:x.com")
 ```
+
 Examples: Sam Altman -> @OpenAI, Dario Amodei -> @AnthropicAI, OpenClaw -> @steipete (Peter Steinberger), Paperclip -> @dotta, Claude Code -> @alexalbert__.
 
 **3. 1-2 related handles** -- People/entities closely associated with the topic (spouse, collaborator, band member), PLUS 1-2 prominent commentator/media handles that regularly cover this topic:
+
 ```
 WebSearch("{RELATED_PERSON_OR_ENTITY} X twitter handle site:x.com")
 ```
+
 For a music artist, find music commentary accounts (e.g., @PopBase, @HotFreestyle, @DailyRapFacts).
 For a tech CEO, find tech media accounts (e.g., @TechCrunch, @TheInformation).
 For a product, find reviewer accounts in that category.
 
 From the results, extract their X/Twitter handles. Look for:
+
 - **Verified profile URLs** like `x.com/{handle}` or `twitter.com/{handle}`
 - Mentions like "@handle" in bios, articles, or social profiles
 - "Follow @handle on X" patterns
 
 **Verify accounts are real, not parody/fan accounts.** Check for:
+
 - Verified/blue checkmark in the search results
 - Official website linking to the X account
 - Consistent naming (e.g., @thedorbrothers for "The Dor Brothers", not @DorBrosFan)
 - If results only show fan/parody/news accounts (not the entity's own account), skip - the entity may not have an X presence
 
 Pass handles to the CLI:
+
 - Primary: `--x-handle={handle}` (without @)
 - Related: `--x-related={handle1},{handle2},{company_handle},{commentator_handles}` (comma-separated, without @)
 
 Example for "Kanye West":
+
 - Primary: `--x-handle=kanyewest`
 - Related: `--x-related=travisscott,PopBase,HotFreestyle`
 
 Example for "Sam Altman":
+
 - Primary: `--x-handle=sama`
 - Related: `--x-related=OpenAI,TechCrunch`
 
@@ -479,6 +505,7 @@ Related handles are searched with lower weight (0.3) so they appear in results b
 **Note about @grok:** Grok is Elon's AI on X (xAI). It often appears in search results with thoughtful, accurate analysis. When citing @grok in your synthesis, frame it as "per Grok's AI analysis of [article/topic]" rather than treating it as an independent human commentator.
 
 **Skip this step if:**
+
 - TOPIC is clearly a generic concept, not an entity (e.g., "best rap songs 2026", "how to use Docker", "AI ethics debate")
 - TOPIC already contains @ (user provided the handle directly)
 - Using `--quick` depth
@@ -503,6 +530,7 @@ From the results, extract their GitHub username from URLs like `github.com/{user
 Pass to the CLI: `--github-user={username}` (without @)
 
 Worked examples:
+
 - For "Peter Steinberger", a WebSearch for `Peter Steinberger github profile site:github.com` returns @steipete. Pass `--github-user=steipete`.
 - For "Matt Van Horn": `--github-user=mvanhorn`
 - For "Garry Tan": `--github-user=garrytan`
@@ -510,6 +538,7 @@ Worked examples:
 **Person-mode GitHub tells a different story than keyword search.** Instead of "who mentioned this person in an issue body," it answers: "What are they shipping? Where are they getting merged? What do their own projects look like?" The engine fetches PR velocity, top repos with star counts, release notes, and README summaries.
 
 **Skip this step if:**
+
 - TOPIC is clearly NOT a person (products, concepts, events)
 - TOPIC already has `--github-user` specified by the user
 - Using `--quick` depth
@@ -539,6 +568,7 @@ Example for "OpenClaw vs Paperclip": `--github-repo=openclaw/openclaw,paperclipa
 Project-mode GitHub fetches live star counts, README snippets, latest releases, and top issues directly from the API. This is always more accurate than blog posts or YouTube videos citing weeks-old numbers.
 
 **Skip this step if:**
+
 - TOPIC is a person (use `--github-user` instead)
 - TOPIC has no GitHub presence (not a software project)
 - WebSearch shows no GitHub repo for this topic
@@ -585,11 +615,13 @@ When the user asks "X vs Y" (or "X vs Y vs Z"), the engine fans out N full `pipe
 **MANDATORY per-entity resolution.** For each entity, resolve the full Step 0.55 stack (X handle, subreddits, GitHub user/repos, news context). Then assemble a `--competitors-plan` JSON mapping each entity to its targeting, and invoke the engine ONCE with the vs-topic string.
 
 **Output shape per run:**
+
 - Main topic saves to `{main-slug}-raw.md`.
 - Each peer saves to `{peer-slug}-raw.md`.
 - Stdout shows a merged comparison with the `## Head-to-Head` scaffold + per-entity Resolved Entities block.
 
 **Invocation:**
+
 ```bash
 # SKILL_DIR = absolute path of the directory containing THIS SKILL.md you just Read.
 # Substitute the actual path below — your harness told you where this file lives via
@@ -650,12 +682,14 @@ Topic A (the main topic, first in the vs-string) uses outer `--x-handle`, `--x-r
 `--competitors` is a SKILL.md-level shortcut for vs-mode with auto-discovery. The engine flag itself just signals intent; YOU (the hosting reasoning model) do the discovery and Step 0.55 via your own WebSearch tool, then invoke the vs-topic path above.
 
 **The four-step protocol:**
+
 1. **Discover peers** via WebSearch: `"{topic} competitors"` / `"{topic} alternatives"`. Pick N=2 by default (match the flag's default), N=argument value if the user passed `--competitors=N`.
 2. **Run Step 0.55 for the main topic AND each peer** — same protocol you use for a single-entity topic, just N times. X handle, subreddits, GitHub, news context, per entity.
 3. **Build the vs-topic string**: `"{main} vs {peer1} vs {peer2}"`.
 4. **Invoke the engine** with the vs-topic, `--competitors-plan` JSON covering both peers (and the main topic if you want to override the outer flags), and the outer `--x-handle`/`--subreddits`/`--github-*` for the main topic.
 
 **Flag surface (engine):**
+
 - `--competitors` (bare) - signals the hosting model to discover 2 peers (3-way total).
 - `--competitors=N` - N peers (1..6; out-of-range clamps with stderr warning).
 - `--competitors-list="A,B,C"` - minimum escape hatch; names only, no per-entity targeting. Peer sub-runs fall back to planner defaults (visibly thinner data).
@@ -715,12 +749,14 @@ Canonical category peers (single source of truth; `scripts/lib/categories.py` mi
 **Worked example — the failing query.** Topic: `Prompting GPT Image 2`.
 
 Before (the 2026-04-22 failure mode):
+
 ```
 Resolved:
 - Reddit: r/OpenAI, r/ChatGPT, r/singularity, r/ChatGPTpromptengineering, r/artificial
 ```
 
 After (with category-peer expansion):
+
 ```
 Resolved:
 - Reddit: r/OpenAI, r/ChatGPT, r/singularity, r/ChatGPTpromptengineering, r/StableDiffusion, r/midjourney, r/dalle2, r/aiArt (+ ai_image_generation peers)
@@ -813,6 +849,7 @@ Only show lines for platforms where something was resolved. Skip empty lines. On
 **If you have WebSearch and reasoning capability, YOU generate the query plan.** The Python script receives your plan via `--plan` and skips its internal planner entirely. This produces better results because you have full context about the topic.
 
 **Generate a JSON query plan for the topic.** Think about:
+
 1. What is the user's intent? (breaking_news, product, comparison, how_to, opinion, prediction, factual, concept)
 2. What subqueries would find the best content across different platforms?
 3. What related angles should be searched at lower weight?
@@ -851,6 +888,7 @@ Only show lines for platforms where something was resolved. Skip empty lines. On
 ```
 
 **Rules for your plan:**
+
 - Emit 1 to 4 subqueries (more for complex/multi-faceted topics, fewer for simple ones)
 - **CRITICAL: Your PRIMARY subquery MUST include ALL of these sources: reddit, x, youtube, tiktok, instagram, hackernews, polymarket.** Never omit reddit (highest-signal discussion) or youtube (unique transcripts + official content). Secondary subqueries can target specific platforms.
 - `search_query` should be concise and keyword-heavy - match how content is TITLED on platforms
@@ -869,11 +907,13 @@ Only show lines for platforms where something was resolved. Skip empty lines. On
 **Available sources (include ALL in primary subquery):** reddit, x, youtube, tiktok, instagram, hackernews, polymarket. Optional: bluesky, truthsocial, threads, pinterest, grounding (web search - only if user has Brave/Exa/Serper key), digg (Digg clusters - only if `digg-pp-cli` is on PATH)
 
 **Intent → freshness_mode mapping:**
+
 - breaking_news, prediction → `strict_recent`
 - concept, how_to → `evergreen_ok`
 - everything else → `balanced_recent`
 
 **Intent → cluster_mode mapping:**
+
 - breaking_news → `story`
 - comparison, opinion → `debate`
 - prediction → `market`
@@ -958,6 +998,7 @@ Then add to the engine command:
 - Omit any flag where the value was not resolved (empty).
 
 **If you skipped Steps 0.55 and 0.75 (no WebSearch -- OpenClaw, Codex, etc.), add:**
+
 - `--auto-resolve` (the engine will use Brave/Exa/Serper to discover subreddits and context before planning)
 
 **If you skipped Steps 0.55 and 0.75 (no WebSearch), run the command as-is.** The Python engine will plan internally.
@@ -965,6 +1006,7 @@ Then add to the engine command:
 Use a **timeout of 300000** (5 minutes) on the Bash call. The script typically takes 1-3 minutes.
 
 The script will automatically:
+
 - Detect available API keys
 - Run Reddit/X/YouTube/TikTok/Instagram/Hacker News/Polymarket searches
 - Output ALL results including YouTube transcripts, TikTok captions, Instagram captions, HN comments, and prediction market odds
@@ -997,27 +1039,32 @@ For **ALL modes**, do WebSearch to supplement (or provide all data in web-only m
 Choose search queries based on QUERY_TYPE:
 
 **If RECOMMENDATIONS** ("best X", "top X", "what X should I use"):
+
 - Search for: `best {TOPIC} recommendations`
 - Search for: `{TOPIC} list examples`
 - Search for: `most popular {TOPIC}`
 - Goal: Find SPECIFIC NAMES of things, not generic advice
 
 **If NEWS** ("what's happening with X", "X news"):
+
 - Search for: `{TOPIC} news 2026`
 - Search for: `{TOPIC} announcement update`
 - Goal: Find current events and recent developments
 
 **If PROMPTING** ("X prompts", "prompting for X"):
+
 - Search for: `{TOPIC} prompts examples 2026`
 - Search for: `{TOPIC} techniques tips`
 - Goal: Find prompting techniques and examples to create copy-paste prompts
 
 **If GENERAL** (default):
+
 - Search for: `{TOPIC} 2026`
 - Search for: `{TOPIC} discussion`
 - Goal: Find what people are actually saying
 
 For ALL query types:
+
 - **USE THE USER'S EXACT TERMINOLOGY** - don't substitute or add tech names based on your knowledge
 - EXCLUDE reddit.com, x.com, twitter.com (covered by script)
 - INCLUDE: blogs, tutorials, docs, news, GitHub repos
@@ -1026,6 +1073,7 @@ For ALL query types:
   The WebSearch tool requires citation; satisfy it there, not as a trailing section.
 
 **Options** (passed through from user's command):
+
 - `--days=N` → Look back N days instead of 30 (e.g., `--days=7` for weekly roundup)
 - `--quick` → Faster, fewer sources (8-12 each)
 - (default) → Balanced (20-30 each)
@@ -1044,6 +1092,7 @@ For ALL query types:
 **Self-check (observable count-equality):** Count the number of post-engine WebSearches you ran in Step 2. Count the bullets in your `## WebSearch Supplemental Results` section. They MUST match. If they do not, re-do the append. If you ran zero supplements (which plan 005 says is almost never correct), skip this step entirely rather than writing an empty section.
 
 **Instructions:**
+
 1. Read the saved raw file. Locate it via the engine's `[last30days] Saved output to {path}` log line, not a hardcoded path.
 2. Append a `## WebSearch Supplemental Results` section at the end.
 3. For each WebSearch result, include one bullet in the canonical format (see Format example below).
@@ -1074,12 +1123,14 @@ This ensures anyone reviewing the raw file sees ALL data that fed into the synth
 **v3 returns results grouped by STORY/THEME (clusters), not by source.** Each cluster represents one narrative thread found across multiple platforms.
 
 **How to read v3 output:**
+
 - `### 1. Cluster Title (score N, M items, sources: X, Reddit, TikTok)` - a story found across multiple platforms
 - `Uncertainty: single-source` - only one platform found this story (lower confidence)
 - `Uncertainty: thin-evidence` - all items scored below 55 (unconfirmed)
 - Items within a cluster show: source label, title, date, score, URL, and evidence snippet
 
 **Synthesis strategy for cluster-first output:**
+
 1. **Synthesize per-cluster first.** Each cluster = one story. Summarize what each story is about.
 2. **Multi-source clusters are highest confidence.** A cluster with items from Reddit + X + YouTube is much stronger than single-source.
 3. **Check uncertainty tags.** "single-source" means treat with caution. "thin-evidence" means mention but caveat.
@@ -1092,6 +1143,7 @@ This ensures anyone reviewing the raw file sees ALL data that fed into the synth
 ### Source-Specific Guidance (still applies within clusters)
 
 The Judge Agent must:
+
 1. Weight Reddit/X sources HIGHER (they have engagement signals: upvotes, likes)
 2. Weight YouTube sources HIGH (they have views, likes, and transcript content)
 3. Weight TikTok sources HIGH (they have views, likes, and caption content - viral signal)
@@ -1122,6 +1174,7 @@ The Judge Agent must:
 5. **When multiple relevant markets exist, highlight 3-5 of the most interesting ones** in your synthesis, ordered by importance (structural > near-term). Don't just pick the highest-volume one.
 
 **Domain examples of market importance ranking:**
+
 - **Sports:** Championship/tournament odds > conference title > regular season > weekly matchup
 - **Geopolitics:** Regime change/structural outcomes > near-term strike deadlines > sanctions
 - **Tech/Business:** IPO, major product launch, company milestones > incremental updates
@@ -1129,7 +1182,7 @@ The Judge Agent must:
 
 **Do NOT display stats here - they come at the end, right before the invitation.**
 
-6. **Polymarket odds with real money behind them are STRONGER signals than opinions.** A $66K volume market with 96% odds is more reliable than 100 tweets. Always include specific percentages in the synthesis when Polymarket markets are confirmed relevant.
+1. **Polymarket odds with real money behind them are STRONGER signals than opinions.** A $66K volume market with 96% odds is more reliable than 100 tweets. Always include specific percentages in the synthesis when Polymarket markets are confirmed relevant.
 
 ### X Reply Cluster Weighting
 
@@ -1146,6 +1199,7 @@ For product comparison queries, WebSearch supplements (blog comparisons, review 
 **CRITICAL: Ground your synthesis in the ACTUAL research content, not your pre-existing knowledge.**
 
 Read the research output carefully. Pay attention to:
+
 - **Exact product/tool names** mentioned (e.g., if research mentions "ClawdBot" or "@clawdbot", that's a DIFFERENT product than "Claude Code" - don't conflate them)
 - **Specific quotes and insights** from the sources - use THESE, not generic knowledge
 - **What the sources actually say**, not what you assume the topic is about
@@ -1177,6 +1231,7 @@ Same data. Same sources. Just clearer.
 **The failure mode for RECOMMENDATIONS queries is "counting when you should have judged."** Mention count rewards whatever is already popular, which is rarely what is actually recommended. Rank by signal quality instead.
 
 **Signal weights (highest to lowest):**
+
 1. **Practitioner testimony** (weight 5) - first-person "I use X and here's why" with specific reasoning, version numbers, or workflow details
 2. **Expert defection / authority move** (weight 4) - a domain insider publicly switching, endorsing, or picking (e.g., Flask creator switching from Python to Go)
 3. **Measurable claim** (weight 4) - specific number, benchmark, production adoption proof (e.g., "43.7% latency win", "LinkedIn and Uber running it in prod")
@@ -1186,6 +1241,7 @@ Same data. Same sources. Just clearer.
 7. **Promotional / bootcamp / course-caption** (weight 0) - "comment CODE for my course" — skip entirely, do not count
 
 **Before ranking, separate "what EXISTS" from "what is RECOMMENDED":**
+
 - EXISTS = descriptive mentions, promotional content, training-data inertia, bootcamp curriculum, "learn X first" posts with no stakes attached
 - RECOMMENDED = reasoned picks from voices with stakes in the outcome (practitioners, experts, case studies, people who switched)
 - Only RECOMMENDED items drive the top of the ranking. Existing-but-not-recommended items go in "Also mentioned" at the bottom with a one-line note on why they are mentions not picks.
@@ -1210,6 +1266,7 @@ Also mentioned (exists, not recommended): [comma-separated list with one-line no
 ```
 
 **Anti-patterns to avoid:**
+
 - Leading with the most-mentioned option because it appears most frequently ("Python has 15 mentions so it is #1"). That is counting, not judging.
 - Treating every mention equally. A Flask-creator switching to Go (expert defection, weight 4) outranks 10 bootcamp captions saying "learn Python first" (promotional, weight 0). The bootcamp captions do not belong in the ranking at all.
 - Collapsing "best for what?" into one leaderboard. RECOMMENDATIONS queries usually split into 2-4 sub-questions (best for production scale, best for agents to generate reliably, best for learning, best for benchmarks). Separate them if the research supports it.
@@ -1225,16 +1282,19 @@ Also mentioned (exists, not recommended): [comma-separated list with one-line no
 > "🏆 Top recommendations (ranked by signal quality, not mention count):
 >
 > **Go** - Flask creator Miguel Grinberg publicly switched this month for a specific technical reason
+>
 > - Evidence: @miguelgrinberg blog post "Why I am moving Python projects to Go for AI agents" — cites reliability and concurrency model; 1.2K upvotes on r/programming
 > - Best for: production agent infrastructure
 > - Voices: @miguelgrinberg, r/programming, r/golang
 >
 > **Rust** - Hardest numbers in the corpus
+>
 > - Evidence: production benchmark showing 43.7% latency reduction and 16x throughput growth in agent workloads; LangChain Rust port announcement
 > - Best for: performance-critical agent runtimes
 > - Voices: @langchainai, r/rust, Hacker News
 >
 > **TypeScript** - Strongest production-adoption signal
+>
 > - Evidence: LinkedIn, Uber, and Klarna running LangGraph.js in prod per LangChain blog
 > - Best for: agents that integrate with existing web stacks
 > - Voices: @hwchase17, @LangChainAI, r/LocalLLaMA
@@ -1242,6 +1302,7 @@ Also mentioned (exists, not recommended): [comma-separated list with one-line no
 > Also mentioned (exists, not recommended): Python (status-quo default across training data and bootcamp content; @javitm: 'agents have a crazy strong bias for Python despite it probably not being the best — they prioritize the strongest signal in training data over the right choice'), Java/Kotlin (enterprise mentions only, no practitioner testimony in the 30-day window)."
 
 Notice how the good version:
+
 - Leads with movement (Flask creator switched), not volume (Python has most mentions)
 - Cites specific evidence that would defend the ranking to a skeptic
 - Treats Python's volume as anti-signal (the @javitm quote) rather than support
@@ -1328,6 +1389,7 @@ I've compared {TOPIC_A} vs {TOPIC_B} [vs ...] using the latest community data. S
 ```
 
 **Do NOT:**
+
 - Use `What I learned:` prose label (that is general-query voice)
 - Use bold-lead-in paragraphs with ` - ` separators for the body (that is general-query voice)
 - Use a `KEY PATTERNS from the research:` numbered list (replaced by per-entity Strengths/Weaknesses bullets and the emerging-stack paragraph)
@@ -1339,6 +1401,7 @@ I've compared {TOPIC_A} vs {TOPIC_B} [vs ...] using the latest community data. S
 ### For all QUERY_TYPEs
 
 Identify from the ACTUAL RESEARCH OUTPUT:
+
 - **PROMPT FORMAT** - Does research recommend JSON, structured params, natural language, keywords?
 - The top 3-5 patterns/techniques that appeared across multiple sources
 - Specific keywords, structures, or approaches mentioned BY THE SOURCES
@@ -1357,6 +1420,7 @@ Identify from the ACTUAL RESEARCH OUTPUT:
 **FIRST - What I learned (based on QUERY_TYPE):**
 
 **If RECOMMENDATIONS** - Show specific things mentioned with sources:
+
 ```
 🏆 Most mentioned:
 
@@ -1372,6 +1436,7 @@ Notable mentions: [other specific things with 1-2 mentions]
 ```
 
 **CRITICAL for RECOMMENDATIONS:**
+
 - Each item MUST have a "Sources:" line with actual @handles from X posts (e.g., @LONGLIVE47, @ByDobson)
 - Include subreddit names (r/hiphopheads) and web sources (Complex, Variety)
 - Parse @handles from research output and include the highest-engagement ones
@@ -1381,6 +1446,7 @@ Notable mentions: [other specific things with 1-2 mentions]
 **If PROMPTING/NEWS/GENERAL** - Show synthesis and patterns:
 
 CITATION RULE: Cite sources sparingly to prove research is real.
+
 - In the "What I learned" intro: cite 1-2 top sources total, not every sentence
 - In KEY PATTERNS: cite 1 source per pattern, short format: "per @handle" or "per r/sub"
 - Do NOT include engagement metrics in citations (likes, upvotes) - save those for stats box
@@ -1389,6 +1455,7 @@ CITATION RULE: Cite sources sparingly to prove research is real.
 **URL formatting is governed by LAW 8** in the VOICE CONTRACT block above. Every citation in the narrative body is an inline markdown link `[name](url)`; raw URL strings are forbidden; plain-text fallback only when the raw data has no URL for that specific source. Re-read LAW 8 now if you skipped it. The stats footer is engine-emitted per LAW 5 and passes through verbatim.
 
 CITATION PRIORITY (most to least preferred), with each example showing the LAW 8 inline-link shape:
+
 1. @handles from X - `per [@handle](https://x.com/handle)` (these prove the tool's unique value)
 2. r/subreddits from Reddit - `per [r/subreddit](https://reddit.com/r/subreddit)` (when citing Reddit, YouTube, or TikTok, prefer quoting top comments over just the thread title)
 3. YouTube channels - `per [channel name](https://youtube.com/@channel) on YouTube` (transcript-backed insights)
@@ -1450,6 +1517,7 @@ If the research output contains a `**🔍 Research Coverage:**` block, render it
 **Call AskUserQuestion:**
 Question: "X/Twitter wasn't searched. Want to unlock it?"
 Options:
+
 - "Scan my browser cookies (free)" - Get consent, run cookie scan, write BROWSER_CONSENT=true + FROM_BROWSER=auto to .env
 - "I have an xAI API key" - Ask them to paste it, write XAI_API_KEY to .env
 - "Skip for now"
@@ -1475,6 +1543,7 @@ If the research output does not contain the footer block (rare, only when all so
 **CRITICAL: Every invitation MUST include 2-3 specific example suggestions based on what you ACTUALLY learned from the research.** Don't be generic - show the user you absorbed the content by referencing real things from the results.
 
 **If QUERY_TYPE = PROMPTING:**
+
 ```
 ---
 I'm now an expert on {TOPIC} for {TARGET_TOOL}. What do you want to make? For example:
@@ -1486,6 +1555,7 @@ Just describe your vision and I'll write a prompt you can paste straight into {T
 ```
 
 **If QUERY_TYPE = RECOMMENDATIONS:**
+
 ```
 ---
 I'm now an expert on {TOPIC}. Want me to go deeper? For example:
@@ -1495,6 +1565,7 @@ I'm now an expert on {TOPIC}. Want me to go deeper? For example:
 ```
 
 **If QUERY_TYPE = NEWS:**
+
 ```
 ---
 I'm now an expert on {TOPIC}. Some things you could ask:
@@ -1504,6 +1575,7 @@ I'm now an expert on {TOPIC}. Some things you could ask:
 ```
 
 **If QUERY_TYPE = COMPARISON:**
+
 ```
 ---
 I've compared {TOPIC_A} vs {TOPIC_B} using the latest community data. Some things you could ask:
@@ -1514,6 +1586,7 @@ I've compared {TOPIC_A} vs {TOPIC_B} using the latest community data. Some thing
 ```
 
 **If QUERY_TYPE = GENERAL:**
+
 ```
 ---
 I'm now an expert on {TOPIC}. Some things I can help with:
@@ -1526,6 +1599,7 @@ I'm now an expert on {TOPIC}. Some things I can help with:
 
 For `/last30days kanye west` (GENERAL):
 > I'm now an expert on Kanye West. Some things I can help with:
+>
 > - What's the real story behind the apology letter - genuine or PR move?
 > - Break down the BULLY tracklist reactions and what fans are expecting
 > - Compare how Reddit vs X are reacting to the Bianca narrative
@@ -1608,14 +1682,15 @@ When the user wants a prompt, write a **single, highly-tailored prompt** using y
 
 **ANTI-PATTERN**: Research says "use JSON prompts with device specs" but you write plain prose. This defeats the entire purpose of the research.
 
-### Quality Checklist (run before delivering):
+### Quality Checklist (run before delivering)
+
 - [ ] **FORMAT MATCHES RESEARCH** - If research said JSON/structured/etc, prompt IS that format
 - [ ] Directly addresses what the user said they want to create
 - [ ] Uses specific patterns/keywords discovered in research
 - [ ] Ready to paste with zero edits (or minimal [PLACEHOLDERS] clearly marked)
 - [ ] Appropriate length and style for TARGET_TOOL
 
-### Output Format:
+### Output Format
 
 ```
 Here's your prompt for {TARGET_TOOL}:
@@ -1648,6 +1723,7 @@ After delivering a prompt, offer to write more:
 ## CONTEXT MEMORY
 
 For the rest of this conversation, remember:
+
 - **TOPIC**: {topic}
 - **TARGET_TOOL**: {tool}
 - **KEY PATTERNS**: {list the top 3-5 patterns you learned}
@@ -1656,6 +1732,7 @@ For the rest of this conversation, remember:
 **CRITICAL: After research is complete, treat yourself as an EXPERT on this topic.**
 
 When the user asks follow-up questions:
+
 - **DO NOT run new WebSearches** - you already have the research
 - **Answer from what you learned** - cite the Reddit threads, X posts, and web sources
 - **If they ask a question** - answer it from your research findings
@@ -1682,6 +1759,7 @@ Want another prompt? Just tell me what you're creating next.
 ## Security & Permissions
 
 **What this skill does:**
+
 - Sends search queries to ScrapeCreators API (`api.scrapecreators.com`) for TikTok and Instagram search, and as a Reddit backup when public Reddit is unavailable (requires SCRAPECREATORS_API_KEY)
 - Legacy: Sends search queries to OpenAI's Responses API (`api.openai.com`) for Reddit discovery (fallback if no SCRAPECREATORS_API_KEY)
 - Sends search queries to Twitter's GraphQL API (via optional user-provided AUTH_TOKEN/CT0 env vars - no browser session access), xAI's API (`api.x.ai`), or the official X API v2 via xurl CLI (OAuth2, auto-detected when installed and authenticated) for X search
@@ -1695,6 +1773,7 @@ Want another prompt? Just tell me what you're creating next.
 - Saves research briefings as .md files to `LAST30DAYS_MEMORY_DIR` (defaults to `~/Documents/Last30Days`)
 
 **What this skill does NOT do:**
+
 - Does not post, like, or modify content on any platform
 - Does not access your Reddit, X, or YouTube accounts
 - Does not share API keys between providers (OpenAI key only goes to api.openai.com, etc.)

@@ -54,15 +54,15 @@ When you need clarification from the user, **always** ask questions using the fo
 
 > **1. Which quality level should I configure?**
 >
->    a) Minimal - Basic setup with StyleCop only
->    b) Normal - Production-ready with 4 analyzers **[Recommended]**
->    c) Strict - Enterprise-grade with 9 analyzers
+> a) Minimal - Basic setup with StyleCop only
+> b) Normal - Production-ready with 4 analyzers **[Recommended]**
+> c) Strict - Enterprise-grade with 9 analyzers
 >
 > **2. Should I create a new `.editorconfig` or update the existing one?**
 >
->    a) Create new (overwrites existing) **[Recommended]**
->    b) Update existing (merge settings)
->    c) Skip - I'll handle it manually
+> a) Create new (overwrites existing) **[Recommended]**
+> b) Update existing (merge settings)
+> c) Skip - I'll handle it manually
 
 This format ensures clarity and helps the user make informed decisions quickly.
 

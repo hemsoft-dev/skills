@@ -209,6 +209,7 @@ Every generated HTML file MUST include these toggle styles:
 ## Using Themes in Component Styles
 
 When writing component CSS, **always use theme variables** instead of hardcoded colors. Replace:
+
 - `color: var(--slate)` → `color: var(--text-primary)`
 - `background: #F5F1E8` → `background: var(--bg-surface)`
 - `background: #FFFFFF` on cards → `background: var(--bg-card)`

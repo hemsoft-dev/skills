@@ -15,7 +15,7 @@ To prevent integration issues from incompatible service interactions across envi
 
 **Goal**: Detect and address contract breaches early in the development cycle.
 
-**Reference**: https://docs.pactflow.io/docs/user-interface/settings/environments
+**Reference**: <https://docs.pactflow.io/docs/user-interface/settings/environments>
 
 ### Key Terms
 

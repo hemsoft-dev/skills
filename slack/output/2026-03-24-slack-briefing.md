@@ -12,7 +12,7 @@
 
 - **[2026-03-24 11:22]** @Ashley Edds: ohhh thank you. i'll bookmark this one
 - **[2026-03-24 11:21]** @Ashley Edds: Hi -- are you able to pull someone's copilot usage for me?
-- **[2026-03-24 08:01]** @Slack Skill Bot: :sunrise: _Morning Briefing — Tuesday, March 24th, 2026_ :warning: _Needs attention_ • Personal Google services unavailable (calendar + Gmail need re-...
+- **[2026-03-24 08:01]** @Slack Skill Bot: :sunrise: *Morning Briefing — Tuesday, March 24th, 2026* :warning: *Needs attention* • Personal Google services unavailable (calendar + Gmail need re-...
 
 #### \ud83d\udce2 Announcements (1)
 
@@ -30,7 +30,7 @@
 
 - [2026-03-24 16:21] @Nick Peterson: Works!
 - [2026-03-24 16:20] @Franz Hemmer: Link got whacked - try again.
-- [2026-03-24 16:19] @Nick Peterson: 
+- [2026-03-24 16:19] @Nick Peterson:
 
 **#dev-tribe** (19 messages)
 

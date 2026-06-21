@@ -1,0 +1,45 @@
+{
+  "Summary": {
+    "Channels": 0,
+    "Mentions": 0,
+    "DirectMessages": 3,
+    "Announcements": 1,
+    "ChannelMessages": 0.0,
+    "ActionItems": 0
+  },
+  "Mentions": [],
+  "DateRange": {
+    "To": "2026-06-20",
+    "From": "2026-06-19"
+  },
+  "DirectMessages": [
+    {
+      "Text": "_Heartbeat — 10:11 AM_ _New email:_ Discord &lt;noreply@discord.com&gt; — nic.f mentioned you in Egg, Inc.",
+      "From": "Slack Skill Bot",
+      "Timestamp": "2026-06-20 10:12"
+    },
+    {
+      "Text": "_Heartbeat — 8:11 AM_ _New email:_ Ollama — Help us design Ollama’s Team plan _New email:_ Google Play — Your Google Play Order Receipt from Jun 20, 2...",
+      "From": "Slack Skill Bot",
+      "Timestamp": "2026-06-20 08:12"
+    },
+    {
+      "Text": "_Morning Briefing — Saturday, June 20_ _Needs attention_ • Slack DM scan unavailable (read target is not allowed) _Tasks_ Overdue: • Budget — due May ...",
+      "From": "Slack Skill Bot",
+      "Timestamp": "2026-06-20 08:01"
+    }
+  ],
+  "ActionItems": [],
+  "Announcements": [
+    {
+      "Permalink": "https://relias-engineering.slack.com/archives/C9UKH0XMH/p1782014001151189",
+      "Text": "",
+      "From": "PagerDuty",
+      "Channel": "reliasalerts",
+      "Timestamp": "2026-06-20 23:53"
+    }
+  ],
+  "Username": "fhemmer",
+  "GeneratedAt": "2026-06-20 23:54:19",
+  "ChannelActivity": {}
+}

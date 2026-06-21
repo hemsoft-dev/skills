@@ -9,22 +9,22 @@
 - **[2026-04-22 10:03]** @Bryan Halterman: Does stink we all are kinda in silos and our work doesn't overlap too much
 - **[2026-04-22 10:03]** @Bryan Halterman: be a mentor
 - **[2026-04-22 10:02]** @Bryan Halterman: coach him as help him grow into the more senior role
-- **[2026-04-22 16:53]** @Geo Rufino: Lastly, the repo we're building it on in: <https://github.com/relias-engineering/grc-library-service> <https://github.com/relias-engineering/grc-libra...
+- **[2026-04-22 16:53]** @Geo Rufino: Lastly, the repo we're building it on in: <https://github.com/relias-engineering/grc-library-service> <<https://github.com/relias-engineering/grc-libra>...
 - **[2026-04-22 16:52]** @Geo Rufino: The knowledge base of docs
 - **[2026-04-22 16:52]** @Geo Rufino: This is the open ai harness engineering doc I was talking about: <https://openai.com/index/harness-engineering/>
 - **[2026-04-22 16:47]** @Malia Paul: 1?
 - **[2026-04-22 16:47]** @Malia Paul: Does 1:30 work?
 - **[2026-04-22 15:21]** @Malia Paul: I have a few things I'd like to review with you tomorrow in our 1:1 so hopefully nothing will jeopardize our meeting! 1) Q2 goal - I wrote it and need...
-- **[2026-04-22 15:24]** @Slack Skill Bot: :bell: _Heartbeat — 3:13 PM_ :e-mail: _New email:_ Depot — Welcome to Depot! (+1020 older unread not previously notified)
-- **[2026-04-22 14:11]** @Slack Skill Bot: :bell: _Heartbeat — 2:10 PM_ :office: _Work:_ Customer Success Manager flagging potential Mailgun overage costs before May 31, 2026 and asking to conn...
-- **[2026-04-22 13:54]** @Slack Skill Bot: :bell: _Heartbeat — 1:51 PM_ :e-mail: _New email:_ 43 unread not previously notified (latest: Republic — Investment in Amplifi canceled) :office: _Wor...
-- **[2026-04-22 13:20]** @Slack Skill Bot: :bell: _Heartbeat — 1:19 PM_ :e-mail: _New email:_ Republic — Investment in Amplifi canceled :e-mail: _New email:_ Descript — One week out: Get more c...
-- **[2026-04-22 13:04]** @Slack Skill Bot: :bell: _Heartbeat — 1:02 PM_ :office: _Work:_ 3:00 PM–4:00 PM AI Engineering Chapter (Teams link)
+- **[2026-04-22 15:24]** @Slack Skill Bot: :bell: *Heartbeat — 3:13 PM* :e-mail: *New email:* Depot — Welcome to Depot! (+1020 older unread not previously notified)
+- **[2026-04-22 14:11]** @Slack Skill Bot: :bell: *Heartbeat — 2:10 PM* :office: *Work:* Customer Success Manager flagging potential Mailgun overage costs before May 31, 2026 and asking to conn...
+- **[2026-04-22 13:54]** @Slack Skill Bot: :bell: *Heartbeat — 1:51 PM* :e-mail: *New email:* 43 unread not previously notified (latest: Republic — Investment in Amplifi canceled) :office: _Wor...
+- **[2026-04-22 13:20]** @Slack Skill Bot: :bell: *Heartbeat — 1:19 PM* :e-mail: *New email:* Republic — Investment in Amplifi canceled :e-mail: *New email:* Descript — One week out: Get more c...
+- **[2026-04-22 13:04]** @Slack Skill Bot: :bell: *Heartbeat — 1:02 PM* :office: *Work:* 3:00 PM–4:00 PM AI Engineering Chapter (Teams link)
 
 #### \ud83d\udce2 Announcements (2)
 
 - **[2026-04-22 09:31] #neoforce-review-requests** - @Richard Ahmadi: <https://relias-engineering.slack.com/archives/C094PPZ0D6X/p1754590647856859>
-- **[2026-04-22 02:10] #pe-bot-test** - @RAE (Relias Asistant for Engineering): 
+- **[2026-04-22 02:10] #pe-bot-test** - @RAE (Relias Asistant for Engineering):
 
 #### \ud83d\udcc1 Channel Activity
 
@@ -48,7 +48,7 @@
 
 **#next-deployment** (6 messages)
 
-- [2026-04-22 16:43] @Jess Feigal: Physicians and WCEI Craft &amp; Magento Cloud Release planned for tomorrow: <https://relias.atlassia...
+- [2026-04-22 16:43] @Jess Feigal: Physicians and WCEI Craft &amp; Magento Cloud Release planned for tomorrow: <<https://relias.atlassia>...
 - [2026-04-22 15:53] @Vritti Gautam: <!here> Manual and Cypress verification completed successfully for DE!
 - [2026-04-22 15:36] @Vritti Gautam: <!here> Starting DE verification.
 

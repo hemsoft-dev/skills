@@ -4,7 +4,7 @@
 
 #### \ud83d\udcac Direct Messages (1)
 
-- **[2026-04-18 08:01]** @Slack Skill Bot: :sunrise: _Morning Briefing — Saturday, April 18th_ :warning: _Needs attention_ • Work services unavailable (workiq timed out — may need re-authentica...
+- **[2026-04-18 08:01]** @Slack Skill Bot: :sunrise: *Morning Briefing — Saturday, April 18th* :warning: *Needs attention* • Work services unavailable (workiq timed out — may need re-authentica...
 
 #### \ud83d\udcc1 Channel Activity
 

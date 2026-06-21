@@ -15,11 +15,11 @@
 - **[2026-03-10 13:46]** @Michelle Barry: That would be wonderful! i'm sure once you pull something to start with - it'll cause me to ask more questions... If i were to estimate - i'd say quar...
 - **[2026-03-10 13:31]** @Michelle Barry: can you do a couple things for me... Pull details on activity (also - i wonder if they didnt make it available last night - before they responded).......
 - **[2026-03-10 13:26]** @Michelle Barry: i heard back from Bertelsmann - they insist we have access to pull usage.
-- **[2026-03-10 08:01]** @Slack Skill Bot: :sunrise: _Morning Briefing — Tuesday, March 10th_ :clipboard: _Tasks_ _Timed:_ • 8:00 AM — Take morning meds • 12:00 PM — Exercise • 3:00 PM — Get tr...
+- **[2026-03-10 08:01]** @Slack Skill Bot: :sunrise: *Morning Briefing — Tuesday, March 10th* :clipboard: *Tasks* *Timed:* • 8:00 AM — Take morning meds • 12:00 PM — Exercise • 3:00 PM — Get tr...
 
 #### \ud83d\udce2 Announcements (1)
 
-- **[2026-03-10 15:44] #reliasalerts-ssl** - @datadog: 
+- **[2026-03-10 15:44] #reliasalerts-ssl** - @datadog:
 
 #### \ud83d\udcc1 Channel Activity
 
@@ -29,7 +29,7 @@
 - [2026-03-10 17:47] @Nick Peterson: I can
 - [2026-03-10 17:45] @Bryan Halterman: oh I see, group level
 - [2026-03-10 17:45] @Bryan Halterman: are you sure she has admin?
-- [2026-03-10 17:43] @Bryan Halterman: 
+- [2026-03-10 17:43] @Bryan Halterman:
 - [2026-03-10 17:43] @Nick Peterson: lol
 - [2026-03-10 17:43] @Bryan Halterman: lol
 - [2026-03-10 17:43] @Bryan Halterman: <@U032050R2TY|Malia Paul> can we huddle and go through Snyk?
@@ -47,7 +47,7 @@
 - [2026-03-10 10:58] @Trey Walters: If you are calling from another API you'll either need to: 1. Find another endpoint to call 2. Modify this endpoint to work without a user token (for example, by accepting an org id as a query paramet...
 - [2026-03-10 10:56] @Trey Walters: It looks like that endpoint assumes it is being called with a user token, which would include an orgId claim
 - [2026-03-10 10:05] @Charlotte Fowler: <!here> This afternoon at around 1:30PM I will be running a script to update the Network Security Group rules and Application Restrictions in stg-de to add Akamai's proxy origin IPs to the rules allow...
-- [2026-03-10 06:58] @Sowmya Krishnamoorthi: <!here> Divum-DE is addressing issues related to wrapping Live Event Session Attendance in Launch Darkly . We're providing this as an RC for the 26.Q1.3 release. Relevant Ticket: <https://relias.atlas...
+- [2026-03-10 06:58] @Sowmya Krishnamoorthi: <!here> Divum-DE is addressing issues related to wrapping Live Event Session Attendance in Launch Darkly . We're providing this as an RC for the 26.Q1.3 release. Relevant Ticket: <<https://relias.atlas>...
 
 **#dev-ex-private** (10 messages)
 
@@ -68,7 +68,7 @@
 - [2026-03-10 11:17] @Scott Burnette: cc <@U01FN6UP16C|Clark Bonham>
 - [2026-03-10 11:04] @Scott Burnette: PR: <https://bitbucket.org/relias/usermanagementservice/pull-requests/1024>
 - [2026-03-10 10:40] @Fawaz Baig: Hi <@U04CCBY0P88|Jason Smith>, The code has been merged into the staging environment, and we’ve completed testing on our end. Everything looks good and we’re ready to proceed with the deployment. Plea...
-- [2026-03-10 06:58] @Sowmya Krishnamoorthi: <!here> Divum-DE is addressing issues related to wrapping Live Event Session Attendance in Launch Darkly . We're providing this as an RC for the 26.Q1.3 release. Relevant Ticket: <https://relias.atlas...
+- [2026-03-10 06:58] @Sowmya Krishnamoorthi: <!here> Divum-DE is addressing issues related to wrapping Live Event Session Attendance in Launch Darkly . We're providing this as an RC for the 26.Q1.3 release. Relevant Ticket: <<https://relias.atlas>...
 
 **#platform** (3 messages)
 
@@ -78,17 +78,17 @@
 
 **#productivity-engineering-public** (2 messages)
 
-- [2026-03-10 09:51] @Nicolas Tobis: Got it thank you, I'll take a look at the merge conflict 
+- [2026-03-10 09:51] @Nicolas Tobis: Got it thank you, I'll take a look at the merge conflict
 - [2026-03-10 08:48] @Trey Walters: FWIW we've seen merge conflicts prevent a pipeline run from kicking off previously, so I think that's the likely culprit here
 
 **#ai-chapter** (2 messages)
 
 - [2026-03-10 13:56] @Abel Wright: (I should add, the process in my case was closely supervised/shepherded - I did not set it to work and come back the next day - but gpt-5.4 really did an excellent job!)
-- [2026-03-10 13:39] @Abel Wright: This is a super cool repo from Karpathy where he has agents set up iteratively testing ideas to automate systematic improvements to a "nano" chatgpt-like transformer model: <https://github.com/karpath...
+- [2026-03-10 13:39] @Abel Wright: This is a super cool repo from Karpathy where he has agents set up iteratively testing ideas to automate systematic improvements to a "nano" chatgpt-like transformer model: <<https://github.com/karpath>...
 
 **#relias-cortex-external** (1 messages)
 
-- [2026-03-10 09:02] @cortex (product updates): *Improvements :chart_with_upwards_trend:* * You can now retrieve created by and updated by timestamps for Scorecards and Initiatives through our API. Learn more in our <https://docs.cortex.io/api/read...
+- [2026-03-10 09:02] @cortex (product updates): *Improvements :chart_with_upwards_trend:* * You can now retrieve created by and updated by timestamps for Scorecards and Initiatives through our API. Learn more in our <<https://docs.cortex.io/api/read>...
 
 **#relias-engineering** (1 messages)
 

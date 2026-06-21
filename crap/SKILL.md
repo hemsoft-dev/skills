@@ -62,6 +62,7 @@ A method with complexity=1 always has CRAP=1. A method with complexity=10 and 0%
 ```
 
 Flags:
+
 - `-Threshold 6` — CRAP cutoff (default: 6, functions >= this are flagged)
 - `-Top 30` — Show top N worst scores (default: 30)
 - `-Format json` — Machine-readable output for CI/logging
@@ -69,6 +70,7 @@ Flags:
 - `-SkipCoverage` — Reuse existing coverage data (skip test run)
 
 **Stack detection** (checked in order):
+
 | File Present | Stack | Coverage Source | Complexity Source |
 |-------------|-------|----------------|-------------------|
 | `*.sln` / `*.csproj` | dotnet | Coverlet Cobertura XML | `complexity` attr in XML |
@@ -76,11 +78,13 @@ Flags:
 | `package.json` | ts | vitest/jest `coverage-summary.json` | eslint complexity rule |
 
 **Per-stack flow:**
+
 - **ts**: vitest coverage → eslint `complexity: [warn, 1]` → cross-reference
 - **dotnet**: `dotnet test --collect:"XPlat Code Coverage"` → parse Cobertura XML (has per-method complexity + line-rate natively)
 - **python**: pytest-cov → radon cyclomatic complexity → merge
 
 **Prerequisites by stack:**
+
 - ts: `coverage-summary.json` reporter + eslint
 - dotnet: coverlet generating Cobertura XML
 - python: `radon` installed (`pip install radon`)
@@ -108,8 +112,8 @@ $coverageFiles = (Get-ChildItem TestResults -Filter "coverage.cobertura.xml" -Re
 dotnet reportgenerator "-reports:$coverageFiles" "-targetdir:TestResults/CrapReport" "-reporttypes:Html;JsonSummary" "-verbosity:Warning"
 ```
 
-3. Parse Cobertura XML for per-method CRAP scores using the CRAP formula
-4. Present results sorted by CRAP score (highest first)
+1. Parse Cobertura XML for per-method CRAP scores using the CRAP formula
+2. Present results sorted by CRAP score (highest first)
 
 **For TypeScript/JavaScript projects:**
 
@@ -155,11 +159,12 @@ When asked to improve CRAP for a specific method (or the worst methods):
 | Low complexity, low coverage | Just add tests — quick win |
 | Very high complexity (20+) | Split the method first, then test the pieces |
 
-3. Implement the improvement (tests and/or refactor)
-4. Re-run CRAP report to verify the score dropped
-5. Log the improvement (see `log` command)
+1. Implement the improvement (tests and/or refactor)
+2. Re-run CRAP report to verify the score dropped
+3. Log the improvement (see `log` command)
 
 **Improvement priorities** (maximize CRAP reduction per effort):
+
 - Coverage has a **cubic** effect on CRAP: going from 0% → 50% coverage on a complexity-10 method drops CRAP from 110 to 22.5
 - Complexity has a **quadratic** effect: reducing complexity from 10 to 5 drops CRAP from 110 to 30 (at 0% coverage)
 - **Testing first is almost always the higher-leverage move** unless complexity is extreme (30+)
@@ -201,6 +206,7 @@ Create the file if it doesn't exist. Each entry follows this format:
 ```
 
 **Change tracking**: Compare against the previous log entry to compute deltas. Mark methods as:
+
 - `↓N` — improved by N points
 - `↑N` — regressed by N points
 - `NEW` — first appearance (new code)
@@ -254,10 +260,12 @@ When setting up CRAP in CI, recommend this pattern:
 5. **Gate on threshold** (optional — start informational, enforce later)
 
 For .NET CI (GitHub Actions), reference the pattern in `relias-assistant` repo:
+
 - `.github/workflows/ci.yml` — generates Cobertura XML coverage via Coverlet
 - Uploads `coverage-report` artifact consumed by org-metrics scorecard
 
 For TypeScript CI (GitHub Actions), reference the pattern in `hs-buddy` repo:
+
 - `.github/workflows/ci.yml` — generates Cobertura XML via Vitest + V8
 - Uploads `cobertura-coverage` artifact consumed by org-metrics scorecard
 
@@ -305,6 +313,7 @@ For a repo's CRAP score to appear in the scorecard, its CI must:
 ### Reducing CRAP to pass the rule
 
 Use the `improve` command to fix critical methods. Key strategies:
+
 - **Add tests first** (cubic effect — highest leverage)
 - **Refactor complex methods** (quadratic effect — split into smaller methods)
 - See the `improve` command above for detailed guidance

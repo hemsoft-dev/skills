@@ -435,6 +435,7 @@ protected-files:
 ### `protect_top_level_dot_folders` (hardcoded `true`)
 
 Flags any changed file whose first path component starts with `.` and is ≥2 chars:
+
 - `.github/workflows/ci.yml` → FLAGGED (`.github` starts with `.`)
 - `.env` → NOT flagged (root-level file, no `/`)
 - Exclusions require trailing slash: `[".agents/"]`
@@ -610,6 +611,7 @@ safe-outputs:
 ### SSH Config & `gh aw audit` Bug
 
 The remote URL uses SSH alias `github-work1` instead of `github.com`:
+
 ```
 git@github-work1:relias-engineering/ai-workflows.git
 ```
@@ -731,6 +733,7 @@ When bash is set to unrestricted (`bash: [":*"]` or `bash: "*"` or `bash: null`)
 **Diagnosis**: The git push succeeded but something triggered the fallback-to-issue path. Check the run logs for "Code push ... fell back to review issue".
 
 **Possible causes**:
+
 1. Protected files detected → set `protected-files: allowed`
 2. Push failed (permission) → configure GitHub App
 3. Non-fast-forward push → `fallback-as-pull-request: true` (default) handles this
@@ -741,6 +744,7 @@ When bash is set to unrestricted (`bash: [":*"]` or `bash: "*"` or `bash: null`)
 **Diagnosis**: Either the run is still in progress, or your git remote uses an SSH alias.
 
 **Fix**:
+
 - Wait for run to complete, then retry
 - If SSH alias issue: use `gh run view <id> --repo owner/repo` instead
 - File a bug with `gh aw` team
@@ -748,6 +752,7 @@ When bash is set to unrestricted (`bash: [":*"]` or `bash: "*"` or `bash: null`)
 ### `gh aw compile` fails
 
 **Diagnosis**: Check for:
+
 - Duplicate frontmatter blocks
 - Invalid YAML in frontmatter
 - `allow-workflows: true` without `safe-outputs.github-app`
@@ -772,6 +777,7 @@ When bash is set to unrestricted (`bash: [":*"]` or `bash: "*"` or `bash: null`)
 | Schedule | `gh-aw-{workflow}` |
 
 Override with:
+
 ```yaml
 concurrency:
   group: custom-${{ github.ref }}
@@ -811,11 +817,13 @@ safe-outputs:
 ## 13. WORKFLOW-ID MARKER
 
 All items created by workflows include a hidden marker:
+
 ```html
 <!-- gh-aw-workflow-id: WORKFLOW_NAME -->
 ```
 
 Search for workflow-created items:
+
 ```
 repo:owner/repo is:issue is:open "gh-aw-workflow-id: simplisticate-pr" in:body
 ```

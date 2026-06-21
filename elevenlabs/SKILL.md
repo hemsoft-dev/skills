@@ -132,9 +132,10 @@ Accepted source types:
 5. Ask for any focus hints (must-cover points, callouts, sections)
 6. Ask for output path (required)
 7. Generate a two-host script from the sources
-  - Preferred helper: `New-ElevenLabsPodcastDialogue.ps1`
-8. Review transcript for quality (required before synthesis)
-9. Synthesize with `Invoke-ElevenLabsPodcast.ps1`
+
+- Preferred helper: `New-ElevenLabsPodcastDialogue.ps1`
+1. Review transcript for quality (required before synthesis)
+2. Synthesize with `Invoke-ElevenLabsPodcast.ps1`
 
 **Default behavior for script generation:**
 

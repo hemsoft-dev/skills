@@ -12,7 +12,7 @@
 - **[2026-04-13 09:40]** @Christian Mutaba: Hey Franz! The Pact Testing effort was put on hold due to shifting priorities, but I think it is an important area for us to revisit as the number of ...
 - **[2026-04-13 17:48]** @Jeff Buda: but that question raises a key point I was trying to make: we need to output of the agentic workflows to be verifiable in the cloud via automated test...
 - **[2026-04-13 17:47]** @Jeff Buda: see this readme note regarding running locally: <https://github.com/relias-engineering/notifications-api|relias-engineering/notifications-api>
-- **[2026-04-13 17:46]** @Jeff Buda: <https://github.com/relias-engineering/user-groups|relias-engineering/user-groups: Compliance Management User Groups API> or <https://github.com/relia...
+- **[2026-04-13 17:46]** @Jeff Buda: <<https://github.com/relias-engineering/user-groups|relias-engineering/user-groups>: Compliance Management User Groups API> or <<https://github.com/relia>...
 - **[2026-04-13 18:07]** @Malia Paul: Does that make any sense?
 - **[2026-04-13 18:07]** @Malia Paul: I think we have to have things out of beta to put it "on paper". Hence my question to those with an item in beta - "how can I unblock you?". I thought...
 - **[2026-04-13 16:18]** @Malia Paul: If it were up to me, we'd all go back to industry standard titles - Principal SE, SDET, etc.
@@ -50,7 +50,7 @@
 - [2026-04-13 14:37] @Nick Peterson: Hey yall, I got a slight migraine, I'm going to step away for a few and take some meds. I'll be back online later
 - [2026-04-13 12:26] @Bryan Halterman: packing up and heading home, be back online in about an hour
 - [2026-04-13 11:36] @Bryan Halterman: internet at the office is SLOW today
-- [2026-04-13 11:35] @Bryan Halterman: <https://github.blog/ai-and-ml/github-copilot/how-squad-runs-coordinated-ai-agents-inside-your-repository/|How Squad runs coordinated AI agents inside your repository - The GitHub Blog>
+- [2026-04-13 11:35] @Bryan Halterman: <<https://github.blog/ai-and-ml/github-copilot/how-squad-runs-coordinated-ai-agents-inside-your-repository/|How> Squad runs coordinated AI agents inside your repository - The GitHub Blog>
 - [2026-04-13 11:34] @Bryan Halterman: sorry squads
 - [2026-04-13 11:33] @Bryan Halterman: I thought I saw something about swarms (where it generates AI teams) that you can assign work but I'm not finding it again
 - [2026-04-13 11:31] @Bryan Halterman: have you use fleet mode?
@@ -71,7 +71,7 @@
 **#dev-env-help** (7 messages)
 
 - [2026-04-13 13:09] @Anthony Garera: Cloned worked, thanks <@U01GHAS5A8L|Kyle McDaniel>
-- [2026-04-13 13:04] @Anthony Garera: 
+- [2026-04-13 13:04] @Anthony Garera:
 - [2026-04-13 13:04] @Anthony Garera: Found it, now I see a lot more repos showing up
 - [2026-04-13 13:03] @Kyle McDaniel: I can also resend it if need be - this invite should be particularly for the "Platform Dev/Test" group.
 - [2026-04-13 13:02] @Anthony Garera: Let me check, I thought I accepted them all
@@ -89,12 +89,12 @@
 
 **#ai-chapter** (6 messages)
 
-- [2026-04-13 17:48] @Geo Rufino: Anyone ever wish they could run github cli from a roller coaster? Github team is trying to make your dreams reality. <https://github.blog/changelog/2026-04-13-remote-control-cli-sessions-on-web-and-mo...
+- [2026-04-13 17:48] @Geo Rufino: Anyone ever wish they could run github cli from a roller coaster? Github team is trying to make your dreams reality. <<https://github.blog/changelog/2026-04-13-remote-control-cli-sessions-on-web-and-mo>...
 - [2026-04-13 12:15] @Geo Rufino: It was great seeing the varying levels of success teams had using AI for story creation and risk identification during BRP. Based on the feedback I’ve received, many of you have ideas on how to iterat...
-- [2026-04-13 11:52] @George DeCherney: This is a pretty good 101 series on using Copilot in Visual Studio Code for agent first development <https://www.youtube.com/playlist?list=PLj6YeMhvp2S4l1_iP4-pS6p7lgyqKo-Ix|VS Code Learn - YouTube>
+- [2026-04-13 11:52] @George DeCherney: This is a pretty good 101 series on using Copilot in Visual Studio Code for agent first development <<https://www.youtube.com/playlist?list=PLj6YeMhvp2S4l1_iP4-pS6p7lgyqKo-Ix|VS> Code Learn - YouTube>
 - [2026-04-13 10:14] @Josh Bowman: I would say this horrifies me, but I'm pretty sure there's also a quantum mechanics for babies so :man-shrugging:
 - [2026-04-13 10:10] @Austin Gilmore: At what age can you get that in their LinkedIn profile?
-- [2026-04-13 07:26] @George DeCherney: The book that was requested for our morning story time… 
+- [2026-04-13 07:26] @George DeCherney: The book that was requested for our morning story time…
 
 **#productivity-engineering-public** (4 messages)
 

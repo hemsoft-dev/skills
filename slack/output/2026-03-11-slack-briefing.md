@@ -13,7 +13,7 @@
 - **[2026-03-11 16:02]** @Nick Peterson: Thats MEEE
 - **[2026-03-11 16:02]** @Nick Peterson: And I'm done, makes me wonder who else is getting slammed
 - **[2026-03-11 16:01]** @Nick Peterson: Lmao Yes
-- **[2026-03-11 08:01]** @Slack Skill Bot: :sunrise: _Morning Briefing — Wednesday, March 11th_ :clipboard: _Tasks_ _Timed:_ • 8:00 AM — Take morning meds • 9:00 AM — Prepare for presentation •...
+- **[2026-03-11 08:01]** @Slack Skill Bot: :sunrise: *Morning Briefing — Wednesday, March 11th* :clipboard: *Tasks* *Timed:* • 8:00 AM — Take morning meds • 9:00 AM — Prepare for presentation •...
 
 #### \ud83d\udcc1 Channel Activity
 
@@ -53,7 +53,7 @@
 - [2026-03-11 16:21] @Samuel Harris: <!here> Starting DE verification
 - [2026-03-11 16:01] @Mark Earl: <!here> starting DE deployment
 - [2026-03-11 13:29] @Clark Bonham: Looks like it's going now
-- [2026-03-11 13:19] @Scott Burnette: hi <@U01FN6UP16C|Clark Bonham> would you be able to approve the MFE staging deployment gate here? <https://dev.azure.com/ReliasDevelopment/ReliasPlatform/_build/results?buildId=357555&view=logs&s=3502...
+- [2026-03-11 13:19] @Scott Burnette: hi <@U01FN6UP16C|Clark Bonham> would you be able to approve the MFE staging deployment gate here? <<https://dev.azure.com/ReliasDevelopment/ReliasPlatform/_build/results?buildId=357555&view=logs&s=3502>...
 - [2026-03-11 10:48] @Charlotte Fowler: Instructions look simple enough, though I did have one question that I've included as a comment on the ticket.
 
 **#relias-engineering** (9 messages)
@@ -77,7 +77,7 @@
 **#ai-chapter** (3 messages)
 
 - [2026-03-11 18:10] @Christian Mutaba: Interesting read on how AI adoption is impacting large tech companies in unexpected ways. Amazon reportedly linked several recent outages to AI-assisted code changes and is now requiring stronger over...
-- [2026-03-11 17:14] @Franz Hemmer: 
+- [2026-03-11 17:14] @Franz Hemmer:
 - [2026-03-11 17:08] @Geo Rufino: A little moment of silence for edit mode...
 
 ---
