@@ -1,5 +1,5 @@
 {
-  "GeneratedAtUtc": "2026-06-21T03:54:46.1855706+00:00",
+  "GeneratedAtUtc": "2026-06-22T03:53:45.0855423+00:00",
   "Enterprise": "bertelsmann",
   "Organization": "Relias-Engineering",
   "Year": 2026,
@@ -24,7 +24,8 @@
     17,
     18,
     19,
-    20
+    20,
+    21
   ],
   "RefreshedDays": [
     1,
@@ -46,15 +47,16 @@
     17,
     18,
     19,
-    20
+    20,
+    21
   ],
   "ApiVersion": "2026-03-10",
   "IncludeOrganizationFilter": false,
-  "RefreshRunId": "58e89a62a3da41c788f409ec33f840f1",
+  "RefreshRunId": "0886c0016b4c4690a958260d29ce4e06",
   "RefreshStatus": "Complete",
   "FetchedResponseCount": 1,
   "FailedResponseCount": 0,
-  "ReusedResponseCount": 19,
+  "ReusedResponseCount": 20,
   "Users": [
     {
       "User": "fhemmerrelias",
@@ -1072,8 +1074,27 @@
               }
             ]
           },
-          "RefreshedAtUtc": "2026-06-21T03:54:46.0627890+00:00",
+          "RefreshedAtUtc": "2026-06-20T23:54:46.062789-04:00",
           "RefreshRunId": "58e89a62a3da41c788f409ec33f840f1"
+        },
+        {
+          "Day": 21,
+          "Path": "/enterprises/bertelsmann/settings/billing/premium_request/usage?year=2026&month=6&day=21&user=fhemmerrelias",
+          "StatusCode": 200,
+          "Success": true,
+          "RawJson": "{\"timePeriod\":{\"year\":2026,\"month\":6,\"day\":21},\"enterprise\":\"Bertelsmann\",\"user\":\"fhemmerrelias\",\"usageItems\":[]}",
+          "Response": {
+            "timePeriod": {
+              "year": 2026,
+              "month": 6,
+              "day": 21
+            },
+            "enterprise": "Bertelsmann",
+            "user": "fhemmerrelias",
+            "usageItems": []
+          },
+          "RefreshedAtUtc": "2026-06-22T03:53:44.9321303+00:00",
+          "RefreshRunId": "0886c0016b4c4690a958260d29ce4e06"
         }
       ],
       "Error": ""
