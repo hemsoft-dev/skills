@@ -1,0 +1,308 @@
+{
+  "GeneratedAt": "2026-06-25 23:38:53",
+  "Mentions": [],
+  "DirectMessages": [
+    {
+      "From": "Bryan Halterman",
+      "Timestamp": "2026-06-25 07:05",
+      "Text": "does that still happen with a fresh session (like inprivate)"
+    },
+    {
+      "From": "John Poe",
+      "Timestamp": "2026-06-25 09:21",
+      "Text": "Hey Franz I don’t know if you are the right person to ask. I have a problem moving a repo from bitbucket to GitHub. All commits must be signed now whe..."
+    },
+    {
+      "From": "Malia Paul",
+      "Timestamp": "2026-06-25 13:14",
+      "Text": "Meeting with Michelle running over"
+    }
+  ],
+  "Username": "fhemmer",
+  "DateRange": {
+    "From": "2026-06-24",
+    "To": "2026-06-25"
+  },
+  "Announcements": [
+    {
+      "From": "Sharada Tanikella",
+      "Channel": "deploy-and-conquer-public",
+      "Permalink": "https://relias-engineering.slack.com/archives/C08NSUBKDCZ/p1782422813405949?thread_ts=1782396150.095329",
+      "Timestamp": "2026-06-25 17:26",
+      "Text": "<@S08NHB1LQMN|deploy-conquer> Please add Jason, Kris , Chun to your private channel. Also share repo links so they can have the set up done soon."
+    },
+    {
+      "From": "Jeff Hannan",
+      "Channel": "adf-alerts-non-prod",
+      "Permalink": "https://relias-engineering.slack.com/archives/C0BCJ38CJKY/p1782421870629749",
+      "Timestamp": "2026-06-25 17:11",
+      "Text": "not intruding! this is your channel too"
+    },
+    {
+      "From": "Emily Doyle",
+      "Channel": "swatteam-lite",
+      "Permalink": "https://relias-engineering.slack.com/archives/CHWQ0SW8P/p1782419602457269?thread_ts=1782419572.541999",
+      "Timestamp": "2026-06-25 16:33",
+      "Text": "Yes--at least the Academy issues we have been discussing on the Sysman channel for about an hour"
+    },
+    {
+      "From": "Cherie Cutchin",
+      "Channel": "accredited-content",
+      "Permalink": "https://relias-engineering.slack.com/archives/C0ARTAEC8KB/p1782418869953749",
+      "Timestamp": "2026-06-25 16:21",
+      "Text": "<!here> Channel consolidation! We have archived the private channel that was also being used for Accredited Content. This is the one we will use going forward. If you don't feel like you need to be a participant, you are welcome to remove yourself an..."
+    },
+    {
+      "From": "Giovanni Rufino",
+      "Channel": "adf-knowledge-share",
+      "Permalink": "https://relias-engineering.slack.com/archives/C09SGFYSJ66/p1782416250889629",
+      "Timestamp": "2026-06-25 15:37",
+      "Text": "<@U036JBV3JJV|Beth> Any chance you have a sec to approve a tiny PR? <https://github.com/relias-engineering/shared-datafactory/pull/51> If not I'll go through official channels."
+    },
+    {
+      "From": "Priyanka Goyal",
+      "Channel": "dev-tribe",
+      "Permalink": "https://relias-engineering.slack.com/archives/C1KAF274N/p1782394696310619?thread_ts=1782394696.310619",
+      "Timestamp": "2026-06-25 09:38",
+      "Text": "<!channel> Is it safe to ignore these Snyk checks and merge PR ?"
+    },
+    {
+      "From": "George DeCherney",
+      "Channel": "dev-tribe",
+      "Permalink": "https://relias-engineering.slack.com/archives/C1KAF274N/p1782394280729279",
+      "Timestamp": "2026-06-25 09:31",
+      "Text": "<!channel> I only see two services accounted for here. Please respond to acknowledge who will be doing each service <https://relias-engineering.slack.com/archives/C1KAF274N/p1782330819350269>"
+    }
+  ],
+  "ActionItems": [],
+  "ChannelActivity": {
+    "dev-tribe": {
+      "TotalMessages": 83,
+      "RecentMessages": [
+        {
+          "From": "Vritti Gautam",
+          "Timestamp": "2026-06-25 22:33",
+          "Text": "<!here> Rustici Engine on Dev1 is currently failing. Could someone please help investigate?"
+        },
+        {
+          "From": "Samuel Renkert",
+          "Timestamp": "2026-06-25 21:24",
+          "Text": ""
+        },
+        {
+          "From": "Samuel Renkert",
+          "Timestamp": "2026-06-25 21:24",
+          "Text": "Hello, I am seeing more branches at the repo root (content-scheduler). I suspect this is AI. How do we feel about putting AI branches (and/or all human branches) inside a folder? Non-exhaustive exampl..."
+        },
+        {
+          "From": "Shane Neiman",
+          "Timestamp": "2026-06-25 18:22",
+          "Text": "No worries, I agree with that. I was thinking I would lose progress at first, but that isn't the case, so I'm good with the plan."
+        },
+        {
+          "From": "George DeCherney",
+          "Timestamp": "2026-06-25 18:17",
+          "Text": "Sorry for the run around. It just feels like if we use Fridays branch's it might remove the question of “which branch” but maybe that's just a me thing"
+        },
+        {
+          "From": "Shane Neiman",
+          "Timestamp": "2026-06-25 18:06",
+          "Text": "Works for me! Github actions triggers don't have a reliable start time, but I will track in the morning and post updates as they come. I do expect it to be successful. Dev1 has successfully deployed a..."
+        },
+        {
+          "From": "George DeCherney",
+          "Timestamp": "2026-06-25 17:57",
+          "Text": "Can we let the Friday automation run and then if it passes us that otherwise use that branch?"
+        },
+        {
+          "From": "Shane Neiman",
+          "Timestamp": "2026-06-25 17:55",
+          "Text": "Once we confirm, I will close this PR considering this branch will get thrown out <https://github.com/relias-engineering/rlms-website/pull/2997>"
+        },
+        {
+          "From": "Shane Neiman",
+          "Timestamp": "2026-06-25 17:53",
+          "Text": "Good point. Can't speak for John, but for me, I can tweak my automation easily to avoid losing the progress I had"
+        },
+        {
+          "From": "George DeCherney",
+          "Timestamp": "2026-06-25 17:50",
+          "Text": "As much as I want to say yes I also wonder if it is cleaner to just have the Friday morning automation cut the branches again? But I honestly don't know everything that is involved at this point. What..."
+        }
+      ]
+    },
+    "next-deployment": {
+      "TotalMessages": 12,
+      "RecentMessages": [
+        {
+          "From": "Shawn Bamberg",
+          "Timestamp": "2026-06-25 21:53",
+          "Text": "<!here> manual and automated testing has completed successfully for the 26.Q2.03 release in CA and US"
+        },
+        {
+          "From": "Shawn Bamberg",
+          "Timestamp": "2026-06-25 21:26",
+          "Text": "<!here> beginning validation for CA and US"
+        },
+        {
+          "From": "Scott Sill",
+          "Timestamp": "2026-06-25 21:26",
+          "Text": "<!here> CA &amp; US deployment complete"
+        },
+        {
+          "From": "Scott Sill",
+          "Timestamp": "2026-06-25 21:05",
+          "Text": "<!here> Starting 2026 Q2.03 US &amp; CA deployment"
+        },
+        {
+          "From": "Shawn Bamberg",
+          "Timestamp": "2026-06-25 15:48",
+          "Text": "<!here> manual and automated testing has completed successfully for the 26.Q2.03 release in DE"
+        },
+        {
+          "From": "Shawn Bamberg",
+          "Timestamp": "2026-06-25 15:22",
+          "Text": "<!here> beginning validation for DE"
+        },
+        {
+          "From": "Scott Sill",
+          "Timestamp": "2026-06-25 15:22",
+          "Text": "<!here> Germany deployment complete"
+        },
+        {
+          "From": "Scott Sill",
+          "Timestamp": "2026-06-25 15:05",
+          "Text": "<!here> Starting 2026 Q2.03 Deployment to Germany"
+        },
+        {
+          "From": "Jason Smith",
+          "Timestamp": "2026-06-25 11:31",
+          "Text": "this is complete"
+        },
+        {
+          "From": "Terrence Meikle",
+          "Timestamp": "2026-06-25 10:05",
+          "Text": "<@SBMTU8ZUY|cloudengineers-sysadmins> resending this request"
+        }
+      ]
+    },
+    "productivity-engineering-public": {
+      "TotalMessages": 10,
+      "RecentMessages": [
+        {
+          "From": "Malia Paul",
+          "Timestamp": "2026-06-25 16:00",
+          "Text": "For the signed commits issue, I think there was another thread about creating a bypass group for this issue - so you can bypass the requirement with an admin."
+        },
+        {
+          "From": "Malia Paul",
+          "Timestamp": "2026-06-25 15:59",
+          "Text": "The Snyk thing should not be blocking (also, it appears InfoSec may be reconfiguring Snyk scans on repos and removing some)."
+        },
+        {
+          "From": "Jack Cornblum",
+          "Timestamp": "2026-06-25 15:54",
+          "Text": "<@U03P22TK0TG|Darren Jack> has been able to merge these PRs though"
+        },
+        {
+          "From": "Jack Cornblum",
+          "Timestamp": "2026-06-25 15:53",
+          "Text": "I did post in dev-tribe but hadn't gotten any responses. There are two different things happening: 1. On trying to rebase and merge we get blocked saying that the PR contains un-verified commits, even..."
+        },
+        {
+          "From": "Malia Paul",
+          "Timestamp": "2026-06-25 15:50",
+          "Text": "The issue is with signed commits, not Snyk, correct? Snyk does not prevent merges. I would post on dev-tribe. This is not something PE can assist in (although I'm sure we'll have opinions) solving."
+        },
+        {
+          "From": "Clark Bonham",
+          "Timestamp": "2026-06-25 15:34",
+          "Text": "<!here> This is also preventing me from merging my release branches into master for rlms-website."
+        },
+        {
+          "From": "Jack Cornblum",
+          "Timestamp": "2026-06-25 15:32",
+          "Text": "<!here> Hi, a few of us are having issues merging PRs in the nurse mobile repo. We have verified that our commits are signed, but get a warning for a snyk status check when trying to squash and merge,..."
+        },
+        {
+          "From": "Bryan Halterman",
+          "Timestamp": "2026-06-25 09:44",
+          "Text": "other than that its basically self-service. I'm happy to hop on a call with them."
+        },
+        {
+          "From": "Bryan Halterman",
+          "Timestamp": "2026-06-25 09:42",
+          "Text": "with the SSO, there is no invite necessary anymore. Its just sign in with SSO, sign in with the linked GitHub account. and they have to have MFA on the GitHub account"
+        },
+        {
+          "From": "George DeCherney",
+          "Timestamp": "2026-06-25 09:11",
+          "Text": "yeah I think something is not working because they do have the tile in MyApps and after clicking it were still not added to the org. I have manually invited them to the org and added them to their app..."
+        }
+      ]
+    },
+    "dev-ex-private": {
+      "TotalMessages": 14,
+      "RecentMessages": [
+        {
+          "From": "Nick Peterson",
+          "Timestamp": "2026-06-25 17:02",
+          "Text": "Big Brain Bryan"
+        },
+        {
+          "From": "Franz Hemmer",
+          "Timestamp": "2026-06-25 16:53",
+          "Text": "Don't forget to keep an eye on <#C05BRPSNNRW> we no longer have automatic bot running on that."
+        },
+        {
+          "From": "Bryan Halterman",
+          "Timestamp": "2026-06-25 14:59",
+          "Text": "both are better than the nick name I had when I was a manager Bad News Bryan"
+        },
+        {
+          "From": "Bryan Halterman",
+          "Timestamp": "2026-06-25 14:58",
+          "Text": "lol thanks"
+        },
+        {
+          "From": "Nick Peterson",
+          "Timestamp": "2026-06-25 14:43",
+          "Text": "Brainstorm Bryan"
+        },
+        {
+          "From": "Bryan Halterman",
+          "Timestamp": "2026-06-25 14:39",
+          "Text": "Bitchy Bryan"
+        },
+        {
+          "From": "Bryan Halterman",
+          "Timestamp": "2026-06-25 12:49",
+          "Text": "I added some comments Franz"
+        },
+        {
+          "From": "Bryan Halterman",
+          "Timestamp": "2026-06-25 12:37",
+          "Text": "I'm looking now. I got caught up in helping Kris with a CosmosDB Emulator issue (got it resolved wooo not even the sys admins could figure it out mwhahah)"
+        },
+        {
+          "From": "Franz Hemmer",
+          "Timestamp": "2026-06-25 10:57",
+          "Text": "If you use gh x pr then you'll see it clearly."
+        },
+        {
+          "From": "Franz Hemmer",
+          "Timestamp": "2026-06-25 10:56",
+          "Text": "Towards the bottom"
+        }
+      ]
+    }
+  },
+  "Summary": {
+    "Announcements": 7,
+    "ActionItems": 0,
+    "ChannelMessages": 119.0,
+    "Mentions": 0,
+    "DirectMessages": 3,
+    "Channels": 4
+  }
+}

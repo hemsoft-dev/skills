@@ -791,3 +791,6 @@ Result: Saved `diary/entries/2026/06/2026-06-20.html` with weather, Slack, quali
 
 2026-06-21 - 23:58 - Scaffold diary entry for Sunday 2026-06-21
 Result: Saved `diary/entries/2026/06/2026-06-21.html` with weather, Slack, quality-gated news, token-billing daily numbers, live DeepSWE check, trending repos, software/watchlist updates, productivity, weekend meeting omission, and no-screenshot validation. Left Today's Highlight and Personal Reflections as TODOs.
+
+2026-06-25 - 23:46 - Scaffold diary entry for Thursday 2026-06-25
+Result: Saved `diary/entries/2026/06/2026-06-25.html` with weather, Slack, quality-gated news, token-billing daily numbers, refreshed DeepSWE context, trending repos, software/watchlist updates, productivity, WorkIQ meeting summary, and no-screenshot validation. Left Today's Highlight and Personal Reflections as TODOs.

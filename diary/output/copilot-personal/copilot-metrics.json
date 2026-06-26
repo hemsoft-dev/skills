@@ -1,5 +1,5 @@
 {
-  "GeneratedAtUtc": "2026-06-22T03:53:45.0855423+00:00",
+  "GeneratedAtUtc": "2026-06-26T03:39:56.5489734+00:00",
   "Enterprise": "bertelsmann",
   "Organization": "Relias-Engineering",
   "Year": 2026,
@@ -25,7 +25,11 @@
     18,
     19,
     20,
-    21
+    21,
+    22,
+    23,
+    24,
+    25
   ],
   "RefreshedDays": [
     1,
@@ -48,15 +52,19 @@
     18,
     19,
     20,
-    21
+    21,
+    22,
+    23,
+    24,
+    25
   ],
   "ApiVersion": "2026-03-10",
   "IncludeOrganizationFilter": false,
-  "RefreshRunId": "0886c0016b4c4690a958260d29ce4e06",
+  "RefreshRunId": "ead9f72c6dd24898836f696e8366d6fa",
   "RefreshStatus": "Complete",
-  "FetchedResponseCount": 1,
+  "FetchedResponseCount": 4,
   "FailedResponseCount": 0,
-  "ReusedResponseCount": 20,
+  "ReusedResponseCount": 21,
   "Users": [
     {
       "User": "fhemmerrelias",
@@ -1093,8 +1101,138 @@
             "user": "fhemmerrelias",
             "usageItems": []
           },
-          "RefreshedAtUtc": "2026-06-22T03:53:44.9321303+00:00",
+          "RefreshedAtUtc": "2026-06-21T23:53:44.9321303-04:00",
           "RefreshRunId": "0886c0016b4c4690a958260d29ce4e06"
+        },
+        {
+          "Day": 22,
+          "Path": "/enterprises/bertelsmann/settings/billing/premium_request/usage?year=2026&month=6&day=22&user=fhemmerrelias",
+          "StatusCode": 200,
+          "Success": true,
+          "RawJson": "{\"timePeriod\":{\"year\":2026,\"month\":6,\"day\":22},\"enterprise\":\"Bertelsmann\",\"user\":\"fhemmerrelias\",\"usageItems\":[]}",
+          "Response": {
+            "timePeriod": {
+              "year": 2026,
+              "month": 6,
+              "day": 22
+            },
+            "enterprise": "Bertelsmann",
+            "user": "fhemmerrelias",
+            "usageItems": []
+          },
+          "RefreshedAtUtc": "2026-06-26T03:39:40.2390504+00:00",
+          "RefreshRunId": "ead9f72c6dd24898836f696e8366d6fa"
+        },
+        {
+          "Day": 23,
+          "Path": "/enterprises/bertelsmann/settings/billing/premium_request/usage?year=2026&month=6&day=23&user=fhemmerrelias",
+          "StatusCode": 200,
+          "Success": true,
+          "RawJson": "{\"timePeriod\":{\"year\":2026,\"month\":6,\"day\":23},\"enterprise\":\"Bertelsmann\",\"user\":\"fhemmerrelias\",\"usageItems\":[]}",
+          "Response": {
+            "timePeriod": {
+              "year": 2026,
+              "month": 6,
+              "day": 23
+            },
+            "enterprise": "Bertelsmann",
+            "user": "fhemmerrelias",
+            "usageItems": []
+          },
+          "RefreshedAtUtc": "2026-06-26T03:39:45.6833261+00:00",
+          "RefreshRunId": "ead9f72c6dd24898836f696e8366d6fa"
+        },
+        {
+          "Day": 24,
+          "Path": "/enterprises/bertelsmann/settings/billing/premium_request/usage?year=2026&month=6&day=24&user=fhemmerrelias",
+          "StatusCode": 200,
+          "Success": true,
+          "RawJson": "{\"timePeriod\":{\"year\":2026,\"month\":6,\"day\":24},\"enterprise\":\"Bertelsmann\",\"user\":\"fhemmerrelias\",\"usageItems\":[{\"product\":\"Copilot\",\"sku\":\"Copilot AI Credits\",\"model\":\"GPT-5.5\",\"unitType\":\"ai-credits\",\"pricePerUnit\":0.01,\"grossQuantity\":94.01,\"grossAmount\":0.9401,\"discountQuantity\":94.01,\"discountAmount\":0.9401,\"netQuantity\":0.0,\"netAmount\":0.0}]}",
+          "Response": {
+            "timePeriod": {
+              "year": 2026,
+              "month": 6,
+              "day": 24
+            },
+            "enterprise": "Bertelsmann",
+            "user": "fhemmerrelias",
+            "usageItems": [
+              {
+                "product": "Copilot",
+                "sku": "Copilot AI Credits",
+                "model": "GPT-5.5",
+                "unitType": "ai-credits",
+                "pricePerUnit": 0.01,
+                "grossQuantity": 94.01,
+                "grossAmount": 0.9401,
+                "discountQuantity": 94.01,
+                "discountAmount": 0.9401,
+                "netQuantity": 0.0,
+                "netAmount": 0.0
+              }
+            ]
+          },
+          "RefreshedAtUtc": "2026-06-26T03:39:51.0975316+00:00",
+          "RefreshRunId": "ead9f72c6dd24898836f696e8366d6fa"
+        },
+        {
+          "Day": 25,
+          "Path": "/enterprises/bertelsmann/settings/billing/premium_request/usage?year=2026&month=6&day=25&user=fhemmerrelias",
+          "StatusCode": 200,
+          "Success": true,
+          "RawJson": "{\"timePeriod\":{\"year\":2026,\"month\":6,\"day\":25},\"enterprise\":\"Bertelsmann\",\"user\":\"fhemmerrelias\",\"usageItems\":[{\"product\":\"Copilot\",\"sku\":\"Copilot AI Credits\",\"model\":\"Claude Sonnet 4.6\",\"unitType\":\"ai-credits\",\"pricePerUnit\":0.01,\"grossQuantity\":16.79574,\"grossAmount\":0.1679574,\"discountQuantity\":16.79574,\"discountAmount\":0.1679574,\"netQuantity\":0.0,\"netAmount\":0.0},{\"product\":\"Copilot\",\"sku\":\"Copilot AI Credits\",\"model\":\"Code Review model\",\"unitType\":\"ai-credits\",\"pricePerUnit\":0.01,\"grossQuantity\":57.83253,\"grossAmount\":0.5783253,\"discountQuantity\":57.83253,\"discountAmount\":0.5783253,\"netQuantity\":0.0,\"netAmount\":0.0},{\"product\":\"Copilot\",\"sku\":\"Copilot AI Credits\",\"model\":\"GPT-5.5\",\"unitType\":\"ai-credits\",\"pricePerUnit\":0.01,\"grossQuantity\":124.2801,\"grossAmount\":1.242801,\"discountQuantity\":124.2801,\"discountAmount\":1.242801,\"netQuantity\":0.0,\"netAmount\":0.0}]}",
+          "Response": {
+            "timePeriod": {
+              "year": 2026,
+              "month": 6,
+              "day": 25
+            },
+            "enterprise": "Bertelsmann",
+            "user": "fhemmerrelias",
+            "usageItems": [
+              {
+                "product": "Copilot",
+                "sku": "Copilot AI Credits",
+                "model": "Claude Sonnet 4.6",
+                "unitType": "ai-credits",
+                "pricePerUnit": 0.01,
+                "grossQuantity": 16.79574,
+                "grossAmount": 0.1679574,
+                "discountQuantity": 16.79574,
+                "discountAmount": 0.1679574,
+                "netQuantity": 0.0,
+                "netAmount": 0.0
+              },
+              {
+                "product": "Copilot",
+                "sku": "Copilot AI Credits",
+                "model": "Code Review model",
+                "unitType": "ai-credits",
+                "pricePerUnit": 0.01,
+                "grossQuantity": 57.83253,
+                "grossAmount": 0.5783253,
+                "discountQuantity": 57.83253,
+                "discountAmount": 0.5783253,
+                "netQuantity": 0.0,
+                "netAmount": 0.0
+              },
+              {
+                "product": "Copilot",
+                "sku": "Copilot AI Credits",
+                "model": "GPT-5.5",
+                "unitType": "ai-credits",
+                "pricePerUnit": 0.01,
+                "grossQuantity": 124.2801,
+                "grossAmount": 1.242801,
+                "discountQuantity": 124.2801,
+                "discountAmount": 1.242801,
+                "netQuantity": 0.0,
+                "netAmount": 0.0
+              }
+            ]
+          },
+          "RefreshedAtUtc": "2026-06-26T03:39:56.4909239+00:00",
+          "RefreshRunId": "ead9f72c6dd24898836f696e8366d6fa"
         }
       ],
       "Error": ""

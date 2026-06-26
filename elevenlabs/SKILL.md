@@ -134,6 +134,7 @@ Accepted source types:
 7. Generate a two-host script from the sources
 
 - Preferred helper: `New-ElevenLabsPodcastDialogue.ps1`
+
 1. Review transcript for quality (required before synthesis)
 2. Synthesize with `Invoke-ElevenLabsPodcast.ps1`
 
