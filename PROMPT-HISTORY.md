@@ -794,3 +794,6 @@ Result: Saved `diary/entries/2026/06/2026-06-21.html` with weather, Slack, quali
 
 2026-06-25 - 23:46 - Scaffold diary entry for Thursday 2026-06-25
 Result: Saved `diary/entries/2026/06/2026-06-25.html` with weather, Slack, quality-gated news, token-billing daily numbers, refreshed DeepSWE context, trending repos, software/watchlist updates, productivity, WorkIQ meeting summary, and no-screenshot validation. Left Today's Highlight and Personal Reflections as TODOs.
+
+2026-06-28 - 01:48 - Create Codex PR and issue processor skills
+Result: Added `codex-pr-processor` and `codex-issue-processor` skills for Codex-driven PR/issue workflows using CodeRabbitAI and Macroscope review signals.

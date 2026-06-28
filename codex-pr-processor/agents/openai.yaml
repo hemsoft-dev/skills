@@ -1,0 +1,4 @@
+interface:
+  display_name: "Codex PR Processor"
+  short_description: "Drive existing PRs through Codex, CodeRabbit, and Macroscope review"
+  default_prompt: "Use $codex-pr-processor to process an existing pull request until Codex, CodeRabbit, and Macroscope have no actionable current-head comments."
