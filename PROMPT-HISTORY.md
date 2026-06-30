@@ -797,3 +797,9 @@ Result: Saved `diary/entries/2026/06/2026-06-25.html` with weather, Slack, quali
 
 2026-06-28 - 01:48 - Create Codex PR and issue processor skills
 Result: Added `codex-pr-processor` and `codex-issue-processor` skills for Codex-driven PR/issue workflows using CodeRabbitAI and Macroscope review signals.
+
+2026-06-29 - 11:01 - Search Slack for Nick Monday absences and standup misses
+Result: Queried #productivity-engineering-private, #dev-ex-private, and #prod-eng-devex-private for Nick-related Monday absence and standup/huddle miss evidence, finding no Monday absence evidence and five standup/huddle miss events.
+
+2026-06-29 - 23:18 - Scaffold diary entry for Monday 2026-06-29
+Result: Saved `diary/entries/2026/06/2026-06-29.html` with weather, curated Slack activity, quality-gated news, token-billing daily numbers, refreshed DeepSWE context, trending repos, software/watchlist updates, productivity, WorkIQ meeting notes, and no-screenshot validation. Left Today's Highlight and Personal Reflections as TODOs.

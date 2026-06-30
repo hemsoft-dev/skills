@@ -1,0 +1,170 @@
+{
+  "Date": "2026-06-29",
+  "GeneratedAt": "2026-06-29T23:10:29.3599935-04:00",
+  "Categories": [
+    {
+      "Title": "🇺🇸 US News",
+      "Articles": [
+        {
+          "Title": "Michigan governor threatens to pull troops from D.C. if used for Trump task force",
+          "Link": "https://www.npr.org/2026/06/29/nx-s1-5875427/michigan-governor-national-guard-dc",
+          "Source": "NPR Politics",
+          "Published": "2026-06-29T19:34:58.0000000-04:00"
+        },
+        {
+          "Title": "Professor known for 'torture memos' will advise conspiracy probe focused on perceived Trump foes",
+          "Link": "https://www.pbs.org/newshour/politics/professor-known-for-torture-memos-will-advise-conspiracy-probe-focused-on-perceived-trump-foes",
+          "Source": "PBS Politics",
+          "Published": "2026-06-29T19:16:32.0000000-04:00"
+        },
+        {
+          "Title": "What the Supreme Court rulings mean for presidential power",
+          "Link": "https://www.pbs.org/newshour/show/what-the-supreme-court-rulings-mean-for-presidential-power",
+          "Source": "PBS Politics",
+          "Published": "2026-06-29T18:55:00.0000000-04:00"
+        },
+        {
+          "Title": "The Temporary Protected Status program may effectively be over. Here's what we know.",
+          "Link": "https://www.npr.org/2026/06/29/g-s1-130942/temporary-protected-status-program-explainer-supreme-court",
+          "Source": "NPR Politics",
+          "Published": "2026-06-29T16:54:23.0000000-04:00"
+        },
+        {
+          "Title": "Supreme Court ruling proves Federal Reserve is unique agency, Lisa Cook's lawyer says",
+          "Link": "https://www.pbs.org/newshour/show/supreme-court-ruling-proves-federal-reserve-is-unique-agency-lisa-cooks-lawyer-says",
+          "Source": "PBS Politics",
+          "Published": "2026-06-29T18:50:02.0000000-04:00"
+        },
+        {
+          "Title": "News Wrap: Supreme Court rules constitutional protections apply to location data",
+          "Link": "https://www.pbs.org/newshour/show/news-wrap-supreme-court-rules-constitutional-protections-apply-to-location-data",
+          "Source": "PBS Politics",
+          "Published": "2026-06-29T18:40:00.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🌍 World News",
+      "Articles": [
+        {
+          "Title": "Australia politics live: Josh Burns tells antisemitism inquiry of online hate; RBA warns datacentre boom may fire up inflation",
+          "Link": "https://www.theguardian.com/australia-news/live/2026/jun/30/australia-politics-live-anthony-albanese-tax-reform-pauline-hanson-one-nation-multiculturalism-question-time-angus-taylor-coalition-royal-commission-ntwnfb",
+          "Source": "The Guardian",
+          "Published": "2026-06-29T23:03:20.0000000-04:00"
+        },
+        {
+          "Title": "Mourners light candles after deadly German shelter shooting",
+          "Link": "https://www.aljazeera.com/video/newsfeed/2026/6/30/mourners-light-candles-after-deadly-german-shelter-shooting?traffic_source=rss",
+          "Source": "Al Jazeera",
+          "Published": "2026-06-29T22:45:45.0000000-04:00"
+        },
+        {
+          "Title": "Trump: US envoys enroute to Doha for ‘perhaps important’ Iran meeting",
+          "Link": "https://www.aljazeera.com/video/newsfeed/2026/6/30/trump-us-envoys-enroute-to-doha-for-perhaps-important-iran-meeting?traffic_source=rss",
+          "Source": "Al Jazeera",
+          "Published": "2026-06-29T22:41:18.0000000-04:00"
+        },
+        {
+          "Title": "Liberal supreme court justices condemn ‘destabilizing’ ruling that expands Trump’s power to fire regulators – as it happened",
+          "Link": "https://www.theguardian.com/us-news/live/2026/jun/29/supreme-court-donald-trump-administration-us-politics-latest-news-updates",
+          "Source": "The Guardian",
+          "Published": "2026-06-29T22:07:14.0000000-04:00"
+        },
+        {
+          "Title": "What do we know about the shooting in Stade, Germany?",
+          "Link": "https://www.bbc.co.uk/news/videos/cdx7j0wn9lvo?at_medium=RSS&at_campaign=rss",
+          "Source": "BBC",
+          "Published": "2026-06-29T20:17:27.0000000-04:00"
+        },
+        {
+          "Title": "Trump says Iran requested Doha meeting as Tehran denies direct US talks",
+          "Link": "https://www.france24.com/en/middle-east/20260629-trump-iran-doha-tehran-us-talks-hormuz-lebanon",
+          "Source": "France 24",
+          "Published": "2026-06-29T19:46:13.0000000-04:00"
+        },
+        {
+          "Title": "Paraguay knock Germany out of World Cup 2026 on penalties",
+          "Link": "https://www.france24.com/en/sport/20260629-world-cup-2026-paraguay-knock-germany-out-of-world-cup-on-penalties",
+          "Source": "France 24",
+          "Published": "2026-06-29T19:42:05.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🤖 AI News",
+      "Articles": [
+        {
+          "Title": "Ornith-1.0: Self-Scaffolding LLMs for Agentic Coding",
+          "Link": "https://simonwillison.net/2026/Jun/29/ornith/#atom-everything",
+          "Source": "Simon Willison's Weblog",
+          "Published": "2026-06-29T12:17:59.0000000-04:00"
+        },
+        {
+          "Title": "Vibe coding platform Base44 launches own model as AI startups seek defensibility",
+          "Link": "https://techcrunch.com/2026/06/29/vibe-coding-platform-base44-launches-own-model-as-ai-startups-seek-defensibility/",
+          "Source": "TechCrunch",
+          "Published": "2026-06-29T22:28:41.0000000-04:00"
+        },
+        {
+          "Title": "Gemini’s personalized AI image generation is now free for US users",
+          "Link": "https://techcrunch.com/2026/06/29/geminis-personalized-ai-image-generation-is-now-free-for-u-s-users/",
+          "Source": "TechCrunch",
+          "Published": "2026-06-29T16:12:59.0000000-04:00"
+        },
+        {
+          "Title": "Tidal won’t pay royalties on AI-generated music but isn’t banning it outright",
+          "Link": "https://www.theverge.com/tech/959211/tidal-ai-music-policy-demonetizingdetect-label",
+          "Source": "The Verge",
+          "Published": "2026-06-29T15:47:35.0000000-04:00"
+        },
+        {
+          "Title": "OpenAI is teasing new hardware… for Codex",
+          "Link": "https://www.theverge.com/ai-artificial-intelligence/959174/openai-codex-hardware-work-louder",
+          "Source": "The Verge",
+          "Published": "2026-06-29T14:52:03.0000000-04:00"
+        },
+        {
+          "Title": "AI agents are not your “coworkers”",
+          "Link": "https://www.technologyreview.com/2026/06/29/1139849/ai-agents-are-not-your-coworkers/",
+          "Source": "MIT Technology Review",
+          "Published": "2026-06-29T14:00:00.0000000-04:00"
+        },
+        {
+          "Title": "The Download: metric weaknesses and AI elephant warnings",
+          "Link": "https://www.technologyreview.com/2026/06/29/1139834/the-download-metric-weaknesses-ai-elephant-warnings/",
+          "Source": "MIT Technology Review",
+          "Published": "2026-06-29T08:10:00.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🇩🇰 Danish News",
+      "Articles": [
+        {
+          "Title": "The biggest Fourth of July festival outside of the U.S. is held in Denmark - and they're leaving Trump out again - The Copenhagen Post",
+          "Link": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxNNTNnTjh4VzNFTHVZclFUaFI5bEtVTVE0UnhQREpwZlVzMktTZ1VaQjlQQ2ZKWE44Y2pvZ0NqM25pRURKUHdMVnptNkVIaTNlMlkxUFFmSGpadWxoaEdQeW51VUN5MlVEMWZxbVNGcWg4bjdKbUhYamoxSGRkdk43NTRJZTlra0t4VjV1R3RvUUhLUFhlZ1g3OUt5OEtYMmw5Qk1kSTBaMUJzQ20yZzlSb1pVY2I0RllnZFhhYU5VNFhHRHBlUm5udVdnc0hQSDRfdUN2Ql9kQmlHazVuWW9IUVN6Z1JieENQaXNv?oc=5",
+          "Source": "Google News Denmark",
+          "Published": "2026-06-29T23:00:00.0000000-04:00"
+        },
+        {
+          "Title": "Irish EU presidency to cost triple those of Cyprus, Denmark - politico.eu",
+          "Link": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQX25EWXBtNW00ci1HdE13S0ZCd0U1b0Z1T1RudFVEQ0pjaHhLVGlEV3FLVkJUZ2NoeUZkWFZqWFIxRnR2QTlFR0RtTHp2QnV3eDhLcFV6Mzhmc0FJT3pkNVJWQk5pV3gxeW5CSWc0YlN0cnJ5TjEwYjdqUnpEdXBEcHZFa3owVjAzVlJ5OTJnRmNyYjlnX0E?oc=5",
+          "Source": "Google News Denmark",
+          "Published": "2026-06-29T22:26:42.0000000-04:00"
+        },
+        {
+          "Title": "Venezuelansk oppositionsleder: Regeringen forhindrer mig i at rejse ind i landet efter jordskælv",
+          "Link": "https://www.dr.dk/nyheder/seneste/venezuelansk-oppositionsleder-regeringen-forhindrer-mig-i-rejse-ind-i-landet-efter-jordskaelv",
+          "Source": "DR News",
+          "Published": "2026-06-29T20:43:40.0000000-04:00"
+        },
+        {
+          "Title": "Politiet jagter mistænkt efter formodet attentat i Monaco",
+          "Link": "https://www.dr.dk/nyheder/seneste/eksplosion-i-monaco-i-livsfare-efter-formodet-attentat",
+          "Source": "DR News",
+          "Published": "2026-06-29T18:03:17.0000000-04:00"
+        }
+      ]
+    }
+  ]
+}
