@@ -1,0 +1,170 @@
+{
+  "Date": "2026-06-30",
+  "GeneratedAt": "2026-06-30T19:08:54.0273100-04:00",
+  "Categories": [
+    {
+      "Title": "🇺🇸 US News",
+      "Articles": [
+        {
+          "Title": "Examining the Supreme Court's birthright citizenship, campaign finance rulings",
+          "Link": "https://www.pbs.org/newshour/show/examining-the-supreme-courts-birthright-citizenship-campaign-finance-rulings",
+          "Source": "PBS Politics",
+          "Published": "2026-06-30T18:55:40.0000000-04:00"
+        },
+        {
+          "Title": "How the birthright citizenship decision impacts Trump's immigration agenda",
+          "Link": "https://www.pbs.org/newshour/show/how-the-birthright-citizenship-decision-impacts-trumps-immigration-agenda",
+          "Source": "PBS Politics",
+          "Published": "2026-06-30T18:50:54.0000000-04:00"
+        },
+        {
+          "Title": "Rep. Tom Kean returns to Congress, says depression is why he went missing for months",
+          "Link": "https://www.npr.org/2026/06/30/nx-s1-5876222/tom-kean-new-jersey-congress-depression",
+          "Source": "NPR Politics",
+          "Published": "2026-06-30T12:29:37.0000000-04:00"
+        },
+        {
+          "Title": "Supreme Court strikes down limits on political party spending",
+          "Link": "https://www.npr.org/2026/06/30/nx-s1-5827039/supreme-court-campaign-finance",
+          "Source": "NPR Politics",
+          "Published": "2026-06-30T10:28:28.0000000-04:00"
+        },
+        {
+          "Title": "Trump announces Republican midterm convention in Dallas in September",
+          "Link": "https://www.pbs.org/newshour/politics/trump-announces-republican-midterm-convention-in-dallas-in-september",
+          "Source": "PBS Politics",
+          "Published": "2026-06-30T18:46:42.0000000-04:00"
+        },
+        {
+          "Title": "Who is affected by the Supreme Court's ruling on trans athletes in women's sports",
+          "Link": "https://www.pbs.org/newshour/show/who-is-affected-by-the-supreme-courts-ruling-on-trans-athletes-in-womens-sports",
+          "Source": "PBS Politics",
+          "Published": "2026-06-30T18:45:00.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🌍 World News",
+      "Articles": [
+        {
+          "Title": "Australia politics live: Tim Wilson says Coalition needs time to regain trust after another poll in the doldrums",
+          "Link": "https://www.theguardian.com/australia-news/live/2026/jul/01/australia-politics-live-labor-kpmg-daniel-mulino-jim-chalmers-anthony-albanese-question-time-coalition-angus-taylor-one-nation-pauline-hanson-ntwnfb",
+          "Source": "The Guardian",
+          "Published": "2026-06-30T19:04:16.0000000-04:00"
+        },
+        {
+          "Title": "UK poll highlights fears about access to emergency contraception",
+          "Link": "https://www.theguardian.com/society/2026/jul/01/uk-poll-highlights-fears-about-access-to-emergency-contraception",
+          "Source": "The Guardian",
+          "Published": "2026-06-30T19:01:19.0000000-04:00"
+        },
+        {
+          "Title": "World Cup 2026: Mbappé's brace sends France into round of 16 as Les Bleus demolish Sweden",
+          "Link": "https://www.france24.com/en/sport/20260630-world-cup-2026-mbapp%C3%A9-s-brace-sends-france-into-round-of-16-as-les-bleus-demolish-sweden",
+          "Source": "France 24",
+          "Published": "2026-06-30T18:54:17.0000000-04:00"
+        },
+        {
+          "Title": "“WhatsApp Privacy Changes”",
+          "Link": "https://www.aljazeera.com/video/newsfeed/2026/6/30/whatsapp-privacy?traffic_source=rss",
+          "Source": "Al Jazeera",
+          "Published": "2026-06-30T18:33:26.0000000-04:00"
+        },
+        {
+          "Title": "US Supreme Court has dealt heavy defeats to Trump, while expanding his power",
+          "Link": "https://www.bbc.co.uk/news/articles/c4gyqeqe8xyo?at_medium=RSS&at_campaign=rss",
+          "Source": "BBC",
+          "Published": "2026-06-30T18:29:47.0000000-04:00"
+        },
+        {
+          "Title": "Mexico fans blast horns outside Ecuador hotel the night before World Cup clash",
+          "Link": "https://www.aljazeera.com/sports/2026/6/30/mexico-fans-blast-horns-outside-ecuador-hotel-the-night-before-world-cup-clash?traffic_source=rss",
+          "Source": "Al Jazeera",
+          "Published": "2026-06-30T18:15:31.0000000-04:00"
+        },
+        {
+          "Title": "France sets presidential election date as Macron finishes final term",
+          "Link": "https://www.france24.com/en/europe/20260630-france-sets-presidential-election-date-as-macron-finishes-final-term",
+          "Source": "France 24",
+          "Published": "2026-06-30T18:09:22.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🤖 AI News",
+      "Articles": [
+        {
+          "Title": "What's new in Claude Sonnet 5",
+          "Link": "https://simonwillison.net/2026/Jun/30/claude-sonnet-5/#atom-everything",
+          "Source": "Simon Willison's Weblog",
+          "Published": "2026-06-30T17:23:02.0000000-04:00"
+        },
+        {
+          "Title": "The AI Compass",
+          "Link": "https://simonwillison.net/2026/Jun/30/the-ai-compass/#atom-everything",
+          "Source": "Simon Willison's Weblog",
+          "Published": "2026-06-30T13:39:23.0000000-04:00"
+        },
+        {
+          "Title": "OpenClaw is finally available on Android and iOS",
+          "Link": "https://techcrunch.com/2026/06/30/openclaw-is-finally-available-on-android-and-ios/",
+          "Source": "TechCrunch",
+          "Published": "2026-06-30T17:53:28.0000000-04:00"
+        },
+        {
+          "Title": "Claude Science is Anthropic’s newest flagship product",
+          "Link": "https://www.technologyreview.com/2026/06/30/1139987/claude-science-is-anthropics-newest-flagship-product/",
+          "Source": "MIT Technology Review",
+          "Published": "2026-06-30T17:50:04.0000000-04:00"
+        },
+        {
+          "Title": "The DeepMind trio who built a poker AI are now making money for quant hedge funds",
+          "Link": "https://techcrunch.com/2026/06/30/the-deepmind-trio-who-built-a-poker-ai-are-now-making-money-for-quant-hedge-funds/",
+          "Source": "TechCrunch",
+          "Published": "2026-06-30T16:33:48.0000000-04:00"
+        },
+        {
+          "Title": "New attack provides one more reason why AI browsers are a bad idea",
+          "Link": "https://arstechnica.com/security/2026/06/ai-browsers-can-be-lulled-into-a-dream-world-where-guardrails-no-longer-apply/",
+          "Source": "Ars Technica",
+          "Published": "2026-06-30T16:03:14.0000000-04:00"
+        },
+        {
+          "Title": "Netflix is using an AI-generated Gene Wilder voice in its Willy Wonka reality show",
+          "Link": "https://www.theverge.com/streaming/959684/netflix-wonka-golden-ticket-gene-wilder",
+          "Source": "The Verge",
+          "Published": "2026-06-30T13:19:15.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🇩🇰 Danish News",
+      "Articles": [
+        {
+          "Title": "PT PAL, Denmark deepen naval technology partnership - ANTARA News",
+          "Link": "https://news.google.com/rss/articles/CBMikgFBVV95cUxPMFdDTVhmSTdDLTBlajdkMl85SVFzLXBTT2szNGlHbS1icE1neHFmRW1BR1FoOXphY3V0T1dwc1FZRFdOT29SVURmRW9SWFlLVExBZWI3NjZJLXg3MlpoZUs3dG4xZ3ZublVTQ3VfbFJtZncwUWc5eF91MjJ1N1lycnJGU3cxODRoaXIyRktOVTFXd9IBlwFBVV95cUxNX1UxMkVxSlV3SlpxX3ppYUxDZEhObnFzOEkzU01pelRPbzMwYklzOWNONHJldUJsd21ZUllZMTBvTW5UR1RUNFVmN095c0s4Ym9DZ3hGNGlBWF9RYTVHa29senhwVzZWemFydmlfTlZhZC1LTmppQXQ5VFlvcUw2bWhFUmpuY3c4SzFyUnBoWC0wOFp2N1Nv?oc=5",
+          "Source": "Google News Denmark",
+          "Published": "2026-06-30T18:58:25.0000000-04:00"
+        },
+        {
+          "Title": "Gov. Evers marks Wisconsin Kringle Day at O&H Danish Bakery - WISN",
+          "Link": "https://news.google.com/rss/articles/CBMinAFBVV95cUxORXQ2bkRocmV1TFdwS2tLeEloQU5YbnRIYU9QaWxmODBicnJLTmctREk0UVhMU0l3U2ZnQ09fV1hfdnN0N1A3RkhPUUZidDZMR2hhek9pWE8wajhsbTdTcVNENlREajRjc04yOXVFamFTbng4VFZZR1lZTzN6UU5DZklSMnYwWEQ5NEtCdnlwQ3hqV3dTNWxiM3hqcEk?oc=5",
+          "Source": "Google News Denmark",
+          "Published": "2026-06-30T18:57:00.0000000-04:00"
+        },
+        {
+          "Title": "To mænd sigtet efter voldtægtsanmeldelse på Roskilde Festival",
+          "Link": "https://www.dr.dk/nyheder/seneste/maend-sigtet-efter-voldtaegtsanmeldelse-paa-roskilde-festival",
+          "Source": "DR News",
+          "Published": "2026-06-30T15:24:21.0000000-04:00"
+        },
+        {
+          "Title": "Dansk Blindesamfund vil klage over erstatning til rejsekort-standere",
+          "Link": "https://www.dr.dk/nyheder/seneste/dansk-blindesamfund-vil-klage-over-erstatning-til-rejsekort-standere",
+          "Source": "DR News",
+          "Published": "2026-06-30T14:50:38.0000000-04:00"
+        }
+      ]
+    }
+  ]
+}

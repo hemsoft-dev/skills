@@ -1,15 +1,15 @@
 ---
 name: generate-image
-description: V2.1 - Generates images from text prompts using Nano Banana 2 (default) or GPT 5.4 Image 2 (elite) via OpenRouter API. Pro-level quality at Flash speed. Elite mode for premium quality on demand.
+description: V2.2 - Generates images from text prompts using Nano Banana 2 (default), GPT 5.4 Image 2 (elite), or GPT Image 2 (ultra) via OpenRouter API. Pro-level quality at Flash speed; premium and ultra modes on explicit request.
 ---
 
 # Generate Image
 
 **Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
-Generate images from text descriptions using **Nano Banana 2** (default) or **GPT 5.4 Image 2** (elite).
+Generate images from text descriptions using **Nano Banana 2** (default), **GPT 5.4 Image 2** (elite), or **GPT Image 2** (ultra).
 
-**Default behavior**: Always use Nano Banana 2. Only use GPT 5.4 Image 2 when the user explicitly requests it or asks for an "elite" image.
+**Default behavior**: Always use Nano Banana 2. Only use GPT 5.4 Image 2 when the user explicitly requests it or asks for an "elite" image. Only use GPT Image 2 when the user explicitly requests it or asks for an "ultra" image.
 
 ## Usage
 
@@ -19,6 +19,9 @@ Generate images from text descriptions using **Nano Banana 2** (default) or **GP
 
 # Elite mode (GPT 5.4 Image 2 — premium)
 & $env:USERPROFILE\.agents\skills\generate-image\scripts\generate-image.ps1 -Prompt "Your prompt" -OutputPath "D:\image.png" -Elite
+
+# Ultra mode (GPT Image 2 — ultra)
+& $env:USERPROFILE\.agents\skills\generate-image\scripts\generate-image.ps1 -Prompt "Your prompt" -OutputPath "D:\image.png" -Ultra
 
 # With Directory Opus preview
 & $env:USERPROFILE\.agents\skills\generate-image\scripts\generate-image.ps1 -Prompt "Your prompt" -OutputPath "D:\image.png" -Preview
@@ -31,6 +34,7 @@ Generate images from text descriptions using **Nano Banana 2** (default) or **GP
 | `-Prompt` | Yes | The text prompt describing the image to generate |
 | `-OutputPath` | Yes | Absolute path where the image will be saved |
 | `-Elite` | No | Use GPT 5.4 Image 2 instead of default. **Only when user explicitly requests elite/premium quality.** |
+| `-Ultra` | No | Use GPT Image 2 instead of default. **Only when user explicitly requests ultra quality or GPT Image 2.** |
 | `-Preview` | No | Opens the generated image in Directory Opus viewer after saving |
 
 ## Requirements
@@ -154,6 +158,17 @@ After each image generation, the system automatically displays your OpenRouter c
 | Released | Apr 21, 2026 |
 | When | **Only** when user explicitly asks for elite/premium or says "GPT 5.4" |
 
+### Ultra: GPT Image 2
+
+| Property | Value |
+|----------|-------|
+| Model ID | `openai/gpt-image-2` |
+| Quality | Ultra |
+| Speed | Moderate |
+| Cost | Premium OpenRouter image model pricing |
+| Released | Current OpenRouter model |
+| When | **Only** when user explicitly asks for ultra or says "GPT Image 2" |
+
 ## Technical Notes
 
 ### Response Format
@@ -170,6 +185,7 @@ Nano Banana 2 returns images via `choices[0].message.images[]` array with base64
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 2.2 | 2026-06-30 | Added GPT Image 2 as ultra option via `-Ultra` flag. Default remains Nano Banana 2. |
 | 2.1 | 2026-04-27 | Added GPT 5.4 Image 2 as elite option via `-Elite` flag. Default remains Nano Banana 2. |
 | 2.0 | 2026-03-01 | Hardwired to Nano Banana 2 (Gemini 3.1 Flash Image). Removed multi-model scripts. Single script simplicity. |
 | 1.6 | 2026-02-28 | Added Nano Banana Pro script |

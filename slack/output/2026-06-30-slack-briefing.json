@@ -1,0 +1,361 @@
+{
+  "Summary": {
+    "ActionItems": 0,
+    "ChannelMessages": 60.0,
+    "Announcements": 16,
+    "DirectMessages": 4,
+    "Mentions": 0,
+    "Channels": 5
+  },
+  "GeneratedAt": "2026-06-30 19:08:07",
+  "Mentions": [],
+  "ActionItems": [],
+  "Username": "fhemmer",
+  "Announcements": [
+    {
+      "Permalink": "https://relias-engineering.slack.com/archives/C06SWFZG0S0/p1782850180274389",
+      "Text": "has renamed the channel from \"snack-overflow\" to \"snack-overflow-public\"",
+      "Timestamp": "2026-06-30 16:09",
+      "Channel": "snack-overflow-public",
+      "From": "Malia Paul"
+    },
+    {
+      "Permalink": "https://relias-engineering.slack.com/archives/C08KXDC3C8G/p1782846839555279?thread_ts=1782846839.555279",
+      "Text": "By end of day today, please assign yourself 4 stories from this Epic: <https://relias.atlassian.net/browse/RPLAT-14346> • This is the .net upgrade and the work will be shared by all teams. • You can pick up any of the unassigned ones on the list. (As...",
+      "Timestamp": "2026-06-30 15:13",
+      "Channel": "mobile-monsters-inc-public",
+      "From": "Cherie Cutchin"
+    },
+    {
+      "Permalink": "https://relias-engineering.slack.com/archives/C092JS9CNM6/p1782845591610959?thread_ts=1782844011.712549",
+      "Text": "I can be the point of contact for the channel. I do need to be added though.",
+      "Timestamp": "2026-06-30 14:53",
+      "Channel": "git-happens-public",
+      "From": "Chuck Waltz"
+    },
+    {
+      "Permalink": "https://relias-engineering.slack.com/archives/C08KT7SKTPB/p1782844678140359",
+      "Text": "By end of day today, please assign yourself 3-4 stories from this Epic: <https://relias.atlassian.net/browse/RPLAT-14346> • This is the .net upgrade and the work will be shared by all teams. • You can pick up any of the unassigned ones on the list. (...",
+      "Timestamp": "2026-06-30 14:37",
+      "Channel": "scrumblebeez-public",
+      "From": "Cherie Cutchin"
+    },
+    {
+      "Permalink": "https://relias-engineering.slack.com/archives/C08DP7928H3/p1782844546921659",
+      "Text": "By end of day today, please assign yourself 3 stories from this Epic: <https://relias.atlassian.net/browse/RPLAT-14346> • This is the .net upgrade and the work will be shared by all teams. • You can pick up any of the unassigned ones on the list. (As...",
+      "Timestamp": "2026-06-30 14:35",
+      "Channel": "divum-us-public",
+      "From": "Cherie Cutchin"
+    },
+    {
+      "Permalink": "https://relias-engineering.slack.com/archives/C0AQ2UM3J8P/p1782844219182969",
+      "Text": "By end of day today, please assign yourself 4 stories from this Epic: <https://relias.atlassian.net/browse/RPLAT-14346> • This is the .net upgrade and the work will be shared by all teams. • You can pick up any of the unassigned ones on the list. (As...",
+      "Timestamp": "2026-06-30 14:30",
+      "Channel": "hg-novaguard-public",
+      "From": "Cherie Cutchin"
+    },
+    {
+      "Permalink": "https://relias-engineering.slack.com/archives/C099FU5FUQG/p1782844122754179",
+      "Text": "By end of day today, please assign yourself 4 stories from this Epic: <https://relias.atlassian.net/browse/RPLAT-14346> • This is the .net upgrade and the work will be shared by all teams. • You can pick up any of the unassigned ones on the list. (As...",
+      "Timestamp": "2026-06-30 14:28",
+      "Channel": "hg-spartans-public",
+      "From": "Cherie Cutchin"
+    },
+    {
+      "Permalink": "https://relias-engineering.slack.com/archives/C0999RPPS1X/p1782844057503939",
+      "Text": "By end of day today, please assign yourself 4 stories from this Epic: <https://relias.atlassian.net/browse/RPLAT-14346> • This is the .net upgrade and the work will be shared by all teams. • You can pick up any of the unassigned ones on the list. (As...",
+      "Timestamp": "2026-06-30 14:27",
+      "Channel": "hg-neoforce-public",
+      "From": "Cherie Cutchin"
+    },
+    {
+      "Permalink": "https://relias-engineering.slack.com/archives/C092JS9CNM6/p1782844011712549?thread_ts=1782844011.712549",
+      "Text": "By end of day today, please assign yourself 2 more stories from this Epic: <https://relias.atlassian.net/browse/RPLAT-14346> • This is the .net upgrade and the work will be shared by all teams. • You can pick up any of the unassigned ones on the list...",
+      "Timestamp": "2026-06-30 14:26",
+      "Channel": "git-happens-public",
+      "From": "Cherie Cutchin"
+    },
+    {
+      "Permalink": "https://relias-engineering.slack.com/archives/C0AQMPAHTTP/p1782843950862909?thread_ts=1782843950.862909",
+      "Text": "By end of day today, please assign yourself 4 stories from this Epic: <https://relias.atlassian.net/browse/RPLAT-14346> • This is the .net upgrade and the work will be shared by all teams. • You can pick up any of the unassigned ones on the list. (As...",
+      "Timestamp": "2026-06-30 14:25",
+      "Channel": "hg-gladiators-public",
+      "From": "Cherie Cutchin"
+    },
+    {
+      "Permalink": "https://relias-engineering.slack.com/archives/C098RV8P6CD/p1782843902546369",
+      "Text": "By end of day today, please assign yourself 3 more stories from this Epic: <https://relias.atlassian.net/browse/RPLAT-14346> • This is the .net upgrade and the work will be shared by all teams. • You can pick up any of the unassigned ones on the list...",
+      "Timestamp": "2026-06-30 14:25",
+      "Channel": "hg-guardians-public",
+      "From": "Cherie Cutchin"
+    },
+    {
+      "Permalink": "https://relias-engineering.slack.com/archives/C08NSUBKDCZ/p1782839726023119",
+      "Text": "By end of day today, please assign yourself 3 stories from this Epic: <https://relias.atlassian.net/browse/RPLAT-14346> • This is the .net upgrade and the work will be shared by all teams. • You can pick up any of the unassigned ones on the list. (As...",
+      "Timestamp": "2026-06-30 13:15",
+      "Channel": "deploy-and-conquer-public",
+      "From": "Cherie Cutchin"
+    },
+    {
+      "Permalink": "https://relias-engineering.slack.com/archives/C0A602R1G91/p1782829289104229?thread_ts=1782482607.872249",
+      "Text": "This looks like a user profile ticket, you can reach out to <#C092JS9CNM6> channel about getting some reviewers on it",
+      "Timestamp": "2026-06-30 10:21",
+      "Channel": "users",
+      "From": "Kyle McDaniel"
+    },
+    {
+      "Permalink": "https://relias-engineering.slack.com/archives/C08KXDC3C8G/p1782825215765199",
+      "Text": "(for automation - standard channel name!)",
+      "Timestamp": "2026-06-30 09:13",
+      "Channel": "mobile-monsters-inc-public",
+      "From": "Malia Paul"
+    },
+    {
+      "Permalink": "https://relias-engineering.slack.com/archives/C08KXDC3C8G/p1782825201554509",
+      "Text": "has renamed the channel from \"mobile_monsters_inc_public\" to \"mobile-monsters-inc-public\"",
+      "Timestamp": "2026-06-30 09:13",
+      "Channel": "mobile-monsters-inc-public",
+      "From": "Malia Paul"
+    },
+    {
+      "Permalink": "https://relias-engineering.slack.com/archives/C0ANNRDRVMM/p1782824736855469",
+      "Text": "<@U09J4N6NSLX|Shahrukh Khan> Please reach out in the Ship It public channel and we will get someone to look into it.",
+      "Timestamp": "2026-06-30 09:05",
+      "Channel": "q2-grc-integration",
+      "From": "Michaela Paul"
+    }
+  ],
+  "ChannelActivity": {
+    "dev-tribe": {
+      "RecentMessages": [
+        {
+          "Text": "<@U08959F2S0J|sgroner> for XM when you get back",
+          "Timestamp": "2026-06-30 15:59",
+          "From": "George DeCherney"
+        },
+        {
+          "Text": "<https://relias.atlassian.net/browse/RPLAT-22933>",
+          "Timestamp": "2026-06-30 15:16",
+          "From": "Shane Neiman"
+        },
+        {
+          "Text": "<@U01UXJP4GPN|Shane Neiman> lets create a ticket for it and we can work it through the process",
+          "Timestamp": "2026-06-30 15:06",
+          "From": "George DeCherney"
+        },
+        {
+          "Text": "Prefer Snackoverflow to own the NDS changes as they are the SME team for NDS. For learner app, I am tagging <@U03P22TK0TG|Darren Jack> and <@U0AS26FMH4N|Wes Wood> Thank you",
+          "Timestamp": "2026-06-30 14:41",
+          "From": "Sharada Tanikella"
+        },
+        {
+          "Text": "<@U08PC4BLARK|George DeCherney> : Can we have a quick chat with Sharada on this before or after our status meeting?",
+          "Timestamp": "2026-06-30 14:36",
+          "From": "Shobana Sampath"
+        },
+        {
+          "Text": "Same thing in the handlers step ```2026-06-30T0713.3760375Z /home/vsts/work/1/s/test/Relias.UserManagement.Core.Tests/Services/UserServiceBulkImportUsersTests.cs(2376,23): error CS7036: There is no ar...",
+          "Timestamp": "2026-06-30 14:25",
+          "From": "Kyle McDaniel"
+        },
+        {
+          "Text": "In the logs there is an error due to a failed test: ```2026-06-30T0701.8359496Z /home/vsts/work/1/s/test/Relias.UserManagement.Core.Tests/Services/UserServiceBulkImportUsersTests.cs(2376,23): error CS...",
+          "Timestamp": "2026-06-30 14:25",
+          "From": "Kyle McDaniel"
+        },
+        {
+          "Text": "",
+          "Timestamp": "2026-06-30 14:07",
+          "From": "Kelly Leeman"
+        },
+        {
+          "Text": "<@U088CEZSLHX|kleeman> said she will look into this in 3 minutes. Hopefully she could approve it",
+          "Timestamp": "2026-06-30 14:05",
+          "From": "Lakshmi Kondragunta"
+        },
+        {
+          "Text": "I don't see the think tank team in here or permissions group",
+          "Timestamp": "2026-06-30 14:04",
+          "From": "Bryan Halterman"
+        }
+      ],
+      "TotalMessages": 24
+    },
+    "ai-chapter": {
+      "RecentMessages": [
+        {
+          "Text": "<https://github.blog/changelog/2026-06-30-claude-sonnet-5-is-generally-available-for-github-copilot/|https://github.blog/changelog/2026-06-30-claude-sonnet-5-is-generally-available-for-github-copilot/...",
+          "Timestamp": "2026-06-30 16:24",
+          "From": "David Driscoll"
+        }
+      ],
+      "TotalMessages": 1
+    },
+    "productivity-engineering-public": {
+      "RecentMessages": [
+        {
+          "Text": "it sounds like it shouldn't break local workflows using the MCP server at least.",
+          "Timestamp": "2026-06-30 15:55",
+          "From": "Gray Anthony"
+        },
+        {
+          "Text": "that's disappointing",
+          "Timestamp": "2026-06-30 13:40",
+          "From": "Jeff Buda"
+        },
+        {
+          "Text": "<https://relias.atlassian.net/browse/EA-2815|relias.atlassian.net/browse/EA-2815> Not sure if this applied to you",
+          "Timestamp": "2026-06-30 13:39",
+          "From": "Emma Dickinson"
+        },
+        {
+          "Text": "hello Was Atlassian/Jira API key generation disabled recently? Some of my devs are reporting that they can no longer generate API keys.",
+          "Timestamp": "2026-06-30 13:38",
+          "From": "Jeff Buda"
+        },
+        {
+          "Text": "SNYK NOISE REDUCED I've updated the configuration so that PRs will only be flagged when a vulnerability is introduced by changes in the current PR. The quality gate remains disabled, so \"flagged\" does...",
+          "Timestamp": "2026-06-30 12:06",
+          "From": "Malia Paul"
+        },
+        {
+          "Text": "Thank you so much <@U01RRQXEEG5|Halterman>!",
+          "Timestamp": "2026-06-30 11:39",
+          "From": "Christian Mutaba"
+        },
+        {
+          "Text": "Or it could be settings coming down from the Bertelsmann override for auth.",
+          "Timestamp": "2026-06-30 11:27",
+          "From": "Bryan Halterman"
+        },
+        {
+          "Text": "We ended up having to send an invite to restore Christian's access. Not sure why his account required the invite. Possibly associated with the way the account was removed during the incident.",
+          "Timestamp": "2026-06-30 11:26",
+          "From": "Bryan Halterman"
+        },
+        {
+          "Text": "I had a similar issue, I had to go through the MyApps tile and make sure SMS MFA was explicitly removed from my account, even after setting up the authenticator.",
+          "Timestamp": "2026-06-30 11:25",
+          "From": "John Martin"
+        },
+        {
+          "Text": "Have you tried entering by clicking the MyApps tile yet?",
+          "Timestamp": "2026-06-30 11:09",
+          "From": "Tyler Deal"
+        }
+      ],
+      "TotalMessages": 15
+    },
+    "prod-eng-devex-private": {
+      "RecentMessages": [
+        {
+          "Text": "idk why but that popped in my head as a response",
+          "Timestamp": "2026-06-30 14:16",
+          "From": "Bryan Halterman"
+        },
+        {
+          "Text": "It's all fun and games until someone pokes your eye out!",
+          "Timestamp": "2026-06-30 14:16",
+          "From": "Bryan Halterman"
+        },
+        {
+          "Text": "I'm glad you're having fun ...",
+          "Timestamp": "2026-06-30 14:15",
+          "From": "Franz Hemmer"
+        },
+        {
+          "Text": "",
+          "Timestamp": "2026-06-30 14:14",
+          "From": "Bryan Halterman"
+        },
+        {
+          "Text": "I see a Franzy-Photo in there",
+          "Timestamp": "2026-06-30 14:10",
+          "From": "Bryan Halterman"
+        },
+        {
+          "Text": "(vs. mansplained)",
+          "Timestamp": "2026-06-30 14:09",
+          "From": "Malia Paul"
+        },
+        {
+          "Text": "I think I just got AI-splained",
+          "Timestamp": "2026-06-30 14:09",
+          "From": "Malia Paul"
+        },
+        {
+          "Text": "See you next quarter Franz",
+          "Timestamp": "2026-06-30 13:59",
+          "From": "Bryan Halterman"
+        },
+        {
+          "Text": "<@U032050R2TY|Malia Paul> Told Copilot to look at your Word doc and the ai-skills repo and formulate suggestions ...",
+          "Timestamp": "2026-06-30 13:41",
+          "From": "Franz Hemmer"
+        },
+        {
+          "Text": "Talk about hitting the right amount ...",
+          "Timestamp": "2026-06-30 13:40",
+          "From": "Franz Hemmer"
+        }
+      ],
+      "TotalMessages": 15
+    },
+    "next-deployment": {
+      "RecentMessages": [
+        {
+          "Text": "I'll kick them off now",
+          "Timestamp": "2026-06-30 15:06",
+          "From": "Mark Earl"
+        },
+        {
+          "Text": "<@SBMTU8ZUY|cloudengineers-sysadmins> <@UA529EN11|DA> any chance we can get help with this today?",
+          "Timestamp": "2026-06-30 15:05",
+          "From": "Ashley Edds"
+        },
+        {
+          "Text": "Physicians Craft &amp; Magento Release planned for tomorrow: <https://relias.atlassian.net/browse/CHM-6268>",
+          "Timestamp": "2026-06-30 14:49",
+          "From": "Jason Tolhurst"
+        },
+        {
+          "Text": "<@SBMTU8ZUY|cloudengineers-sysadmins> bumping",
+          "Timestamp": "2026-06-30 13:08",
+          "From": "Gage Stroud"
+        },
+        {
+          "Text": "<@SBMTU8ZUY|cloudengineers-sysadmins> Hello! Would anyone be available to help us with this deployment to prod: <https://relias.atlassian.net/browse/CHM-6280?issueKey=CHM-6280&subProduct=jira-software...",
+          "Timestamp": "2026-06-30 09:38",
+          "From": "Gage Stroud"
+        }
+      ],
+      "TotalMessages": 5
+    }
+  },
+  "DirectMessages": [
+    {
+      "Text": "Bot sitting",
+      "Timestamp": "2026-06-30 11:07",
+      "From": "Bryan Halterman"
+    },
+    {
+      "Text": "",
+      "Timestamp": "2026-06-30 11:07",
+      "From": "Bryan Halterman"
+    },
+    {
+      "Text": "",
+      "Timestamp": "2026-06-30 11:00",
+      "From": "Bryan Halterman"
+    },
+    {
+      "Text": "",
+      "Timestamp": "2026-06-30 03:14",
+      "From": "Slack Skill Bot"
+    }
+  ],
+  "DateRange": {
+    "From": "2026-06-29",
+    "To": "2026-06-30"
+  }
+}

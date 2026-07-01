@@ -1,10 +1,11 @@
 <#
 .SYNOPSIS
-    Generates an image using Nano Banana 2 (default) or GPT 5.4 Image 2 (elite) via OpenRouter API.
+    Generates an image using Nano Banana 2 (default), GPT 5.4 Image 2 (elite), or GPT Image 2 (ultra) via OpenRouter API.
 
 .DESCRIPTION
     Default: google/gemini-3.1-flash-image-preview — Pro-level visual quality at Flash speed (~$0.08-0.12/image).
     Elite:   openai/gpt-5.4-image-2 — Premium quality ($8/$15/$30 per 1M tokens). Use only when explicitly requested.
+    Ultra:   openai/gpt-image-2 — Ultra quality. Use only when explicitly requested.
 
 .PARAMETER Prompt
     The text prompt describing the image to generate.
@@ -15,6 +16,9 @@
 .PARAMETER Elite
     Use GPT 5.4 Image 2 instead of the default Nano Banana 2. Significantly more expensive.
 
+.PARAMETER Ultra
+    Use GPT Image 2 instead of the default Nano Banana 2. Ultra quality; use only when explicitly requested.
+
 .PARAMETER Preview
     Opens the generated image in Directory Opus viewer after saving.
 
@@ -23,6 +27,9 @@
 
 .EXAMPLE
     .\generate-image.ps1 -Prompt "A futuristic cityscape at night" -OutputPath "D:\city.png" -Elite -Preview
+
+.EXAMPLE
+    .\generate-image.ps1 -Prompt "A futuristic cityscape at night" -OutputPath "D:\city.png" -Ultra -Preview
 #>
 
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'Preview', Justification = 'Used inside Save-Image function')]
@@ -37,13 +44,23 @@ param(
     [switch]$Elite,
 
     [Parameter(Mandatory = $false)]
+    [switch]$Ultra,
+
+    [Parameter(Mandatory = $false)]
     [switch]$Preview
 )
 
 $InformationPreference = 'Continue'
 $ErrorActionPreference = "Stop"
 
-if ($Elite) {
+if ($Elite -and $Ultra) {
+    throw "Use only one model tier: -Elite or -Ultra."
+}
+
+if ($Ultra) {
+    $Model = "openai/gpt-image-2"
+    $ModelLabel = "GPT Image 2 (Ultra)"
+} elseif ($Elite) {
     $Model = "openai/gpt-5.4-image-2"
     $ModelLabel = "GPT 5.4 Image 2 (Elite)"
 } else {
