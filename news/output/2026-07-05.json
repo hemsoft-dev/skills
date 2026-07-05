@@ -1,0 +1,164 @@
+{
+  "Date": "2026-07-05",
+  "GeneratedAt": "2026-07-05T19:02:49.7280105-04:00",
+  "Categories": [
+    {
+      "Title": "🇺🇸 US News",
+      "Articles": [
+        {
+          "Title": "White House report brands Smithsonian leadership as radical activists who can't be trusted",
+          "Link": "https://www.pbs.org/newshour/politics/white-house-report-brands-smithsonian-leadership-as-radical-activists-who-cant-be-trusted",
+          "Source": "PBS Politics",
+          "Published": "2026-07-05T18:21:08.0000000-04:00"
+        },
+        {
+          "Title": "Democrat Mallory McMorrow suspends her Michigan Senate campaign and scrambles the pivotal race",
+          "Link": "https://www.pbs.org/newshour/politics/democrat-mallory-mcmorrow-suspends-her-michigan-senate-campaign-and-scrambles-the-pivotal-race",
+          "Source": "PBS Politics",
+          "Published": "2026-07-05T15:20:06.0000000-04:00"
+        },
+        {
+          "Title": "Politics chat: Trump's July 4 speech, financial disclosures; Supreme Court rulings",
+          "Link": "https://www.npr.org/2026/07/05/nx-s1-5877426/politics-chat-trumps-july-4-speech-financial-disclosures-supreme-court-rulings",
+          "Source": "NPR Politics",
+          "Published": "2026-07-05T08:04:23.0000000-04:00"
+        },
+        {
+          "Title": "Paul Pelosi in hit-and-run in California, car left with major damage, authorities say",
+          "Link": "https://www.npr.org/2026/07/05/g-s1-132046/paul-pelosi-hit-and-run-california-car-damage",
+          "Source": "NPR Politics",
+          "Published": "2026-07-05T06:28:42.0000000-04:00"
+        },
+        {
+          "Title": "NATO chief faces challenge at summit as Trump demands 'loyalty' and not just burden-sharing",
+          "Link": "https://www.pbs.org/newshour/world/nato-chief-faces-challenge-at-summit-as-trump-demands-loyalty-and-not-just-burden-sharing",
+          "Source": "PBS Politics",
+          "Published": "2026-07-05T14:24:19.0000000-04:00"
+        },
+        {
+          "Title": "Trump's administration won't seek new bids to repair the Reflecting Pool",
+          "Link": "https://www.pbs.org/newshour/politics/trumps-administration-wont-seek-new-bids-to-repair-the-reflecting-pool",
+          "Source": "PBS Politics",
+          "Published": "2026-07-05T12:30:18.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🌍 World News",
+      "Articles": [
+        {
+          "Title": "Venezuelan leader marks Independence Day with message of ‘no social unrest’",
+          "Link": "https://www.aljazeera.com/news/2026/7/5/venezuelan-leader-marks-independence-day-with-message-of-no-social-unrest?traffic_source=rss",
+          "Source": "Al Jazeera",
+          "Published": "2026-07-05T18:48:13.0000000-04:00"
+        },
+        {
+          "Title": "Australia news live: Albanese apologises for podcast comment about Kylie Minogue; auction clearances below 50% again",
+          "Link": "https://www.theguardian.com/australia-news/live/2026/jul/06/australia-news-live-crisafulli-bail-laws-property-market-auction-clearance-tax-reform-prime-minister-albanese-fiji-treaty-royal-commission-meta-antisemitism-ntwnfb",
+          "Source": "The Guardian",
+          "Published": "2026-07-05T18:44:40.0000000-04:00"
+        },
+        {
+          "Title": "How a son rescued his father from the rubble of Venezuela’s earthquakes",
+          "Link": "https://www.aljazeera.com/news/longform/2026/7/5/how-a-son-rescued-his-father-from-the-rubble-of-venezuelas-earthquakes?traffic_source=rss",
+          "Source": "Al Jazeera",
+          "Published": "2026-07-05T18:41:40.0000000-04:00"
+        },
+        {
+          "Title": "Anthony Albanese apologises ‘unequivocally’ for podcast comment about Kylie Minogue",
+          "Link": "https://www.theguardian.com/australia-news/2026/jul/06/anthony-albanese-apologises-kylie-minogue-podcast-comment",
+          "Source": "The Guardian",
+          "Published": "2026-07-05T18:26:55.0000000-04:00"
+        },
+        {
+          "Title": "World Cup 2026: Haaland brace sinks Brazil as Norway storm into quarter-finals",
+          "Link": "https://www.france24.com/en/sport/20260705-world-cup-2026-haaland-brace-sinks-brazil-as-norway-storm-into-quarter-finals",
+          "Source": "France 24",
+          "Published": "2026-07-05T18:07:02.0000000-04:00"
+        },
+        {
+          "Title": "Super Typhoon Bavi makes landfall on US Pacific islands with huge wind gusts",
+          "Link": "https://www.bbc.co.uk/news/articles/cr7xpgx50jxo?at_medium=RSS&at_campaign=rss",
+          "Source": "BBC",
+          "Published": "2026-07-05T17:39:12.0000000-04:00"
+        },
+        {
+          "Title": "FIFA lifts Folarin Balogun's World Cup suspension after Trump calls Infantino",
+          "Link": "https://www.france24.com/en/sport/20260705-fifa-lifts-balogun-world-cup-suspension-trump-call",
+          "Source": "France 24",
+          "Published": "2026-07-05T17:21:48.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🤖 AI News",
+      "Articles": [
+        {
+          "Title": "sqlite-utils 4.0rc2, mostly written by Claude Fable (for about $149.25)",
+          "Link": "https://simonwillison.net/2026/Jul/5/sqlite-utils-fable/#atom-everything",
+          "Source": "Simon Willison's Weblog",
+          "Published": "2026-07-04T21:00:48.0000000-04:00"
+        },
+        {
+          "Title": "Better Models: Worse Tools",
+          "Link": "https://simonwillison.net/2026/Jul/4/better-models-worse-tools/#atom-everything",
+          "Source": "Simon Willison's Weblog",
+          "Published": "2026-07-04T18:53:52.0000000-04:00"
+        },
+        {
+          "Title": "Some of the nation’s rich are letting AI teach their kids",
+          "Link": "https://www.theverge.com/ai-artificial-intelligence/961505/wealthy-ai-schools-alpha-forge-prep",
+          "Source": "The Verge",
+          "Published": "2026-07-05T18:30:54.0000000-04:00"
+        },
+        {
+          "Title": "Infuriating Google commercial imagines the founding fathers embracing AI",
+          "Link": "https://www.theverge.com/ai-artificial-intelligence/961468/google-ai-commercial-founding-fathers-declaration-of-independence",
+          "Source": "The Verge",
+          "Published": "2026-07-05T10:23:11.0000000-04:00"
+        },
+        {
+          "Title": "New Google commercial imagines a Declaration of Independence written with help from AI",
+          "Link": "https://techcrunch.com/2026/07/04/new-google-commercial-imagines-a-declaration-of-independence-written-with-help-from-ai/",
+          "Source": "TechCrunch",
+          "Published": "2026-07-04T16:55:25.0000000-04:00"
+        },
+        {
+          "Title": "Midjourney wants Hollywood studios to reveal the details of their AI usage",
+          "Link": "https://techcrunch.com/2026/07/04/midjourney-wants-hollywood-studios-to-reveal-the-details-of-their-ai-usage/",
+          "Source": "TechCrunch",
+          "Published": "2026-07-04T14:00:05.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🇩🇰 Danish News",
+      "Articles": [
+        {
+          "Title": "Why HX Greenland is the ultimate voyage + win an $20K cruise - Karryon",
+          "Link": "https://news.google.com/rss/articles/CBMif0FVX3lxTE1xWThQVHlpM1ltc0xxTHViTGtpVjFkWTBjQzZnMi04MC1NSFRsb0RzZV93bFdFMXdSc0dfUDU5WE5IeXJteDZTbk5jUTJSOTl5WHVPSW1fUlUyOTItX3E1TGZzT3p1S3VlalpOZS1yN2Z5Z2UxelNURng1dVF6eE0?oc=5",
+          "Source": "Google News Denmark",
+          "Published": "2026-07-05T18:00:00.0000000-04:00"
+        },
+        {
+          "Title": "Dødstallet stiger til over 3000 i Venezuela efter kraftige jordskælv",
+          "Link": "https://www.dr.dk/nyheder/seneste/doedstallet-stiger-til-over-3000-i-venezuela-efter-kraftige-jordskaelv",
+          "Source": "DR News",
+          "Published": "2026-07-05T17:27:33.0000000-04:00"
+        },
+        {
+          "Title": "Christian Eriksen collapses on pitch again as World Cup warm-up clash abandoned - GB News",
+          "Link": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxPcy1KbklOeU1OR1VjYjZLX09xdUxHYVlrUnRqbXU1LUlHOHo4NFZnWFBZTGdOS1k4WFpFVUFvY2NObDRnWGNJMTZDYlJkQXpGNjMxem9CbTBCaXR2QmhFMnRMQlBMbko1TGNpUDMzNkdrdklVZGNGZzNSbzhHY1NLRTZ3U2xLMmFv?oc=5",
+          "Source": "Google News Denmark",
+          "Published": "2026-07-05T17:02:18.0000000-04:00"
+        },
+        {
+          "Title": "Flyaflysninger efter askesøjle over Etna-vulkan ",
+          "Link": "https://www.dr.dk/nyheder/seneste/flyaflysninger-efter-askesoejle-over-etna-vulkan",
+          "Source": "DR News",
+          "Published": "2026-07-05T13:29:55.0000000-04:00"
+        }
+      ]
+    }
+  ]
+}
