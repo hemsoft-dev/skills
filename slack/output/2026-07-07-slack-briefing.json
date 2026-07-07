@@ -1,0 +1,432 @@
+{
+  "DirectMessages": [
+    {
+      "Text": "Have a safe trip tomorrow Franz",
+      "From": "Bryan Halterman",
+      "Timestamp": "2026-07-07 14:04"
+    },
+    {
+      "Text": "but that 10% savings draws me in!! lol",
+      "From": "George DeCherney",
+      "Timestamp": "2026-07-07 11:15"
+    },
+    {
+      "Text": "so I was trying to see if I could prevent that from happening again",
+      "From": "George DeCherney",
+      "Timestamp": "2026-07-07 10:57"
+    },
+    {
+      "Text": "because I use auto I got bit by it selecting haiku for a task and burning 600 credits",
+      "From": "George DeCherney",
+      "Timestamp": "2026-07-07 10:57"
+    },
+    {
+      "Text": "I was just looking at the model usage for our org and top 10 models make up 96% of usage",
+      "From": "George DeCherney",
+      "Timestamp": "2026-07-07 10:56"
+    },
+    {
+      "Text": "yeah",
+      "From": "George DeCherney",
+      "Timestamp": "2026-07-07 10:56"
+    },
+    {
+      "Text": "Looks like it'll be on the CP tomorrow!",
+      "From": "Malia Paul",
+      "Timestamp": "2026-07-07 14:20"
+    },
+    {
+      "Text": "Newly worded: Franz recently reached out regarding making the GitHub Copilot App (<https://github.com/features/ai/github-app|GitHub Copilot App>) avai...",
+      "From": "Malia Paul",
+      "Timestamp": "2026-07-07 12:23"
+    },
+    {
+      "Text": "Wow in retrospect, that was a poorly worded paragraph",
+      "From": "Malia Paul",
+      "Timestamp": "2026-07-07 12:20"
+    },
+    {
+      "Text": "This is what I just sent Dan/Todd/David: Hello my wonderful IT friends! Franz reached out to you all about getting the Github Copilot App <https://git...",
+      "From": "Malia Paul",
+      "Timestamp": "2026-07-07 12:19"
+    },
+    {
+      "Text": "App not CLI. Got it.",
+      "From": "Malia Paul",
+      "Timestamp": "2026-07-07 11:57"
+    }
+  ],
+  "Announcements": [
+    {
+      "Text": "job-goblins is a private channel",
+      "From": "Lakshmi Kondragunta",
+      "Channel": "dev-tribe",
+      "Permalink": "https://relias-engineering.slack.com/archives/C1KAF274N/p1783459741640469?thread_ts=1783458161.629019",
+      "Timestamp": "2026-07-07 17:29"
+    },
+    {
+      "Text": "<@U4SRD66JG|Lakshmi> I can't remember the job goblins public channel name and couldn't find it easily searching",
+      "From": "Ashley Edds",
+      "Channel": "dev-tribe",
+      "Permalink": "https://relias-engineering.slack.com/archives/C1KAF274N/p1783458390812209?thread_ts=1783458161.629019",
+      "Timestamp": "2026-07-07 17:06"
+    },
+    {
+      "Text": "I have records for teams called Job Goblins and ColdFix -> Are these new teams with public channels?",
+      "From": "Clark Bonham",
+      "Channel": "dev-tribe",
+      "Permalink": "https://relias-engineering.slack.com/archives/C1KAF274N/p1783458161629019?thread_ts=1783458161.629019",
+      "Timestamp": "2026-07-07 17:02"
+    },
+    {
+      "Text": "set the channel topic: <https://relias.atlassian.net/browse/CHM-6303>",
+      "From": "Clark Bonham",
+      "Channel": "platform-deployment-26-q2-06",
+      "Permalink": "https://relias-engineering.slack.com/archives/C0BFPJS31D3/p1783454942151799",
+      "Timestamp": "2026-07-07 16:09"
+    },
+    {
+      "Text": "set the channel description: <https://relias.atlassian.net/browse/CHM-6303>",
+      "From": "Clark Bonham",
+      "Channel": "platform-deployment-26-q2-06",
+      "Permalink": "https://relias-engineering.slack.com/archives/C0BFPJS31D3/p1783454935557289",
+      "Timestamp": "2026-07-07 16:08"
+    },
+    {
+      "Text": "<@U0ALZCY4KQC|c.cutchin> Thank you for asking <@U0AHW0XM1ST|Hal Lee> about this channel as it prompted him to remind me to set it up!",
+      "From": "David Atkinson",
+      "Channel": "brp_q3_2026_ecm",
+      "Permalink": "https://relias-engineering.slack.com/archives/C0BFP38AE3X/p1783451993916359",
+      "Timestamp": "2026-07-07 15:19"
+    },
+    {
+      "Text": "tagging <@U0ALZCY4KQC|c.cutchin> so she knows this is a valid channel",
+      "From": "Hal Lee",
+      "Channel": "brp_q3_2026_ecm",
+      "Permalink": "https://relias-engineering.slack.com/archives/C0BFP38AE3X/p1783451891154709",
+      "Timestamp": "2026-07-07 15:18"
+    },
+    {
+      "Text": "set the channel topic: This is the best way to communicate with ECM during 2026 Q3 BRP. Please tag <!subteam^SBMTU8ZUY> and/or <!subteam^SB3GH6USY> with your request. We look forward to hearing from you!",
+      "From": "David Atkinson",
+      "Channel": "brp_q3_2026_ecm",
+      "Permalink": "https://relias-engineering.slack.com/archives/C0BFP38AE3X/p1783450774332629",
+      "Timestamp": "2026-07-07 14:59"
+    },
+    {
+      "Text": "Hi <!channel> I just got off the phone with Stormi, and wanted to share an update on the Content Tags.",
+      "From": "Emily Bishop",
+      "Channel": "communities-adf-content-pipleines",
+      "Permalink": "https://relias-engineering.slack.com/archives/C0BFD4V29C5/p1783448440142169",
+      "Timestamp": "2026-07-07 14:20"
+    },
+    {
+      "Text": "set the channel topic: Fix Version for current monolith sprint work: 26.Q2.6 RPLAT Deployment",
+      "From": "Clark Bonham",
+      "Channel": "dev-tribe",
+      "Permalink": "https://relias-engineering.slack.com/archives/C1KAF274N/p1783437977789329",
+      "Timestamp": "2026-07-07 11:26"
+    },
+    {
+      "Text": "Reposting an explanation I previously posted in CLS deployments but tailored to CES. Crash course on the smoke test and its notifications: QA was asked to write smoke tests last year that canvas critical functionalities for their MFEs. The smoke test...",
+      "From": "Tyler Deal",
+      "Channel": "ces-deployments",
+      "Permalink": "https://relias-engineering.slack.com/archives/C09ACHWUEH3/p1783434344632349",
+      "Timestamp": "2026-07-07 10:25"
+    },
+    {
+      "Text": "Tyler Deal configured Cypress to post *failed runs* for the Content Engagement project to this channel. Happy testing!",
+      "From": "cypress",
+      "Channel": "ces-deployments",
+      "Permalink": "https://relias-engineering.slack.com/archives/C09ACHWUEH3/p1783433920192469",
+      "Timestamp": "2026-07-07 10:18"
+    },
+    {
+      "Text": "added an integration to this channel: <https://relias-engineering.slack.com/services/B0BFRT348BB|Cypress>",
+      "From": "Tyler Deal",
+      "Channel": "ces-deployments",
+      "Permalink": "https://relias-engineering.slack.com/archives/C09ACHWUEH3/p1783433919206769",
+      "Timestamp": "2026-07-07 10:18"
+    },
+    {
+      "Text": "yes lets route CES stuff to the deployments channel I think that makes the most sense. and <@U03R99WTXNW|Tyler Deal> sorry I hadn't seen the other pr but thanks for finding it",
+      "From": "Kelly Leeman",
+      "Channel": "courses",
+      "Permalink": "https://relias-engineering.slack.com/archives/C09GC0579K5/p1783431297966549?thread_ts=1783430585.071789",
+      "Timestamp": "2026-07-07 09:34"
+    },
+    {
+      "Text": "<@U08MN3S27LP|j.sharma> <@U08EC64NSJG|a.kulkarni> <@U0AHW0XM1ST|Hal Lee> and please tag any other teams that might be working in the course player. I have tagged you all in the test channel as well.",
+      "From": "Kelly Leeman",
+      "Channel": "courses",
+      "Permalink": "https://relias-engineering.slack.com/archives/C09GC0579K5/p1783430678546899?thread_ts=1783430585.071789",
+      "Timestamp": "2026-07-07 09:24"
+    }
+  ],
+  "ChannelActivity": {
+    "productivity-engineering-public": {
+      "TotalMessages": 20,
+      "RecentMessages": [
+        {
+          "Text": "Hi <@S06FDGKPGJ3|pe-quality>, Could you please review below PR for component testing for Pro on the Go courses? <https://github.com/relias-engineering/rlms-website/pull/3144|https://github.com/relias-...",
+          "From": "Radhika Pathak",
+          "Timestamp": "2026-07-07 14:27"
+        },
+        {
+          "Text": "Hi <@S06FDGKPGJ3|pe-quality> Please review my PRs. <https://github.com/relias-engineering/rlms-website/pull/3162|Componenet testing for home-page-feature by sjoshi0115 · Pull Request #3162 · relias-en...",
+          "From": "Sumit Joshi",
+          "Timestamp": "2026-07-07 14:25"
+        },
+        {
+          "Text": "sorry I was distracted by other task, it's resolved now",
+          "From": "Tamila Smolich",
+          "Timestamp": "2026-07-07 13:06"
+        },
+        {
+          "Text": "Thank you, <@U01RRQXEEG5|Halterman>, for the clarification. I’ll revisit the SonarCloud setup steps, and if I have any questions or updates, I’ll post them here.",
+          "From": "Nirmit Shah",
+          "Timestamp": "2026-07-07 12:27"
+        },
+        {
+          "Text": "I only setup it up so that the project can authenticate with SonarCloud. I did not do the work to get ADO/GH Actions setup to report to SonarCloud",
+          "From": "Bryan Halterman",
+          "Timestamp": "2026-07-07 11:59"
+        },
+        {
+          "Text": "Hi <@U032050R2TY|Malia Paul> , Thank you for your support! The migration of relias.caching from Bitbucket to GitHub has been completed successfully. Repository: <https://github.com/relias-engineering/...",
+          "From": "Nirmit Shah",
+          "Timestamp": "2026-07-07 11:53"
+        },
+        {
+          "Text": "Those are separate issues. The Synk thing will fall off with your next commit. It was resolved while you were on PTO. The merge conflict is what is shown below. Something in that file was edited on de...",
+          "From": "Tyler Deal",
+          "Timestamp": "2026-07-07 10:39"
+        },
+        {
+          "Text": "the merge conflict is due to the snyk failure, that I read shouldn't prevent merging. I'm not sure if I can do anything to resolve it",
+          "From": "Tamila Smolich",
+          "Timestamp": "2026-07-07 10:34"
+        },
+        {
+          "Text": "Looks like it gave you a merge conflict, though. Can you resolve that so things are how you want them to be?",
+          "From": "Tyler Deal",
+          "Timestamp": "2026-07-07 10:29"
+        },
+        {
+          "Text": "<@U03R99WTXNW|Tyler Deal> Please let us know if needed any additional changes we will take that on priority , as we have to close this small epic by EOD",
+          "From": "Sagar Tambolkar",
+          "Timestamp": "2026-07-07 10:29"
+        }
+      ]
+    },
+    "prod-eng-devex-private": {
+      "TotalMessages": 3,
+      "RecentMessages": [
+        {
+          "Text": "I know - we'll deal with that when we get there.",
+          "From": "Franz Hemmer",
+          "Timestamp": "2026-07-07 11:41"
+        },
+        {
+          "Text": "I think you might end up with merge conflicts around the version bump <@U2XMZDPJ7|Franz>",
+          "From": "Bryan Halterman",
+          "Timestamp": "2026-07-07 11:15"
+        },
+        {
+          "Text": "i'll take a gander after I finish with Paul's review",
+          "From": "Bryan Halterman",
+          "Timestamp": "2026-07-07 09:51"
+        }
+      ]
+    },
+    "dev-tribe": {
+      "TotalMessages": 15,
+      "RecentMessages": [
+        {
+          "Text": "job-goblins is a private channel",
+          "From": "Lakshmi Kondragunta",
+          "Timestamp": "2026-07-07 17:29"
+        },
+        {
+          "Text": "<@U4SRD66JG|Lakshmi> I can't remember the job goblins public channel name and couldn't find it easily searching",
+          "From": "Ashley Edds",
+          "Timestamp": "2026-07-07 17:06"
+        },
+        {
+          "Text": "<#C0B0D3ZMJ10>",
+          "From": "Beth Dodd",
+          "Timestamp": "2026-07-07 17:04"
+        },
+        {
+          "Text": "<!here> Does anyone know what's going on with <https://relias.atlassian.net/wiki/spaces/RLPD/pages/5601755137/Non-Prod+Observability+Dashboards|the Dashboards>. Looks like a bunch (maybe all) are miss...",
+          "From": "Gray Anthony",
+          "Timestamp": "2026-07-07 17:03"
+        },
+        {
+          "Text": "I have records for teams called Job Goblins and ColdFix -> Are these new teams with public channels?",
+          "From": "Clark Bonham",
+          "Timestamp": "2026-07-07 17:02"
+        },
+        {
+          "Text": "<!here> Release branches for the 26.Q2.04-05 Relias Platform Deployment have been merged and closed. • Identity Service • Learning Service • RLMS Database • RLMS Legacy • RLMS Website • Usermanagement...",
+          "From": "Clark Bonham",
+          "Timestamp": "2026-07-07 16:53"
+        },
+        {
+          "Text": "Thanks <@U01RRQXEEG5|Halterman>! The migration is complete — all branches and history are now on GitHub, and the Bitbucket README has been updated. No rush on removing the bypass, I'm all done pushing...",
+          "From": "Nirmit Shah",
+          "Timestamp": "2026-07-07 11:44"
+        },
+        {
+          "Text": "set the channel topic: Fix Version for current monolith sprint work: 26.Q2.6 RPLAT Deployment",
+          "From": "Clark Bonham",
+          "Timestamp": "2026-07-07 11:26"
+        },
+        {
+          "Text": "<!here> Ahoy folks! This is a friendly reminder that I am cutting branches re: Sprint 26.Q2.6 tomorrow, and it's also big room planning time so need to assure that everything is ready to go. Fix Versi...",
+          "From": "Clark Bonham",
+          "Timestamp": "2026-07-07 11:24"
+        },
+        {
+          "Text": "Repo has been imported to SonarCloud. The webhook and token scope have been updated so that the repo can authenticate with SonarCloud",
+          "From": "Bryan Halterman",
+          "Timestamp": "2026-07-07 09:19"
+        }
+      ]
+    },
+    "next-deployment": {
+      "TotalMessages": 11,
+      "RecentMessages": [
+        {
+          "Text": "<!here> Release branches for the 26.Q2.04-05 Relias Platform Deployment have been merged and closed. • Identity Service • Learning Service • RLMS Database • RLMS Legacy • RLMS Website • Usermanagement...",
+          "From": "Clark Bonham",
+          "Timestamp": "2026-07-07 16:53"
+        },
+        {
+          "Text": "<@U08AUG8NACX|s.dasharatha> pls test and let us know",
+          "From": "Mustak Ahamed",
+          "Timestamp": "2026-07-07 12:45"
+        },
+        {
+          "Text": "You can go ahead and test",
+          "From": "Clark Bonham",
+          "Timestamp": "2026-07-07 12:43"
+        },
+        {
+          "Text": "Shall we start with the testing? Or should we wait for Cypress to complete?",
+          "From": "Mustak Ahamed",
+          "Timestamp": "2026-07-07 12:36"
+        },
+        {
+          "Text": "Okay, <@U08BBHZBJQ4|m.ahamed> I have this out and live on staging environments and I have kicked off Cypress.",
+          "From": "Clark Bonham",
+          "Timestamp": "2026-07-07 12:17"
+        },
+        {
+          "Text": "Awaiting Clark for the stage push. Post that, we can start testing.",
+          "From": "Mustak Ahamed",
+          "Timestamp": "2026-07-07 12:14"
+        },
+        {
+          "Text": "Any updates?",
+          "From": "Warren Sutherland",
+          "Timestamp": "2026-07-07 12:12"
+        },
+        {
+          "Text": "^ working to resolve I should have stated",
+          "From": "Clark Bonham",
+          "Timestamp": "2026-07-07 11:10"
+        },
+        {
+          "Text": "When going to merge this into develop, I have a conflict around RLMS/ReliasLearning.RLMS/Model/ExamManager.cs fyi",
+          "From": "Clark Bonham",
+          "Timestamp": "2026-07-07 11:09"
+        },
+        {
+          "Text": "We are still working on getting this through the builds... having some stability issues with sonarcloud. CC: <@U01FN6UP16C|Clark>",
+          "From": "Warren Sutherland",
+          "Timestamp": "2026-07-07 10:18"
+        }
+      ]
+    },
+    "ai-chapter": {
+      "TotalMessages": 16,
+      "RecentMessages": [
+        {
+          "Text": "Happy Pre BRP present: Miro MCP has been enabled Https://mcp.miro.com",
+          "From": "George DeCherney",
+          "Timestamp": "2026-07-07 18:45"
+        },
+        {
+          "Text": "NVIDIA is becoming more than a GPU company. As it moves deeper into AI model hosting and inference, OpenAI and Anthropic may continue to lead, but the market is likely to shift from a two-company race...",
+          "From": "Christian Mutaba",
+          "Timestamp": "2026-07-07 17:42"
+        },
+        {
+          "Text": "the few times i've used it, i've been pleasantly surprised (re: GPT-OSS)",
+          "From": "Rasheed Akhtar",
+          "Timestamp": "2026-07-07 16:46"
+        },
+        {
+          "Text": "im surprised GPT-OSS is not anywhere in that list. its pretty good from my own testing at least",
+          "From": "George DeCherney",
+          "Timestamp": "2026-07-07 16:11"
+        },
+        {
+          "Text": "i wish I had the VRAM to run GLM5.2 locally. (Just need a cluster of 4x Nvidia Spark DGX )",
+          "From": "Rasheed Akhtar",
+          "Timestamp": "2026-07-07 16:09"
+        },
+        {
+          "Text": "<https://learn.microsoft.com/en-us/azure/foundry-local/get-started?tabs=windows&pivots=programming-language-javascript|Get started with Foundry Local - Foundry Local | Microsoft Learn>",
+          "From": "George DeCherney",
+          "Timestamp": "2026-07-07 16:04"
+        },
+        {
+          "Text": "Open-weight models are becoming harder to ignore in the best way. GLM-5.2 is showing impressive progress across coding and agentic benchmarks, and it’s a good reminder that model strategy does not hav...",
+          "From": "Christian Mutaba",
+          "Timestamp": "2026-07-07 15:38"
+        },
+        {
+          "Text": "Yeah, Fable is the nuclear option, it feels like the right tool when the margin for error is near zero, like heart surgery, swapping a live database, AI-era security fixes, complex rule engines, or ch...",
+          "From": "Christian Mutaba",
+          "Timestamp": "2026-07-07 11:01"
+        },
+        {
+          "Text": "Theo showcases a really neat way to instruct how to choose which model to use as the subagent model by using a matrix of his personal views on the capabilities of the models.",
+          "From": "Franz Hemmer",
+          "Timestamp": "2026-07-07 09:32"
+        },
+        {
+          "Text": "Fair.",
+          "From": "George DeCherney",
+          "Timestamp": "2026-07-07 09:32"
+        }
+      ]
+    }
+  },
+  "Mentions": [
+    {
+      "Text": "I think you might end up with merge conflicts around the version bump <@U2XMZDPJ7|Franz>",
+      "From": "Bryan Halterman",
+      "Channel": "prod-eng-devex-private",
+      "Permalink": "https://relias-engineering.slack.com/archives/C09LB1CM1BK/p1783437354895509?thread_ts=1783383665.231539",
+      "Timestamp": "2026-07-07 11:15"
+    }
+  ],
+  "Summary": {
+    "ActionItems": 0,
+    "Mentions": 1,
+    "DirectMessages": 11,
+    "Channels": 5,
+    "Announcements": 15,
+    "ChannelMessages": 65.0
+  },
+  "DateRange": {
+    "To": "2026-07-07",
+    "From": "2026-07-06"
+  },
+  "GeneratedAt": "2026-07-07 19:02:29",
+  "ActionItems": [],
+  "Username": "fhemmer"
+}

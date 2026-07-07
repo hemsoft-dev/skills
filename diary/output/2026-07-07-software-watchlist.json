@@ -1,0 +1,13 @@
+{
+  "versions": {
+    "Claude Code": "v2.1.203",
+    "Gemini CLI": "v0.50.0-preview.1",
+    "GitHub CLI": "v2.96.0",
+    "GitHub Copilot CLI": "v1.0.69",
+    "Codex CLI": "rust-v0.142.5",
+    "GitHub Web": "Jul 7",
+    "Goose CLI": "v1.41.0",
+    "Node.js": "v26.4.0"
+  },
+  "date": "2026-07-07"
+}
