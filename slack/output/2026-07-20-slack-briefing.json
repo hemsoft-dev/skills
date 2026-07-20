@@ -1,0 +1,320 @@
+{
+  "Username": "fhemmer",
+  "ActionItems": [
+    {
+      "Link": "https://relias-engineering.slack.com/archives/C0AHWV2C62G/p1784552934717259",
+      "Channel": "prod-eng-devex-automation",
+      "From": "github",
+      "Text": "Pending review on relias-engineering/rlms-website - <https://github.com/orgs/relias-engineering/teams/productivity-engineering/settings/reminders/92327|Manage reminder> [#3064] <https://github.com/rel...",
+      "Type": "Mention"
+    }
+  ],
+  "ChannelActivity": {
+    "relias-engineering": {
+      "TotalMessages": 2,
+      "RecentMessages": [
+        {
+          "Timestamp": "2026-07-20 08:59",
+          "From": "George DeCherney",
+          "Text": "Hi <@U08KLBZELDP|p.pise> this does not apply to Harbinger teams. Thanks for checking!"
+        },
+        {
+          "Timestamp": "2026-07-20 01:51",
+          "From": "Prasad Pise",
+          "Text": "Hi <@U08PC4BLARK|George DeCherney> Is this applicable for all Harbinger teams as well?"
+        }
+      ]
+    },
+    "prod-eng-devex-private": {
+      "TotalMessages": 6,
+      "RecentMessages": [
+        {
+          "Timestamp": "2026-07-20 08:50",
+          "From": "Franz Hemmer",
+          "Text": "Great! Hopefully that will be fun and get to recharge a bit too"
+        },
+        {
+          "Timestamp": "2026-07-20 08:29",
+          "From": "Bryan Halterman",
+          "Text": "Going to the beach Thursday, GalaxyCon Friday, Movies on Tuesday hair cuts all the fun stuff"
+        },
+        {
+          "Timestamp": "2026-07-20 08:28",
+          "From": "Bryan Halterman",
+          "Text": "yea doing a in-town vacation with the kids and girlfriend before George starts back up at school next week"
+        },
+        {
+          "Timestamp": "2026-07-20 08:27",
+          "From": "Franz Hemmer",
+          "Text": "Did indeed thanks - you on vacation as well now Bryan?"
+        },
+        {
+          "Timestamp": "2026-07-20 08:21",
+          "From": "Bryan Halterman",
+          "Text": "Hope you had a great trip Franz!"
+        },
+        {
+          "Timestamp": "2026-07-20 08:05",
+          "From": "Franz Hemmer",
+          "Text": "Hey friends Landed safely yesterday and will be back tomorrow."
+        }
+      ]
+    },
+    "ai-chapter": {
+      "TotalMessages": 3,
+      "RecentMessages": [
+        {
+          "Timestamp": "2026-07-20 13:44",
+          "From": "Franz Hemmer",
+          "Text": "Its pretty great - I was lucky to get a subscription before they paused it today because of such high demand."
+        },
+        {
+          "Timestamp": "2026-07-20 13:25",
+          "From": "Christian Mutaba",
+          "Text": "Interesting update: Kimi K3, an open-weight model, is currently ranked #1 in Arena’s Frontend Code Arena, ahead of Claude Fable 5 and GPT-5.6 Sol. I haven’t tested it yet, and the ranking is still pre..."
+        },
+        {
+          "Timestamp": "2026-07-20 12:35",
+          "From": "Ruchita Kothari",
+          "Text": "Hello <!here> We have one back end code generator common for all repo that works in CQRS pattern.. Recently we have seen code generator orchestrator agent in LCAS repo. Is there any one who is working..."
+        }
+      ]
+    },
+    "dev-tribe": {
+      "TotalMessages": 10,
+      "RecentMessages": [
+        {
+          "Timestamp": "2026-07-20 16:26",
+          "From": "Clark Bonham",
+          "Text": "I am just getting general slowness across the board"
+        },
+        {
+          "Timestamp": "2026-07-20 15:15",
+          "From": "John Turner",
+          "Text": "Was an odd bug where after coming back from sleep google works but no other websites do without closing and reoppening browser"
+        },
+        {
+          "Timestamp": "2026-07-20 15:05",
+          "From": "John Turner",
+          "Text": "Has github been slow to load for anyone else today ?"
+        },
+        {
+          "Timestamp": "2026-07-20 12:21",
+          "From": "Clark Bonham",
+          "Text": "I will need some reviews/approvals • <https://github.com/relias-engineering/rlms-website/pull/3373|Merge release/26.Q2.06 into master by rcbonham-relias · Pull Request #3373 · relias-engineering/rlms-..."
+        },
+        {
+          "Timestamp": "2026-07-20 12:16",
+          "From": "Gray Anthony",
+          "Text": "<!here> ByteKnights team is preparing to migrate the <https://bitbucket.org/relias/rlms-legacy/branches/?sort=target.date&page=8|rlms-legacy> bitbucket repo to github. In coordination with <@U01FN6UP1..."
+        },
+        {
+          "Timestamp": "2026-07-20 10:39",
+          "From": "Giovanni Rufino",
+          "Text": "<https://relias.atlassian.net/wiki/spaces/RLPD/pages/6445498434/Git+Commit+Signing+for+Relias+Engineering|relias.atlassian.net/wiki/…/Git+Commit+Signing+for+Relias+Engineering>"
+        },
+        {
+          "Timestamp": "2026-07-20 10:36",
+          "From": "Samuel Renkert",
+          "Text": "You must configure your local repo to sign your commits with your certificate."
+        },
+        {
+          "Timestamp": "2026-07-20 10:36",
+          "From": "Akkinapelli SivaKrishna",
+          "Text": "Hi <!here> I am facing an issue while pushing my changes getting the error shown in the screenshot below. Has anyone faced this before or known how to fix it? Thanks in advance! CC: <@U08NCMR7TT7|b.ku..."
+        },
+        {
+          "Timestamp": "2026-07-20 09:25",
+          "From": "Wes Wood",
+          "Text": "<@U09EN943BFF|Anushweta Balsaraf>, it might be best to treat this like PRs that were closed due to the github issue and follow the steps here: <https://relias.atlassian.net/wiki/spaces/RLPD/pages/6445..."
+        },
+        {
+          "Timestamp": "2026-07-20 09:14",
+          "From": "Anushweta Balsaraf",
+          "Text": "<@U0AS26FMH4N|Wes Wood> We observed after taking pull from develop to resolve conflict and resolve Reviewers comment, issue while pushing commit as Repository rule violations found for refs/heads/bug/..."
+        }
+      ]
+    },
+    "next-deployment": {
+      "TotalMessages": 3,
+      "RecentMessages": [
+        {
+          "Timestamp": "2026-07-20 17:13",
+          "From": "Clark Bonham",
+          "Text": "<!here> Release branches for the 26.Q2.06 Relias Platform Deployment have been merged and closed. • Identity Service • Learning Service • Quickbase Sync • RLMS Legacy • RLMS Website • Usermanagement S..."
+        },
+        {
+          "Timestamp": "2026-07-20 14:26",
+          "From": "Michael McCormick",
+          "Text": "deployment complete"
+        },
+        {
+          "Timestamp": "2026-07-20 14:06",
+          "From": "Michael McCormick",
+          "Text": "<!here> starting <https://relias.atlassian.net/browse/CHM-6309|relias.atlassian.net/browse/CHM-6309> deployment"
+        }
+      ]
+    },
+    "productivity-engineering-public": {
+      "TotalMessages": 10,
+      "RecentMessages": [
+        {
+          "Timestamp": "2026-07-20 14:03",
+          "From": "Mustak Ahamed",
+          "Text": "<@U029XSX69PX|Gray Anthony> <@U01RRQXEEG5|Halterman>, Could you help clarify how this work differs from the following epic? <https://relias.atlassian.net/browse/RPLAT-14346|Upgrade repositories using ..."
+        },
+        {
+          "Timestamp": "2026-07-20 10:57",
+          "From": "Bryan Halterman",
+          "Text": "If you need to setup SonarCloud we will need to assist with that to get the webhooks and token updated for the repo when it moves over to the new SonarCloud tenant. (and remove it from the bitbucket s..."
+        },
+        {
+          "Timestamp": "2026-07-20 10:45",
+          "From": "Gray Anthony",
+          "Text": "<@S06JSVBUPFG|pe-devex> ByteKnights is preparing to knock these tickets out: <https://relias.atlassian.net/browse/RPLAT-3223|GITHUB MIGRATION: RLMS Legacy Website (rlms-legacy)> <https://relias.atlass..."
+        },
+        {
+          "Timestamp": "2026-07-20 10:45",
+          "From": "John Martin",
+          "Text": "ok i understand why this is in base now. approving and posting some additional comments to consider after merging"
+        },
+        {
+          "Timestamp": "2026-07-20 10:06",
+          "From": "John Martin",
+          "Text": "Also, these can go to all CEs in <#C85Q48HTM> - All CEs help with Target, it's not a PE Infra responsibility. We primarily help rollout and implement new resources, processes, etc."
+        },
+        {
+          "Timestamp": "2026-07-20 10:04",
+          "From": "John Martin",
+          "Text": "I'm taking a look. At a glance based on the comment, I'd probably prefer these go in the prd-us overlay since they're a result of prd-us traffic as opposed to scaling ALL environments to that of prd-u..."
+        },
+        {
+          "Timestamp": "2026-07-20 09:33",
+          "From": "Drazen Jovanovic",
+          "Text": "Hi <@S08T518LL6R|pe-infra>, can you take a look? <https://github.com/relias-engineering/cm-core-gitops/pull/4|github.com/relias-engineering/cm-core-gitops/pull/4>"
+        },
+        {
+          "Timestamp": "2026-07-20 09:09",
+          "From": "Karthika Menon",
+          "Text": "<@U08KLC0E3SM|p.patil> <@U08KLC04JMP|r.pathak> <@U08MN3SCURM|s.joshi> <@U0918BL4V71|s.adhav> <@S06FDGKPGJ3|pe-quality> Sorry was on vacation and have been sifting through conversations related to CT. ..."
+        },
+        {
+          "Timestamp": "2026-07-20 08:27",
+          "From": "Bryan Halterman",
+          "Text": "This PR still has unresolved comments from me and from GitHub Copilot, you're welcome to move on to other reviewers as I'm on PTO. With that said we do require that folks address all comments includin..."
+        },
+        {
+          "Timestamp": "2026-07-20 08:07",
+          "From": "Jayati Sharma",
+          "Text": "<@U01RRQXEEG5|Halterman> Good Morning!! Thanks for the assistance. The <https://github.com/relias-engineering/Relias.Caching/pull/1#pullrequestreview-4734667491|PR >is all ready and I have reviewed it..."
+        }
+      ]
+    }
+  },
+  "GeneratedAt": "2026-07-20 19:02:48",
+  "DirectMessages": [
+    {
+      "Timestamp": "2026-07-20 14:21",
+      "From": "Slack Skill Bot",
+      "Text": ""
+    },
+    {
+      "Timestamp": "2026-07-20 13:22",
+      "From": "Slack Skill Bot",
+      "Text": ""
+    }
+  ],
+  "Announcements": [
+    {
+      "Timestamp": "2026-07-20 15:55",
+      "From": "Lane Schmelzenbach",
+      "Channel": "github-copilot",
+      "Permalink": "https://relias-engineering.slack.com/archives/C05BRPSNNRW/p1784577324159139?thread_ts=1784564834.659089",
+      "Text": "Thanks Malia, other than scraping this channel is there a way to get a relias user to github user list?"
+    },
+    {
+      "Timestamp": "2026-07-20 13:53",
+      "From": "Moumit Dutta",
+      "Channel": "wizardry-public",
+      "Permalink": "https://relias-engineering.slack.com/archives/C06TGS0QR2N/p1784569983786299?thread_ts=1784208007.060609",
+      "Text": "<@U088CEZSLHX|kleeman>, good morning! I wanted to check if there is a specific Infosec channel or a designated Infosec contact through whom we can submit a request for review."
+    },
+    {
+      "Timestamp": "2026-07-20 10:43",
+      "From": "Pavel Herasimov",
+      "Channel": "hg-guardians-public",
+      "Permalink": "https://relias-engineering.slack.com/archives/C098RV8P6CD/p1784558617735699?thread_ts=1784557762.279219",
+      "Text": "<@U04PPKTNQBE|Samuel> I <https://relias-engineering.slack.com/archives/C098RV8P6CD/p1784306833212619|had asked for an update> earlier in this channel and also reached out to <@U0B2N6NDA3E|s.rawat> directly before that, but I haven’t received confirma..."
+    },
+    {
+      "Timestamp": "2026-07-20 09:08",
+      "From": "github",
+      "Channel": "prod-eng-devex-automation",
+      "Permalink": "https://relias-engineering.slack.com/archives/C0AHWV2C62G/p1784552934717259",
+      "Text": "Pending review on relias-engineering/rlms-website - <https://github.com/orgs/relias-engineering/teams/productivity-engineering/settings/reminders/92327|Manage reminder> [#3064] <https://github.com/relias-engineering/rlms-website/pull/3064|POTG Automa..."
+    },
+    {
+      "Timestamp": "2026-07-20 08:39",
+      "From": "Hemant Patil",
+      "Channel": "infosec",
+      "Permalink": "https://relias-engineering.slack.com/archives/C01QRGR5ENA/p1784551194824059",
+      "Text": "<!here>, I was advised to reach out here for an InfoSec review. If this isn't the right channel, could you please let me know where I should submit this request? We have a PR that includes a few JavaScript files as part of our SCORM package, and we'd..."
+    },
+    {
+      "Timestamp": "2026-07-20 01:10",
+      "From": "github",
+      "Channel": "pe-bot-franz",
+      "Permalink": "https://relias-engineering.slack.com/archives/C08GHQC0LVC/p1784524256224089",
+      "Text": ""
+    }
+  ],
+  "Summary": {
+    "Mentions": 5,
+    "DirectMessages": 2,
+    "ChannelMessages": 34.0,
+    "Announcements": 6,
+    "Channels": 6,
+    "ActionItems": 1
+  },
+  "Mentions": [
+    {
+      "Timestamp": "2026-07-20 09:08",
+      "From": "github",
+      "Channel": "prod-eng-devex-automation",
+      "Permalink": "https://relias-engineering.slack.com/archives/C0AHWV2C62G/p1784552934717259",
+      "Text": "Pending review on relias-engineering/rlms-website - <https://github.com/orgs/relias-engineering/teams/productivity-engineering/settings/reminders/92327|Manage reminder> [#3064] <https://github.com/rel..."
+    },
+    {
+      "Timestamp": "2026-07-20 01:30",
+      "From": "github",
+      "Channel": "pe-bot-franz",
+      "Permalink": "https://relias-engineering.slack.com/archives/C08GHQC0LVC/p1784525427884109",
+      "Text": ""
+    },
+    {
+      "Timestamp": "2026-07-20 01:21",
+      "From": "github",
+      "Channel": "pe-bot-franz",
+      "Permalink": "https://relias-engineering.slack.com/archives/C08GHQC0LVC/p1784524865814809?thread_ts=1784524865.814809",
+      "Text": ""
+    },
+    {
+      "Timestamp": "2026-07-20 01:10",
+      "From": "github",
+      "Channel": "pe-bot-franz",
+      "Permalink": "https://relias-engineering.slack.com/archives/C08GHQC0LVC/p1784524256224089",
+      "Text": ""
+    },
+    {
+      "Timestamp": "2026-07-20 01:10",
+      "From": "github",
+      "Channel": "pe-bot-franz",
+      "Permalink": "https://relias-engineering.slack.com/archives/C08GHQC0LVC/p1784524244005539",
+      "Text": ""
+    }
+  ],
+  "DateRange": {
+    "To": "2026-07-20",
+    "From": "2026-07-19"
+  }
+}

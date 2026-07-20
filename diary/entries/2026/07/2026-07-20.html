@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Monday, 2026-07-20</title>
+  <style>
+    [data-theme="paper"], :root {
+      --bg-canvas: #080808; --bg-surface: #F5F1E8; --bg-card: #FFFFFF;
+      --text-primary: #141413; --text-secondary: #9A9891; --text-muted: #9A9891;
+      --accent-primary: #D97757; --accent-secondary: #788C5D; --accent-tertiary: #6A8CAF;
+      --border-subtle: rgba(20,20,19,0.08); --link-color: #6A8CAF;
+      --accent-tag-bg: rgba(217,119,87,0.12); --accent-tag-text: #D97757;
+      --sky-tag-bg: rgba(106,140,175,0.12); --sky-tag-text: #6A8CAF;
+      --olive-tag-bg: rgba(120,140,93,0.12); --olive-tag-text: #788C5D;
+      --slate-tag-bg: rgba(20,20,19,0.08); --slate-tag-text: #9A9891;
+      --warn-bg: #D97757; --warn-text: #FFFFFF;
+      --shadow-soft: 0 24px 80px rgba(0,0,0,0.18);
+      --table-header-bg: rgba(20,20,19,0.04); --table-border: rgba(20,20,19,0.06);
+      --stat-positive: #788C5D; --stat-negative: #D97757;
+    }
+    [data-theme="obsidian"] {
+      --bg-canvas: #0d1117; --bg-surface: #161b22; --bg-card: #21262d;
+      --text-primary: #c9d1d9; --text-secondary: #8b949e; --text-muted: #6e7681;
+      --accent-primary: #58a6ff; --accent-secondary: #3fb950; --accent-tertiary: #d2a8ff;
+      --border-subtle: rgba(240,246,252,0.1); --link-color: #58a6ff;
+      --accent-tag-bg: rgba(88,166,255,0.12); --accent-tag-text: #58a6ff;
+      --sky-tag-bg: rgba(210,168,255,0.12); --sky-tag-text: #d2a8ff;
+      --olive-tag-bg: rgba(63,185,80,0.12); --olive-tag-text: #3fb950;
+      --slate-tag-bg: rgba(139,148,158,0.12); --slate-tag-text: #8b949e;
+      --warn-bg: #f85149; --warn-text: #FFFFFF;
+      --shadow-soft: 0 24px 80px rgba(0,0,0,0.4);
+      --table-header-bg: rgba(240,246,252,0.06); --table-border: rgba(240,246,252,0.08);
+      --stat-positive: #3fb950; --stat-negative: #f85149;
+    }
+    [data-theme="twilight"] {
+      --bg-canvas: #16162a; --bg-surface: #1e1e3f; --bg-card: #2a2a4a;
+      --text-primary: #e0def4; --text-secondary: #908caa; --text-muted: #6c6c89;
+      --accent-primary: #7c5cbf; --accent-secondary: #c4a7e7; --accent-tertiary: #f7c59f;
+      --border-subtle: rgba(200,180,240,0.12); --link-color: #7c5cbf;
+      --accent-tag-bg: rgba(124,92,191,0.15); --accent-tag-text: #7c5cbf;
+      --sky-tag-bg: rgba(247,197,159,0.15); --sky-tag-text: #f7c59f;
+      --olive-tag-bg: rgba(196,167,231,0.15); --olive-tag-text: #c4a7e7;
+      --slate-tag-bg: rgba(144,140,170,0.12); --slate-tag-text: #908caa;
+      --warn-bg: #7c5cbf; --warn-text: #FFFFFF;
+      --shadow-soft: 0 24px 80px rgba(0,0,0,0.5);
+      --table-header-bg: rgba(200,180,240,0.08); --table-border: rgba(200,180,240,0.1);
+      --stat-positive: #c4a7e7; --stat-negative: #f7c59f;
+    }
+    [data-theme="carbon"] {
+      --bg-canvas: #111111; --bg-surface: #1a1a1a; --bg-card: #222222;
+      --text-primary: #ececec; --text-secondary: #888888; --text-muted: #666666;
+      --accent-primary: #D97757; --accent-secondary: #788C5D; --accent-tertiary: #6A8CAF;
+      --border-subtle: rgba(255,255,255,0.08); --link-color: #D97757;
+      --accent-tag-bg: rgba(217,119,87,0.15); --accent-tag-text: #D97757;
+      --sky-tag-bg: rgba(106,140,175,0.15); --sky-tag-text: #6A8CAF;
+      --olive-tag-bg: rgba(120,140,93,0.15); --olive-tag-text: #788C5D;
+      --slate-tag-bg: rgba(255,255,255,0.08); --slate-tag-text: #888888;
+      --warn-bg: #D97757; --warn-text: #FFFFFF;
+      --shadow-soft: 0 24px 80px rgba(0,0,0,0.5);
+      --table-header-bg: rgba(255,255,255,0.04); --table-border: rgba(255,255,255,0.06);
+      --stat-positive: #788C5D; --stat-negative: #D97757;
+    }
+    .theme-toggle{position:fixed;top:16px;right:16px;z-index:100;font-family:ui-monospace,"Cascadia Code","Fira Code",monospace;font-size:0.75rem}
+    .theme-toggle-btn{background:var(--bg-card);color:var(--text-secondary);border:1px solid var(--border-subtle);border-radius:6px;padding:6px 10px;cursor:pointer;font-size:1.2rem;line-height:1;transition:background .2s,color .2s}
+    .theme-toggle-btn:hover{background:var(--accent-primary);color:var(--bg-canvas)}
+    .theme-menu{display:none;position:absolute;top:100%;right:0;margin-top:4px;background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:8px;box-shadow:var(--shadow-soft);overflow:hidden;min-width:140px}
+    .theme-menu.open{display:block}
+    .theme-menu button{display:block;width:100%;text-align:left;background:none;color:var(--text-primary);border:none;padding:10px 16px;cursor:pointer;font-family:inherit;font-size:0.8rem;transition:background .15s}
+    .theme-menu button:hover{background:var(--accent-primary);color:var(--bg-canvas)}
+    :root { --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 24px; --space-6: 32px; --space-7: 48px; --radius-lg: 32px; --radius-md: 20px; --radius-sm: 12px; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg-canvas); color: var(--text-primary); font: 400 16px/1.6 Inter, "Segoe UI", Arial, sans-serif; }
+    a { color: var(--link-color); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .page-shell { min-height: 100vh; padding: var(--space-7) var(--space-5); }
+    .window { max-width: 1180px; margin: 0 auto; padding: var(--space-6); background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); }
+    h1 { font-family: Georgia, "Times New Roman", serif; font-size: 2.2rem; font-weight: 700; margin: 0 0 var(--space-2) 0; }
+    .subtitle, .mono, .eyebrow { font-family: ui-monospace, "Cascadia Code", "Fira Code", monospace; }
+    .subtitle { color: var(--text-muted); font-size: 0.8rem; margin-bottom: var(--space-6); }
+    .eyebrow { color: var(--text-muted); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: var(--space-2); }
+    .muted { color: var(--text-muted); }
+    .section { margin-bottom: var(--space-6); padding-bottom: var(--space-6); border-bottom: 1px solid var(--border-subtle); }
+    .section:last-child { border-bottom: none; }
+    .section-title { font-family: Georgia, "Times New Roman", serif; font-size: 1.3rem; font-weight: 600; margin: 0 0 var(--space-4) 0; }
+    .section-subtitle { font-family: Georgia, "Times New Roman", serif; font-size: 1.05rem; font-weight: 600; margin: var(--space-5) 0 var(--space-3) 0; }
+    .card, .stat-block { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: var(--space-4); }
+    .card + .card { margin-top: var(--space-3); }
+    .grid { display: grid; gap: var(--space-3); }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .stat-block { text-align: center; }
+    .stat-label { color: var(--text-muted); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: var(--space-1); }
+    .stat-value { font-family: Georgia, "Times New Roman", serif; font-size: 1.55rem; font-weight: 700; }
+    .stat-delta { margin-top: var(--space-1); font-size: 0.78rem; }
+    .tag { display: inline-block; font-family: ui-monospace, "Cascadia Code", monospace; font-size: 0.65rem; padding: 2px 8px; border-radius: 4px; white-space: nowrap; vertical-align: middle; }
+    .tag-slate { background: var(--slate-tag-bg); color: var(--slate-tag-text); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+    th { text-align: left; padding: var(--space-2) var(--space-3); background: var(--table-header-bg); border-bottom: 1px solid var(--table-border); font-family: ui-monospace, "Cascadia Code", monospace; font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-muted); }
+    td { padding: var(--space-2) var(--space-3); border-bottom: 1px solid var(--table-border); vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    ol.num-list { list-style: none; counter-reset: nl; margin: 0; padding: 0; }
+    ol.num-list li { counter-increment: nl; position: relative; padding: var(--space-2) 0 var(--space-2) 32px; border-bottom: 1px solid var(--table-border); line-height: 1.5; }
+    ol.num-list li:last-child { border-bottom: none; }
+    ol.num-list li::before { content: counter(nl); position: absolute; left: 0; top: var(--space-2); width: 24px; text-align: right; font-family: ui-monospace, "Cascadia Code", monospace; font-size: 0.75rem; color: var(--text-muted); }
+    .todo-callout { border-color: rgba(217,119,87,0.3); background: linear-gradient(135deg, var(--bg-card), rgba(217,119,87,0.08)); }
+    .todo-callout strong { color: var(--accent-primary); }
+    .diary-generated-markdown h1, .diary-generated-markdown h2, .diary-generated-markdown h3, .diary-generated-markdown h4 { font-family: Georgia, "Times New Roman", serif; margin: var(--space-4) 0 var(--space-2); }
+    .diary-generated-markdown h1:first-child, .diary-generated-markdown h2:first-child, .diary-generated-markdown h3:first-child, .diary-generated-markdown h4:first-child { margin-top: 0; }
+    .diary-generated-markdown ul, .diary-generated-markdown ol { margin: 0; padding-left: 1.2rem; }
+    .diary-generated-markdown p:last-child { margin-bottom: 0; }
+    .footer { color: var(--text-muted); font-size: 0.78rem; text-align: center; }
+    @media (max-width: 900px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } .page-shell { padding: var(--space-5) var(--space-3); } .window { padding: var(--space-5); } }
+  </style>
+</head>
+<body>
+  <div class="theme-toggle" aria-label="Theme selector">
+    <button class="theme-toggle-btn" onclick="toggleThemeMenu()" aria-haspopup="true" aria-expanded="false">⋮</button>
+    <div class="theme-menu" id="themeMenu">
+      <button onclick="setTheme('paper')">📰 Paper</button>
+      <button onclick="setTheme('obsidian')">🖤 Obsidian</button>
+      <button onclick="setTheme('twilight')">🌆 Twilight</button>
+      <button onclick="setTheme('carbon')">🔲 Carbon</button>
+    </div>
+  </div>
+
+  <main class="page-shell">
+    <article class="window">
+      <header class="section">
+        <div class="eyebrow">Diary scaffold &mdash; HTML dashboard variant</div>
+        <h1>Monday, 2026-07-20</h1>
+        <div class="subtitle">Generated with the current diary HTML scaffold. Refresh automated sections, then fill in Today&rsquo;s Highlight and Personal Reflections.</div>
+      </header>
+
+      <section class="section">
+        <div class="section-title">🎯 Today's Highlight</div>
+        <div class="card todo-callout">
+          <!-- TODO: fill in -->
+          <strong>TODO:</strong> Pick the main news headline of the day from the News Headlines section below, add its URL, and optionally add 1-2 sentences of context.
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-title">💬 Slack Activity</div>
+<div class="card diary-generated-markdown">
+  <div class="eyebrow">Source: Slack briefing for 2026-07-20</div>
+<ul>
+<li><strong>#next-deployment</strong>: Platform 26.Q2.06 deployment completed. Release branches merged and closed across Identity Service, Learning Service, Quickbase Sync, RLMS Legacy, RLMS Website, and Usermanagement Service. CHM-6309 deployment also completed.</li>
+<li><strong>#dev-tribe</strong>: ByteKnights team preparing to migrate the rlms-legacy Bitbucket repo to GitHub. Clark Bonham requested reviews/approvals for the release/26.Q2.06 merge into master PR #3373.</li>
+<li><strong>#dev-tribe</strong>: SivaKrishna hit a git push error related to commit signing; Samuel Renkert and Giovanni Rufino pointed to the Git Commit Signing documentation on Confluence.</li>
+<li><strong>#dev-tribe</strong>: Anushweta Balsaraf reported repository rule violations when pushing after resolving conflicts; Wes Wood advised following the GitHub issue recovery steps.</li>
+<li><strong>#ai-chapter</strong>: Christian Mutaba shared that Kimi K3, an open-weight model, is ranked #1 in Arena's Frontend Code Arena ahead of Claude Fable 5 and GPT-5.6 Sol. Franz noted high demand caused subscriptions to be paused.</li>
+<li><strong>#ai-chapter</strong>: Ruchita Kothari asked if anyone is working on a code generator orchestrator agent similar to the one in the LCAS repo, for the shared CQRS back-end code generator.</li>
+<li><strong>#productivity-engineering-public</strong>: ByteKnights tagging pe-devex to coordinate rlms-legacy GitHub migration tickets (RPLAT-3223). Bryan noted SonarCloud setup assistance will be needed for the migrated repo.</li>
+<li><strong>#productivity-engineering-public</strong>: John Martin reviewed cm-core-gitops PR #4, preferring scaling config go in the prd-us overlay rather than base, and clarified Target support is shared across all CEs.</li>
+<li><strong>#productivity-engineering-public</strong>: Bryan Halterman reminded contributors that all PR comments—including GitHub Copilot review comments—must be addressed before merge.</li>
+<li><strong>#infosec</strong>: Hemant Patil requested an InfoSec review for a PR containing JavaScript files in a SCORM package. Moumit Dutta also asked about the proper Infosec contact for review submissions.</li>
+<li><strong>#prod-eng-devex-automation</strong>: Pending PR review flagged for the productivity-engineering team on rlms-website PR #3064 (POTG Automation).</li>
+</ul>
+</div>
+
+      </section>
+
+      <section class="section">
+        <div class="section-title">🌤 Weather</div>
+<div class="card diary-generated-markdown">
+  <div class="eyebrow">OpenWeather snapshot for 2026-07-20</div>
+<h3 id="mooresville-us">📍 Mooresville, US</h3>
+<table>
+<thead>
+<tr>
+<th>📅 Date</th>
+<th>📆 Day</th>
+<th>🕐 Time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2026-07-20</td>
+<td>Monday</td>
+<td>7:03 PM Eastern</td>
+</tr>
+</tbody>
+</table>
+<h3 id="current-weather">Current Weather</h3>
+<table>
+<thead>
+<tr>
+<th>🌡️ Temp</th>
+<th>🤔 Feels Like</th>
+<th>☁️ Condition</th>
+<th>💨 Wind</th>
+<th>💧 Humidity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>88°F</td>
+<td>100°F</td>
+<td>Overcast Clouds</td>
+<td>4 mph</td>
+<td>70%</td>
+</tr>
+</tbody>
+</table>
+<h3 id="day-forecast">3-Day Forecast</h3>
+<table>
+<thead>
+<tr>
+<th>Day</th>
+<th>Icon</th>
+<th>Condition</th>
+<th>Low</th>
+<th>High</th>
+<th>Wind</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tuesday</td>
+<td>☁️</td>
+<td>Overcast Clouds</td>
+<td>78°F</td>
+<td>90°F</td>
+<td>17 mph</td>
+</tr>
+<tr>
+<td>Wednesday</td>
+<td>🌧️</td>
+<td>Light Rain</td>
+<td>76°F</td>
+<td>94°F</td>
+<td>17 mph</td>
+</tr>
+<tr>
+<td>Thursday</td>
+<td>🌧️</td>
+<td>Light Rain</td>
+<td>69°F</td>
+<td>83°F</td>
+<td>10 mph</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+      </section>
+
+      <section class="section">
+        <div class="section-title">📰 News Headlines</div>
+<div class="card diary-generated-markdown">
+  <div class="eyebrow">News snapshot for 2026-07-20</div>
+<h3>&#127482;&#127480; US News</h3>
+<ol class="num-list">
+<li><a href="https://www.pbs.org/newshour/show/deadly-shootings-by-ice-officers-renew-scrutiny-of-recruitment-and-training">Deadly shootings by ICE officers renew scrutiny of recruitment and training</a> <span class="tag tag-slate">PBS Politics</span></li>
+<li><a href="https://www.pbs.org/newshour/politics/trump-imposes-50-tariffs-on-canadian-goods-citing-disputes-over-autos-alcohol-and-cheese">Trump imposes 50% tariffs on Canadian goods, citing disputes over autos, alcohol and cheese</a> <span class="tag tag-slate">PBS Politics</span></li>
+<li><a href="https://www.npr.org/2026/07/20/nx-s1-5897469/with-just-a-week-left-until-august-recess-congress-faces-long-to-do-list">With just a week left until August recess, Congress faces long to-do list</a> <span class="tag tag-slate">NPR Politics</span></li>
+<li><a href="https://www.npr.org/2026/07/20/nx-s1-5897456/maine-democrats-close-in-on-pick-to-replace-senate-candidate-graham-platner">Maine Democrats close in on pick to replace Senate candidate Graham Platner</a> <span class="tag tag-slate">NPR Politics</span></li>
+<li><a href="https://www.pbs.org/newshour/politics/im-in-darline-graham-says-she-will-run-for-a-full-term-in-lindsey-grahams-senate-seat">&#39;I&#39;m in.&#39; Darline Graham says she will run for a full term in Lindsey Graham&#39;s Senate seat</a> <span class="tag tag-slate">PBS Politics</span></li>
+<li><a href="https://www.pbs.org/newshour/politics/troy-jackson-emerges-as-likely-senate-pick-for-maine-democrats">Troy Jackson emerges as likely Senate pick for Maine Democrats</a> <span class="tag tag-slate">PBS Politics</span></li>
+</ol>
+<h3>&#127757; World News</h3>
+<ol class="num-list">
+<li><a href="https://www.theguardian.com/australia-news/live/2026/jul/21/australia-news-live-barnaby-joyce-pauline-hanson-one-nation-anthony-albanese-labor-antisemitism-royal-commission-ntwnfb">Australia news live: Barnaby Joyce dogged by Tommy Robinson questions – and by a dog – in spiky ABC interview</a> <span class="tag tag-slate">The Guardian</span></li>
+<li><a href="https://www.theguardian.com/world/2026/jul/20/us-state-department-list-leftists-cuba">‘Front groups and fellow travelers’: state department attacks US left over Cuba</a> <span class="tag tag-slate">The Guardian</span></li>
+<li><a href="https://www.aljazeera.com/video/newsfeed/2026/7/20/aje-onl-nf_chaos-in-india-as-cockroach-march-on-parliament-200726?traffic_source=rss">Chaos in India as ‘Cockroach activists’ march on parliament</a> <span class="tag tag-slate">Al Jazeera</span></li>
+<li><a href="https://www.aljazeera.com/video/newsfeed/2026/7/20/aje-onl-nf_war-on-iran-back-to-square-one-200726?traffic_source=rss">War on Iran: War resumes 30 days after MoU</a> <span class="tag tag-slate">Al Jazeera</span></li>
+<li><a href="https://www.bbc.co.uk/news/articles/cg4dzq3x3e1o?at_medium=RSS&amp;at_campaign=rss">Trump imposes 50% tariff on Canadian imports</a> <span class="tag tag-slate">BBC</span></li>
+<li><a href="https://www.france24.com/en/economy/20260720-trump-signs-order-imposing-new-50-tariffs-on-certain-canadian-goods">Trump signs order imposing new 50% tariffs on certain Canadian goods</a> <span class="tag tag-slate">France 24</span></li>
+<li><a href="https://www.france24.com/en/middle-east/20260720-lebanese-army-south-lebanon-pilot-zones-israel-withdrawal">Lebanese army deploys to three southern pilot zones under US-backed security framework</a> <span class="tag tag-slate">France 24</span></li>
+</ol>
+<h3>&#129302; AI News</h3>
+<ol class="num-list">
+<li><a href="https://simonwillison.net/2026/Jul/20/afraid-of-chinese-models/#atom-everything">Who’s Afraid of Chinese Models?</a> <span class="tag tag-slate">Simon Willison&#39;s Weblog</span></li>
+<li><a href="https://simonwillison.net/2026/Jul/19/ai-mania/#atom-everything">AI Mania Is Eviscerating Global Decision-Making</a> <span class="tag tag-slate">Simon Willison&#39;s Weblog</span></li>
+<li><a href="https://techcrunch.com/2026/07/20/trumps-latest-ai-czar-has-already-resigned/">Trump’s latest AI czar has already resigned</a> <span class="tag tag-slate">TechCrunch</span></li>
+<li><a href="https://www.theverge.com/tech/968375/sony-udio-lawsuit-songs-ai-copyright">Here are the 30,000 songs Sony is suing Udio&amp;#8217;s AI music generator over</a> <span class="tag tag-slate">The Verge</span></li>
+<li><a href="https://techcrunch.com/2026/07/20/google-is-working-on-a-new-ai-chip-designed-to-make-gemini-more-efficient/">Google is working on a new AI chip designed to make Gemini more efficient</a> <span class="tag tag-slate">TechCrunch</span></li>
+<li><a href="https://www.theverge.com/business/968257/spacex-in-your-index-fund-explained">SpaceX in your index fund, explained</a> <span class="tag tag-slate">The Verge</span></li>
+<li><a href="https://www.technologyreview.com/2026/07/20/1140675/chinas-ai-models-have-trumps-ai-world-at-war-with-itself/">China’s AI models have Trump’s AI world at war with itself</a> <span class="tag tag-slate">MIT Technology Review</span></li>
+</ol>
+<h3>&#127465;&#127472; Danish News</h3>
+<ol class="num-list">
+<li><a href="https://news.google.com/rss/articles/CBMiqAFBVV95cUxNbUxnV0F3bVlVV3o3bGpyeVh0SUNXWDFiRVBhbzdoOXVkTDdSckNDbWhhdmFyTWhSc2NBYzluUlA2MzB2MVlVODRBUk5CU3BPQ1MyazV6VndGWUo4X2lUWV9TbGl1RzZxSmJJWmpHRFdra2pnOFA1YVE4MFZXQlpIckhubWpUaUluZ3RoMHMwWTF3M202QzNaWmZvNzJ2eFhUbkxqSFBPWks?oc=5">South Delta soccer standout signs with European club - Delta Optimist</a> <span class="tag tag-slate">Google News Denmark</span></li>
+<li><a href="https://news.google.com/rss/articles/CBMijgFBVV95cUxQbnpYWThmNkJHWng4SXlwUlRZWVplc3kxcEFNZXA5YUlBLXpkZFdmdXN0NktTbXRBTFFrUm8waVo0Sng5bFBZSEtaejNVSFdRVWZfN1ZpRFo5bmREZldjMlNJNXp1d3owNHZKSTZkQWZ3UDlGS3hnSmdEQUVfSDVWbE16VV9kX3d0WHhkWHRn?oc=5">260616-Z-GV629-1027 - nationalguard.mil</a> <span class="tag tag-slate">Google News Denmark</span></li>
+<li><a href="https://www.dr.dk/nyheder/seneste/beroemt-skakspiller-vil-ikke-vaere-ungarns-praesident">Ber&#248;mt skakspiller vil ikke v&#230;re Ungarns pr&#230;sident</a> <span class="tag tag-slate">DR News</span></li>
+<li><a href="https://www.dr.dk/nyheder/seneste/politi-efterforsker-knivstikkeri-i-aarhus">Politi efterforsker knivstikkeri i Aarhus</a> <span class="tag tag-slate">DR News</span></li>
+</ol>
+</div>
+
+      </section>
+
+      <section class="section">
+        <div class="section-title">📊 Daily Numbers</div>
+<div class="card diary-generated-markdown">
+  <div class="eyebrow">Daily numbers snapshot for 2026-07-20</div>
+<ul>
+<li><strong>Dow Jones</strong>: 51,839.26 (-713.71, -1.36%)</li>
+<li><strong>S&amp;P 500</strong>: 7,443.28 (-90.49, -1.20%)</li>
+</ul>
+<p><em>Markets sold off sharply after weak U.S. labor data intensified economic worries. The Dow and S&amp;P moved broadly in tandem, indicating a market-wide tone rather than an isolated sector move.</em></p>
+<ul>
+<li><strong>Relias Repo Count</strong>: GitHub: 301 (—), Bitbucket: unavailable</li>
+<li><strong>GitHub Copilot Org-Wide AI Credits</strong>: 1,905,122.339 credits, $19,051.22 gross, $0.00 net (308 users; cache generated 07/20/2026 05:20:16; days 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20)
+<ul>
+<li><strong>Top Users</strong>: gdecherney-relias: 98,972.064 credits ($989.72 gross); JasonMTwichell-Relias: 96,477.289 credits ($964.77 gross); Jeff-Buda-at-Relias: 94,088.574 credits ($940.89 gross); david-driscoll: 58,530.250 credits ($585.30 gross); vgautamRelias: 49,753.532 credits ($497.54 gross)</li>
+<li><strong>Delta vs Yesterday</strong>: unavailable (previous diary snapshot missing Copilot token-billing metrics)</li>
+<li><strong>Personal (fhemmerrelias)</strong>: 38,616.884 AI credits, $386.17 gross, $0.00 net (10 days with usage)</li>
+<li><strong>Personal Delta vs Yesterday</strong>: unavailable (previous diary snapshot missing Copilot token-billing metrics)</li>
+</ul>
+</li>
+<li><strong>Cloudflare Usage</strong>:
+<ul>
+<li><strong>nowleadershipgroup.com</strong>: 61 page views, 112 unique visitors, 0 emails forwarded
+<ul>
+<li><strong>Delta vs Yesterday</strong>: unavailable (previous diary entry missing Cloudflare metrics)</li>
+</ul>
+</li>
+<li><strong>setitfreeloop.org</strong>: 0 page views, 0 unique visitors
+<ul>
+<li><strong>Delta vs Yesterday</strong>: unavailable (previous diary entry missing Cloudflare metrics)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+
+      </section>
+
+      <section class="section">
+        <div class="section-title">🤖 LLM Models</div>
+<div class="grid grid-2">
+  <div class="card">
+    <div class="eyebrow">DeepSWE checked 2026-07-20 19:17 Eastern - primary coding-agent benchmark</div>
+    <h3>DeepSWE coding-agent benchmark</h3>
+    <table>
+      <tbody>
+        <tr><td>Live source</td><td><a href="https://deepswe.datacurve.ai/">DeepSWE</a> fetched successfully during July 20 validation.</td></tr>
+        <tr><td>Leaderboard updated</td><td>July 17, 2026</td></tr>
+        <tr><td>Tasks</td><td>113</td></tr>
+        <tr><td>Models tracked</td><td>16</td></tr>
+        <tr><td>Top result</td><td>gpt-5.6-sol max on mini-swe-agent</td></tr>
+        <tr><td>Pass@1</td><td>73% ± 3%</td></tr>
+        <tr><td>Average cost</td><td>$8.39 per task</td></tr>
+        <tr><td>Average time</td><td>Not exposed in the July 20 page snapshot</td></tr>
+        <tr><td>Average output tokens</td><td>60k</td></tr>
+        <tr><td>Agent steps</td><td>61</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card">
+    <div class="eyebrow">Secondary model context</div>
+    <p>DeepSWE moved from the stale July 7 carry-forward to the July 17 leaderboard snapshot. The current page reports gpt-5.6-sol as the top configuration at 73% Pass@1, with Claude Fable 5 and gpt-5.6-terra both around 70%.</p>
+    <p>The scaffold also found 5 new OpenRouter models in the last 7 days. LMSYS parsing failed and OpenRouter app-rank hydration data was not found, so those sources are noted as unavailable rather than treated as fresh ranking changes.</p>
+  </div>
+</div>
+
+<div class="card diary-generated-markdown">
+  <div class="eyebrow">LLM snapshot for 2026-07-20 - model releases</div>
+  <h3 id="new-model-releases-last-7-days">New Model Releases (Last 7 Days)</h3>
+  <table>
+    <thead>
+      <tr><th>Model</th><th>Provider</th><th>Released</th><th>Context</th><th>Pricing (in/out per 1M)</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><a href="https://openrouter.ai/meituan/longcat-2.0">LongCat 2.0</a></td><td>Meituan</td><td>Jul 20</td><td>1024K</td><td>$0.30 / $1.20</td></tr>
+      <tr><td><a href="https://openrouter.ai/thinkingmachines/inkling">Thinking Machines: Inkling</a></td><td>Thinkingmachines</td><td>Jul 17</td><td>1024K</td><td>$1.00 / $4.05</td></tr>
+      <tr><td><a href="https://openrouter.ai/openrouter/auto-beta">Auto Router (Beta)</a></td><td>Openrouter</td><td>Jul 17</td><td>1953K</td><td>Dynamic (router)</td></tr>
+      <tr><td><a href="https://openrouter.ai/moonshotai/kimi-k3">Kimi K3</a></td><td>Moonshotai</td><td>Jul 16</td><td>1024K</td><td>$3.00 / $15.00</td></tr>
+      <tr><td><a href="https://openrouter.ai/meta/muse-spark-1.1">Muse Spark 1.1</a></td><td>Meta</td><td>Jul 16</td><td>1024K</td><td>$1.25 / $4.25</td></tr>
+    </tbody>
+  </table>
+  <p><em>Total models on OpenRouter: 339</em></p>
+</div>
+
+<div class="card diary-generated-markdown">
+  <div class="eyebrow">LLM snapshot for 2026-07-20 - app rankings</div>
+  <h3 id="top-openrouter-apps-by-token-usage">Top OpenRouter Apps (by Token Usage)</h3>
+  <p><em>Failed to fetch app rankings because the expected rankMap hydration data was not present.</em></p>
+</div>
+
+
+      </section>
+
+      <section class="section">
+        <div class="section-title">🔥 Trending GitHub Repos</div>
+<div class="card diary-generated-markdown">
+  <div class="eyebrow">GitHub Trending for 2026-07-20</div>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Repository</th>
+<th>Description</th>
+<th>Stars</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><a href="https://github.com/tirth8205/code-review-graph">tirth8205/code-review-graph</a></td>
+<td>Local-first code intelligence graph for MCP and CLI. Builds a persistent map of your codebase so ...</td>
+<td>⭐ 23,044 (+1,876 today)</td>
+</tr>
+<tr>
+<td>2</td>
+<td><a href="https://github.com/1jehuang/jcode">1jehuang/jcode</a></td>
+<td>The most intelligent agent harness for code</td>
+<td>⭐ 9,585 (+612 today)</td>
+</tr>
+<tr>
+<td>3</td>
+<td><a href="https://github.com/diegosouzapw/OmniRoute">diegosouzapw/OmniRoute</a></td>
+<td>Never stop coding. Free MIT AI gateway: one endpoint, 268+ providers (50+ free), 500+ models — Cl...</td>
+<td>⭐ 21,701 (+1,300 today)</td>
+</tr>
+<tr>
+<td>4</td>
+<td><a href="https://github.com/rohitg00/ai-engineering-from-scratch">rohitg00/ai-engineering-from-scratch</a></td>
+<td>Learn it. Build it. Ship it for others.</td>
+<td>⭐ 40,484 (+846 today)</td>
+</tr>
+<tr>
+<td>5</td>
+<td><a href="https://github.com/msitarzewski/agency-agents">msitarzewski/agency-agents</a></td>
+<td>A complete AI agency at your fingertips - From frontend wizards to Reddit community ninjas, from ...</td>
+<td>⭐ 134,673 (+744 today)</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+      </section>
+
+      <section class="section">
+        <div class="section-title">🛠 Software Watchlist</div>
+<div class="card diary-generated-markdown">
+  <div class="eyebrow">Software watchlist snapshot for 2026-07-20</div>
+<table>
+<thead>
+<tr>
+<th>Software</th>
+<th>Version</th>
+<th>Released</th>
+<th>Highlights</th>
+<th>Links</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/anthropics/claude-code">Claude Code</a></td>
+<td>v2.1.216</td>
+<td>Jul 20</td>
+<td>Added <code>sandbox.filesystem.disabled</code> setting to skip filesystem isolation while keeping network egress control; Fixed a slowdown in long sessions where message normalization cost grew quadratically with the number of turns, causing multi-second sta...</td>
+<td><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.216">Release</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/google-gemini/gemini-cli">Gemini CLI</a></td>
+<td>v0.52.0-preview.0</td>
+<td>Jul 16</td>
+<td>Refactor: exclude transient CI configuration files from workspace context by @DavidAPierce in <a href="https://github.com/google-gemini/gemini-cli/pull/28216;">https://github.com/google-gemini/gemini-cli/pull/28216;</a> feat(caretaker-triage): add triage worker core foundational modules by @chadd28 in https://github...</td>
+<td><a href="https://github.com/google-gemini/gemini-cli/releases/tag/v0.52.0-preview.0">Release</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/cli/cli">GitHub CLI</a></td>
+<td>v2.96.0</td>
+<td>Jul 2</td>
+<td>Allow <code>gh release download</code> without authentication on public repositories by @BagToad in #13723; Detect additional third-party coding agents by @BagToad in #13722; Support <code>antigravity-cli</code> and <code>antigravity2.0</code> in <code>gh skill</code> by @BagToad in #13784;...</td>
+<td><a href="https://github.com/cli/cli/releases/tag/v2.96.0">Release</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/github/copilot-cli">GitHub Copilot CLI</a></td>
+<td>v1.0.72</td>
+<td>Jul 20</td>
+<td>An <code>agentStop</code> hook that always blocks no longer loops indefinitely: the CLI now ends the turn after 8 consecutive blocks, and <code>agentStop</code> hooks receive a <code>stop_hook_active</code> flag so they can detect a forced continuation and self-limit; Add opt-in ...</td>
+<td><a href="https://github.com/github/copilot-cli/releases/tag/v1.0.72">Release</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/openai/codex">Codex CLI</a></td>
+<td>rust-v0.144.6</td>
+<td>Jul 18</td>
+<td>Refreshed bundled instructions for GPT-5.6 Sol, Terra, and Luna, and corrected their context windows to 272,000 tokens. (#33972, #34009); #33972 Backport refreshed bundled model metadata to 0.144 @sayan-oai; #34009 Narrow 0.144 hotfix to GPT-5.6 p...</td>
+<td><a href="https://github.com/openai/codex/releases/tag/rust-v0.144.6">Release</a></td>
+</tr>
+<tr>
+<td><a href="https://github.blog/changelog/">GitHub Web</a></td>
+<td>Jul 20</td>
+<td>Jul 20</td>
+<td>AI credit pools for cost centers in the billing UI; Copilot users can now see AI credits used per billing cycle; GitHub Code Quality is now generally available</td>
+<td><a href="https://github.blog/changelog/">Changelog</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/block/goose">Goose CLI</a></td>
+<td>v1.43.0</td>
+<td>Jul 14</td>
+<td>Reconnect desktop ACP sessions after sleep and connection loss #10411; Per-message usage stats UI (tokens, cost, TTFT, tok/s) #10210; Per-message usage/cost tracking with derived session totals #10172; Group chat sessions by project in nav panel #...</td>
+<td><a href="https://github.com/aaif-goose/goose/releases/tag/v1.43.0">Release</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/nodejs/node">Node.js</a></td>
+<td>v26.5.0</td>
+<td>Jul 8</td>
+<td>[<code>55f48446c7</code>] - <strong>(SEMVER-MINOR)</strong> <strong>buffer</strong>: implement blob.textStream() (Matthew Aitken) #64036; [<code>b373202efc</code>] - <strong>(SEMVER-MINOR)</strong> <strong>esm</strong>: add <code>--experimental-import-text</code> flag (Efe) #62300; [<code>39e0c14455</code>] - <strong>(SEMVER-MINOR)</strong> **perf_ho...</td>
+<td><a href="https://github.com/nodejs/node/releases/tag/v26.5.0">Release</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+      </section>
+
+      <section class="section">
+        <div class="section-title">📋 Watchlist Updates</div>
+<div class="card diary-generated-markdown">
+  <div class="eyebrow">Active watchlist checks for 2026-07-20</div>
+  <ul>
+    <li><strong>Claude Code</strong>: v2.1.216 shipped today with a new <code>sandbox.filesystem.disabled</code> setting and a fix for long-session slowdown from quadratic message normalization cost. <a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.216">Release</a></li>
+    <li><strong>GitHub Copilot CLI</strong>: v1.0.72 shipped today with an <code>agentStop</code> loop limit and hook-state signaling. <a href="https://github.com/github/copilot-cli/releases/tag/v1.0.72">Release</a></li>
+    <li><strong>GitHub Web</strong>: today's changelog included AI credit pools for cost centers, user-visible Copilot AI credits per billing cycle, and GitHub Code Quality general availability. <a href="https://github.blog/changelog/">Changelog</a></li>
+  </ul>
+  <p>The remaining active watchlist items were checked from the available scaffold/watchlist sources with no verified same-day movement added to this entry.</p>
+</div>
+
+      </section>
+
+      <section class="section">
+        <div class="section-title">💻 Today's Productivity</div>
+<div class="card diary-generated-markdown">
+  <div class="eyebrow">Productivity snapshot for 2026-07-20</div>
+  <table>
+    <thead><tr><th>Metric</th><th>Count</th></tr></thead>
+    <tbody>
+      <tr><td>Lines of Code</td><td>+0</td></tr>
+      <tr><td>Commits</td><td>0</td></tr>
+      <tr><td>Pull Requests Merged</td><td>0</td></tr>
+      <tr><td>Code Reviews</td><td>3</td></tr>
+      <tr><td>Issues Closed</td><td>0</td></tr>
+    </tbody>
+  </table>
+  <p>Weekday validation passed because the collector completed and found non-zero activity via 3 code reviews.</p>
+</div>
+
+      </section>
+
+      <section class="section">
+        <div class="section-title">💼 Meetings</div>
+<div class="card diary-generated-markdown">
+  <div class="eyebrow">WorkIQ meeting lookup for 2026-07-20</div>
+  <table>
+    <thead><tr><th>Time</th><th>Meeting</th><th>Attendees / Notes</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>11:00 AM - 11:30 AM</td>
+        <td>Prod Eng Standup</td>
+        <td>Organizer: Malia Paul. Attendees included Bryan Halterman, John Martin, Tyler Deal, Nick Peterson, Karthika Menon, Daniel Wilson, Sid Marti, Paul Layne, Jason Smith, and Franz Hemmer. WorkIQ found the meeting invite but no transcript, recap, notes, or documented action items for today's occurrence.</td>
+      </tr>
+      <tr>
+        <td>4:00 PM - 4:45 PM</td>
+        <td>AI Task Force</td>
+        <td>Transcript and generated recap found. Topics included AI playbook feedback, GitHub Copilot app adoption, expanding AI skills in the playbook, customer analytics and observability, repo fitness contracts / repo-nibbler, and temporary task-force representation while Zack Nall is out.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="card diary-generated-markdown">
+  <div class="eyebrow">AI Task Force action items</div>
+  <ul>
+    <li>Malia Paul: review AI-generated tickets for inconsistencies and submit/follow up on the IT request for GitHub Copilot app rollout to Mac users.</li>
+    <li>Sarah Spencer: identify observability practices for the AI playbook and coordinate with Anuj's team on customer analytics dashboards.</li>
+    <li>Malia Paul: reach out to Geo about participating in AI Task Force while Zack is out and add recommended skills into the playbook.</li>
+    <li>George DeCherney: confirm IT approval before adding the Chief of Staff tool to the playbook and rollout guidance.</li>
+  </ul>
+  <p>Notable mention: Automate Atlas Updates has been adopted by all of Shobana's teams for summarizing work and preparing Atlas reporting updates.</p>
+</div>
+
+      </section>
+
+      <section class="section">
+        <div class="section-title">💭 Personal Reflections</div>
+<div class="card todo-callout">
+  <!-- TODO: fill in -->
+  <strong>TODO:</strong> Add your thoughts, feelings, observations, or anything else worth remembering about today.
+</div>
+
+      </section>
+
+      <section class="section">
+        <div class="section-title">📸 Screenshots</div>
+<div class="card diary-generated-markdown">
+  <div class="eyebrow">Screenshot library check for 2026-07-20</div>
+  <p>No screenshots were found because <code>C:\Users\User\.agents\skills\screenshot\images\library\2026-07-20</code> does not exist.</p>
+</div>
+
+      </section>
+
+        <div class="footer">Entry created with diary skill V1.6</div>
+    </article>
+  </main>
+
+  <script>
+    function setTheme(t){document.documentElement.setAttribute('data-theme',t);localStorage.setItem('html-theme',t);closeThemeMenu()}
+    function toggleThemeMenu(){const m=document.getElementById('themeMenu');const b=document.querySelector('.theme-toggle-btn');const open=m.classList.toggle('open');b.setAttribute('aria-expanded',open)}
+    function closeThemeMenu(){document.getElementById('themeMenu').classList.remove('open');document.querySelector('.theme-toggle-btn').setAttribute('aria-expanded','false')}
+    document.addEventListener('click',e=>{if(!e.target.closest('.theme-toggle'))closeThemeMenu()});
+    (function(){const t=localStorage.getItem('html-theme')||'carbon';document.documentElement.setAttribute('data-theme',t)})()
+  </script>
+</body>
+</html>
