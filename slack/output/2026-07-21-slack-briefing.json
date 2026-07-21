@@ -1,0 +1,406 @@
+{
+  "GeneratedAt": "2026-07-21 19:08:29",
+  "DateRange": {
+    "To": "2026-07-21",
+    "From": "2026-07-20"
+  },
+  "Username": "fhemmer",
+  "ChannelActivity": {
+    "next-deployment": {
+      "RecentMessages": [
+        {
+          "Text": "I'll remove you from a table I duplicated you on.",
+          "From": "Wes Wood",
+          "Timestamp": "2026-07-21 15:18"
+        },
+        {
+          "Text": "ohh, ok. thanks.",
+          "From": "Wes Wood",
+          "Timestamp": "2026-07-21 15:17"
+        },
+        {
+          "Text": "",
+          "From": "Jeff Hannan",
+          "Timestamp": "2026-07-21 15:17"
+        },
+        {
+          "Text": "we're already on it Wes",
+          "From": "Jeff Hannan",
+          "Timestamp": "2026-07-21 15:17"
+        },
+        {
+          "Text": "<@UE2PWA868|jhannan> could you update the page?",
+          "From": "Wes Wood",
+          "Timestamp": "2026-07-21 15:17"
+        },
+        {
+          "Text": "it's Beth and myself on this next one",
+          "From": "Jeff Hannan",
+          "Timestamp": "2026-07-21 15:17"
+        },
+        {
+          "Text": "we handle this on a rotation",
+          "From": "Jeff Hannan",
+          "Timestamp": "2026-07-21 15:16"
+        },
+        {
+          "Text": "<@SB3GH6USY|dba> who can be the POC for this weeks prod deployment: <https://relias.atlassian.net/wiki/spaces/RLPD/pages/6524895591/26.Q2.06+Relias+Platform+Deployment|relias.atlassian.net/wiki/…/…>?",
+          "From": "Wes Wood",
+          "Timestamp": "2026-07-21 15:16"
+        },
+        {
+          "Text": "That works for me.",
+          "From": "Michael McCormick",
+          "Timestamp": "2026-07-21 11:11"
+        },
+        {
+          "Text": "Does 11 AM works? I will update acc",
+          "From": "Ruchita Kothari",
+          "Timestamp": "2026-07-21 11:04"
+        }
+      ],
+      "TotalMessages": 13
+    },
+    "productivity-engineering-public": {
+      "RecentMessages": [
+        {
+          "Text": "merged",
+          "From": "Tyler Deal",
+          "Timestamp": "2026-07-21 18:26"
+        },
+        {
+          "Text": "<@S08T518LL6R|pe-infra> team, in one of the recent failed CSS deployments, our team discovered the last deployed mfe build was no longer available when they decided to roll back. This caused a signifi...",
+          "From": "Yuhua Zhong",
+          "Timestamp": "2026-07-21 18:22"
+        },
+        {
+          "Text": "For some visibility, the newly enforced rules for .cy.ts files: \"@nx/workspace-no-comma-delimited-selectors\": \"error\" - prevents OR querying of elements, precise selectors should always be used \"@nx/w...",
+          "From": "Tyler Deal",
+          "Timestamp": "2026-07-21 18:13"
+        },
+        {
+          "Text": "All checks passed. Just need a second approver.",
+          "From": "Tyler Deal",
+          "Timestamp": "2026-07-21 18:11"
+        },
+        {
+          "Text": "thank you so much <@U03R99WTXNW|Tyler Deal>",
+          "From": "Lakshmi Kondragunta",
+          "Timestamp": "2026-07-21 18:02"
+        },
+        {
+          "Text": "They have been merged.",
+          "From": "Tyler Deal",
+          "Timestamp": "2026-07-21 17:58"
+        },
+        {
+          "Text": "<@U03R99WTXNW|Tyler Deal> those 3 PR's",
+          "From": "Lakshmi Kondragunta",
+          "Timestamp": "2026-07-21 17:49"
+        },
+        {
+          "Text": "Here: <https://relias-engineering.slack.com/archives/C06F7RT6U6L/p1784666294605019?thread_ts=1784643899.385439&channel=C06F7RT6U6L&message_ts=1784666294.605019>",
+          "From": "Jess Feigal",
+          "Timestamp": "2026-07-21 17:39"
+        },
+        {
+          "Text": "<@U03R99WTXNW|Tyler Deal> I rebuilt the PR in the original post to ensure a last second change made it in. I posted an accurate list with 3 PRs that need this by pass",
+          "From": "Jess Feigal",
+          "Timestamp": "2026-07-21 17:39"
+        },
+        {
+          "Text": "The one I was asked to bypass in the OP has been closed...?",
+          "From": "Tyler Deal",
+          "Timestamp": "2026-07-21 17:27"
+        }
+      ],
+      "TotalMessages": 71
+    },
+    "platform": {
+      "RecentMessages": [
+        {
+          "Text": "Thank you Chris! We have a client upset that their users aren't being updated to the default. But I did not have the historical knowledge to say if this was behavior we had before.",
+          "From": "Katherine Foster",
+          "Timestamp": "2026-07-21 14:53"
+        },
+        {
+          "Text": "I will review and provide an opinion. I will say that the likely direction will be to correct documentation to match existing behavior and then review that behavior seperately.",
+          "From": "Christopher LaGant",
+          "Timestamp": "2026-07-21 14:52"
+        },
+        {
+          "Text": "Good afternoon <@S030YMH3Z4J|relias-platform-pms>! Looking for a ruling here concerning two values in the HRIS User Importer: Self-Completion Mode and External Request Mode. It looks like according to...",
+          "From": "Katherine Foster",
+          "Timestamp": "2026-07-21 14:50"
+        }
+      ],
+      "TotalMessages": 3
+    },
+    "ai-chapter": {
+      "RecentMessages": [
+        {
+          "Text": "Gemini released another flash model before 3.5 Pro. And announced they're working on Gemini 4. <https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-6-flash-3-5-flash-lite-...",
+          "From": "Giovanni Rufino",
+          "Timestamp": "2026-07-21 13:46"
+        }
+      ],
+      "TotalMessages": 1
+    },
+    "dev-tribe": {
+      "RecentMessages": [
+        {
+          "Text": "Merged. Thanks.",
+          "From": "Tyler Deal",
+          "Timestamp": "2026-07-21 18:26"
+        },
+        {
+          "Text": "In search of a second approver to fix PR build <https://github.com/relias-engineering/rlms-website/pull/3417|github.com/relias-engineering/rlms-website/pull/3417>",
+          "From": "Tyler Deal",
+          "Timestamp": "2026-07-21 18:13"
+        },
+        {
+          "Text": "There aren't issues with Sonar itself - just if you have java scanner in your yaml file for the Sonar stage. If you do, you need to update the Java version referenced. It's pretty clear in the error m...",
+          "From": "Malia Paul",
+          "Timestamp": "2026-07-21 18:06"
+        },
+        {
+          "Text": "I think SonarCloud is having issues. Not sure if that particular error is related to an ongoing thread in <#C06F7RT6U6L> or not, though.",
+          "From": "Tyler Deal",
+          "Timestamp": "2026-07-21 17:52"
+        },
+        {
+          "Text": "well, I saw a failure on Run Tests (Jest) Group4, but digging into it it looks like failure was on Publish Coverage",
+          "From": "Jason Goodyke",
+          "Timestamp": "2026-07-21 17:50"
+        },
+        {
+          "Text": "I am only fixing the linting issues surrounding two cy.ts files so if you're seeing something else, it is not on my radar.",
+          "From": "Tyler Deal",
+          "Timestamp": "2026-07-21 17:48"
+        },
+        {
+          "Text": "Yeah, PR builds are running against my branch now",
+          "From": "Tyler Deal",
+          "Timestamp": "2026-07-21 17:47"
+        },
+        {
+          "Text": "<@U03R99WTXNW|Tyler Deal> just to confirm, you are actively fixing the build? I've merged code, but that was prior to your message (and experienced a failed build after merge), so just making sure the...",
+          "From": "Jason Goodyke",
+          "Timestamp": "2026-07-21 17:47"
+        },
+        {
+          "Text": "<!here> If you have an open RLMS-Website PR with component tests on it, you must pull latest before merging to make sure you are compliant with newly merged linting rules. After syncing with develop, ...",
+          "From": "Tyler Deal",
+          "Timestamp": "2026-07-21 16:55"
+        },
+        {
+          "Text": "",
+          "From": "Darren Jack",
+          "Timestamp": "2026-07-21 14:54"
+        }
+      ],
+      "TotalMessages": 47
+    },
+    "product-engineering": {
+      "RecentMessages": [
+        {
+          "Text": "Yeah it'll only be an issue for newer orgs and if the their import generator intersects/happens before the data exports. Everyone's timing is different but usually late at night. So I think we got a l...",
+          "From": "Phillip Chae",
+          "Timestamp": "2026-07-21 10:36"
+        },
+        {
+          "Text": "<@UD5S8PJ3G|Ashley> - I believe we've talked about this tangentially with the integration service. I don't have requirements or anything, but good to keep in mind.",
+          "From": "Christopher LaGant",
+          "Timestamp": "2026-07-21 10:05"
+        },
+        {
+          "Text": "<!here> Good morning. Question, do you know what the plan is for data exports (to SFTP) in target? Right now, the process goes in asc order by Orgid one at a time, we're at the point where the newer o...",
+          "From": "Phillip Chae",
+          "Timestamp": "2026-07-21 09:27"
+        }
+      ],
+      "TotalMessages": 3
+    },
+    "sonarcloud-public": {
+      "RecentMessages": [
+        {
+          "Text": "For those who do see the Java versioning issue, you'll need to update your pipeline yaml to fix it.",
+          "From": "Malia Paul",
+          "Timestamp": "2026-07-21 15:50"
+        },
+        {
+          "Text": "Looks like this is fixed now.",
+          "From": "Brian O'Connor",
+          "Timestamp": "2026-07-21 12:55"
+        },
+        {
+          "Text": "```Caused by: com.sonarsource.scanner.engine.webapi.client.HttpException: Error 500 on <https://sonarcloud.io/batch/project.protobuf?key=relias-engineering_authorization&branch=main> : {\"errors\":[{\"ms...",
+          "From": "Brian O'Connor",
+          "Timestamp": "2026-07-21 12:41"
+        },
+        {
+          "Text": "Our team is dealing with this issue as well and we're already on SonarCloudAnalyze4. Seems like other pipelines are failing as well. I'm assuming SonarCloud connections are just down.",
+          "From": "Brian O'Connor",
+          "Timestamp": "2026-07-21 12:39"
+        },
+        {
+          "Text": "Lmk if you need an extra set of eyes on it",
+          "From": "Gray Anthony",
+          "Timestamp": "2026-07-21 12:27"
+        },
+        {
+          "Text": "okay... wanted to check before I made that change. I'll see if potentially something else.",
+          "From": "Terrence Meikle",
+          "Timestamp": "2026-07-21 12:22"
+        },
+        {
+          "Text": "I'm surprised that v3 is failing, so maybe something else is going on",
+          "From": "Gray Anthony",
+          "Timestamp": "2026-07-21 12:21"
+        },
+        {
+          "Text": "",
+          "From": "Terrence Meikle",
+          "Timestamp": "2026-07-21 12:18"
+        },
+        {
+          "Text": "<@U029XSX69PX|Gray Anthony> I'm also having pipeline failures (PR) around Sonar Cloud Analyze step. Want to confirm that we all need to update version to v4?",
+          "From": "Terrence Meikle",
+          "Timestamp": "2026-07-21 12:17"
+        },
+        {
+          "Text": "relevant files are here: <https://github.com/search?q=repo%3Arelias-engineering%2Flearning-service%20sonar&type=code|github.com/search?q=repo%3Arelias-engine…&amp;type=code>",
+          "From": "Gray Anthony",
+          "Timestamp": "2026-07-21 10:26"
+        }
+      ],
+      "TotalMessages": 16
+    }
+  },
+  "Summary": {
+    "ActionItems": 1,
+    "Announcements": 6,
+    "DirectMessages": 8,
+    "ChannelMessages": 154.0,
+    "Channels": 7,
+    "Mentions": 3
+  },
+  "DirectMessages": [
+    {
+      "Text": "Let's see pictures!",
+      "From": "Malia Paul",
+      "Timestamp": "2026-07-21 09:44"
+    },
+    {
+      "Text": "Welcome back! How was your trip???",
+      "From": "Malia Paul",
+      "Timestamp": "2026-07-21 09:44"
+    },
+    {
+      "Text": "Nick and Bryan are both out so I guess refinement is not really necessary",
+      "From": "Malia Paul",
+      "Timestamp": "2026-07-21 09:43"
+    },
+    {
+      "Text": "I ran copilot and it complained about the major version pinning citing that it would fail, but that was a false positive. That's the reason why I didn...",
+      "From": "Nick Peterson",
+      "Timestamp": "2026-07-21 16:29"
+    },
+    {
+      "Text": "Can you review/approve this for learning service? <https://github.com/relias-engineering/learning-service/pull/3|github.com/relias-engineering/learnin...",
+      "From": "Nick Peterson",
+      "Timestamp": "2026-07-21 16:26"
+    },
+    {
+      "Text": "I'll ask Malia, but I'm leaning towards bypass",
+      "From": "Nick Peterson",
+      "Timestamp": "2026-07-21 15:23"
+    },
+    {
+      "Text": "I could use some help deciding what to do about this: <https://github.com/relias-engineering/learning-service/pull/3/checks?check_run_id=88727965258|g...",
+      "From": "Nick Peterson",
+      "Timestamp": "2026-07-21 15:14"
+    },
+    {
+      "Text": "it wasn't flagged by the quality gate bc the changes didn't introduce any major version pinning",
+      "From": "Nick Peterson",
+      "Timestamp": "2026-07-21 15:10"
+    }
+  ],
+  "Announcements": [
+    {
+      "Text": "Here: <https://relias-engineering.slack.com/archives/C06F7RT6U6L/p1784666294605019?thread_ts=1784643899.385439&channel=C06F7RT6U6L&message_ts=1784666294.605019>",
+      "Permalink": "https://relias-engineering.slack.com/archives/C06F7RT6U6L/p1784669966212079?thread_ts=1784643899.385439",
+      "Channel": "productivity-engineering-public",
+      "From": "Jess Feigal",
+      "Timestamp": "2026-07-21 17:39"
+    },
+    {
+      "Text": "yep! it was in our private channel but if others are curious i attached a screenshot and this was <https://github.com/relias-engineering/rlms-website/pull/2788|the draft PR>, pasting my PR closed comment here: the build passes but we have a few depen...",
+      "Permalink": "https://relias-engineering.slack.com/archives/C07SEBELP7E/p1784664616135689?thread_ts=1784662397.846619",
+      "Channel": "angular-hotline",
+      "From": "India Evans",
+      "Timestamp": "2026-07-21 16:10"
+    },
+    {
+      "Text": "Can you all cross post in the Accredited Content channel for awareness?",
+      "Permalink": "https://relias-engineering.slack.com/archives/C077RRRA8KS/p1784661901470339?thread_ts=1784659973.850299",
+      "Channel": "frontier-public",
+      "From": "Kelly Leeman",
+      "Timestamp": "2026-07-21 15:25"
+    },
+    {
+      "Text": "Shashank, as Swetha clarified our understanding in this thread, <https://relias-engineering.slack.com/archives/C08DP7928H3/p1784544746916389?thread_ts=1784300051.377089&channel=C08DP7928H3&message_ts=1784544746.916389>, we haven't prepared for any st...",
+      "Permalink": "https://relias-engineering.slack.com/archives/C08DP7928H3/p1784653550321659?thread_ts=1784646949.101629",
+      "Channel": "divum-us-public",
+      "From": "Mustak Ahamed",
+      "Timestamp": "2026-07-21 13:05"
+    },
+    {
+      "Text": "<@U04PPKTNQBE|Samuel> here is a recent example from the <#C85Q48HTM> channel: Good afternoon, <@SBMTU8ZUY|cloudengineers-sysadmins> and <@SB3GH6USY|dba>! Can we please get volunteers to support a CES deployment this afternoon? CHM ticket: <https://re...",
+      "Permalink": "https://relias-engineering.slack.com/archives/C85Q48HTM/p1784646603471679?thread_ts=1784645889.420599",
+      "Channel": "systems-management",
+      "From": "Michael McCormick",
+      "Timestamp": "2026-07-21 11:10"
+    },
+    {
+      "Text": "Hey Frontier, the ADF <https://adf.azure.com/en/monitoring/pipelineruns/6e0fc007-15e7-468e-a794-e83b62913228?factory=%2Fsubscriptions%2F3741355f-a2fe-4aa7-b024-1cecffdca327%2FresourceGroups%2Fdev1-shared-datafactory-rg%2Fproviders%2FMicrosoft.DataFac...",
+      "Permalink": "https://relias-engineering.slack.com/archives/C077RRRA8KS/p1784643344450929?thread_ts=1784643344.450929",
+      "Channel": "frontier-public",
+      "From": "Furkan Karabulut",
+      "Timestamp": "2026-07-21 10:15"
+    }
+  ],
+  "Mentions": [
+    {
+      "Text": "<@U2XMZDPJ7|Franz> <@U69NKFZ9A|Nick> in Bryan's absence can you all investigate what might be happening with SonarCloud?",
+      "Permalink": "https://relias-engineering.slack.com/archives/C06F7RT6U6L/p1784656738398509?thread_ts=1784655030.351769",
+      "Channel": "productivity-engineering-public",
+      "From": "Malia Paul",
+      "Timestamp": "2026-07-21 13:58"
+    },
+    {
+      "Text": "<@U2XMZDPJ7|Franz> <@U04AD8G1ABY|Karthika Menon> do either of you have any thoughts on how to best approach this?",
+      "Permalink": "https://relias-engineering.slack.com/archives/C06F7RT6U6L/p1784647658465679?thread_ts=1784643899.385439",
+      "Channel": "productivity-engineering-public",
+      "From": "Malia Paul",
+      "Timestamp": "2026-07-21 11:27"
+    },
+    {
+      "Text": "",
+      "Permalink": "https://relias-engineering.slack.com/archives/C08GHQC0LVC/p1784638958889539",
+      "Channel": "pe-bot-franz",
+      "From": "github",
+      "Timestamp": "2026-07-21 09:02"
+    }
+  ],
+  "ActionItems": [
+    {
+      "Text": "<@U2XMZDPJ7|Franz> <@U69NKFZ9A|Nick> in Bryan's absence can you all investigate what might be happening with SonarCloud?",
+      "Channel": "productivity-engineering-public",
+      "From": "Malia Paul",
+      "Link": "https://relias-engineering.slack.com/archives/C06F7RT6U6L/p1784656738398509?thread_ts=1784655030.351769",
+      "Type": "Mention"
+    }
+  ]
+}

@@ -1,0 +1,170 @@
+{
+  "Date": "2026-07-21",
+  "GeneratedAt": "2026-07-21T19:09:35.8544097-04:00",
+  "Categories": [
+    {
+      "Title": "🇺🇸 US News",
+      "Articles": [
+        {
+          "Title": "Hegseth says Iran war has cost $37.5B so far and Pentagon needs $67B to restock arms",
+          "Link": "https://www.pbs.org/newshour/show/hegseth-says-iran-war-has-cost-37-5b-so-far-and-pentagon-needs-67b-to-restock-arms",
+          "Source": "PBS Politics",
+          "Published": "2026-07-21T18:55:58.0000000-04:00"
+        },
+        {
+          "Title": "Trump raises tensions with Canada by announcing new 50% tariffs",
+          "Link": "https://www.pbs.org/newshour/show/trump-raises-tensions-with-canada-by-announcing-new-50-tariffs",
+          "Source": "PBS Politics",
+          "Published": "2026-07-21T18:40:27.0000000-04:00"
+        },
+        {
+          "Title": "Trump hits Canada with slew of new 50% tariffs set to take effect in 30 days",
+          "Link": "https://www.npr.org/2026/07/21/nx-s1-5901957/trump-hits-canada-with-slew-of-new-50-tariffs-set-to-take-effect-in-30-days",
+          "Source": "NPR Politics",
+          "Published": "2026-07-21T16:09:34.0000000-04:00"
+        },
+        {
+          "Title": "Sen. Chris Murphy on the Iran war and Pete Hegseth's upcoming Senate testimony",
+          "Link": "https://www.npr.org/2026/07/21/nx-s1-5900980/sen-chris-murphy-on-the-iran-war-and-pete-hegseths-upcoming-senate-testimony",
+          "Source": "NPR Politics",
+          "Published": "2026-07-21T06:41:37.0000000-04:00"
+        },
+        {
+          "Title": "WATCH: Trump says U.S. will hit area of Iran's Pickaxe Mountain 'very heavily'",
+          "Link": "https://www.pbs.org/newshour/politics/watch-trump-says-u-s-will-hit-area-of-irans-pickaxe-mountain-very-heavily",
+          "Source": "PBS Politics",
+          "Published": "2026-07-21T17:55:27.0000000-04:00"
+        },
+        {
+          "Title": "WATCH: Trump says U.S. would have to 'take care' of potential Houthi blockade of Red Sea",
+          "Link": "https://www.pbs.org/newshour/politics/watch-trump-says-u-s-would-have-to-take-care-of-potential-houthi-blockade-of-red-sea",
+          "Source": "PBS Politics",
+          "Published": "2026-07-21T16:25:18.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🌍 World News",
+      "Articles": [
+        {
+          "Title": "Tankers carrying Saudi oil turned back after Houthi threats; Trump claims US will hit Iran nuclear storage facility ‘pretty soon’",
+          "Link": "https://www.theguardian.com/world/live/2026/jul/21/us-iran-war-live-updates-strait-of-hormuz-attacks-houthis-blockade-red-sea-middle-east-crisis-latest-news",
+          "Source": "The Guardian",
+          "Published": "2026-07-21T18:57:26.0000000-04:00"
+        },
+        {
+          "Title": "Australia news live: Joyce sorry for ‘verbally assaulting’ dog Stella in live interview; Watt calls on Hanson to reveal Europe trip funding",
+          "Link": "https://www.theguardian.com/australia-news/live/2026/jul/22/australia-news-live-penny-wong-asean-pacific-missile-pauline-hanson-one-nation-labor-conference-tax-anthony-albanese-antisemitism-royal-commission-ntwnfb",
+          "Source": "The Guardian",
+          "Published": "2026-07-21T18:49:49.0000000-04:00"
+        },
+        {
+          "Title": "Zelenskyy replaces Ukraine military chief after protests",
+          "Link": "https://www.aljazeera.com/news/2026/7/21/zelenskyy-replaces-ukraine-military-chief-after-protests?traffic_source=rss",
+          "Source": "Al Jazeera",
+          "Published": "2026-07-21T17:58:32.0000000-04:00"
+        },
+        {
+          "Title": "Drone shows scorched landscape after Spain wildfire",
+          "Link": "https://www.aljazeera.com/video/newsfeed/2026/7/21/drone-shows-scorched-landscape-after-spain-wildfire?traffic_source=rss",
+          "Source": "Al Jazeera",
+          "Published": "2026-07-21T17:21:12.0000000-04:00"
+        },
+        {
+          "Title": "Zelensky fires army chief Oleksandr Syrsky, ‌a 'victory for protestors'",
+          "Link": "https://www.france24.com/en/zelensky-fires-army-chief-oleksandr-syrsky-a-victory-for-protestors",
+          "Source": "France 24",
+          "Published": "2026-07-21T16:22:25.0000000-04:00"
+        },
+        {
+          "Title": "Senegal u-turns to back ex-president Sall to lead UN",
+          "Link": "https://www.france24.com/en/senegal-u-turns-to-back-ex-president-sall-to-lead-un",
+          "Source": "France 24",
+          "Published": "2026-07-21T16:16:19.0000000-04:00"
+        },
+        {
+          "Title": "Zelensky sacks Ukraine's top army commander after days of protests",
+          "Link": "https://www.bbc.co.uk/news/articles/cyvl35z3917o?at_medium=RSS&at_campaign=rss",
+          "Source": "BBC",
+          "Published": "2026-07-21T15:57:38.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🤖 AI News",
+      "Articles": [
+        {
+          "Title": "Nativ: Run AI models locally on your Mac",
+          "Link": "https://simonwillison.net/2026/Jul/21/nativ/#atom-everything",
+          "Source": "Simon Willison's Weblog",
+          "Published": "2026-07-21T10:22:27.0000000-04:00"
+        },
+        {
+          "Title": "A Fireside Chat with Cat and Thariq from the Claude Code team",
+          "Link": "https://simonwillison.net/2026/Jul/21/cat-and-thariq/#atom-everything",
+          "Source": "Simon Willison's Weblog",
+          "Published": "2026-07-21T08:54:02.0000000-04:00"
+        },
+        {
+          "Title": "OpenAI Models Escaped Containment and Hacked HuggingFace",
+          "Link": "https://www.wired.com/story/openai-models-escaped-containment-and-hacked-huggingface/",
+          "Source": "Wired",
+          "Published": "2026-07-21T18:50:01.0000000-04:00"
+        },
+        {
+          "Title": "Neill Blomkamp’s new zombie AI ‘film’ is just slop warmed over",
+          "Link": "https://www.theverge.com/entertainment/968703/neill-blomkamps-nightborne-barley-studios-seedance",
+          "Source": "The Verge",
+          "Published": "2026-07-21T18:06:43.0000000-04:00"
+        },
+        {
+          "Title": "OpenAI says it accidentally hacked Hugging Face with a new AI system",
+          "Link": "https://www.theverge.com/ai-artificial-intelligence/968988/openai-hugging-face-hack-ai",
+          "Source": "The Verge",
+          "Published": "2026-07-21T17:48:54.0000000-04:00"
+        },
+        {
+          "Title": "OpenAI says Hugging Face was breached by its own pre-release models",
+          "Link": "https://techcrunch.com/2026/07/21/openai-says-hugging-face-was-breached-by-its-own-pre-release-models/",
+          "Source": "TechCrunch",
+          "Published": "2026-07-21T16:56:55.0000000-04:00"
+        },
+        {
+          "Title": "Jack Dorsey is taking on Slack with Buzz, a group chat platform for teams and their AI agents",
+          "Link": "https://techcrunch.com/2026/07/21/jack-dorsey-is-taking-on-slack-with-buzz-a-group-chat-platform-for-teams-and-their-ai-agents/",
+          "Source": "TechCrunch",
+          "Published": "2026-07-21T15:43:41.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🇩🇰 Danish News",
+      "Articles": [
+        {
+          "Title": "GreenX Metals Advances Critical Minerals Exploration at Greenland’s Eleonore North - TipRanks",
+          "Link": "https://news.google.com/rss/articles/CBMizgFBVV95cUxPcFlGNnF3QnNrNmlXWFZDV0xnNmpEQ0J5R1R1cWpJZ21NbEFOeG9zYWpOWW5EeFVMVlB2Y3A1bDVHRFpKVm9LWEhaWG81VzVhSU5aaTNBUEhVOEM4ZTFUQ3hXVzVrQlE5b290Wm9UaHM2a0Y2TjlRaDlwZ3BnMjdyWFNkQjFJZUJkU2JRT1QyNVdhZTV2YzNZMXh6TTY5d29vM2ZqMHUyUDBkd0hJc3MtWnJMeDFiLTFhaVUteTBkTndaOXM3OFBoWTVUOEtNQQ?oc=5",
+          "Source": "Google News Denmark",
+          "Published": "2026-07-21T19:00:15.0000000-04:00"
+        },
+        {
+          "Title": "Greenland sharks swim so slowly that most people could walk faster than them, may not reach sexual maturity until around 150—and the oldest known individual was estimated to have lived for roughly four centuries - ScienceBlog.com",
+          "Link": "https://news.google.com/rss/articles/CBMiyAJBVV95cUxNUVpmTWZCOHdrV3E5WlR6T1FabWRDQ0loUlZyUFloeTRiYUVobDE3T2ZIWDZDYjg2ekM5THRDblFQMHlxOE9FUHU2eUdqbVpWdkVFUWdaUkU3Nk5GeEdzX3hrSlNCd1hqYWdxZU9RVzd0cFVFelNWNW1uV3NoVFhzdGhncndha1BMazlabmo2eXdPUExjSjBST0FBZGRyNUZzLVloc28zRnpHZEdhQmF1SEdWa2o1cUt3UzJFWDlReXAwYkhkbXl1SVZHM25UZ2VGVWduVTNwb0RabHlPaTBqY0w0eXBQQ3RpcEZYakk1WW9YamZxbUNTY1FtQVZXSGZRN3ZhZk1vZ0p5ZnIzOXF2TG9USVpnc2hHVFItSnBOVmVrV25OMjFBYS1BNGxNLTYzT09NUVNfYk52WnZEOGVMWE81Y3RkMnVF?oc=5",
+          "Source": "Google News Denmark",
+          "Published": "2026-07-21T18:28:17.0000000-04:00"
+        },
+        {
+          "Title": "Zelenskyj fyrer Ukraines hærchef",
+          "Link": "https://www.dr.dk/nyheder/seneste/zelenskyj-har-fyret-haerchef-syrskyj",
+          "Source": "DR News",
+          "Published": "2026-07-21T15:55:49.0000000-04:00"
+        },
+        {
+          "Title": "Mindst 41 døde i færgeforlis ud for Guyana",
+          "Link": "https://www.dr.dk/nyheder/seneste/mindst-41-doede-i-faergeforlis-ud-guyana",
+          "Source": "DR News",
+          "Published": "2026-07-21T15:04:38.0000000-04:00"
+        }
+      ]
+    }
+  ]
+}
