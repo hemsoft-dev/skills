@@ -1,5 +1,5 @@
 {
-  "GeneratedAtUtc": "2026-07-21T23:09:50.8773611+00:00",
+  "GeneratedAtUtc": "2026-07-22T23:03:33.7072303+00:00",
   "Enterprise": "bertelsmann",
   "Organization": "Relias-Engineering",
   "Year": 2026,
@@ -25,7 +25,8 @@
     18,
     19,
     20,
-    21
+    21,
+    22
   ],
   "RefreshedDays": [
     1,
@@ -48,15 +49,16 @@
     18,
     19,
     20,
-    21
+    21,
+    22
   ],
   "ApiVersion": "2026-03-10",
   "IncludeOrganizationFilter": false,
-  "RefreshRunId": "c811ac5b862a4f759c9330bdc10eaba1",
+  "RefreshRunId": "c19240a22dc647eaad77642c44fef902",
   "RefreshStatus": "Complete",
   "FetchedResponseCount": 2,
   "FailedResponseCount": 0,
-  "ReusedResponseCount": 19,
+  "ReusedResponseCount": 20,
   "Users": [
     {
       "User": "fhemmerrelias",
@@ -852,7 +854,7 @@
               }
             ]
           },
-          "RefreshedAtUtc": "2026-07-21T23:09:45.2558936+00:00",
+          "RefreshedAtUtc": "2026-07-21T19:09:45.2558936-04:00",
           "RefreshRunId": "c811ac5b862a4f759c9330bdc10eaba1"
         },
         {
@@ -898,8 +900,93 @@
               }
             ]
           },
-          "RefreshedAtUtc": "2026-07-21T23:09:50.7797957+00:00",
-          "RefreshRunId": "c811ac5b862a4f759c9330bdc10eaba1"
+          "RefreshedAtUtc": "2026-07-22T23:03:28.0964633+00:00",
+          "RefreshRunId": "c19240a22dc647eaad77642c44fef902"
+        },
+        {
+          "Day": 22,
+          "Path": "/enterprises/bertelsmann/settings/billing/premium_request/usage?year=2026&month=7&day=22&user=fhemmerrelias",
+          "StatusCode": 200,
+          "Success": true,
+          "RawJson": "{\"timePeriod\":{\"year\":2026,\"month\":7,\"day\":22},\"enterprise\":\"Bertelsmann\",\"user\":\"fhemmerrelias\",\"usageItems\":[{\"product\":\"Copilot\",\"sku\":\"Copilot AI Credits\",\"model\":\"Claude Haiku 4.5\",\"unitType\":\"ai-credits\",\"pricePerUnit\":0.01,\"grossQuantity\":33.71137,\"grossAmount\":0.3371137,\"discountQuantity\":33.71137,\"discountAmount\":0.3371137,\"netQuantity\":0.0,\"netAmount\":0.0},{\"product\":\"Copilot\",\"sku\":\"Copilot AI Credits\",\"model\":\"Claude Opus 4.6\",\"unitType\":\"ai-credits\",\"pricePerUnit\":0.01,\"grossQuantity\":29.1293,\"grossAmount\":0.291293,\"discountQuantity\":29.1293,\"discountAmount\":0.291293,\"netQuantity\":0.0,\"netAmount\":0.0},{\"product\":\"Copilot\",\"sku\":\"Copilot AI Credits\",\"model\":\"Code Review model\",\"unitType\":\"ai-credits\",\"pricePerUnit\":0.01,\"grossQuantity\":66.954385,\"grossAmount\":0.66954385,\"discountQuantity\":66.954385,\"discountAmount\":0.66954385,\"netQuantity\":0.0,\"netAmount\":0.0},{\"product\":\"Copilot\",\"sku\":\"Copilot AI Credits\",\"model\":\"GPT-5.5\",\"unitType\":\"ai-credits\",\"pricePerUnit\":0.01,\"grossQuantity\":499.399,\"grossAmount\":4.99399,\"discountQuantity\":499.399,\"discountAmount\":4.99399,\"netQuantity\":0.0,\"netAmount\":0.0},{\"product\":\"Copilot\",\"sku\":\"Copilot AI Credits\",\"model\":\"GPT-5.6 Sol\",\"unitType\":\"ai-credits\",\"pricePerUnit\":0.01,\"grossQuantity\":6450.46485,\"grossAmount\":64.5046485,\"discountQuantity\":6486.409925,\"discountAmount\":64.86409925,\"netQuantity\":0.0,\"netAmount\":0.0}]}",
+          "Response": {
+            "timePeriod": {
+              "year": 2026,
+              "month": 7,
+              "day": 22
+            },
+            "enterprise": "Bertelsmann",
+            "user": "fhemmerrelias",
+            "usageItems": [
+              {
+                "product": "Copilot",
+                "sku": "Copilot AI Credits",
+                "model": "Claude Haiku 4.5",
+                "unitType": "ai-credits",
+                "pricePerUnit": 0.01,
+                "grossQuantity": 33.71137,
+                "grossAmount": 0.3371137,
+                "discountQuantity": 33.71137,
+                "discountAmount": 0.3371137,
+                "netQuantity": 0.0,
+                "netAmount": 0.0
+              },
+              {
+                "product": "Copilot",
+                "sku": "Copilot AI Credits",
+                "model": "Claude Opus 4.6",
+                "unitType": "ai-credits",
+                "pricePerUnit": 0.01,
+                "grossQuantity": 29.1293,
+                "grossAmount": 0.291293,
+                "discountQuantity": 29.1293,
+                "discountAmount": 0.291293,
+                "netQuantity": 0.0,
+                "netAmount": 0.0
+              },
+              {
+                "product": "Copilot",
+                "sku": "Copilot AI Credits",
+                "model": "Code Review model",
+                "unitType": "ai-credits",
+                "pricePerUnit": 0.01,
+                "grossQuantity": 66.954385,
+                "grossAmount": 0.66954385,
+                "discountQuantity": 66.954385,
+                "discountAmount": 0.66954385,
+                "netQuantity": 0.0,
+                "netAmount": 0.0
+              },
+              {
+                "product": "Copilot",
+                "sku": "Copilot AI Credits",
+                "model": "GPT-5.5",
+                "unitType": "ai-credits",
+                "pricePerUnit": 0.01,
+                "grossQuantity": 499.399,
+                "grossAmount": 4.99399,
+                "discountQuantity": 499.399,
+                "discountAmount": 4.99399,
+                "netQuantity": 0.0,
+                "netAmount": 0.0
+              },
+              {
+                "product": "Copilot",
+                "sku": "Copilot AI Credits",
+                "model": "GPT-5.6 Sol",
+                "unitType": "ai-credits",
+                "pricePerUnit": 0.01,
+                "grossQuantity": 6450.46485,
+                "grossAmount": 64.5046485,
+                "discountQuantity": 6486.409925,
+                "discountAmount": 64.86409925,
+                "netQuantity": 0.0,
+                "netAmount": 0.0
+              }
+            ]
+          },
+          "RefreshedAtUtc": "2026-07-22T23:03:33.5911357+00:00",
+          "RefreshRunId": "c19240a22dc647eaad77642c44fef902"
         }
       ],
       "Error": ""

@@ -1,0 +1,402 @@
+{
+  "ActionItems": [
+    {
+      "Link": "https://relias-engineering.slack.com/archives/C05BRPSNNRW/p1784754678338209?thread_ts=1784742321.452869",
+      "From": "Aaron Mundy",
+      "Type": "Mention",
+      "Text": "<@U2XMZDPJ7|Franz> I had accidentally created multiple accounts for github and had both my @gmail and @relias accounts separate. I''ve deleted the @relias account and have attached that email to my @g...",
+      "Channel": "github-copilot"
+    },
+    {
+      "Link": "https://relias-engineering.slack.com/archives/C02MA1U06CQ/p1784732398671989?thread_ts=1784676789.286739",
+      "From": "Christian Mutaba",
+      "Type": "Mention",
+      "Text": "Hi <@U2XMZDPJ7|Franz>, I don’t think I have the SonarCloud permissions I need. I may have had access before, but I’m no longer sure where to go or what steps to follow to add it. I still love SonarClo...",
+      "Channel": "sonarcloud"
+    }
+  ],
+  "ChannelActivity": {
+    "next-deployment": {
+      "RecentMessages": [
+        {
+          "From": "Vritti Gautam",
+          "Text": "<!here> Manual and Automation testing has been successfully completed for DE. Thank you <@U7663DN1Z>.",
+          "Timestamp": "2026-07-22 16:43"
+        },
+        {
+          "From": "Vritti Gautam",
+          "Text": "<!here> Starting DE manual verification",
+          "Timestamp": "2026-07-22 16:16"
+        },
+        {
+          "From": "Mark Earl",
+          "Text": "<!here> DE deployment complete",
+          "Timestamp": "2026-07-22 16:16"
+        },
+        {
+          "From": "Kyle McDaniel",
+          "Text": "Yep, saw it got rolled up into 3445 merge. Thank you!",
+          "Timestamp": "2026-07-22 15:23"
+        },
+        {
+          "From": "Lindsey Adams",
+          "Text": "it should be this build <https://dev.azure.com/ReliasDevelopment/ReliasPlatform/_build/results?buildId=405068&view=results|dev.azure.com/ReliasDevelopment/ReliasPlatform/_build/results?buildId=405068&...",
+          "Timestamp": "2026-07-22 15:21"
+        },
+        {
+          "From": "Lindsey Adams",
+          "Text": "they get batched, so the title doesn't always reflect what you'd expect",
+          "Timestamp": "2026-07-22 15:20"
+        },
+        {
+          "From": "Kyle McDaniel",
+          "Text": "Got it - was confused cause I didn't see the rlms-website build for the develop merge (I actually still don't see it for some odd reason)",
+          "Timestamp": "2026-07-22 15:19"
+        },
+        {
+          "From": "Lindsey Adams",
+          "Text": "yes <@U01GHAS5A8L|Kyle M> , I merged to develop first and cherry-picked from there. it isn't finished deploying yet",
+          "Timestamp": "2026-07-22 15:13"
+        },
+        {
+          "From": "Lindsey Adams",
+          "Text": "it looks like builds are being cancelled, I'm assuming agents are needed for a release. so it might take longer than expected",
+          "Timestamp": "2026-07-22 15:12"
+        },
+        {
+          "From": "Kyle McDaniel",
+          "Text": "Dumb question from me, is this already reverted/fixed in develop?",
+          "Timestamp": "2026-07-22 15:12"
+        }
+      ],
+      "TotalMessages": 35
+    },
+    "productivity-engineering-public": {
+      "RecentMessages": [
+        {
+          "From": "Tyler Deal",
+          "Text": "Oh, I just saw she was adding it at staging level. Should cancel out when dev climbs to staging and be okay.",
+          "Timestamp": "2026-07-22 15:16"
+        },
+        {
+          "From": "Karthika Menon",
+          "Text": "<@U01QFKJFMK7|Vritti Gautam> A sync with develop should work",
+          "Timestamp": "2026-07-22 15:13"
+        },
+        {
+          "From": "Karthika Menon",
+          "Text": "It was merged 45 min ago",
+          "Timestamp": "2026-07-22 15:12"
+        },
+        {
+          "From": "Karthika Menon",
+          "Text": "Lindsey's PR has been merged",
+          "Timestamp": "2026-07-22 15:12"
+        },
+        {
+          "From": "Karthika Menon",
+          "Text": "I think the branch just needs sync",
+          "Timestamp": "2026-07-22 15:12"
+        },
+        {
+          "From": "Karthika Menon",
+          "Text": "I pulled latest from develop I see the flag set in the file",
+          "Timestamp": "2026-07-22 15:11"
+        },
+        {
+          "From": "Tyler Deal",
+          "Text": "Someone misunderstood a PR comment of mine, removed the line, and merged before I could (ask them to) put it back.",
+          "Timestamp": "2026-07-22 15:09"
+        },
+        {
+          "From": "Tyler Deal",
+          "Text": "Add experimentalJustInTimeCompile: true, exactly as you see it to the file in the image above.",
+          "Timestamp": "2026-07-22 15:08"
+        },
+        {
+          "From": "Tyler Deal",
+          "Text": "You can add it to your branch if you need it now, yes. If one of you merges before the other, the line should be exactly the same and cancel out, not causing a conflict.",
+          "Timestamp": "2026-07-22 15:07"
+        },
+        {
+          "From": "Vritti Gautam",
+          "Text": "So you would like for us to fix it ?",
+          "Timestamp": "2026-07-22 15:05"
+        }
+      ],
+      "TotalMessages": 45
+    },
+    "dev-tribe": {
+      "RecentMessages": [
+        {
+          "From": "Narender Dubbaka",
+          "Text": "Thanks, <@U01UXJP4GPN|Shane Neiman> Neiman and <@U02V48PAE4E|Drazen>. I’m confirming the correct DEV1 values for ApiUrl, AppId, TreeId, and ViewUserListScopedPermission. Once confirmed, I’ll update th...",
+          "Timestamp": "2026-07-22 18:47"
+        },
+        {
+          "From": "Shane Neiman",
+          "Text": "Here are the specific values Drazen and I added to allow UM API to start. Drazen may have put the right value, but I know the ones I did are likely incorrect.",
+          "Timestamp": "2026-07-22 17:58"
+        },
+        {
+          "From": "Shane Neiman",
+          "Text": "UM API is back up and I can login in now and view some pages like the course list view in the content library and the transcript page I added fake values based on appsettings.Development.json added in...",
+          "Timestamp": "2026-07-22 17:53"
+        },
+        {
+          "From": "Drazen Jovanovic",
+          "Text": "I've added it, but now we have a different error ; would the team be open to rolling back their PR to unblock ongoing development?",
+          "Timestamp": "2026-07-22 17:32"
+        },
+        {
+          "From": "Drazen Jovanovic",
+          "Text": "Do we need it here?",
+          "Timestamp": "2026-07-22 17:19"
+        },
+        {
+          "From": "Drazen Jovanovic",
+          "Text": "<https://bitbucket.org/relias/usermanagementservice/pull-requests/1081|bitbucket.org/relias/usermanagementservice/pull-requests/1081> Startup.cs ```services.AddOptions<AuthorizationServiceOptions>() ....",
+          "Timestamp": "2026-07-22 17:15"
+        },
+        {
+          "From": "Jeremiah Turner",
+          "Text": "<https://target-jturner.dev1.reliaslearning.com/>",
+          "Timestamp": "2026-07-22 16:37"
+        },
+        {
+          "From": "Jeremiah Turner",
+          "Text": "I can access StagingUS, but not Dev1",
+          "Timestamp": "2026-07-22 16:37"
+        },
+        {
+          "From": "Samuel Renkert",
+          "Text": "Is this a dev1 issue only or do we need to worry about STG too. Once STG has its current issue resolved.",
+          "Timestamp": "2026-07-22 16:17"
+        },
+        {
+          "From": "Trey Walters",
+          "Text": "FYI if the ApiUrl does need to be provided I believe that would just be manual via the Azure Portal UI. The ARM template for UMAPI is deprecated and the release pipeline does not handle those values.",
+          "Timestamp": "2026-07-22 16:11"
+        }
+      ],
+      "TotalMessages": 54
+    },
+    "sonarcloud-public": {
+      "RecentMessages": [
+        {
+          "From": "Jess Feigal",
+          "Text": "<@U032050R2TY|Malia Paul> I scheduled a follow-up call to discuss these instances in more detail on Monday. I'm thinking a conversation will be the best format to help clear the air.",
+          "Timestamp": "2026-07-22 17:06"
+        },
+        {
+          "From": "Malia Paul",
+          "Text": "Looks like <https://sonarcloud.io/component_measures?id=relias-engineering_magento-2&metric=new_duplicated_lines_density&pullRequest=244&selected=relias-engineering_magento-2%3Aapp%2Fcode%2FRelias%2FP...",
+          "Timestamp": "2026-07-22 15:29"
+        },
+        {
+          "From": "Malia Paul",
+          "Text": "The rule that's failing is a valid concern - there are duplicated lines introduced in new code",
+          "Timestamp": "2026-07-22 15:28"
+        },
+        {
+          "From": "Malia Paul",
+          "Text": "So this is the PR correct <https://github.com/relias-engineering/magento-2/pull/244|github.com/relias-engineering/magento-2/pull/244>? Because it already looks to be merged?",
+          "Timestamp": "2026-07-22 15:25"
+        },
+        {
+          "From": "Lakshmi Kondragunta",
+          "Text": "<@U032050R2TY|Malia Paul> can someone help on this please?",
+          "Timestamp": "2026-07-22 15:05"
+        },
+        {
+          "From": "Jess Feigal",
+          "Text": "When I go into SonarCloud and mark these failures either as \"Accepted\" or \"False Positive\" - I then come back to Github and click the \"re-run\" but the \"ANNOTATIONS\" list never updates. Should it? It f...",
+          "Timestamp": "2026-07-22 12:23"
+        }
+      ],
+      "TotalMessages": 6
+    },
+    "prod-eng-devex-private": {
+      "RecentMessages": [
+        {
+          "From": "Franz Hemmer",
+          "Text": "Yeah no idea",
+          "Timestamp": "2026-07-22 16:24"
+        },
+        {
+          "From": "Malia Paul",
+          "Text": "It's funny that the requests are trickling back in again. Not sure what changed? A turnover at Harbinger?",
+          "Timestamp": "2026-07-22 14:59"
+        },
+        {
+          "From": "Franz Hemmer",
+          "Text": "I'll see what I can put together - meanwhile I can handle the requests manually.",
+          "Timestamp": "2026-07-22 13:58"
+        },
+        {
+          "From": "Malia Paul",
+          "Text": "Can we turn the github copilot bot back on? I cannot keep up with all the SonarCloud, Copilot, etc. requests on all channels. It's exhausting! Michelle sent me a list of Harbinger devs no longer with ...",
+          "Timestamp": "2026-07-22 13:54"
+        }
+      ],
+      "TotalMessages": 4
+    }
+  },
+  "DirectMessages": [
+    {
+      "From": "Giovanni Rufino",
+      "Text": "No worries, Germans are probably asleep.",
+      "Timestamp": "2026-07-22 15:38"
+    },
+    {
+      "From": "Giovanni Rufino",
+      "Text": "Any chance you can activate the new gemini flash model?",
+      "Timestamp": "2026-07-22 15:24"
+    },
+    {
+      "From": "Giovanni Rufino",
+      "Text": "I asked people to give you your flowers. Jason did a great presentation on agentic coding. But I'm a dodo and didn't realize the recording didn't star...",
+      "Timestamp": "2026-07-22 14:35"
+    },
+    {
+      "From": "Giovanni Rufino",
+      "Text": "Hey there. I didn't know you were back. You have some thank you's sitting in the engineering chapter chat from last week.",
+      "Timestamp": "2026-07-22 14:02"
+    },
+    {
+      "From": "Nick Peterson",
+      "Text": "<https://engineering.reliaslearning.com/developer-documentation/docs/how-to/bitbucket-to-github-migration-guide.html#migrating-sonarcloud-integration|...",
+      "Timestamp": "2026-07-22 10:50"
+    },
+    {
+      "From": "Nick Peterson",
+      "Text": "after or before?",
+      "Timestamp": "2026-07-22 10:45"
+    },
+    {
+      "From": "Nick Peterson",
+      "Text": "I got time",
+      "Timestamp": "2026-07-22 10:44"
+    },
+    {
+      "From": "Slack Skill Bot",
+      "Text": "",
+      "Timestamp": "2026-07-22 18:29"
+    },
+    {
+      "From": "Slack Skill Bot",
+      "Text": "",
+      "Timestamp": "2026-07-22 18:28"
+    },
+    {
+      "From": "Slack Skill Bot",
+      "Text": "",
+      "Timestamp": "2026-07-22 18:28"
+    },
+    {
+      "From": "Slack Skill Bot",
+      "Text": "",
+      "Timestamp": "2026-07-22 18:10"
+    },
+    {
+      "From": "Slack Skill Bot",
+      "Text": "",
+      "Timestamp": "2026-07-22 17:04"
+    }
+  ],
+  "Mentions": [
+    {
+      "Permalink": "https://relias-engineering.slack.com/archives/C05BRPSNNRW/p1784754678338209?thread_ts=1784742321.452869",
+      "From": "Aaron Mundy",
+      "Channel": "github-copilot",
+      "Text": "<@U2XMZDPJ7|Franz> I had accidentally created multiple accounts for github and had both my @gmail and @relias accounts separate. I''ve deleted the @relias account and have attached that email to my @g...",
+      "Timestamp": "2026-07-22 17:11"
+    },
+    {
+      "Permalink": "https://relias-engineering.slack.com/archives/C02MA1U06CQ/p1784732398671989?thread_ts=1784676789.286739",
+      "From": "Christian Mutaba",
+      "Channel": "sonarcloud",
+      "Text": "Hi <@U2XMZDPJ7|Franz>, I don’t think I have the SonarCloud permissions I need. I may have had access before, but I’m no longer sure where to go or what steps to follow to add it. I still love SonarClo...",
+      "Timestamp": "2026-07-22 10:59"
+    }
+  ],
+  "DateRange": {
+    "From": "2026-07-21",
+    "To": "2026-07-22"
+  },
+  "Username": "fhemmer",
+  "GeneratedAt": "2026-07-22 19:02:35",
+  "Announcements": [
+    {
+      "Permalink": "https://relias-engineering.slack.com/archives/C0AP5ATKWJU/p1784752288527879?thread_ts=1784672500.498389",
+      "From": "Samuel Renkert",
+      "Channel": "css-deployments",
+      "Text": "If this == \"the material component issue\" { yes; } else if this == \"the MFE update\" {It was deployed last night at 1:00AM EST;} The pipeline is executing now. This channel will be updated.",
+      "Timestamp": "2026-07-22 16:31"
+    },
+    {
+      "Permalink": "https://relias-engineering.slack.com/archives/C1KAF274N/p1784750388420439?thread_ts=1784750388.420439",
+      "From": "George DeCherney",
+      "Channel": "dev-tribe",
+      "Text": "<!channel> dev1 has been down for an hour and I have not heard anyone claim the issue or an ETA on a fix can we prioritize this",
+      "Timestamp": "2026-07-22 15:59"
+    },
+    {
+      "Permalink": "https://relias-engineering.slack.com/archives/CHWQ0SW8P/p1784747883559839?thread_ts=1784747688.745879",
+      "From": "David Atkinson",
+      "Channel": "swatteam-lite",
+      "Text": "<#CHWQ0SW8P> and <#C1KAXGA2D> are channels reserved for production related issues. <#C85Q48HTM> would be your best bet to engage a member of ECM for non-production related issues.",
+      "Timestamp": "2026-07-22 15:18"
+    },
+    {
+      "Permalink": "https://relias-engineering.slack.com/archives/CHWQ0SW8P/p1784747768696079?thread_ts=1784747688.745879",
+      "From": "David Atkinson",
+      "Channel": "swatteam-lite",
+      "Text": "<@U04U9GL81QT|jgoodyke> Happy to help with this issue, but I don't believe <#CHWQ0SW8P> is the appropriate channel. Can you please repost in <#C85Q48HTM> or <#C1KAF274N>?",
+      "Timestamp": "2026-07-22 15:16"
+    },
+    {
+      "Permalink": "https://relias-engineering.slack.com/archives/D0629BF2J0H/p1784745341265749",
+      "From": "Giovanni Rufino",
+      "Channel": "U03NUJ51VH8",
+      "Text": "I asked people to give you your flowers. Jason did a great presentation on agentic coding. But I'm a dodo and didn't realize the recording didn't start until halfway through. He did share the repo and powerpoint in AI Chapter channel though.",
+      "Timestamp": "2026-07-22 14:35"
+    },
+    {
+      "Permalink": "https://relias-engineering.slack.com/archives/C09LB1CM1BK/p1784742899636039?thread_ts=1784742899.636039",
+      "From": "Malia Paul",
+      "Channel": "prod-eng-devex-private",
+      "Text": "Can we turn the github copilot bot back on? I cannot keep up with all the SonarCloud, Copilot, etc. requests on all channels. It's exhausting! Michelle sent me a list of Harbinger devs no longer with Relias and I can't find 99% of them because the em...",
+      "Timestamp": "2026-07-22 13:54"
+    },
+    {
+      "Permalink": "https://relias-engineering.slack.com/archives/C0ANNRDRVMM/p1784730528956609",
+      "From": "Warren Sutherland",
+      "Channel": "grc-integration",
+      "Text": "has renamed the channel from \"q2-grc-integration\" to \"grc-integration\"",
+      "Timestamp": "2026-07-22 10:28"
+    },
+    {
+      "Permalink": "https://relias-engineering.slack.com/archives/C0BDEFKE19N/p1784730161625949",
+      "From": "Warren Sutherland",
+      "Channel": "temp-policy-pro-bulk-edit-upload-planning",
+      "Text": "archived the channel",
+      "Timestamp": "2026-07-22 10:22"
+    },
+    {
+      "Permalink": "https://relias-engineering.slack.com/archives/C0B6L7QNCCF/p1784729681218039",
+      "From": "Warren Sutherland",
+      "Channel": "content-archived-bug-rplat-19440",
+      "Text": "archived the channel",
+      "Timestamp": "2026-07-22 10:14"
+    }
+  ],
+  "Summary": {
+    "Announcements": 9,
+    "DirectMessages": 12,
+    "Mentions": 2,
+    "ActionItems": 2,
+    "Channels": 5,
+    "ChannelMessages": 144.0
+  }
+}
