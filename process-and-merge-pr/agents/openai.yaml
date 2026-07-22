@@ -1,0 +1,4 @@
+interface:
+  display_name: "Process and Merge PR"
+  short_description: "Drive one PR through readiness and squash merge"
+  default_prompt: "Use $process-and-merge-pr to make this pull request mergeable and squash-merge it."
