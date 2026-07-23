@@ -1,0 +1,272 @@
+{
+  "Summary": {
+    "Channels": 5,
+    "Mentions": 0,
+    "Announcements": 4,
+    "ChannelMessages": 217.0,
+    "ActionItems": 0,
+    "DirectMessages": 5
+  },
+  "DirectMessages": [
+    {
+      "Timestamp": "2026-07-23 18:43",
+      "Text": "",
+      "From": "Slack Skill Bot"
+    },
+    {
+      "Timestamp": "2026-07-23 18:43",
+      "Text": "",
+      "From": "Slack Skill Bot"
+    },
+    {
+      "Timestamp": "2026-07-23 18:43",
+      "Text": "",
+      "From": "Slack Skill Bot"
+    },
+    {
+      "Timestamp": "2026-07-23 18:06",
+      "Text": "",
+      "From": "Slack Skill Bot"
+    },
+    {
+      "Timestamp": "2026-07-23 12:37",
+      "Text": "",
+      "From": "Slack Skill Bot"
+    }
+  ],
+  "DateRange": {
+    "From": "2026-07-22",
+    "To": "2026-07-23"
+  },
+  "GeneratedAt": "2026-07-23 19:01:36",
+  "Username": "fhemmer",
+  "ChannelActivity": {
+    "productivity-engineering-public": {
+      "RecentMessages": [
+        {
+          "Timestamp": "2026-07-23 15:34",
+          "Text": "Happy to help! I just did the same thing to authenticate the CICD pipeline. Should be ready whenever you want to merge",
+          "From": "Shane Neiman"
+        },
+        {
+          "Timestamp": "2026-07-23 15:29",
+          "Text": "Thanks Shane, I appreciate your help in unblocking divum on their P1 bug here!",
+          "From": "Warren Sutherland"
+        },
+        {
+          "Timestamp": "2026-07-23 15:28",
+          "Text": "Thanks John! Glad to know we did the right thing I will double check the CICD pipeline real quick before jump back over to something else.",
+          "From": "Shane Neiman"
+        },
+        {
+          "Timestamp": "2026-07-23 15:26",
+          "Text": "we're not 100% on how the integrations happen on the service connections, but if it was a connection thing I'd expect it to hit all pipelines at the same time",
+          "From": "John Martin"
+        },
+        {
+          "Timestamp": "2026-07-23 15:25",
+          "Text": "there's a chance that I missed a few pipelines from the SSO migration a while back - I was doing it manually in both orgs by going down the list, opening subfolders and popping each pipeline edit out ...",
+          "From": "John Martin"
+        },
+        {
+          "Timestamp": "2026-07-23 15:25",
+          "Text": "All checks passed shane Thank you so much",
+          "From": "Charan MV"
+        },
+        {
+          "Timestamp": "2026-07-23 15:17",
+          "Text": "<@U7FH56NJ1> I have a question for you because I am just curious to understand why this happened. Could this be something related to the SSO migration a while back that never got propagated to this pi...",
+          "From": "Shane Neiman"
+        },
+        {
+          "Timestamp": "2026-07-23 15:06",
+          "Text": "I just pushed the changes and i can the Evaluation Service PR in the builds",
+          "From": "Charan MV"
+        },
+        {
+          "Timestamp": "2026-07-23 14:56",
+          "Text": "Fingers crossed it will trigger automatically on your next commit",
+          "From": "Shane Neiman"
+        },
+        {
+          "Timestamp": "2026-07-23 14:55",
+          "Text": "It is running manually now. I just opened the pipeline to edit and save without any changes to force it to reauthenticate. <https://dev.azure.com/ReliasDevelopment/ReliasPlatform/_build/results?buildI...",
+          "From": "Shane Neiman"
+        }
+      ],
+      "TotalMessages": 27
+    },
+    "next-deployment": {
+      "RecentMessages": [
+        {
+          "Timestamp": "2026-07-23 15:18",
+          "Text": "Deploy completed",
+          "From": "Haoming Gao"
+        },
+        {
+          "Timestamp": "2026-07-23 14:48",
+          "Text": "Starting 2 pipelines on <https://relias.atlassian.net/browse/CHM-6338|CES 2026.07.17 Release - Deploy CES to Production>",
+          "From": "Michael McCormick"
+        },
+        {
+          "Timestamp": "2026-07-23 14:25",
+          "Text": "Reporting Deployment successfull",
+          "From": "Amha Shiferaw"
+        },
+        {
+          "Timestamp": "2026-07-23 14:09",
+          "Text": "Reporting4.1 Deployment has begun <https://relias.atlassian.net/browse/CHM-6344|relias.atlassian.net/browse/CHM-6344>",
+          "From": "Amha Shiferaw"
+        },
+        {
+          "Timestamp": "2026-07-23 14:03",
+          "Text": "CES MFE now has the revert on staging as well",
+          "From": "Lindsey Adams"
+        },
+        {
+          "Timestamp": "2026-07-23 13:22",
+          "Text": "great thanks",
+          "From": "Ruchita Kothari"
+        },
+        {
+          "Timestamp": "2026-07-23 13:20",
+          "Text": "ok thx.... both pipelines complete",
+          "From": "Michael McCormick"
+        },
+        {
+          "Timestamp": "2026-07-23 13:20",
+          "Text": "now complete",
+          "From": "Michael McCormick"
+        },
+        {
+          "Timestamp": "2026-07-23 13:20",
+          "Text": "that is the pipeline for the revert",
+          "From": "Michael McCormick"
+        },
+        {
+          "Timestamp": "2026-07-23 13:10",
+          "Text": "<@U0A8MSJ3SC9> I can see it is still running",
+          "From": "Ruchita Kothari"
+        }
+      ],
+      "TotalMessages": 57
+    },
+    "sonarcloud-public": {
+      "RecentMessages": [
+        {
+          "Timestamp": "2026-07-23 08:56",
+          "Text": "Hi everyone — before posting a SonarCloud PR failure in this channel, please take a moment to review the issue locally using the SonarQube IDE extension. You can find setup guidance here: <https://eng...",
+          "From": "Malia Paul"
+        },
+        {
+          "Timestamp": "2026-07-23 08:34",
+          "Text": "<@U04R2SJ5AN9> please ensure BryanH can join as well.",
+          "From": "Malia Paul"
+        }
+      ],
+      "TotalMessages": 2
+    },
+    "prod-eng-devex-private": {
+      "RecentMessages": [
+        {
+          "Timestamp": "2026-07-23 08:47",
+          "Text": "Just FYI - I'll be testing the <#C05BRPSNNRW> requests in an automated way today so please don't process the requests. They are hanging there for a reason right now.",
+          "From": "Franz Hemmer"
+        },
+        {
+          "Timestamp": "2026-07-23 08:40",
+          "Text": "JessF from Communities has scheduled a meeting next week with me to discuss SonarCloud because their recent PR failed SC and she has questions. I'm not sure why they think they need to be held to a di...",
+          "From": "Malia Paul"
+        }
+      ],
+      "TotalMessages": 2
+    },
+    "dev-tribe": {
+      "RecentMessages": [
+        {
+          "Timestamp": "2026-07-23 16:28",
+          "Text": "so something else is going on, sorry not an area I know about.",
+          "From": "Lindsey Adams"
+        },
+        {
+          "Timestamp": "2026-07-23 16:28",
+          "Text": "yeah it's not the same snackbar issue. that actually means the snackbar is working",
+          "From": "Lindsey Adams"
+        },
+        {
+          "Timestamp": "2026-07-23 16:21",
+          "Text": "Here is the recording of the snackbar that I see on dev1",
+          "From": "Vritti Gautam"
+        },
+        {
+          "Timestamp": "2026-07-23 16:19",
+          "Text": "the snackbar fix was merged to develop yesterday. the specific issue with the snackbar shows in a console error that references the snack bar. if you're seeing a snackbar pop up with an error message,...",
+          "From": "Lindsey Adams"
+        },
+        {
+          "Timestamp": "2026-07-23 16:18",
+          "Text": "Seeing the same snackbar error messages on dev1 and also these network errors. Will this be fixed when the fix on staging is merged to dev1",
+          "From": "Vritti Gautam"
+        },
+        {
+          "Timestamp": "2026-07-23 16:09",
+          "Text": "dev2-sql-02 is back up now.",
+          "From": "Mandy Burch"
+        },
+        {
+          "Timestamp": "2026-07-23 15:46",
+          "Text": "<!here> FYI, I'm going to reboot dev2-sql-02 at 4pm unless there is an objection. It appears to be under severe memory pressure and I can't even open SSMS on it right now.",
+          "From": "Mandy Burch"
+        },
+        {
+          "Timestamp": "2026-07-23 15:04",
+          "Text": "<@U0AS26FMH4N> one of my engineers is using Postman with a relias email and is on some teams and can join the \"relias-bsd team\" so he might be a resource?",
+          "From": "Kelly Leeman"
+        },
+        {
+          "Timestamp": "2026-07-23 15:02",
+          "Text": "and so if Wes needed to he could go through the new software request process?",
+          "From": "Kelly Leeman"
+        },
+        {
+          "Timestamp": "2026-07-23 15:01",
+          "Text": "Linette is in what department for us newbies?",
+          "From": "Kelly Leeman"
+        }
+      ],
+      "TotalMessages": 129
+    }
+  },
+  "Announcements": [
+    {
+      "Permalink": "https://relias-engineering.slack.com/archives/C0AAM9SKJ66/p1784831372290069",
+      "Timestamp": "2026-07-23 14:29",
+      "Channel": "eng-e2e-test-triage",
+      "Text": "Hi <@U02DGDZD57S> <@U64PAFX42> <@U098MJK88LF> - I’ll post any unclassified bugs in this channel and tag you each morning as new defects come in.",
+      "From": "Pradeep Kumar Bendi"
+    },
+    {
+      "Permalink": "https://relias-engineering.slack.com/archives/C0BJWJZHS7R/p1784818060519419",
+      "Timestamp": "2026-07-23 10:47",
+      "Channel": "temp-ces-css-contract-alignment",
+      "Text": "Hey everyone — starting this temp channel to quickly validate ownership and close any gaps on eventing related to plan completion. <@U5KNE0WKV> <@U01JN9HHM08> <@UD5S8PJ3G> <@U033BG7F5ED> <@U04PPKTNQBE> <@U69NKFZ9A> We think there may be a gap, and wa...",
+      "From": "Warren Sutherland"
+    },
+    {
+      "Permalink": "https://relias-engineering.slack.com/archives/C02NH6WJ81M/p1784811373532729",
+      "Timestamp": "2026-07-23 08:56",
+      "Channel": "sonarcloud-public",
+      "Text": "Hi everyone — before posting a SonarCloud PR failure in this channel, please take a moment to review the issue locally using the SonarQube IDE extension. You can find setup guidance here: <https://engineering.reliaslearning.com/developer-documentatio...",
+      "From": "Malia Paul"
+    },
+    {
+      "Permalink": "https://relias-engineering.slack.com/archives/C1KAF274N/p1784795282014309?thread_ts=1784795282.014309",
+      "Timestamp": "2026-07-23 04:28",
+      "Channel": "dev-tribe",
+      "Text": "<!here> I am facing an issue with NDS PR, The Sonar Cloud Analyze is failing with error \"The version of Java (17) used to run this analysis is deprecated, and SonarQube Cloud no longer supports it. Please upgrade to Java 21 or later. You can find mor...",
+      "From": "Tarun Sharma"
+    }
+  ],
+  "ActionItems": [],
+  "Mentions": []
+}
