@@ -27,6 +27,10 @@ Thumbs.db
 
 *.log
 
+# Runtime state
+
+github-copilot-license-processor/state/*.json
+
 # Temporary files
 
 tmp/
@@ -36,6 +40,8 @@ temp/
 # Python virtual environments
 
 browser-use/venv/
+__pycache__/
+*.pyc
 
 # YouTube processor output files
 

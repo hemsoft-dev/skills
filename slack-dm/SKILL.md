@@ -1,39 +1,165 @@
 ---
 name: slack-dm
-description: Send approved Slack direct messages from Hermes Agent on macOS using the Slack Web API.
-compatibility: Requires macOS, python3, network access, and SLACK_TOKEN with im:write, chat:write, and users:read.email when resolving by email.
+description: V1.0 - Send concise, structured Slack direct-message updates with a project, outcome, summary, category emoji, and optional detail table. Use when an agent or scheduled automation needs to notify the owner through Slack.
+compatibility: Requires PowerShell 5.1+ on Windows or Python 3.9+ on macOS, network access, and SLACK_TOKEN with im:write and chat:write.
 ---
 
 # Slack DM
 
-Use this skill when the user asks Hermes to send them a Slack direct message.
+Use this skill to send a Slack direct-message update. When the user does not
+specify a format, always use the structured project, outcome, and summary
+format below.
 
-## Safety Rules
+## Safety rules
 
-- Never send a Slack message without explicit approval.
-- Before any send, show the exact recipient and exact message text.
-- Wait for a clear approval such as "yes", "go ahead", or "send it".
-- Run the send command once only. Do not retry just because output is blank or surprising.
-- If the user says the DM did not arrive, then inspect the error/output and ask before trying again.
+- Treat DMs to Franz Hemmer (`U2XMZDPJ7`) as preauthorized. Send them
+  immediately when requested directly or by a scheduled automation.
+- For every other recipient, show the exact recipient and exact message
+  preview. Wait for clear approval before sending.
+- Run the send command once only. Do not retry because output is blank or
+  surprising.
+- If the DM does not arrive, inspect the error and ask before trying again.
 - Keep SSH and Slack tokens private. Never print `SLACK_TOKEN`.
 
-## Recipient
+## Message contract
 
-Default user recipient:
+Every message must begin with these three items in this order:
 
-- Franz Hemmer: `U2XMZDPJ7`
+| Position | Content | Example |
+| --- | --- | --- |
+| 1 | Project, on one line | `📦 codexbar-ios` |
+| 2 | Short outcome, on one line | `✅ PR #102 merged` |
+| 3 | One- or two-line summary | `Issue #101 closed after the squash merge.` |
 
-The helper can also resolve a Slack user by email when the bot token has `users:read.email`.
+Follow these rules:
+
+1. Keep the outcome to a few words. State the artifact and result, such as
+   `PR #83 merged`, `Issue #72 blocked`, or `Release deployed`.
+2. Keep the summary to one or two short sentences. Do not repeat the project
+   or outcome.
+3. Put multi-part implementation results in `--detail` rows. Do not turn the
+   summary into a list.
+4. Put links in `--url`. Do not insert a long raw URL into the first three
+   lines.
+5. Never pass a free-form blob. The helper intentionally requires structured
+   arguments.
+
+Slack uses the same three-line hierarchy for the top-level fallback text.
+This keeps notifications, History results, and screen-reader output
+scannable. The opened message uses Block Kit and renders detail rows as a
+table.
+
+## Category emoji
+
+Choose exactly one category:
+
+| Category | Emoji | Use for |
+| --- | --- | --- |
+| `merged` | ✅ | A pull request merged |
+| `completed` | 🎯 | An issue or task completed |
+| `review` | 🔍 | Review or audit results |
+| `blocked` | 🚧 | Work that needs intervention |
+| `failed` | 🚨 | Failed validation or execution |
+| `deployed` | 🚀 | A release or deployment |
+| `tests` | 🧪 | Test-focused results |
+| `maintenance` | 🛠️ | Cleanup, dependency, or upkeep work |
+| `info` | ℹ️ | Neutral information |
+
+## Command path
+
+Use the command for the active runtime:
+
+| Runtime | Command prefix |
+| --- | --- |
+| Windows agent | `& "$HOME\.agents\skills\slack-dm\scripts\Send-SlackDm.ps1"` |
+| macOS agent | `python3 "$HOME/.agents/skills/slack-dm/scripts/slack_dm.py"` |
+| macOS Hermes | `python3 "$HOME/.hermes/skills/slack-dm/scripts/slack_dm.py"` |
+
+## Step 1: Compose the update
+
+Provide:
+
+- `--project`: repository, product, or workstream name
+- `--category`: one value from the category table
+- `--task`: the short outcome
+- `--summary`: one or two short sentences
+- `--detail "Area=Result"`: optional; repeat for multi-part work
+- `--url`: optional primary link
+
+Example content:
+
+```text
+--project "codexbar-ios"
+--category merged
+--task "PR #102 merged"
+--summary "Issue #101 closed after the squash merge. Review and CI gates passed."
+--detail "Inventory=Added saved-reset selection flow"
+--detail "Reliability=Added retry-safe redemption state"
+--detail "Quality=Added accessibility coverage and tests"
+--url "https://github.com/HemSoft/codexbar-ios/pull/102"
+```
+
+## Step 2: Preview when required
+
+Dry-run is the default and does not contact Slack. Use it for a non-owner
+recipient or whenever a preview is useful:
+
+```bash
+python3 "$HOME/.agents/skills/slack-dm/scripts/slack_dm.py" \
+  --user-id U2XMZDPJ7 \
+  --project "codexbar-ios" \
+  --category merged \
+  --task "PR #102 merged" \
+  --summary "Issue #101 closed after the squash merge. Review and CI gates passed." \
+  --detail "Inventory=Added saved-reset selection flow" \
+  --detail "Reliability=Added retry-safe redemption state" \
+  --url "https://github.com/HemSoft/codexbar-ios/pull/102"
+```
+
+The preview prints the exact fallback text and Block Kit payload.
+
+Windows agents use the same arguments with PowerShell parameter names:
+
+```powershell
+& "$HOME\.agents\skills\slack-dm\scripts\Send-SlackDm.ps1" `
+  -UserId U2XMZDPJ7 `
+  -Project "codexbar-ios" `
+  -Category merged `
+  -Task "PR #102 merged" `
+  -Summary "Issue #101 closed after the squash merge. Review and CI gates passed." `
+  -Detail "Inventory=Added saved-reset selection flow", `
+          "Reliability=Added retry-safe redemption state" `
+  -Url "https://github.com/HemSoft/codexbar-ios/pull/102"
+```
+
+## Step 3: Send once
+
+Add `--confirm-send` to the approved command. DMs to the owner are already
+authorized; other recipients require approval first.
+
+```bash
+python3 "$HOME/.agents/skills/slack-dm/scripts/slack_dm.py" \
+  --user-id U2XMZDPJ7 \
+  --project "codexbar-ios" \
+  --category merged \
+  --task "PR #102 merged" \
+  --summary "Issue #101 closed after the squash merge. Review and CI gates passed." \
+  --detail "Inventory=Added saved-reset selection flow" \
+  --detail "Reliability=Added retry-safe redemption state" \
+  --url "https://github.com/HemSoft/codexbar-ios/pull/102" \
+  --confirm-send
+```
+
+On Windows, add `-ConfirmSend` to the preview command.
 
 ## Environment
 
-Hermes must have a bot token available as `SLACK_TOKEN`.
-
-The token must start with `xoxb-` and include:
+The bot token must be available as `SLACK_TOKEN`, start with `xoxb-`, and
+include:
 
 - `im:write`
 - `chat:write`
-- `users:read.email` only if using `--email`
+- `users:read.email` only when using `--email`
 
 Check token presence without printing it:
 
@@ -41,38 +167,26 @@ Check token presence without printing it:
 test -n "$SLACK_TOKEN" && echo "SLACK_TOKEN is set" || echo "SLACK_TOKEN is missing"
 ```
 
-Optionally verify the token identity without exposing it:
+Verify token identity without sending a message:
 
 ```bash
-python3 ~/.hermes/skills/slack-dm/scripts/slack_dm.py --auth-test
+python3 "$HOME/.agents/skills/slack-dm/scripts/slack_dm.py" --auth-test
 ```
 
-## Dry Run First
+On Windows:
 
-Use dry-run mode to preview the recipient and payload. This does not contact Slack.
-
-```bash
-python3 ~/.hermes/skills/slack-dm/scripts/slack_dm.py \
-  --user-id U2XMZDPJ7 \
-  --text "Message preview"
+```powershell
+& "$HOME\.agents\skills\slack-dm\scripts\Send-SlackDm.ps1" -AuthTest
 ```
-
-## Send After Approval
-
-After the user approves the exact text, send once:
-
-```bash
-python3 ~/.hermes/skills/slack-dm/scripts/slack_dm.py \
-  --user-id U2XMZDPJ7 \
-  --text "Approved message text" \
-  --confirm-send
-```
-
-The helper posts a compact Block Kit message with fallback text. Keep message text short enough that Slack does not collapse it behind "Show more".
 
 ## Troubleshooting
 
-- `SLACK_TOKEN is not set`: add the bot token to Hermes' environment or shell environment.
-- `missing_scope`: the Slack app token lacks one of the required scopes.
-- `channel_not_found` or `not_allowed_token_type`: use a bot token (`xoxb-`) with DM scopes, not a user token.
+- `Permission denied: ...virtual_file.log`: the helper removes inherited
+  `SSLKEYLOGFILE` settings before opening Slack HTTPS connections.
+- `SLACK_TOKEN is not set`: add the bot token to the agent environment.
+- `missing_scope`: the Slack app token lacks a required scope.
+- `channel_not_found` or `not_allowed_token_type`: use a bot token (`xoxb-`)
+  with DM scopes, not a user token.
 - `user_not_found`: verify the Slack user ID or email.
+- Argument errors about summary lines or lengths: shorten the message instead
+  of bypassing the structured format.
