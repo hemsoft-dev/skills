@@ -1,0 +1,170 @@
+{
+  "Date": "2026-07-24",
+  "GeneratedAt": "2026-07-24T19:02:41.6649465-04:00",
+  "Categories": [
+    {
+      "Title": "🇺🇸 US News",
+      "Articles": [
+        {
+          "Title": "WATCH: Trump says Venezuela is 'not ready yet' for elections after U.S. ouster of Maduro",
+          "Link": "https://www.pbs.org/newshour/politics/watch-trump-says-venezuela-is-not-ready-yet-for-elections-after-u-s-ouster-of-maduro",
+          "Source": "PBS Politics",
+          "Published": "2026-07-24T17:52:42.0000000-04:00"
+        },
+        {
+          "Title": "St. Louis Democratic House primary exposes party rifts over Israel",
+          "Link": "https://www.npr.org/2026/07/24/nx-s1-5903070/st-louis-democratic-house-primary-exposes-party-rifts-over-israel",
+          "Source": "NPR Politics",
+          "Published": "2026-07-24T17:17:28.0000000-04:00"
+        },
+        {
+          "Title": "WATCH: Trump touts new nuclear reactors in his push to speed up domestic power",
+          "Link": "https://www.pbs.org/newshour/politics/watch-trump-touts-new-nuclear-reactors-in-his-push-to-speed-up-production",
+          "Source": "PBS Politics",
+          "Published": "2026-07-24T16:45:37.0000000-04:00"
+        },
+        {
+          "Title": "Trump's replacement tariffs continue to put pressure on U.S. economy",
+          "Link": "https://www.npr.org/2026/07/24/nx-s1-5904620/trumps-replacement-tariffs-continue-to-put-pressure-on-u-s-economy",
+          "Source": "NPR Politics",
+          "Published": "2026-07-24T16:26:01.0000000-04:00"
+        },
+        {
+          "Title": "WATCH LIVE: Trump speaks at White House Correspondents' Dinner after attack disrupted April event",
+          "Link": "https://www.pbs.org/newshour/politics/watch-live-trump-speaks-at-white-house-correspondents-dinner-after-attack-disrupted-april-event",
+          "Source": "PBS Politics",
+          "Published": "2026-07-24T15:31:06.0000000-04:00"
+        },
+        {
+          "Title": "New U.S. tariffs linked to claims of foreign forced labor dismay and anger trading partners",
+          "Link": "https://www.pbs.org/newshour/world/new-u-s-tariffs-linked-to-claims-of-foreign-forced-labor-dismay-and-anger-trading-partners",
+          "Source": "PBS Politics",
+          "Published": "2026-07-24T12:57:09.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🌍 World News",
+      "Articles": [
+        {
+          "Title": "Four Palestinians and two Israelis killed in West Bank shooting",
+          "Link": "https://www.bbc.co.uk/news/articles/cx2rxmye4k3o?at_medium=RSS&at_campaign=rss",
+          "Source": "BBC",
+          "Published": "2026-07-24T18:49:59.0000000-04:00"
+        },
+        {
+          "Title": "‘I’m not in a hurry’: Trump bats down concerns of Iran war affecting midterms – US politics live",
+          "Link": "https://www.theguardian.com/us-news/live/2026/jul/24/donald-trump-tariffs-white-house-correspondents-dinner-latest-news-updates",
+          "Source": "The Guardian",
+          "Published": "2026-07-24T18:24:36.0000000-04:00"
+        },
+        {
+          "Title": "More than 200,000 people flee or lock down as wildfires sweep France and Spain",
+          "Link": "https://www.theguardian.com/world/2026/jul/24/france-evacuation-cap-ferret-peninsula-wildfire",
+          "Source": "The Guardian",
+          "Published": "2026-07-24T18:18:51.0000000-04:00"
+        },
+        {
+          "Title": "Firefighters struggle to contain Madrid wildfires, as more than 140,000 evacuated in France and Spain",
+          "Link": "https://www.bbc.co.uk/news/articles/czjlenp0xk8o?at_medium=RSS&at_campaign=rss",
+          "Source": "BBC",
+          "Published": "2026-07-24T17:47:16.0000000-04:00"
+        },
+        {
+          "Title": "China, Philippine coastguard vessels clash in South China Sea",
+          "Link": "https://www.aljazeera.com/video/newsfeed/2026/7/24/china-philippine-coastguard-vessels-clash-in-south-china-sea?traffic_source=rss",
+          "Source": "Al Jazeera",
+          "Published": "2026-07-24T17:29:10.0000000-04:00"
+        },
+        {
+          "Title": "Paramount agrees to pause Warner Bros deal while court case plays out",
+          "Link": "https://www.aljazeera.com/economy/2026/7/24/paramount-agrees-to-pause-warner-bros-deal-while-court-case-plays-out?traffic_source=rss",
+          "Source": "Al Jazeera",
+          "Published": "2026-07-24T17:27:45.0000000-04:00"
+        },
+        {
+          "Title": "US pummels Iran as Tehran targets regional bases stationing US forces",
+          "Link": "https://www.france24.com/en/middle-east/20260724-us-pummels-iranian-sites-tehran-targets-regional-bases-stationing-us-forces",
+          "Source": "France 24",
+          "Published": "2026-07-24T16:48:17.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🤖 AI News",
+      "Articles": [
+        {
+          "Title": "The first known runaway AI agent - or a very bad marketing stunt?",
+          "Link": "https://simonwillison.net/2026/Jul/23/the-first-known-runaway-ai-agent/#atom-everything",
+          "Source": "Simon Willison's Weblog",
+          "Published": "2026-07-23T18:53:08.0000000-04:00"
+        },
+        {
+          "Title": "Prentis, new AI lab co-founded by Reid Hoffman, Marc Pincus in talks to raise $100M",
+          "Link": "https://techcrunch.com/2026/07/24/prentis-new-ai-lab-co-founded-by-reid-hoffman-marc-pincus-in-talks-to-raise-100m/",
+          "Source": "TechCrunch",
+          "Published": "2026-07-24T18:25:58.0000000-04:00"
+        },
+        {
+          "Title": "Why Cognition bought Poke: AI personality is becoming a competitive advantage",
+          "Link": "https://techcrunch.com/2026/07/24/why-cognition-bought-poke-ai-personality-is-becoming-a-competitive-advantage/",
+          "Source": "TechCrunch",
+          "Published": "2026-07-24T14:07:32.0000000-04:00"
+        },
+        {
+          "Title": "Did Chinese AI Steal From Anthropic, and OpenAI Loses Control of Two Models",
+          "Link": "https://www.wired.com/story/uncanny-valley-podcast/",
+          "Source": "Wired",
+          "Published": "2026-07-24T13:53:01.0000000-04:00"
+        },
+        {
+          "Title": "Anthropic releases Opus 5 with ‘close’ to Fable 5’s capabilities",
+          "Link": "https://www.theverge.com/ai-artificial-intelligence/970105/claude-opus-5-announced-anthropic-ai-model-release",
+          "Source": "The Verge",
+          "Published": "2026-07-24T13:00:00.0000000-04:00"
+        },
+        {
+          "Title": "Meta is making its AI chatbot more like an assistant",
+          "Link": "https://www.theverge.com/tech/970570/meta-ai-chatbot-productivity-update",
+          "Source": "The Verge",
+          "Published": "2026-07-24T13:00:00.0000000-04:00"
+        },
+        {
+          "Title": "Silicon Valley Is Completely Divided Over Chinese AI",
+          "Link": "https://www.wired.com/story/silicon-valley-is-completely-divided-over-chinese-ai/",
+          "Source": "Wired",
+          "Published": "2026-07-24T11:00:00.0000000-04:00"
+        }
+      ]
+    },
+    {
+      "Title": "🇩🇰 Danish News",
+      "Articles": [
+        {
+          "Title": "San Diego FC signs winger Elias Achouri to 'Designated Player' contract - cbs8.com",
+          "Link": "https://news.google.com/rss/articles/CBMi7gFBVV95cUxONzdRaWRocl9HaGFQT0pRMHJzWHdUS0poYWdaWDYyU2Y4b1QwQnVWMnVGa2VPT3k5XzZoeFVRQmdwQ0NlZHN0akdvWkh5QzRzUUI0SFR5dC1sdWpRRURlTUJpcTFURl9VelNQZ1NkbVJ1S1A1WVRPS1JfQW5JdXh2WkRVMmhaWF8wOGtWSjFfZmNOajdWdFJrZEFob3kteEx0VHFCbG02NUVXaVRudVZjZ25xRklXMWtUN0M4TVI2dkswZzVfUURGQkdhbnowd211clEycjBVZm9wSnNBZWhLWlI2bGNHVEkxMWJ0N1dB?oc=5",
+          "Source": "Google News Denmark",
+          "Published": "2026-07-24T18:49:00.0000000-04:00"
+        },
+        {
+          "Title": "San Diego FC acquire Elias Achouri from FC Copenhagen - MLSsoccer.com",
+          "Link": "https://news.google.com/rss/articles/CBMijAFBVV95cUxQS1FwMlZaZnpidXM1eWFiS3FaN1lVWWZWZ1djNWRlNGZlcmJ2OXV4NWxDNF9rVFYzMkwwa2s1UmVWc2wwRWRmRHEtZEhLdUhOeV9PQ0xhUXlacXR5WUlHbVdkMGZIR1FKdXhiTzBISEYyMlJmblROSXNYN1UybkpPVFhNeWpTdXNhcWg5Rg?oc=5",
+          "Source": "Google News Denmark",
+          "Published": "2026-07-24T18:35:48.0000000-04:00"
+        },
+        {
+          "Title": "Straffedomstols medlemmer stemmer for at fjerne chefanklager",
+          "Link": "https://www.dr.dk/nyheder/seneste/straffedomstols-medlemmer-stemmer-fjerne-chefanklager",
+          "Source": "DR News",
+          "Published": "2026-07-24T17:16:56.0000000-04:00"
+        },
+        {
+          "Title": "Løkke fordømmer russisk angreb på lettisk konsulat i Ukraine",
+          "Link": "https://www.dr.dk/nyheder/seneste/loekke-fordoemmer-russisk-angreb-paa-lettisk-konsulat-i-ukraine",
+          "Source": "DR News",
+          "Published": "2026-07-24T17:12:48.0000000-04:00"
+        }
+      ]
+    }
+  ]
+}

@@ -863,3 +863,15 @@ Result: Validated all current source and history changes, committed the complete
 
 2026-07-23 - 19:08 - Generate today's daily diary scaffold
 Result: Created and validated the 2026-07-23 HTML diary entry, patched live-only sections, prepared commit/push, and sent the required single Slack DM.
+
+2026-07-24 - 08:10 - Reduce the active skill count by archiving 20 low-use skills
+Result: Archived the approved 20 skills to the external skills archive, preserved unrelated history changes, and
+identified dependency-bearing stale skills for a follow-up archive pass.
+
+2026-07-24 - 12:29 - Archive the approved second-wave stale skills
+Result: Archived seven additional stale skills, verified their recoverable copies, and reduced the active skill count
+from 148 to 141 without altering the existing GitHub or Slack history content.
+
+2026-07-24 - 19:07 - Generate today's daily diary scaffold
+Result: Created the 2026-07-24 HTML diary entry, patched live-only sections, and prepared commit/push plus the
+required single Slack DM notification.
