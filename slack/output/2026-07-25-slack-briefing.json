@@ -1,0 +1,58 @@
+{
+  "Mentions": [],
+  "GeneratedAt": "2026-07-25 19:02:03",
+  "ActionItems": [],
+  "DateRange": {
+    "To": "2026-07-25",
+    "From": "2026-07-24"
+  },
+  "DirectMessages": [
+    {
+      "Timestamp": "2026-07-25 18:15",
+      "Text": "",
+      "From": "Slack Skill Bot"
+    },
+    {
+      "Timestamp": "2026-07-25 17:56",
+      "Text": "",
+      "From": "Slack Skill Bot"
+    },
+    {
+      "Timestamp": "2026-07-25 15:41",
+      "Text": "",
+      "From": "Slack Skill Bot"
+    },
+    {
+      "Timestamp": "2026-07-25 14:00",
+      "Text": "",
+      "From": "Slack Skill Bot"
+    },
+    {
+      "Timestamp": "2026-07-25 13:25",
+      "Text": "",
+      "From": "Slack Skill Bot"
+    }
+  ],
+  "Username": "fhemmer",
+  "Announcements": [],
+  "Summary": {
+    "DirectMessages": 5,
+    "Channels": 1,
+    "Announcements": 0,
+    "ChannelMessages": 1.0,
+    "Mentions": 0,
+    "ActionItems": 0
+  },
+  "ChannelActivity": {
+    "ai-chapter": {
+      "TotalMessages": 1,
+      "RecentMessages": [
+        {
+          "Timestamp": "2026-07-25 15:26",
+          "Text": "Checkout <https://axi.md/|https://axi.md/> Apparently MCP connections to GitHub and other popular software services developers use can cost a lot of tokens, read:”expensive” Axi has more budget friend...",
+          "From": "Ajith Kallambella"
+        }
+      ]
+    }
+  }
+}
