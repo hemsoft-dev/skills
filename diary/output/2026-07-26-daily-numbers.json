@@ -1,0 +1,30 @@
+{
+  "githubRepos": 304,
+  "bitbucketRepos": null,
+  "date": "2026-07-26",
+  "copilot": {
+    "personalGeneratedAt": "07/26/2026 19:03:21",
+    "personalGrossCostUsd": 1032.17,
+    "personalAICredits": 103217.064,
+    "personalNetCostUsd": 354.62,
+    "orgAICredits": 2739745.217,
+    "personalLogin": "fhemmerrelias",
+    "orgGeneratedAt": "07/26/2026 05:42:49",
+    "orgNetCostUsd": 2422.65,
+    "orgUserCount": 312,
+    "orgGrossCostUsd": 27397.49,
+    "billingModel": "ai-credits-token-billing"
+  },
+  "cloudflare": {
+    "nowleadershipgroup.com": {
+      "pageViews": 31,
+      "uniqueVisitors": 112,
+      "emailsForwarded": 0
+    },
+    "setitfreeloop.org": {
+      "pageViews": 0,
+      "uniqueVisitors": 0,
+      "emailsForwarded": null
+    }
+  }
+}

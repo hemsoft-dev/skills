@@ -1,0 +1,63 @@
+{
+  "Username": "fhemmer",
+  "Announcements": [],
+  "ChannelActivity": {
+    "ai-chapter": {
+      "RecentMessages": [
+        {
+          "Text": "It is a great reminder that we should always be looking for opportunity to have AI creating generated durable/reusable artifacts like scripts to do things over using AI tokens to “solve” it. Within pr...",
+          "From": "George DeCherney",
+          "Timestamp": "2026-07-26 09:50"
+        },
+        {
+          "Text": "All for efficiency gains but a lot of these require setup and configuration of auth features that we either don't have access to or don't want to duplicate per user. One of the pros of MCP is the stan...",
+          "From": "George DeCherney",
+          "Timestamp": "2026-07-26 09:39"
+        }
+      ],
+      "TotalMessages": 2
+    }
+  },
+  "DirectMessages": [
+    {
+      "Text": "",
+      "From": "Slack Skill Bot",
+      "Timestamp": "2026-07-26 17:34"
+    },
+    {
+      "Text": "",
+      "From": "Slack Skill Bot",
+      "Timestamp": "2026-07-26 13:19"
+    },
+    {
+      "Text": "",
+      "From": "Slack Skill Bot",
+      "Timestamp": "2026-07-26 13:15"
+    },
+    {
+      "Text": "",
+      "From": "Slack Skill Bot",
+      "Timestamp": "2026-07-26 13:15"
+    },
+    {
+      "Text": "",
+      "From": "Slack Skill Bot",
+      "Timestamp": "2026-07-26 12:17"
+    }
+  ],
+  "ActionItems": [],
+  "Mentions": [],
+  "DateRange": {
+    "To": "2026-07-26",
+    "From": "2026-07-25"
+  },
+  "Summary": {
+    "Mentions": 0,
+    "ChannelMessages": 2.0,
+    "ActionItems": 0,
+    "Announcements": 0,
+    "DirectMessages": 5,
+    "Channels": 1
+  },
+  "GeneratedAt": "2026-07-26 19:02:33"
+}

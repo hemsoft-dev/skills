@@ -1,6 +1,6 @@
 ---
 name: slack-dm
-description: V1.0 - Send concise, structured Slack direct-message updates with a project, outcome, summary, category emoji, and optional detail table. Use when an agent or scheduled automation needs to notify the owner through Slack.
+description: V1.1 - Send concise, structured Slack direct-message updates with a project, outcome, summary, category emoji, optional detail table, and available runtime metrics. Use when an agent or scheduled automation needs to notify the owner through Slack.
 compatibility: Requires PowerShell 5.1+ on Windows or Python 3.9+ on macOS, network access, and SLACK_TOKEN with im:write and chat:write.
 ---
 
@@ -43,11 +43,35 @@ Follow these rules:
    lines.
 5. Never pass a free-form blob. The helper intentionally requires structured
    arguments.
+6. Put available runtime metrics in ordinary detail rows. Do not add them to
+   the summary or send a follow-up message just to report a late metric.
 
 Slack uses the same three-line hierarchy for the top-level fallback text.
 This keeps notifications, History results, and screen-reader output
 scannable. The opened message uses Block Kit and renders detail rows as a
 table.
+
+## Runtime metric detail rows
+
+The caller owns measurement; the Slack helpers only render supplied values.
+For agent or automation work:
+
+- Add `Duration=<human-readable elapsed time>` when the caller measured the
+  run, such as `Duration=42s`, `Duration=8m 17s`, or `Duration=1h 4m`.
+- Add `Tokens=<exact cumulative count>` only when the runtime exposes an exact
+  value before the message is sent, such as `Tokens=18,742`.
+- Never estimate tokens from characters, transcript size, or elapsed time.
+- Omit unavailable metrics instead of displaying guessed values or `unknown`.
+- Send once only; do not send a second DM if a final token count appears after
+  the approved notification.
+
+These remain `--detail "Area=Result"` / `-Detail "Area=Result"` values so every
+caller gets the existing detail table and accessible fallback behavior without
+a new command interface. Slack documents
+[table blocks](https://docs.slack.dev/reference/block-kit/blocks/table-block)
+as the structured-data component for messages and recommends meaningful
+[top-level fallback text](https://docs.slack.dev/block-kit/) for screen-reader
+access.
 
 ## Category emoji
 
@@ -96,6 +120,8 @@ Example content:
 --detail "Inventory=Added saved-reset selection flow"
 --detail "Reliability=Added retry-safe redemption state"
 --detail "Quality=Added accessibility coverage and tests"
+--detail "Duration=8m 17s"
+--detail "Tokens=18,742"
 --url "https://github.com/HemSoft/codexbar-ios/pull/102"
 ```
 
