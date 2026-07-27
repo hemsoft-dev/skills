@@ -885,3 +885,11 @@ deployment blocker before committing and pushing the complete worktree.
 
 2026-07-26 - 19:10 - Generate today's daily diary scaffold
 Result: Created and validated the 2026-07-26 HTML diary entry, patched live-only sections, prepared the commit/push, and queued the required single Slack DM with the local file link.
+
+2026-07-26 - 20:56 - Reduce the active skill count by archiving 20 unused or stale skills
+Result: Archived the approved 20-skill batch to the recoverable external archive, reduced active skills from 141 to
+121, verified every archive tree digest, and guarded the PowerShell profile against the archived Qwen3-TTS script.
+
+2026-07-26 - 22:07 - Diagnose workstation fans running at full speed
+Result: Ruled out initial CPU, memory, and GPU heat load; traced an ASUS Fan Xpert control failure after a same-day
+component update; and restored and restarted the disabled AsusFanControlService through an approved UAC prompt.
