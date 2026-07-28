@@ -1,6 +1,6 @@
 ---
 name: hardware
-description: "V1.0 - Commands: list, add, remove, info. Tracks personal hardware inventory with product details, manuals, and maintenance info. Use when the user asks about their hardware, devices, appliances, or equipment."
+description: "V1.1 - Commands: list, add, remove, info, power. Tracks personal hardware inventory with product details, manuals, maintenance info, and supported device telemetry. Use when the user asks about their hardware, devices, appliances, or equipment."
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -52,6 +52,7 @@ When user activates this skill without specifying an action, run **list** to sho
 | `add` | Add a new hardware item to inventory |
 | `remove` | Remove a hardware item from inventory |
 | `info` | Show detailed info for a specific item |
+| `power` | Read supported UPS power telemetry |
 
 ## Inventory File
 
@@ -83,6 +84,21 @@ When adding a new item, ask for any missing required fields:
 - Location (required — e.g., Office, Living Room, Kitchen)
 - Brand, Model, Manual link, Product Page — include if provided
 
+## Power Monitoring
+
+### CyberPower GX150C2
+
+On Windows, connect the UPS communication port to the computer with its USB
+cable, then run:
+
+```powershell
+.\scripts\Get-GX150C2Power.ps1
+```
+
+The script reads the UPS's USB HID `PercentLoad` report and estimates output
+watts from its 1000 W rating. The estimate has approximately 10 W resolution
+and is not a utility-grade measurement of wall consumption.
+
 ## File Structure
 
 ```text
@@ -90,6 +106,8 @@ hardware/
 ├── SKILL.md
 ├── inventory/
 │   └── hardware-inventory.md
+├── scripts/
+│   └── Get-GX150C2Power.ps1
 └── History/
     └── {YYYY-MM-DD}.md
 ```

@@ -893,3 +893,7 @@ Result: Archived the approved 20-skill batch to the recoverable external archive
 2026-07-26 - 22:07 - Diagnose workstation fans running at full speed
 Result: Ruled out initial CPU, memory, and GPU heat load; traced an ASUS Fan Xpert control failure after a same-day
 component update; and restored and restarted the disabled AsusFanControlService through an approved UAC prompt.
+
+2026-07-27 - 22:54 - Add the CyberPower GX150C2 UPS to owned hardware and determine live power-monitoring options
+Result: Added the UPS and a dependency-free USB HID reader that reports live load percentage, estimated output watts,
+input and output voltage, and battery charge without PowerPanel or cloud access.
