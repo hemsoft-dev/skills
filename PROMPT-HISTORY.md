@@ -957,3 +957,7 @@ phased Mini-first control-plane architecture over Tailscale.
 2026-07-29 - 10:00 - Explain how to connect Codex Desktop on Home to Mini
 Result: Live-verified Home's `mini` SSH alias, Mini's Codex executable and ChatGPT authentication, and provided the
 remaining Settings > Connections workflow for adding Mini as an SSH host.
+
+2026-07-29 - 10:09 - Correct the Home-to-Mini Codex Desktop connection direction
+Result: Distinguished device Remote Control from SSH remote projects and identified Settings > Connections > SSH as
+the Home-to-Mini path, with the other two Connections tabs controlling desktop-app hosts instead.
