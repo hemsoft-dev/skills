@@ -937,3 +937,7 @@ matched the approved SSO onboarding reply for non-members, and left the already-
 2026-07-29 - 00:03 - Commit and push every pending skills-repository change to main
 Result: Consolidated the approved skill archive removals, Copilot processor enhancements, Jira guidance, and
 interaction histories; ran focused tests and changed-file lint checks before publishing a clean main branch.
+
+2026-07-29 - 00:38 - Enroll Ubuntu mini in the private Tailscale network
+Result: Found and enrolled mini, verified MagicDNS, encrypted ping, SSH, and Taildrop, and expanded the durable
+machine map and transfer conventions from three computers to four.

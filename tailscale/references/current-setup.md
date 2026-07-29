@@ -1,6 +1,6 @@
 # Current Setup
 
-Last verified: 2026-06-29 after proving Mac-to-home key auth.
+Last verified: 2026-07-29 after enrolling and verifying Ubuntu host `mini`.
 
 ## Devices
 
@@ -36,9 +36,62 @@ Last verified: 2026-06-29 after proving Mac-to-home key auth.
 - Public key reported by the Relias setup for outbound SSH:
   `ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFq/AYI7WxQ17Nt0MUWj4EdBSL3nteaPNXXpO2XzxuTc fhemmerrelias@github.com`.
 
+### Ubuntu mini
+
+- Ubuntu version: `26.04`.
+- Local and Tailscale hostname: `mini`.
+- Tailscale DNS: `mini.tail3280fc.ts.net`.
+- Tailscale IPv4: `100.97.164.73`.
+- LAN IPv4 observed during enrollment: `192.168.1.105`.
+- LAN MAC observed during enrollment: `38-05-25-34-A5-B4`.
+- SSH account: `franz`.
+- User home: `/home/franz`.
+- Tailscale version verified after enrollment: `1.98.10`.
+- Tailscale SSH is enabled.
+- Tailscale operator: `franz`, allowing non-root `tailscale file get`.
+
 ### Other tailnet host
 
 - Existing Linux laptop: `franz-laptop.tail3280fc.ts.net`, `100.90.152.8`.
+
+## Home-to-Mini SSH
+
+The Windows desktop alias is:
+
+```sshconfig
+Host mini
+    HostName mini.tail3280fc.ts.net
+    User franz
+    UserKnownHostsFile ~/.ssh/known_hosts_tailnet ~/.ssh/known_hosts
+```
+
+Verified from `home` on 2026-07-29:
+
+```text
+ssh mini
+connected user=franz host=mini ip=100.97.164.73 tailscaled=active
+```
+
+Additional proof:
+
+- `tailscale status --json` reported Linux host `mini` online.
+- `tailscale ping mini` reached `100.97.164.73` directly through
+  `192.168.1.105:41641` in 3 ms.
+- MagicDNS resolved `mini.tail3280fc.ts.net` to `100.97.164.73`.
+- `tailscale file cp --targets` listed `mini`.
+- Home-to-mini Taildrop passed with a 77-byte smoke file and matching SHA-256
+  `3e2b44aca6274d3674b6cb9aec0a5c062d4eb411e193120767e98301a1487ec9`.
+- The accepted ED25519 host-key fingerprint is
+  `SHA256:BbNqFA+udBFauI0URPmI7CW+cge9xVZl+LijFAXPpZQ`.
+
+The MacBook Air has a `mini` alias with the same destination and account.
+Alias expansion is verified there, but its first Tailscale SSH web check is
+still pending. The Windows laptop was offline during rollout and does not yet
+have the alias.
+
+`mini` has no outbound private SSH key. Outbound SSH from `mini` to the Windows
+or macOS hosts is intentionally unprovisioned until key authorization and the
+narrow Windows firewall update are explicitly completed.
 
 ## Windows-to-Mac SSH
 

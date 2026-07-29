@@ -1,6 +1,6 @@
 ---
 name: tailscale
-description: Resume, verify, and troubleshoot this machine's Tailscale private mesh and SSH setup between Windows desktop, MacBook Air, and other tailnet hosts. Use when the user asks about Tailscale, secure tunnels over the internet, SSH over Tailscale, MagicDNS names, Windows OpenSSH Server setup after restart, Mac Remote Login over tailnet, or continuing the desktop/Mac tunnel setup.
+description: "V1.0 - Commands: Status, Enroll, SSH, Diagnose. Enroll, verify, and troubleshoot the private Tailscale mesh and SSH access across Windows, macOS, and Linux hosts."
 ---
 
 # Tailscale
@@ -34,6 +34,7 @@ names, IPs, SSH aliases, and the current post-restart recovery checklist.
    - Windows: run `C:\Program Files\Tailscale\tailscale.exe status --json`.
    - Mac: use `ssh air` if available, then run
      `/Applications/Tailscale.app/Contents/MacOS/Tailscale status`.
+   - Linux: run `tailscale status --json`.
 3. Verify SSH separately from Tailscale:
    - TCP port 22 reachable.
    - SSH banner returned.
@@ -42,6 +43,38 @@ names, IPs, SSH aliases, and the current post-restart recovery checklist.
    before testing Mac-to-Windows SSH.
 5. Update this skill's reference file when stable hostnames, usernames, or
    recovery steps change.
+
+## Enroll an Ubuntu Host
+
+1. Resolve the host on the LAN before enrollment. Tailscale cannot discover a
+   machine until its client joins the tailnet.
+2. Install `curl` when the Ubuntu image does not include it:
+
+   ```bash
+   sudo apt-get update
+   sudo apt-get install -y curl
+   ```
+
+3. Install Tailscale and enable private Tailscale SSH:
+
+   ```bash
+   curl -fsSL https://tailscale.com/install.sh | sh
+   sudo tailscale up --hostname=<alias> --ssh
+   ```
+
+4. Open the authentication URL and join the existing tailnet.
+5. From an enrolled host, verify all five signals:
+
+   | Signal | Verification |
+   | --- | --- |
+   | Control plane | `tailscale status --json` shows the expected Linux host |
+   | Encrypted path | `tailscale ping <alias>` succeeds |
+   | MagicDNS | `<alias>.<tailnet>.ts.net` resolves to the assigned Tailscale IP |
+   | SSH | `ssh <alias>` succeeds with the expected account and hostname |
+   | Taildrop | `tailscale file cp --targets` lists the host |
+
+6. If Tailscale SSH requests an additional check, complete its web
+   authentication. Do not replace that check with password authentication.
 
 ## Useful Checks
 
