@@ -953,3 +953,7 @@ Result: Installed Node 22.22.1, npm 9.2.0, Git 2.53.0, and Codex CLI 0.146.0 sys
 2026-07-29 - 09:51 - Compare remote control for AI harnesses across multiple machines
 Result: Compared Codex, Copilot, Claude Code, T3 Code, OpenCode, and terminal multiplexers, then recommended a
 phased Mini-first control-plane architecture over Tailscale.
+
+2026-07-29 - 10:00 - Explain how to connect Codex Desktop on Home to Mini
+Result: Live-verified Home's `mini` SSH alias, Mini's Codex executable and ChatGPT authentication, and provided the
+remaining Settings > Connections workflow for adding Mini as an SSH host.
