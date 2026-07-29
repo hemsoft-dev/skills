@@ -945,3 +945,7 @@ machine map and transfer conventions from three computers to four.
 2026-07-29 - 02:02 - Restore personal Laptop SSH and configure Mini bidirectionally
 Result: Live-verified Laptop OpenSSH, hardened its firewall, gave Mini a unique outbound key, authorized it on
 Home, Laptop, and Air, proved nine source-native directions, and added a one-click Laptop outbound verifier.
+
+2026-07-29 - 02:11 - Install Codex CLI on Ubuntu mini
+Result: Installed Node 22.22.1, npm 9.2.0, Git 2.53.0, and Codex CLI 0.146.0 system-wide, verified the CLI as
+`franz`, and confirmed authentication remains intentionally unconfigured.
