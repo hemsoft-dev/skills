@@ -949,3 +949,7 @@ Home, Laptop, and Air, proved nine source-native directions, and added a one-cli
 2026-07-29 - 02:11 - Install Codex CLI on Ubuntu mini
 Result: Installed Node 22.22.1, npm 9.2.0, Git 2.53.0, and Codex CLI 0.146.0 system-wide, verified the CLI as
 `franz`, and confirmed authentication remains intentionally unconfigured.
+
+2026-07-29 - 09:51 - Compare remote control for AI harnesses across multiple machines
+Result: Compared Codex, Copilot, Claude Code, T3 Code, OpenCode, and terminal multiplexers, then recommended a
+phased Mini-first control-plane architecture over Tailscale.
