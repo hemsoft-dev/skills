@@ -1,6 +1,8 @@
 # Current Setup
 
-Last verified: 2026-07-29 after enrolling and verifying Ubuntu host `mini`.
+Last verified: 2026-07-29 after configuring Mini's inbound and outbound SSH,
+restoring SSH on the personal Windows laptop, and proving nine of twelve
+source-native routes. Laptop's three console-originated routes remain pending.
 
 ## Devices
 
@@ -25,8 +27,26 @@ Last verified: 2026-07-29 after enrolling and verifying Ubuntu host `mini`.
 - macOS SSH account short name: `home`.
 - Tailscale CLI path: `/Applications/Tailscale.app/Contents/MacOS/Tailscale`.
 
+### Personal Windows laptop
+
+- Windows host name: `DESKTOP-7ES73Q4`.
+- Friendly SSH alias: `laptop`.
+- Tailscale DNS: `desktop-7es73q4.tail3280fc.ts.net`.
+- Tailscale IPv4: `100.117.202.124`.
+- Windows account for SSH: `User`.
+- This is the personal laptop. It is not the Relias laptop.
+- OpenSSH service: `Running` and `Automatic`.
+- OpenSSH service binary: `C:\Program Files\OpenSSH\sshd.exe`.
+- Port 22 listens on `0.0.0.0` and `::`.
+- `OpenSSH-Server-In-TCP` allows only Home, Air, and Mini Tailscale IPs:
+  `100.101.122.39`, `100.69.182.27`, and `100.97.164.73`.
+- Home-to-Laptop key authentication returned `desktop-7es73q4\user` and
+  `DESKTOP-7ES73Q4`.
+
 ### Relias Windows laptop
 
+- This is a separate work computer. Do not use `relias` as another definition
+  of the personal `laptop` alias.
 - Tailscale host name: `relias`.
 - Tailscale DNS: `relias.tail3280fc.ts.net`.
 - Tailscale IPv4: `100.78.214.125`.
@@ -84,14 +104,28 @@ Additional proof:
 - The accepted ED25519 host-key fingerprint is
   `SHA256:BbNqFA+udBFauI0URPmI7CW+cge9xVZl+LijFAXPpZQ`.
 
-The MacBook Air has a `mini` alias with the same destination and account.
-Alias expansion is verified there, but its first Tailscale SSH web check is
-still pending. The Windows laptop was offline during rollout and does not yet
-have the alias.
+The MacBook Air and personal Windows laptop have `mini` aliases with the same
+destination and account. Home-to-Mini and Air-to-Mini strict SSH checks return
+`mini`. Laptop-to-Mini encrypted reachability is verified by a 4 ms Tailscale
+ping and a successful TCP/22 test; its final console-originated SSH check is
+pending.
 
-`mini` has no outbound private SSH key. Outbound SSH from `mini` to the Windows
-or macOS hosts is intentionally unprovisioned until key authorization and the
-narrow Windows firewall update are explicitly completed.
+`mini` has its own Ed25519 outbound key. Its private key remains only at
+`/home/franz/.ssh/id_ed25519`; no private key was copied between machines. The
+public-key fingerprint is:
+
+```text
+SHA256:z1qmHxo96drCrkE0Vy722NvjPoF9ETMWdzdW+xZ9sEA
+```
+
+That public key is authorized on Home and Laptop through
+`C:\ProgramData\ssh\administrators_authorized_keys` and on Air through
+`/Users/home/.ssh/authorized_keys`. Strict key-authenticated SSH from Mini
+returns the expected hostnames for Laptop, Home, and Air.
+
+Home's `OpenSSH-Server-In-TCP` rule allows Laptop, Air, Mini, and the separately
+preserved Relias peer: `100.117.202.124`, `100.69.182.27`, `100.97.164.73`,
+and `100.78.214.125`.
 
 ## Windows-to-Mac SSH
 
@@ -161,9 +195,9 @@ they did not keep the Mac reachable after lid-close sleep in this setup.
 
 ## Mac-to-Windows SSH
 
-Mac-to-Windows SSH is reachable over Tailscale. Windows `sshd` is running,
-automatic, and restricted by firewall to the MacBook Air and Relias laptop
-Tailscale IPs.
+Mac-to-Windows SSH is reachable over Tailscale. Home's Windows `sshd` is
+running, automatic, and restricted by firewall to the personal Laptop,
+MacBook Air, Mini, and Relias Tailscale IPs.
 
 The user ran this in elevated PowerShell:
 
@@ -194,15 +228,16 @@ Set-Service : Service sshd was not found on computer '.'.
 Diagnosis: Windows staged OpenSSH Server and needs a reboot before `sshd`
 materializes.
 
-## Post-Restart Windows OpenSSH State
+## Home Windows OpenSSH State
 
-Final post-restart state verified on 2026-06-29:
+The post-restart state was completed on 2026-06-29. Service, authentication,
+and firewall state were reverified and updated on 2026-07-29:
 
 - `sshd` exists.
 - `sshd` is `Running` and `Automatic`.
 - Port 22 is listening on `0.0.0.0` and `::`.
-- `OpenSSH-Server-In-TCP` remote addresses are restricted to `100.69.182.27`
-  and `100.78.214.125`.
+- `OpenSSH-Server-In-TCP` remote addresses are restricted to `100.117.202.124`,
+  `100.69.182.27`, `100.97.164.73`, and `100.78.214.125`.
 - Mac `ssh -o BatchMode=yes -o ConnectTimeout=8 home whoami` succeeded and
   returned `User`.
 - Windows SSH banner from Mac: `SSH-2.0-OpenSSH_for_Windows_9.5`.
@@ -333,8 +368,8 @@ powershell -ExecutionPolicy Bypass -File D:\tmp\finish-windows-ssh-tailscale.ps1
 - Windows currently has Tailscale Funnel enabled for desktop HTTPS according to
   `tailscale status`, but do not use Funnel for SSH.
 - Keep SSH private to the tailnet.
-- If possible, restrict Windows firewall ingress to the Mac's Tailscale IP
-  `100.69.182.27`.
+- Restrict Windows SSH firewall ingress to the explicitly intended Tailscale
+  peers; do not use `Any` as the remote address.
 - For Mac Remote Login, prefer key-only SSH. The Mac readable config had only
   default commented lines for password auth:
 

@@ -1,6 +1,6 @@
 ---
 name: tailscale
-description: "V1.0 - Commands: Status, Enroll, SSH, Diagnose. Enroll, verify, and troubleshoot the private Tailscale mesh and SSH access across Windows, macOS, and Linux hosts."
+description: "V1.1 - Commands: Status, Enroll, SSH, Diagnose. Enroll, verify, and troubleshoot the private Tailscale mesh and SSH access across Windows, macOS, and Linux hosts."
 ---
 
 # Tailscale

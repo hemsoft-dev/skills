@@ -941,3 +941,7 @@ interaction histories; ran focused tests and changed-file lint checks before pub
 2026-07-29 - 00:38 - Enroll Ubuntu mini in the private Tailscale network
 Result: Found and enrolled mini, verified MagicDNS, encrypted ping, SSH, and Taildrop, and expanded the durable
 machine map and transfer conventions from three computers to four.
+
+2026-07-29 - 02:02 - Restore personal Laptop SSH and configure Mini bidirectionally
+Result: Live-verified Laptop OpenSSH, hardened its firewall, gave Mini a unique outbound key, authorized it on
+Home, Laptop, and Air, proved nine source-native directions, and added a one-click Laptop outbound verifier.
