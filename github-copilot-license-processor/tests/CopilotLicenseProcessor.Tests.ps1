@@ -26,6 +26,43 @@ Mail : flex.user@relias.com
         $request.Email | Should -Be 'flex.user@relias.com'
     }
 
+    It 'treats a GH Admin user-group request with required fields as a Copilot request' {
+        $request = ConvertFrom-SlackLicenseRequest `
+            -AdminUserGroupId 'S081GPRJ9PB' `
+            -Text @'
+<!subteam^S081GPRJ9PB> requesting access for relias-engineering
+Username: lenient-user
+Email: lenient.user@relias.com
+'@
+
+        $request.IsRequest | Should -BeTrue
+        $request.Username | Should -Be 'lenient-user'
+        $request.Email | Should -Be 'lenient.user@relias.com'
+    }
+
+    It 'accepts a plain GH Admin mention without fixed request wording' {
+        $request = ConvertFrom-SlackLicenseRequest -Text @'
+@gh admin please help with this request
+Username: plain-mention-user
+Email: plain.mention@relias.com
+'@
+
+        $request.IsRequest | Should -BeTrue
+        $request.Username | Should -Be 'plain-mention-user'
+        $request.Email | Should -Be 'plain.mention@relias.com'
+    }
+
+    It 'does not treat a different Slack user group as a Copilot request' {
+        ConvertFrom-SlackLicenseRequest `
+            -AdminUserGroupId 'S081GPRJ9PB' `
+            -Text @'
+<!subteam^S000OTHER> requesting access
+Username: unrelated-user
+Email: unrelated.user@relias.com
+'@ |
+            Should -BeNullOrEmpty
+    }
+
     It 'extracts a linked GitHub username' {
         $request = ConvertFrom-SlackLicenseRequest -Text @'
 Requesting copilot license
@@ -49,6 +86,80 @@ Email: missing.user@relias.com
 
         $request.IsRequest | Should -BeTrue
         $request.Username | Should -BeNullOrEmpty
+    }
+
+    It 'reports every missing required request field' {
+        $request = ConvertFrom-SlackLicenseRequest -Text @'
+@gh admin
+Username:
+Email:
+'@
+
+        $issues = @(Get-SlackLicenseRequestValidationIssue -Request $request)
+
+        $issues | Should -Contain 'GitHub username'
+        $issues | Should -Contain 'email address'
+    }
+}
+
+Describe 'ConvertTo-SlackOrganizationOnboardingReply' {
+    It 'reproduces the approved SSO onboarding response as Block Kit' {
+        $reply = ConvertTo-SlackOrganizationOnboardingReply `
+            -Username 'octocat-relias' `
+            -Organization 'relias-engineering'
+
+        $reply.Text | Should -Be 'Not a member of Relias-Engineering org. See thread for SSO instructions.'
+        $reply.Blocks.Count | Should -Be 4
+        $reply.Blocks[0].text.text | Should -Match 'Not a member'
+        $reply.Blocks[3].text.text | Should -Match 'myapps\.microsoft\.com'
+        $reply.Blocks[3].text.text | Should -Match 'octocat-relias'
+        $reply.Blocks[3].text.text | Should -Match 'new message'
+    }
+}
+
+Describe 'Send-SlackThreadReply' {
+    BeforeEach {
+        Mock -ModuleName CopilotLicenseProcessor Invoke-SlackApi {
+            if ($Method -eq 'auth.test') {
+                return [pscustomobject]@{ ok = $true; user_id = 'U-BOT' }
+            }
+
+            if ($Method -eq 'conversations.replies') {
+                return [pscustomobject]@{ ok = $true; messages = @() }
+            }
+
+            return [pscustomobject]@{ ok = $true }
+        }
+    }
+
+    It 'keeps existing plain-text replies backward compatible' {
+        Send-SlackThreadReply `
+            -Token 'test-token' `
+            -ChannelId 'C123' `
+            -ThreadTimestamp '123.456' `
+            -Text 'Invite sent'
+
+        Should -Invoke -ModuleName CopilotLicenseProcessor Invoke-SlackApi -Times 1 -ParameterFilter {
+            $Method -eq 'chat.postMessage' -and -not $Body.ContainsKey('blocks')
+        }
+    }
+
+    It 'includes Block Kit data when supplied' {
+        $blocks = @(@{
+            type = 'section'
+            text = @{ type = 'mrkdwn'; text = 'Structured reply' }
+        })
+
+        Send-SlackThreadReply `
+            -Token 'test-token' `
+            -ChannelId 'C123' `
+            -ThreadTimestamp '123.456' `
+            -Text 'Fallback' `
+            -Blocks $blocks
+
+        Should -Invoke -ModuleName CopilotLicenseProcessor Invoke-SlackApi -Times 1 -ParameterFilter {
+            $Method -eq 'chat.postMessage' -and $Body.blocks.Count -eq 1
+        }
     }
 }
 

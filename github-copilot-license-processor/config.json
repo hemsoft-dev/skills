@@ -1,6 +1,7 @@
 {
   "Organization": "relias-engineering",
   "SlackChannelId": "C05BRPSNNRW",
+  "AdminUserGroupId": "S081GPRJ9PB",
   "ReceiptChannelId": "C0AHWV2C62G",
   "Mode": "Live",
   "InitialLookbackHours": 168,

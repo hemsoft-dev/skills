@@ -83,7 +83,15 @@ try {
             $state.LastScannedTs = [string]$message.ts
         }
 
-        $request = ConvertFrom-SlackLicenseRequest -Text ([string]$message.text)
+        $adminUserGroupId = if ($config.PSObject.Properties['AdminUserGroupId']) {
+            [string]$config.AdminUserGroupId
+        }
+        else {
+            ''
+        }
+        $request = ConvertFrom-SlackLicenseRequest `
+            -Text ([string]$message.text) `
+            -AdminUserGroupId $adminUserGroupId
         if (-not $request) {
             continue
         }
@@ -134,13 +142,14 @@ try {
             continue
         }
 
-        $username = [string]$request.Username
-        if ([string]::IsNullOrWhiteSpace($username)) {
+        $validationIssues = @(Get-SlackLicenseRequestValidationIssue -Request $request)
+        if ($validationIssues.Count -gt 0) {
+            $missingFields = $validationIssues -join ', '
             if ($isDryRun) {
                 Write-ProcessorLog `
                     -LogDirectory $logDirectory `
                     -Level Warning `
-                    -Message "Dry-run: request $($request.Ts) needs manual review because no username was parsed."
+                    -Message "Dry-run: request $($request.Ts) needs correction; missing $missingFields."
                 $remaining.Add($request)
                 continue
             }
@@ -156,8 +165,8 @@ try {
                     -ChannelId $config.ReceiptChannelId `
                     -Title 'GitHub Copilot seat request rejected' `
                     -Details ([ordered]@{
-                        User   = '(username not parsed)'
-                        Reason = 'The request did not contain a recognizable GitHub username.'
+                        User   = if ($request.Username) { $request.Username } else { '(username not parsed)' }
+                        Reason = "The request is missing required information: $missingFields."
                     }) `
                     -ProcessedAt (Get-Date) `
                     -ClientMessageKey "rejected:$($request.Ts)"
@@ -175,7 +184,7 @@ try {
                     -Token $token `
                     -ChannelId $config.SlackChannelId `
                     -ThreadTimestamp $request.Ts `
-                    -Text 'I could not identify the GitHub username. Please reply with `Username: your-github-login`.'
+                    -Text "I could not process this request because it is missing: $missingFields. Please post a new top-level message tagging GH Admin with `Username: your-github-login` and `Email: your-email-address`. Do not reply in this thread."
                 $completed.Add($request.Ts)
             }
             catch {
@@ -185,11 +194,12 @@ try {
                 Write-ProcessorLog `
                     -LogDirectory $logDirectory `
                     -Level Error `
-                    -Message "Request $($request.Ts) with no username failed and remains pending: $($_.Exception.Message)"
+                    -Message "Incomplete request $($request.Ts) failed and remains pending: $($_.Exception.Message)"
             }
             continue
         }
 
+        $username = [string]$request.Username
         try {
             $processingStage = 'organization membership lookup'
             Write-ProcessorLog `
@@ -227,6 +237,9 @@ try {
                 -Message "Added processing reaction for $username; checking existing Copilot seat."
 
             if (-not $isMember) {
+                $onboardingReply = ConvertTo-SlackOrganizationOnboardingReply `
+                    -Username $username `
+                    -Organization $config.Organization
                 $processingStage = 'rejection receipt'
                 $null = Send-SlackReceipt `
                     -Token $token `
@@ -253,7 +266,8 @@ try {
                     -Token $token `
                     -ChannelId $config.SlackChannelId `
                     -ThreadTimestamp $request.Ts `
-                    -Text "GitHub user `$username` is not currently a member of the relias-engineering organization. Please complete GitHub SSO onboarding and submit a new request."
+                    -Text $onboardingReply.Text `
+                    -Blocks $onboardingReply.Blocks
                 $completed.Add($request.Ts)
                 continue
             }

@@ -1,6 +1,6 @@
 ---
 name: jira
-description: V2.3 - Query JIRA tickets, boards, and sprints via REST API PowerShell scripts. Replaces the deprecated .NET JiraService connector. Also tracks active JIRA epics for Productivity Engineering.
+description: "V2.4 - Commands: Get, Search, Comments, Board, Create Child, Move. Query and manage Jira work in Productivity Engineering."
 ---
 
 # JIRA Skill
@@ -9,6 +9,11 @@ description: V2.3 - Query JIRA tickets, boards, and sprints via REST API PowerSh
 
 Query JIRA tickets, search by JQL, retrieve comments, and view board/sprint information using the Atlassian REST API.
 Replaces the deprecated .NET `JiraService` / `JiraServiceFactory` connector.
+
+## Default Behavior
+
+When activated without an action, show the available commands from the description and ask which operation to run.
+Never create, edit, or transition an issue without an explicit user request.
 
 ## Authentication
 
@@ -82,6 +87,51 @@ Use this when a user asks about a board or sprint, or pastes a board URL.
 ```
 
 Returns: Board name, type, project info, sprint names, goals, dates, and optionally issues with status breakdown.
+
+### Move an Issue to a Kanban Column
+
+Never infer a board column from the Jira status category. A status in the `To Do` category can still map to the
+board's `Backlog` column.
+
+#### Workflow
+
+1. Read the issue's current status and available transitions.
+2. Read the live board configuration from `GET /rest/agile/1.0/board/{boardId}/configuration`.
+3. Find the requested column and collect its configured status IDs.
+4. Choose an available transition whose destination status ID is in that column.
+5. Transition the issue.
+6. Re-read the issue and board to verify all three conditions:
+   - The issue has the expected destination status ID.
+   - The board query returns the issue.
+   - The live board configuration maps that status ID to the requested column.
+
+Use the Atlassian connector's transition operations when available. If they are unavailable, use Jira REST endpoints
+for the same read, transition, and verification steps.
+
+#### Decision Rules
+
+| Situation | Required action |
+| --- | --- |
+| User names a board column | Resolve the column through live board configuration before transitioning |
+| User provides a reference issue | Compare its status name and ID, then verify that ID maps to the requested column |
+| Status category matches the column name | Ignore the category and use the board configuration |
+| Multiple transitions map to the column | Ask which workflow status the user wants |
+| No available transition maps to the column | Stop and report the workflow limitation |
+
+#### Developer Experience Board Reference
+
+Board `729` is the Productivity Engineering `Developer Experience` Kanban board. This mapping was verified on
+2026-07-28 and is reference material only; always refresh the live configuration before a transition.
+
+| Board column | Jira statuses |
+| --- | --- |
+| Backlog | `Open` (`1`), `Deferred` (`10001`), `Backlog` (`10202`), `To Be Refined` (`15134`) |
+| To Do | `Ready` (`15133`) |
+| In Progress | `Blocked` (`13109`), `In Progress` (`3`), `Design` (`11602`), `Review` (`14283`) |
+| Done | `Closed` (`6`) |
+
+Reference issue `PE-1323` used `Ready` (`15133`) when verified. Therefore, moving an issue to this board's `To Do`
+column required the `Ready` transition, not leaving it in `Open`.
 
 ### Common JQL Queries
 

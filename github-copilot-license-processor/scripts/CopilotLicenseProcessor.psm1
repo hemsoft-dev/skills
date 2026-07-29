@@ -18,11 +18,21 @@ function ConvertFrom-SlackLicenseRequest {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory)]
-        [string]$Text
+        [string]$Text,
+
+        [string]$AdminUserGroupId
     )
 
     $plainText = ConvertTo-SlackPlainText -Text $Text
-    if ($plainText -notmatch '(?i)requesting\s+copilot\s+license') {
+    $hasLegacyRequestPhrase = $plainText -match '(?i)requesting\s+copilot\s+license'
+    $hasPlainAdminMention = $plainText -match '(?i)(?<![\w])@gh(?:[\s-]*admin)(?![\w])'
+    $hasConfiguredAdminMention = $false
+    if (-not [string]::IsNullOrWhiteSpace($AdminUserGroupId)) {
+        $escapedGroupId = [regex]::Escape($AdminUserGroupId)
+        $hasConfiguredAdminMention = $Text -match "<!subteam\^$escapedGroupId(?:\|[^>]*)?>"
+    }
+
+    if (-not ($hasLegacyRequestPhrase -or $hasPlainAdminMention -or $hasConfiguredAdminMention)) {
         return $null
     }
 
@@ -30,16 +40,16 @@ function ConvertFrom-SlackLicenseRequest {
     $email = $null
 
     foreach ($line in ($plainText -split '\r?\n')) {
-        if (-not $username -and $line -match '(?i)^\s*(?:github\s+)?user\s*name|^\s*username') {
-            if ($line -match '(?i)^\s*(?:(?:github\s+)?user\s*name|username)\s*:?\s*(?<value>.+?)\s*$') {
-                $username = $Matches.value.Trim().TrimStart('@')
-                if ($username -match '^https?://github\.com/(?<login>[^/?#]+)') {
-                    $username = $Matches.login
-                }
+        if (-not $username -and
+            $line -match '(?i)^\s*(?:(?:github\s+)?user\s+name|(?:github\s+)?username)(?:\s*:\s*|\s+)(?<value>.+?)\s*$') {
+            $username = $Matches.value.Trim().TrimStart('@')
+            if ($username -match '^https?://github\.com/(?<login>[^/?#]+)') {
+                $username = $Matches.login
             }
         }
 
-        if (-not $email -and $line -match '(?i)^\s*(?:email(?:\s+address)?|mail)\s*:?\s*(?<value>.+?)\s*$') {
+        if (-not $email -and
+            $line -match '(?i)^\s*(?:email(?:\s+address)?|mail)(?:\s*:\s*|\s+)(?<value>.+?)\s*$') {
             $candidate = $Matches.value.Trim()
             if ($candidate -match '(?i)(?<address>[a-z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-z0-9.-]+\.[a-z]{2,})') {
                 $email = $Matches.address
@@ -51,6 +61,81 @@ function ConvertFrom-SlackLicenseRequest {
         IsRequest = $true
         Username  = $username
         Email     = $email
+    }
+}
+
+function Get-SlackLicenseRequestValidationIssue {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [psobject]$Request
+    )
+
+    if ([string]::IsNullOrWhiteSpace([string]$Request.Username)) {
+        'GitHub username'
+    }
+
+    if ([string]::IsNullOrWhiteSpace([string]$Request.Email)) {
+        'email address'
+    }
+}
+
+function ConvertTo-SlackOrganizationOnboardingReply {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string]$Username,
+
+        [Parameter(Mandatory)]
+        [string]$Organization
+    )
+
+    $displayOrganization = if ($Organization -ieq 'relias-engineering') {
+        'Relias-Engineering'
+    }
+    else {
+        $Organization
+    }
+
+    $instructions = @"
+:one: *Sign in through SSO*
+If the GitHub tile is not available in <https://myapps.microsoft.com|myapps>, request access through ITHC.
+
+:two: *Link your GitHub account*
+On your first SSO sign-in, log in with the intended GitHub account: ``$Username``.
+
+:three: *Request your license again*
+Once you are a member, post a new message in this channel tagging GH Admin with your Username and Email. Do not reply in this thread.
+"@
+
+    [pscustomobject]@{
+        Text   = "Not a member of $displayOrganization org. See thread for SSO instructions."
+        Blocks = @(
+            @{
+                type = 'section'
+                text = @{
+                    type = 'mrkdwn'
+                    text = ":no_entry_sign: *Not a member of the $displayOrganization org yet*"
+                }
+            },
+            @{
+                type = 'divider'
+            },
+            @{
+                type = 'section'
+                text = @{
+                    type = 'mrkdwn'
+                    text = "You'll need to join the *$displayOrganization* GitHub org before we can assign a Copilot license. Here's how:"
+                }
+            },
+            @{
+                type = 'section'
+                text = @{
+                    type = 'mrkdwn'
+                    text = $instructions.Trim()
+                }
+            }
+        )
     }
 }
 
@@ -599,7 +684,9 @@ function Send-SlackThreadReply {
         [string]$ThreadTimestamp,
 
         [Parameter(Mandatory)]
-        [string]$Text
+        [string]$Text,
+
+        [object[]]$Blocks
     )
 
     $auth = Invoke-SlackApi -Method 'auth.test' -Token $Token -HttpMethod Get
@@ -616,11 +703,16 @@ function Send-SlackThreadReply {
         return
     }
 
-    $null = Invoke-SlackApi -Method 'chat.postMessage' -Token $Token -Body @{
+    $body = @{
         channel   = $ChannelId
         thread_ts = $ThreadTimestamp
         text      = $Text
     }
+    if ($null -ne $Blocks -and $Blocks.Count -gt 0) {
+        $body.blocks = $Blocks
+    }
+
+    $null = Invoke-SlackApi -Method 'chat.postMessage' -Token $Token -Body $body
 }
 
 function Write-ProcessorLog {
@@ -649,12 +741,14 @@ Export-ModuleMember -Function @(
     'Add-CopilotSeat',
     'Add-SlackReaction',
     'ConvertFrom-SlackLicenseRequest',
+    'ConvertTo-SlackOrganizationOnboardingReply',
+    'ConvertTo-SlackReceiptBody',
     'Get-CopilotSeatCount',
     'Get-ProcessorConfig',
     'Get-ProcessorState',
     'Get-SlackChannelMessage',
+    'Get-SlackLicenseRequestValidationIssue',
     'Get-SlackToken',
-    'ConvertTo-SlackReceiptBody',
     'Remove-SlackReaction',
     'Send-SlackReceipt',
     'Send-SlackThreadReply',

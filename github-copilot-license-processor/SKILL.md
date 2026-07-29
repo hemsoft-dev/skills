@@ -1,6 +1,6 @@
 ---
 name: github-copilot-license-processor
-description: "V1.4 - Commands: Process, Status, Install, SetMode. Polls Slack for Relias GitHub Copilot license requests, validates organization membership, safely assigns seats, and posts audit receipts."
+description: "V1.5 - Commands: Process, Status, Install, SetMode. Polls Slack for Relias GitHub Copilot license requests, validates organization membership, safely assigns seats, and posts audit receipts."
 compatibility: Requires PowerShell 7, GitHub CLI authentication, Slack bot access, and Windows Task Scheduler
 hooks:
   PostToolUse:
@@ -45,15 +45,18 @@ One-shot live processing:
 
 ## Workflow
 
-1. Poll `#github-copilot` for new request messages.
-2. Extract the GitHub username and email.
-3. Queue requests persistently so dry-run scans do not lose them.
-4. In dry-run mode, validate organization membership without Slack or billing writes.
-5. In live mode, add `:eyes:`, validate membership, assign the seat, replace
+1. Poll `#github-copilot` for new top-level messages.
+2. Treat a message as a request when it uses the legacy Copilot request phrase
+   or tags GH Admin. Extract the GitHub username and email.
+3. Respond explicitly when a recognized request is missing either required field.
+4. Queue requests persistently so dry-run scans do not lose them.
+5. In dry-run mode, validate organization membership without Slack or billing writes.
+6. In live mode, add `:eyes:`, validate membership, assign the seat, replace
    `:eyes:` with `:github-approved:`, and reply `Invite sent`.
-6. Post success, rejection, and first-attempt failure receipts to
+7. For non-members, reply with the approved Relias-Engineering SSO onboarding steps.
+8. Post success, rejection, and first-attempt failure receipts to
    `#prod-eng-devex-automation`.
-7. Leave transient failures pending for a later retry.
+9. Leave transient failures pending for a later retry.
 
 ## Safety
 
