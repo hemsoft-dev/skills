@@ -961,3 +961,39 @@ remaining Settings > Connections workflow for adding Mini as an SSH host.
 2026-07-29 - 10:09 - Correct the Home-to-Mini Codex Desktop connection direction
 Result: Distinguished device Remote Control from SSH remote projects and identified Settings > Connections > SSH as
 the Home-to-Mini path, with the other two Connections tabs controlling desktop-app hosts instead.
+
+2026-07-30 - 09:47 - Install SwiftLint and SwiftFormat on the MacBook Air
+Result: Connected to the Tailscale `air` target, installed both tools with Homebrew, and verified their executable
+paths and versions from the Mac's login shell.
+
+2026-07-30 - 14:13 - Diagnose missing upcoming Todoist massage appointment
+Result: Verified the live Massage task is scheduled for August 10, 2027 rather than 2026, explaining why it is
+absent from this year's upcoming appointments.
+
+2026-07-30 - 14:19 - Begin a global Codex AGENTS.md with Franz and Tailscale context
+Result: Created the global agent guidance with Franz's collaboration context, identified this computer as `home`,
+and directed agents to use the `tailscale-network` skill for SSH access to `air`, `mini`, and `laptop`.
+
+2026-07-30 - 14:21 - Copy the global Codex AGENTS.md to Air with machine-specific context
+Result: Sent the file through Taildrop, installed it at `/Users/home/.codex/AGENTS.md` with `air` as the current
+computer, and verified the local, routed, and installed copies had the same SHA-256 hash.
+
+2026-07-30 - 14:23 - Copy the global Codex AGENTS.md to Mini with machine-specific context
+Result: Sent the file through Taildrop, installed it at `/home/franz/.codex/AGENTS.md` with `mini` as the current
+computer, and verified the local, routed, and installed copies had the same SHA-256 hash.
+
+2026-07-30 - 14:27 - Copy the global Codex AGENTS.md to Laptop with machine-specific context
+Result: Sent the file through Taildrop, installed it at `C:\Users\User\.codex\AGENTS.md` with `laptop` as the
+current computer, and verified the local, routed, and installed copies had the same SHA-256 hash.
+
+2026-08-01 - 08:08 - Add the installed Greptile CLI to the cli-tools skill
+Result: Documented Greptile 3.3.1 installation, updates, authentication, review modes, and telemetry controls;
+synchronized skill version 1.9 and migrated manual logging requirements to hooks.
+
+2026-08-01 - 08:31 - Refactor cli-tools into category reference files
+Result: Retained all 11 documented tools, reduced the main skill to a routing and workflow entrypoint, and moved
+full operational details into development, text-editor, AI, and system-monitoring references.
+
+2026-08-01 - 08:47 - Commit, push, and clean the skills repository
+Result: Audited all pending work, repaired review automation and history-log issues, verified changed files, and
+prepared the repository for focused conventional commits, push, and safe branch/worktree/stash cleanup.
