@@ -1,4 +1,4 @@
 interface:
   display_name: "Copilot PR Processor"
-  short_description: "Drive existing PRs through Copilot review"
-  default_prompt: "Use $copilot-pr-processor to process an existing pull request until GitHub Copilot PR Reviewer has no actionable comments."
+  short_description: "Drive PRs through Copilot and SFL review"
+  default_prompt: "Use $copilot-pr-processor to process an existing pull request until GitHub Copilot has no actionable comments and the available SFL workflow-dispatch reviewer has a zero-finding current-head review sheet."

@@ -10,17 +10,10 @@ param(
     [int] $PullNumber,
 
     [Parameter(Mandatory = $false)]
-    [string] $ReviewerLogin = 'copilot-pull-request-reviewer',
+    [string] $ReviewerLogin = 'copilot-pull-request-reviewer[bot]',
 
     [Parameter(Mandatory = $false)]
-    [ValidateSet('Bot', 'User')]
-    [string] $ReviewerKind = 'Bot',
-
-    [Parameter(Mandatory = $false)]
-    [switch] $DryRun,
-
-    [Parameter(Mandatory = $false)]
-    [switch] $SkipRestFallback
+    [switch] $DryRun
 )
 
 Set-StrictMode -Version Latest
@@ -110,7 +103,7 @@ if ($DryRun) {
     [pscustomobject]@{
         requested = $false
         dryRun = $true
-        method = "graphql requestReviewsByLogin $ReviewerKind"
+        method = 'rest requested_reviewers'
         reviewer = $ReviewerLogin
         url = $pr.url
         headRefOid = $pr.headRefOid
@@ -118,66 +111,32 @@ if ($DryRun) {
     exit 0
 }
 
-if ($ReviewerKind -eq 'Bot') {
-    $mutation = @"
-mutation(`$pullRequestId: ID!, `$login: String!) {
-  requestReviewsByLogin(input: {pullRequestId: `$pullRequestId, botLogins: [`$login], union: true}) {
-    pullRequest {
-      url
-      headRefOid
+$restResult = Invoke-Gh -Arguments @(
+    'api',
+    '-X', 'POST',
+    "repos/$($identity.Owner)/$($identity.Name)/pulls/$($identity.PullNumber)/requested_reviewers",
+    '-f', "reviewers[]=$ReviewerLogin"
+)
+
+$response = $restResult | ConvertFrom-Json
+$requestedReviewers = @($response.requested_reviewers)
+$requestVisible = $requestedReviewers.login -contains $ReviewerLogin
+
+[pscustomobject]@{
+    requested = $requestVisible
+    accepted = $true
+    method = 'rest requested_reviewers'
+    reviewer = $ReviewerLogin
+    url = $pr.url
+    headRefOid = $pr.headRefOid
+    visibleRequestedReviewers = @($requestedReviewers.login)
+    warning = if ($requestVisible) {
+        $null
+    } else {
+        'GitHub accepted the API call but did not add Copilot to requested_reviewers. Treat Copilot review as unavailable until a review appears.'
     }
-  }
-}
-"@
-} else {
-    $mutation = @"
-mutation(`$pullRequestId: ID!, `$login: String!) {
-  requestReviewsByLogin(input: {pullRequestId: `$pullRequestId, userLogins: [`$login], union: true}) {
-    pullRequest {
-      url
-      headRefOid
-    }
-  }
-}
-"@
-}
+} | ConvertTo-Json -Depth 10
 
-try {
-    $result = Invoke-Gh -Arguments @(
-        'api', 'graphql',
-        '-f', "query=$mutation",
-        '-F', "pullRequestId=$($pr.id)",
-        '-F', "login=$ReviewerLogin"
-    )
-
-    $parsed = $result | ConvertFrom-Json
-    [pscustomobject]@{
-        requested = $true
-        method = "graphql requestReviewsByLogin $ReviewerKind"
-        reviewer = $ReviewerLogin
-        url = $parsed.data.requestReviewsByLogin.pullRequest.url
-        headRefOid = $parsed.data.requestReviewsByLogin.pullRequest.headRefOid
-    } | ConvertTo-Json -Depth 5
-    exit 0
-} catch {
-    $graphQlError = $_.Exception.Message
-
-    if ($SkipRestFallback) {
-        throw
-    }
-
-    $restResult = Invoke-Gh -Arguments @(
-        'api',
-        '-X', 'POST',
-        "repos/$($identity.Owner)/$($identity.Name)/pulls/$($identity.PullNumber)/requested_reviewers",
-        '-f', "reviewers[]=$ReviewerLogin"
-    )
-
-    [pscustomobject]@{
-        requested = $true
-        method = 'rest requested_reviewers fallback'
-        reviewer = $ReviewerLogin
-        graphQlError = $graphQlError
-        response = ($restResult | ConvertFrom-Json)
-    } | ConvertTo-Json -Depth 20
+if (-not $requestVisible) {
+    exit 2
 }
