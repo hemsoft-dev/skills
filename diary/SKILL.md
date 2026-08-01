@@ -1,6 +1,6 @@
 ---
 name: diary
-description: "V1.9 - Commands: create, scaffold, update. Personal diary management with credential-resilient automated collection, quality-gated news, DeepSWE-first LLM benchmarks, token-based Copilot billing, and HTML entries."
+description: "V1.10 - Commands: create, scaffold, update. Personal diary management with credential-resilient automated collection, quality-gated news, DeepSWE-first LLM benchmarks, token-based Copilot billing, and HTML entries."
 ---
 
 # Diary
@@ -52,7 +52,7 @@ Also load yesterday's diary entry (`diary/entries/YYYY/MM/YYYY-MM-DD.html` for y
 
 | # | Section | Cached File | Fallback Script |
 |---|---------|-------------|------------------|
-| 1 | Weather | **ALWAYS re-run** (weather changes throughout the day) | `weather/scripts/Get-DailyWeather.ps1` |
+| 1 | Weather | **ALWAYS re-run** (weather changes throughout the day) | `diary/scripts/Get-DailyWeather.ps1` |
 | 2 | News | `news/output/YYYY-MM-DD.json` | `news/scripts/Get-AllNews.ps1 -Date YYYY-MM-DD -Count 7 -HoursBack 48` |
 | 3 | Slack Activity | `slack/output/YYYY-MM-DD-slack-briefing.json` | `slack/scripts/Get-SlackDailyBriefing.ps1 -OutputFormat Detailed 6>&1` |
 
@@ -85,7 +85,7 @@ DeepSWE is the most important LLM benchmark for diary scaffolding.
 | # | Section | How |
 |---|---------|------|
 | 10 | Meetings (workiq) | `workiq ask -q "What meetings did I have today {YYYY-MM-DD}? List each meeting with time, title, and attendees."` — then for each meeting: `workiq ask -q "Show me the transcript or notes from the {meeting title} meeting today. Include key discussion points and action items."` |
-| 11 | Watchlist Updates | Read `watchlist/WATCHLIST.md` → for each Active item, check its key resources for updates **from today** → include only items with actual changes |
+| 11 | Watchlist Updates | Read `diary/config/WATCHLIST.md` → for each Active item, check its key resources for updates **from today** → include only items with actual changes |
 | 12 | Trending GitHub Repos | Fetch `https://github.com/trending` with `Invoke-WebRequest -UseBasicParsing`, then regex-extract repo paths from `/owner/repo/stargazers` links. Get star counts + descriptions via `gh api "repos/{owner}/{repo}" --jq '.stargazers_count, .description'`. Take top 5. |
 | 13 | Today's Productivity | `productivity/scripts/Get-TodayProductivity.ps1` → LOC, commits, PRs, reviews, issues |
 | 14 | Screenshots | Check `screenshot/images/library/YYYY-MM-DD/` for `.webp` files |
