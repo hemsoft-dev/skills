@@ -1,4 +1,4 @@
-[CmdletBinding()]
+﻿[CmdletBinding()]
 param(
     [string]$UserId = 'U2XMZDPJ7',
     [string]$Email,
@@ -128,6 +128,18 @@ function ConvertTo-CleanSummary {
     return $cleaned
 }
 
+function ConvertTo-CleanTask {
+    param([string]$Value)
+
+    $task = ConvertTo-SingleLine -Value $Value -FieldName 'task' -Maximum 400
+    $artifactReference = '(?i)\b(?:PR|pull request|Issue)\s*#?\s*\d+\b'
+    $artifactTask = '^(?:PR|Issue) #[1-9]\d* — \S(?:.*\S)? — \S(?:.*\S)?$'
+    if ($task -match $artifactReference -and $task -cnotmatch $artifactTask) {
+        throw "issue/PR task must use 'PR #<ID> — <exact title> — <result>' or 'Issue #<ID> — <exact title> — <result>'"
+    }
+    return $task
+}
+
 function ConvertTo-DetailRow {
     param([string]$Value)
 
@@ -183,8 +195,8 @@ function ConvertTo-SlackMessage {
 
     $emoji = $script:CategoryEmojis[$CategoryName]
     $fallbackLines = [Collections.Generic.List[string]]::new()
-    $fallbackLines.Add("$($script:ProjectEmoji) $ProjectName")
     $fallbackLines.Add("$emoji $TaskName")
+    $fallbackLines.Add("$($script:ProjectEmoji) $ProjectName")
     $fallbackLines.Add($SummaryText)
     if ($DetailRows.Count -gt 0) {
         $detailText = ($DetailRows | ForEach-Object { "$($_.Area): $($_.Result)" }) -join '; '
@@ -202,16 +214,16 @@ function ConvertTo-SlackMessage {
 
     $blocks = [Collections.ArrayList]::new()
     [void]$blocks.Add([ordered]@{
+        type = 'section'
+        text = [ordered]@{ type = 'mrkdwn'; text = $outcome }
+    })
+    [void]$blocks.Add([ordered]@{
         type = 'header'
         text = [ordered]@{
             type  = 'plain_text'
             text  = "$($script:ProjectEmoji) $ProjectName"
             emoji = $true
         }
-    })
-    [void]$blocks.Add([ordered]@{
-        type = 'section'
-        text = [ordered]@{ type = 'mrkdwn'; text = $outcome }
     })
     [void]$blocks.Add([ordered]@{
         type = 'section'
@@ -285,7 +297,7 @@ try {
     }
 
     $cleanProject = ConvertTo-SingleLine -Value $Project -FieldName 'project' -Maximum 140
-    $cleanTask = ConvertTo-SingleLine -Value $Task -FieldName 'task' -Maximum 180
+    $cleanTask = ConvertTo-CleanTask -Value $Task
     $cleanSummary = ConvertTo-CleanSummary -Value $Summary
     $detailRows = @($Detail | ForEach-Object { ConvertTo-DetailRow -Value $_ })
     $safeUrl = ConvertTo-SafeUrl -Value $Url

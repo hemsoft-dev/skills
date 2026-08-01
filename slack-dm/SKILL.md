@@ -1,7 +1,6 @@
 ---
 name: slack-dm
-description: V1.1 - Send concise, structured Slack direct-message updates with a project, outcome, summary, category emoji, optional detail table, and available runtime metrics. Use when an agent or scheduled automation needs to notify the owner through Slack.
-compatibility: Requires PowerShell 5.1+ on Windows or Python 3.9+ on macOS, network access, and SLACK_TOKEN with im:write and chat:write.
+description: V1.2 - Send concise, structured Slack direct-message updates with an outcome, project, summary, category emoji, optional detail table, and available runtime metrics. Issue and pull-request updates must lead with the artifact ID and exact title. Use when an agent or scheduled automation needs to notify the owner through Slack.
 ---
 
 # Slack DM
@@ -27,23 +26,31 @@ Every message must begin with these three items in this order:
 
 | Position | Content | Example |
 | --- | --- | --- |
-| 1 | Project, on one line | `📦 codexbar-ios` |
-| 2 | Short outcome, on one line | `✅ PR #102 merged` |
-| 3 | One- or two-line summary | `Issue #101 closed after the squash merge.` |
+| 1 | Short outcome, on one line | `✅ PR #102 — Add saved-reset selection — merged` |
+| 2 | Project, on one line | `📦 codexbar-ios` |
+| 3 | One- or two-line summary | `The squash merge passed review and CI gates.` |
 
 Follow these rules:
 
-1. Keep the outcome to a few words. State the artifact and result, such as
-   `PR #83 merged`, `Issue #72 blocked`, or `Release deployed`.
-2. Keep the summary to one or two short sentences. Do not repeat the project
+1. For every message about an issue or pull request, resolve the exact artifact
+   ID and current title before composing the DM. Never send the message when
+   either value is unknown.
+2. Begin `--task` with the artifact ID and exact title, then state the result:
+   `PR #<ID> — <exact title> — <result>` or
+   `Issue #<ID> — <exact title> — <result>`. This is the first fallback line
+   and the first visible Block Kit content. A titleless outcome such as
+   `PR117 merged`, `PR #117 merged`, or `Issue #72 blocked` is prohibited.
+3. For messages not about an issue or pull request, keep the outcome to a few
+   words, such as `Release deployed`.
+4. Keep the summary to one or two short sentences. Do not repeat the project
    or outcome.
-3. Put multi-part implementation results in `--detail` rows. Do not turn the
+5. Put multi-part implementation results in `--detail` rows. Do not turn the
    summary into a list.
-4. Put links in `--url`. Do not insert a long raw URL into the first three
+6. Put links in `--url`. Do not insert a long raw URL into the first three
    lines.
-5. Never pass a free-form blob. The helper intentionally requires structured
+7. Never pass a free-form blob. The helper intentionally requires structured
    arguments.
-6. Put available runtime metrics in ordinary detail rows. Do not add them to
+8. Put available runtime metrics in ordinary detail rows. Do not add them to
    the summary or send a follow-up message just to report a late metric.
 
 Slack uses the same three-line hierarchy for the top-level fallback text.
@@ -115,8 +122,8 @@ Example content:
 ```text
 --project "codexbar-ios"
 --category merged
---task "PR #102 merged"
---summary "Issue #101 closed after the squash merge. Review and CI gates passed."
+--task "PR #102 — Add saved-reset selection — merged"
+--summary "The squash merge passed review and CI gates."
 --detail "Inventory=Added saved-reset selection flow"
 --detail "Reliability=Added retry-safe redemption state"
 --detail "Quality=Added accessibility coverage and tests"
@@ -135,8 +142,8 @@ python3 "$HOME/.agents/skills/slack-dm/scripts/slack_dm.py" \
   --user-id U2XMZDPJ7 \
   --project "codexbar-ios" \
   --category merged \
-  --task "PR #102 merged" \
-  --summary "Issue #101 closed after the squash merge. Review and CI gates passed." \
+  --task "PR #102 — Add saved-reset selection — merged" \
+  --summary "The squash merge passed review and CI gates." \
   --detail "Inventory=Added saved-reset selection flow" \
   --detail "Reliability=Added retry-safe redemption state" \
   --url "https://github.com/HemSoft/codexbar-ios/pull/102"
@@ -151,8 +158,8 @@ Windows agents use the same arguments with PowerShell parameter names:
   -UserId U2XMZDPJ7 `
   -Project "codexbar-ios" `
   -Category merged `
-  -Task "PR #102 merged" `
-  -Summary "Issue #101 closed after the squash merge. Review and CI gates passed." `
+  -Task "PR #102 — Add saved-reset selection — merged" `
+  -Summary "The squash merge passed review and CI gates." `
   -Detail "Inventory=Added saved-reset selection flow", `
           "Reliability=Added retry-safe redemption state" `
   -Url "https://github.com/HemSoft/codexbar-ios/pull/102"
@@ -168,8 +175,8 @@ python3 "$HOME/.agents/skills/slack-dm/scripts/slack_dm.py" \
   --user-id U2XMZDPJ7 \
   --project "codexbar-ios" \
   --category merged \
-  --task "PR #102 merged" \
-  --summary "Issue #101 closed after the squash merge. Review and CI gates passed." \
+  --task "PR #102 — Add saved-reset selection — merged" \
+  --summary "The squash merge passed review and CI gates." \
   --detail "Inventory=Added saved-reset selection flow" \
   --detail "Reliability=Added retry-safe redemption state" \
   --url "https://github.com/HemSoft/codexbar-ios/pull/102" \

@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import sys
 import urllib.error
 import urllib.parse
@@ -30,6 +31,13 @@ CATEGORY_EMOJIS = {
     "maintenance": "🛠️",
     "info": "ℹ️",
 }
+ARTIFACT_REFERENCE = re.compile(
+    r"\b(?:PR|pull request|Issue)\s*#?\s*\d+\b",
+    re.IGNORECASE,
+)
+ARTIFACT_TASK = re.compile(
+    r"^(?:PR|Issue) #[1-9]\d* — \S(?:.*\S)? — \S(?:.*\S)?$",
+)
 
 
 def disable_inherited_ssl_key_logging() -> None:
@@ -107,6 +115,17 @@ def clean_summary(value: str) -> str:
     return summary
 
 
+def clean_task(value: str) -> str:
+    task = clean_single_line(value, "task", 400)
+    if ARTIFACT_REFERENCE.search(task) and not ARTIFACT_TASK.fullmatch(task):
+        raise ValueError(
+            "issue/PR task must use "
+            "'PR #<ID> — <exact title> — <result>' or "
+            "'Issue #<ID> — <exact title> — <result>'"
+        )
+    return task
+
+
 def parse_detail(value: str) -> tuple[str, str]:
     if "=" not in value:
         raise ValueError('detail must use "Area=Result" format')
@@ -141,8 +160,8 @@ def build_fallback(
     url: str | None,
 ) -> str:
     lines = [
-        f"{PROJECT_EMOJI} {project}",
         f"{CATEGORY_EMOJIS[category]} {task}",
+        f"{PROJECT_EMOJI} {project}",
         summary,
     ]
     if details:
@@ -169,16 +188,16 @@ def build_message(
 
     blocks: list[dict] = [
         {
+            "type": "section",
+            "text": {"type": "mrkdwn", "text": outcome},
+        },
+        {
             "type": "header",
             "text": {
                 "type": "plain_text",
                 "text": f"{PROJECT_EMOJI} {project}",
                 "emoji": True,
             },
-        },
-        {
-            "type": "section",
-            "text": {"type": "mrkdwn", "text": outcome},
         },
         {
             "type": "section",
@@ -243,7 +262,7 @@ def parse_message_arguments(args: argparse.Namespace) -> tuple:
         raise ValueError(f"required structured arguments missing: {', '.join(missing)}")
 
     project = clean_single_line(args.project, "project", 140)
-    task = clean_single_line(args.task, "task", 180)
+    task = clean_task(args.task)
     summary = clean_summary(args.summary)
     details = [parse_detail(value) for value in args.detail]
     url = validate_url(args.url)
@@ -258,7 +277,13 @@ def build_parser() -> argparse.ArgumentParser:
     target.add_argument("--user-id", default=DEFAULT_USER_ID, help="Slack user ID.")
     target.add_argument("--email", help="Slack email address to resolve and DM.")
     parser.add_argument("--project", help="Repository, product, or workstream.")
-    parser.add_argument("--task", help="Short outcome, such as 'PR #83 merged'.")
+    parser.add_argument(
+        "--task",
+        help=(
+            "Short outcome. Issue/PR updates require "
+            "'PR #<ID> — <exact title> — <result>' format."
+        ),
+    )
     parser.add_argument("--summary", help="One- or two-line concise summary.")
     parser.add_argument(
         "--category",
