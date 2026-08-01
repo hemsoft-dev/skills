@@ -997,3 +997,7 @@ full operational details into development, text-editor, AI, and system-monitorin
 2026-08-01 - 08:47 - Commit, push, and clean the skills repository
 Result: Audited all pending work, repaired review automation and history-log issues, verified changed files, and
 prepared the repository for focused conventional commits, push, and safe branch/worktree/stash cleanup.
+
+2026-08-01 - 17:48 - Archive the approved skill candidates and retain seven selected skills
+Result: Archived the 13 approved skills with verified recoverable copies, recorded the seven retention decisions,
+and re-homed weather and watchlist assets under diary to prevent broken active workflows.
