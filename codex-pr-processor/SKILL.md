@@ -1,6 +1,7 @@
 ---
 name: codex-pr-processor
-description: V1.0 - Process an existing GitHub pull request through Codex, CodeRabbit, and Macroscope feedback until current-head actionable comments are addressed, review threads are resolved, and normal PR checks pass.
+description: V1.1 - Process an existing GitHub pull request through Codex, CodeRabbit, Macroscope, and optional Greptile feedback until current-head actionable comments are addressed, review threads are resolved, and normal PR checks pass.
+compatibility: Requires PowerShell 7, GitHub CLI, GitHub network access, and authenticated gh. Helper scripts support Windows, macOS, and Linux when these dependencies are installed.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -38,7 +39,7 @@ hooks:
 
 # Codex PR Processor
 
-Default behavior: take the existing PR supplied by the user, address actionable Codex review feedback, request another Codex review, and use CodeRabbit plus Macroscope as secondary reviewers. Repeat until the latest current-head review signal has no actionable comments, all addressed review threads are explicitly resolved, and normal PR checks pass.
+Default behavior: take the existing PR supplied by the user, address actionable Codex review feedback, request another Codex review, and use CodeRabbit plus Macroscope as secondary reviewers. Include Greptile only when the user requests it or the repository workflow explicitly requires it. Repeat until the latest current-head review signal has no actionable comments, all addressed review threads are explicitly resolved, and normal PR checks pass.
 
 ## Target State
 
@@ -49,6 +50,7 @@ Codex reviews currently behave like automated PR comments/reviews, not guarantee
 | Latest Codex review/comment for current head has no actionable comments | Codex reviewed the current head and found nothing to fix | Yes, after checks pass and all relevant threads are resolved |
 | CodeRabbit status is success and no current-head actionable CodeRabbit threads remain | Secondary review is clean | Yes |
 | Macroscope Correctness is success and no current-head actionable Macroscope threads remain | Secondary review is clean; Approvability may be neutral | Yes |
+| Requested Greptile review has no current-head actionable comments | Optional review is clean; use the live Greptile status check when configured | Yes |
 | No unresolved addressed review threads remain | Prior comments were fixed, obsolete, or non-actionable and explicitly resolved in GitHub | Yes |
 | Any reviewer leaves current-code actionable feedback | There is feedback to triage and address | No |
 
@@ -65,7 +67,7 @@ Codex reviews currently behave like automated PR comments/reviews, not guarantee
 1. Verify GitHub CLI and auth:
 
    ```powershell
-   $gh = (Get-Command gh.exe).Source
+   $gh = (Get-Command gh -CommandType Application -ErrorAction Stop).Source
    & $gh auth status
    ```
 
@@ -88,7 +90,7 @@ Codex reviews currently behave like automated PR comments/reviews, not guarantee
 
 ## Review Requests
 
-Request Codex through the documented PR trigger comment, not the Copilot `requestReviewsByLogin` API path:
+Request the standard reviewers through their documented PR trigger comments, not the Copilot `requestReviewsByLogin` API path:
 
 ```powershell
 .\codex-pr-processor\scripts\Request-CodexPrReview.ps1 -Url "https://github.com/OWNER/REPO/pull/123"
@@ -100,7 +102,27 @@ By default the script posts these comments:
 - `@coderabbitai review`
 - `@Macroscope-App review`
 
+To request Greptile too, add `-IncludeGreptile`:
+
+```powershell
+.\codex-pr-processor\scripts\Request-CodexPrReview.ps1 `
+  -Url "https://github.com/OWNER/REPO/pull/123" `
+  -IncludeGreptile `
+  -GreptileReady
+```
+
+This adds the official manual Greptile trigger comment, `@greptileai`. Before
+requesting it, verify that the repository is enabled and indexed in Greptile.
+Greptile reviews can consume review quota, so do not enable this option without
+user or repository-workflow authorization. The request helper requires
+`-GreptileReady` as an explicit attestation when `-IncludeGreptile` is used.
+
 Use `-DryRun` first when validating a PR identity or troubleshooting permissions.
+
+Official Greptile references:
+
+- [Manual review triggers](https://www.greptile.com/docs/code-review-bot/trigger-code-review)
+- [Developer essentials](https://www.greptile.com/docs/code-review/developer-essentials)
 
 ## Automatic Codex Reviews
 
@@ -121,7 +143,7 @@ If automatic reviews are configured to run on PR updates, use the automatic revi
    .\codex-pr-processor\scripts\Get-CodexPrReviewState.ps1 -Url "https://github.com/OWNER/REPO/pull/123"
    ```
 
-2. Triage every unresolved Codex, CodeRabbit, and Macroscope thread:
+2. Triage every unresolved Codex, CodeRabbit, Macroscope, and requested Greptile thread:
 
    | Comment type | Required action |
    | --- | --- |
@@ -141,6 +163,8 @@ If automatic reviews are configured to run on PR updates, use the automatic revi
    .\codex-pr-processor\scripts\Request-CodexPrReview.ps1 -Url "https://github.com/OWNER/REPO/pull/123"
    ```
 
+   Add `-IncludeGreptile` when Greptile is part of the active review set.
+
 9. Wait for review/check completion. Poll more frequently for status checks, but give review bots several minutes before deciding they did not respond.
 10. Re-fetch state and repeat while any reviewer leaves new actionable comments.
 
@@ -149,7 +173,7 @@ If automatic reviews are configured to run on PR updates, use the automatic revi
 Before reporting that the PR is ready:
 
 1. Confirm the PR head SHA that reviewers evaluated matches the current PR head SHA.
-2. Confirm every addressed Codex, CodeRabbit, and Macroscope review thread has `isResolved: true`. Do not count stale/outdated threads as resolved unless GitHub also reports `isResolved: true`.
+2. Confirm every addressed Codex, CodeRabbit, Macroscope, and requested Greptile review thread has `isResolved: true`. Do not count stale/outdated threads as resolved unless GitHub also reports `isResolved: true`.
 3. Confirm normal PR checks and merge state are acceptable:
 
    ```powershell
@@ -163,7 +187,7 @@ Before reporting that the PR is ready:
 Return:
 
 1. PR URL and current head SHA.
-2. Latest Codex, CodeRabbit, and Macroscope review URLs or check URLs, states, submitted/completed times, and body summaries.
+2. Latest Codex, CodeRabbit, Macroscope, and requested Greptile review URLs or check URLs, states, submitted/completed times, and body summaries.
 3. Unresolved reviewer thread count after explicit resolution; this must be zero for completed work.
 4. Commands run and exact pass/fail results.
 5. Any unavailable API, rate-limit, duplicate-review, or permission evidence.
@@ -171,7 +195,9 @@ Return:
 ## Avoid
 
 - Using the Copilot `requestReviewsByLogin` API path for Codex.
+- Requesting Greptile without explicit user or repository-workflow authorization.
 - Mass-resolving review threads without addressing or documenting them.
 - Treating outdated/stale review comments as complete while `isResolved` is still false.
 - Treating Codex comments as branch-protection approval.
+- Treating a Greptile comment or confidence score as approval without a successful configured status check.
 - Declaring readiness before checking PR head SHA, checks, merge state, and latest reviewer feedback.

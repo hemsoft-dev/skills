@@ -1001,3 +1001,11 @@ prepared the repository for focused conventional commits, push, and safe branch/
 2026-08-01 - 17:48 - Archive the approved skill candidates and retain seven selected skills
 Result: Archived the 13 approved skills with verified recoverable copies, recorded the seven retention decisions,
 and re-homed weather and watchlist assets under diary to prevent broken active workflows.
+
+2026-08-01 - 21:44 - Add optional Greptile reviews to codex-pr-processor
+Result: Added an opt-in Greptile PR trigger, recognized the live Greptile GitHub bot identity in reviewer state,
+and documented repository enablement, indexing, quota, and readiness requirements.
+
+2026-08-02 - 11:24 - Publish Greptile-enabled codex-pr-processor to Home, Air, and Mini
+Result: Made GitHub CLI discovery cross-platform, validated review requests and Greptile state detection, and
+verified byte-identical 14-file skill manifests on all three computers.

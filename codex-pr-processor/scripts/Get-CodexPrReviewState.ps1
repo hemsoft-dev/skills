@@ -10,7 +10,7 @@ param(
     [int] $PullNumber,
 
     [Parameter(Mandatory = $false)]
-    [string] $ReviewerAuthorPattern = '(?i)(codex|chatgpt-codex-connector|coderabbitai|macroscopeapp)'
+    [string] $ReviewerAuthorPattern = '(?i)(codex|chatgpt-codex-connector|coderabbitai|macroscopeapp|greptile(?:ai|-apps))'
 )
 
 Set-StrictMode -Version Latest
@@ -66,7 +66,7 @@ function Invoke-Gh {
     $output -join [Environment]::NewLine
 }
 
-$script:Gh = (Get-Command gh.exe).Source
+$script:Gh = (Get-Command gh -CommandType Application -ErrorAction Stop).Source
 $identity = Resolve-PrIdentity -InputUrl $Url -InputRepo $Repo -InputPullNumber $PullNumber
 
 $query = @'
@@ -184,6 +184,119 @@ $threadSummaries = @($reviewerThreads) | ForEach-Object {
     }
 }
 
+function Get-ProviderState {
+    param(
+        [Parameter(Mandatory = $true)]
+        [object] $PullRequest,
+
+        [Parameter(Mandatory = $true)]
+        [string] $AuthorPattern,
+
+        [AllowNull()]
+        [object] $LatestCheck
+    )
+
+    $reviews = @($PullRequest.reviews.nodes) | Where-Object {
+        $_.author -and $_.author.login -match $AuthorPattern
+    }
+    $comments = @($PullRequest.comments.nodes) | Where-Object {
+        $_.author -and $_.author.login -match $AuthorPattern
+    }
+    $threads = @($PullRequest.reviewThreads.nodes) |
+        Where-Object {
+            $thread = $_
+            -not $thread.isResolved -and @(
+                $thread.comments.nodes | Where-Object {
+                    $_.author -and $_.author.login -match $AuthorPattern
+                }
+            ).Count -gt 0
+        } |
+        ForEach-Object {
+            $thread = $_
+            $firstComment = @($thread.comments.nodes) | Where-Object {
+                $_.author -and $_.author.login -match $AuthorPattern
+            } | Select-Object -First 1
+
+            [pscustomobject]@{
+                id = $thread.id
+                path = $thread.path
+                line = $thread.line
+                isOutdated = $thread.isOutdated
+                firstAuthor = $firstComment.author.login
+                firstUrl = $firstComment.url
+                firstBody = $firstComment.body
+                reviewCommitOid = if ($firstComment.pullRequestReview) {
+                    $firstComment.pullRequestReview.commit.oid
+                } else {
+                    $null
+                }
+            }
+        }
+
+    [pscustomobject]@{
+        reviewCount = @($reviews).Count
+        latestReview = @($reviews) |
+            Sort-Object submittedAt -Descending |
+            Select-Object -First 1
+        prCommentCount = @($comments).Count
+        latestPrComment = @($comments) |
+            Sort-Object createdAt -Descending |
+            Select-Object -First 1
+        unresolvedThreadCount = @($threads).Count
+        unresolvedThreads = $threads
+        latestCheck = $LatestCheck
+    }
+}
+
+$checksJson = Invoke-Gh -Arguments @(
+    'pr', 'view', "$($identity.PullNumber)",
+    '--repo', "$($identity.Owner)/$($identity.Name)",
+    '--json', 'statusCheckRollup'
+)
+$checkRollup = @(($checksJson | ConvertFrom-Json).statusCheckRollup)
+
+function Get-LatestCheck {
+    param([string] $Pattern)
+
+    @($checkRollup) |
+        Where-Object {
+            $name = $_.PSObject.Properties['name']
+            $context = $_.PSObject.Properties['context']
+            $workflowName = $_.PSObject.Properties['workflowName']
+
+            ($name -and $name.Value -match $Pattern) -or
+            ($context -and $context.Value -match $Pattern) -or
+            ($workflowName -and $workflowName.Value -match $Pattern)
+        } |
+        Sort-Object {
+            $completedAt = $_.PSObject.Properties['completedAt']
+            $startedAt = $_.PSObject.Properties['startedAt']
+            if ($completedAt -and $completedAt.Value) { $completedAt.Value }
+            elseif ($startedAt -and $startedAt.Value) { $startedAt.Value }
+            else { '' }
+        } -Descending |
+        Select-Object -First 1
+}
+
+$providerStates = [ordered]@{
+    codex = Get-ProviderState `
+        -PullRequest $pr `
+        -AuthorPattern '(?i)(codex|chatgpt-codex-connector)' `
+        -LatestCheck (Get-LatestCheck -Pattern '(?i)codex')
+    codeRabbit = Get-ProviderState `
+        -PullRequest $pr `
+        -AuthorPattern '(?i)coderabbitai' `
+        -LatestCheck (Get-LatestCheck -Pattern '(?i)coderabbit')
+    macroscope = Get-ProviderState `
+        -PullRequest $pr `
+        -AuthorPattern '(?i)macroscopeapp' `
+        -LatestCheck (Get-LatestCheck -Pattern '(?i)macroscope')
+    greptile = Get-ProviderState `
+        -PullRequest $pr `
+        -AuthorPattern '(?i)greptile(?:ai|-apps)' `
+        -LatestCheck (Get-LatestCheck -Pattern '(?i)greptile')
+}
+
 [pscustomobject]@{
     repository = "$($identity.Owner)/$($identity.Name)"
     pullNumber = $identity.PullNumber
@@ -200,4 +313,5 @@ $threadSummaries = @($reviewerThreads) | ForEach-Object {
     latestReviewerPrComment = @($reviewerComments) | Sort-Object createdAt -Descending | Select-Object -First 1
     unresolvedReviewerThreadCount = @($threadSummaries).Count
     unresolvedReviewerThreads = $threadSummaries
+    reviewers = $providerStates
 } | ConvertTo-Json -Depth 20

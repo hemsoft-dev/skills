@@ -16,6 +16,12 @@ param(
     [switch] $SkipMacroscope,
 
     [Parameter(Mandatory = $false)]
+    [switch] $IncludeGreptile,
+
+    [Parameter(Mandatory = $false)]
+    [switch] $GreptileReady,
+
+    [Parameter(Mandatory = $false)]
     [switch] $DryRun
 )
 
@@ -72,7 +78,7 @@ function Invoke-Gh {
     $output -join [Environment]::NewLine
 }
 
-$script:Gh = (Get-Command gh.exe).Source
+$script:Gh = (Get-Command gh -CommandType Application -ErrorAction Stop).Source
 $identity = Resolve-PrIdentity -InputUrl $Url -InputRepo $Repo -InputPullNumber $PullNumber
 
 $prJson = Invoke-Gh -Arguments @(
@@ -82,12 +88,19 @@ $prJson = Invoke-Gh -Arguments @(
 )
 $pr = $prJson | ConvertFrom-Json
 
+if ($IncludeGreptile -and -not $GreptileReady) {
+    throw 'Greptile was requested, but -GreptileReady was not supplied. Verify the repository is enabled and indexed before consuming review quota.'
+}
+
 $reviewComments = @('@codex review')
 if (-not $SkipCodeRabbit) {
     $reviewComments += '@coderabbitai review'
 }
 if (-not $SkipMacroscope) {
     $reviewComments += '@Macroscope-App review'
+}
+if ($IncludeGreptile) {
+    $reviewComments += '@greptileai'
 }
 
 if ($DryRun) {
@@ -96,6 +109,7 @@ if ($DryRun) {
         dryRun = $true
         url = $pr.url
         headRefOid = $pr.headRefOid
+        greptileReady = [bool] $GreptileReady
         comments = $reviewComments
     } | ConvertTo-Json -Depth 5
     exit 0
