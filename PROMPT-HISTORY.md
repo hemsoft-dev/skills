@@ -1009,3 +1009,7 @@ and documented repository enablement, indexing, quota, and readiness requirement
 2026-08-02 - 11:24 - Publish Greptile-enabled codex-pr-processor to Home, Air, and Mini
 Result: Made GitHub CLI discovery cross-platform, validated review requests and Greptile state detection, and
 verified byte-identical 14-file skill manifests on all three computers.
+
+2026-08-02 - 13:24 - Create a Dune: Awakening expert skill for Landsraad house reward routes
+Result: Added a versioned 25-house location database, screenshot-driven workflow, exact sourced coordinates,
+spelling aliases, validation, and a zone-aware PowerShell route planner.

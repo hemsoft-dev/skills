@@ -1,7 +1,7 @@
 ---
 name: process-issue
 description: >-
-  V1.1 - Hourly orchestrator that processes the single oldest eligible GitHub issue through merge, then sends the
+  V1.2 - Hourly orchestrator that processes the single oldest eligible GitHub issue through merge, then sends the
   owner one structured Slack DM for actionable results while suppressing true no-op notifications.
 compatibility: Requires git, GitHub CLI, network access, and the slack-dm skill with a configured SLACK_TOKEN.
 ---
@@ -83,12 +83,23 @@ shifted code). Before building:
   `curate-issues` re-triages `needs-human` issues on its next run.
 - **Otherwise** proceed.
 
+## Configured PR reviewers
+
+For issues from **private repositories owned by `HemSoft`**, the configured PR reviewers
+are **CodeRabbit** (`coderabbitai`), **Cubic**, **Macroscope**, **Greptile**, and
+**Codex**.
+
+Request each review through the reviewer's normal channel (GitHub app automation or its
+review-request trigger) and apply the Step 5 merge gate to all of them: each needs a
+clean current-head signal or a documented unavailability before merge. For any other
+repository, use the reviewers that repository has configured instead.
+
 ## Step 4 — Drive to a mergeable PR (delegate)
 
 Hand the specific issue number to the repository's issue→PR skill in **explicit-issue
 mode** (e.g. `issue-to-mergeable-pr`): branch from the latest default, implement the
 smallest defensible change, run the repo's tests/lint/build, open a PR that closes the
-issue, and run its review loop until ready. Do **not** re-run backlog hygiene or oldest-pick
+issue, and run its review loop with the configured PR reviewers until ready. Do **not** re-run backlog hygiene or oldest-pick
 — `curate-issues` owns that; process exactly this issue.
 
 If this issue already has an open PR from a prior run (and you hold the lease), **resume**
