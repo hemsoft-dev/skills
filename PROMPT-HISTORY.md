@@ -1013,3 +1013,11 @@ verified byte-identical 14-file skill manifests on all three computers.
 2026-08-02 - 13:24 - Create a Dune: Awakening expert skill for Landsraad house reward routes
 Result: Added a versioned 25-house location database, screenshot-driven workflow, exact sourced coordinates,
 spelling aliases, validation, and a zone-aware PowerShell route planner.
+
+2026-08-04 - 13:43 - Archive and remove all active Superpowers skills
+Result: Traced the active bundle to GitHub Copilot CLI, archived all 14 skills and three supporting cache copies,
+then removed the plugin and marketplace registration and verified no Superpowers skills remain discoverable.
+
+2026-08-04 - 15:23 - Diagnose Graphify Gemini quota failures from a clipboard screenshot
+Result: Confirmed free-tier daily quota exhaustion during semantic extraction, verified completed chunks were
+checkpointed, and identified safe stop-and-resume options without altering graph output.

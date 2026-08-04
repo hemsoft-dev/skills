@@ -30,6 +30,7 @@ Thumbs.db
 # Runtime state
 
 github-copilot-license-processor/state/*.json
+graphify-out/cache/
 
 # Temporary files
 
