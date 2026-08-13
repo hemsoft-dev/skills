@@ -216,12 +216,14 @@ Invoke-ScriptAnalyzer -Path . -Recurse -Settings .PSScriptAnalyzerSettings.psd1
 
 **Rules enforced**:
 
-- Consistent heading hierarchy
-- Fenced code blocks with language specifiers
-- Line length: 120 characters
+- Consistent heading hierarchy (duplicate headings flagged for siblings only)
+- Fenced code block style (language specifier not required)
 - Proper blank lines around sections
 - No trailing spaces
 - Files end with newline
+- Line length is **not** enforced (MD013 disabled)
+
+The root `.markdownlint.jsonc` is the single config for the whole repo — per-skill markdownlint overrides must not be added. The pre-commit hook lints every staged `.md` file against the root config.
 
 **Manual check and auto-fix**:
 
@@ -243,11 +245,13 @@ markdownlint-cli2 --fix "**/*.md"
 
 ### Installing Pre-Commit Hooks
 
-If hooks are not installed, run:
+Canonical hook sources live in the version-controlled `hooks/` folder. To install them, or to reset `.git/hooks` back to the canonical copies, run:
 
 ```powershell
 .\Install-GitHooks.ps1
 ```
+
+The installer copies everything from `hooks/` into `.git/hooks/`, overwriting what is there. Edit hooks in `hooks/` only — never directly in `.git/hooks/`.
 
 This sets up the pre-commit hook to automatically:
 
@@ -412,6 +416,7 @@ BREAKING CHANGE: API now requires OAuth tokens instead of API keys.
 | `.markdownlint.jsonc` | Markdown linting configuration |
 | `.PSScriptAnalyzerSettings.psd1` | PowerShell linting configuration |
 | `Install-GitHooks.ps1` | Pre-commit hook installer |
+| `hooks/` | Canonical git hook sources (installed by `Install-GitHooks.ps1`) |
 | `AGENTS.md` | This file - Agent guidelines |
 | `PROMPT-HISTORY.md` | Log of meaningful prompt interactions |
 

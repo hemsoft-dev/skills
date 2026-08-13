@@ -1064,3 +1064,6 @@ Result: Stamped $0.48 owner-reported cost in RUNS.md (DeepSeek self-stamped 1h 4
 
 2026-08-13 - 04:07 - Close out GLM 5.2 yahtzee-bench run (7m 49s, $0.43) and clean entries repo
 Result: Filled GLM 5.2's RUNS.md row from owner report (GLM left time/cost unstamped). Removed regenerated empty worktrees folder and 0-byte electron log debris from main checkout, pushed GLM's merged entry to origin; entries repo verified clean and in sync.
+
+2026-08-13 - 08:59 - Align markdown linting to root config and reset git hooks with canonical sources
+Result: Deleted github/.markdownlint-cli2.jsonc per-skill override and stripped redundant markdownlint-disable comments from 5 github history files so the root config governs all skills. Versioned the orphaned copilot-hooks-era pre-commit hooks in a new hooks/ folder, recreated the missing Install-GitHooks.ps1 installer (reset = reinstall from hooks/), updated AGENTS.md to match actual lint rules and hook workflow.

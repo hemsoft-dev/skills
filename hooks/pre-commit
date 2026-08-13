@@ -1,0 +1,18 @@
+#!/bin/sh
+# Managed by Install-GitHooks.ps1 — source of truth is the hooks/ folder in this repo.
+# Windows Git hook wrapper - calls PowerShell and Markdown quality checks
+
+POWERSHELL_EXIT=0
+if [ -f ".git/hooks/pre-commit.ps1" ]; then
+  pwsh.exe -NoProfile -ExecutionPolicy Bypass -File ".git/hooks/pre-commit.ps1"
+  POWERSHELL_EXIT=$?
+fi
+
+pwsh.exe -NoProfile -ExecutionPolicy Bypass -File ".git/hooks/pre-commit-markdown.ps1"
+MARKDOWN_EXIT=$?
+
+if [ $POWERSHELL_EXIT -ne 0 ] || [ $MARKDOWN_EXIT -ne 0 ]; then
+  exit 1
+fi
+
+exit 0
