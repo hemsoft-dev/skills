@@ -1073,3 +1073,6 @@ Result: Added `disable-model-invocation: true` to all 55 active skill manifests,
 
 2026-08-13 - 09:41 - Uninstall graphify CLI and remove all graphify artifacts from skills repo
 Result: Per owner request as part of a broader skills/hooks cleanup: uninstalled graphifyy v0.9.32 via uv (graphify + graphify-mcp executables removed), deleted the graphify/ skill folder and graphify-out/ knowledge graph, removed the .codex/hooks.json graphify hook-check, dropped the root .markdownlint-cli2.jsonc (its only purpose was ignoring GRAPH_REPORT.md), removed graphify-out entries from .gitignore, and removed the graphify section from AGENTS.md. One artifact remains outside this repo: D:\github\HemSoft\set-it-free-loop\graphify-out.
+
+2026-08-13 - 10:05 - Complete graphify removal across SFL repos; handle stray reinstall
+Result: Removed graphify-out and hooks from HemSoft/set-it-free-loop (08d01dd) and relias-engineering/set-it-free-loop (59ab5a9, folder was untracked there; cleaned .gitignore), deleted ~/.graphify data dir. Detected and re-uninstalled graphifyy 0.9.41, which a concurrent session with stale AGENTS.md context had auto-installed at 09:54 via the old graphify skill's auto-install step. Final sweep: zero graphify artifacts remain anywhere; both SFL repos clean and pushed.
