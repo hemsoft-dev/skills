@@ -1,6 +1,40 @@
 ---
 name: personal-review
-description: V1.2 - Expert in drafting, analyzing, and improving quarterly and annual work performance reviews based on historical review patterns and achievements.
+description: V1.5 - Expert in drafting, analyzing, and improving quarterly and annual work performance reviews based on historical review patterns and achievements.
+hooks:
+  PostToolUse:
+    - matcher: "Read|Write|Edit"
+      hooks:
+        - type: prompt
+          prompt: |
+            If a file was read, written, or edited in the personal-review directory (path contains 'personal-review'), verify that history logging occurred.
+
+            Check if History/{YYYY-MM-DD}.md exists and contains an entry for this interaction with:
+            - Format: "## HH:MM - {Action Taken}"
+            - One-line summary
+            - Accurate timestamp
+
+            If history entry is missing or incomplete, provide specific feedback on what needs to be added.
+            If history entry exists and is properly formatted, acknowledge completion.
+  Stop:
+    - matcher: "*"
+      hooks:
+        - type: prompt
+          prompt: |
+            Before stopping, if personal-review was used (check if any files in personal-review directory were modified), verify that the interaction was logged:
+
+            1. Check if History/{YYYY-MM-DD}.md exists in personal-review directory
+            2. Verify it contains an entry with format "## HH:MM - {Action Taken}"
+            3. Ensure the entry includes a one-line summary of what was done
+            4. Verify retrospective check was performed
+
+            If history entry is missing:
+            - Return {"decision": "block", "reason": "History entry missing. Please log this interaction to History/{YYYY-MM-DD}.md"}
+
+            If history entry exists:
+            - Return {"decision": "approve"}
+
+            Include a systemMessage with details about the history entry status.
 ---
 
 # Personal Review Assistant
@@ -8,15 +42,6 @@ description: V1.2 - Expert in drafting, analyzing, and improving quarterly and a
 **Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
 
 Expert assistant for creating and refining work performance reviews (quarterly and annual).
-
-## ALWAYS: Log This Interaction
-
-After completing work using this skill, append to `History/{YYYY-MM-DD}.md`:
-
-```markdown
-## {HH:MM} - {Action Taken}
-{One-line summary of what was done}
-```
 
 ## Overview
 
@@ -45,6 +70,14 @@ results.
      GitHub Agentic Workflows the engineering organization can use.
    - Review angles: Repo launch, reusable workflow catalog, documentation and
      examples, adoption by teams, and measurable reuse impact.
+
+2. `sfl-pr-reviewer` — Q3/26
+   - Purpose: SFL PR Reviewer full-spectrum reviewer (`sfl-pr-review.lock.yml`) — three evidence-based passes (Security, Correctness/Reliability, Quality/Maintainability) with Critical/High/Medium/Low severity, inline threads, review sheet verdict, and `SFL Reviewer Approval` check gate. Works alongside GitHub Copilot PR Reviewer in the `copilot-pr-processor` dual-review zero-findings loop.
+   - Review angles: Reviewer workflow dispatch (`workflow_dispatch` with `item_number`/`aw_context`), severity taxonomy and clean-sheet target (zero findings across all severities), `APPROVE` verdict vs. approval-gate distinction, thread resolution via `resolveReviewThread`, head-SHA matching, dual-reviewer readiness criteria, legacy `sfl-review` label fallback, and adoption across SFL-managed repos.
+
+3. `sfl-canvas` (GitHub Copilot App) — Q3/26
+   - Purpose: SFL Canvas GitHub Copilot App — Copilot extensibility surface (Copilot App / extension) for SFL orchestration, providing canvas-style UI and app-based interaction with the Set It Free Loop pipeline.
+   - Review angles: Copilot App registration and installation model, canvas UI for issue/PR orchestration, SFL pipeline visibility (`sfl-issue` → `sfl-pr` → `sfl-done`), app permissions and auth, integration with existing `gh sfl` CLI and `workflows/` deployment model, and measurable impact on SFL adoption/throughput.
 
 ## Core Principles (Research-Backed)
 

@@ -1,5 +1,0 @@
-Scanning 1/287: halfiltertest
-Done halfiltertest branches=10 commits=0 findings=0
-Scanning 2/287: authorization
-Done authorization branches=25 commits=0 findings=0
-Scanning 3/287: grc-library-service

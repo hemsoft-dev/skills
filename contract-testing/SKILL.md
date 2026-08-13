@@ -1,6 +1,39 @@
 ---
 name: contract-testing
-description: "V1.6 - Expert in contract testing for .NET/C# microservices using PactNet (consumer-driven). Covers Pact Broker, CI/CD gating, ADO/GHA pipeline patterns, and implementation. Includes Relias production broker credentials, service inventory, organizational context, meeting takeaways, PactNet 5.x FFI publish bug workaround (REST API), and a complete 'implement in your repo' workflow. Use when implementing, reviewing, or discussing contract testing."
+description: "V1.7 - Expert in contract testing for .NET/C# microservices using PactNet (consumer-driven). Covers Pact Broker, CI/CD gating, ADO/GHA pipeline patterns, and implementation. Includes Relias production broker credentials, service inventory, organizational context, meeting takeaways, PactNet 5.x FFI publish bug workaround (REST API), and a complete 'implement in your repo' workflow. Use when implementing, reviewing, or discussing contract testing."
+hooks:
+  PostToolUse:
+    - matcher: "Read|Write|Edit"
+      hooks:
+        - type: prompt
+          prompt: |
+            If a file was read, written, or edited in the contract-testing directory (path contains 'contract-testing'), verify that history logging occurred.
+
+            Check if History/{YYYY-MM-DD}.md exists and contains an entry for this interaction with:
+            - Format: "## HH:MM - {Action Taken}"
+            - One-line summary
+            - Accurate timestamp (obtained via `Get-Date -Format "HH:mm"` command, never guessed)
+
+            If history entry is missing or incomplete, provide specific feedback on what needs to be added.
+            If history entry exists and is properly formatted, acknowledge completion.
+  Stop:
+    - matcher: "*"
+      hooks:
+        - type: prompt
+          prompt: |
+            Before stopping, if contract-testing was used (check if any files in contract-testing directory were modified), verify that the interaction was logged:
+
+            1. Check if History/{YYYY-MM-DD}.md exists in contract-testing directory
+            2. Verify it contains an entry with format "## HH:MM - {Action Taken}" where HH:MM was obtained via `Get-Date -Format "HH:mm"` (never guessed)
+            3. Ensure the entry includes a one-line summary of what was done
+
+            If history entry is missing:
+            - Return {"decision": "block", "reason": "History entry missing. Please log this interaction to History/{YYYY-MM-DD}.md with format: ## HH:MM - {Action Taken}\n{One-line summary}"}
+
+            If history entry exists:
+            - Return {"decision": "approve"}
+
+            Include a systemMessage with details about the history entry status.
 ---
 
 # Contract Testing for .NET
@@ -1121,14 +1154,3 @@ Before reporting success, verify ALL applicable items:
 - [ ] CI pipeline stage added with graceful skip when creds missing
 - [ ] Build succeeds with zero errors
 - [ ] Tests pass locally (in local/file mode)
-
-## ALWAYS: Log This Interaction
-
-After any meaningful interaction, append to `contract-testing/History/{YYYY-MM-DD}.md`:
-
-```markdown
-## HH:MM - {Action Taken}
-{One-line summary}
-```
-
-Get the timestamp with `Get-Date -Format "HH:mm"` — never guess.

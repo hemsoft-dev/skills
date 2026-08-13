@@ -1,6 +1,40 @@
 ---
 name: process-and-merge-pr
-description: V1.0 - Take one explicitly identified existing GitHub pull request through conflict, verification, check, and review remediation until its current head is mergeable, then squash-merge it and verify closeout. Use only when the user explicitly asks to process and merge a PR; do not use for issue selection, backlog processing, or readiness-only work.
+description: V1.1 - Take one explicitly identified existing GitHub pull request through conflict, verification, check, and review remediation until its current head is mergeable, then squash-merge it and verify closeout. Use only when the user explicitly asks to process and merge a PR; do not use for issue selection, backlog processing, or readiness-only work.
+hooks:
+  PostToolUse:
+    - matcher: "Read|Write|Edit"
+      hooks:
+        - type: prompt
+          prompt: |
+            If a file was read, written, or edited in the process-and-merge-pr directory (path contains 'process-and-merge-pr'), verify that history logging occurred.
+
+            Check if History/{YYYY-MM-DD}.md exists and contains an entry for this interaction with:
+            - Format: "## HH:MM - {Action Taken}"
+            - One-line summary
+            - Accurate timestamp
+
+            If history entry is missing or incomplete, provide specific feedback on what needs to be added.
+            If history entry exists and is properly formatted, acknowledge completion.
+  Stop:
+    - matcher: "*"
+      hooks:
+        - type: prompt
+          prompt: |
+            Before stopping, if process-and-merge-pr was used (check if any files in process-and-merge-pr directory were modified), verify that the interaction was logged:
+
+            1. Check if History/{YYYY-MM-DD}.md exists in process-and-merge-pr directory
+            2. Verify it contains an entry with format "## HH:MM - {Action Taken}"
+            3. Ensure the entry includes a one-line summary of what was done
+            4. Verify retrospective check was performed
+
+            If history entry is missing:
+            - Return {"decision": "block", "reason": "History entry missing. Please log this interaction to History/{YYYY-MM-DD}.md"}
+
+            If history entry exists:
+            - Return {"decision": "approve"}
+
+            Include a systemMessage with details about the history entry status.
 ---
 
 # Process and Merge a Pull Request

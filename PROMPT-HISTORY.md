@@ -1025,3 +1025,36 @@ checkpointed, and identified safe stop-and-resume options without altering graph
 2026-08-04 - 16:50 - Commit and clean the skills repo, then build its Graphify graph through OpenRouter
 Result: Pushed the existing Graphify integration, registered OpenRouter without storing its key, generated and
 validated a 2,393-node graph, and documented the remaining semantic-coverage warnings.
+
+2026-08-04 - 17:09 - Find 20 skills that are candidates for archiving
+Result: Ran the skill-archive candidate scan (60-day window) and listed the 20 oldest/never-used skills as
+archive candidates; nothing was archived.
+
+2026-08-04 - 17:11 - Archive candidate skills 6 through 19
+Result: Archived 14 skills (text-read-image, sharepoint, alerts, productivity-publisher, relias-assistant, today,
+copilot-hooks, markdown, productivity, aspire, hooks, installs, html, shortcuts) to ~/.agents/skills-archived and
+verified all source folders were removed.
+
+2026-08-04 - 17:11 - Mark remaining 5 candidate skills as active
+Result: Created today-dated History entries for context7-mcp, graphify, python, tdd, and teams, resetting their
+inactivity clock; a rescan now returns zero archive candidates.
+
+2026-08-04 - 18:14 - Find the next 20 archive candidates
+Result: Ran the skill-archive scan with a 37-day window and listed the next 20 oldest unused skills as archive
+candidates; nothing was archived.
+
+2026-08-04 - 23:03 - Archive 14 more candidates, harden logging on the 6 keepers, resolve code-review
+Result: Archived copilot-cost, dotnet11, github-metrics, news, autohotkey, azure, todo, github-init, miasma,
+badge-manager, dotnet, opencode, zellij, cursor. Converted contract-testing, atlassian, and mail from manual
+ALWAYS logging to hooks (version bumped), confirmed sonar, crap, copilot-issue-processor already had hooks, and
+added today-dated History entries to all 6 keepers so they stop surfacing as candidates. Determined "code-review"
+is Copilot CLI's built-in /review command, not an archivable skill; copilot-pr-processor left active.
+
+2026-08-06 - 21:21 - Audit Relias engineering tools and collaboration systems for FedRAMP compliance gaps
+Result: Performed a read-only evidence sweep across Slack, WorkIQ-indexed Teams and mail, 48 local Relias repositories, and FedRAMP guidance; identified credential exposure, unresolved GitHub App secret handling, unapproved AI-provider/model evidence, and boundary/ATO review gaps.
+
+2026-08-07 - 01:07 - Compare named Relias engineering products against current FedRAMP Marketplace status
+Result: Cross-checked Slack, WorkIQ-indexed Teams and mail, local repositories, and official FedRAMP listings for Slack, Teams, GitHub, Bitbucket, SonarCloud, LaunchDarkly, Cypress, and related services; separated covered offerings from unlisted products and unknown Relias tenant/plan configurations.
+
+2026-08-13 - 00:22 - Add run telemetry (date, time taken, cost) to yahtzee-bench skill; first contender Muse Spark 1.2
+Result: Created RUNS.md in the skill folder with a per-run table, added a required Run telemetry step to the Create flow and run-log output to the Status command, bumped skill to V1.1. Logged Muse Spark 1.2 run started 2026-08-13 00:12, still running. No changes to the entries repo.
