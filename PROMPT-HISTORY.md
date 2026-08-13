@@ -1070,3 +1070,6 @@ Result: Deleted github/.markdownlint-cli2.jsonc per-skill override and stripped 
 
 2026-08-13 - 09:00 - Make every active skill manual-only through frontmatter
 Result: Added `disable-model-invocation: true` to all 55 active skill manifests, bumped each skill version, synchronized mirrored version metadata, and added one dated history entry per skill. Archived skills were left unchanged; the included untracked unslop skill also had its ordered-list numbering normalized for lint compliance.
+
+2026-08-13 - 09:41 - Uninstall graphify CLI and remove all graphify artifacts from skills repo
+Result: Per owner request as part of a broader skills/hooks cleanup: uninstalled graphifyy v0.9.32 via uv (graphify + graphify-mcp executables removed), deleted the graphify/ skill folder and graphify-out/ knowledge graph, removed the .codex/hooks.json graphify hook-check, dropped the root .markdownlint-cli2.jsonc (its only purpose was ignoring GRAPH_REPORT.md), removed graphify-out entries from .gitignore, and removed the graphify section from AGENTS.md. One artifact remains outside this repo: D:\github\HemSoft\set-it-free-loop\graphify-out.
