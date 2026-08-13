@@ -1061,3 +1061,6 @@ Result: Created RUNS.md in the skill folder with a per-run table, added a requir
 
 2026-08-13 - 03:51 - Close out DeepSeek V4 Flash run and clean up yahtzee-bench entries repo git hygiene
 Result: Stamped $0.48 owner-reported cost in RUNS.md (DeepSeek self-stamped 1h 44m/Complete). Entries repo: deleted empty worktrees folder, restored muse-spark portable exe to committed artifact with owner approval, pushed unpushed deepseek entry commit; verified clean and in sync with origin.
+
+2026-08-13 - 04:07 - Close out GLM 5.2 yahtzee-bench run (7m 49s, $0.43) and clean entries repo
+Result: Filled GLM 5.2's RUNS.md row from owner report (GLM left time/cost unstamped). Removed regenerated empty worktrees folder and 0-byte electron log debris from main checkout, pushed GLM's merged entry to origin; entries repo verified clean and in sync.

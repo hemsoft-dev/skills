@@ -15,3 +15,4 @@ One row per Create run. This file lives in the skill folder only — never copy 
 |-----------|-------------------|----------|------------|------|--------|
 | Muse Spark 1.2 | muse-spark-1-2 | 2026-08-13 | 11m 34s | $1.13 | Complete |
 | DeepSeek V4 Flash | deepseek-v4-flash | 2026-08-13 | 1h 44m | $0.48 | Complete |
+| GLM 5.2 | glm-5-2 | 2026-08-13 | 7m 49s | $0.43 | Complete |
