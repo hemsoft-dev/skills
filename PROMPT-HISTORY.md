@@ -1058,3 +1058,6 @@ Result: Cross-checked Slack, WorkIQ-indexed Teams and mail, local repositories, 
 
 2026-08-13 - 00:22 - Add run telemetry (date, time taken, cost) to yahtzee-bench skill; first contender Muse Spark 1.2
 Result: Created RUNS.md in the skill folder with a per-run table, added a required Run telemetry step to the Create flow and run-log output to the Status command, bumped skill to V1.1. Logged Muse Spark 1.2 run started 2026-08-13 00:12, still running. No changes to the entries repo.
+
+2026-08-13 - 03:51 - Close out DeepSeek V4 Flash run and clean up yahtzee-bench entries repo git hygiene
+Result: Stamped $0.48 owner-reported cost in RUNS.md (DeepSeek self-stamped 1h 44m/Complete). Entries repo: deleted empty worktrees folder, restored muse-spark portable exe to committed artifact with owner approval, pushed unpushed deepseek entry commit; verified clean and in sync with origin.
