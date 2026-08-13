@@ -1,6 +1,7 @@
 ---
 name: skill-archive
-description: "V1.0 - Commands: Archive, Scan. Archives local agent skills by moving named skill folders to ~/.agents/skills-archived, or scans History entries to find long-unused archive candidates when no skill is provided."
+description: "V1.1 - Commands: Archive, Scan. Archives local agent skills by moving named skill folders to ~/.agents/skills-archived, or scans History entries to find long-unused archive candidates when no skill is provided."
+disable-model-invocation: true
 ---
 
 # Skill Archive

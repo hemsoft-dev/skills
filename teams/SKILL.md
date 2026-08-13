@@ -1,6 +1,7 @@
 ---
 name: teams
-description: V1.1 - Expert in Microsoft Teams API via Microsoft Graph for reading chats, sending messages, checking presence, and managing teams with delegated user tokens.
+description: V1.2 - Expert in Microsoft Teams API via Microsoft Graph for reading chats, sending messages, checking presence, and managing teams with delegated user tokens.
+disable-model-invocation: true
 ---
 
 # Microsoft Teams

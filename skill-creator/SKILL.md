@@ -1,6 +1,7 @@
 ---
 name: skill-creator
-description: V1.11 - Creates new skills with optimized SKILL.md files following the agentskills.io open standard. Default location is .agents/skills/ (universal, all vendors). Uses hooks for history tracking and retrospectives (enabled by default). Includes explicit instructions for getting accurate timestamps. Consults protocols skill for standardized execution patterns.
+description: V1.12 - Creates new skills with optimized SKILL.md files following the agentskills.io open standard. Default location is .agents/skills/ (universal, all vendors). Uses hooks for history tracking and retrospectives (enabled by default). Includes explicit instructions for getting accurate timestamps. Consults protocols skill for standardized execution patterns.
+disable-model-invocation: true
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"

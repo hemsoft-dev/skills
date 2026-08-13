@@ -1,6 +1,7 @@
 ---
 name: todoist
-description: V1.4 - Interact with Todoist API via PowerShell scripts to manage tasks, projects, labels, and track task updates/comments.
+description: V1.5 - Interact with Todoist API via PowerShell scripts to manage tasks, projects, labels, and track task updates/comments.
+disable-model-invocation: true
 ---
 
 # Todoist

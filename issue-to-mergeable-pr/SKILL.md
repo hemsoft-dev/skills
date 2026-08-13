@@ -1,6 +1,7 @@
 ---
 name: issue-to-mergeable-pr
-description: V1.2 - Turns GitHub Issues into clean branches and PRs, with no-argument backlog orchestration across isolated worktrees when parallel agent tooling is available.
+description: V1.3 - Turns GitHub Issues into clean branches and PRs, with no-argument backlog orchestration across isolated worktrees when parallel agent tooling is available.
+disable-model-invocation: true
 compatibility: Requires git, GitHub CLI authentication, network access, and a GitHub repository with Issues and Pull Requests enabled.
 hooks:
   PostToolUse:

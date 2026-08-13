@@ -1,6 +1,7 @@
 ---
 name: branding
-description: V1.2 - HemSoft Developments branding guidelines, design system, and shadcn/ui component library.
+description: V1.3 - HemSoft Developments branding guidelines, design system, and shadcn/ui component library.
+disable-model-invocation: true
 ---
 
 # Branding

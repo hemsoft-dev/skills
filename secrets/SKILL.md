@@ -1,6 +1,7 @@
 ---
 name: secrets
-description: V1.1 - Stores and retrieves sensitive environment variables and API keys from SECRETS.md for quick reference.
+description: V1.2 - Stores and retrieves sensitive environment variables and API keys from SECRETS.md for quick reference.
+disable-model-invocation: true
 ---
 
 # Secrets Manager

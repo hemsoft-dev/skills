@@ -1,6 +1,7 @@
 ---
 name: slack-search
-description: "V1.2 - Slack message search, channel discovery, and user lookup with advanced query syntax and PowerShell scripts. CRITICAL: All scripts require 6>&1 stream redirection."
+description: "V1.3 - Slack message search, channel discovery, and user lookup with advanced query syntax and PowerShell scripts. CRITICAL: All scripts require 6>&1 stream redirection."
+disable-model-invocation: true
 compatibility: Requires SLACK_USER_TOKEN environment variable, PowerShell, network access
 ---
 

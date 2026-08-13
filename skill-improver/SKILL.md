@@ -1,6 +1,7 @@
 ---
 name: skill-improver
-description: V2.2 - Applies standardized improvements to skills and proactively suggests missing opt-in features. Converts "ALWAYS:" sections to hooks. Checks for protocol reference opportunities. Checks for commands-first description format. Enforces .agents/skills/ as the universal skill location per agentskills.io spec. Use when modifying any skill.
+description: V2.3 - Applies standardized improvements to skills and proactively suggests missing opt-in features. Converts "ALWAYS:" sections to hooks. Checks for protocol reference opportunities. Checks for commands-first description format. Enforces .agents/skills/ as the universal skill location per agentskills.io spec. Use when modifying any skill.
+disable-model-invocation: true
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"

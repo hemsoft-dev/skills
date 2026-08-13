@@ -1067,3 +1067,6 @@ Result: Filled GLM 5.2's RUNS.md row from owner report (GLM left time/cost unsta
 
 2026-08-13 - 08:59 - Align markdown linting to root config and reset git hooks with canonical sources
 Result: Deleted github/.markdownlint-cli2.jsonc per-skill override and stripped redundant markdownlint-disable comments from 5 github history files so the root config governs all skills. Versioned the orphaned copilot-hooks-era pre-commit hooks in a new hooks/ folder, recreated the missing Install-GitHooks.ps1 installer (reset = reinstall from hooks/), updated AGENTS.md to match actual lint rules and hook workflow.
+
+2026-08-13 - 09:00 - Make every active skill manual-only through frontmatter
+Result: Added `disable-model-invocation: true` to all 55 active skill manifests, bumped each skill version, synchronized mirrored version metadata, and added one dated history entry per skill. Archived skills were left unchanged; the included untracked unslop skill also had its ordered-list numbering normalized for lint compliance.

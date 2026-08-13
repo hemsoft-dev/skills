@@ -1,10 +1,11 @@
 ---
 name: sfl
 description: >
-  V2.1 - Commands: create-issue, status, explain, labels. Interact with the Set it
+  V2.2 - Commands: create-issue, status, explain, labels. Interact with the Set it
   Free Loop (SFL): create properly labeled issues, check pipeline status, and
   understand the automated issue-to-PR loop. Use when the user mentions SFL, wants
   an issue implemented by automation, or asks about the quality loop.
+disable-model-invocation: true
 ---
 
 # SFL — Set it Free Loop

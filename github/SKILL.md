@@ -1,6 +1,7 @@
 ---
 name: github
-description: V2.0 - GitHub API operations including billing, usage statistics, Copilot metrics, SSH keys, releases/tags, account management, and unified PR checking for GitHub/Bitbucket via CLI Tools.
+description: V2.1 - GitHub API operations including billing, usage statistics, Copilot metrics, SSH keys, releases/tags, account management, and unified PR checking for GitHub/Bitbucket via CLI Tools.
+disable-model-invocation: true
 ---
 
 # GitHub API Skill

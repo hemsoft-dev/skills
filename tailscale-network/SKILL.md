@@ -1,6 +1,7 @@
 ---
 name: tailscale-network
-description: "V1.0 - Commands: Connect, Run, Send, Retrieve. Operate the private four-computer Tailscale network across laptop, home, air, and mini."
+description: "V1.1 - Commands: Connect, Run, Send, Retrieve. Operate the private four-computer Tailscale network across laptop, home, air, and mini."
+disable-model-invocation: true
 ---
 
 # Tailscale network

@@ -1,8 +1,9 @@
 ---
 name: process-issue
 description: >-
-  V1.2 - Hourly orchestrator that processes the single oldest eligible GitHub issue through merge, then sends the
+  V1.3 - Hourly orchestrator that processes the single oldest eligible GitHub issue through merge, then sends the
   owner one structured Slack DM for actionable results while suppressing true no-op notifications.
+disable-model-invocation: true
 compatibility: Requires git, GitHub CLI, network access, and the slack-dm skill with a configured SLACK_TOKEN.
 ---
 

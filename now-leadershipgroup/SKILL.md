@@ -1,6 +1,7 @@
 ---
 name: now-leadershipgroup
-description: V1.2 - Expert in Now Leadership Group business, website, tech stack, infrastructure, accounts, and email/domain management. Use when working on NLG website, managing accounts, troubleshooting email/DNS, or planning infrastructure changes. See TODO.md for active migration tracking.
+description: V1.3 - Expert in Now Leadership Group business, website, tech stack, infrastructure, accounts, and email/domain management. Use when working on NLG website, managing accounts, troubleshooting email/DNS, or planning infrastructure changes. See TODO.md for active migration tracking.
+disable-model-invocation: true
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"

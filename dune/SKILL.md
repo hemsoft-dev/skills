@@ -1,6 +1,7 @@
 ---
 name: dune
-description: "V1.0 - Expert guidance for Dune: Awakening, especially Landsraad Great Houses, representatives, reward screenshots, locations, and efficient reward-collection routes. Use when identifying houses such as Hurata or Thorvald, locating representatives, reading Landsraad rewards from screenshots, planning a multi-house redemption route, or maintaining current Dune location data."
+description: "V1.1 - Expert guidance for Dune: Awakening, especially Landsraad Great Houses, representatives, reward screenshots, locations, and efficient reward-collection routes. Use when identifying houses such as Hurata or Thorvald, locating representatives, reading Landsraad rewards from screenshots, planning a multi-house redemption route, or maintaining current Dune location data."
+disable-model-invocation: true
 ---
 
 # Dune: Awakening Expert

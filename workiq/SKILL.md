@@ -1,6 +1,7 @@
 ---
 name: workiq
-description: V1.0 - Expert in Microsoft Work IQ CLI and MCP server for querying M365 data (emails, calendar, Teams, documents, people) using natural language. Use when working with WorkIQ installation, authentication, configuration, querying M365 data, or setting up WorkIQ as an MCP server.
+description: V1.1 - Expert in Microsoft Work IQ CLI and MCP server for querying M365 data (emails, calendar, Teams, documents, people) using natural language. Use when working with WorkIQ installation, authentication, configuration, querying M365 data, or setting up WorkIQ as an MCP server.
+disable-model-invocation: true
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"

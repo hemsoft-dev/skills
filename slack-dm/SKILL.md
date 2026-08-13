@@ -1,6 +1,7 @@
 ---
 name: slack-dm
-description: V1.2 - Send concise, structured Slack direct-message updates with an outcome, project, summary, category emoji, optional detail table, and available runtime metrics. Issue and pull-request updates must lead with the artifact ID and exact title. Use when an agent or scheduled automation needs to notify the owner through Slack.
+description: V1.3 - Send concise, structured Slack direct-message updates with an outcome, project, summary, category emoji, optional detail table, and available runtime metrics. Issue and pull-request updates must lead with the artifact ID and exact title. Use when an agent or scheduled automation needs to notify the owner through Slack.
+disable-model-invocation: true
 ---
 
 # Slack DM

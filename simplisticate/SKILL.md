@@ -1,6 +1,7 @@
 ---
 name: simplisticate
-description: V1.2 - Identifies complexity in code and proposes targeted simplifications with risk assessment. Cross-references repo-audit for documentation/config hygiene.
+description: V1.3 - Identifies complexity in code and proposes targeted simplifications with risk assessment. Cross-references repo-audit for documentation/config hygiene.
+disable-model-invocation: true
 ---
 
 # Simplisticate Agent 🎯

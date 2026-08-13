@@ -1,8 +1,9 @@
 ---
 name: identify-issues
-description: "V1.0 - Deeply analyze a repository and file high-precision, evidence-backed GitHub issues for real bugs, coverage gaps, performance, quality, dependency, security, dead-code, documentation, and CI problems. Creates issues only; never writes code."
+description: "V1.1 - Deeply analyze a repository and file high-precision, evidence-backed GitHub issues for real bugs, coverage gaps, performance, quality, dependency, security, dead-code, documentation, and CI problems. Creates issues only; never writes code."
+disable-model-invocation: true
 metadata:
-  version: "1.0"
+  version: "1.1"
 ---
 
 # Identify New Issues by Analyzing the Repository

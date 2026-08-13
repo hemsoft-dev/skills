@@ -1,6 +1,7 @@
 ---
 name: personal-review
-description: V1.5 - Expert in drafting, analyzing, and improving quarterly and annual work performance reviews based on historical review patterns and achievements.
+description: V1.6 - Expert in drafting, analyzing, and improving quarterly and annual work performance reviews based on historical review patterns and achievements.
+disable-model-invocation: true
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"

@@ -1,6 +1,7 @@
 ---
 name: contract-testing
-description: "V1.7 - Expert in contract testing for .NET/C# microservices using PactNet (consumer-driven). Covers Pact Broker, CI/CD gating, ADO/GHA pipeline patterns, and implementation. Includes Relias production broker credentials, service inventory, organizational context, meeting takeaways, PactNet 5.x FFI publish bug workaround (REST API), and a complete 'implement in your repo' workflow. Use when implementing, reviewing, or discussing contract testing."
+description: "V1.8 - Expert in contract testing for .NET/C# microservices using PactNet (consumer-driven). Covers Pact Broker, CI/CD gating, ADO/GHA pipeline patterns, and implementation. Includes Relias production broker credentials, service inventory, organizational context, meeting takeaways, PactNet 5.x FFI publish bug workaround (REST API), and a complete 'implement in your repo' workflow. Use when implementing, reviewing, or discussing contract testing."
+disable-model-invocation: true
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"

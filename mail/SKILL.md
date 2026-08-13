@@ -1,6 +1,7 @@
 ---
 name: mail
-description: V1.3 - Query emails across Outlook, Gmail, and IMAP accounts. Supports today, unread, recent, search, and date-filtered queries.
+description: V1.4 - Query emails across Outlook, Gmail, and IMAP accounts. Supports today, unread, recent, search, and date-filtered queries.
+disable-model-invocation: true
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"

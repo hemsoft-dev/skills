@@ -1,10 +1,11 @@
 ---
 name: relias
-description: V1.1 - Expert in everything about Relias (the company), including HR policies, benefits, culture, organizational structure, and workplace procedures.
+description: V1.2 - Expert in everything about Relias (the company), including HR policies, benefits, culture, organizational structure, and workplace procedures.
+disable-model-invocation: true
 compatibility: Requires docling for PDF/DOCX to Markdown conversion of HR documents
 metadata:
   author: HemSoft Developments
-  version: "1.1"
+  version: "1.2"
   document_location: HR/
 ---
 

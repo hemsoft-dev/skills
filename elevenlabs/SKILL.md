@@ -1,6 +1,7 @@
 ---
 name: elevenlabs
-description: "V1.2 - Commands: tts, podcast. Expert in ElevenLabs API for text-to-speech generation, voice management, and audio processing. Use when generating speech, producing two-host podcasts, listing voices, or working with ElevenLabs features."
+description: "V1.3 - Commands: tts, podcast. Expert in ElevenLabs API for text-to-speech generation, voice management, and audio processing. Use when generating speech, producing two-host podcasts, listing voices, or working with ElevenLabs features."
+disable-model-invocation: true
 dependencies: PowerShell 5.1+
 compatibility: Requires ELEVENLABS_API_KEY environment variable, network access, and ffplay (from ffmpeg) for playback.
 hooks:

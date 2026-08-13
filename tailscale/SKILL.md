@@ -1,6 +1,7 @@
 ---
 name: tailscale
-description: "V1.2 - Commands: Status, Enroll, SSH, Diagnose. Enroll, verify, and troubleshoot the private Tailscale mesh and SSH access across Windows, macOS, and Linux hosts."
+description: "V1.3 - Commands: Status, Enroll, SSH, Diagnose. Enroll, verify, and troubleshoot the private Tailscale mesh and SSH access across Windows, macOS, and Linux hosts."
+disable-model-invocation: true
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"

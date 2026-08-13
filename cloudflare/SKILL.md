@@ -1,6 +1,7 @@
 ---
 name: cloudflare
-description: V1.0 - Cloudflare usage statistics for web analytics and email routing across managed domains. Use when checking page views, unique visitors, or email forwarding stats.
+description: V1.1 - Cloudflare usage statistics for web analytics and email routing across managed domains. Use when checking page views, unique visitors, or email forwarding stats.
+disable-model-invocation: true
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"

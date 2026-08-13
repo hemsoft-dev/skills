@@ -1,6 +1,7 @@
 ---
 name: slack
-description: Primary entry point for Slack API operations with sub-skills for search, files, and advanced features.
+description: V1.0 - Primary entry point for Slack API operations with sub-skills for search, files, and advanced features.
+disable-model-invocation: true
 ---
 
 # Slack Web API

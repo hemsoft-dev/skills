@@ -1,6 +1,7 @@
 ---
 name: copilot-pr-processor
-description: V1.4 - Process an existing GitHub pull request through GitHub Copilot PR Reviewer and, when installed, the SFL full-spectrum reviewer until both current-head reviews have zero findings and all review threads are explicitly resolved. Requests Copilot through the API and SFL through workflow dispatch, with legacy label fallback. Use for exhaustive PR readiness loops that include Critical, High, Medium, and Low findings.
+description: V1.5 - Process an existing GitHub pull request through GitHub Copilot PR Reviewer and, when installed, the SFL full-spectrum reviewer until both current-head reviews have zero findings and all review threads are explicitly resolved. Requests Copilot through the API and SFL through workflow dispatch, with legacy label fallback. Use for exhaustive PR readiness loops that include Critical, High, Medium, and Low findings.
+disable-model-invocation: true
 ---
 
 # Copilot PR Processor

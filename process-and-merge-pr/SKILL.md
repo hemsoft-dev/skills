@@ -1,6 +1,7 @@
 ---
 name: process-and-merge-pr
-description: V1.1 - Take one explicitly identified existing GitHub pull request through conflict, verification, check, and review remediation until its current head is mergeable, then squash-merge it and verify closeout. Use only when the user explicitly asks to process and merge a PR; do not use for issue selection, backlog processing, or readiness-only work.
+description: V1.2 - Take one explicitly identified existing GitHub pull request through conflict, verification, check, and review remediation until its current head is mergeable, then squash-merge it and verify closeout. Use only when the user explicitly asks to process and merge a PR; do not use for issue selection, backlog processing, or readiness-only work.
+disable-model-invocation: true
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"

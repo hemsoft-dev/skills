@@ -1,6 +1,7 @@
 ---
 name: protocols
-description: V1.0 - Central reference manual of standardized procedures and execution patterns. Skills consult this for detailed instructions on common tasks to ensure consistency. User-controlled; never modify without explicit request.
+description: V1.1 - Central reference manual of standardized procedures and execution patterns. Skills consult this for detailed instructions on common tasks to ensure consistency. User-controlled; never modify without explicit request.
+disable-model-invocation: true
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"

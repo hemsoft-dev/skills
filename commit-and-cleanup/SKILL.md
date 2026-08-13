@@ -1,8 +1,9 @@
 ---
 name: commit-and-cleanup
-description: "V1.3 - Commit, push, and cleanup branches/worktrees/stashes with git hygiene."
-version: "1.3"
-lastModified: "2026-08-07"
+description: "V1.4 - Commit, push, and cleanup branches/worktrees/stashes with git hygiene."
+disable-model-invocation: true
+version: "1.4"
+lastModified: "2026-08-13"
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"

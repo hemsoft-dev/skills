@@ -1,6 +1,7 @@
 ---
 name: sonar
-description: "V1.0 - Commands: PRIssues, ProjectIssues, QualityGate. Fetch SonarCloud (SonarQube Cloud) issues, quality gate status, and measures for the Relias configurator project and other projects. Use when asked whether a pull request has Sonar issues, what they are, or about Sonar quality gate / coverage / duplication results. Knows where the SONAR_TOKEN lives and how to query the private SonarCloud API."
+description: "V1.1 - Commands: PRIssues, ProjectIssues, QualityGate. Fetch SonarCloud (SonarQube Cloud) issues, quality gate status, and measures for the Relias configurator project and other projects. Use when asked whether a pull request has Sonar issues, what they are, or about Sonar quality gate / coverage / duplication results. Knows where the SONAR_TOKEN lives and how to query the private SonarCloud API."
+disable-model-invocation: true
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"

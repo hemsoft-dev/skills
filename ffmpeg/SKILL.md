@@ -1,6 +1,7 @@
 ---
 name: ffmpeg
-description: V1.3 - Universal media processing toolkit with Appender workflow for concatenating video segments with smooth transitions. Use for transcoding, filtering, streaming, and format conversion.
+description: V1.4 - Universal media processing toolkit with Appender workflow for concatenating video segments with smooth transitions. Use for transcoding, filtering, streaming, and format conversion.
+disable-model-invocation: true
 ---
 
 # FFmpeg

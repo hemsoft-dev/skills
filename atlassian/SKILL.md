@@ -1,6 +1,7 @@
 ---
 name: atlassian
-description: V1.9 - Search and manage JIRA tickets, Confluence docs, and Cortex Internal Developer Portal with proper field configuration and full Confluence API support. ALWAYS includes clickable links in results.
+description: V1.10 - Search and manage JIRA tickets, Confluence docs, and Cortex Internal Developer Portal with proper field configuration and full Confluence API support. ALWAYS includes clickable links in results.
+disable-model-invocation: true
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"

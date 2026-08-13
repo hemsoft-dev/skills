@@ -1,6 +1,7 @@
 ---
 name: tempo
-description: V1.2 - Read and write Tempo time tracking data. Use when retrieving time entries, adding worklogs, checking hours logged, or managing time tracking.
+description: V1.3 - Read and write Tempo time tracking data. Use when retrieving time entries, adding worklogs, checking hours logged, or managing time tracking.
+disable-model-invocation: true
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"

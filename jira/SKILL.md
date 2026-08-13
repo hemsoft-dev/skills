@@ -1,6 +1,7 @@
 ---
 name: jira
-description: "V2.5 - Commands: Get, Search, Comments, Board, Create Child, Move. Query and manage Jira work in Productivity Engineering."
+description: "V2.6 - Commands: Get, Search, Comments, Board, Create Child, Move. Query and manage Jira work in Productivity Engineering."
+disable-model-invocation: true
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"

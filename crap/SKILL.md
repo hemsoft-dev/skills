@@ -1,6 +1,7 @@
 ---
 name: crap
-description: "V1.2 - Commands: report, improve, log, status. CRAP (Change Risk Anti-Patterns) score management for .NET, TypeScript, and Python projects. Generates reports, identifies risky methods, guides improvements, and tracks score progress. Integrated with org-metrics scorecard as a conditional Gold rule (10 pts). Use when analyzing code quality, reducing change risk, or tracking CRAP score trends."
+description: "V1.3 - Commands: report, improve, log, status. CRAP (Change Risk Anti-Patterns) score management for .NET, TypeScript, and Python projects. Generates reports, identifies risky methods, guides improvements, and tracks score progress. Integrated with org-metrics scorecard as a conditional Gold rule (10 pts). Use when analyzing code quality, reducing change risk, or tracking CRAP score trends."
+disable-model-invocation: true
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"

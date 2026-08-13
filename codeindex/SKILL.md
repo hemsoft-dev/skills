@@ -1,6 +1,7 @@
 ---
 name: codeindex
-description: "V1.0 - Commands: Init, Index, Query, Status, Watch, UI. Use when working with the local Code Index install, reducing token usage with indexed code retrieval, or explaining the Windows-specific Code Index setup and limitations on this machine."
+description: "V1.1 - Commands: Init, Index, Query, Status, Watch, UI. Use when working with the local Code Index install, reducing token usage with indexed code retrieval, or explaining the Windows-specific Code Index setup and limitations on this machine."
+disable-model-invocation: true
 compatibility: "Requires C:\\Users\\User\\.local\\bin\\codeindex.exe. This local Windows build works as a CLI but currently falls back to mock embeddings, and MCP integration with Copilot CLI/OpenCode is not reliable here."
 hooks:
   PostToolUse:

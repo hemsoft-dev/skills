@@ -1,6 +1,7 @@
 ---
 name: python
-description: V1.2 - Expert in Python installation, virtual environments, package management, and troubleshooting on Windows. Skills must use isolated virtual environments - never install Python packages globally.
+description: V1.3 - Expert in Python installation, virtual environments, package management, and troubleshooting on Windows. Skills must use isolated virtual environments - never install Python packages globally.
+disable-model-invocation: true
 ---
 
 # Python Expert

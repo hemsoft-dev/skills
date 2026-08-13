@@ -1,6 +1,7 @@
 ---
 name: diary
-description: "V1.10 - Commands: create, scaffold, update. Personal diary management with credential-resilient automated collection, quality-gated news, DeepSWE-first LLM benchmarks, token-based Copilot billing, and HTML entries."
+description: "V1.11 - Commands: create, scaffold, update. Personal diary management with credential-resilient automated collection, quality-gated news, DeepSWE-first LLM benchmarks, token-based Copilot billing, and HTML entries."
+disable-model-invocation: true
 ---
 
 # Diary

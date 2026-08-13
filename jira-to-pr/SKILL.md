@@ -1,6 +1,7 @@
 ---
 name: jira-to-pr
-description: "V1.0 - Process a selected JIRA ticket into an implementation-ready branch and pull request when the user asks to process JIRA work."
+description: "V1.1 - Process a selected JIRA ticket into an implementation-ready branch and pull request when the user asks to process JIRA work."
+disable-model-invocation: true
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"

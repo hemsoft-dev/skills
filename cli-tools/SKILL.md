@@ -1,9 +1,10 @@
 ---
 name: cli-tools
-description: "V1.10 - Commands: Install, Update, VersionCheck, Usage. Route CLI-tool requests to concise category references and verify results."
+description: "V1.11 - Commands: Install, Update, VersionCheck, Usage. Route CLI-tool requests to concise category references and verify results."
+disable-model-invocation: true
 metadata:
   author: HemSoft Developments
-  version: "1.10"
+  version: "1.11"
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"

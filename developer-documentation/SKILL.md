@@ -1,6 +1,7 @@
 ---
 name: developer-documentation
-description: V1.2 - Expert in all software engineering standards, processes, and best practices at Relias, including onboarding, testing, CI/CD, security, and developer tooling.
+description: V1.3 - Expert in all software engineering standards, processes, and best practices at Relias, including onboarding, testing, CI/CD, security, and developer tooling.
+disable-model-invocation: true
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"

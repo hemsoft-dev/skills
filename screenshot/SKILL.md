@@ -1,6 +1,7 @@
 ---
 name: screenshot
-description: Capture screenshots from the Windows clipboard or import SnagIt captures for AI description and OCR text extraction.
+description: V1.0 - Capture screenshots from the Windows clipboard or import SnagIt captures for AI description and OCR text extraction.
+disable-model-invocation: true
 ---
 
 # Screenshot

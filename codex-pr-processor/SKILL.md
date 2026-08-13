@@ -1,6 +1,7 @@
 ---
 name: codex-pr-processor
-description: V1.1 - Process an existing GitHub pull request through Codex, CodeRabbit, Macroscope, and optional Greptile feedback until current-head actionable comments are addressed, review threads are resolved, and normal PR checks pass.
+description: V1.2 - Process an existing GitHub pull request through Codex, CodeRabbit, Macroscope, and optional Greptile feedback until current-head actionable comments are addressed, review threads are resolved, and normal PR checks pass.
+disable-model-invocation: true
 compatibility: Requires PowerShell 7, GitHub CLI, GitHub network access, and authenticated gh. Helper scripts support Windows, macOS, and Linux when these dependencies are installed.
 hooks:
   PostToolUse:

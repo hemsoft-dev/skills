@@ -1,6 +1,7 @@
 ---
 name: copilot-issue-processor
-description: V1.0 - Turns the oldest GitHub Issue into a clean branch and PR, then iterates with repo-appropriate automated PR review until the PR is merge-ready.
+description: V1.1 - Turns the oldest GitHub Issue into a clean branch and PR, then iterates with repo-appropriate automated PR review until the PR is merge-ready.
+disable-model-invocation: true
 compatibility: Requires git, GitHub CLI authentication, network access, and a GitHub repository with Issues and Pull Requests enabled.
 hooks:
   PostToolUse:

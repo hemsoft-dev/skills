@@ -1,6 +1,7 @@
 ---
 name: yahtzee-bench
-description: "V1.1 - Commands: Create, Score, Status. Create: build a cross-platform Electron 6-dice Yahtzee game (Windows executable, up to 4 players, selectable AI opponents, rich scoresheet, gold-standard UX) as a self-contained entry, and record run telemetry (date, time taken, cost) in RUNS.md. Score and Status are owner-only commands for reviewing finished entries."
+description: "V1.2 - Commands: Create, Score, Status. Create: build a cross-platform Electron 6-dice Yahtzee game (Windows executable, up to 4 players, selectable AI opponents, rich scoresheet, gold-standard UX) as a self-contained entry, and record run telemetry (date, time taken, cost) in RUNS.md. Score and Status are owner-only commands for reviewing finished entries."
+disable-model-invocation: true
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
