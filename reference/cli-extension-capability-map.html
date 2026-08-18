@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CLI extension capability map</title>
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+  <main>
+    <p class="eyebrow">Quick reference</p>
+    <h1>CLI extension capability map</h1>
+    <p class="lede">A Copilot CLI extension is a long-lived Node.js process attached to one live session.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Capability</th>
+          <th>Who initiates it</th>
+          <th>Good examples</th>
+          <th>Contract status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Custom tool</td>
+          <td>Copilot chooses it from its name, description, and JSON Schema.</td>
+          <td>Repository health, release evidence, local service status, domain-specific calculations.</td>
+          <td>Documented CLI extension contract.</td>
+        </tr>
+        <tr>
+          <td>Slash command</td>
+          <td>The user runs it directly.</td>
+          <td><code>/sessionstats</code>, <code>/handoff</code>, <code>/releasecheck</code>.</td>
+          <td>Documented CLI extension contract.</td>
+        </tr>
+        <tr>
+          <td>Session events</td>
+          <td>The CLI emits them while the agent works.</td>
+          <td>Tool duration, failures, token use, turn completion, audit logs.</td>
+          <td>Demonstrated by GitHub's tutorial and SDK event reference.</td>
+        </tr>
+        <tr>
+          <td>Session state</td>
+          <td>The extension updates ordinary module variables.</td>
+          <td>Running totals, active process IDs, cached API results, workflow state.</td>
+          <td>In memory for one session. Write to disk for longer persistence.</td>
+        </tr>
+        <tr>
+          <td>Terminal UI</td>
+          <td>The extension requests a dialog from the host.</td>
+          <td>Confirm, select, text input, and JSON Schema forms.</td>
+          <td>SDK capability. Check <code>session.capabilities.ui?.elicitation</code> first.</td>
+        </tr>
+        <tr>
+          <td>Shell process</td>
+          <td>The extension starts or stops it through the session RPC.</td>
+          <td>Cancelable tests, dev servers, benchmarks, log streaming.</td>
+          <td>Present in the CLI changelog and SDK RPC. Verify the bundled version.</td>
+        </tr>
+        <tr>
+          <td>Canvas UI</td>
+          <td>The Copilot app hosts the visual interface.</td>
+          <td>Kanban boards, triage boards, documents, dashboards.</td>
+          <td>Documented for the app, not as a free-form CLI TUI API.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <section class="callout">
+      <strong>Security boundary.</strong> The extension process runs local JavaScript with your account's operating-system privileges. CLI permission prompts do not turn untrusted extension code into safe code.
+    </section>
+
+    <h2>Lifecycle</h2>
+    <p><code>discover → start process → join session → register capabilities → observe and act → reload or stop</code></p>
+    <p>Use <code>/extensions manage</code> for status and logs. Use <code>/extensions mode</code> to choose Load &amp; Augment, Load Only, or Disabled.</p>
+
+    <nav aria-label="Course navigation">
+      <a href="../lessons/0002-what-a-cli-extension-can-own.html">Lesson 0002</a>
+      <a href="copilot-extension-boundaries.html">Boundary reference</a>
+      <a href="https://docs.github.com/en/copilot/concepts/agents/copilot-cli/about-cli-extensions">GitHub concept guide</a>
+    </nav>
+  </main>
+</body>
+</html>

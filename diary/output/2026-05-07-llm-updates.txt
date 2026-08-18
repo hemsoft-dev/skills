@@ -1,8 +1,0 @@
-### LMSYS Chatbot Arena Leaderboard
-
-*No change from 2026-05-05 entry. Carry forward from yesterday.*
-
-**Overall (Top 5)**
-
-| Rank | Model | Organization |
-|

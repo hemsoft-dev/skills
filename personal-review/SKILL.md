@@ -1,6 +1,6 @@
 ---
 name: personal-review
-description: V1.6 - Expert in drafting, analyzing, and improving quarterly and annual work performance reviews based on historical review patterns and achievements.
+description: V1.7 - Expert in drafting, analyzing, and improving quarterly and annual work performance reviews based on historical review patterns and achievements.
 disable-model-invocation: true
 hooks:
   PostToolUse:
@@ -40,8 +40,6 @@ hooks:
 
 # Personal Review Assistant
 
-**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
-
 Expert assistant for creating and refining work performance reviews (quarterly and annual).
 
 ## Overview
@@ -73,7 +71,7 @@ results.
      examples, adoption by teams, and measurable reuse impact.
 
 2. `sfl-pr-reviewer` — Q3/26
-   - Purpose: SFL PR Reviewer full-spectrum reviewer (`sfl-pr-review.lock.yml`) — three evidence-based passes (Security, Correctness/Reliability, Quality/Maintainability) with Critical/High/Medium/Low severity, inline threads, review sheet verdict, and `SFL Reviewer Approval` check gate. Works alongside GitHub Copilot PR Reviewer in the `copilot-pr-processor` dual-review zero-findings loop.
+   - Purpose: SFL PR Reviewer full-spectrum reviewer (`sfl-pr-review.lock.yml`) — three evidence-based passes (Security, Correctness/Reliability, Quality/Maintainability) with Critical/High/Medium/Low severity, inline threads, review sheet verdict, and `SFL Reviewer Approval` check gate. Works alongside GitHub Copilot PR Reviewer in the `process-pr` dual-review zero-findings loop.
    - Review angles: Reviewer workflow dispatch (`workflow_dispatch` with `item_number`/`aw_context`), severity taxonomy and clean-sheet target (zero findings across all severities), `APPROVE` verdict vs. approval-gate distinction, thread resolution via `resolveReviewThread`, head-SHA matching, dual-reviewer readiness criteria, legacy `sfl-review` label fallback, and adoption across SFL-managed repos.
 
 3. `sfl-canvas` (GitHub Copilot App) — Q3/26

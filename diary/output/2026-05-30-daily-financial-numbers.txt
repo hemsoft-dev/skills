@@ -1,8 +1,0 @@
-Daily Financial Numbers - 2026-05-30 (Saturday)
-================================================
-US markets CLOSED (weekend). Values are last close (Thursday 2026-05-29).
-
-Dow Jones (^DJI):  51,032  (last close)
-S&P 500 (^GSPC):   7,580   (last close)
-
-Note: No trading Saturday. Carried forward from last session for reference.

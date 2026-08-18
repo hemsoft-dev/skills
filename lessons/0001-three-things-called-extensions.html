@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Three things called extensions</title>
+  <link rel="stylesheet" href="../assets/course.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <main>
+    <p class="eyebrow">Lesson 0001 · 5 minutes</p>
+    <h1>Three things called extensions</h1>
+    <p class="lede">By the end, you can reject plugin work you already know and spot the runtime API that is actually new.</p>
+
+    <section class="callout">
+      <strong>The useful finding.</strong> Copilot CLI extensions are not plugins. They are experimental JavaScript processes that join the live session through the Copilot SDK.
+    </section>
+
+    <h2>Classify by behavior</h2>
+    <div class="decision">
+      <article>
+        <h3>Plugin</h3>
+        <p>Installs a bundle of agents, skills, hooks, MCP servers, and LSP configuration. It solves distribution.</p>
+      </article>
+      <article>
+        <h3>CLI extension</h3>
+        <p>Runs beside the CLI, observes events, keeps state, and adds tools, commands, or terminal forms.</p>
+      </article>
+      <article>
+        <h3>Canvas extension</h3>
+        <p>Runs in the Copilot app's side panel as a shared visual artifact for people and agents.</p>
+      </article>
+    </div>
+
+    <h2>The architectural difference</h2>
+    <p>A skill gives the model instructions. An MCP server gives the model remote tools. A CLI extension joins the session itself:</p>
+
+    <p><code>extension.mjs → joinSession(...) → events + state + tools + commands + UI requests</code></p>
+
+    <p>That lets an extension measure tool duration, count usage across turns, react to lifecycle events, or ask the user for structured input. A plugin can distribute agents, skills, hooks, MCP, and LSP configuration, but it does not replace this executable runtime.</p>
+
+    <p>Canvas goes one step further. It gives people and agents the same persistent visual artifact in the app side panel. The CLI TUI can show host-provided dialogs and forms, but GitHub does not document a stable free-form layout API for it yet.</p>
+
+    <section class="quiz" data-quiz
+      data-feedback-correct="Correct. A live session process can observe events and retain state."
+      data-feedback-wrong="Try again. Packaging and one MCP connection do not create a session observer.">
+      <h2>Retrieval check</h2>
+      <p>Which choice can observe every tool call and retain a running total during one session?</p>
+      <div class="quiz-options">
+        <button type="button" data-answer>Install a plugin bundle</button>
+        <button type="button" data-answer data-correct="true">Write a session process</button>
+        <button type="button" data-answer>Configure one MCP server</button>
+      </div>
+      <p class="feedback" data-feedback aria-live="polite"></p>
+    </section>
+
+    <h2>Read the primary source</h2>
+    <p>Read GitHub's <a href="https://docs.github.com/en/copilot/tutorials/create-an-extension">CLI extension tutorial</a>, especially the tool-time example. It proves the key capability by subscribing to tool execution events and keeping state in a long-lived process.</p>
+
+    <p>Ask your teaching agent about anything that is unclear. The next lesson will build a minimal read-only session observer after we verify your installed CLI version and extension mode.</p>
+
+    <nav aria-label="Course navigation">
+      <a href="../reference/copilot-extension-boundaries.html">Comparison reference</a>
+      <a href="0002-what-a-cli-extension-can-own.html">Lesson 0002</a>
+      <a href="https://docs.github.com/en/copilot/how-tos/github-copilot-app/working-with-canvas-extensions">Canvas comparison</a>
+    </nav>
+  </main>
+</body>
+</html>

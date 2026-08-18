@@ -1,4 +1,0 @@
-interface:
-  display_name: "Dune: Awakening Expert"
-  short_description: "Plan Landsraad reward collection routes"
-  default_prompt: "Use $dune to read my Landsraad rewards and plan an efficient collection route."

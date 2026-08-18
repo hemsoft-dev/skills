@@ -1,6 +1,6 @@
 ---
 name: skill-creator
-description: V1.12 - Creates new skills with optimized SKILL.md files following the agentskills.io open standard. Default location is .agents/skills/ (universal, all vendors). Uses hooks for history tracking and retrospectives (enabled by default). Includes explicit instructions for getting accurate timestamps. Consults protocols skill for standardized execution patterns.
+description: V1.14 - Creates new skills with optimized SKILL.md files following the agentskills.io open standard. Default location is .agents/skills/ (universal, all vendors). Uses hooks for history tracking and retrospectives (enabled by default). Includes explicit instructions for getting accurate timestamps.
 disable-model-invocation: true
 hooks:
   PostToolUse:
@@ -39,8 +39,6 @@ hooks:
 
 # Skill Creator
 
-**Protocol Check**: Before proceeding, check the `protocols` skill to see if any protocol entries apply to this task.
-
 Create new skills following the [agentskills.io](https://agentskills.io/specification) open standard.
 
 ## Skill Location Standard
@@ -49,19 +47,36 @@ The canonical location for skills is **`.agents/skills/`** — this is the unive
 
 **Do NOT use vendor-specific paths** (`.claude/skills/`, `.github/skills/`, `.cursor/rules/`) for new skills unless the user explicitly requests vendor lock-in. Those are legacy/fallback paths.
 
-## Agent Skills Specification - Frontmatter Reference
+## Frontmatter Reference
 
-Per the official spec at <https://agentskills.io/specification>, SKILL.md frontmatter supports:
+### Agent Skills Specification Fields
 
-| Field    | Required | Constraints                                                     |
-| `name`             | ✅ | Max 64 chars. Lowercase alphanumeric + hyphens.    |
-| `description`      | ✅ | Max 1024 chars. Include what + when to use.        |
-| `license`          | ❌ | License name or reference (e.g., `Apache-2.0`)    |
-| `dependencies`     | ❌ | Software packages required (e.g., `python>=3.8`)  |
-| `compatibility`    | ❌ | Max 500 chars. Environment requirements             |
-| `metadata`         | ❌ | Key-value map for custom properties                 |
-| `allowed-tools`    | ❌ | Space-delimited pre-approved tools                 |
-| `hooks`            | ❌ | Hook configuration for automated post-processing   |
+Per the official spec at <https://agentskills.io/specification>, SKILL.md
+frontmatter supports these fields:
+
+| Field | Required | Constraints |
+| --- | --- | --- |
+| `name` | Yes | Max 64 chars. Lowercase alphanumeric and hyphens. |
+| `description` | Yes | Max 1024 chars. Include what the skill does and when to use it. |
+| `license` | No | License name or reference, such as `Apache-2.0`. |
+| `compatibility` | No | Max 500 chars. Environment requirements. |
+| `metadata` | No | String key-value map for custom properties. |
+| `allowed-tools` | No | Experimental. Space-delimited pre-approved tools. |
+
+### Optional Client Extensions
+
+These fields are outside the core Agent Skills specification. Client support
+varies; invocation control is documented by
+[Claude Code](https://code.claude.com/docs/en/skills#control-who-invokes-a-skill).
+
+| Field | Required | Constraints |
+| --- | --- | --- |
+| `dependencies` | No | Software packages required, such as `python>=3.8`. |
+| `hooks` | No | Hook configuration for automated post-processing. |
+| `disable-model-invocation` | No | Claude Code boolean: `true` prevents automatic loading and allows user invocation only; `false` permits model invocation. Client default: `false`. |
+
+**Recommended skill-creator default**: Set `disable-model-invocation: true`
+unless the user explicitly wants the model to invoke the skill automatically.
 
 ## Skill Structure
 
@@ -78,12 +93,13 @@ Each skill requires:
 
 ## SKILL.md Format
 
-**Minimal (required only):**
+**Recommended default:**
 
 ```markdown
 ---
 name: {skill-name}
 description: V{major}.{minor} - {One sentence describing when to use this skill}
+disable-model-invocation: true
 ---
 
 # {Skill Title}
@@ -97,6 +113,7 @@ description: V{major}.{minor} - {One sentence describing when to use this skill}
 ---
 name: {skill-name}
 description: "V{major}.{minor} - Commands: {Cmd1}, {Cmd2}, {Cmd3}. {Description of what + when to use}"
+disable-model-invocation: true
 ---
 ```
 
@@ -111,6 +128,7 @@ entry points — simple single-purpose skills should omit it.
 ---
 name: {skill-name}
 description: V{major}.{minor} - {Description of what + when to use}
+disable-model-invocation: true
 license: Apache-2.0
 compatibility: Requires git, network access
 metadata:
@@ -136,19 +154,11 @@ hooks:
 
 1. **Description** - Single sentence that helps the LLM decide if this skill applies
 2. **Commands prefix** - If the skill has multiple commands or modes, list them at the start of the description: `Commands: Cmd1, Cmd2, Cmd3.` This makes capabilities visible when the user types `/{skill-name}` in the chat prompt
-3. **Instructions** - Minimal, actionable guidance; avoid over-documentation
-4. **Placeholders** - Use `{VARIABLE}` for runtime values
-5. **Output Format** - Only specify if the skill produces structured output
-6. **Scripts Organization** - Keep all PowerShell/Python scripts in a `scripts/` subfolder (e.g., `{skill-name}/scripts/script-name.ps1`)
-
-## Protocols Integration
-
-When encountering common patterns during skill creation, consult the `protocols` skill for standardized execution instructions. The protocols skill contains detailed procedures for:
-
-- Asking clarifying questions
-- (More protocols will be added over time)
-
-Instead of duplicating detailed instructions, reference the appropriate protocol. This ensures consistency across all skills.
+3. **Invocation control** - Set `disable-model-invocation: true` by default; use `false` only when automatic model invocation is intentional
+4. **Instructions** - Minimal, actionable guidance; avoid over-documentation
+5. **Placeholders** - Use `{VARIABLE}` for runtime values
+6. **Output Format** - Only specify if the skill produces structured output
+7. **Scripts Organization** - Keep all PowerShell/Python scripts in a `scripts/` subfolder (e.g., `{skill-name}/scripts/script-name.ps1`)
 
 ## Creation Workflow
 
@@ -156,7 +166,8 @@ Instead of duplicating detailed instructions, reference the appropriate protocol
 
 ### Step 1: Get Skill Details
 
-Ask user for skill name and purpose. If you need to ask clarifying questions, consult the `protocols` skill for standardized question format.
+Use the skill name and purpose from the request when they are explicit. Ask only
+for missing details that would materially change the result.
 
 ### Step 2: Choose Location
 
@@ -230,7 +241,7 @@ hooks:
 ### Step 4: Create Files
 
 1. Create directory at chosen location (default: user folder)
-2. Write SKILL.md with frontmatter (including hooks if enabled) and instructions
+2. Write SKILL.md with `disable-model-invocation: true` by default, frontmatter hooks if enabled, and instructions
 3. Apply version prefix (V1.0)
 4. Create History/ directory if history tracking enabled (default: enabled)
 5. Create initial History/{YYYY-MM-DD}.md entry if history tracking enabled
@@ -251,18 +262,15 @@ This returns the current time in 24-hour format (e.g., "12:36", "23:53", "02:22"
 
 Tell user where the skill was created and what features are enabled.
 
-## Skill-Improver Integration
+## Final Review
 
-Before finalizing the skill, check the `skill-improver` skill for available improvements and offer them:
+Before finalizing the skill:
 
-| Improvement          | Default        | Override                                    |
-|----------------------|----------------|---------------------------------------------|
-| Version prefix       | Always applied | Never (always V1.0 for new skills)          |
-| History Tracking     | Enabled        | Only if user says "no history" or similar   |
-| Retrospective        | Enabled        | Only if user says "no retrospective" or similar |
-| Location             | `.agents/skills/` (user) | "repo" → `{repo}/.agents/skills/`, vendor-specific only if explicitly requested |
-| History Tracking (hooks) | Enabled    | Only if user says "no history" or similar   |
-| Retrospectives (hooks)   | Enabled    | Only if user says "no retrospective" or similar |
+1. Validate the frontmatter and directory name.
+2. Confirm the instructions are concise and executable.
+3. Check that scripts and referenced files exist.
+4. Record the exact timestamp in the current history file when history is enabled.
+5. Run the repository's focused Markdown and script checks.
 
 ## Anti-Patterns
 

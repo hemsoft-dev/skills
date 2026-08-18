@@ -1076,3 +1076,21 @@ Result: Per owner request as part of a broader skills/hooks cleanup: uninstalled
 
 2026-08-13 - 10:05 - Complete graphify removal across SFL repos; handle stray reinstall
 Result: Removed graphify-out and hooks from HemSoft/set-it-free-loop (08d01dd) and relias-engineering/set-it-free-loop (59ab5a9, folder was untracked there; cleaned .gitignore), deleted ~/.graphify data dir. Detected and re-uninstalled graphifyy 0.9.41, which a concurrent session with stale AGENTS.md context had auto-installed at 09:54 via the old graphify skill's auto-install step. Final sweep: zero graphify artifacts remain anywhere; both SFL repos clean and pushed.
+
+2026-08-13 - 10:29 - Diagnose recurring Codex MCP startup interruption warning
+Result: Verified Codex 0.147.0 and all three reported MCP servers are healthy in a fresh process, traced the warning to the client cancellation/event-lag path, and identified an unreleased upstream queue fix that landed after the current stable and alpha builds. Left MCP configuration unchanged because timeout or command edits would target the wrong failure mode.
+
+2026-08-13 - 11:13 - Archive every local skill except the approved three
+Result: Archived 62 skills to `C:\Users\User\.agents\skills-archived`, including 14 legacy skills that Codex still discovered under `_archived`. Verified 1,349 files and 318,667,984 bytes with matching SHA-256 hashes; a fresh Codex prompt exposes only `personal-review`, `skill-creator`, and `slack-dm`. Preserved the owner's intentional report-file deletions and left all changes uncommitted.
+
+2026-08-13 - 11:18 - Add invocation control to the skill-creator frontmatter reference
+Result: Documented `disable-model-invocation` as an optional client extension with `true` and `false` values, recommended `true` by default, updated skill templates and workflow guidance, and bumped skill-creator to V1.13.
+
+2026-08-13 - 11:29 - Apply unslop globally to Codex responses
+Result: Unarchived unslop, made it model-invocable as V1.1, and added a machine-wide Codex developer instruction requiring unslop as the final editing pass for every user-facing response. Kept the user-level hooks file empty because a Stop hook would force a second model pass instead of rewriting the response directly.
+
+2026-08-13 - 16:30 - Create the user-level fleet skill
+Result: Created `~/.agents/skills/fleet` at V1.0 from the archived `tailscale-network` skill, preserved the four-machine SSH and Taildrop procedures, verified the aliases and current Tailscale addresses from home, and left the archived source unchanged.
+
+2026-08-18 - 13:32 - Prepare the active-skills migration for publication
+Result: Proved 1,346 deleted files match their Home archive Git blobs, preserved the three documented report deletions, removed a raw prompt dump, fixed 43 Markdown findings and two CRLF shell templates, and removed active references to archived workflow skills.

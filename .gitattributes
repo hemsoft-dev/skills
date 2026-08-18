@@ -15,3 +15,8 @@ productivity/use-cases/repos/data/** linguist-generated
 productivity/use-cases/repos/templates/demo-*.html linguist-generated
 
 .github/workflows/*.lock.yml linguist-generated=true merge=ours
+
+# Keep cross-platform shell scripts executable by Bash on macOS and Linux.
+*.sh text eol=lf
+*.command text eol=lf
+hooks/pre-commit text eol=lf

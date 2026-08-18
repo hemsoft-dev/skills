@@ -1,8 +1,0 @@
-Claude Code: {   "message": "Not Found",   "documentation_url": "https://docs.github.com/rest",   "status": "404" }
-Gemini CLI: {   "message": "Not Found",   "documentation_url": "https://docs.github.com/rest",   "status": "404" }
-GitHub CLI: {   "message": "Not Found",   "documentation_url": "https://docs.github.com/rest",   "status": "404" }
-GitHub Copilot CLI: {   "message": "Not Found",   "documentation_url": "https://docs.github.com/rest",   "status": "404" }
-GitHub Copilot (gh extension): {   "message": "Not Found",   "documentation_url": "https://docs.github.com/rest",   "status": "404" }
-GitHub Copilot Chat: {   "message": "Not Found",   "documentation_url": "https://docs.github.com/rest",   "status": "404" }
-Goose CLI: {   "message": "Not Found",   "documentation_url": "https://docs.github.com/rest",   "status": "404" }
-Node.js: {   "message": "Not Found",   "documentation_url": "https://docs.github.com/rest",   "status": "404" }

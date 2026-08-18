@@ -1,4 +1,0 @@
-interface:
-  display_name: "Codex PR Processor"
-  short_description: "Drive PRs through Codex and optional Greptile review"
-  default_prompt: "Use $codex-pr-processor to process an existing pull request until Codex, CodeRabbit, Macroscope, and any explicitly authorized and verified Greptile review have no actionable current-head comments."

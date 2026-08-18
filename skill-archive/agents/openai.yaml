@@ -1,4 +1,0 @@
-interface:
-display_name: "Skill Archive"
-short_description: "Archive inactive local skills"
-default_prompt: "Use $skill-archive to archive an unused skill or find archive candidates."

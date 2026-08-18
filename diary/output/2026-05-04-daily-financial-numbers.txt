@@ -1,4 +1,0 @@
-Dow Jones: 48941.9 (prev close: 49499.27, delta: -557.37, -1.13%)
-S&P 500: 7200.75 (prev close: 7230.12, delta: -29.37, -0.41%)
-GitHub repos: 267
-Bitbucket repos: 562

@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>What a CLI extension can own</title>
+  <link rel="stylesheet" href="../assets/course.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <main>
+    <p class="eyebrow">Lesson 0002 · 8 minutes</p>
+    <h1>What a CLI extension can own</h1>
+    <p class="lede">The useful unit is a session participant with memory and Node.js behind it.</p>
+
+    <section class="callout">
+      <strong>The design test.</strong> Use an extension when behavior depends on what happens during a live session. Use a skill for instructions and MCP for an external tool service.
+    </section>
+
+    <h2>Five solid capabilities</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Capability</th>
+          <th>What it buys you</th>
+          <th>Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Model-callable tools</td>
+          <td>A JSON-Schema function whose result goes back into the model's context.</td>
+          <td><code>release_readiness</code> gathers checks that the built-in tools do not expose as one answer.</td>
+        </tr>
+        <tr>
+          <td>User slash commands</td>
+          <td>A deterministic action that bypasses model tool selection.</td>
+          <td><code>/sessionstats</code> prints tool count, failures, duration, and token use.</td>
+        </tr>
+        <tr>
+          <td>Events and memory</td>
+          <td>The process observes activity and keeps state across turns.</td>
+          <td>Pair <code>tool.execution_start</code> with <code>tool.execution_complete</code> to measure every tool call.</td>
+        </tr>
+        <tr>
+          <td>Terminal forms</td>
+          <td>The host can collect a confirmation, selection, text value, or structured form.</td>
+          <td>A release command asks for environment and version, then confirms production.</td>
+        </tr>
+        <tr>
+          <td>Local processes</td>
+          <td>The extension can run Node.js code and use supported shell execution RPCs.</td>
+          <td>Start a dev server, stream its logs, report health, and stop it cleanly.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>GitHub's <a href="https://docs.github.com/en/copilot/tutorials/create-an-extension">official tutorial</a> proves the first three with a tool-time observer and a token-count command. The <a href="https://github.com/github/copilot-sdk/blob/main/nodejs/README.md">Node SDK reference</a> documents capability-gated UI elicitation. The CLI changelog records <code>session.shell.exec</code> and <code>session.shell.kill</code>.</p>
+
+    <h2>A small but real extension</h2>
+    <p>This one process observes failures, answers a model tool call, and handles a user command:</p>
+
+    <pre><code>import { joinSession } from "@github/copilot-sdk/extension";
+
+let failures = 0;
+
+const session = await joinSession({
+  tools: [{
+    name: "session_failure_count",
+    description: "Report failed tool calls in this session.",
+    parameters: { type: "object", properties: {} },
+    handler: async () =&gt; `${failures} tool calls have failed.`,
+  }],
+  commands: [{
+    name: "failures",
+    description: "Print the current failed tool-call count.",
+    handler: async () =&gt; {
+      await session.log(`${failures} tool calls have failed.`);
+    },
+  }],
+});
+
+session.on("tool.execution_complete", (event) =&gt; {
+  if (event.data?.success === false) failures += 1;
+});</code></pre>
+
+    <p>The model may call <code>session_failure_count</code>. The human may run <code>/failures</code>. Both read the same module state.</p>
+
+    <h2>Examples worth building</h2>
+    <table>
+      <tbody>
+        <tr>
+          <th>Session flight recorder</th>
+          <td>Count tool calls, correlate durations and failures, track usage, then expose <code>/sessionstats</code> and a model-callable diagnostic tool.</td>
+        </tr>
+        <tr>
+          <th>PR review cockpit</th>
+          <td>Keep the selected PR in session state, gather current-head checks and review threads, and ask for confirmation before any write-capable command.</td>
+        </tr>
+        <tr>
+          <th>Local model monitor</th>
+          <td>Poll Ollama health, record model latency during the session, provide <code>/localstatus</code>, and let the user select a model through a terminal dialog.</td>
+        </tr>
+        <tr>
+          <th>Development process keeper</th>
+          <td>Launch a server or benchmark, stream output, retain the process identifier, and stop it through a command or tool.</td>
+        </tr>
+        <tr>
+          <th>Release guardian</th>
+          <td>Accumulate evidence while the agent works, expose one readiness result, then require an explicit human confirmation before a release action.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Where Canvas enters</h2>
+    <p>The same extension locations also hold Canvas extensions for the Copilot app. The app adds the missing visual host: a shared side-panel artifact that people edit while the agent calls its capabilities. GitHub documents <code>/create-canvas</code> as the supported creation path, but it does not yet publish a stable free-form Canvas API reference.</p>
+
+    <p>That suggests a clean split. Put session observation, commands, and local process control in the executable extension. Add a Canvas when the human needs a board, dashboard, document, or other visual state.</p>
+
+    <h2>Two hard limits</h2>
+    <p>Module state lasts only until the extension reloads or the session restarts. Persist anything important yourself. More seriously, the extension runs as local JavaScript with your operating-system privileges. <em>Load Only</em> prevents Copilot from rewriting extensions, but it does not sandbox code you chose to load.</p>
+
+    <section class="quiz" data-quiz
+      data-feedback-correct="Correct. Cross-turn observation and state are the extension's distinctive job."
+      data-feedback-wrong="Try again. Instructions belong in skills, and external tool exposure already fits MCP.">
+      <h2>Retrieval check</h2>
+      <p>Which requirement most clearly needs an executable CLI extension?</p>
+      <div class="quiz-options">
+        <button type="button" data-answer>Explain our release checklist steps</button>
+        <button type="button" data-answer data-correct="true">Track failures across this session</button>
+        <button type="button" data-answer>Expose Jira issues as tools</button>
+      </div>
+      <p class="feedback" data-feedback aria-live="polite"></p>
+    </section>
+
+    <p>Ask your teaching agent about any example you want to design. The next hands-on lesson should build the session flight recorder because it exercises tools, commands, events, and state without making external changes.</p>
+
+    <nav aria-label="Course navigation">
+      <a href="0001-three-things-called-extensions.html">Lesson 0001</a>
+      <a href="../reference/cli-extension-capability-map.html">Capability map</a>
+      <a href="https://docs.github.com/en/copilot/concepts/agents/copilot-cli/about-cli-extensions">GitHub concept guide</a>
+      <a href="https://docs.github.com/en/copilot/how-tos/github-copilot-app/working-with-canvas-extensions">Canvas guide</a>
+    </nav>
+  </main>
+</body>
+</html>

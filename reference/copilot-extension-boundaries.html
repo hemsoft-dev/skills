@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Copilot extension boundaries</title>
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+  <main>
+    <p class="eyebrow">Quick reference</p>
+    <h1>Copilot extension boundaries</h1>
+    <p class="lede">Choose by runtime behavior, not by GitHub's overloaded names.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Mechanism</th>
+          <th>What it is</th>
+          <th>Use it when</th>
+          <th>Key limit</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Plugin</td>
+          <td>An installable bundle of agents, skills, hooks, MCP, and LSP configuration.</td>
+          <td>You need distribution, versioning, or shared defaults.</td>
+          <td>Packaging alone adds no runtime model beyond its bundled parts.</td>
+        </tr>
+        <tr>
+          <td>CLI extension</td>
+          <td>A long-lived Node.js process that joins a CLI session through <code>@github/copilot-sdk/extension</code>.</td>
+          <td>You need event observation, session state, custom tools, slash commands, or terminal forms.</td>
+          <td>The API is experimental. The documented UI is host-provided elicitation, not a free-form app panel.</td>
+        </tr>
+        <tr>
+          <td>Canvas extension</td>
+          <td>A shared interactive artifact shown in the Copilot app's right-side panel.</td>
+          <td>People and agents need to edit the same visual state through controls and agent-callable capabilities.</td>
+          <td>It requires the Copilot app Canvas host.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <section class="callout">
+      <strong>Fast test.</strong> If the requirement begins with "while this session runs," try a CLI extension. If it begins with "show a shared board, document, or dashboard," try a Canvas extension. If it begins with "install this configuration everywhere," use a plugin.
+    </section>
+
+    <h2>Locations</h2>
+    <table>
+      <tbody>
+        <tr>
+          <th>User CLI extension</th>
+          <td><code>~/.copilot/extensions/NAME/extension.mjs</code></td>
+        </tr>
+        <tr>
+          <th>Project CLI extension</th>
+          <td><code>.github/extensions/NAME/extension.mjs</code></td>
+        </tr>
+        <tr>
+          <th>User Canvas extension</th>
+          <td><code>~/.copilot/extensions/NAME/</code></td>
+        </tr>
+        <tr>
+          <th>Project Canvas extension</th>
+          <td><code>.github/extensions/NAME/</code></td>
+        </tr>
+      </tbody>
+    </table>
+    <p>The overlapping paths are intentional. The active Copilot host determines which capabilities and interface are available.</p>
+
+    <nav aria-label="Course navigation">
+      <a href="../lessons/0001-three-things-called-extensions.html">Lesson 0001</a>
+      <a href="cli-extension-capability-map.html">Capability map</a>
+      <a href="https://docs.github.com/en/copilot/tutorials/create-an-extension">GitHub CLI tutorial</a>
+      <a href="https://docs.github.com/en/copilot/how-tos/github-copilot-app/working-with-canvas-extensions">GitHub Canvas guide</a>
+    </nav>
+  </main>
+</body>
+</html>
