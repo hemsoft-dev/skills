@@ -1,6 +1,6 @@
 # mini-github-runner implementation
 
-Status: In progress
+Status: Complete
 
 Last verified: 2026-08-19 on `home`
 
@@ -120,7 +120,7 @@ Run trusted GitHub Actions jobs on an isolated virtual machine hosted by `mini`,
 - [x] Skill documentation matches the live implementation.
 - [x] All four skill-capable fleet computers have matching verified copies.
 - [x] Repository checks pass for the complete user-authorized worktree.
-- [ ] Status changes from `In progress` to `Complete` only after every check above passes.
+- [x] Status changes from `In progress` to `Complete` only after every check above passes.
 
 ## Evidence log
 
@@ -287,7 +287,14 @@ Run trusted GitHub Actions jobs on an isolated virtual machine hosted by `mini`,
 - Added `MANIFEST.sha256` for every project file except the manifest itself.
   This closes the source set that will be committed, checked by GitHub, and
   redistributed once more before the project status changes to complete.
+- Skills commit `e9d613bbafa7f1333f892580e93be378fcbc15ed` passed Code
+  Quality run 32319949897 and Quality Check run 32319949937.
+- Redistributed that checked source to laptop, air, and mini. Each destination
+  preserved one timestamped first-install backup, all nine source files matched
+  across the four computers, and laptop, air, and mini each passed the manifest
+  with native tools. These verified results satisfy every acceptance check and
+  authorize this ledger's status change to `Complete`.
 
 ## Current blockers
 
-None. Host provisioning no longer requires an interactive password.
+None. Implementation and fleet distribution are complete.
