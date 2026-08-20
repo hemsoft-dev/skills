@@ -16,7 +16,9 @@ Run trusted GitHub Actions jobs on an isolated virtual machine hosted by `mini`,
 - [x] Keep the guest off Tailscale and block access to the tailnet and home LAN.
 - [x] Use repository-level runners because `HemSoft` is a GitHub personal account.
 - [x] Track implementation and proof in this file until closeout.
-- [ ] Choose the first `HemSoft/REPOSITORY` for registration and smoke testing.
+- [x] Use `HemSoft/yahtzee` as the first repository for registration and smoke testing.
+- [x] Treat Yahtzee as a public-repository exception with a manual-only smoke
+  workflow that never runs pull-request or other untrusted code.
 
 ## Live baseline
 
@@ -67,8 +69,10 @@ Run trusted GitHub Actions jobs on an isolated virtual machine hosted by `mini`,
 
 ## Milestone 5: Register GitHub runner
 
-- [ ] Confirm the exact target repository.
-- [ ] Confirm GitHub authentication uses the `HemSoft` account for runner administration.
+- [x] Confirm the exact target repository as `HemSoft/yahtzee`.
+- [x] Confirm GitHub authentication uses the `HemSoft` account with repository
+  administration permission.
+- [ ] Verify public-repository Actions and fork-approval settings before runner registration.
 - [ ] Download the current official GitHub Actions runner release and verify its published checksum.
 - [ ] Register `mini-github-runner-01` with explicit labels.
 - [ ] Install and enable the runner service under a dedicated guest user.
@@ -77,7 +81,8 @@ Run trusted GitHub Actions jobs on an isolated virtual machine hosted by `mini`,
 
 ## Milestone 6: End-to-end validation
 
-- [ ] Add or select a harmless smoke workflow for the target repository.
+- [ ] Add a harmless `workflow_dispatch`-only smoke workflow for `HemSoft/yahtzee`.
+- [ ] Prove no Yahtzee workflow routes `pull_request` or other untrusted events to the self-hosted runner.
 - [ ] Prove the workflow ran on `mini-github-runner-01`.
 - [ ] Record workflow URL, run ID, commit SHA, conclusion, and runner labels.
 - [ ] Reboot the guest and prove the runner returns online automatically.
@@ -135,8 +140,23 @@ Run trusted GitHub Actions jobs on an isolated virtual machine hosted by `mini`,
 - Commit `f71e7cb5` published the initial project and complete authorized
   25-file worktree to `origin/main`; repository hooks passed PowerShell and
   Markdown checks during the commit.
+- Selected public repository `HemSoft/yahtzee` as the first runner target.
+  The `HemSoft` GitHub token reported full administration permission.
+- Cleaned and published Yahtzee commit
+  `37234de8cf10021342d57d07e698f593f1763068` after rebasing onto three newer
+  remote refactor commits. Local and remote `main` matched at `0 0` divergence.
+- Yahtzee verification passed 117 game-engine tests, the desktop production
+  build, UI and game-engine typechecks, and `run.ps1` syntax. GitHub reported
+  zero configured check runs on the published commit.
+- Yahtzee retains pre-existing check debt outside the cleanup commit: root
+  lint lacks ESLint, root typecheck lacks `tsconfig.json`, desktop and web
+  lack Vite `ImportMeta.env` typing, and mobile typecheck cannot resolve
+  `process` or `@yahtzee/ui`.
+- Corrected the proposed direct dependency from incompatible
+  `expo-asset@55.0.10` to Expo SDK 52-compatible `~11.0.5`. Expo still reports
+  older pre-existing compatibility drift in React, Async Storage, safe-area
+  context, and React types.
 
 ## Current blockers
 
 1. Privileged package installation on `mini` requires Franz to enter the sudo password in a visible terminal.
-2. GitHub runner registration requires the first exact `HemSoft/REPOSITORY` target.
