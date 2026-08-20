@@ -15,7 +15,9 @@ if ($raw) {
                 try {
                     $settings = Get-Content $settingsPath -Raw | ConvertFrom-Json
                     if ($null -ne $settings.audioEnabled) { $audioEnabled = $settings.audioEnabled }
-                } catch {}
+                } catch {
+                    Write-Verbose "Unable to read hook settings from '$settingsPath': $_"
+                }
             }
             if ($audioEnabled) {
                 $mp3Path = Join-Path $scriptDir 'done.mp3'

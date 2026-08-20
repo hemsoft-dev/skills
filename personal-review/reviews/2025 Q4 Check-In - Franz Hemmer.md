@@ -22,8 +22,6 @@
 
 **Legacy Release Tool polish.** A few **edge-case workflows** and comms still need hardening before general availability.
 
-####
-
 #### 2) Responsible — Represent. Initiate. Develop
 
 **What went well**
@@ -50,8 +48,6 @@
 
 **Signal-to-noise risk.** As visibility grew, the volume of suggestions increased; I need a **lighter-weight intake** to keep contributors engaged without slowing execution.
 
-###
-
 ### Goals for next quarter (Q4 2025)
 
 1. **Relias Assistant (Yakob!) — Beta &amp; Iteration.**
@@ -69,8 +65,6 @@ Package “ **GitHub + Copilot playbook** ” (templates, PR practices, guardrai
 1. **Learn AI Together — Governed Expansion.**
 
 Pilot a **company-wide track** with clear outcomes, content rubric, and quarterly calendar; maintain the **Engineer track** for depth.
-
-###
 
 ### Manager support requested
 
