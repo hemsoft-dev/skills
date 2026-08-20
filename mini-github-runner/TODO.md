@@ -298,6 +298,11 @@ Run trusted GitHub Actions jobs on an isolated virtual machine hosted by `mini`,
   `actions/checkout@v4` and `actions/setup-node@v4` to their current v7 majors,
   moves Markdown jobs from Node 20 to Node 24, and adds durable GitHub UI plus
   CLI monitoring instructions to `SKILL.md`.
+- Published skills commit `3cc0d5f55d2bdf8c471c778c5a21efb1b4f825fa`.
+  Code Quality run 32320950908, Copilot Setup Steps run 32320950897, and
+  Quality Check run 32320950902 all succeeded with checkout v7, setup-node v7,
+  and Node 24. Their logs contain no deprecated Node 20 action warning, forced
+  Node 24 compatibility warning, or stale checkout/setup-node v4 reference.
 
 ## Current blockers
 
