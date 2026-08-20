@@ -151,6 +151,34 @@ Distribute only after implementation and validation are complete. Install the sk
 
 ## Operations
 
+### Monitoring
+
+Use these GitHub pages:
+
+- [Yahtzee self-hosted runners](https://github.com/HemSoft/yahtzee/settings/actions/runners)
+- [Manual smoke workflow](https://github.com/HemSoft/yahtzee/actions/workflows/self-hosted-smoke.yml)
+- [All Yahtzee Actions runs](https://github.com/HemSoft/yahtzee/actions)
+
+The runner page shows online, offline, and busy state plus labels. The workflow
+page shows each manual smoke run and its job logs. GitHub does not provide
+guest CPU, memory, or disk graphs for a self-hosted runner, so inspect those on
+mini and inside the guest.
+
+```powershell
+$env:GH_TOKEN = gh auth token --user HemSoft
+gh api repos/HemSoft/yahtzee/actions/runners --jq `
+  '.runners[] | {id,name,status,busy,labels:[.labels[].name]}'
+gh run list --repo HemSoft/yahtzee --workflow self-hosted-smoke.yml --limit 10
+```
+
+```bash
+virsh -c qemu:///system dominfo github-runner-01
+virsh -c qemu:///system domstats github-runner-01
+```
+
+Inside the guest, use `systemctl status`, `journalctl`, `free -h`, `df -h`, and
+`uptime` for service and host-resource monitoring.
+
 ### Guest and runner lifecycle
 
 Run these on mini:

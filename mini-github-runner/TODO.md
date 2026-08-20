@@ -294,6 +294,10 @@ Run trusted GitHub Actions jobs on an isolated virtual machine hosted by `mini`,
   across the four computers, and laptop, air, and mini each passed the manifest
   with native tools. These verified results satisfy every acceptance check and
   authorize this ledger's status change to `Complete`.
+- Prepared a maintenance update that moves the skills workflows from
+  `actions/checkout@v4` and `actions/setup-node@v4` to their current v7 majors,
+  moves Markdown jobs from Node 20 to Node 24, and adds durable GitHub UI plus
+  CLI monitoring instructions to `SKILL.md`.
 
 ## Current blockers
 
