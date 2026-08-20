@@ -34,6 +34,7 @@ Run trusted GitHub Actions jobs on an isolated virtual machine hosted by `mini`,
 - [x] Create `mini-github-runner/SKILL.md`.
 - [x] Create this `TODO.md` implementation ledger.
 - [x] Enable history tracking.
+- [x] Publish the initial project with the complete authorized skills worktree.
 - [ ] Add tested provisioning and verification scripts only where they reduce repeated manual work.
 - [x] Validate frontmatter, links, Markdown, and script syntax.
 
@@ -131,6 +132,9 @@ Run trusted GitHub Actions jobs on an isolated virtual machine hosted by `mini`,
   syntax checks, skill frontmatter checks, and `git diff --check`.
 - Franz explicitly authorized committing and pushing every current skills
   repository change so `main` can return to a clean state.
+- Commit `f71e7cb5` published the initial project and complete authorized
+  25-file worktree to `origin/main`; repository hooks passed PowerShell and
+  Markdown checks during the commit.
 
 ## Current blockers
 
