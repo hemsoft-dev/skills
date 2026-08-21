@@ -1,6 +1,6 @@
 ---
 name: slack-dm
-description: V1.3 - Send concise, structured Slack direct-message updates with an outcome, project, summary, category emoji, optional detail table, and available runtime metrics. Issue and pull-request updates must lead with the artifact ID and exact title. Use when an agent or scheduled automation needs to notify the owner through Slack.
+description: V1.4 - Send concise, structured Slack direct-message updates with an outcome, project, summary, category emoji, optional detail table, and available runtime metrics. Issue and pull-request updates must lead with the artifact ID and exact title. Use when an agent or scheduled automation needs to notify the owner through Slack.
 disable-model-invocation: true
 ---
 
@@ -212,6 +212,14 @@ On Windows:
 ```powershell
 & "$HOME\.agents\skills\slack-dm\scripts\Send-SlackDm.ps1" -AuthTest
 ```
+
+## History
+
+After using this skill, append an entry to `History/{YYYY-MM-DD}.md` in this
+skill folder: `## HH:MM - {Action Taken}` plus a one-line summary naming the
+recipient and category. Take the timestamp from the shell
+(`Get-Date -Format "HH:mm"` on Windows, `date +%H:%M` elsewhere), never an
+estimate.
 
 ## Troubleshooting
 

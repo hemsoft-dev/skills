@@ -1,6 +1,6 @@
 ---
 name: skill-creator
-description: V1.14 - Creates new skills with optimized SKILL.md files following the agentskills.io open standard. Default location is .agents/skills/ (universal, all vendors). Uses hooks for history tracking and retrospectives (enabled by default). Includes explicit instructions for getting accurate timestamps.
+description: V1.15 - Creates new skills with optimized SKILL.md files following the agentskills.io open standard. Default location is .agents/skills/ (universal, all vendors). Uses hooks for history tracking and retrospectives (enabled by default). Includes explicit instructions for getting accurate timestamps.
 disable-model-invocation: true
 hooks:
   PostToolUse:
@@ -159,6 +159,7 @@ hooks:
 5. **Placeholders** - Use `{VARIABLE}` for runtime values
 6. **Output Format** - Only specify if the skill produces structured output
 7. **Scripts Organization** - Keep all PowerShell/Python scripts in a `scripts/` subfolder (e.g., `{skill-name}/scripts/script-name.ps1`)
+8. **Imported skills** - Skills from other authors keep their author's conventions. Do not retrofit version prefixes, `disable-model-invocation`, hooks, or History folders onto third-party skills unless the user asks; house style applies to skills created here
 
 ## Creation Workflow
 

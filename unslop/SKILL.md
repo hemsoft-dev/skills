@@ -1,12 +1,14 @@
 ---
 name: unslop
-description: V1.1 - Cut AI tells from any writing. Must always apply.
+description: V1.2 - Cut AI tells from any writing. Must always apply.
 disable-model-invocation: false
 ---
 
 # Unslop
 
 Edit text to remove AI patterns and add human voice.
+
+Scope: this skill governs prose. It does not override functional output formats that other skills mandate, such as grilling's numbered question format with its status emojis or slack-dm's category emoji table. When another skill defines a required structure, keep the structure and apply unslop to the words around it.
 
 ## Process
 
@@ -79,3 +81,10 @@ Removing patterns is half the job. Sterile, voiceless writing is just as obvious
 3. **Active voice.** Prefer it. Catch "is/are/was/were + past participle" and name the actor: "queries are validated" becomes "the compiler validates queries", "the file is parsed by the loader" becomes "the loader parses the file". Passive is fine only when the actor is unknown or genuinely doesn't matter.
 4. **Cut adverbs, or use a stronger verb.** "runs quickly" becomes "is fast" or the number. "significantly improves" becomes the measured delta. An adverb propping up a weak verb means the verb is wrong.
 5. **Prefer the plain word.** "utilize" becomes "use", "leverage" becomes "use", "facilitate" becomes "help", "numerous" becomes "many", "in the event that" becomes "if". The fancier synonym is rarely clearer.
+
+## History
+
+When a session uses unslop to shape a document or deliverable (not ordinary
+chat replies), append `## HH:MM - {Action Taken}` plus a one-line summary to
+`History/{YYYY-MM-DD}.md`. Take the timestamp from the shell, never an
+estimate.

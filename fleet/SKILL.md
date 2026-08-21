@@ -1,6 +1,6 @@
 ---
 name: fleet
-description: "V1.8 - Commands: Connect, Run, Send, Retrieve. Operate the private Tailscale fleet across laptop, home, air, mini, iphone, and ipad."
+description: "V1.9 - Commands: Connect, Run, Send, Retrieve. Operate the private Tailscale fleet across laptop, home, air, mini, iphone, and ipad."
 disable-model-invocation: true
 ---
 
@@ -151,3 +151,10 @@ Use these native pickup paths when reporting completion:
 Taildrop is the file-sharing transport. Do not substitute FTP, SCP, SFTP,
 public links, or email attachments unless the user explicitly asks. Do not
 expose SSH beyond Tailscale or copy private SSH keys between machines.
+
+## History
+
+After using this skill, append an entry to `History/{YYYY-MM-DD}.md` in this
+skill folder: `## HH:MM - {Action Taken}` plus a one-line summary. Take the
+timestamp from the shell (`Get-Date -Format "HH:mm"` on Windows,
+`date +%H:%M` elsewhere), never an estimate.
