@@ -1,6 +1,6 @@
 ---
 name: personal-review
-description: V1.7 - Expert in drafting, analyzing, and improving quarterly and annual work performance reviews based on historical review patterns and achievements.
+description: V1.8 - Expert in drafting, analyzing, and improving quarterly and annual work performance reviews based on historical review patterns and achievements.
 disable-model-invocation: true
 hooks:
   PostToolUse:
@@ -212,3 +212,11 @@ Use STAR method for each major accomplishment:
 | Resource | Link |
 |----------|------|
 | TalentGuard (Relias) | [relias.talentguard.com](https://relias.talentguard.com/Pages/HomePageAPI.aspx?menu=Home&ApplyStartTab=true) |
+
+## History
+
+After using this skill, append `## HH:MM - {Action Taken}` plus a one-line
+summary to `History/{YYYY-MM-DD}.md` in this skill folder, noting whether a
+retrospective check found a reusable improvement. Take the timestamp from the
+shell (`Get-Date -Format "HH:mm"` on Windows, `date +%H:%M` elsewhere), never
+an estimate.

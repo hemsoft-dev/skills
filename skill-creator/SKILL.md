@@ -1,6 +1,6 @@
 ---
 name: skill-creator
-description: V1.15 - Creates new skills with optimized SKILL.md files following the agentskills.io open standard. Default location is .agents/skills/ (universal, all vendors). Uses hooks for history tracking and retrospectives (enabled by default). Includes explicit instructions for getting accurate timestamps.
+description: V1.16 - Creates new skills with optimized SKILL.md files following the agentskills.io open standard. Default location is .agents/skills/ (universal, all vendors). Uses hooks for history tracking and retrospectives (enabled by default). Includes explicit instructions for getting accurate timestamps.
 disable-model-invocation: true
 hooks:
   PostToolUse:
@@ -239,6 +239,8 @@ hooks:
 
 **Important**: Replace `{skill-name}` with the actual skill name throughout the hooks configuration.
 
+**Client support caveat**: frontmatter `hooks` are a Claude Code extension. Opencode reads only `name`, `description`, `license`, `compatibility`, and `metadata` from skill frontmatter and ignores every other field, including `hooks` and `disable-model-invocation`. The same applies to other clients with partial spec support. Because of that, every skill created here must also carry a short body-level `## History` section stating the logging rule in plain instructions. The body section is the mechanism that works everywhere; the hooks block is a Claude Code enhancement layered on top, not a replacement.
+
 ### Step 4: Create Files
 
 1. Create directory at chosen location (default: user folder)
@@ -279,3 +281,11 @@ Before finalizing the skill:
 - Redundant sections
 - Hypothetical edge cases
 - Documentation for documentation's sake
+
+## History
+
+After using this skill, append `## HH:MM - {Action Taken}` plus a one-line
+summary to `History/{YYYY-MM-DD}.md` in this skill folder, noting whether a
+retrospective check found a reusable improvement. Take the timestamp from the
+shell (`Get-Date -Format "HH:mm"` on Windows, `date +%H:%M` elsewhere), never
+an estimate.

@@ -1,6 +1,6 @@
 ---
 name: issue-to-pr
-description: V1.1 - Turns one specified GitHub issue into a validated pull request from a well-named branch in an isolated worktree, then iterates on current-head GitHub Copilot PR Review and SFL feedback when those reviewers are configured. Use for issue implementation in any repository or GitHub account. Optional merge and cleanup requires direct user approval.
+description: V1.2 - Turns one specified GitHub issue into a validated pull request from a well-named branch in an isolated worktree, then iterates on current-head GitHub Copilot PR Review and SFL feedback when those reviewers are configured. Use for issue implementation in any repository or GitHub account. Optional merge and cleanup requires direct user approval.
 disable-model-invocation: true
 compatibility: Requires git, GitHub CLI, network access, and permission to push a branch and create a pull request in the target repository. Optional approved merge and cleanup requires mergepr on PATH.
 hooks:
@@ -264,3 +264,11 @@ One issue maps to one intentionally named branch, one isolated worktree, and
 one open pull request whose current head has repository-native validation and
 all available configured review evidence. No unrelated checkout, branch,
 worktree, stash, issue, or pull request is changed.
+
+## History
+
+After using this skill, append `## HH:MM - {Action Taken}` plus a one-line
+summary to `History/{YYYY-MM-DD}.md` in this skill folder, noting whether a
+retrospective check found a reusable improvement to the skill. Take the
+timestamp from the shell (`Get-Date -Format "HH:mm"` on Windows,
+`date +%H:%M` elsewhere), never an estimate.

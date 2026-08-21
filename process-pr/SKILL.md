@@ -1,6 +1,6 @@
 ---
 name: process-pr
-description: V1.1 - Takes one specified existing GitHub pull request to a human-ready state by discovering configured AI reviewers, soliciting their current-head reviews, addressing actionable feedback, and iterating until every available reviewer approves or has no further comments. Use in any repository or GitHub account. Optional merge and cleanup requires direct user approval.
+description: V1.2 - Takes one specified existing GitHub pull request to a human-ready state by discovering configured AI reviewers, soliciting their current-head reviews, addressing actionable feedback, and iterating until every available reviewer approves or has no further comments. Use in any repository or GitHub account. Optional merge and cleanup requires direct user approval.
 disable-model-invocation: true
 compatibility: Requires git, GitHub CLI, GitHub network access, permission to push to the PR branch, and permission to request the repository's configured reviewers. Optional approved merge and cleanup requires mergepr on PATH.
 hooks:
@@ -189,3 +189,11 @@ path.
 - Resolving live findings before addressing or disproving them.
 - Declaring readiness while a required reviewer or check is pending.
 - Merging the PR or invoking `mergepr` without direct user approval for that exact pull request.
+
+## History
+
+After using this skill, append `## HH:MM - {Action Taken}` plus a one-line
+summary to `History/{YYYY-MM-DD}.md` in this skill folder, noting whether a
+retrospective check found a reusable improvement to the skill. Take the
+timestamp from the shell (`Get-Date -Format "HH:mm"` on Windows,
+`date +%H:%M` elsewhere), never an estimate.

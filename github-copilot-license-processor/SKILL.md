@@ -1,6 +1,6 @@
 ---
 name: github-copilot-license-processor
-description: "V1.6 - Commands: Process, Status, Install, SetMode. Polls Slack for Relias GitHub Copilot license requests, validates organization membership, safely assigns seats, and posts audit receipts."
+description: "V1.7 - Commands: Process, Status, Install, SetMode. Polls Slack for Relias GitHub Copilot license requests, validates organization membership, safely assigns seats, and posts audit receipts."
 compatibility: Requires PowerShell 7, GitHub CLI authentication, Slack bot access, and Windows Task Scheduler or a Linux systemd user timer
 disable-model-invocation: true
 hooks:
@@ -91,3 +91,11 @@ minutes as a persistent systemd user timer. The service starts
 `scripts/Run-CopilotLicenseProcessorLinux.ps1`, which reads
 `~/.config/github-copilot-license-processor/credentials.json`. User lingering
 keeps the timer active while Franz is logged out.
+
+## History
+
+After using this skill, append `## HH:MM - {Action Taken}` plus a one-line
+summary to `History/{YYYY-MM-DD}.md` in this skill folder, noting whether a
+retrospective check found a reusable improvement. Take the timestamp from the
+shell (`Get-Date -Format "HH:mm"` on Windows, `date +%H:%M` elsewhere), never
+an estimate.
