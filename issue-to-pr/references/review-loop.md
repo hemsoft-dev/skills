@@ -53,14 +53,19 @@ workflows:
 .github/workflows/sfl-pr-review.lock.yml
 ```
 
-Also inspect live workflow state through the Actions API. If the repository
-variable `SFL_ENABLED` is readable and explicitly equals `false`, SFL is
-disabled. Absence of that variable does not by itself disable SFL.
+The auto workflow may be either a dispatcher for the reviewer lock or an
+observer named `SFL Codex Review Observer` that validates registered native
+Codex reviews without a reviewer lock. Also inspect live workflow state through
+the Actions API. If the repository variable `SFL_ENABLED` is readable and
+explicitly equals `false`, SFL is disabled. Absence of that variable does not by
+itself disable SFL.
 
 Classify SFL as:
 
 - **automatic**: the active auto-trigger and compatible reviewer lock exist on
   the default branch;
+- **observer**: an active `SFL Codex Review Observer` publishes the live required
+  SFL gate and accepts registered exact-head reviews through `gh sfl review`;
 - **manual only**: the active reviewer lock supports `workflow_dispatch` but no
   active auto-trigger exists;
 - **not configured**: no active compatible reviewer workflow exists;
@@ -74,6 +79,19 @@ events including `opened`, `synchronize`, `reopened`, `ready_for_review`,
 
 When automatic SFL is configured, let the normal ready/synchronize event run
 first. Do not manually dispatch a duplicate run while one is queued or active.
+
+For an observer deployment, inspect `gh sfl status --repo <owner/repo>` and use
+the installed extension's documented request shape, normally:
+
+```text
+gh sfl review --repo <owner/repo> <pr-number>
+```
+
+If status reports the observer installed but the review command reports that
+SFL is not installed, the extension and deployment are incompatible. Classify
+SFL as misconfigured and preserve the failing required gate. Do not run
+`gh sfl init`, `gh sfl sync`, or manually recreate the observer's registry and
+comment protocol without explicit deployment-repair authority.
 
 ## SFL explicit rerun
 
@@ -100,8 +118,10 @@ that label instead. Never add or toggle unrelated SFL pipeline labels.
 ## SFL result rules
 
 The current SFL contract publishes review findings plus an immutable-head
-`SFL Reviewer Approval` check. Completion requires the applicable required
-check to succeed for the current head and all actionable findings to be fixed.
+required check or status, such as `SFL Reviewer Approval` or
+`SFL Reviewer Gate Runner`. Discover the live required context instead of
+hard-coding one name. Completion requires that context to succeed for the
+current head and all actionable findings to be fixed.
 
 Do not manually resolve a live SFL finding merely to make the thread count look
 clean. After pushing a fix, let the next exact-head SFL run determine whether

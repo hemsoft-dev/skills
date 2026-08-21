@@ -47,7 +47,8 @@ Build and operate an isolated GitHub Actions self-hosted runner on `mini`.
 - Host: `mini`, reached with the fleet SSH alias.
 - Guest: KVM virtual machine `github-runner-01`.
 - Isolation: the guest does not join Tailscale and cannot reach the tailnet or home LAN.
-- Runtime: the GitHub runner and optional Docker engine run inside the guest, never as `franz` on the host.
+- Runtime: the GitHub runner and Docker engine run inside the guest, never as
+  `franz` on the host.
 - Scope: repository-level registrations under the personal `HemSoft` account.
 - Secrets: never write registration tokens, credentials, or private keys into this skill, `TODO.md`, history, logs, or shell output.
 
@@ -63,6 +64,9 @@ Build and operate an isolated GitHub Actions self-hosted runner on `mini`.
 - Runner: v2.336.0 under `/opt/actions-runner/yahtzee`, systemd unit
   `actions.runner.HemSoft-yahtzee.mini-github-runner-01.service`, user
   `actions`, labels `mini` and `yahtzee` plus GitHub's default labels.
+- GH AW runtime: Docker Engine 29.7.2, Docker Compose 5.5.0, GitHub CLI
+  2.45.0, and ripgrep 14.1.0. The `actions` user belongs to the guest-local
+  `docker` group. Node.js remains workflow-managed through `actions/setup-node`.
 - Repository: `HemSoft/yahtzee`. Its only self-hosted workflow is
   `.github/workflows/self-hosted-smoke.yml`, triggered only by
   `workflow_dispatch` with zero token permissions.
@@ -110,6 +114,11 @@ The tested first-build sequence is:
    `/home/franz/.ssh/github-runner-01_known_hosts` before the first SSH login.
 4. Run `scripts/verify-guest-isolation.sh` inside the guest before registering
    any repository.
+5. When a trusted GH AW workflow is selected, stream
+   `scripts/prepare-gh-aw-runtime.sh` into the guest as `runner-admin`. This
+   installs Docker from Docker's signed Ubuntu repository plus `gh` and
+   ripgrep, then restarts the runner service so `actions` receives its Docker
+   group membership.
 
 ### Register
 
@@ -145,6 +154,8 @@ Distribute only after implementation and validation are complete. Install the sk
 - Never run pull-request code from untrusted contributors on a persistent runner.
 - Keep GitHub token permissions at the workflow minimum.
 - Do not mount the host filesystem or host Docker socket into the guest.
+- Treat membership in the guest's `docker` group as root-equivalent inside the
+  guest. Keep the VM isolation boundary intact.
 - Do not give the guest a route to `100.64.0.0/10` or local private subnets.
 - Preserve unrelated changes in the shared skills repository.
 - Do not claim completion from package delivery alone. Native installation and verification are required.
@@ -260,8 +271,9 @@ gh api --method DELETE repos/HemSoft/yahtzee/actions/runners/21
   short-lived and should never be reused from files or history.
 - Disk pressure: inspect `df -h /` and `_work`; remove only disposable build
   output after proving no job is running. Do not delete runner credentials.
-- Docker failure: Docker is intentionally absent. Add it only for a selected,
-  trusted workflow that needs it, and keep it inside the guest.
+- Docker failure: run `sudo -u actions -H docker version`, inspect
+  `systemctl status docker`, and confirm the live runner process lists the
+  guest-local Docker group. Never substitute mini's host Docker socket.
 - Network failure: distinguish public DNS/HTTPS failure from an expected
   private-range block. Inspect the libvirt lease, filter binding, and filter
   XML; never attach Tailscale or weaken the private-range policy as a shortcut.
@@ -273,6 +285,8 @@ Current references:
 
 - [GitHub self-hosted runner documentation](https://docs.github.com/en/actions/how-tos/manage-runners/self-hosted-runners)
 - [GitHub secure use reference](https://docs.github.com/en/actions/reference/security/secure-use)
+- [GH AW self-hosted runner requirements](https://github.github.com/gh-aw/reference/self-hosted-runners/)
+- [Docker Engine on Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
 - [libvirt network filter format](https://libvirt.org/formatnwfilter.html)
 
 ## Completion

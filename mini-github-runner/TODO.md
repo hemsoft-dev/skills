@@ -2,7 +2,7 @@
 
 Status: Complete
 
-Last verified: 2026-08-19 on `home`
+Last verified: 2026-08-19 at 22:03 on `home`
 
 ## Goal
 
@@ -110,6 +110,21 @@ Run trusted GitHub Actions jobs on an isolated virtual machine hosted by `mini`,
 - [x] Compare installed SHA-256 hashes with the source on every target.
 - [x] Run a native `Status` read on every target.
 
+## Milestone 9: Prepare the GH AW runtime
+
+- [x] Confirm the Yahtzee runner is online, idle, and isolated before changing
+  the guest.
+- [x] Install Docker Engine and Compose from Docker's signed Ubuntu repository.
+- [x] Install guest-local `gh` and ripgrep for GH AW and SFL workflow steps.
+- [x] Add only the guest `actions` account to the guest-local Docker group.
+- [x] Restart the runner service and prove its live process has Docker access.
+- [x] Run `hello-world` as `actions` and reach GitHub plus GHCR over HTTPS.
+- [x] Re-run the full guest isolation test after Docker modifies guest networking.
+- [x] Run a fresh current-head Yahtzee smoke workflow after provisioning.
+- [x] Add and idempotently verify the durable GH AW runtime provisioning script.
+- [x] Update skill documentation and source hashes for the live runtime.
+- [x] Redistribute and verify the updated skill on every skill-capable computer.
+
 ## Acceptance checks
 
 - [x] `mini-github-runner-01` is online in the selected GitHub repository.
@@ -123,6 +138,28 @@ Run trusted GitHub Actions jobs on an isolated virtual machine hosted by `mini`,
 - [x] Status changes from `In progress` to `Complete` only after every check above passes.
 
 ## Evidence log
+
+### 2026-08-20
+
+- Rechecked the live runner for an SFL subscription-auth feasibility review.
+  `github-runner-01` was running with 4 vCPUs and 5 GiB RAM, its libvirt NAT
+  network and `github-runner-locked` binding were active, and GitHub reported
+  `mini-github-runner-01` online and idle for `HemSoft/yahtzee`.
+- The guest runner service was active with 4.2 GiB memory available and 93 GiB
+  disk free. The `actions` account had no Codex executable and no
+  `~/.codex/auth.json`; the host's login is not shared into the isolated guest.
+- Mini's host account had Codex CLI 0.146.0 logged in through ChatGPT. A bounded
+  noninteractive read-only probe returned exactly `SUBSCRIPTION_OK` in five
+  seconds using model `gpt-5.6-luna`, proving that the ChatGPT subscription can
+  drive `codex exec` on Linux.
+- Stock `gh-aw` remains incompatible with that login path: its Codex harness
+  requires `CODEX_API_KEY` or `OPENAI_API_KEY` and assigns a transient
+  `CODEX_HOME`. Merely changing `runs-on` to mini does not reuse the persistent
+  ChatGPT login.
+- A viable SFL experiment therefore needs a distinct repository runner service,
+  a dedicated guest user with device-authenticated Codex, and a manual-only
+  direct `codex exec` probe before any reviewer or consumer deployment. This is
+  proposed work, not completed runner scope.
 
 ### 2026-08-19
 
@@ -303,7 +340,37 @@ Run trusted GitHub Actions jobs on an isolated virtual machine hosted by `mini`,
   Quality Check run 32320950902 all succeeded with checkout v7, setup-node v7,
   and Node 24. Their logs contain no deprecated Node 20 action warning, forced
   Node 24 compatibility warning, or stale checkout/setup-node v4 reference.
+- Provisioned the GH AW host runtime inside `github-runner-01` from Docker's
+  signed Ubuntu repository. Installed Docker Engine 29.7.2, Compose 5.5.0,
+  GitHub CLI 2.45.0, and ripgrep 14.1.0 without granting `actions` sudo.
+- Added `actions` only to the guest-local Docker group and restarted the runner
+  service. The live runner PID listed supplementary group 987, matching the
+  mode 0660 `root:docker` socket, and `docker version` reported client and
+  server 29.7.2 when executed as `actions`.
+- `docker run --rm hello-world` succeeded as `actions`; GitHub API returned
+  HTTP 200 and the unauthenticated GHCR v2 endpoint returned expected HTTP 401.
+- Post-Docker isolation verification returned `ISOLATION_OK`: public DNS and
+  HTTPS worked, LAN and all three tested tailnet SSH endpoints remained
+  blocked, Tailscale remained absent, and `vnet2` retained
+  `github-runner-locked`.
+- Fresh smoke run 32323195241 succeeded on job 96289203353 in three seconds at
+  commit `25446a700d935f4e415d3004abbc798094bdfe1c`.
+  [Run 32323195241](https://github.com/HemSoft/yahtzee/actions/runs/32323195241)
+- Added `scripts/prepare-gh-aw-runtime.sh` and ran it again against the already
+  provisioned guest. Apt reported every selected package current, the service
+  restart succeeded, and all four runtime version probes passed, proving the
+  helper is idempotent on the live VM.
+- The first cross-platform manifest check exposed CRLF path endings when Linux
+  read the Windows-generated manifest. No source verification was claimed from
+  that attempt. Rewrote `MANIFEST.sha256` with LF endings and then passed every
+  listed hash natively on laptop, air, and mini.
+- Laptop, air, and mini preserved timestamped pre-update skill backups, received
+  the Docker-aware skill, and natively read `Status: In progress` after every
+  source hash matched. This evidence authorizes the final status change and one
+  final distribution of the closed source set.
 
 ## Current blockers
 
-None. Implementation and fleet distribution are complete.
+None. The GH AW host runtime, durable provisioning helper, documentation, and
+fleet distribution are complete. Yahtzee workflow implementation now continues
+in `D:\github\HemSoft\yahtzee\TODO.md`.
