@@ -280,7 +280,7 @@ See references/a.md and [b](./references/b.md).
                 New-TestSkill -Root $root -Name 'indent-indicator' -Frontmatter $frontmatter
                 $result = Invoke-SkillsLint -Root $root
                 $result.ExitCode | Should -Be 1
-                $result.Output | Should -Match "'description' exceeds 1024 characters \(got 1201\)"
+                $result.Output | Should -Match "'description' exceeds 1024 characters \(got 1202\)"
             }
             finally { Remove-Item -LiteralPath $root -Recurse -Force }
         }
@@ -309,7 +309,7 @@ See references/a.md and [b](./references/b.md).
                 New-TestSkill -Root $root -Name 'trail-space' -Frontmatter $frontmatter
                 $result = Invoke-SkillsLint -Root $root
                 $result.ExitCode | Should -Be 1
-                $result.Output | Should -Match "'description' exceeds 1024 characters \(got 1030\)"
+                $result.Output | Should -Match "'description' exceeds 1024 characters \(got 1031\)"
             }
             finally { Remove-Item -LiteralPath $root -Recurse -Force }
         }
@@ -342,6 +342,85 @@ See references/a.md and [b](./references/b.md).
                 New-TestSkill -Root $root -Name 'quoted-hash' -Frontmatter $frontmatter
                 $result = Invoke-SkillsLint -Root $root
                 $result.ExitCode | Should -Be 0
+            }
+            finally { Remove-Item -LiteralPath $root -Recurse -Force }
+        }
+
+        It 'blocks explicit YAML null spellings' {
+            foreach ($spelling in @('null', '~')) {
+                $root = New-TestRepo
+                try {
+                    New-TestSkill -Root $root -Name "null-$spelling" -Frontmatter "name: null-x`ndescription: $spelling"
+                    $result = Invoke-SkillsLint -Root $root
+                    $result.ExitCode | Should -Be 1
+                    $result.Output | Should -Match "'description' is missing or empty"
+                }
+                finally { Remove-Item -LiteralPath $root -Recurse -Force }
+            }
+        }
+
+        It 'measures trailing whitespace inside quoted descriptions' {
+            $root = New-TestRepo
+            try {
+                $quoted = '"' + ('x' * 1020) + (' ' * 10) + '"'
+                New-TestSkill -Root $root -Name 'quoted-trail' -Frontmatter "name: quoted-trail`ndescription: $quoted"
+                $result = Invoke-SkillsLint -Root $root
+                $result.ExitCode | Should -Be 1
+                $result.Output | Should -Match "'description' exceeds 1024 characters \(got 1030\)"
+            }
+            finally { Remove-Item -LiteralPath $root -Recurse -Force }
+        }
+
+        It 'ignores name and description nested under another frontmatter key' {
+            $root = New-TestRepo
+            try {
+                $frontmatter = "metadata:$([Environment]::NewLine)  name: nested-skill$([Environment]::NewLine)  description: valid text"
+                New-TestSkill -Root $root -Name 'nested-skill' -Frontmatter $frontmatter
+                $result = Invoke-SkillsLint -Root $root
+                $result.ExitCode | Should -Be 1
+                $result.Output | Should -Match "'name' is missing or empty"
+                $result.Output | Should -Match "'description' is missing or empty"
+            }
+            finally { Remove-Item -LiteralPath $root -Recurse -Force }
+        }
+
+        It 'counts the clipped final newline when measuring literal blocks at the boundary' {
+            $root = New-TestRepo
+            try {
+                $body = 'x' * 1024
+                $frontmatter = "name: clip-boundary`ndescription: |$([Environment]::NewLine)  $body"
+                New-TestSkill -Root $root -Name 'clip-boundary' -Frontmatter $frontmatter
+                $result = Invoke-SkillsLint -Root $root
+                $result.ExitCode | Should -Be 1
+                $result.Output | Should -Match "'description' exceeds 1024 characters \(got 1025\)"
+            }
+            finally { Remove-Item -LiteralPath $root -Recurse -Force }
+        }
+
+        It 'accepts a strip-chomped block at exactly 1024 characters' {
+            $root = New-TestRepo
+            try {
+                $body = 'x' * 1024
+                $frontmatter = "name: strip-boundary`ndescription: |-$([Environment]::NewLine)  $body"
+                New-TestSkill -Root $root -Name 'strip-boundary' -Frontmatter $frontmatter
+                $result = Invoke-SkillsLint -Root $root
+                $result.ExitCode | Should -Be 0
+            }
+            finally { Remove-Item -LiteralPath $root -Recurse -Force }
+        }
+
+        It 'checks link destinations that carry optional titles' {
+            $root = New-TestRepo
+            try {
+                New-TestSkill -Root $root -Name 'link-titles' `
+                    -Frontmatter "name: link-titles`ndescription: Something useful." `
+                    -Body @'
+See [missing](MISSING.md "details") and [present](titled.md "ok").
+'@ `
+                    -Files @('titled.md')
+                $result = Invoke-SkillsLint -Root $root
+                $result.ExitCode | Should -Be 1
+                $result.Output | Should -Match "references 'MISSING\.md' but it does not exist"
             }
             finally { Remove-Item -LiteralPath $root -Recurse -Force }
         }

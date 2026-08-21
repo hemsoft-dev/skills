@@ -54,21 +54,25 @@ function Split-SkillFrontmatter {
 }
 
 function Get-FrontmatterValue {
-    # Line-based extraction with YAML block scalar support so that folded
-    # ('>') and literal ('|') descriptions are measured, not just markers.
-    # The header pattern covers the full YAML block scalar header grammar:
-    # optional indentation indicator, optional chomping indicator (either
-    # order), and an optional trailing comment.
+    # Line-based extraction with YAML scalar semantics sufficient for the
+    # spec checks: top-level keys only, block scalars with full header
+    # grammar and chomping, quoted scalars preserving whitespace, comment
+    # stripping on plain scalars, and explicit null spellings.
     param(
         [string]$Frontmatter,
         [string]$Field
     )
-    $blockHeader = '^[>|](?:[1-9][+-]?|[+-][1-9]|[+-]|[1-9])?(?:[ \t]+#.*)?$'
+    $blockHeader = '^[>|]([1-9][+-]?|[+-][1-9]|[+-]|[1-9])?(?:[ \t]+#.*)?$'
     $lines = $Frontmatter -split '\r?\n'
     for ($i = 0; $i -lt $lines.Count; $i++) {
-        if ($lines[$i] -notmatch ('^\s*' + [regex]::Escape($Field) + '\s*:\s*(.*)$')) { continue }
+        # Root-level keys only: nested 'name:' under another key must not count.
+        if ($lines[$i] -notmatch ('^' + [regex]::Escape($Field) + '[ \t]*:[ \t]*(.*)$')) { continue }
         $value = $Matches[1].Trim()
         if ($value -match $blockHeader) {
+            $indicator = ''
+            if ([regex]::Match($value, $blockHeader).Groups[1].Success) {
+                $indicator = [regex]::Match($value, $blockHeader).Groups[1].Value
+            }
             # Collect raw body lines and strip only the detected block indent,
             # so significant interior whitespace and trailing spaces survive
             # into the length check. Folding is approximated by joining with
@@ -83,7 +87,9 @@ function Get-FrontmatterValue {
                     break
                 }
             }
+            $trailingBlanks = 0
             while ($rawLines.Count -gt 0 -and $rawLines[-1].Trim().Length -eq 0) {
+                $trailingBlanks++
                 $rawLines = $rawLines[0..($rawLines.Count - 2)]
             }
             $indent = $null
@@ -102,6 +108,19 @@ function Get-FrontmatterValue {
             else {
                 $value = $body -join ' '
             }
+            # Chomping: clip (default) keeps one final newline, strip (-)
+            # removes it, keep (+) retains all trailing newlines.
+            if ($value.Length -gt 0) {
+                if ($indicator.Contains('-')) {
+                    # strip: nothing to append
+                }
+                elseif ($indicator.Contains('+')) {
+                    $value += "`n" * (1 + $trailingBlanks)
+                }
+                else {
+                    $value += "`n"
+                }
+            }
             if ($value.Trim().Length -eq 0) { return $null }
             return $value
         }
@@ -110,7 +129,8 @@ function Get-FrontmatterValue {
             $last = $value.Substring($value.Length - 1, 1)
             if (($first -eq '"' -and $last -eq '"') -or ($first -eq "'" -and $last -eq "'")) {
                 # Quoted scalars may contain '#' legitimately; no comment handling.
-                return $value.Substring(1, $value.Length - 2).Trim()
+                # Return verbatim so significant trailing spaces are measured.
+                return $value.Substring(1, $value.Length - 2)
             }
         }
         if ($value.StartsWith('#')) {
@@ -120,6 +140,10 @@ function Get-FrontmatterValue {
         if ($value -match '[ \t]#') {
             # Strip inline comments from unquoted plain scalars.
             $value = ([regex]::Split($value, '[ \t]#')[0]).TrimEnd()
+        }
+        if ($value -eq '' -or @('~', 'null', 'Null', 'NULL') -contains $value) {
+            # Empty or explicit YAML null spellings mean the field is absent.
+            return $null
         }
         return $value
     }
@@ -156,8 +180,17 @@ function Find-SkillReference {
     $content = [regex]::Replace($content, '`[^`\r\n]*`', '')
 
     $tokens = @()
-    foreach ($m in [regex]::Matches($content, '\[[^\]\r\n]*\]\(([^)\r\n\s]+)\)')) {
-        $tokens += $m.Groups[1].Value
+    foreach ($m in [regex]::Matches($content, '\[[^\]\r\n]*\]\(([^)\r\n]*)\)')) {
+        # Markdown destinations may carry an optional title:
+        # [guide](MISSING.md "details") or [guide](<some file.md>).
+        $destination = $m.Groups[1].Value.Trim()
+        if ($destination.StartsWith('<') -and $destination.Contains('>')) {
+            $destination = ($destination -split '>')[0].TrimStart('<')
+        }
+        else {
+            $destination = ($destination -split '\s+')[0]
+        }
+        $tokens += $destination
     }
     foreach ($m in [regex]::Matches($content, '(?<![\w./~-])([\w.-]+(?:/[\w.-]+)+\.[A-Za-z0-9]{1,6})(?![\w.-])')) {
         $tokens += $m.Groups[1].Value
