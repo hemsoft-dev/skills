@@ -1,18 +1,16 @@
 #!/bin/sh
 # Managed by Install-GitHooks.ps1 — source of truth is the hooks/ folder in this repo.
-# Windows Git hook wrapper - calls PowerShell and Markdown quality checks
+# Windows Git hook wrapper - calls PowerShell, Markdown, and skills lint checks.
+# Resolves the shared hooks directory so linked worktrees find the installed hooks.
 
-POWERSHELL_EXIT=0
-if [ -f ".git/hooks/pre-commit.ps1" ]; then
-  pwsh.exe -NoProfile -ExecutionPolicy Bypass -File ".git/hooks/pre-commit.ps1"
-  POWERSHELL_EXIT=$?
-fi
+HOOKS_DIR="$(git rev-parse --path-format=absolute --git-common-dir)/hooks"
+EXIT_CODE=0
 
-pwsh.exe -NoProfile -ExecutionPolicy Bypass -File ".git/hooks/pre-commit-markdown.ps1"
-MARKDOWN_EXIT=$?
+for hook in pre-commit.ps1 pre-commit-markdown.ps1 pre-commit-skills-lint.ps1; do
+  pwsh.exe -NoProfile -ExecutionPolicy Bypass -File "$HOOKS_DIR/$hook"
+  if [ $? -ne 0 ]; then
+    EXIT_CODE=1
+  fi
+done
 
-if [ $POWERSHELL_EXIT -ne 0 ] || [ $MARKDOWN_EXIT -ne 0 ]; then
-  exit 1
-fi
-
-exit 0
+exit $EXIT_CODE

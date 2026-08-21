@@ -1,0 +1,237 @@
+# Pester 5 tests for hooks/pre-commit-skills-lint.ps1.
+# Seeds fixture skill trees with known violations and asserts the lint catches them.
+
+BeforeAll {
+    $scriptPath = Join-Path $PSScriptRoot '..\pre-commit-skills-lint.ps1'
+
+    function New-TestRepo {
+        [CmdletBinding(SupportsShouldProcess)]
+        param()
+        $root = Join-Path ([System.IO.Path]::GetTempPath()) ("skills-lint-" + [guid]::NewGuid().ToString('N'))
+        New-Item -ItemType Directory -Path $root -Force | Out-Null
+        return $root
+    }
+
+    function New-TestSkill {
+        [CmdletBinding(SupportsShouldProcess)]
+        param(
+            [string]$Root,
+            [string]$Name,
+            [string]$Frontmatter,
+            [string]$Body = '',
+            [string[]]$Files = @()
+        )
+        $dir = Join-Path $Root $Name
+        New-Item -ItemType Directory -Path $dir -Force | Out-Null
+        if (-not [string]::IsNullOrWhiteSpace($Frontmatter)) {
+            Set-Content -LiteralPath (Join-Path $dir 'SKILL.md') -Value "---$([Environment]::NewLine)$Frontmatter$([Environment]::NewLine)---$([Environment]::NewLine)$Body" -Encoding utf8
+        }
+        else {
+            Set-Content -LiteralPath (Join-Path $dir 'SKILL.md') -Value "# no frontmatter here" -Encoding utf8
+        }
+        foreach ($file in $Files) {
+            $target = Join-Path $dir $file
+            New-Item -ItemType Directory -Path (Split-Path -Parent $target) -Force | Out-Null
+            Set-Content -LiteralPath $target -Value 'placeholder' -Encoding utf8
+        }
+        return $dir
+    }
+
+    function Invoke-SkillsLint {
+        param([string]$Root)
+        $output = & pwsh -NoProfile -File $scriptPath -RepoRoot $Root 2>&1 | Out-String
+        return @{
+            ExitCode = $LASTEXITCODE
+            Output   = $output
+        }
+    }
+}
+
+AfterAll {
+    # Temp fixtures live under the system temp path and are cleaned up per test below.
+}
+
+Describe 'pre-commit-skills-lint' {
+
+    Context 'a fully valid skill' {
+        BeforeAll {
+            $root = New-TestRepo
+            New-TestSkill -Root $root -Name 'valid-skill' `
+                -Frontmatter "name: valid-skill`ndescription: A valid skill for testing." `
+                -Body @'
+See [details](references/details.md) and `scripts/run.ps1`.
+'@ `
+                -Files @('references/details.md', 'scripts/run.ps1')
+        }
+
+        AfterAll {
+            if ($root -and (Test-Path $root)) { Remove-Item -LiteralPath $root -Recurse -Force }
+        }
+
+        It 'passes with exit code 0 and reports the checked skill' {
+            $result = Invoke-SkillsLint -Root $root
+            $result.ExitCode | Should -Be 0
+            $result.Output | Should -Match 'valid-skill'
+        }
+    }
+
+    Context 'frontmatter violations' {
+
+        It 'blocks when frontmatter is missing entirely' {
+            $root = New-TestRepo
+            try {
+                New-TestSkill -Root $root -Name 'no-fm' -Frontmatter $null
+                $result = Invoke-SkillsLint -Root $root
+                $result.ExitCode | Should -Be 1
+                $result.Output | Should -Match 'missing YAML frontmatter'
+            }
+            finally { Remove-Item -LiteralPath $root -Recurse -Force }
+        }
+
+        It 'blocks when name does not match the directory' {
+            $root = New-TestRepo
+            try {
+                New-TestSkill -Root $root -Name 'actual-dir' -Frontmatter "name: other-name`ndescription: Something useful."
+                $result = Invoke-SkillsLint -Root $root
+                $result.ExitCode | Should -Be 1
+                $result.Output | Should -Match "does not match directory 'actual-dir'"
+            }
+            finally { Remove-Item -LiteralPath $root -Recurse -Force }
+        }
+
+        It 'blocks when name violates the lowercase-hyphen pattern' {
+            $root = New-TestRepo
+            try {
+                New-TestSkill -Root $root -Name 'bad_name' -Frontmatter "name: bad_Name`ndescription: Something useful."
+                $result = Invoke-SkillsLint -Root $root
+                $result.ExitCode | Should -Be 1
+                $result.Output | Should -Match 'does not match \^\[a-z0-9\]'
+            }
+            finally { Remove-Item -LiteralPath $root -Recurse -Force }
+        }
+
+        It 'blocks when description is missing' {
+            $root = New-TestRepo
+            try {
+                New-TestSkill -Root $root -Name 'desc-less' -Frontmatter "name: desc-less"
+                $result = Invoke-SkillsLint -Root $root
+                $result.ExitCode | Should -Be 1
+                $result.Output | Should -Match "'description' is missing or empty"
+            }
+            finally { Remove-Item -LiteralPath $root -Recurse -Force }
+        }
+
+        It 'blocks when description exceeds 1024 characters' {
+            $root = New-TestRepo
+            try {
+                $longDescription = 'x' * 1025
+                New-TestSkill -Root $root -Name 'long-desc' -Frontmatter "name: long-desc`ndescription: $longDescription"
+                $result = Invoke-SkillsLint -Root $root
+                $result.ExitCode | Should -Be 1
+                $result.Output | Should -Match 'exceeds 1024 characters'
+            }
+            finally { Remove-Item -LiteralPath $root -Recurse -Force }
+        }
+
+        It 'accepts a 1024 character description at the boundary' {
+            $root = New-TestRepo
+            try {
+                $maxDescription = 'x' * 1024
+                New-TestSkill -Root $root -Name 'max-desc' -Frontmatter "name: max-desc`ndescription: $maxDescription"
+                $result = Invoke-SkillsLint -Root $root
+                $result.ExitCode | Should -Be 0
+            }
+            finally { Remove-Item -LiteralPath $root -Recurse -Force }
+        }
+    }
+
+    Context 'referenced file checks' {
+
+        It 'blocks when a markdown link target is missing from the skill folder' {
+            $root = New-TestRepo
+            try {
+                New-TestSkill -Root $root -Name 'dead-link' `
+                    -Frontmatter "name: dead-link`ndescription: Has a dead reference." `
+                    -Body @'
+Read [the format](GLOSSARY-FORMAT.md) first.
+'@ `
+                    -Files @()
+                $result = Invoke-SkillsLint -Root $root
+                $result.ExitCode | Should -Be 1
+                $result.Output | Should -Match "references 'GLOSSARY-FORMAT\.md' but it does not exist"
+            }
+            finally { Remove-Item -LiteralPath $root -Recurse -Force }
+        }
+
+        It 'blocks when a bare relative path token is missing' {
+            $root = New-TestRepo
+            try {
+                New-TestSkill -Root $root -Name 'bare-token' `
+                    -Frontmatter "name: bare-token`ndescription: Mentions a script path in prose." `
+                    -Body 'Run references/missing-guide.md before starting.' `
+                    -Files @()
+                $result = Invoke-SkillsLint -Root $root
+                $result.ExitCode | Should -Be 1
+                $result.Output | Should -Match "references 'references/missing-guide\.md'"
+            }
+            finally { Remove-Item -LiteralPath $root -Recurse -Force }
+        }
+
+        It 'ignores paths inside fenced code blocks and inline code spans' {
+            $root = New-TestRepo
+            try {
+                New-TestSkill -Root $root -Name 'code-only' `
+                    -Frontmatter "name: code-only`ndescription: Only mentions paths as examples." `
+                    -Body @'
+Use `vercel/next.js` style ids. Example tree:
+
+```
+docs/agents/issue-tracker.md
+/opt/actions-runner/bin/Runner.Listener
+```
+
+External docs at https://example.com/guide.md and /absolute/path/file.md.
+'@ `
+                    -Files @()
+                $result = Invoke-SkillsLint -Root $root
+                $result.ExitCode | Should -Be 0
+            }
+            finally { Remove-Item -LiteralPath $root -Recurse -Force }
+        }
+
+        It 'accepts existing relative references' {
+            $root = New-TestRepo
+            try {
+                New-TestSkill -Root $root -Name 'good-links' `
+                    -Frontmatter "name: good-links`ndescription: All references resolve." `
+                    -Body @'
+See references/a.md and [b](./references/b.md).
+'@ `
+                    -Files @('references/a.md', 'references/b.md')
+                $result = Invoke-SkillsLint -Root $root
+                $result.ExitCode | Should -Be 0
+            }
+            finally { Remove-Item -LiteralPath $root -Recurse -Force }
+        }
+    }
+
+    Context 'duplicate reference basenames' {
+
+        It 'warns but does not block when two skills ship the same reference basename' {
+            $root = New-TestRepo
+            try {
+                New-TestSkill -Root $root -Name 'skill-one' `
+                    -Frontmatter "name: skill-one`ndescription: First divergent copy." `
+                    -Files @('references/review-loop.md')
+                New-TestSkill -Root $root -Name 'skill-two' `
+                    -Frontmatter "name: skill-two`ndescription: Second divergent copy." `
+                    -Files @('references/review-loop.md')
+                $result = Invoke-SkillsLint -Root $root
+                $result.ExitCode | Should -Be 0
+                $result.Output | Should -Match "reference basename 'review-loop\.md' ships in multiple skills"
+                $result.Output | Should -Match 'WARNING'
+            }
+            finally { Remove-Item -LiteralPath $root -Recurse -Force }
+        }
+    }
+}
