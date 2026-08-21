@@ -39,15 +39,19 @@ function Split-SkillFrontmatter {
 function Get-FrontmatterValue {
     # Line-based extraction with YAML block scalar support so that folded
     # ('>') and literal ('|') descriptions are measured, not just markers.
+    # The header pattern covers the full YAML block scalar header grammar:
+    # optional indentation indicator, optional chomping indicator (either
+    # order), and an optional trailing comment.
     param(
         [string]$Frontmatter,
         [string]$Field
     )
+    $blockHeader = '^[>|](?:[1-9][+-]?|[+-][1-9]|[+-]|[1-9])?(?:[ \t]+#.*)?$'
     $lines = $Frontmatter -split '\r?\n'
     for ($i = 0; $i -lt $lines.Count; $i++) {
         if ($lines[$i] -notmatch ('^\s*' + [regex]::Escape($Field) + '\s*:\s*(.*)$')) { continue }
         $value = $Matches[1].Trim()
-        if ($value -match '^[>|][+-]?$') {
+        if ($value -match $blockHeader) {
             $parts = @()
             for ($j = $i + 1; $j -lt $lines.Count; $j++) {
                 if ($lines[$j] -match '^\s+\S') {
@@ -166,8 +170,11 @@ function Test-SkillFrontmatter {
 
 function Test-SkillReference {
     param(
+        [string]$RepoRoot,
+        [string]$SkillName,
         [string]$SkillDir,
         [string]$Content,
+        [bool]$IsGitRepo,
         [ref]$Errors
     )
 
@@ -186,7 +193,17 @@ function Test-SkillReference {
             $Errors.Value.Add("SKILL.md references '$token' which escapes the skill folder")
             continue
         }
-        if (-not (Test-Path -LiteralPath $targetFull -PathType Leaf)) {
+        # In a repository, existence is decided by the index: an untracked
+        # target would not be part of the committed skill even though it sits
+        # on disk. Only non-repo fixture trees fall back to the working tree.
+        if ($IsGitRepo) {
+            & git -C $RepoRoot cat-file -e ":$SkillName/$candidate" 2>$null
+            $exists = ($LASTEXITCODE -eq 0)
+        }
+        else {
+            $exists = (Test-Path -LiteralPath $targetFull -PathType Leaf)
+        }
+        if (-not $exists) {
             $Errors.Value.Add("SKILL.md references '$token' but it does not exist in the skill folder")
         }
     }
@@ -225,6 +242,8 @@ if (-not (Test-Path -LiteralPath $RepoRoot -PathType Container)) {
     exit 1
 }
 
+$isGitRepo = ((& git -C $RepoRoot rev-parse --is-inside-work-tree 2>$null) -eq 'true')
+
 Write-Info 'Running skills structural checks...'
 
 $skills = @(Find-SkillDirectory -Root $RepoRoot)
@@ -245,7 +264,8 @@ foreach ($skill in $skills) {
     $skillErrors = New-Object System.Collections.Generic.List[string]
     $errorRef = [ref]$skillErrors
     Test-SkillFrontmatter -SkillDir $skillDir -Content $content -Errors $errorRef
-    Test-SkillReference -SkillDir $skillDir -Content $content -Errors $errorRef
+    Test-SkillReference -RepoRoot $RepoRoot -SkillName $skill.Name -SkillDir $skillDir `
+        -Content $content -IsGitRepo $isGitRepo -Errors $errorRef
 
     if ($skillErrors.Count -gt 0) {
         Write-Fail "Checking: $skillLabel"

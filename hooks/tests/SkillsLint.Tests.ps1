@@ -271,6 +271,32 @@ See references/a.md and [b](./references/b.md).
             }
             finally { Remove-Item -LiteralPath $root -Recurse -Force }
         }
+
+        It 'blocks a block scalar with an explicit indentation indicator when expanded text is oversized' {
+            $root = New-TestRepo
+            try {
+                $chunk = 'x' * 600
+                $frontmatter = "name: indent-indicator`ndescription: |2$([Environment]::NewLine)  $chunk$([Environment]::NewLine)  $chunk"
+                New-TestSkill -Root $root -Name 'indent-indicator' -Frontmatter $frontmatter
+                $result = Invoke-SkillsLint -Root $root
+                $result.ExitCode | Should -Be 1
+                $result.Output | Should -Match "'description' exceeds 1024 characters \(got 1201\)"
+            }
+            finally { Remove-Item -LiteralPath $root -Recurse -Force }
+        }
+
+        It 'blocks a block scalar header carrying a comment when expanded text is oversized' {
+            $root = New-TestRepo
+            try {
+                $chunk = 'x' * 600
+                $frontmatter = "name: header-comment`ndescription: >- # folded, strip$([Environment]::NewLine)  $chunk$([Environment]::NewLine)  $chunk"
+                New-TestSkill -Root $root -Name 'header-comment' -Frontmatter $frontmatter
+                $result = Invoke-SkillsLint -Root $root
+                $result.ExitCode | Should -Be 1
+                $result.Output | Should -Match "'description' exceeds 1024 characters"
+            }
+            finally { Remove-Item -LiteralPath $root -Recurse -Force }
+        }
     }
 
     Context 'parent-relative reference escapes' {
@@ -323,6 +349,45 @@ See references/a.md and [b](./references/b.md).
                 Set-Content -LiteralPath (Join-Path $skillDir 'SKILL.md') `
                     -Value "---$([Environment]::NewLine)name: drifted-name`ndescription: Something useful.$([Environment]::NewLine)---" `
                     -Encoding utf8
+                $result = Invoke-SkillsLint -Root $root
+                $result.ExitCode | Should -Be 0
+            }
+            finally { Remove-Item -LiteralPath $root -Recurse -Force }
+        }
+
+        It 'blocks a staged reference whose target exists on disk but is not staged' {
+            $root = New-TestRepo
+            try {
+                New-TestSkill -Root $root -Name 'untracked-target' `
+                    -Frontmatter "name: untracked-target`ndescription: Something useful." `
+                    -Body @'
+Read [the guide](references/late.md) first.
+'@ `
+                    -Files @('references/late.md')
+                & git init -q $root
+                & git -C $root config user.email 'test@example.com'
+                & git -C $root config user.name 'test'
+                & git -C $root add (Join-Path $root 'untracked-target\SKILL.md')
+                $result = Invoke-SkillsLint -Root $root
+                $result.ExitCode | Should -Be 1
+                $result.Output | Should -Match "references 'references/late\.md' but it does not exist"
+            }
+            finally { Remove-Item -LiteralPath $root -Recurse -Force }
+        }
+
+        It 'accepts a staged reference when its target is staged too' {
+            $root = New-TestRepo
+            try {
+                New-TestSkill -Root $root -Name 'tracked-target' `
+                    -Frontmatter "name: tracked-target`ndescription: Something useful." `
+                    -Body @'
+Read [the guide](references/on-time.md) first.
+'@ `
+                    -Files @('references/on-time.md')
+                & git init -q $root
+                & git -C $root config user.email 'test@example.com'
+                & git -C $root config user.name 'test'
+                & git -C $root add .
                 $result = Invoke-SkillsLint -Root $root
                 $result.ExitCode | Should -Be 0
             }
