@@ -299,6 +299,54 @@ See references/a.md and [b](./references/b.md).
         }
     }
 
+    Context 'scalar precision' {
+
+        It 'blocks an oversized literal block whose trailing spaces push it past 1024 characters' {
+            $root = New-TestRepo
+            try {
+                $line = ('x' * 1020) + (' ' * 10)
+                $frontmatter = "name: trail-space`ndescription: |$([Environment]::NewLine)  $line"
+                New-TestSkill -Root $root -Name 'trail-space' -Frontmatter $frontmatter
+                $result = Invoke-SkillsLint -Root $root
+                $result.ExitCode | Should -Be 1
+                $result.Output | Should -Match "'description' exceeds 1024 characters \(got 1030\)"
+            }
+            finally { Remove-Item -LiteralPath $root -Recurse -Force }
+        }
+
+        It 'blocks a YAML-null description written as a bare comment' {
+            $root = New-TestRepo
+            try {
+                New-TestSkill -Root $root -Name 'null-comment' -Frontmatter "name: null-comment`ndescription: # TODO"
+                $result = Invoke-SkillsLint -Root $root
+                $result.ExitCode | Should -Be 1
+                $result.Output | Should -Match "'description' is missing or empty"
+            }
+            finally { Remove-Item -LiteralPath $root -Recurse -Force }
+        }
+
+        It 'accepts an unquoted description carrying an inline comment' {
+            $root = New-TestRepo
+            try {
+                New-TestSkill -Root $root -Name 'inline-comment' -Frontmatter "name: inline-comment`ndescription: Real text # note"
+                $result = Invoke-SkillsLint -Root $root
+                $result.ExitCode | Should -Be 0
+            }
+            finally { Remove-Item -LiteralPath $root -Recurse -Force }
+        }
+
+        It 'accepts a quoted description containing a hash character' {
+            $root = New-TestRepo
+            try {
+                $frontmatter = 'name: quoted-hash' + [Environment]::NewLine + 'description: "use issue #123 tracking"'
+                New-TestSkill -Root $root -Name 'quoted-hash' -Frontmatter $frontmatter
+                $result = Invoke-SkillsLint -Root $root
+                $result.ExitCode | Should -Be 0
+            }
+            finally { Remove-Item -LiteralPath $root -Recurse -Force }
+        }
+    }
+
     Context 'parent-relative reference escapes' {
 
         It 'blocks a link that resolves outside the skill folder even when the target exists' {
@@ -388,6 +436,44 @@ Read [the guide](references/on-time.md) first.
                 & git -C $root config user.email 'test@example.com'
                 & git -C $root config user.name 'test'
                 & git -C $root add .
+                $result = Invoke-SkillsLint -Root $root
+                $result.ExitCode | Should -Be 0
+            }
+            finally { Remove-Item -LiteralPath $root -Recurse -Force }
+        }
+    }
+
+    Context 'index-discovered skills' {
+
+        It 'validates a staged skill whose files were deleted from the working tree' {
+            $root = New-TestRepo
+            try {
+                $skillDir = New-TestSkill -Root $root -Name 'ghost-skill' `
+                    -Frontmatter "name: wrong-name`ndescription: Something useful."
+                & git init -q $root
+                & git -C $root config user.email 'test@example.com'
+                & git -C $root config user.name 'test'
+                & git -C $root add .
+                Remove-Item -LiteralPath (Join-Path $skillDir 'SKILL.md') -Force
+                Remove-Item -LiteralPath $skillDir -Recurse -Force
+                $result = Invoke-SkillsLint -Root $root
+                $result.ExitCode | Should -Be 1
+                $result.Output | Should -Match "does not match directory 'ghost-skill'"
+            }
+            finally { Remove-Item -LiteralPath $root -Recurse -Force }
+        }
+
+        It 'passes a valid staged skill whose files were deleted from the working tree' {
+            $root = New-TestRepo
+            try {
+                $skillDir = New-TestSkill -Root $root -Name 'clean-ghost' `
+                    -Frontmatter "name: clean-ghost`ndescription: Something useful."
+                & git init -q $root
+                & git -C $root config user.email 'test@example.com'
+                & git -C $root config user.name 'test'
+                & git -C $root add .
+                Remove-Item -LiteralPath (Join-Path $skillDir 'SKILL.md') -Force
+                Remove-Item -LiteralPath $skillDir -Recurse -Force
                 $result = Invoke-SkillsLint -Root $root
                 $result.ExitCode | Should -Be 0
             }

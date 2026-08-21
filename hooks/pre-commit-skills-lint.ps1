@@ -22,10 +22,27 @@ function Write-Info([string]$Message) { Write-Host $Message -ForegroundColor Cya
 function Write-WarnLine([string]$Message) { Write-Host $Message -ForegroundColor Yellow }
 
 function Find-SkillDirectory {
-    param([string]$Root)
-    return @(Get-ChildItem -LiteralPath $Root -Directory | Where-Object {
-        Test-Path -LiteralPath (Join-Path $_.FullName 'SKILL.md')
-    } | Sort-Object Name)
+    # Union of filesystem skills and skills that exist only in the index, so
+    # staged-but-deleted-from-disk SKILL.md files are still validated.
+    param(
+        [string]$Root,
+        [bool]$IsGitRepo
+    )
+    $names = @{}
+    foreach ($dir in Get-ChildItem -LiteralPath $Root -Directory) {
+        if (Test-Path -LiteralPath (Join-Path $dir.FullName 'SKILL.md')) {
+            $names[$dir.Name] = $true
+        }
+    }
+    if ($IsGitRepo) {
+        foreach ($path in (& git -C $Root ls-files --cached -- '*/SKILL.md')) {
+            $name = ($path -split '/')[0]
+            if ($name) { $names[$name] = $true }
+        }
+    }
+    return @(foreach ($name in ($names.Keys | Sort-Object)) {
+        [pscustomobject]@{ Name = $name; FullName = (Join-Path $Root $name) }
+    })
 }
 
 function Split-SkillFrontmatter {
@@ -52,23 +69,57 @@ function Get-FrontmatterValue {
         if ($lines[$i] -notmatch ('^\s*' + [regex]::Escape($Field) + '\s*:\s*(.*)$')) { continue }
         $value = $Matches[1].Trim()
         if ($value -match $blockHeader) {
-            $parts = @()
+            # Collect raw body lines and strip only the detected block indent,
+            # so significant interior whitespace and trailing spaces survive
+            # into the length check. Folding is approximated by joining with
+            # single spaces, which keeps the character count within a few of
+            # exact YAML decoding.
+            $rawLines = @()
             for ($j = $i + 1; $j -lt $lines.Count; $j++) {
-                if ($lines[$j] -match '^\s+\S') {
-                    $parts += $lines[$j].Trim()
+                if ($lines[$j] -match '^\s*\S' -or $lines[$j].Trim().Length -eq 0) {
+                    $rawLines += $lines[$j]
                 }
-                elseif ($lines[$j].Trim().Length -gt 0) {
+                else {
                     break
                 }
             }
-            $value = $parts -join ' '
+            while ($rawLines.Count -gt 0 -and $rawLines[-1].Trim().Length -eq 0) {
+                $rawLines = $rawLines[0..($rawLines.Count - 2)]
+            }
+            $indent = $null
+            foreach ($line in $rawLines) {
+                if ($line.Trim().Length -eq 0) { continue }
+                $count = ([regex]::Match($line, '^[ \t]*')).Value.Length
+                if ($null -eq $indent -or $count -lt $indent) { $indent = $count }
+            }
+            if ($null -eq $indent) { $indent = 0 }
+            $body = @(foreach ($line in $rawLines) {
+                if ($line.Trim().Length -eq 0) { '' } else { $line.Substring($indent) }
+            })
+            if ($value.StartsWith('|')) {
+                $value = $body -join "`n"
+            }
+            else {
+                $value = $body -join ' '
+            }
+            if ($value.Trim().Length -eq 0) { return $null }
+            return $value
         }
         if ($value.Length -ge 2) {
             $first = $value.Substring(0, 1)
             $last = $value.Substring($value.Length - 1, 1)
             if (($first -eq '"' -and $last -eq '"') -or ($first -eq "'" -and $last -eq "'")) {
-                $value = $value.Substring(1, $value.Length - 2).Trim()
+                # Quoted scalars may contain '#' legitimately; no comment handling.
+                return $value.Substring(1, $value.Length - 2).Trim()
             }
+        }
+        if ($value.StartsWith('#')) {
+            # 'description: # TODO' parses as YAML null.
+            return $null
+        }
+        if ($value -match '[ \t]#') {
+            # Strip inline comments from unquoted plain scalars.
+            $value = ([regex]::Split($value, '[ \t]#')[0]).TrimEnd()
         }
         return $value
     }
@@ -246,7 +297,7 @@ $isGitRepo = ((& git -C $RepoRoot rev-parse --is-inside-work-tree 2>$null) -eq '
 
 Write-Info 'Running skills structural checks...'
 
-$skills = @(Find-SkillDirectory -Root $RepoRoot)
+$skills = @(Find-SkillDirectory -Root $RepoRoot -IsGitRepo $isGitRepo)
 if ($skills.Count -eq 0) {
     Write-Success 'No skill folders found'
     exit 0
