@@ -170,7 +170,7 @@ request, or GitHub accepts an explicit request. After the pull request is ready:
 ### SFL Reviewer
 
 Detect SFL only from the target repository's default branch and live Actions
-state. Read [references/review-loop.md](references/review-loop.md) before
+state. Read [references/review-iteration.md](references/review-iteration.md) before
 requesting, interpreting, or resolving reviewer feedback.
 
 ## 7. Iterate on the immutable current head
@@ -189,7 +189,7 @@ For every review pass:
 7. Treat the new head SHA as a new review target; earlier clean signals do not
    prove the new head.
 8. Follow the thread-resolution and rerun rules in
-   [references/review-loop.md](references/review-loop.md).
+   [references/review-iteration.md](references/review-iteration.md).
 
 Repeat while new, current-head actionable findings appear. Do not create an
 infinite reviewer loop: after one valid request for an unchanged head, observe

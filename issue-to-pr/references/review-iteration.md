@@ -3,6 +3,10 @@
 Use this reference only after a pull request exists and is ready for review.
 All observations must be tied to the pull request's current head SHA.
 
+For the wider multi-reviewer evidence contract (thread decision table,
+evidence epochs, final gate), see
+`../../process-pr/references/current-head-review-loop.md`.
+
 ## Baseline state
 
 Capture the pull request identity and current head, then inspect checks:

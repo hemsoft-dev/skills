@@ -2,6 +2,9 @@
 
 Use this reference for the concrete evidence contract behind `process-pr`. Commands are PowerShell-compatible; replace placeholders with resolved values and quote comma-separated `--json` field lists.
 
+For SFL deployment classification, observer mode, and dispatch shapes, see
+`../../issue-to-pr/references/review-iteration.md`.
+
 ## Baseline Evidence
 
 ```powershell

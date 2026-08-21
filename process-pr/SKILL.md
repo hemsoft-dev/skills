@@ -32,7 +32,7 @@ hooks:
 
 Take one existing pull request from its current state to an open, human-ready state. Discover the repository's actual AI-review policy, request each configured reviewer without duplicate noise, process every current-head finding, and repeat until the available reviewers approve or report no further comments.
 
-Read [references/review-loop.md](references/review-loop.md) before requesting reviews or deciding that the PR is ready.
+Read [references/current-head-review-loop.md](references/current-head-review-loop.md) before requesting reviews or deciding that the PR is ready.
 
 ## Boundaries
 
