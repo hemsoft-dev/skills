@@ -234,4 +234,99 @@ See references/a.md and [b](./references/b.md).
             finally { Remove-Item -LiteralPath $root -Recurse -Force }
         }
     }
+
+    Context 'block scalar descriptions' {
+
+        It 'blocks a folded description whose expanded text exceeds 1024 characters' {
+            $root = New-TestRepo
+            try {
+                $chunk = 'x' * 600
+                $frontmatter = "name: folded-long`ndescription: >-$([Environment]::NewLine)  $chunk$([Environment]::NewLine)  $chunk"
+                New-TestSkill -Root $root -Name 'folded-long' -Frontmatter $frontmatter
+                $result = Invoke-SkillsLint -Root $root
+                $result.ExitCode | Should -Be 1
+                $result.Output | Should -Match "'description' exceeds 1024 characters \(got 1201\)"
+            }
+            finally { Remove-Item -LiteralPath $root -Recurse -Force }
+        }
+
+        It 'accepts a literal block description within the limit' {
+            $root = New-TestRepo
+            try {
+                $frontmatter = "name: literal-ok`ndescription: |$([Environment]::NewLine)  A perfectly reasonable$([Environment]::NewLine)  multi-line description."
+                New-TestSkill -Root $root -Name 'literal-ok' -Frontmatter $frontmatter
+                $result = Invoke-SkillsLint -Root $root
+                $result.ExitCode | Should -Be 0
+            }
+            finally { Remove-Item -LiteralPath $root -Recurse -Force }
+        }
+
+        It 'blocks an empty literal block description' {
+            $root = New-TestRepo
+            try {
+                New-TestSkill -Root $root -Name 'literal-empty' -Frontmatter "name: literal-empty`ndescription: |"
+                $result = Invoke-SkillsLint -Root $root
+                $result.ExitCode | Should -Be 1
+                $result.Output | Should -Match "'description' is missing or empty"
+            }
+            finally { Remove-Item -LiteralPath $root -Recurse -Force }
+        }
+    }
+
+    Context 'parent-relative reference escapes' {
+
+        It 'blocks a link that resolves outside the skill folder even when the target exists' {
+            $root = New-TestRepo
+            try {
+                Set-Content -LiteralPath (Join-Path $root 'shared.md') -Value 'shared' -Encoding utf8
+                New-TestSkill -Root $root -Name 'escaper' `
+                    -Frontmatter "name: escaper`ndescription: Tries to reach outside its folder." `
+                    -Body 'Borrow [shared notes](../shared.md) first.'
+                $result = Invoke-SkillsLint -Root $root
+                $result.ExitCode | Should -Be 1
+                $result.Output | Should -Match "references '\.\./shared\.md' which escapes the skill folder"
+            }
+            finally { Remove-Item -LiteralPath $root -Recurse -Force }
+        }
+    }
+
+    Context 'staged content validation' {
+
+        It 'validates the index version when SKILL.md has staged changes' {
+            $root = New-TestRepo
+            try {
+                $skillDir = New-TestSkill -Root $root -Name 'staged-skill' `
+                    -Frontmatter "name: wrong-name`ndescription: Something useful."
+                & git init -q $root
+                & git -C $root config user.email 'test@example.com'
+                & git -C $root config user.name 'test'
+                & git -C $root add .
+                Set-Content -LiteralPath (Join-Path $skillDir 'SKILL.md') `
+                    -Value "---$([Environment]::NewLine)name: staged-skill$([Environment]::NewLine)description: Something useful.$([Environment]::NewLine)---" `
+                    -Encoding utf8
+                $result = Invoke-SkillsLint -Root $root
+                $result.ExitCode | Should -Be 1
+                $result.Output | Should -Match "does not match directory 'staged-skill'"
+            }
+            finally { Remove-Item -LiteralPath $root -Recurse -Force }
+        }
+
+        It 'passes when the staged version is valid even if the working tree drifted' {
+            $root = New-TestRepo
+            try {
+                $skillDir = New-TestSkill -Root $root -Name 'clean-stage' `
+                    -Frontmatter "name: clean-stage`ndescription: Something useful."
+                & git init -q $root
+                & git -C $root config user.email 'test@example.com'
+                & git -C $root config user.name 'test'
+                & git -C $root add .
+                Set-Content -LiteralPath (Join-Path $skillDir 'SKILL.md') `
+                    -Value "---$([Environment]::NewLine)name: drifted-name`ndescription: Something useful.$([Environment]::NewLine)---" `
+                    -Encoding utf8
+                $result = Invoke-SkillsLint -Root $root
+                $result.ExitCode | Should -Be 0
+            }
+            finally { Remove-Item -LiteralPath $root -Recurse -Force }
+        }
+    }
 }

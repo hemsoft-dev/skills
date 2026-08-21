@@ -37,36 +37,66 @@ function Split-SkillFrontmatter {
 }
 
 function Get-FrontmatterValue {
+    # Line-based extraction with YAML block scalar support so that folded
+    # ('>') and literal ('|') descriptions are measured, not just markers.
     param(
         [string]$Frontmatter,
         [string]$Field
     )
-    if ($Frontmatter -notmatch ('(?m)^\s*' + [regex]::Escape($Field) + '\s*:\s*(.*)$')) {
-        return $null
-    }
-    $value = $Matches[1].Trim()
-    if ($value.Length -ge 2) {
-        $first = $value.Substring(0, 1)
-        $last = $value.Substring($value.Length - 1, 1)
-        if (($first -eq '"' -and $last -eq '"') -or ($first -eq "'" -and $last -eq "'")) {
-            $value = $value.Substring(1, $value.Length - 2).Trim()
+    $lines = $Frontmatter -split '\r?\n'
+    for ($i = 0; $i -lt $lines.Count; $i++) {
+        if ($lines[$i] -notmatch ('^\s*' + [regex]::Escape($Field) + '\s*:\s*(.*)$')) { continue }
+        $value = $Matches[1].Trim()
+        if ($value -match '^[>|][+-]?$') {
+            $parts = @()
+            for ($j = $i + 1; $j -lt $lines.Count; $j++) {
+                if ($lines[$j] -match '^\s+\S') {
+                    $parts += $lines[$j].Trim()
+                }
+                elseif ($lines[$j].Trim().Length -gt 0) {
+                    break
+                }
+            }
+            $value = $parts -join ' '
         }
+        if ($value.Length -ge 2) {
+            $first = $value.Substring(0, 1)
+            $last = $value.Substring($value.Length - 1, 1)
+            if (($first -eq '"' -and $last -eq '"') -or ($first -eq "'" -and $last -eq "'")) {
+                $value = $value.Substring(1, $value.Length - 2).Trim()
+            }
+        }
+        return $value
     }
-    return $value
+    return $null
+}
+
+function Get-SkillMdContent {
+    # Prefer the index version so the hook validates what is being committed
+    # when a SKILL.md has staged changes; fall back to the working tree for
+    # untracked files (or fixture trees that are not git repositories).
+    param(
+        [string]$RepoRoot,
+        [string]$RelativePath
+    )
+    $indexed = & git -C $RepoRoot show ":$RelativePath" 2>$null
+    if ($LASTEXITCODE -eq 0) {
+        return ($indexed -join "`n")
+    }
+    return (Get-Content -LiteralPath (Join-Path $RepoRoot $RelativePath) -Raw)
 }
 
 function Find-SkillReference {
     # Returns relative path tokens that SKILL.md genuinely references.
     # Fenced code blocks, inline code spans, URLs, absolute paths, and
     # placeholder patterns are excluded so prose examples do not count.
-    param([string]$Path)
+    param([string]$Content)
 
-    $content = Get-Content -LiteralPath $Path -Raw
-    if (-not $content) {
+    if (-not $Content) {
         return @()
     }
 
-    $content = [regex]::Replace($content, '(?s)```.*?(```|\z)', '')
+    $content = [regex]::Replace($Content, '(?s)```.*?(```|\z)', '')
     $content = [regex]::Replace($content, '(?s)~~~.*?(~~~|\z)', '')
     $content = [regex]::Replace($content, '`[^`\r\n]*`', '')
 
@@ -97,12 +127,11 @@ function Find-SkillReference {
 function Test-SkillFrontmatter {
     param(
         [string]$SkillDir,
-        [System.IO.FileInfo]$SkillMd,
+        [string]$Content,
         [ref]$Errors
     )
 
-    $content = Get-Content -LiteralPath $SkillMd.FullName -Raw
-    $frontmatter = Split-SkillFrontmatter -Content $content
+    $frontmatter = Split-SkillFrontmatter -Content $Content
 
     if ($null -eq $frontmatter) {
         $Errors.Value.Add("missing YAML frontmatter block")
@@ -138,14 +167,26 @@ function Test-SkillFrontmatter {
 function Test-SkillReference {
     param(
         [string]$SkillDir,
-        [System.IO.FileInfo]$SkillMd,
+        [string]$Content,
         [ref]$Errors
     )
 
-    foreach ($token in Find-SkillReference -Path $SkillMd.FullName) {
+    # Canonical skill root with a trailing separator so sibling directories
+    # whose names share a prefix cannot satisfy the containment test.
+    $rootFull = $SkillDir.TrimEnd('\', '/')
+    if (-not $rootFull.EndsWith('\') -and -not $rootFull.EndsWith('/')) {
+        $rootFull = "$rootFull\"
+    }
+
+    foreach ($token in Find-SkillReference -Content $Content) {
         $candidate = $token -replace '^\./', ''
         $target = Join-Path $SkillDir $candidate
-        if (-not (Test-Path -LiteralPath $target -PathType Leaf)) {
+        $targetFull = [System.IO.Path]::GetFullPath($target)
+        if (-not $targetFull.StartsWith($rootFull, [System.StringComparison]::OrdinalIgnoreCase)) {
+            $Errors.Value.Add("SKILL.md references '$token' which escapes the skill folder")
+            continue
+        }
+        if (-not (Test-Path -LiteralPath $targetFull -PathType Leaf)) {
             $Errors.Value.Add("SKILL.md references '$token' but it does not exist in the skill folder")
         }
     }
@@ -197,13 +238,14 @@ $warnings = New-Object System.Collections.Generic.List[string]
 
 foreach ($skill in $skills) {
     $skillDir = $skill.FullName
-    $skillMd = Join-Path $skillDir 'SKILL.md'
+    $relativePath = "$($skill.Name)/SKILL.md"
+    $content = Get-SkillMdContent -RepoRoot $RepoRoot -RelativePath $relativePath
     $skillLabel = $skill.Name
 
     $skillErrors = New-Object System.Collections.Generic.List[string]
     $errorRef = [ref]$skillErrors
-    Test-SkillFrontmatter -SkillDir $skillDir -SkillMd (Get-Item -LiteralPath $skillMd) -Errors $errorRef
-    Test-SkillReference -SkillDir $skillDir -SkillMd (Get-Item -LiteralPath $skillMd) -Errors $errorRef
+    Test-SkillFrontmatter -SkillDir $skillDir -Content $content -Errors $errorRef
+    Test-SkillReference -SkillDir $skillDir -Content $content -Errors $errorRef
 
     if ($skillErrors.Count -gt 0) {
         Write-Fail "Checking: $skillLabel"
