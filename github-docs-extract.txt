@@ -1,4 +1,0 @@
-===FILE:docs/how-to/add-new-user-to-github.md===
-===FILE:docs/how-to/github-sso-documentation.md===
-===FILE:docs/how-to/github-ssh-key.md===
-===FILE:docs/onboarding/developer-workstation-setup.md===
