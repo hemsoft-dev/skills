@@ -1,6 +1,6 @@
 ---
 name: repo-cleanup
-description: "V1.1 - Commands: Audit, Clean. Use automatically whenever repository work finishes, a pull request merges, or the user asks to clean, tidy, synchronize, or return a Git repository to main; preserve and integrate uncommitted, unpushed, stashed, and branch-only work before removing obsolete branches and worktrees."
+description: "V1.2 - Commands: Audit, Clean. Use automatically whenever repository work finishes, a pull request merges, or the user asks to clean, tidy, synchronize, or return a Git repository to main; preserve and integrate uncommitted, unpushed, stashed, and branch-only work before removing obsolete branches and worktrees."
 disable-model-invocation: false
 compatibility: Requires git. Remote ownership and pull request checks require GitHub CLI, GitHub access, and permission to fetch or delete refs.
 hooks:
@@ -60,7 +60,7 @@ Use these policies:
 
 | Repository owner | Policy |
 | --- | --- |
-| `HemSoft` | Franz is the sole routine contributor. Local branches and remote branches proven to be his are cleanup candidates when no ongoing work remains. Preserve any remote branch that is not proven to be his. |
+| `HemSoft` | Franz is the sole routine contributor. Local branches and remote branches proven to be his are cleanup candidates when no ongoing work remains. Preserve any remote branch that is not proven to be his. An explicit `Clean` request also authorizes immediate removal of proven-obsolete unreachable objects after the concurrency checks below pass. |
 | `relias-engineering` | Treat the repository as shared. Never delete another person's remote branch. Delete Franz's remote branch only when its pull request merged, the remote tip still matches the recorded pull request head, and no later work exists. Route new work through the repository's pull request process instead of pushing directly to `main`. |
 | Any other owner | Preserve remote branches unless the user supplies an ownership and deletion policy. |
 
@@ -148,7 +148,23 @@ Use this order for each item:
 5. Drop one stash only after its content is on `origin/main` or exact comparison proves it is a duplicate. Record its object ID first.
 6. Run `git worktree prune --dry-run` and `git remote prune --dry-run origin`. Run the corresponding commands without `--dry-run` only after inspecting what they will remove.
 
-Do not prune reflogs or unreachable objects during the same cleanup. Once all unique work is preserved, normal Git expiry can handle them later.
+For a `HemSoft` `Clean`, remove unreachable recovery objects during the same cleanup when every unreachable commit is classified `DELETE`, `main` is safely on `origin/main`, no Git process is writing objects, and no Git lock file exists. Git's normal expiry depends on time limits and garbage-collection triggers, so waiting for it is not proof of cleanup.
+
+Run the dry-runs first:
+
+```powershell
+git prune --dry-run --expire=now
+```
+
+For each audited `reflog-only` commit, locate every exact reflog selector that names it with `git reflog show --all --format='%gD%x09%H%x09%gs'`. Delete only those selectors with `git reflog delete --dry-run --rewrite '{REF}@{INDEX}'` first. Process numeric indexes from highest to lowest within each ref so later selectors do not shift before use. Do not use a repository-wide `git reflog expire --expire-unreachable=now --all` as a shortcut because it may remove unrelated recovery history.
+
+If the exact reflog deletions and prune dry-run contain only audited obsolete work, run each approved `git reflog delete --rewrite '{REF}@{INDEX}'`, then run:
+
+```powershell
+git gc --prune=now
+```
+
+Immediate pruning is irreversible and Git warns that `--prune=now` can corrupt a repository when another process is writing objects. Do not run it while a commit, fetch, receive, index-pack, maintenance job, or another object-writing Git command is active. Do not accelerate reflog or object expiry in `relias-engineering`, another shared repository, or any repository with uncertain work unless the user separately authorizes that exact cleanup after reviewing the audit.
 
 ## Final proof
 
@@ -165,6 +181,9 @@ git branch -vv
 git worktree list --porcelain
 git stash list
 git ls-remote --heads origin
+git fsck --full --no-reflogs --unreachable
+git fsck --full --unreachable
+git count-objects -vH
 ```
 
 Report:
@@ -175,7 +194,7 @@ Report:
 - validation, commits, pushes, pull requests, deletions, and retained work;
 - final cleanliness, ahead/behind count, remaining stashes, worktrees, local branches, and remote branches.
 
-Cleanup is complete when `main` is clean and matches `origin/main`, all intended work is on `origin/main` or explicitly retained with a named owner and next step, no proven-obsolete local state remains, and every remaining remote branch has evidence of ongoing work or a documented ownership precaution.
+Cleanup is complete when `main` is clean and matches `origin/main`, all intended work is on `origin/main` or explicitly retained with a named owner and next step, no proven-obsolete local state remains, and every remaining remote branch has evidence of ongoing work or a documented ownership precaution. A completed `HemSoft` `Clean` also has no audited-obsolete commit reported by either final `git fsck` command.
 
 ## History
 
