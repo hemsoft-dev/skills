@@ -1,6 +1,6 @@
 ---
 name: issue-to-pr
-description: V1.2 - Turns one specified GitHub issue into a validated pull request from a well-named branch in an isolated worktree, then iterates on current-head GitHub Copilot PR Review and SFL feedback when those reviewers are configured. Use for issue implementation in any repository or GitHub account. Optional merge and cleanup requires direct user approval.
+description: V1.4 - Turns one specified GitHub issue into a validated pull request from an isolated worktree, then routes current-head AI review by repository owner. HemSoft uses Cubic and Codex; fhemmerrelias and relias-engineering use Copilot PR Review. Optional merge and cleanup requires direct user approval.
 disable-model-invocation: true
 compatibility: Requires git, GitHub CLI, network access, and permission to push a branch and create a pull request in the target repository. Optional approved merge and cleanup requires mergepr on PATH.
 hooks:
@@ -21,9 +21,9 @@ hooks:
 # Issue to PR
 
 Take one user-specified GitHub issue from verified repository state to an open,
-reviewed pull request. The workflow is agent-neutral and account-neutral: use
-repository evidence instead of hard-coded owners, usernames, reviewer vendors,
-branch names, or local paths.
+reviewed pull request. Resolve the canonical repository owner before requesting
+review, then apply the owner policy in section 6. Never infer the repository
+family from the active GitHub account or local path.
 
 The default terminal state is an open pull request. Do not merge, enable an
 administrative bypass, force-push, delete a branch, or remove the worktree
@@ -67,6 +67,14 @@ for the issue number and likely title slug.
   default branch before doing new work.
 - Never create a second branch or pull request for the same issue merely
   because its name differs.
+
+For a requested Dependabot queue with no backing issues, treat each open
+Dependabot pull request as the specified work item. If packages require exact
+matching versions, stack the dependent pull request onto the parent branch,
+regenerate the lockfile with the repository's package manager, merge the child
+into the parent, then revalidate and re-review the combined parent head before
+merging it to the default branch. Do not land a knowingly incompatible
+intermediate dependency state.
 
 ## 3. Name the branch and worktree
 
@@ -141,36 +149,56 @@ branch. The pull-request body must include:
 - `Closes #<issue-number>`;
 - any residual risk or deliberately deferred work.
 
-Create the pull request ready for review by default. SFL's automatic reviewer
-does not review drafts. Use a draft only when the user or repository explicitly
-requires one, and mark it ready before entering the automated review loop.
+Create the pull request ready for review by default. Automatic reviewers may
+skip drafts. Use a draft only when the user or repository explicitly requires
+one, and mark it ready before entering the automated review loop.
 
-## 6. Discover configured reviewers
+## 6. Route reviewers by repository owner
 
-Do not choose reviewers from the repository owner or the active GitHub account.
-Discover each capability from live repository and pull-request state.
+Match the canonical owner case-insensitively. This routing is deliberate and
+overrides generic vendor discovery:
 
-### GitHub Copilot PR Review
+| Repository owner | Required AI reviewers | Never request as fallback |
+| --- | --- | --- |
+| `HemSoft` | Cubic and connected Codex | Copilot or SFL |
+| `fhemmerrelias` | GitHub Copilot PR Review | Cubic, Codex, or SFL |
+| `relias-engineering` | GitHub Copilot PR Review | Cubic, Codex, or SFL |
+| Any other owner | Reviewers proven by repository policy or live behavior | Any unproven reviewer |
 
-Copilot is available when it is automatically requested, has reviewed the pull
-request, or GitHub accepts an explicit request. After the pull request is ready:
+For `HemSoft`, let Cubic's automatic exact-head check run. Request connected
+Codex once per unchanged head with:
 
-1. Inspect current review requests and reviews.
-2. Allow repository automation a short opportunity to request or run Copilot.
-3. If Copilot has not been requested or reviewed, request it with:
+```text
+gh pr comment <pr> --repo HemSoft/<repo> --body "@codex review"
+```
 
-   ```text
-   gh pr edit <pr> --repo <owner/repo> --add-reviewer "@copilot"
-   ```
+Do not post a duplicate Codex trigger when the unchanged head already has a
+request, run, review, or clean signal. Cubic and Codex are both required unless
+the user explicitly waives an unavailable reviewer for that pull request.
 
-4. Re-read review requests or reviews. A permission error, unsupported feature,
-   or a request that GitHub does not retain means Copilot is unavailable; record
-   the exact evidence and continue without claiming Copilot completion.
+On bot-authored pull requests, a manual Cubic trigger may be plan-limited even
+when automatic checks are enabled. Do not count that error as approval. When a
+later base merge safely makes the branch stale, update it from the base and
+wait for Cubic's automatic exact-head check; otherwise report Cubic as
+unavailable and require the normal explicit waiver.
 
-### SFL Reviewer
+For `fhemmerrelias` and `relias-engineering`, inspect current review requests
+and reviews, allow repository automation a short opportunity to request
+Copilot, then request it once per unchanged head when needed:
 
-Detect SFL only from the target repository's default branch and live Actions
-state. Read [references/review-iteration.md](references/review-iteration.md) before
+```text
+gh pr edit <pr> --repo <owner/repo> --add-reviewer "@copilot"
+```
+
+Copilot is required for these work repositories unless the user explicitly
+waives an unavailable reviewer for that pull request. Re-read review state after
+the request and record any permission, availability, or retention failure.
+
+For any other owner, discover reviewers from repository instructions, active
+default-branch automation, recent comparable pull requests, and current PR
+activity. Do not copy the HemSoft or work reviewer roster to another owner.
+
+Read [references/review-iteration.md](references/review-iteration.md) before
 requesting, interpreting, or resolving reviewer feedback.
 
 ## 7. Iterate on the immutable current head
@@ -180,8 +208,8 @@ For every review pass:
 1. Record the pull request's current head SHA.
 2. Gather required checks, failed Actions logs, reviews, and unresolved inline
    threads for that SHA.
-3. Triage every actionable Copilot and SFL finding. Verify each finding against
-   the code instead of accepting it automatically.
+3. Triage every actionable finding from the owner-routed reviewer set. Verify
+   each finding against the code instead of accepting it automatically.
 4. Implement the smallest defensible fixes and update tests when behavior
    changes.
 5. Run the relevant local validation again.
@@ -206,20 +234,19 @@ same current head SHA:
 - repository-required checks pass;
 - the pull request is mergeable or GitHub reports no conflict;
 - no actionable review thread remains unresolved;
-- Copilot is clean for the current head, or its unavailability is documented;
-- when SFL is configured, the current-head `SFL Reviewer Approval` check passes
-  and the current SFL review has no actionable findings;
+- every owner-routed required reviewer is current-head clean or the user has
+  explicitly waived its documented unavailability for this pull request;
 - the final local validation is recorded.
 
-Do not equate a Copilot review comment with a formal GitHub approval. Do not
-bypass an expected SFL check when its workflow failed to start; that is a
-configuration failure to report, not permission to merge.
+Do not equate a comment-only AI review with a formal GitHub approval. A missing
+required reviewer is a blocker to report, not permission to substitute a
+reviewer from another repository family.
 
 ## 9. Closeout
 
 Report the issue, pull request URL, branch, worktree path, current head SHA,
-validation results, check state, Copilot state, SFL state, unresolved thread
-count, active GitHub identity, and any exact blocker.
+validation results, check state, the routed reviewer set and each current-head
+signal, unresolved thread count, active GitHub identity, and any exact blocker.
 
 Keep the worktree and branch while the pull request is open so revisions remain
 safe and isolated. If the user later directly approves merging this exact pull

@@ -24,7 +24,46 @@ Use the GitHub GraphQL `reviewThreads` connection, with pagination, when inline
 thread state matters. If a current dedicated GitHub review-comment skill is
 available in the runtime, it may provide the same thread-level evidence.
 
-## Copilot
+## Owner routing
+
+Resolve the canonical owner from the pull request's `owner/repo` identity and
+apply the routing table in `../SKILL.md` before requesting any reviewer. The
+active GitHub login and local checkout path do not determine reviewer policy.
+
+Do not use another repository family's reviewer as a fallback. Repository
+instructions may add required checks, but changing the routed reviewer set
+requires explicit user direction.
+
+## HemSoft reviewers
+
+### Cubic
+
+Cubic normally starts automatically. Tie its check, review, comments, and
+threads to the current head. A passing `cubic · AI code reviewer` check plus no
+actionable Cubic thread is clean. If Cubic reports a finding, verify it, fix it
+when valid, reply with evidence, resolve only after it no longer applies, and
+wait for the new-head check.
+
+Do not invent a manual Cubic trigger. Use one only when the repository documents
+it and the automatic current-head run failed to start.
+
+### Connected Codex
+
+Inspect comments, reviews, checks, and runs for an existing current-head Codex
+request or result. If none exists, request once per unchanged head with:
+
+```text
+gh pr comment <pr> --repo HemSoft/<repo> --body "@codex review"
+```
+
+Completion requires a current-head Codex review with no actionable findings and
+no unresolved Codex thread. A trigger comment alone is not completion. Do not
+request Copilot or SFL for a HemSoft pull request.
+
+## Work reviewer: Copilot
+
+Use this section only for repositories owned by `fhemmerrelias` or
+`relias-engineering`.
 
 The supported GitHub CLI request is:
 
@@ -47,7 +86,13 @@ Copilot PR Review commonly leaves comments rather than a branch-protection
 approval. Record its clean feedback state separately from GitHub's
 `reviewDecision`.
 
-## SFL detection
+Do not request Cubic, Codex, or SFL for these work repositories.
+
+## Other-owner SFL detection
+
+Use this section only for an owner outside `HemSoft`, `fhemmerrelias`, and
+`relias-engineering`, and only when live repository evidence puts SFL in the
+active reviewer set.
 
 Inspect the repository default branch, not the feature branch, for these active
 workflows:
@@ -97,7 +142,7 @@ SFL as misconfigured and preserve the failing required gate. Do not run
 `gh sfl init`, `gh sfl sync`, or manually recreate the observer's registry and
 comment protocol without explicit deployment-repair authority.
 
-## SFL explicit rerun
+## Other-owner SFL explicit rerun
 
 Use an explicit rerun only when the pull request is eligible, no exact-head SFL
 run is active, and either a rerun is needed after feedback or normal automation
@@ -119,7 +164,7 @@ Before dispatching, read the live workflow's declared inputs; deployments may
 evolve. If the repository documents `sfl-review` as its explicit trigger, use
 that label instead. Never add or toggle unrelated SFL pipeline labels.
 
-## SFL result rules
+## Other-owner SFL result rules
 
 The current SFL contract publishes review findings plus an immutable-head
 required check or status, such as `SFL Reviewer Approval` or
@@ -139,9 +184,9 @@ installation, workflow, or eligibility failure. Never bypass the gate.
 
 ## Bounded loop
 
-For each new head SHA, allow at most one outstanding Copilot request and one
-outstanding SFL review. Continue useful local work while reviews run. Stop and
-report evidence when:
+For each new head SHA, allow at most one outstanding request per active
+reviewer. Continue useful local work while reviews run. Stop and report evidence
+when:
 
 - the current head is clean and all applicable checks pass;
 - a reviewer is unavailable after one valid request;

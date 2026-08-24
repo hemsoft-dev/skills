@@ -316,9 +316,7 @@ if (-not $RepoRoot) {
         Write-Fail 'Could not determine repository root'
         exit 1
     }
-    if ($IsWindows -or $PSVersionTable.PSVersion.Major -lt 6) {
-        $RepoRoot = $RepoRoot -replace '/', '\\'
-    }
+    $RepoRoot = [System.IO.Path]::GetFullPath($RepoRoot)
 }
 
 if (-not (Test-Path -LiteralPath $RepoRoot -PathType Container)) {

@@ -36,6 +36,7 @@ github-copilot-license-processor/state/*.json
 tmp/
 temp/
 *.tmp
+testResults.xml
 
 # Python virtual environments
 
