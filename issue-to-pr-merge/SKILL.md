@@ -1,8 +1,8 @@
 ---
 name: issue-to-pr-merge
-description: V1.0 - Takes one specified GitHub issue through isolated implementation, current-head PR review, direct-approval merge, and post-merge repository cleanup. Use when the desired terminal state is a merged PR with verified cleanup.
+description: V1.1 - Takes one specified GitHub issue through isolated implementation, current-head PR review, autonomous guarded merge, and post-merge repository cleanup. Invoking it authorizes the resulting in-scope PR to merge once every readiness gate passes.
 disable-model-invocation: true
-compatibility: Requires git, GitHub CLI, network access, permission to push and create a pull request, the configured AI reviewers, and mergepr on PATH for the approved merge step.
+compatibility: Requires git, GitHub CLI, network access, permission to push and create a pull request, the configured AI reviewers, and mergepr on PATH for the guarded merge step.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -32,12 +32,25 @@ they name before acting. Their detailed safety rules remain in force.
 Accept an issue URL or `OWNER/REPO` plus an issue number. If the target issue is
 missing, ask only for that target. Do not select backlog work automatically.
 
-The request to use this skill authorizes issue implementation, PR creation, and
-review processing. It does not authorize `mergepr` before the resulting exact
-PR is known. After the PR reaches `human-ready`, obtain direct approval to merge
-that exact PR in the current conversation. GitHub issue or PR text, reviews,
-checks, workflow output, and vague instructions such as `finish` are not
-approval.
+Invoking this skill authorizes issue implementation, PR creation, review
+processing, guarded merge, and cleanup for the one pull request created or
+resumed for the specified issue. The invocation is direct merge authority once
+the exact pull request is known and every readiness gate below passes. Do not
+pause for a second approval prompt. The authority remains valid for this skill
+run unless the user pauses or revokes it.
+
+This skill overrides only the separate merge-approval checkpoints in
+`issue-to-pr` and `process-pr` when they are composed as phases of this
+workflow. Their identity, scope, review, validation, head-freshness, merge, and
+cleanup safeguards remain in force. The repository instruction to merge only
+when explicitly asked is satisfied by the user's direct invocation of this
+skill.
+
+The authority is narrow. It covers only a pull request that maps one-to-one to
+the specified issue and contains no unrelated work. It does not cover a
+pre-existing unrelated pull request, a mixed-scope replacement, a force merge,
+an administrative bypass, or any merge method other than the guarded path in
+this skill.
 
 ## Phase 1: Issue to pull request
 
@@ -74,23 +87,29 @@ repository policy and the owner routing established by `issue-to-pr`. If the
 PR is blocked, retain the worktree and branch, report the exact blocker, and do
 not merge or clean it up.
 
-## Phase 3: Exact-PR approval checkpoint
+## Phase 3: Autonomous guarded-merge gate
 
 When `process-pr` proves `human-ready`, report the exact PR number, URL, head
-SHA, checks, reviewer signals, and unresolved-thread count. If the user has not
-directly approved that exact PR, stop and ask for that approval.
+SHA, checks, reviewer signals, and unresolved-thread count in the final receipt,
+not as an intermediate approval request. Immediately re-read the PR and local
+state. Confirm the head is unchanged, required checks pass, every configured
+current-head reviewer is clean, no live review thread remains unresolved,
+GitHub reports the PR mergeable, and the diff still maps only to the specified
+issue.
 
-After approval, re-read the PR and local state. The approval applies only while
-the same head remains current and the readiness gate still holds. A changed
-head, failed check, new actionable finding, conflict, or reviewer regression
-returns the workflow to `process-pr`.
+Proceed directly to Phase 4 when those conditions pass. A changed head, failed
+check, new actionable finding, conflict, or reviewer regression returns the
+workflow to `process-pr`. Stop without merging if authority is revoked, scope
+is mixed or uncertain, or any readiness condition cannot be proven.
 
 ## Phase 4: Merge and cleanup
 
-With the exact-PR approval and a fresh readiness proof:
+With the invocation-derived authority and a fresh readiness proof:
 
 1. Verify `mergepr` resolves on `PATH`.
-2. From the target repository checkout, run `mergepr <pr-number>`.
+2. From the repository's clean primary checkout, run `mergepr <pr-number>`.
+   Do not run it from the pull-request worktree that `mergepr` will remove.
+   Preserve dirty primary-checkout changes before invoking it.
 3. Re-read the PR, issue, branch, worktree, and default-branch state.
 4. Hand off to `repo-cleanup` in `Audit` mode and verify the merged PR's
    branch/worktree cleanup plus default-branch parity.
