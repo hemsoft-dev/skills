@@ -1,8 +1,8 @@
 ---
 name: process-pr
-description: V1.6 - Takes one specified existing GitHub pull request to a human-ready state by discovering configured AI reviewers, soliciting current-head reviews, and addressing feedback. Merge remains approval-gated by default, but a composing merge skill can supply documented invocation authority.
+description: V1.7 - Takes one specified existing GitHub pull request to a human-ready state by discovering configured AI reviewers, soliciting current-head reviews, and addressing feedback. Merge remains approval-gated by default, but a composing merge skill can supply documented invocation authority and owns the final Slack notification when it owns the merge.
 disable-model-invocation: true
-compatibility: Requires git, GitHub CLI, GitHub network access, permission to push to the PR branch, and permission to request the repository's configured reviewers. Optional authorized merge and cleanup requires mergepr on PATH.
+compatibility: Requires git, GitHub CLI, GitHub network access, permission to push to the PR branch, and permission to request the repository's configured reviewers. Optional authorized merge and cleanup requires mergepr on PATH and the slack-dm skill.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -204,6 +204,18 @@ default-branch parity and that
 the merged PR's branch and worktree were handled. Do not run broad `Clean` or
 delete unrelated branches, stashes, worktrees, or recovery objects unless the
 user separately requested full repository cleanup in the current conversation.
+
+After every post-merge check and cleanup action is complete, invoke the
+`slack-dm` skill at `../slack-dm/SKILL.md`. Send Franz one `merged` DM with the
+canonical `OWNER/REPO` project, `PR #<number> — <exact current title> — merged`
+outcome, PR URL, merge commit, and cleanup result. Send only after GitHub
+reports `MERGED`. This is the final workflow phase before the user-facing
+response.
+
+The skill that owns the final post-merge proof owns this notification. If a
+composing skill retains ownership of the merge and cleanup, return the evidence
+without sending a duplicate DM; the composing skill must send it after its
+final proof.
 
 When `issue-to-pr-merge` is the caller, return the final merged state only after
 this audit. Report the merge commit, closed issue state, default-branch and

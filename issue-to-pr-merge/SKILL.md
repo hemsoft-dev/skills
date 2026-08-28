@@ -1,8 +1,8 @@
 ---
 name: issue-to-pr-merge
-description: "V1.2 - Commands: Issue, Oldest. Takes one exact or lease-selected oldest GitHub issue through isolated implementation, current-head review, guarded merge, and cleanup; Oldest supports hourly resume and stalled-run escalation."
+description: "V1.3 - Commands: Issue, Oldest. Takes one exact or lease-selected oldest GitHub issue through isolated implementation, current-head review, guarded merge, cleanup, and a final Slack notification; Oldest supports hourly resume and stalled-run escalation."
 disable-model-invocation: true
-compatibility: Requires git, GitHub CLI, network access, permission to push and create a pull request, the configured AI reviewers, and mergepr on PATH for the guarded merge step.
+compatibility: Requires git, GitHub CLI, network access, permission to push and create a pull request, the configured AI reviewers, mergepr on PATH, and the slack-dm skill.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -164,6 +164,12 @@ With the invocation-derived authority and a fresh readiness proof:
 3. Re-read the PR, issue, branch, worktree, and default-branch state.
 4. Hand off to `repo-cleanup` in `Audit` mode and verify the merged PR's
    branch/worktree cleanup plus default-branch parity.
+5. Complete any Oldest-mode lease and durable-state updates, then invoke the
+   `slack-dm` skill at `../slack-dm/SKILL.md`. Send Franz one `merged` DM with
+   the canonical `OWNER/REPO` project, `PR #<number> — <exact current title> —
+   merged` outcome, PR URL, merge commit, and cleanup result. Send only after
+   GitHub reports `MERGED`. This is the final workflow phase before the
+   user-facing response.
 
 `mergepr` owns the guarded cleanup of the completed PR's branch and worktree.
 Do not duplicate those destructive operations. Do not run broad
@@ -175,13 +181,18 @@ If `mergepr` is unavailable or fails, preserve the exact state and report the
 error. Do not substitute a raw `gh pr merge`, force-push, branch deletion, or
 recursive filesystem deletion.
 
+This composing skill owns the notification. Its `issue-to-pr` and `process-pr`
+phases must not send duplicate DMs. A waiting, blocked, failed, or no-op run
+does not send a merged notification.
+
 ## Definition of done
 
 The issue is closed by the merged PR; the merge commit and exact final head are
 recorded; the target default branch matches its remote; the completed PR's
 branch and worktree are removed or explicitly retained with evidence; and the
 post-merge `repo-cleanup` audit passes. Any unrelated repository work remains
-preserved and is reported.
+preserved and is reported. A successful run ends its operational work by
+sending the Slack merge notification.
 
 For one `Oldest` run, `waiting` is also a valid safe terminal result when the
 exact issue and pull request are durably recorded, the run lease is released,

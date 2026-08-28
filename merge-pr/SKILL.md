@@ -1,8 +1,8 @@
 ---
 name: merge-pr
-description: V1.0 - Merge one explicitly numbered GitHub pull request, use an admin merge only when a validated PR is blocked by repository policy, then run repository cleanup.
+description: V1.1 - Merge one explicitly numbered GitHub pull request, use an admin merge only when a validated PR is blocked by repository policy, run repository cleanup, then send a final Slack notification.
 disable-model-invocation: true
-compatibility: Requires git, GitHub CLI, GitHub access, mergepr on PATH, and the repo-cleanup skill.
+compatibility: Requires git, GitHub CLI, GitHub access, mergepr on PATH, the repo-cleanup skill, and the slack-dm skill.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -48,6 +48,7 @@ Require one positive integer. Verify that it resolves to a pull request, not an 
 6. Re-read the PR and require `MERGED` before reporting merge success. Record whether the admin fallback ran and capture the merge commit SHA.
 7. After the merge attempt, invoke the `repo-cleanup` skill in `Clean` mode from the primary checkout. If the merge failed, classify the open PR branch and worktree as `KEEP`; cleanup must preserve them.
 8. Prove the final repository state. Report the PR URL and state, exact reviewed head, merge commit, merge method, admin-fallback use, cleanup actions, retained work, primary branch cleanliness, `HEAD == origin/{DEFAULT_BRANCH}`, and ahead/behind counts.
+9. If GitHub reports `MERGED`, invoke the `slack-dm` skill at `../slack-dm/SKILL.md`. Send Franz one `merged` DM with the canonical `OWNER/REPO` project, `PR #<number> — <exact current title> — merged` outcome, PR URL, merge commit, merge method, and cleanup result. This is the final workflow phase before the user-facing response. Do not send a merged notification when the PR remains open or the merge failed.
 
 ## History
 

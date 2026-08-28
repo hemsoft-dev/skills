@@ -1,8 +1,8 @@
 ---
 name: issues-to-pr-merge
-description: V1.4 - Runs a Codex Goal that autonomously processes one repository's selected GitHub issues oldest-first, takes each through guarded merge and cleanup without per-PR approval prompts, then gives the user a plain-language recap.
+description: V1.5 - Runs a Codex Goal that autonomously processes one repository's selected GitHub issues oldest-first, takes each through guarded merge and cleanup without per-PR approval prompts, sends final Slack notifications, then gives the user a plain-language recap.
 disable-model-invocation: true
-compatibility: Requires Codex Goals, git, GitHub CLI, network access, permission to push, create pull requests, and merge the frozen queue, the configured AI reviewers, and mergepr on PATH.
+compatibility: Requires Codex Goals, git, GitHub CLI, network access, permission to push, create pull requests, and merge the frozen queue, the configured AI reviewers, mergepr on PATH, and the slack-dm skill.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -155,6 +155,20 @@ Complete the Goal only when every queued issue is either:
 A blocked issue blocks the batch. Do not skip it merely to make progress. Keep
 its branch and worktree when the singular skill requires retention, and report
 what would unblock the Goal.
+
+## Final Slack notifications
+
+After the last repository, cleanup, identity, and Goal-state check is complete,
+invoke the `slack-dm` skill at `../slack-dm/SKILL.md` once per PR that this Goal
+merged. Send the DMs in frozen-queue order. Each DM must use category `merged`,
+the canonical `OWNER/REPO` project, `PR #<number> — <exact current title> —
+merged` outcome, PR URL, merge commit, and cleanup result. Send only for PRs
+that GitHub reports `MERGED`.
+
+These notifications are the final workflow phase before the user-facing recap.
+The composed singular skills must not send duplicate DMs. If the batch stops
+after merging only part of the queue, notify for those proven merges after the
+final preservation and Goal-state checks, then report the blocker.
 
 ## Closeout report
 

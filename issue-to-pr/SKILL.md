@@ -1,8 +1,8 @@
 ---
 name: issue-to-pr
-description: V1.6 - Turns one specified GitHub issue into a validated pull request from an isolated worktree, then routes current-head AI review by repository owner. HemSoft requires connected Codex and uses Cubic when available; fhemmerrelias and relias-engineering use Copilot PR Review. Optional merge and cleanup requires direct user approval.
+description: V1.7 - Turns one specified GitHub issue into a validated pull request from an isolated worktree, then routes current-head AI review by repository owner. HemSoft requires connected Codex and uses Cubic when available; fhemmerrelias and relias-engineering use Copilot PR Review. Optional merge, cleanup, and Slack notification require direct user approval.
 disable-model-invocation: true
-compatibility: Requires git, GitHub CLI, network access, and permission to push a branch and create a pull request in the target repository. Optional approved merge and cleanup requires mergepr on PATH.
+compatibility: Requires git, GitHub CLI, network access, and permission to push a branch and create a pull request in the target repository. Optional approved merge and cleanup requires mergepr on PATH and the slack-dm skill.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -289,11 +289,21 @@ After direct approval:
 
 4. Re-read the pull request and local repository state. Report the merge
    commit, base-branch parity, removed or preserved branch, and worktree state.
+5. After every post-merge check and cleanup action is complete, invoke the
+   `slack-dm` skill at `../slack-dm/SKILL.md`. Send Franz one `merged` DM with
+   the canonical `OWNER/REPO` project, `PR #<number> — <exact current title> —
+   merged` outcome, PR URL, merge commit, and cleanup result. Send only after
+   GitHub reports `MERGED`. This is the final workflow phase before the
+   user-facing response.
 
 `mergepr` performs the squash merge and guarded branch and worktree cleanup. Do
 not duplicate that cleanup. If the command is unavailable or fails, preserve
 the exact state and report the error before taking another merge or cleanup
 path.
+
+The skill that owns the final post-merge proof owns this notification. When a
+composing merge skill owns the merge and cleanup, return the evidence without
+sending a duplicate DM; the composing skill must send it after its final proof.
 
 ## Definition of done
 
