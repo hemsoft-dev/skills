@@ -96,7 +96,7 @@ For every worktree, run `git -C {WORKTREE_PATH} status --porcelain=v2 --branch`.
 - related pull request state, author, base, head SHA, merge commit, and current head ref;
 - related open issue, recent push or review activity, stash base, or other evidence of ongoing work.
 
-Inspect each stash with `git stash show --stat --include-untracked {STASH}` and `git stash show -p --include-untracked {STASH}`. Refresh the stash list after every drop because stash indexes move.
+Inspect each stash with `git stash show --stat --include-untracked {STASH}` and `git stash show -p --include-untracked {STASH}`. In PowerShell, quote literal selectors such as `'stash@{0}'`; otherwise PowerShell can split the selector into multiple arguments. Refresh the stash list after every drop because stash indexes move.
 
 For squash-merge cases, compare patches with `git cherry origin/main {BRANCH}` and, when needed, stable patch IDs. Commit messages and matching filenames are not proof.
 

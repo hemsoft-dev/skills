@@ -1,6 +1,6 @@
 ---
 name: process-pr
-description: V1.5 - Takes one specified existing GitHub pull request to a human-ready state by discovering configured AI reviewers, soliciting current-head reviews, and addressing feedback. Merge remains approval-gated by default, but a composing merge skill can supply documented invocation authority.
+description: V1.6 - Takes one specified existing GitHub pull request to a human-ready state by discovering configured AI reviewers, soliciting current-head reviews, and addressing feedback. Merge remains approval-gated by default, but a composing merge skill can supply documented invocation authority.
 disable-model-invocation: true
 compatibility: Requires git, GitHub CLI, GitHub network access, permission to push to the PR branch, and permission to request the repository's configured reviewers. Optional authorized merge and cleanup requires mergepr on PATH.
 hooks:

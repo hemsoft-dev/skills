@@ -1,6 +1,6 @@
 ---
 name: issues-to-pr-merge
-description: V1.3 - Runs a Codex Goal that autonomously processes one repository's selected GitHub issues oldest-first, takes each through guarded merge and cleanup without per-PR approval prompts, then gives the user a plain-language recap.
+description: V1.4 - Runs a Codex Goal that autonomously processes one repository's selected GitHub issues oldest-first, takes each through guarded merge and cleanup without per-PR approval prompts, then gives the user a plain-language recap.
 disable-model-invocation: true
 compatibility: Requires Codex Goals, git, GitHub CLI, network access, permission to push, create pull requests, and merge the frozen queue, the configured AI reviewers, and mergepr on PATH.
 hooks:
@@ -78,8 +78,10 @@ attention.
 
 ## Process one issue at a time
 
-For the oldest remaining issue, invoke `issue-to-pr-merge` and follow its full
-workflow. Resume existing issue work before creating a branch or pull request.
+For the oldest remaining issue, invoke `issue-to-pr-merge` in `Issue` mode and
+follow its full workflow. The frozen batch owns selection, so never invoke the
+singular skill's `Oldest` mode from this Goal. Resume existing issue work before
+creating a branch or pull request.
 Create new work only in the singular skill's isolated worktree. Base every new
 issue branch on the freshly fetched remote default branch after the previous
 issue's merge and cleanup proof.

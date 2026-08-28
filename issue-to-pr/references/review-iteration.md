@@ -45,7 +45,10 @@ when valid, reply with evidence, resolve only after it no longer applies, and
 wait for the new-head check.
 
 Do not invent a manual Cubic trigger. Use one only when the repository documents
-it and the automatic current-head run failed to start.
+it and the automatic current-head run failed to start. For HemSoft, Cubic is
+conditional: an exact-head run that starts must finish clean, but a missing run
+or documented plan or quota exhaustion does not block a clean current-head
+Codex result and does not require a pull-request-specific waiver.
 
 ### Connected Codex
 

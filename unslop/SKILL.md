@@ -10,6 +10,15 @@ Edit text to remove AI patterns and add human voice.
 
 Scope: this skill governs prose. It does not override functional output formats that other skills mandate, such as grilling's numbered question format with its status emojis or slack-dm's category emoji table. When another skill defines a required structure, keep the structure and apply unslop to the words around it.
 
+## User-facing time
+
+- Report times in `America/New_York`, not UTC.
+- Label dates in daylight saving time as EDT and dates in standard time as EST.
+  Use ET when a date is unavailable or the distinction does not matter.
+- Convert source timestamps to Eastern Time before presenting them. Include UTC
+  only when an API, log, or troubleshooting step requires the original value,
+  and place it after the Eastern Time value.
+
 ## Process
 
 1. Scan for the patterns below.

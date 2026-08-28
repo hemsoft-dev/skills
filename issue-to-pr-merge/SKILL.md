@@ -1,6 +1,6 @@
 ---
 name: issue-to-pr-merge
-description: V1.1 - Takes one specified GitHub issue through isolated implementation, current-head PR review, autonomous guarded merge, and post-merge repository cleanup. Invoking it authorizes the resulting in-scope PR to merge once every readiness gate passes.
+description: "V1.2 - Commands: Issue, Oldest. Takes one exact or lease-selected oldest GitHub issue through isolated implementation, current-head review, guarded merge, and cleanup; Oldest supports hourly resume and stalled-run escalation."
 disable-model-invocation: true
 compatibility: Requires git, GitHub CLI, network access, permission to push and create a pull request, the configured AI reviewers, and mergepr on PATH for the guarded merge step.
 hooks:
@@ -20,17 +20,33 @@ hooks:
 
 # Issue to PR merge
 
-Process one user-specified GitHub issue from verified repository state through a
-merged pull request and a proven post-merge repository state. This skill is a
+Process one exact or lease-selected GitHub issue from verified repository state
+through a merged pull request and a proven post-merge repository state. This skill is a
 composition of the `issue-to-pr` skill at `../issue-to-pr/SKILL.md`, the
 `process-pr` skill at `../process-pr/SKILL.md`, and the `repo-cleanup` skill at
 `../repo-cleanup/SKILL.md`. Read those skills and the review-loop references
 they name before acting. Their detailed safety rules remain in force.
 
+Use one of two modes:
+
+- `Issue {ISSUE_URL_OR_OWNER_REPO_NUMBER}` processes one exact issue. This is
+  the default when the invocation includes an issue number.
+- `Oldest {OWNER/REPO}` processes at most one lease-selected issue for a
+  recurring run. Read
+  [references/scheduled-oldest-lease.md](references/scheduled-oldest-lease.md)
+  before selecting, resuming, or changing an issue in this mode.
+
 ## Required input and authority
 
-Accept an issue URL or `OWNER/REPO` plus an issue number. If the target issue is
-missing, ask only for that target. Do not select backlog work automatically.
+In `Issue` mode, accept an issue URL or `OWNER/REPO` plus an issue number. If
+the target issue is missing, ask only for that target. Do not select backlog
+work automatically.
+
+In `Oldest` mode, accept one `OWNER/REPO` and a stable automation ID. Select
+only issues labeled `agent:ready`. Default to a 120-minute lease TTL and
+escalation after three consecutive completed runs with no movement. Process at
+most one issue per invocation. Resume this automation's unfinished issue or
+linked pull request before selecting new work.
 
 Invoking this skill authorizes issue implementation, PR creation, review
 processing, guarded merge, and cleanup for the one pull request created or
@@ -51,6 +67,41 @@ the specified issue and contains no unrelated work. It does not cover a
 pre-existing unrelated pull request, a mixed-scope replacement, a force merge,
 an administrative bypass, or any merge method other than the guarded path in
 this skill.
+
+An explicit `Oldest` invocation supplies the same narrow authority for the one
+issue that the lease protocol selects or resumes. Record the exact issue before
+implementation. The authority does not extend to a second issue in the same
+run, an issue reserved by a human, or an issue blocked for human input.
+
+## Scheduled Oldest mode
+
+Apply this section only for `Oldest`.
+
+1. Follow the scheduled lease reference and inspect durable automation state,
+   active leases, open pull requests, branches, and worktrees.
+2. If this automation owns unfinished work, acquire the run lease and resume
+   that exact issue. Do not select another issue while it remains in flight.
+3. Otherwise select the oldest eligible issue, acquire its lease, and record
+   the exact issue number and baseline before entering Phase 1.
+4. Add the stable automation ID and current run ID as commit trailers for every
+   automation-authored commit so a later run can distinguish its own head from
+   manual work.
+5. Refresh the lease at each implementation, validation, review, and merge
+   phase. Release only the current run's lease on every terminal path.
+6. If CI or review is still pending after a bounded useful wait, preserve the
+   branch, worktree, pull request, and durable state. Release the run lease and
+   finish as `waiting`; the next hourly run must resume it.
+7. Compare the final progress fingerprint with the prior completed run. Reset
+   the unchanged-run count when state moved. Increment it only after a run
+   acquired the lease and completed without movement. Lease collisions and an
+   empty eligible queue are no-ops, not failed retries.
+8. After three consecutive no-movement runs, apply `agent:blocked`, preserve
+   every recovery artifact, and report the exact human action needed. Do not
+   resume that issue until a human removes the blocker and marks it ready.
+
+Human-authored activity wins. Stop before edits or merge if the issue, pull
+request, branch, or worktree shows manual ownership that the durable automation
+record cannot attribute to this automation.
 
 ## Phase 1: Issue to pull request
 
@@ -132,12 +183,22 @@ branch and worktree are removed or explicitly retained with evidence; and the
 post-merge `repo-cleanup` audit passes. Any unrelated repository work remains
 preserved and is reported.
 
+For one `Oldest` run, `waiting` is also a valid safe terminal result when the
+exact issue and pull request are durably recorded, the run lease is released,
+all work remains resumable, and the unchanged-run count is updated. A blocked
+result must retain the branch and worktree and must name the required human
+decision or repair.
+
 ## Closeout report
 
 Report the issue and PR URLs, merge commit, repository and owner, final default
 branch and `origin` SHAs, validation results, reviewer signals, active GitHub
 identity, target branch/worktree result, cleanup-audit result, and any exact
 blocker or retained work.
+
+For `Oldest`, also report the automation ID, lease result, selection or resume
+reason, previous and final progress fingerprints, unchanged-run count, and the
+next scheduled action. True no-ops may use a one-line receipt.
 
 ## History
 

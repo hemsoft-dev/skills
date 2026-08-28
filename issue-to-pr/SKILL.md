@@ -1,6 +1,6 @@
 ---
 name: issue-to-pr
-description: V1.4 - Turns one specified GitHub issue into a validated pull request from an isolated worktree, then routes current-head AI review by repository owner. HemSoft uses Cubic and Codex; fhemmerrelias and relias-engineering use Copilot PR Review. Optional merge and cleanup requires direct user approval.
+description: V1.6 - Turns one specified GitHub issue into a validated pull request from an isolated worktree, then routes current-head AI review by repository owner. HemSoft requires connected Codex and uses Cubic when available; fhemmerrelias and relias-engineering use Copilot PR Review. Optional merge and cleanup requires direct user approval.
 disable-model-invocation: true
 compatibility: Requires git, GitHub CLI, network access, and permission to push a branch and create a pull request in the target repository. Optional approved merge and cleanup requires mergepr on PATH.
 hooks:
@@ -114,6 +114,12 @@ tip with `git worktree add -b <branch> <path> origin/<default-branch>`. Use `-b`
 not `-B`, so an unexpected existing branch stops the operation rather than
 resetting it. Verify the new worktree is clean and based on the expected commit.
 
+Bootstrap dependencies inside the isolated worktree. Never junction or symlink
+generated or dependency directories such as `node_modules` or `.aspire` to a
+different checkout: worktree cleanup can remove contents through that shared
+target. If a same-revision generated seed is safe to reuse, copy it, then
+install and validate the worktree-local dependencies normally.
+
 ## 4. Define and implement the smallest complete change
 
 Before editing, state a compact implementation contract:
@@ -158,29 +164,29 @@ one, and mark it ready before entering the automated review loop.
 Match the canonical owner case-insensitively. This routing is deliberate and
 overrides generic vendor discovery:
 
-| Repository owner | Required AI reviewers | Never request as fallback |
-| --- | --- | --- |
-| `HemSoft` | Cubic and connected Codex | Copilot or SFL |
-| `fhemmerrelias` | GitHub Copilot PR Review | Cubic, Codex, or SFL |
-| `relias-engineering` | GitHub Copilot PR Review | Cubic, Codex, or SFL |
-| Any other owner | Reviewers proven by repository policy or live behavior | Any unproven reviewer |
+| Repository owner | Required AI reviewers | Conditional AI reviewers | Never request as fallback |
+| --- | --- | --- | --- |
+| `HemSoft` | Connected Codex | Cubic when an exact-head run is available within its plan and quota | Copilot or SFL |
+| `fhemmerrelias` | GitHub Copilot PR Review | None | Cubic, Codex, or SFL |
+| `relias-engineering` | GitHub Copilot PR Review | None | Cubic, Codex, or SFL |
+| Any other owner | Reviewers proven required by repository policy or live behavior | Reviewers proven optional by repository policy or live behavior | Any unproven reviewer |
 
-For `HemSoft`, let Cubic's automatic exact-head check run. Request connected
-Codex once per unchanged head with:
+For `HemSoft`, let Cubic's automatic exact-head check run when available.
+Request connected Codex once per unchanged head with:
 
 ```text
 gh pr comment <pr> --repo HemSoft/<repo> --body "@codex review"
 ```
 
 Do not post a duplicate Codex trigger when the unchanged head already has a
-request, run, review, or clean signal. Cubic and Codex are both required unless
-the user explicitly waives an unavailable reviewer for that pull request.
+request, run, review, or clean signal. A clean current-head Codex result
+satisfies the required AI-review gate.
 
-On bot-authored pull requests, a manual Cubic trigger may be plan-limited even
-when automatic checks are enabled. Do not count that error as approval. When a
-later base merge safely makes the branch stale, update it from the base and
-wait for Cubic's automatic exact-head check; otherwise report Cubic as
-unavailable and require the normal explicit waiver.
+Treat Cubic as conditional. If an exact-head Cubic run starts, process every
+finding and require its clean result before readiness. If Cubic does not start,
+or live evidence shows plan or quota exhaustion, record it as unavailable and
+continue without a pull-request-specific waiver. Do not invent a manual Cubic
+trigger or manufacture a base update merely to retrigger it.
 
 For `fhemmerrelias` and `relias-engineering`, inspect current review requests
 and reviews, allow repository automation a short opportunity to request
@@ -234,13 +240,15 @@ same current head SHA:
 - repository-required checks pass;
 - the pull request is mergeable or GitHub reports no conflict;
 - no actionable review thread remains unresolved;
-- every owner-routed required reviewer is current-head clean or the user has
-  explicitly waived its documented unavailability for this pull request;
+- every owner-routed required reviewer is current-head clean;
+- every conditional reviewer that ran on the current head is clean, while any
+  unavailable conditional reviewer is documented without blocking readiness;
 - the final local validation is recorded.
 
 Do not equate a comment-only AI review with a formal GitHub approval. A missing
-required reviewer is a blocker to report, not permission to substitute a
-reviewer from another repository family.
+required reviewer is a blocker to report. A missing conditional reviewer is a
+reported limitation, not permission to substitute another repository family's
+reviewer.
 
 ## 9. Closeout
 
@@ -271,7 +279,9 @@ After direct approval:
    identity. Confirm the readiness gate still holds unless the user explicitly
    accepts a named blocker.
 2. Verify `mergepr` resolves on `PATH`.
-3. From the target repository checkout, run:
+3. From the repository's clean primary checkout, run the command below. Do not
+   run it from the pull-request worktree that `mergepr` will remove. Preserve
+   dirty primary-checkout changes before invoking it.
 
    ```powershell
    mergepr <pr-number>

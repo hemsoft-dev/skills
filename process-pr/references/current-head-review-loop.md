@@ -109,6 +109,8 @@ Do not copy trigger comments from another repository. In particular, do not spen
 
 Define the completion signal before requesting the reviewer. Accept formal approval when provided; otherwise require a current-head clean review/check plus zero unresolved actionable threads.
 
+For connected Codex, inspect ordinary PR issue comments in addition to review objects, review threads, checks, and reactions on the trigger comment. A clean exact-head receipt can arrive as a normal PR comment several minutes after the temporary `eyes` reaction disappears. Do not classify that disappearance as a failed review or retry the unchanged head until the PR comments have been refreshed and the original request has had time to settle.
+
 ## Thread Decisions
 
 Use this decision table for each current-head thread:
