@@ -41,6 +41,12 @@ backlog processing.
    preferred local checkout.
 2. Run `gh auth status` and prove that the active identity can read the issue
    and push to the repository. Never infer the correct account from the owner.
+   On Windows, a restricted or sandboxed process may be unable to read GitHub
+   CLI credentials from the system keyring and can falsely report a stored
+   token as invalid. When the host shell reports valid authentication or
+   credential-store access is restricted, repeat the same read-only auth check
+   with host credential-store access before asking the user to reauthenticate.
+   Never print the token.
 3. If the active identity lacks access but another already-authenticated
    identity has it, record the original identity, switch with
    `gh auth switch --user <login>`, verify access, and restore the original

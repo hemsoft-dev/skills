@@ -1,0 +1,4 @@
+interface:
+  display_name: "Minibot"
+  short_description: "Manage the Minibot profiles on mini"
+  default_prompt: "Use $minibot to recap the current minimal bot architecture and inspect its live status."

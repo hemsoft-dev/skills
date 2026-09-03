@@ -1,0 +1,11 @@
+{
+  "skillName": "twg",
+  "target": "global",
+  "installPath": "C:\\Users\\User\\.agents\\skills\\twg-confluence",
+  "binaryPath": "C:\\Users\\User\\AppData\\Local\\Programs\\twg\\bin\\twg.exe",
+  "installedAt": "2026-08-31T18:39:57.430Z",
+  "installedVersion": "1.1.0",
+  "buildProfile": "external",
+  "buildCommit": "b2c3dff1d03a",
+  "builtAt": "2026-07-22T06:48:29.702Z"
+}

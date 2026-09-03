@@ -1,6 +1,6 @@
 ---
 name: merge-pr
-description: V1.1 - Merge one explicitly numbered GitHub pull request, use an admin merge only when a validated PR is blocked by repository policy, run repository cleanup, then send a final Slack notification.
+description: V1.2 - Merge one or more explicitly selected GitHub pull requests from oldest to newest, cleaning the repository between each merge and sending one final Slack notification per successful merge.
 disable-model-invocation: true
 compatibility: Requires git, GitHub CLI, GitHub access, mergepr on PATH, the repo-cleanup skill, and the slack-dm skill.
 hooks:
@@ -25,31 +25,40 @@ hooks:
             Before stopping, if merge-pr was used, verify that History/{YYYY-MM-DD}.md contains an accurate "## HH:MM - {Action Taken}" entry and a one-line summary. Obtain the time with Get-Date -Format "HH:mm". Block completion if the entry is missing.
 ---
 
-# Merge PR
+# Merge PRs
 
-Invoke as `$merge-pr {PR_NUMBER}` from any checkout of the target repository.
+Invoke from any checkout of the target repository. Supported selectors are:
+
+- one PR: `$merge-pr 42`
+- several PRs: `$merge-pr 42 47 51` or `$merge-pr 42,47,51`
+- an inclusive range: `$merge-pr 42-51`
+- a mixture: `$merge-pr 42,47-49 51`
 
 ## Authorization
 
-The invocation directly authorizes merging only the numbered pull request in the current repository. It also authorizes an admin merge when the guarded fallback below permits it and authorizes `repo-cleanup Clean` in that repository. Never reuse this authority for another PR or repository.
+The invocation directly authorizes merging only the expanded set of pull request numbers in the current repository. It also authorizes an admin merge when the guarded fallback below permits it and authorizes `repo-cleanup Clean` after each selected PR. Never reuse this authority for another PR or repository.
 
-Require one positive integer. Verify that it resolves to a pull request, not an issue, before changing anything.
+Accept positive integers, comma-separated values, and inclusive `N-M` ranges. Normalize descending ranges, remove duplicates, and reject malformed or empty selectors. Before changing anything, expand the complete set and verify that every number resolves to a pull request, not an issue. If any selector is invalid, stop without merging any PR.
+
+"Oldest" means the earliest GitHub `createdAt` timestamp among the selected PRs. Sort by `createdAt` ascending, then by PR number ascending when timestamps match. Do not use numeric order as a substitute for creation time.
 
 ## Workflow
 
 1. Resolve the repository from `git remote get-url origin`, the primary checkout from `git worktree list --porcelain`, the active GitHub login, and the default branch. Read the repository's applicable `AGENTS.md` instructions.
-2. Read the PR with GitHub CLI. Record its URL, state, draft state, base branch, head branch, exact head SHA, mergeability, merge state, reviews, review threads, and checks.
-3. Stop before merging when the PR is closed without merge, is a draft, has conflicts, has failing or pending required checks, lacks a repository-required current-head review, or changed head after validation. Do not invent review requirements the repository does not have.
-4. From the clean primary checkout, run `mergepr {PR_NUMBER}`. Do not run it from a linked PR worktree that it may remove.
-5. If `mergepr` returns an error, re-read the PR before deciding what happened:
+2. Expand and validate the full selector set. Read each PR's `number`, `createdAt`, title, URL, state, draft state, base branch, head branch, and head SHA. Sort the selected PRs by `createdAt`, then number. Show the resolved order before the first merge.
+3. Process each PR in that fixed order. Refresh its live state, mergeability, merge state, reviews, review threads, checks, and exact head SHA immediately before deciding whether it can merge.
+4. Mark the current PR `BLOCKED` without merging when it is closed without merge, is a draft, has conflicts, has failing or pending required checks, lacks a repository-required current-head review, or changed head after validation. Do not invent review requirements the repository does not have. Continue to step 7 so cleanup runs before the next selected PR.
+5. From the clean primary checkout, run `mergepr {PR_NUMBER}`. Do not run it from a linked PR worktree that it may remove.
+6. If `mergepr` returns an error, re-read the PR before deciding what happened:
    - If GitHub reports it merged, continue to cleanup.
-   - If it remains open and otherwise satisfies step 3, use `gh pr merge {PR_NUMBER} --squash --delete-branch --admin` only when the normal merge was refused by branch protection, merge queue policy, or an equivalent administrative gate.
+   - If it remains open and otherwise satisfies step 4, use `gh pr merge {PR_NUMBER} --squash --delete-branch --admin` only when the normal merge was refused by branch protection, merge queue policy, or an equivalent administrative gate.
    - Never use `--admin` to override conflicts, draft state, test failures, pending required checks, missing required current-head review, or a changed head.
-6. Re-read the PR and require `MERGED` before reporting merge success. Record whether the admin fallback ran and capture the merge commit SHA.
-7. After the merge attempt, invoke the `repo-cleanup` skill in `Clean` mode from the primary checkout. If the merge failed, classify the open PR branch and worktree as `KEEP`; cleanup must preserve them.
-8. Prove the final repository state. Report the PR URL and state, exact reviewed head, merge commit, merge method, admin-fallback use, cleanup actions, retained work, primary branch cleanliness, `HEAD == origin/{DEFAULT_BRANCH}`, and ahead/behind counts.
-9. If GitHub reports `MERGED`, invoke the `slack-dm` skill at `../slack-dm/SKILL.md`. Send Franz one `merged` DM with the canonical `OWNER/REPO` project, `PR #<number> — <exact current title> — merged` outcome, PR URL, merge commit, merge method, and cleanup result. This is the final workflow phase before the user-facing response. Do not send a merged notification when the PR remains open or the merge failed.
+7. Re-read the PR. Record `MERGED`, `BLOCKED`, `SKIPPED_ALREADY_MERGED`, or `FAILED`, whether the admin fallback ran, and the merge commit SHA when present. A PR already merged before this invocation is a no-op and must not trigger a duplicate Slack notification.
+8. Invoke the `repo-cleanup` skill in `Clean` mode from the primary checkout after every selected PR, including a blocked, failed, or already-merged item. If the current PR remains open, classify its branch and worktree as `KEEP`. Cleanup must preserve unrelated or uncertain work.
+9. Do not start the next PR until cleanup proves the primary checkout is clean on the default branch and matches `origin/{DEFAULT_BRANCH}`. If cleanup cannot reach that safe state, stop the batch and report the remaining PRs as `NOT_ATTEMPTED`.
+10. For each PR newly proven `MERGED`, invoke the `slack-dm` skill at `../slack-dm/SKILL.md` after cleanup. Send Franz one `merged` DM with the canonical `OWNER/REPO` project, `PR #<number> - <exact current title> - merged` outcome, PR URL, merge commit, merge method, and cleanup result. Do not send a merged notification for blocked, failed, already-merged, or not-attempted items.
+11. After the last PR, prove the final repository state. Report the ordered input set and one result per PR, including URL, exact reviewed head, state, merge commit, merge method, admin-fallback use, cleanup result, and retained work. Also report primary branch cleanliness, `HEAD == origin/{DEFAULT_BRANCH}`, and ahead/behind counts.
 
 ## History
 
-After using this skill, append `## HH:MM - {Action Taken}` and a one-line summary to `History/{YYYY-MM-DD}.md`. Get the time from `Get-Date -Format "HH:mm"`, never from an estimate.
+After using or modifying this skill, append `## HH:MM - {Action Taken}` and a one-line summary to `History/{YYYY-MM-DD}.md`. State whether a retrospective found a reusable improvement. Get the time from `Get-Date -Format "HH:mm"`, never from an estimate.

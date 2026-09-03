@@ -1,12 +1,12 @@
 ---
 name: fleet
-description: "V1.9 - Commands: Connect, Run, Send, Retrieve. Operate the private Tailscale fleet across laptop, home, air, mini, iphone, and ipad."
+description: "V1.10 - Commands: Connect, Run, Send, Retrieve. Operate the private Tailscale fleet across laptop, home, air, mini, grokbot, iphone, and ipad."
 disable-model-invocation: true
 ---
 
 # Fleet
 
-Use the SSH aliases `laptop`, `home`, `air`, and `mini`. Use `iphone` and
+Use the SSH aliases `laptop`, `home`, `air`, `mini`, and `grokbot`. Use `iphone` and
 `ipad` as the friendly names for the mobile Tailscale devices. Their MagicDNS
 names are `iphone` and `ipad163`, respectively. Mobile devices are not SSH
 targets. Verify an alias from its source computer before declaring that
@@ -15,7 +15,7 @@ direction ready.
 ## Default behavior
 
 When the user invokes this skill without specifying a command, identify the
-current machine, report the six fleet devices and their live Tailscale status,
+current machine, report the seven fleet devices and their live Tailscale status,
 then ask which machine and operation to use. Do not start interactive SSH or
 transfer files without a specific destination and action.
 
@@ -27,6 +27,7 @@ transfer files without a specific destination and action.
 | `home` | Windows | `User` | `desktop-phubt5b` | `100.101.122.39` | `C:\Users\User` |
 | `air` | macOS | `home` | `franzs-macbook-air` | `100.69.182.27` | `/Users/home` |
 | `mini` | Ubuntu 26.04 | `franz` | `mini` | `100.97.164.73` | `/home/franz` |
+| `grokbot` | Debian 13 | `box` | `grokbot` | `100.112.74.104` | `/home/box` |
 | `iphone` | iOS | N/A | `iphone` | `100.88.39.97` | N/A |
 | `ipad` | iPadOS | N/A | `ipad163` | `100.64.238.123` | N/A |
 
@@ -35,12 +36,12 @@ as diagnostics and fallbacks, not user-facing names.
 
 ## Connect and run commands
 
-- Connect interactively with `ssh laptop`, `ssh home`, `ssh air`, or `ssh mini`.
+- Connect interactively with `ssh laptop`, `ssh home`, `ssh air`, `ssh mini`, or `ssh grokbot`.
 - Test noninteractively with `ssh -o BatchMode=yes -o ConnectTimeout=10 <alias> "echo connected"`.
 - Do not run SSH commands against `iphone` or `ipad`; they are Tailscale devices and Taildrop targets only.
 - Invoke PowerShell explicitly for nontrivial commands on `laptop` or `home`.
-- Use the normal remote shell on `air` or `mini`.
-- `mini` uses Tailscale SSH. The tailnet's self-device SSH rule uses
+- Use the normal remote shell on `air`, `mini`, or `grokbot`.
+- `mini` and `grokbot` use Tailscale SSH. The tailnet's self-device SSH rule uses
   `accept`, so automation should not require an additional web check.
 - Never disable SSH host-key checking. If a host-key mismatch appears, stop and report it.
 - Use SSH for shells and remote commands only. Do not use FTP, SCP, or SFTP for file sharing.
@@ -62,6 +63,7 @@ Taildrop target names differ from the friendly aliases:
 | `home` | `desktop-phubt5b` |
 | `air` | `franzs-macbook-air` |
 | `mini` | `mini` |
+| `grokbot` | `grokbot` |
 | `iphone` | `iphone` |
 | `ipad` | `ipad163` |
 
@@ -79,12 +81,14 @@ TailscaleShare/
 │   ├── from-laptop/
 │   ├── from-home/
 │   ├── from-air/
-│   └── from-mini/
+│   ├── from-mini/
+│   └── from-grokbot/
 └── Outbox/
     ├── to-laptop/
     ├── to-home/
     ├── to-air/
-    └── to-mini/
+    ├── to-mini/
+    └── to-grokbot/
 ```
 
 Use these meanings consistently:
@@ -110,18 +114,20 @@ tailscale file cp --name "from-<sender>--<filename>" "<local-file>" <recipient-t
 Desktop pickup locations:
 
 ```text
-laptop: C:\Users\User\Downloads
-home:   C:\Users\User\Downloads
-air:    /Users/home/Downloads
-mini:   /home/franz/Downloads
+laptop:  C:\Users\User\Downloads
+home:    C:\Users\User\Downloads
+air:     /Users/home/Downloads
+mini:    /home/franz/Downloads
+grokbot: /home/box/Downloads
 ```
 
-On `mini`, receive its CLI Taildrop inbox with
-`tailscale file get --conflict=rename /home/franz/Downloads`. Do not run
-`tailscale file get` routinely on the desktop clients.
+On `mini` and `grokbot`, receive the CLI Taildrop inbox with
+`tailscale file get --conflict=rename` into that machine's Downloads directory.
+Do not run `tailscale file get` routinely on the desktop clients.
 
-`mini` is configured with Tailscale operator `franz`. After rebuilding
-a Linux host, restore non-root Taildrop access once with:
+`mini` is configured with Tailscale operator `franz`. `grokbot` is configured
+with Tailscale operator `box`. After rebuilding a Linux host, restore non-root
+Taildrop access once with:
 
 ```bash
 sudo tailscale set --operator=$USER
@@ -147,6 +153,7 @@ Use these native pickup paths when reporting completion:
 - home: `C:\Users\User\TailscaleShare\Inbox\from-<sender>\`
 - air: `/Users/home/TailscaleShare/Inbox/from-<sender>/`
 - mini: `/home/franz/TailscaleShare/Inbox/from-<sender>/`
+- grokbot: `/home/box/TailscaleShare/Inbox/from-<sender>/`
 
 Taildrop is the file-sharing transport. Do not substitute FTP, SCP, SFTP,
 public links, or email attachments unless the user explicitly asks. Do not
