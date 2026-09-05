@@ -1,8 +1,8 @@
 ---
 name: repo-cleanup
-description: "V1.3 - Commands: Audit, Clean. Explicit invocation defaults to repository-wide Clean, including intended work unrelated to the current task; preserve, validate, and integrate uncommitted, unpushed, stashed, and branch-only work onto main before removing proven-obsolete state. Automatic use defaults to Audit."
+description: "V1.4 - Commands: Audit, Clean. Runs a deterministic PowerShell fast path to commit all pending main-checkout changes, synchronize, push, and remove merged unused local branches; handles retained work separately. Explicit invocation means Clean, automatic use means Audit."
 disable-model-invocation: false
-compatibility: Requires git. Remote ownership and pull request checks require GitHub CLI, GitHub access, and permission to fetch or delete refs.
+compatibility: Requires PowerShell 7 and git. Automatic publication targets HemSoft GitHub repositories with main as the default branch; exceptional PR checks require GitHub CLI.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -30,191 +30,154 @@ hooks:
 
 # Repository cleanup
 
-Leave one repository on clean, current `main` without losing unfinished work. Inventory first, integrate intended work, remove only proven obsolete state, and report anything retained.
+Use `scripts/repo-cleanup.ps1` first. Routine cleanup should be one script run,
+not an agent rebuilding the Git workflow command by command.
 
 ## Commands
 
-- `Audit` inventories and classifies state. It may fetch remote refs, but it does not commit, push, delete, drop, or remove anything.
-- `Clean` performs the full workflow. A direct `$repo-cleanup` invocation without a mode means `Clean`. Also use it when the user asks to clean, tidy, synchronize, return to `main`, or clean up after a merge.
+- A direct `$repo-cleanup` invocation means `Clean` unless Franz asks for `Audit`.
+- Automatic loading because work finished means `Audit` unless the current
+  workflow or user already authorizes cleanup.
+- `Deep audit` additionally inspects recovery objects. It is not a prerequisite
+  for ordinary cleanup.
 
-Automatic skill loading is not deletion permission. If the skill triggers only because work finished, run `Audit`. Approval to merge one pull request alone covers that pull request's artifacts; a direct cleanup request supplies the broader authority below.
+## Authority
 
-## Clean authority and scope
+Franz's 2026-09-05 instruction authorizes repository-wide cleanup, including
+intended work from earlier tasks and other sessions. His follow-up explicitly
+requests a deterministic script that commits and pushes all uncommitted changes.
+For this workflow, one commit containing all pending main-checkout changes is
+intentional. Do not split it by task, create preservation worktrees, or ask again
+solely because files are unrelated, include skill instructions, or were discovered
+later. Honor explicit exclusions and active ownership conflicts.
 
-Franz explicitly requested repository-wide cleanup on 2026-09-05, including work unrelated to the current task. An explicit `Clean` request authorizes the following for the resolved repository:
+For HemSoft repositories, an explicit Clean authorizes staging all non-ignored
+changes, running validation, committing, synchronizing and pushing unprotected
+main, and deleting proven-obsolete local state. Follow the PR workflow for shared
+repositories or protected branches. Never bypass hooks or server protections.
 
-- Inspect all current files, commits, branches, worktrees, stashes, and recovery objects. Include intended changes from earlier tasks and sessions, including source code, `AGENTS.md`, skill instructions, configuration, documentation, and history files.
-- Preserve and validate that work, split independent changes into coherent commits, and integrate it onto `main`. For `HemSoft`, this includes committing and pushing directly to unprotected `main` when validation passes and the push is fast-forward safe. Follow the repository's pull-request process when direct updates are prohibited.
-- Make verified backups or named preservation branches/worktrees and restore the primary copies only after proving that no work will be lost and the source has not changed since the snapshot. This permits clearing preserved changes from the primary checkout to run an already-authorized merge.
-- Remove only state proven obsolete by the checks below, then return the primary checkout to clean parity with `origin/main`.
+The script does not inspect file contents for secrets or infer whether another
+agent is still editing. Before running it, read repository instructions, inspect
+the pending diff once, and resolve any actual secret, generated-file, explicit
+exclusion, or active-edit problem. Ordinary intended changes need no extra gate.
 
-Do not ask again merely because a file is outside the original issue, a different session created it, or its exact path became known during the audit. A new direct cleanup request establishes a fresh repository-wide scope; an earlier task baseline does not exclude newly discovered intended work. Honor explicit user exclusions and still-active leave-in-place instructions.
+## Fast path
 
-Scope is broad; disposal is not. Do not publish secrets, combine unexplained changes, overwrite active edits, discard unique work, bypass protections, or treat an unknown open pull request as approved for merge. Preserve unfinished or uncertain work with its owner, reason, and next step. Ask only for a concrete unresolved decision, ownership conflict, or action outside this authority.
-
-When a runtime requests authorization context, cite the user's explicit repository-wide cleanup request and name the audited actions and targets. Skill wording does not override runtime controls. If an action is rejected, complete unaffected work, report the exact execution block, and request only the additional approval the rejection requires.
-
-If `mergepr` already cleaned the approved pull request, verify its result instead of repeating the deletion.
-
-## Safety rules
-
-- Work on one resolved repository root. Read its `AGENTS.md` and repository instructions first.
-- This skill targets `main`. Confirm that `origin/main` exists and that GitHub reports `main` as the default branch. If either check fails, stop and ask whether to use the actual default branch.
-- Treat uncommitted files, untracked files, unpushed commits, stashes, reflogs, and unreachable commits as work until evidence proves otherwise.
-- Do not use `git reset --hard`, `git clean`, `git stash clear`, bulk branch deletion, force-push, or recursive filesystem deletion.
-- Never delete the primary checkout. Never remove a dirty worktree or a branch checked out in any worktree.
-- Run destructive commands one item at a time. Record the exact path or ref and expected SHA before each command, then verify the result.
-- Do not bypass branch protection or repository-required validation. Do not commit secrets, credentials, generated output, ignored dependencies, or unexplained changes merely to make the tree clean. Intended work unrelated to the original task remains in scope for `Clean`.
-- Preserve uncertain work and report the blocker. A smaller cleanup with no data loss is a valid outcome.
-
-## Resolve repository family and identity
-
-Determine the repository from `origin`, not the directory name. Record the GitHub owner, repository, authenticated login, configured Git author name and email, and default branch.
-
-Use these policies:
-
-| Repository owner | Policy |
-| --- | --- |
-| `HemSoft` | Franz is the sole routine contributor. Local branches and remote branches proven to be his are cleanup candidates when no ongoing work remains. Preserve any remote branch that is not proven to be his. An explicit `Clean` request also authorizes immediate removal of proven-obsolete unreachable objects after the concurrency checks below pass. |
-| `relias-engineering` | Treat the repository as shared. Never delete another person's remote branch. Delete Franz's remote branch only when its pull request merged, the remote tip still matches the recorded pull request head, and no later work exists. Route new work through the repository's pull request process instead of pushing directly to `main`. |
-| Any other owner | Preserve remote branches unless the user supplies an ownership and deletion policy. |
-
-Prove branch ownership with an authenticated GitHub login plus at least one strong signal: the related pull request author and head ref, a local branch and reflog tied to the work, or a direct user statement. Commit author, branch-name style, or recency alone is not proof.
-
-## Inventory before changing anything
-
-Fetch current refs, then capture the baseline:
+Record any required skill history before running cleanup. Resolve the checkout
+on `main` using `git worktree list --porcelain` if the current checkout is on a
+feature branch. Run from that main checkout:
 
 ```powershell
-git rev-parse --show-toplevel
-git remote -v
-git fetch origin --tags
-git remote prune --dry-run origin
-git status --porcelain=v2 --branch
-git branch -vv
-git for-each-ref --sort=-committerdate --format='%(refname:short)%09%(objectname)%09%(upstream:short)%09%(upstream:track)%09%(committerdate:iso8601)' refs/heads refs/remotes/origin
-git worktree list --porcelain
-git stash list --format='%gd%x09%H%x09%ci%x09%gs'
-git reflog --all --date=iso
-git fsck --full --no-reflogs --unreachable
-git fsck --full --unreachable
-gh auth status
-gh api user --jq .login
-gh repo view --json nameWithOwner,defaultBranchRef
+& "$HOME/.agents/skills/repo-cleanup/scripts/repo-cleanup.ps1" -RepoPath .
 ```
 
-For every worktree, run `git -C {WORKTREE_PATH} status --porcelain=v2 --branch`. For every local and remote feature branch, record:
-
-- tip SHA, upstream, worktree path, and ahead/behind counts from `git rev-list --left-right --count origin/main...{BRANCH}`;
-- commits and file changes absent from `origin/main`;
-- whether the same patch is already on `origin/main`, including squash merges;
-- related pull request state, author, base, head SHA, merge commit, and current head ref;
-- related open issue, recent push or review activity, stash base, or other evidence of ongoing work.
-
-Inspect each stash with `git stash show --stat --include-untracked {STASH}` and `git stash show -p --include-untracked {STASH}`. In PowerShell, quote literal selectors such as `'stash@{0}'`; otherwise PowerShell can split the selector into multiple arguments. Refresh the stash list after every drop because stash indexes move.
-
-For squash-merge cases, compare patches with `git cherry origin/main {BRANCH}` and, when needed, stable patch IDs. Commit messages and matching filenames are not proof.
-
-Compare the commit lines from both `git fsck` runs. A commit reported only with `--no-reflogs` is still protected by a reflog. A commit reported by both runs is truly unreachable and needs manual relevance review. Ignore blob and tree noise unless it belongs to a commit being recovered.
-
-Classify every item as `INTEGRATE`, `KEEP`, `DELETE`, or `BLOCKED`, with evidence. Age alone never makes an item deletable.
-
-## Decide whether work is ongoing
-
-Keep an item when any of these apply:
-
-- its worktree is dirty or another process or agent may be using it;
-- it has an open or draft pull request, an open linked issue, pending review, or active checks;
-- it contains commits or a patch not present on `origin/main`;
-- it is ahead of or has diverged from its upstream and its purpose is unresolved;
-- a stash, reflog entry, or unreachable commit contains unique work;
-- remote branch ownership is unknown or belongs to someone else;
-- a closed, unmerged pull request still contains work whose disposition is unclear.
-
-A local branch is a deletion candidate when it has no worktree, no dirty state, no unique work, and either Git ancestry proves it merged into `origin/main` or a merged pull request proves its exact recorded head was integrated with no later commits.
-
-A remote branch is a deletion candidate only when family policy permits it, ownership is proven, no open work depends on it, and a fresh remote SHA still matches the SHA that was audited.
-
-## Preserve and integrate work
-
-Handle each independent change separately. Do not sweep unrelated files into one cleanup commit.
-
-A dirty file or an unmerged commit is an integration candidate, not an automatic reason to stop. Inspect its purpose and ownership first. Keep active or uncertain work preserved until it can be integrated safely.
-
-1. Inspect staged, unstaged, and untracked files. Separate intended source changes from generated files, dependencies, caches, logs, build output, and secrets.
-2. Preserve dirty work before switching branches. Use its existing branch when the purpose is clear. Otherwise create an intentionally named preservation branch and isolated worktree.
-3. Inspect stashes without popping them. Apply a relevant stash in an isolated worktree based on its original base, resolve it, validate it, and commit it. Drop the stash only after the resulting commit is safely integrated.
-4. Recover relevant unreachable commits onto a named branch before any pruning.
-5. Run the repository's declared quality gates for each change. Inspect hook-created changes and final Git identity before committing.
-6. For `HemSoft`, the explicit repository-wide `Clean` request supplies commit-and-push authority for the audited intended work, including work unrelated to the current task. Verify that repository policy permits direct `main` updates, validation passes, and the update is fast-forward safe. Otherwise use the repository's pull request workflow.
-7. For `relias-engineering`, push the feature branch and use the repository's pull request workflow. Do not push new work directly to `main`.
-8. Do not call work integrated until it is present on `origin/main`. An open pull request or preserved branch is `KEEP`, not completed cleanup. Report any approval or review needed to finish it.
-
-Never drop the last copy of work. Before deleting its source ref, prove the exact commits or equivalent patch are on `origin/main`, or preserve them under a named branch approved by the user.
-
-## Remove obsolete state
-
-Re-fetch immediately before deletion and compare the live SHA with the audited SHA. If it changed, stop and reclassify it.
-
-Use this order for each item:
-
-1. Remove a clean, non-primary worktree with `git worktree remove {EXACT_PATH}`.
-2. Verify the worktree registration disappeared. If Windows leaves ignored files behind, verify the exact directory is the former worktree, contains no `.git` metadata or unique files, and is outside the primary checkout. Move only that directory to the Recycle Bin.
-3. Delete the local branch with `git branch -d {BRANCH}`. Use `-D` only when a squash-merged pull request or patch-equivalence proof satisfies every deletion condition and the cleanup request authorizes it.
-4. Delete an allowed remote branch with `git push --force-with-lease="refs/heads/{BRANCH}:{EXPECTED_SHA}" origin ":refs/heads/{BRANCH}"`, one ref at a time. Never delete another author's remote branch.
-5. Drop one stash only after its content is on `origin/main` or exact comparison proves it is a duplicate. Record its object ID first.
-6. Run `git worktree prune --dry-run` and `git remote prune --dry-run origin`. Run the corresponding commands without `--dry-run` only after inspecting what they will remove.
-
-For a `HemSoft` `Clean`, remove unreachable recovery objects during the same cleanup when every unreachable commit is classified `DELETE`, `main` is safely on `origin/main`, no Git process is writing objects, and no Git lock file exists. Git's normal expiry depends on time limits and garbage-collection triggers, so waiting for it is not proof of cleanup.
-
-Run the dry-runs first:
+Optional arguments:
 
 ```powershell
-git prune --dry-run --expire=now
+# Read-only local inventory; does not fetch, stage, commit, or delete.
+& "$HOME/.agents/skills/repo-cleanup/scripts/repo-cleanup.ps1" -RepoPath . -Audit
+
+# Same read-only behavior through PowerShell's standard preview switch.
+& "$HOME/.agents/skills/repo-cleanup/scripts/repo-cleanup.ps1" -RepoPath . -WhatIf
+
+# Supply a commit message and a repository validation script when needed.
+& "$HOME/.agents/skills/repo-cleanup/scripts/repo-cleanup.ps1" -RepoPath . `
+  -Message 'chore: publish pending repository work' `
+  -ValidationScript ./validate.ps1
 ```
 
-For each audited `reflog-only` commit, locate every exact reflog selector that names it with `git reflog show --all --format='%gD%x09%H%x09%gs'`. Delete only those selectors with `git reflog delete --dry-run --rewrite '{REF}@{INDEX}'` first. Process numeric indexes from highest to lowest within each ref so later selectors do not shift before use. Do not use a repository-wide `git reflog expire --expire-unreachable=now --all` as a shortcut because it may remove unrelated recovery history.
+The script performs these steps in order:
 
-If the exact reflog deletions and prune dry-run contain only audited obsolete work, run each approved `git reflog delete --rewrite '{REF}@{INDEX}'`, then run:
+1. Check main, origin ownership/destination, unfinished Git operations, and an
+   exclusive guard against another cleanup-script invocation.
+2. Verify the remote default branch and fetch once with stale remote refs pruned.
+   Stop on pre-existing divergence before staging files.
+3. Stage every non-ignored addition, modification, and deletion from the root.
+   Check the staged diff and commit once when needed, with normal commit hooks.
+4. Fast-forward a clean checkout behind origin. If a dirty checkout was behind,
+   replay only its new cleanup commit; abort a conflict and preserve that commit.
+5. Run `-ValidationScript`, when provided, against the final tree before pushing.
+   Use it for required gates not already covered by commit hooks. It runs under
+   PowerShell 7 with the repository as its working directory and must exit nonzero
+   or throw on failure. The script does not discover or invent test commands.
+6. Push main without force and verify its SHA against the live remote.
+7. Remove local branches whose exact tips are ancestors of published main and
+   which are not checked out anywhere. Use compare-and-delete against each tip.
+8. Return one receipt with SHAs, commit, removed/retained branches, worktrees,
+   stashes, remote refs, and elapsed seconds. A clean rerun creates no commit.
+
+`Complete` means the main checkout is clean and published, with no retained
+feature refs, linked worktrees, or stashes. `PublishedWithRetainedWork` means main
+is published but the listed items still need disposition. A terminating error
+means publication or verification did not complete; read the concrete error.
+No automatic retry, force push, hook bypass, or stash/drop cycle is performed.
+
+Trust a successful receipt for the checks it covers. Do not repeat fetches,
+identity queries, Git inventories, or quality gates without a new change or
+failure. Do not run `fsck`, expire reflogs, or force garbage collection on every
+cleanup. Git's normal recovery retention is intentional and does not make a
+routine cleanup incomplete.
+
+`-LocalRemote` is only for offline tests with a local bare origin. It cannot
+authorize a network origin or another GitHub owner.
+
+## Retained work and errors
+
+Handle only the items the receipt or error identifies, then rerun the fast path
+once if needed. The script preserves linked worktrees, unique branches, stashes,
+remote feature branches, and recovery objects. It never merges an unknown PR.
+
+- For dirty worktrees, inspect ownership and integrate intended changes onto main
+  using a clean patch application or the repository PR workflow. Verify content
+  on origin/main before clearing the original copy. Preserve active or uncertain
+  edits with a named owner, reason, and next step.
+- For branch-only commits, check ancestry or patch equivalence and related PR
+  state. Integrate intended work; do not assume a squash-merged branch is obsolete
+  from its name or age. Merge authority must cover the exact PR.
+- For stashes, inspect each patch before applying it in its original context.
+  Drop the exact current stash only after its work is verified on origin/main.
+- Remove a worktree only when it is clean, inactive, non-primary, and its content
+  is integrated. Record its resolved absolute path and expected tip; use
+  `git worktree remove` without force. Never recursively delete a worktree.
+- Remove a remote feature branch only after ownership, merged PR, absence of later
+  work, and fresh exact tip are verified. Use a lease against that tip. Preserve
+  another contributor's branches. For other owners, use their repository policy.
+- On validation or push failure, fix the actual problem and rerun. Local commits
+  and files remain recoverable. Do not hide a conflict, rejected push, or failed
+  hook to obtain a clean status.
+
+Never use `git reset --hard`, `git clean`, bulk stash deletion, force push, or
+unverified deletion. Do not overwrite active work. Runtime controls still apply;
+report an actual rejection with its reason and complete unaffected work.
+
+## Deep audit
+
+Only when explicitly requested, inspect both `git fsck --full --unreachable` and
+`git fsck --full --no-reflogs --unreachable`. Recover unique commits onto named
+branches. Classify every unreachable commit before removing anything.
+
+For explicit HemSoft deep cleanup, immediate pruning is permitted only after all
+unreachable commits are proven obsolete, main is published, and no Git writer or
+lock exists. Dry-run `git prune --dry-run --expire=now`. If obsolete commits are
+reflog-only, dry-run and remove their exact reflog selectors in descending numeric
+index order within each ref. Do not globally expire reflogs. Then, and only then,
+run `git gc --prune=now` and verify both fsck outputs. Count commits, reflog records,
+and Git objects separately. Shared repositories require their own authorization.
+
+## Verification of this helper
 
 ```powershell
-git gc --prune=now
+Invoke-Pester -Path "$HOME/.agents/skills/repo-cleanup/tests/RepoCleanup.Tests.ps1" -Output Detailed
 ```
 
-Immediate pruning is irreversible and Git warns that `--prune=now` can corrupt a repository when another process is writing objects. Do not run it while a commit, fetch, receive, index-pack, maintenance job, or another object-writing Git command is active. Do not accelerate reflog or object expiry in `relias-engineering`, another shared repository, or any repository with uncertain work unless the user separately authorizes that exact cleanup after reviewing the audit.
-
-## Final proof
-
-Record this run's history before the final integration and cleanliness check, so logging does not leave new uncommitted files after cleanup.
-
-Return the primary checkout to `main`, then verify live state:
-
-```powershell
-git switch main
-git pull --ff-only origin main
-git status --porcelain=v2 --branch
-git rev-parse HEAD
-git rev-parse origin/main
-git rev-list --left-right --count main...origin/main
-git branch -vv
-git worktree list --porcelain
-git stash list
-git ls-remote --heads origin
-git fsck --full --no-reflogs --unreachable
-git fsck --full --unreachable
-git count-objects -vH
-```
-
-Report:
-
-- repository, family, GitHub login, Git author, and exact `main` and `origin/main` SHAs;
-- every uncommitted file, unpushed commit, stash, local branch, remote branch, worktree, and unreachable commit found;
-- the `INTEGRATE`, `KEEP`, `DELETE`, or `BLOCKED` decision and evidence for each;
-- validation, commits, pushes, pull requests, deletions, and retained work;
-- final cleanliness, ahead/behind count, remaining stashes, worktrees, local branches, and remote branches.
-
-Cleanup is complete when `main` is clean and matches `origin/main`, all intended work is on `origin/main` or explicitly retained with a named owner and next step, no proven-obsolete local state remains, and every remaining remote branch has evidence of ongoing work or a documented ownership precaution. A completed `HemSoft` `Clean` also has no audited-obsolete commit reported by either final `git fsck` command.
+The tests use isolated local bare remotes and cover all-change publication,
+idempotence, previews, hook/push failures, synchronization, conflicts, divergence,
+and preservation of worktrees, unique branches, and stashes.
 
 ## History
 
-After using this skill, append `## HH:MM - {Action Taken}` plus a one-line summary to `History/{YYYY-MM-DD}.md` in this skill folder. Note whether a retrospective found a reusable improvement. Get the timestamp from `Get-Date -Format "HH:mm"`, never from an estimate.
+Before the final cleanup run, append `## HH:MM - {Action Taken}` and a truthful
+one-line summary to `History/{YYYY-MM-DD}.md`. Get the timestamp from `Get-Date
+-Format "HH:mm"`. Record whether the run revealed a reusable improvement. Include
+planned verification as planned, then report the actual result from the receipt;
+do not add a redundant history-only commit merely to restate successful checks.

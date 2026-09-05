@@ -42,6 +42,13 @@ jobs:
           if ($hasIssues) { exit 1 }
           Write-Host "✓ All PowerShell files passed" -ForegroundColor Green
 
+      - name: Test repository cleanup with local Git remotes
+        shell: pwsh
+        run: |
+          Install-Module -Name Pester -MinimumVersion 5.7.1 -Force -Scope CurrentUser
+          Import-Module Pester -MinimumVersion 5.7.1 -Force
+          Invoke-Pester -Path repo-cleanup/tests/RepoCleanup.Tests.ps1 -CI -Output Detailed
+
   markdown:
     name: Markdown Quality
     runs-on: ubuntu-latest
