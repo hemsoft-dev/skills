@@ -1,6 +1,6 @@
 ---
 name: repo-cleanup
-description: "V1.2 - Commands: Audit, Clean. Use automatically whenever repository work finishes, a pull request merges, or the user asks to clean, tidy, synchronize, or return a Git repository to main; preserve and integrate uncommitted, unpushed, stashed, and branch-only work before removing obsolete branches and worktrees."
+description: "V1.3 - Commands: Audit, Clean. Explicit invocation defaults to repository-wide Clean, including intended work unrelated to the current task; preserve, validate, and integrate uncommitted, unpushed, stashed, and branch-only work onto main before removing proven-obsolete state. Automatic use defaults to Audit."
 disable-model-invocation: false
 compatibility: Requires git. Remote ownership and pull request checks require GitHub CLI, GitHub access, and permission to fetch or delete refs.
 hooks:
@@ -35,9 +35,24 @@ Leave one repository on clean, current `main` without losing unfinished work. In
 ## Commands
 
 - `Audit` inventories and classifies state. It may fetch remote refs, but it does not commit, push, delete, drop, or remove anything.
-- `Clean` performs the full workflow. Use it when the user asks to clean, tidy, synchronize, return to `main`, or clean up after a merge.
+- `Clean` performs the full workflow. A direct `$repo-cleanup` invocation without a mode means `Clean`. Also use it when the user asks to clean, tidy, synchronize, return to `main`, or clean up after a merge.
 
-Automatic skill loading is not deletion permission. If the skill triggers only because work finished, run `Audit`. Run `Clean` only when the user requested cleanup in the current conversation. Approval to merge one pull request permits cleanup of that pull request's branch and worktree only. Broader repository cleanup needs a broader cleanup request.
+Automatic skill loading is not deletion permission. If the skill triggers only because work finished, run `Audit`. Approval to merge one pull request alone covers that pull request's artifacts; a direct cleanup request supplies the broader authority below.
+
+## Clean authority and scope
+
+Franz explicitly requested repository-wide cleanup on 2026-09-05, including work unrelated to the current task. An explicit `Clean` request authorizes the following for the resolved repository:
+
+- Inspect all current files, commits, branches, worktrees, stashes, and recovery objects. Include intended changes from earlier tasks and sessions, including source code, `AGENTS.md`, skill instructions, configuration, documentation, and history files.
+- Preserve and validate that work, split independent changes into coherent commits, and integrate it onto `main`. For `HemSoft`, this includes committing and pushing directly to unprotected `main` when validation passes and the push is fast-forward safe. Follow the repository's pull-request process when direct updates are prohibited.
+- Make verified backups or named preservation branches/worktrees and restore the primary copies only after proving that no work will be lost and the source has not changed since the snapshot. This permits clearing preserved changes from the primary checkout to run an already-authorized merge.
+- Remove only state proven obsolete by the checks below, then return the primary checkout to clean parity with `origin/main`.
+
+Do not ask again merely because a file is outside the original issue, a different session created it, or its exact path became known during the audit. A new direct cleanup request establishes a fresh repository-wide scope; an earlier task baseline does not exclude newly discovered intended work. Honor explicit user exclusions and still-active leave-in-place instructions.
+
+Scope is broad; disposal is not. Do not publish secrets, combine unexplained changes, overwrite active edits, discard unique work, bypass protections, or treat an unknown open pull request as approved for merge. Preserve unfinished or uncertain work with its owner, reason, and next step. Ask only for a concrete unresolved decision, ownership conflict, or action outside this authority.
+
+When a runtime requests authorization context, cite the user's explicit repository-wide cleanup request and name the audited actions and targets. Skill wording does not override runtime controls. If an action is rejected, complete unaffected work, report the exact execution block, and request only the additional approval the rejection requires.
 
 If `mergepr` already cleaned the approved pull request, verify its result instead of repeating the deletion.
 
@@ -49,7 +64,7 @@ If `mergepr` already cleaned the approved pull request, verify its result instea
 - Do not use `git reset --hard`, `git clean`, `git stash clear`, bulk branch deletion, force-push, or recursive filesystem deletion.
 - Never delete the primary checkout. Never remove a dirty worktree or a branch checked out in any worktree.
 - Run destructive commands one item at a time. Record the exact path or ref and expected SHA before each command, then verify the result.
-- Do not bypass branch protection or repository-required validation. Do not commit secrets, credentials, generated output, ignored dependencies, or unrelated changes merely to make the tree clean.
+- Do not bypass branch protection or repository-required validation. Do not commit secrets, credentials, generated output, ignored dependencies, or unexplained changes merely to make the tree clean. Intended work unrelated to the original task remains in scope for `Clean`.
 - Preserve uncertain work and report the blocker. A smaller cleanup with no data loss is a valid outcome.
 
 ## Resolve repository family and identity
@@ -124,12 +139,14 @@ A remote branch is a deletion candidate only when family policy permits it, owne
 
 Handle each independent change separately. Do not sweep unrelated files into one cleanup commit.
 
+A dirty file or an unmerged commit is an integration candidate, not an automatic reason to stop. Inspect its purpose and ownership first. Keep active or uncertain work preserved until it can be integrated safely.
+
 1. Inspect staged, unstaged, and untracked files. Separate intended source changes from generated files, dependencies, caches, logs, build output, and secrets.
 2. Preserve dirty work before switching branches. Use its existing branch when the purpose is clear. Otherwise create an intentionally named preservation branch and isolated worktree.
 3. Inspect stashes without popping them. Apply a relevant stash in an isolated worktree based on its original base, resolve it, validate it, and commit it. Drop the stash only after the resulting commit is safely integrated.
 4. Recover relevant unreachable commits onto a named branch before any pruning.
 5. Run the repository's declared quality gates for each change. Inspect hook-created changes and final Git identity before committing.
-6. For `HemSoft`, commit and push intended work to `main` only when the current cleanup request authorizes that write, repository policy permits direct `main` updates, validation passes, and the update is fast-forward safe. Otherwise use the repository's pull request workflow.
+6. For `HemSoft`, the explicit repository-wide `Clean` request supplies commit-and-push authority for the audited intended work, including work unrelated to the current task. Verify that repository policy permits direct `main` updates, validation passes, and the update is fast-forward safe. Otherwise use the repository's pull request workflow.
 7. For `relias-engineering`, push the feature branch and use the repository's pull request workflow. Do not push new work directly to `main`.
 8. Do not call work integrated until it is present on `origin/main`. An open pull request or preserved branch is `KEEP`, not completed cleanup. Report any approval or review needed to finish it.
 
@@ -167,6 +184,8 @@ git gc --prune=now
 Immediate pruning is irreversible and Git warns that `--prune=now` can corrupt a repository when another process is writing objects. Do not run it while a commit, fetch, receive, index-pack, maintenance job, or another object-writing Git command is active. Do not accelerate reflog or object expiry in `relias-engineering`, another shared repository, or any repository with uncertain work unless the user separately authorizes that exact cleanup after reviewing the audit.
 
 ## Final proof
+
+Record this run's history before the final integration and cleanliness check, so logging does not leave new uncommitted files after cleanup.
 
 Return the primary checkout to `main`, then verify live state:
 
