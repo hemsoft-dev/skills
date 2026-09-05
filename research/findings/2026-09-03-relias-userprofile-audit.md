@@ -221,14 +221,14 @@ The GitOps repository, which is what actually changes production, has the weaker
 1. **Secret scanning, push protection, and Dependabot security updates are all `disabled`** on both repositories (`GET /repos/{repo}` → `security_and_analysis`). Dependabot *alerting* is nonetheless active, which is how the alerts below exist.
 2. **Four open Dependabot alerts** on `userprofile-service` (zero on `userprofile-gitops`), retrieved from `GET /repos/relias-engineering/userprofile-service/dependabot/alerts?state=open`:
 
-| Severity | Package | Vulnerable range | Advisory |
-|---|---|---|---|
-| High | `Microsoft.Extensions.Caching.Memory` | `>= 6.0.0-preview.1.21102.12, <= 6.0.1` | [CVE-2024-43483](https://github.com/advisories/GHSA-qj66-hp5r-2xgm), .NET denial of service |
-| High | `AutoMapper` | `< 15.1.1` | [CVE-2026-32933](https://github.com/advisories), DoS via uncontrolled recursion |
-| Medium | `Azure.Identity` | `< 1.11.4` | [CVE-2024-35255](https://github.com/advisories/GHSA-m5vv-6r4h-3vj9), elevation of privilege |
-| Medium | `Azure.Identity` | `< 1.11.0` | [CVE-2024-29992](https://github.com/advisories), information disclosure |
+   | Severity | Package | Vulnerable range | Advisory |
+   |---|---|---|---|
+   | High | `Microsoft.Extensions.Caching.Memory` | `>= 6.0.0-preview.1.21102.12, <= 6.0.1` | [CVE-2024-43483](https://github.com/advisories/GHSA-qj66-hp5r-2xgm), .NET denial of service |
+   | High | `AutoMapper` | `< 15.1.1` | [CVE-2026-32933](https://github.com/advisories), DoS via uncontrolled recursion |
+   | Medium | `Azure.Identity` | `< 1.11.4` | [CVE-2024-35255](https://github.com/advisories/GHSA-m5vv-6r4h-3vj9), elevation of privilege |
+   | Medium | `Azure.Identity` | `< 1.11.0` | [CVE-2024-29992](https://github.com/advisories), information disclosure |
 
-Both `Azure.Identity` alerts are relevant here because the service authenticates to App Configuration and Key Vault with `ManagedIdentityCredential` from that exact library.
+   Both `Azure.Identity` alerts are relevant here because the service authenticates to App Configuration and Key Vault with `ManagedIdentityCredential` from that exact library.
 
 3. **A client-secret literal is committed** at [`rlms-website:apps/user-profile-e2e/environments/cypress.prod-us.config.ts:19-20`](https://github.com/relias-engineering/rlms-website/blob/main/apps/user-profile-e2e/environments/cypress.prod-us.config.ts#L19-L20), alongside `CLIENT_ID: '4370c58f-0dc4-4ec8-bfa9-1093cde6422f'` and the comment `// fill this with client secret before running automation`. The value is redacted here. The comment reads like a placeholder, and the client ID matches the **stg-us** `userProfileClientId` in [`infra-stg-us.json`](https://github.com/relias-engineering/userprofile-service/blob/develop/.iac/parameters/infra-stg-us.json), not a production ID, despite the file name. The value was not tested. Someone with tenant access should check it and rotate it if live.
 4. **The anonymous health endpoint leaks environment detail.** The response includes the pod hostname, environment name, and build timestamp. Section 10 has the live results. `Deployed on` is computed as `File.GetLastWriteTimeUtc(Assembly.GetEntryAssembly()!.Location)` ([`HealthCheckService.cs:38-40`](https://github.com/relias-engineering/userprofile-service/blob/develop/src/Relias.UserProfile.App/Services/HealthCheckService.cs#L38-L40)), so it is an image build timestamp, not a rollout time.

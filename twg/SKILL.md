@@ -25,7 +25,6 @@ Load the narrowest workflow skill:
 - `twg-operational-health` for handoffs, incidents, Assets, staffing, meetings, and risk.
 - `twg-bench-lite` for read-only single-prompt A/B comparisons.
 
-
 ## Invocation And Output
 
 Run `twg <command>`. On shell `command not found`, use `$HOME/.local/bin/twg`
@@ -96,11 +95,9 @@ Use a concrete key, URL, ARI, slug, account ID, name, topic, `me`, or window.
   for stale Jira work backed by merged PRs.
 - `../twg-operational-health/SKILL.md` for handoffs, reliability, incidents, assets, staffing, and risk.
 
-
 ## Rules
 
 - Never guess IDs, flags, slugs, ARIs, object IDs, or mutation contracts.
 - For product writes, load the product skill and follow live help.
 - Avoid local inspection, caches, schema probes, or diagnostics unless local state is requested.
 - For writes, read current state and state the mutation unless execution was requested.
-
