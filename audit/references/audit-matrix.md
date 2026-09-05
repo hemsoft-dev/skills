@@ -45,6 +45,16 @@ Use this matrix to prevent blind spots. Mark each applicable area as verified, f
 - Review action pinning, least-privilege permissions, fork safety, script injection, artifact provenance, dependency review, release signing, environments, approvals, and rollback.
 - Inspect release versioning, changelog generation, badge accuracy, generated workflow ownership, and documentation for required local checks.
 
+### CI feedback latency and expensive checks
+
+- Measure recent representative PR runs and review iterations. Record run URLs and revisions, queue time, critical-path duration, job and step timings, reruns, cancellation, and time after fast checks finish. Report sample size and variance; one slow run is evidence to investigate, not a universal regression.
+- Identify serial samples, fixed warmups, redundant builds, cache overhead, and waits for slow CI that delay actionable review feedback. Compare against the repository's feedback budget; do not impose a universal duration limit.
+- Assess fast checks on each update, expensive qualification after review on the final candidate, conservative change selection, isolated parallel samples, and scheduled or release backstops. Recommend only options supported by measured cost and product risk.
+- Trace all production inputs, dependencies, lockfiles, packaging, test infrastructure, renames, large diffs, unknown changes, and version-only metadata through selection. Keep required workflows running; verify job skips and aggregate results cannot hide failure, cancellation, missing evidence, or stale revisions.
+- Check draft-to-ready transitions, review automation, and merge queues for deadlocks or a previous green check permitting merge before final qualification. A review-feedback check must not silently replace the final merge gate.
+- Preserve meaningful soak duration, budgets, baseline comparability, and sample statistics. Parallel samples need isolated comparable environments, distinct complete artifacts tied to the candidate, and the same aggregation and cleanup pairing. Do not count an individual sample as the full qualification or loosen thresholds to save time.
+- Moving checks after merge changes protection. Require a stated risk decision, failure ownership, response and rollback policy, and exact release-candidate evidence. Scheduled runs may be delayed and cannot qualify a different revision.
+
 ## Security and privacy
 
 - Run supported dependency, secret, static-analysis, container, infrastructure, and license scanners. Inspect recent GitHub security runs and unresolved alerts when authorized.

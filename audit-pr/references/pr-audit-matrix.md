@@ -13,6 +13,7 @@ For every area below, record `verified`, `finding`, `covered by existing work`, 
 | Mutation testing | Check meaningful changed production targets, surviving mutants, generated-code exclusions, break and target thresholds, and actual gate execution. Missing infrastructure needs a PR-specific reason before it becomes a recommendation. |
 | Behavior and end-to-end tests | Verify affected critical journeys and recovery paths. For Gherkin, confirm executable matching steps and detect undefined, pending, skipped, or tag-orphaned scenarios. Inspect retries, flake evidence, artifacts, and supported platforms. |
 | CI and delivery | Match live checks to reviewed commits and base rules. Inspect triggers, path filters, skipped jobs, aggregate gates, caches, artifacts, permissions, fork safety, required reviews, unresolved conversations, release steps, and rollback. Distinguish code defects from pre-existing merge-control gaps. |
+| CI feedback latency | Measure representative head and baseline PR runs where available: queue time, job and step timings, critical path, repeated review waits, reruns, and sample size. Inspect expensive memory, performance, soak, and E2E placement; selective execution; isolated parallel samples; cancellation; fast review feedback; and final-candidate qualification. Apply the detailed checks below. Attribute new or worsened delay to this PR; unchanged costs are context. |
 | Security and privacy | Trace changed trust boundaries, authentication, authorization, tenant isolation, input validation, injection, file and URL handling, secret storage, logging, telemetry, retention, and deletion. Use safe proofs and redacted evidence. Never exploit a live service. |
 | Dependencies and supply chain | Inspect manifests and lockfiles together, supported engines, transitive consumers, API and module compatibility, advisories, install scripts, provenance, action pinning, licenses, and notices. A clean vulnerability scan does not prove runtime compatibility. |
 | Performance | Compare affected latency, throughput, startup, bundle or binary size, request or query count, rendering, batching, serialization, and allocation against a repeatable baseline. Record budgets, workload, warm-up, variance, and environment. |
@@ -26,3 +27,17 @@ For every area below, record `verified`, `finding`, `covered by existing work`, 
 Choose tools from the repository's declared stack and pinned versions. Start with compiler or type checks, lint, existing tests, and existing reports. Use available coverage and complexity reporters, mutation runners, security scanners, profilers, accessibility checks, and benchmarks only when they answer a concrete PR question.
 
 Confirm current compatibility and command syntax in official documentation. Prefer structured reports and stable exit codes. Avoid redundant analyzers and subjective scores. Run tools that emit caches or artifacts only in the disposable environment. If an analyzer needs new project dependencies or configuration, report the missing evidence instead of adopting it during the audit.
+
+## Expensive CI qualification
+
+For affected CI or delivery behavior, verify:
+
+- Fast feedback can drive review corrections before expensive qualification finishes. Draft promotion and merge queues cannot deadlock or reuse a stale green check to bypass qualification of the final candidate.
+- Change selection includes transitive runtime inputs, dependencies, lockfiles, packaging, test infrastructure, renamed paths, and unknown changes. Distinguish version-only metadata where relevant. Workflow-level path skips must not strand required checks; job and aggregate logic must reject failures, cancellations, missing evidence, and unexpected skips.
+- Parallel samples remain isolated and comparable, retain meaningful warmup and soak duration, use distinct complete artifacts from the same candidate, and preserve the original statistics and paired cleanup calculations. Budget changes or shorter tests need separate measurement and baseline justification.
+- Scheduled and release coverage complement the PR policy. Moving a check after merge requires an explicit risk decision, failure ownership, response and rollback arrangements, and exact release-candidate validation.
+
+Recommend improvements from measured delay and repository risk, not a universal
+minutes limit or the mere presence of a long test. Do not demand new CI machinery
+for unrelated PRs. If representative timings are unavailable, record the gap
+instead of inventing a speedup or calling an unchanged cost a PR regression.

@@ -1,6 +1,6 @@
 ---
 name: audit-pr
-description: V1.0 - Audits one specified GitHub pull request at a fixed head and base revision across requirements, correctness, architecture, tests, security, performance, memory, documentation, and delivery, with verified findings and explicit coverage limits. Use for a thorough PR audit or review, not a repository-wide audit or implementation work.
+description: V1.1 - Audits one specified GitHub pull request at a fixed head and base revision across requirements, correctness, architecture, tests, security, performance, memory, documentation, and delivery, with verified findings and explicit coverage limits. Use for a thorough PR audit or review, not a repository-wide audit or implementation work.
 disable-model-invocation: true
 hooks:
   PostToolUse:
@@ -70,6 +70,7 @@ For affected production behavior, determine whether each signal is measured and 
 - dependency, secret, static-analysis, and supply-chain security;
 - performance budgets and repeatable regression benchmarks;
 - memory and resource-growth checks for affected long-running paths.
+- CI time to actionable feedback and final qualification, including expensive memory, performance, soak, and end-to-end checks during review iterations.
 
 Use `CRAP = complexity^2 * (1 - coverage)^3 + complexity`, with coverage from 0 to 1. Prefer branch coverage and state its basis. Use the repository's stricter policy when present; otherwise scores above 30 are actionable risks and 15 through 30 warrant review. Compare changed functions with their baseline. An unchanged legacy score is context, not automatically a PR blocker. Repository-wide average coverage cannot substitute for per-function evidence.
 
