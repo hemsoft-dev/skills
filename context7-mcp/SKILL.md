@@ -16,6 +16,8 @@ Activate this skill when the user:
 
 ## How to Fetch Documentation
 
+If Context7 tools are unavailable in the current runtime, use the available web search or fetch tools to consult official documentation instead.
+
 ### Step 1: Resolve the Library ID
 
 Call `resolve-library-id` with:
