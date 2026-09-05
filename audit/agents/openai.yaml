@@ -1,0 +1,4 @@
+interface:
+  display_name: "Repository audit"
+  short_description: "Audit a repository and file improvement issues"
+  default_prompt: "Use $audit to review this repository and create evidence-backed GitHub issues."
