@@ -1,6 +1,6 @@
 ---
 name: issue-to-pr
-description: V1.7 - Turns one specified GitHub issue into a validated pull request from an isolated worktree, then routes current-head AI review by repository owner. HemSoft requires connected Codex and uses Cubic when available; fhemmerrelias and relias-engineering use Copilot PR Review. Optional merge, cleanup, and Slack notification require direct user approval.
+description: V1.8 - Turns one specified GitHub issue into a validated pull request with concise current-head evidence, then routes AI review by repository owner. HemSoft requires connected Codex and uses Cubic when available; fhemmerrelias and relias-engineering use Copilot PR Review. Optional merge, cleanup, and Slack notification require direct user approval.
 disable-model-invocation: true
 compatibility: Requires git, GitHub CLI, network access, and permission to push a branch and create a pull request in the target repository. Optional approved merge and cleanup requires mergepr on PATH and the slack-dm skill.
 hooks:
@@ -154,12 +154,49 @@ Use a concise conventional commit when the repository has no stronger rule,
 for example `fix: stabilize renderer startup (#381)`.
 
 Push the branch normally and open one pull request against the verified default
-branch. The pull-request body must include:
+branch. Preserve the repository's pull-request template and add any missing
+content needed to satisfy this semantic contract:
 
-- a short summary of what changed and why;
-- validation commands and outcomes;
-- `Closes #<issue-number>`;
-- any residual risk or deliberately deferred work.
+```markdown
+## Summary
+
+Explain what changed and why without repeating the issue's full Description,
+Why, or Goal.
+
+## Acceptance Criteria
+
+- [x] `<criterion>`: `<code, test, CI, or repeatable manual evidence>`
+
+## Definition of Done
+
+- [x] `<completed applicable item>`: `<evidence>`
+- [ ] `<pending applicable item>`: `<what remains>`
+
+## Verification
+
+- `<exact command or manual step>`: pass, fail, or not run, plus the observed
+  result.
+
+## Risks and deferred work
+
+None, or name each bounded risk and linked follow-up.
+
+Closes #<issue-number>
+```
+
+Repository template headings may differ, but the same information must remain
+easy to find. The issue is the source of intent; the pull request records the
+implemented outcome and its proof. Do not silently weaken, broaden, or
+reinterpret an acceptance criterion. Mark a criterion complete only when code,
+tests, CI, or repeatable manual evidence proves it. If a criterion remains
+unmet, leave it unchecked, explain the blocker, and do not call the pull request
+ready unless the user explicitly accepts that named deferral.
+
+For Definition of Done, list pull-request-specific evidence and exceptions.
+Reference repository-wide policy instead of copying generic boilerplate. Apply
+the `unslop` skill to the title and prose before creation. Preserve exact
+commands, paths, check names, logs, and any issue wording that must remain
+exact.
 
 Create the pull request ready for review by default. Automatic reviewers may
 skip drafts. Use a draft only when the user or repository explicitly requires
@@ -249,7 +286,16 @@ same current head SHA:
 - every owner-routed required reviewer is current-head clean;
 - every conditional reviewer that ran on the current head is clean, while any
   unavailable conditional reviewer is documented without blocking readiness;
-- the final local validation is recorded.
+- the final local validation is recorded;
+- the pull-request title and body accurately describe the current head, every
+  acceptance criterion is proved or explicitly deferred by the user, and the
+  Definition of Done, verification outcomes, risks, and deferred work are
+  current.
+
+Re-read and refresh the pull-request body after review-driven changes and before
+declaring readiness. Apply `unslop` to changed prose while preserving exact
+technical evidence. Editing the body does not establish a new code-review
+epoch, but any code push does.
 
 Do not equate a comment-only AI review with a formal GitHub approval. A missing
 required reviewer is a blocker to report. A missing conditional reviewer is a
@@ -259,8 +305,9 @@ reviewer.
 ## 9. Closeout
 
 Report the issue, pull request URL, branch, worktree path, current head SHA,
-validation results, check state, the routed reviewer set and each current-head
-signal, unresolved thread count, active GitHub identity, and any exact blocker.
+pull-request body contract status, validation results, check state, the routed
+reviewer set and each current-head signal, unresolved thread count, active
+GitHub identity, and any exact blocker.
 
 Keep the worktree and branch while the pull request is open so revisions remain
 safe and isolated. If the user later directly approves merging this exact pull
@@ -314,9 +361,11 @@ sending a duplicate DM; the composing skill must send it after its final proof.
 ## Definition of done
 
 One issue maps to one intentionally named branch, one isolated worktree, and
-one open pull request whose current head has repository-native validation and
-all available configured review evidence. No unrelated checkout, branch,
-worktree, stash, issue, or pull request is changed.
+one open pull request whose title and body truthfully describe its current
+head, acceptance-criteria status, completion evidence, validation, and risk.
+The current head has repository-native validation and all available configured
+review evidence. No unrelated checkout, branch, worktree, stash, issue, or pull
+request is changed.
 
 ## History
 

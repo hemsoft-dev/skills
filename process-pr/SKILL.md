@@ -1,6 +1,6 @@
 ---
 name: process-pr
-description: V1.7 - Takes one specified existing GitHub pull request to a human-ready state by discovering configured AI reviewers, soliciting current-head reviews, and addressing feedback. Merge remains approval-gated by default, but a composing merge skill can supply documented invocation authority and owns the final Slack notification when it owns the merge.
+description: V1.8 - Takes one specified existing GitHub pull request to a human-ready state with truthful current-head evidence by discovering configured AI reviewers, soliciting reviews, and addressing feedback. Merge remains approval-gated by default, but a composing merge skill can supply documented invocation authority and owns the final Slack notification when it owns the merge.
 disable-model-invocation: true
 compatibility: Requires git, GitHub CLI, GitHub network access, permission to push to the PR branch, and permission to request the repository's configured reviewers. Optional authorized merge and cleanup requires mergepr on PATH and the slack-dm skill.
 hooks:
@@ -44,11 +44,11 @@ Read [references/current-head-review-loop.md](references/current-head-review-loo
   for the exact PR or documented authority from a composing merge skill, this
   skill's terminal states are `human-ready` or `blocked`, never `merged`.
 - An ordinary issue-to-PR request authorizes implementation and review, not
-  merge. Direct invocation of `issue-to-pr-merge` or `issues-to-pr-merge`
-  supplies narrow merge authority for their in-scope resulting PRs. When this
-  skill runs as their review phase, return current-head `human-ready` evidence
-  to the caller without inserting another approval prompt. The composing skill
-  owns final revalidation, merge, and cleanup.
+  merge. Direct invocation of `issue-to-pr-merge` supplies narrow merge
+  authority for its in-scope resulting PRs. When this skill runs as that
+  workflow's review phase, return current-head `human-ready` evidence to the
+  caller without inserting another approval prompt. The composing skill owns
+  final revalidation, merge, and cleanup.
 
 ## Human-Ready Contract
 
@@ -62,6 +62,9 @@ A PR is `human-ready` only when all of these are true for the same current head 
 6. Every configured and available AI reviewer has evaluated the current head and either approved it or produced a clean no-further-comments signal.
 7. No requested review or required check is still pending.
 8. At least one configured AI reviewer produced a current-head signal. If the repository has no AI reviewer configured, the requested AI-review gate is `blocked`, not vacuously complete.
+9. The pull-request title and body accurately describe the current head, linked
+   issue contract when one exists, acceptance-criteria status, final
+   verification evidence, and any residual risk or deferred work.
 
 Never reinterpret a comment-only review as a formal GitHub approval. Report each reviewer's actual signal.
 
@@ -149,7 +152,18 @@ Stop as `blocked` when progress requires a product decision, expanded scope, cre
 
 ### 7. Prove the Gate
 
-Immediately before closeout, re-fetch all evidence and confirm it references the same head SHA. Do not rely on cached output from before the final push.
+Immediately before closeout, re-fetch all evidence and confirm it references the
+same head SHA. Re-read the pull-request title and body, compare their claims
+with the final diff, linked issue, validation, checks, and review results, then
+refresh stale prose or evidence. Preserve the repository's pull-request
+template. Apply `unslop` to changed prose without rewriting exact commands,
+paths, check names, issue wording, or logs. Do not rely on cached output from
+before the final push.
+
+After every body edit, re-read the live body and verify that it is nonempty and
+still contains the required contract sections. On PowerShell, prefer a
+temporary file plus `--body-file <path>` for multiline content; piping a
+variable to `--body-file -` can store an empty body even when `gh` exits zero.
 
 Report:
 
@@ -158,6 +172,8 @@ Report:
 - one row per configured reviewer with request method, latest current-head signal, finding count, unresolved-thread count, and evidence URL or run ID;
 - required-check and merge-state results;
 - local validation commands and exact pass/fail results;
+- pull-request title and body accuracy, including acceptance-criteria and
+  Definition of Done status when the linked issue defines them;
 - any unavailable reviewer, permission, rate-limit, baseline-failure, or configuration evidence;
 - active GitHub account restoration and worktree state.
 

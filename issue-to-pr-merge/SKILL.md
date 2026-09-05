@@ -1,8 +1,8 @@
 ---
 name: issue-to-pr-merge
-description: "V1.3 - Commands: Issue, Oldest. Takes one exact or lease-selected oldest GitHub issue through isolated implementation, current-head review, guarded merge, cleanup, and a final Slack notification; Oldest supports hourly resume and stalled-run escalation."
+description: "V2.2 - Commands: Issue, Oldest. Processes selected issues through concise evidence-backed pull requests, current-head review, guarded merge, full repository cleanup, and Slack notification."
 disable-model-invocation: true
-compatibility: Requires git, GitHub CLI, network access, permission to push and create a pull request, the configured AI reviewers, mergepr on PATH, and the slack-dm skill.
+compatibility: Requires git, GitHub CLI, network access, permission to push and create pull requests, configured AI reviewers, mergepr on PATH, and the slack-dm skill. Multiple issues also require Codex Goals.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -20,17 +20,19 @@ hooks:
 
 # Issue to PR merge
 
-Process one exact or lease-selected GitHub issue from verified repository state
-through a merged pull request and a proven post-merge repository state. This skill is a
-composition of the `issue-to-pr` skill at `../issue-to-pr/SKILL.md`, the
-`process-pr` skill at `../process-pr/SKILL.md`, and the `repo-cleanup` skill at
+Process one or more selected GitHub issues from verified repository state
+through separate merged pull requests and a proven post-merge repository state.
+Process multiple issues serially from oldest to newest. Never work on them in
+parallel. This skill composes `issue-to-pr` at `../issue-to-pr/SKILL.md`,
+`process-pr` at `../process-pr/SKILL.md`, and `repo-cleanup` at
 `../repo-cleanup/SKILL.md`. Read those skills and the review-loop references
 they name before acting. Their detailed safety rules remain in force.
 
 Use one of two modes:
 
-- `Issue {ISSUE_URL_OR_OWNER_REPO_NUMBER}` processes one exact issue. This is
-  the default when the invocation includes an issue number.
+- `Issue {ISSUE_SELECTOR}` processes one exact issue, a comma-separated list,
+  or an inclusive numeric range. This is the default when the invocation
+  includes an issue number.
 - `Oldest {OWNER/REPO}` processes at most one lease-selected issue for a
   recurring run. Read
   [references/scheduled-oldest-lease.md](references/scheduled-oldest-lease.md)
@@ -38,9 +40,18 @@ Use one of two modes:
 
 ## Required input and authority
 
-In `Issue` mode, accept an issue URL or `OWNER/REPO` plus an issue number. If
-the target issue is missing, ask only for that target. Do not select backlog
-work automatically.
+In `Issue` mode, accept:
+
+- one issue URL, or one issue number with an explicit `OWNER/REPO` or an
+  unambiguous current checkout;
+- a comma-separated list such as `12,15,22`; or
+- an inclusive range such as `12-20`.
+
+Resolve every target to one repository. Reject malformed or cross-repository
+selectors instead of guessing. Trim whitespace, remove duplicate numbers, and
+verify that every number is an issue rather than a pull request. Report missing
+or closed targets and do not reopen them. Do not select backlog work outside
+the supplied selector.
 
 In `Oldest` mode, accept one `OWNER/REPO` and a stable automation ID. Select
 only issues labeled `agent:ready`. Default to a 120-minute lease TTL and
@@ -48,30 +59,78 @@ escalation after three consecutive completed runs with no movement. Process at
 most one issue per invocation. Resume this automation's unfinished issue or
 linked pull request before selecting new work.
 
-Invoking this skill authorizes issue implementation, PR creation, review
-processing, guarded merge, and cleanup for the one pull request created or
-resumed for the specified issue. The invocation is direct merge authority once
-the exact pull request is known and every readiness gate below passes. Do not
-pause for a second approval prompt. The authority remains valid for this skill
-run unless the user pauses or revokes it.
+Invoking this skill authorizes issue implementation, pull-request creation,
+review processing, guarded merge, cleanup, and one merge notification for each
+selected issue. The invocation supplies direct merge authority once the exact
+pull request is known and every readiness gate below passes. Do not pause for
+another approval prompt between queued issues unless the user pauses or revokes
+the run.
+
+The invocation is also an explicit `repo-cleanup Clean` request for the target
+repository. After each successful issue merge, clean the complete repository,
+including work already present in the primary checkout at the baseline.
+Integrate independent intended changes separately, validate them, and use the
+repository's protected-branch workflow. This authority covers cleanup pull
+requests created solely from baseline work and permits `mergepr` after each one
+passes the same current-head readiness gate. It does not cover work that appears
+after the baseline, uncertain ownership, mixed or unexplained changes, bypasses,
+or discarded work. Preserve uncertain work on a named branch or worktree and
+report the exact blocker.
 
 This skill overrides only the separate merge-approval checkpoints in
-`issue-to-pr` and `process-pr` when they are composed as phases of this
-workflow. Their identity, scope, review, validation, head-freshness, merge, and
-cleanup safeguards remain in force. The repository instruction to merge only
-when explicitly asked is satisfied by the user's direct invocation of this
-skill.
+`issue-to-pr` and `process-pr` while they are composed here. Their identity,
+scope, review, validation, head-freshness, merge, and cleanup safeguards remain
+in force.
 
-The authority is narrow. It covers only a pull request that maps one-to-one to
-the specified issue and contains no unrelated work. It does not cover a
-pre-existing unrelated pull request, a mixed-scope replacement, a force merge,
-an administrative bypass, or any merge method other than the guarded path in
-this skill.
+The issue-work authority covers one pull request per selected issue, including
+a verified existing pull request that maps only to that issue. The separate
+cleanup authority above covers only explained baseline work split into coherent
+cleanup pull requests. Neither authority covers mixed or uncertain scope,
+administrative bypasses, force merges, or a merge method other than `mergepr`.
 
-An explicit `Oldest` invocation supplies the same narrow authority for the one
-issue that the lease protocol selects or resumes. Record the exact issue before
-implementation. The authority does not extend to a second issue in the same
-run, an issue reserved by a human, or an issue blocked for human input.
+An explicit `Oldest` invocation supplies issue-selection authority for only the
+issue that the lease protocol selects or resumes. It never extends to a second
+issue. Its cleanup authority remains limited to work captured in that run's
+repository baseline.
+
+## Batch Goal and frozen queue
+
+A selector with one open issue runs directly. A selector with more than one
+open issue runs as one persistent Codex Goal. The user may invoke it as:
+
+```text
+/goal $issue-to-pr-merge {OWNER/REPO} {ISSUE_LIST_OR_RANGE}
+```
+
+If the user invokes `$issue-to-pr-merge` with multiple open issues without a
+leading `/goal`, create the Goal as the first action before repository work.
+Set the objective to the resolved repository, immutable issue queue,
+oldest-first order, serial merge requirement, and cleanup gate between issues.
+If a different unfinished Goal exists, do not replace it. Report the conflict
+and ask the user to edit, pause, or clear it.
+
+Do not create a Goal for one exact issue or for `Oldest`. On a resumed batch
+turn, read the active Goal, frozen queue, GitHub artifacts, and local state
+before acting. Complete the Goal only after every queued issue is merged and
+cleanup-completed or is skipped because live evidence proves it closed before
+its turn with no batch artifact. Follow the runtime's blocked-status threshold.
+Do not mark a Goal blocked merely because one turn is waiting on review or CI.
+
+Before changing repository state for a list or range:
+
+1. Verify the canonical repository, default branch, active GitHub identity,
+   access, and applicable instructions.
+2. Record each selected issue's number, URL, exact title, creation time, and
+   state.
+3. Sort open issues by `createdAt` ascending, then by issue number for ties.
+4. Record that immutable queue and each issue's status in the Goal context.
+5. Capture the primary checkout, branches, worktrees, stashes, default-branch
+   SHA, remote SHA, and dirty-file baseline. Preserve all unrelated state.
+
+Do not silently add, drop, or reorder an open issue after the snapshot. Issues
+opened later do not extend the Goal. If an issue closes externally before its
+turn, verify the closure and absence of batch-created artifacts, record it as
+skipped, and continue.
 
 ## Scheduled Oldest mode
 
@@ -103,6 +162,18 @@ Human-authored activity wins. Stop before edits or merge if the issue, pull
 request, branch, or worktree shows manual ownership that the durable automation
 record cannot attribute to this automation.
 
+## Process each issue
+
+For each issue in queue order, finish all four phases and the hygiene gate
+before starting the next issue. Resume verified existing issue work before
+creating a branch or pull request. Base new work on the freshly fetched remote
+default branch after the prior issue's merge and cleanup proof.
+
+Do not start the next issue while the current issue is open, awaiting review,
+blocked, merged but unaudited, or still owns a local or remote workflow
+artifact. A blocked issue blocks the batch. Do not skip it merely to reach later
+issues.
+
 ## Phase 1: Issue to pull request
 
 Follow `issue-to-pr` sections 1 through 5 for:
@@ -112,6 +183,11 @@ Follow `issue-to-pr` sections 1 through 5 for:
 - branch and isolated worktree naming;
 - the smallest complete implementation and repository-native validation;
 - commit, push, and one pull request against the verified default branch.
+
+Whether the pull request is new or resumed, make its title and body satisfy the
+canonical contract in `issue-to-pr` section 5 before handing it to
+`process-pr`. Preserve repository-template requirements and do not replace
+meaningful existing content merely to normalize headings.
 
 Read `issue-to-pr` section 6 for the owner-specific reviewer policy for the
 resulting PR. Let `process-pr` carry out those reviewer requests and collect
@@ -131,12 +207,13 @@ Invoke `process-pr` for the exact PR and use its current-head review loop at
 2. discover and request the configured reviewers without duplicate requests;
 3. fix or disprove every actionable finding, with focused validation;
 4. repeat on every new head SHA; and
-5. prove the `human-ready` contract immediately before any merge decision.
+5. refresh the title and body so their claims match the final current head; and
+6. prove the `human-ready` contract immediately before any merge decision.
 
 The reviewer set must include every reviewer required by the verified
 repository policy and the owner routing established by `issue-to-pr`. If the
 PR is blocked, retain the worktree and branch, report the exact blocker, and do
-not merge or clean it up.
+not merge or clean it up. Stop the batch before starting another issue.
 
 ## Phase 3: Autonomous guarded-merge gate
 
@@ -145,15 +222,18 @@ SHA, checks, reviewer signals, and unresolved-thread count in the final receipt,
 not as an intermediate approval request. Immediately re-read the PR and local
 state. Confirm the head is unchanged, required checks pass, every configured
 current-head reviewer is clean, no live review thread remains unresolved,
-GitHub reports the PR mergeable, and the diff still maps only to the specified
-issue.
+GitHub reports the PR mergeable, the diff still maps only to the selected
+issue, and the final title and body truthfully report satisfied acceptance
+criteria, Definition of Done evidence, verification outcomes, residual risk,
+and deferred work. Apply `unslop` to any final prose edit while preserving exact
+technical evidence.
 
 Proceed directly to Phase 4 when those conditions pass. A changed head, failed
 check, new actionable finding, conflict, or reviewer regression returns the
 workflow to `process-pr`. Stop without merging if authority is revoked, scope
 is mixed or uncertain, or any readiness condition cannot be proven.
 
-## Phase 4: Merge and cleanup
+## Phase 4: Merge, cleanup, and notification
 
 With the invocation-derived authority and a fresh readiness proof:
 
@@ -162,20 +242,28 @@ With the invocation-derived authority and a fresh readiness proof:
    Do not run it from the pull-request worktree that `mergepr` will remove.
    Preserve dirty primary-checkout changes before invoking it.
 3. Re-read the PR, issue, branch, worktree, and default-branch state.
-4. Hand off to `repo-cleanup` in `Audit` mode and verify the merged PR's
-   branch/worktree cleanup plus default-branch parity.
-5. Complete any Oldest-mode lease and durable-state updates, then invoke the
-   `slack-dm` skill at `../slack-dm/SKILL.md`. Send Franz one `merged` DM with
+4. Hand off to `repo-cleanup` in `Clean` mode. Integrate or preserve every
+   baseline change according to its ownership and purpose, remove only proven
+   obsolete state, and return the primary checkout to clean default-branch
+   parity. Process independent cleanup changes separately.
+5. If cleanup creates a pull request from baseline work, run it through
+   `process-pr`, revalidate its immutable current head, merge it with `mergepr`,
+   and resume `repo-cleanup Clean`. Do not send an issue-merge notification for
+   a cleanup pull request.
+6. Complete any Oldest-mode lease and durable-state updates.
+7. Invoke the `slack-dm` skill at `../slack-dm/SKILL.md`. Send Franz one
+   `merged` DM with
    the canonical `OWNER/REPO` project, `PR #<number> — <exact current title> —
    merged` outcome, PR URL, merge commit, and cleanup result. Send only after
-   GitHub reports `MERGED`. This is the final workflow phase before the
-   user-facing response.
+   GitHub reports `MERGED`. If the runtime rejects the send, record the result
+   once and do not retry or route around it.
 
-`mergepr` owns the guarded cleanup of the completed PR's branch and worktree.
-Do not duplicate those destructive operations. Do not run broad
-`repo-cleanup Clean` or remove unrelated state unless the user separately
-requested full repository cleanup in the current conversation. Preserve dirty,
-active, unmerged, unknown-owner, or otherwise unrelated work.
+`mergepr` owns the guarded cleanup of each completed pull request's branch and
+worktree. Do not duplicate those operations. The skill invocation supplies the
+full-cleanup request required by `repo-cleanup`, but it never authorizes data
+loss. Preserve dirty, active, unmerged, unknown-owner, or unexplained work on a
+named branch or worktree when it cannot be integrated safely. A dirty primary
+checkout is not a successful terminal state.
 
 If `mergepr` is unavailable or fails, preserve the exact state and report the
 error. Do not substitute a raw `gh pr merge`, force-push, branch deletion, or
@@ -185,27 +273,61 @@ This composing skill owns the notification. Its `issue-to-pr` and `process-pr`
 phases must not send duplicate DMs. A waiting, blocked, failed, or no-op run
 does not send a merged notification.
 
+## Hygiene gate between issues
+
+After each merge, prove all of the following before continuing:
+
+- GitHub reports the pull request merged and its issue closed;
+- the merge commit and final pull-request head are recorded;
+- the local default branch matches its remote;
+- the completed branch and worktree are removed or retained with an exact
+  blocker;
+- `repo-cleanup` Clean passes;
+- the primary checkout is clean and matches the remote default branch;
+- the active GitHub identity is restored;
+- baseline work is integrated or retained on a named branch or worktree with a
+  documented owner, reason, and next step; and
+- no unexplained stash, obsolete branch/worktree, or obsolete recovery object
+  remains.
+
+If this gate fails, stop the queue and preserve its state. Do not continue while
+a completed issue still owns an unresolved branch, worktree, identity change,
+or cleanup failure.
+
 ## Definition of done
 
-The issue is closed by the merged PR; the merge commit and exact final head are
-recorded; the target default branch matches its remote; the completed PR's
-branch and worktree are removed or explicitly retained with evidence; and the
-post-merge `repo-cleanup` audit passes. Any unrelated repository work remains
-preserved and is reported. A successful run ends its operational work by
-sending the Slack merge notification.
+For every processed issue, its one-to-one pull request is merged, the issue is
+closed, the merge commit and exact final head are recorded, the default branch
+matches its remote, the final pull-request body truthfully records the delivered
+outcome and proof, and full cleanup is proven. The primary checkout is clean.
+Any baseline work that cannot be integrated safely is preserved on a named
+branch or worktree and makes the run `blocked` until its next step is explicit.
 
-For one `Oldest` run, `waiting` is also a valid safe terminal result when the
+For one `Oldest` run, `waiting` is a valid safe terminal result when the
 exact issue and pull request are durably recorded, the run lease is released,
 all work remains resumable, and the unchanged-run count is updated. A blocked
 result must retain the branch and worktree and must name the required human
-decision or repair.
+decision or repair. For a batch Goal, pending review or CI leaves the Goal
+active for a later turn.
 
 ## Closeout report
 
-Report the issue and PR URLs, merge commit, repository and owner, final default
-branch and `origin` SHAs, validation results, reviewer signals, active GitHub
-identity, target branch/worktree result, cleanup-audit result, and any exact
-blocker or retained work.
+For one issue, report the issue and pull-request URLs, merge commit, repository
+and owner, final default branch and `origin` SHAs, pull-request body contract
+status, validation results, reviewer signals, active GitHub identity, branch
+and worktree result, full-cleanup result, and any exact blocker or retained
+work.
+
+For multiple issues, begin with this concise table in frozen-queue order:
+
+| Issue | What it fixed | What to inspect next time |
+| --- | --- | --- |
+
+Then report the repository, original selector, processing order, active GitHub
+identity, final default-branch parity, unrelated retained state, and one
+technical receipt per issue with its final state, issue URL, pull-request URL,
+head SHA, merge commit, body contract status, validation, review, and
+full-cleanup result. State skipped or blocked items plainly.
 
 For `Oldest`, also report the automation ID, lease result, selection or resume
 reason, previous and final progress fingerprints, unchanged-run count, and the
