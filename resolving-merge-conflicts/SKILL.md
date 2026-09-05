@@ -3,12 +3,27 @@ name: resolving-merge-conflicts
 description: "Use when you need to resolve an in-progress git merge/rebase conflict."
 ---
 
-1. **See the current state** of the merge/rebase. Check git history, and the conflicting files.
+1. **Inspect the state.** Read repository instructions and `git status`.
+   Identify the merge/rebase, conflicting paths, and existing staged and
+   unstaged work. Preserve unrelated changes.
 
-2. **Find the primary sources** for each conflict. Understand deeply why each change was made, and what the original intent was. Read the commit messages, check the PRs, check original issues/tickets.
+2. **Establish intent.** Read both changes and their commit history.
+   Consult linked PRs or tickets when needed to settle ambiguity.
+   During rebase, `ours` is the rebased result so far; `theirs` is the
+   commit being replayed.
 
-3. **Resolve each hunk.** Preserve both intents where possible. Where incompatible, pick the one matching the merge's stated goal and note the trade-off. Do **not** invent new behaviour. Always resolve; never `--abort`.
+3. **Resolve conflicts.** Preserve both intents where compatible.
+   Follow the stated goal for trade-offs and explain them. Avoid
+   unrelated behavior changes. If evidence cannot settle a decision,
+   preserve progress and ask. Do not abort or skip commits merely
+   to bypass conflicts.
 
-4. Discover the project's **automated checks** and run them — typically typecheck, then tests, then format. Fix anything the merge broke.
+4. **Review and validate.** Stage only resolved paths and required
+   integration fixes. Inspect the full staged diff, confirm no
+   unmerged entries or accidental conflict markers remain, and run
+   repository-prescribed checks. Fix failures caused by the resolution.
 
-5. **Finish the merge/rebase.** Stage everything and commit. If rebasing, continue the rebase process until all commits are rebased.
+5. **Complete the operation.** Use `git merge --continue` or
+   `git rebase --continue`, repeating for further conflicts.
+   Run required checks on the final result. Report resolutions,
+   trade-offs, check results, and final Git status.
