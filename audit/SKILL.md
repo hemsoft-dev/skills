@@ -57,6 +57,7 @@ Every audit must determine whether the repository measures and gates these signa
 - dependency, secret, static-analysis, and supply-chain security;
 - performance budgets or regression benchmarks appropriate to the product;
 - memory or resource-growth checks for long-running applications and services.
+- CI time to actionable feedback and final qualification, including expensive memory, performance, soak, and end-to-end checks during review iterations.
 
 Use `CRAP = complexity^2 * (1 - coverage)^3 + complexity`, with coverage expressed from 0 to 1. Prefer branch coverage. Record the coverage basis. Unless the repository documents a stricter policy, treat CRAP above 30 for a function as an actionable risk and 15 through 30 as a review queue. If the repository cannot calculate CRAP per function, file an issue to add measurement and a non-regression gate only when the signal is applicable and the repository-specific regression risk is concrete. Do not replace CRAP with repository-wide average coverage.
 
