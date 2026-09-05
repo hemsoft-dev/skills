@@ -1,8 +1,8 @@
 ---
 name: issue-to-pr-merge
-description: "V2.3 - Commands: Issue, Oldest. Processes selected issues through concise evidence-backed pull requests, current-head review, guarded merge, full repository cleanup, and Slack notification."
+description: "V2.4 - Commands: Issue, Oldest. Processes selected issues through concise evidence-backed pull requests, current-head review, guarded merge, full repository cleanup, and Slack notification."
 disable-model-invocation: true
-compatibility: Requires git, GitHub CLI, network access, permission to push and create pull requests, configured AI reviewers, mergepr on PATH, and the slack-dm skill. Multiple issues also require Codex Goals.
+compatibility: Requires git, GitHub CLI, network access, permission to push and create pull requests, access to the shared policy's required reviewer, mergepr on PATH, and the slack-dm skill. Multiple issues also require Codex Goals.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -199,9 +199,9 @@ canonical contract in `issue-to-pr` section 5 before handing it to
 `process-pr`. Preserve repository-template requirements and do not replace
 meaningful existing content merely to normalize headings.
 
-Read `issue-to-pr` section 6 for the owner-specific reviewer policy for the
-resulting PR. Let `process-pr` carry out those reviewer requests and collect
-the current-head evidence so there is one review loop. Do not change repository
+Read `../process-pr/references/pr-reviewer-policy.md` for the shared reviewer
+policy for the resulting PR. Let `process-pr` carry out those reviewer requests
+and collect the current-head evidence so there is one review loop. Do not change repository
 identity, switch accounts without restoring the original account, edit a dirty
 primary checkout, or create a duplicate PR.
 
@@ -214,15 +214,17 @@ Invoke `process-pr` for the exact PR and use its current-head review loop at
 `../process-pr/references/current-head-review-loop.md`. The process must:
 
 1. capture the immutable current-head baseline;
-2. discover and request the configured reviewers without duplicate requests;
+2. apply the shared reviewer policy, verifying requester identity and reusing
+   current-head requests and wait deadlines;
 3. fix or disprove every actionable finding, with focused validation;
 4. repeat on every new head SHA; and
 5. refresh the title and body so their claims match the final current head; and
 6. prove the `human-ready` contract immediately before any merge decision.
 
 The reviewer set must include every reviewer required by the verified
-repository policy and the owner routing established by `issue-to-pr`. If the
-PR is blocked, retain the worktree and branch, report the exact blocker, and do
+repository policy and the shared reviewer policy. Optional products do not
+add a wait gate. An explicit required-review refusal stops the wait immediately.
+If the PR is blocked, retain the worktree and branch, report the exact blocker, and do
 not merge or clean it up. Stop the batch before starting another issue.
 
 ## Phase 3: Autonomous guarded-merge gate
@@ -263,7 +265,7 @@ With the invocation-derived authority and a fresh readiness proof:
 6. Complete any Oldest-mode lease and durable-state updates.
 7. Invoke the `slack-dm` skill at `../slack-dm/SKILL.md`. Send Franz one
    `merged` DM with
-   the canonical `OWNER/REPO` project, `PR #<number> — <exact current title> —
+   the canonical `OWNER/REPO` project, `PR #<number> â€” <exact current title> â€”
    merged` outcome, PR URL, merge commit, and cleanup result. Send only after
    GitHub reports `MERGED`. If the runtime rejects the send, record the result
    once and do not retry or route around it.

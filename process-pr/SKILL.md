@@ -1,8 +1,8 @@
 ---
 name: process-pr
-description: V1.8 - Takes one specified existing GitHub pull request to a human-ready state with truthful current-head evidence by discovering configured AI reviewers, soliciting reviews, and addressing feedback. Merge remains approval-gated by default, but a composing merge skill can supply documented invocation authority and owns the final Slack notification when it owns the merge.
+description: V1.9 - Takes one specified existing GitHub pull request to a human-ready state with truthful current-head evidence by following the shared PR reviewer policy and addressing feedback. Merge remains approval-gated by default, but a composing merge skill can supply documented invocation authority and owns the final Slack notification when it owns the merge.
 disable-model-invocation: true
-compatibility: Requires git, GitHub CLI, GitHub network access, permission to push to the PR branch, and permission to request the repository's configured reviewers. Optional authorized merge and cleanup requires mergepr on PATH and the slack-dm skill.
+compatibility: Requires git, GitHub CLI, GitHub network access, permission to push to the PR branch, and permission to request the reviewers selected by the shared policy. Optional authorized merge and cleanup requires mergepr on PATH and the slack-dm skill.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -30,7 +30,9 @@ hooks:
 
 # Process PR
 
-Take one existing pull request from its current state to an open, human-ready state. Discover the repository's actual AI-review policy, request each configured reviewer without duplicate noise, process every current-head finding, and repeat until the available reviewers approve or report no further comments. When a caller explicitly selects the merge-and-cleanup completion mode, continue from the same gate through the authorized merge and post-merge cleanup handoff.
+Take one existing pull request from its current state to an open, human-ready state. Read the shared reviewer policy, request its required reviewers once per head, and process every actionable finding until the current head is clean. When a caller explicitly selects the merge-and-cleanup completion mode, continue from the same gate through the authorized merge and post-merge cleanup handoff.
+
+Read [references/pr-reviewer-policy.md](references/pr-reviewer-policy.md) for reviewer selection, request methods, and wait limits.
 
 Read [references/current-head-review-loop.md](references/current-head-review-loop.md) before requesting reviews or deciding that the PR is ready.
 
@@ -59,9 +61,9 @@ A PR is `human-ready` only when all of these are true for the same current head 
 3. Required checks pass. Relevant repository-local validation also passes, or an unrelated baseline failure is documented with evidence.
 4. Every actionable AI-review finding is fixed, disproven with concrete evidence, or explicitly deferred by the user.
 5. Every addressed AI-review thread is resolved when the repository and reviewer workflow permit resolution.
-6. Every configured and available AI reviewer has evaluated the current head and either approved it or produced a clean no-further-comments signal.
-7. No requested review or required check is still pending.
-8. At least one configured AI reviewer produced a current-head signal. If the repository has no AI reviewer configured, the requested AI-review gate is `blocked`, not vacuously complete.
+6. Every reviewer required by the shared policy or explicit repository requirements has evaluated the current head and either approved it or produced a clean no-further-comments signal.
+7. No required review or required check is still pending. Optional automatic runs do not create a wait gate.
+8. The shared policy's required AI review has a completed current-head signal. Missing access, explicit refusal, or absent evidence leaves the gate `blocked`.
 9. The pull-request title and body accurately describe the current head, linked
    issue contract when one exists, acceptance-criteria status, final
    verification evidence, and any residual risk or deferred work.
@@ -92,37 +94,20 @@ Record before editing or requesting anything:
 
 Do not treat an outdated review, an old approval, or a green check from another SHA as current evidence.
 
-### 3. Discover the Reviewer Set
+### 3. Select reviewers from the shared policy
 
-Build the active AI-reviewer set from live repository evidence in this order:
+Read [references/pr-reviewer-policy.md](references/pr-reviewer-policy.md).
+Record the selected reviewer, effective requester identity, current-head
+request or result, and any explicit additional repository requirement. An
+installed or automatically active optional product does not add a requirement.
+Do not discover a roster from recent PRs or probe optional product availability.
 
-1. Explicit repository instructions or pull-request policy.
-2. Reviewer workflows and configuration on the default branch.
-3. Existing review requests, bot-authored reviews, checks, and trigger conventions on recent comparable PRs.
-4. The current PR's established reviewer activity.
+### 4. Request and wait within the shared limits
 
-Common reviewers include GitHub Copilot PR Review, SFL, Codex, CodeRabbit, Macroscope, and Greptile, but none is globally mandatory. Do not request a product merely because it appears in this list. Do not omit a reviewer that the repository demonstrably requires.
-
-For each discovered reviewer, record:
-
-- why it is in scope;
-- automatic or manual trigger;
-- the supported request mechanism;
-- the clean or approval signal;
-- whether it is available for this PR and head SHA.
-
-### 4. Solicit Reviews Once Per Head
-
-1. Let configured automatic reviews start before adding a manual request.
-2. Use the repository's documented request mechanism. Do not guess trigger comments, labels, workflow inputs, or bot logins.
-3. Make at most one outstanding request per reviewer per unchanged head SHA.
-4. Record the request time and resulting review request, check, workflow run, or exact failure.
-5. If a reviewer is unavailable, rate-limited, quota-exhausted, plan-limited,
-   misconfigured, or unauthorized, preserve exact evidence. Required reviewer
-   unavailability is a blocker. Conditional or optional reviewer unavailability
-   is a reported limitation and does not need a pull-request-specific waiver.
-   Treat a user direction that applies to a repository or account as standing
-   policy instead of asking for the same waiver on every pull request.
+Follow the shared policy's request, identity, deduplication, refusal, and wait
+rules. Reuse current-head requests across composing workflows. Record each
+request URL, requester, head, start time, and resulting signal or exact failure.
+Do not start another wait budget when a caller or duplicate run already owns it.
 
 ### 5. Process Feedback
 
@@ -136,13 +121,13 @@ For every unresolved current-head finding:
 6. Review the diff and commit only intended files. Push the PR branch without rewriting shared history unless the user explicitly authorizes it.
 7. Resolve an addressed thread only after its finding is fixed, obsolete on the new head, or disproven with evidence. Never mass-resolve threads merely to reach zero.
 
-Any pushed commit creates a new evidence epoch. Re-read the PR head SHA, discard stale readiness conclusions, and solicit the active reviewer set again for the new head.
+Any pushed commit creates a new evidence epoch. Re-read the PR head SHA, discard stale readiness conclusions, and apply the shared policy again for the new head.
 
 ### 6. Wait and Iterate
 
 Poll review and check state without issuing duplicate requests. Continue the bounded loop while useful progress is possible:
 
-1. wait for all outstanding reviewers and required checks;
+1. wait only for required reviewers and checks within the shared policy limits;
 2. fetch current-head reviews, threads, checks, and runs again;
 3. process new actionable findings;
 4. validate, commit, and push any fixes;
@@ -169,7 +154,9 @@ Report:
 
 - PR URL, base branch, head branch, and exact head SHA;
 - final `human-ready` or `blocked` result;
-- one row per configured reviewer with request method, latest current-head signal, finding count, unresolved-thread count, and evidence URL or run ID;
+- required reviewer results with request method, current-head signal, finding
+  count, unresolved-thread count, and evidence URL or run ID;
+- any actionable findings from passive reviewers and their disposition;
 - required-check and merge-state results;
 - local validation commands and exact pass/fail results;
 - pull-request title and body accuracy, including acceptance-criteria and
@@ -223,7 +210,7 @@ user separately requested full repository cleanup in the current conversation.
 
 After every post-merge check and cleanup action is complete, invoke the
 `slack-dm` skill at `../slack-dm/SKILL.md`. Send Franz one `merged` DM with the
-canonical `OWNER/REPO` project, `PR #<number> — <exact current title> — merged`
+canonical `OWNER/REPO` project, `PR #<number> â€” <exact current title> â€” merged`
 outcome, PR URL, merge commit, and cleanup result. Send only after GitHub
 reports `MERGED`. This is the final workflow phase before the user-facing
 response.
@@ -241,7 +228,7 @@ retained unrelated work.
 ## Avoid
 
 - Hard-coding personal or work accounts, organizations, repository owners, or reviewer rosters.
-- Requesting reviewers that are not configured or authorized for the repository.
+- Requesting products outside the shared policy or explicit repository requirements.
 - Posting repeated trigger comments or dispatching duplicate paid review runs.
 - Treating `COMMENTED`, a confidence score, or an outdated approval as current-head approval.
 - Counting outdated unresolved threads as resolved.

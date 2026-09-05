@@ -1,6 +1,6 @@
 ---
 name: issue-to-pr
-description: V1.8 - Turns one specified GitHub issue into a validated pull request with concise current-head evidence, then routes AI review by repository owner. HemSoft requires connected Codex and uses Cubic when available; fhemmerrelias and relias-engineering use Copilot PR Review. Optional merge, cleanup, and Slack notification require direct user approval.
+description: V1.9 - Turns one specified GitHub issue into a validated pull request with concise current-head evidence, then follows the shared PR reviewer policy for current-head review. Optional merge, cleanup, and Slack notification require direct user approval.
 disable-model-invocation: true
 compatibility: Requires git, GitHub CLI, network access, and permission to push a branch and create a pull request in the target repository. Optional approved merge and cleanup requires mergepr on PATH and the slack-dm skill.
 hooks:
@@ -202,53 +202,16 @@ Create the pull request ready for review by default. Automatic reviewers may
 skip drafts. Use a draft only when the user or repository explicitly requires
 one, and mark it ready before entering the automated review loop.
 
-## 6. Route reviewers by repository owner
+## 6. Apply the shared PR reviewer policy
 
-Match the canonical owner case-insensitively. This routing is deliberate and
-overrides generic vendor discovery:
+Read `../process-pr/references/pr-reviewer-policy.md` before requesting any
+reviewer. It is the single source for the product registry, selection,
+requester identity, request methods, refusal handling, and wait limits.
+Do not maintain a separate owner table or discover optional products here.
 
-| Repository owner | Required AI reviewers | Conditional AI reviewers | Never request as fallback |
-| --- | --- | --- | --- |
-| `HemSoft` | Connected Codex | Cubic when an exact-head run is available within its plan and quota | Copilot or SFL |
-| `fhemmerrelias` | GitHub Copilot PR Review | None | Cubic, Codex, or SFL |
-| `relias-engineering` | GitHub Copilot PR Review | None | Cubic, Codex, or SFL |
-| Any other owner | Reviewers proven required by repository policy or live behavior | Reviewers proven optional by repository policy or live behavior | Any unproven reviewer |
-
-For `HemSoft`, let Cubic's automatic exact-head check run when available.
-Request connected Codex once per unchanged head with:
-
-```text
-gh pr comment <pr> --repo HemSoft/<repo> --body "@codex review"
-```
-
-Do not post a duplicate Codex trigger when the unchanged head already has a
-request, run, review, or clean signal. A clean current-head Codex result
-satisfies the required AI-review gate.
-
-Treat Cubic as conditional. If an exact-head Cubic run starts, process every
-finding and require its clean result before readiness. If Cubic does not start,
-or live evidence shows plan or quota exhaustion, record it as unavailable and
-continue without a pull-request-specific waiver. Do not invent a manual Cubic
-trigger or manufacture a base update merely to retrigger it.
-
-For `fhemmerrelias` and `relias-engineering`, inspect current review requests
-and reviews, allow repository automation a short opportunity to request
-Copilot, then request it once per unchanged head when needed:
-
-```text
-gh pr edit <pr> --repo <owner/repo> --add-reviewer "@copilot"
-```
-
-Copilot is required for these work repositories unless the user explicitly
-waives an unavailable reviewer for that pull request. Re-read review state after
-the request and record any permission, availability, or retention failure.
-
-For any other owner, discover reviewers from repository instructions, active
-default-branch automation, recent comparable pull requests, and current PR
-activity. Do not copy the HemSoft or work reviewer roster to another owner.
-
-Read [references/review-iteration.md](references/review-iteration.md) before
-requesting, interpreting, or resolving reviewer feedback.
+Read [references/review-iteration.md](references/review-iteration.md) for the
+handoff to the shared evidence loop. Reuse a current-head request or result
+when another workflow already owns the review.
 
 ## 7. Iterate on the immutable current head
 
@@ -257,8 +220,8 @@ For every review pass:
 1. Record the pull request's current head SHA.
 2. Gather required checks, failed Actions logs, reviews, and unresolved inline
    threads for that SHA.
-3. Triage every actionable finding from the owner-routed reviewer set. Verify
-   each finding against the code instead of accepting it automatically.
+3. Triage actionable findings from all sources, including passive reviewers.
+   Verify each against the code instead of accepting it automatically.
 4. Implement the smallest defensible fixes and update tests when behavior
    changes.
 5. Run the relevant local validation again.
@@ -283,9 +246,8 @@ same current head SHA:
 - repository-required checks pass;
 - the pull request is mergeable or GitHub reports no conflict;
 - no actionable review thread remains unresolved;
-- every owner-routed required reviewer is current-head clean;
-- every conditional reviewer that ran on the current head is clean, while any
-  unavailable conditional reviewer is documented without blocking readiness;
+- every reviewer required by the shared policy and repository is current-head
+  clean; optional runs do not add a completion gate;
 - the final local validation is recorded;
 - the pull-request title and body accurately describe the current head, every
   acceptance criterion is proved or explicitly deferred by the user, and the
@@ -298,9 +260,8 @@ technical evidence. Editing the body does not establish a new code-review
 epoch, but any code push does.
 
 Do not equate a comment-only AI review with a formal GitHub approval. A missing
-required reviewer is a blocker to report. A missing conditional reviewer is a
-reported limitation, not permission to substitute another repository family's
-reviewer.
+required reviewer is a blocker to report. Follow the shared policy for
+refusals and unavailable reviews; do not substitute another product.
 
 ## 9. Closeout
 
@@ -344,7 +305,7 @@ After direct approval:
    commit, base-branch parity, removed or preserved branch, and worktree state.
 5. After every post-merge check and cleanup action is complete, invoke the
    `slack-dm` skill at `../slack-dm/SKILL.md`. Send Franz one `merged` DM with
-   the canonical `OWNER/REPO` project, `PR #<number> — <exact current title> —
+   the canonical `OWNER/REPO` project, `PR #<number> â€” <exact current title> â€”
    merged` outcome, PR URL, merge commit, and cleanup result. Send only after
    GitHub reports `MERGED`. This is the final workflow phase before the
    user-facing response.

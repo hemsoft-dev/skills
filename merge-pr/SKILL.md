@@ -1,6 +1,6 @@
 ---
 name: merge-pr
-description: V1.2 - Merge one or more explicitly selected GitHub pull requests from oldest to newest, cleaning the repository between each merge and sending one final Slack notification per successful merge.
+description: V1.3 - Merge one or more explicitly selected GitHub pull requests from oldest to newest, cleaning the repository between each merge and sending one final Slack notification per successful merge.
 disable-model-invocation: true
 compatibility: Requires git, GitHub CLI, GitHub access, mergepr on PATH, the repo-cleanup skill, and the slack-dm skill.
 hooks:
@@ -42,12 +42,20 @@ Accept positive integers, comma-separated values, and inclusive `N-M` ranges. No
 
 "Oldest" means the earliest GitHub `createdAt` timestamp among the selected PRs. Sort by `createdAt` ascending, then by PR number ascending when timestamps match. Do not use numeric order as a substitute for creation time.
 
+## Reviewer policy
+
+Read `../process-pr/references/pr-reviewer-policy.md` before evaluating review
+readiness. Use its required reviewer set and current-head evidence rules.
+If review processing is needed, hand the exact PR and existing requests to
+`../process-pr/SKILL.md`; preserve this skill's merge and notification ownership.
+Do not add optional reviewers, duplicate requests, or restart refused waits.
+
 ## Workflow
 
 1. Resolve the repository from `git remote get-url origin`, the primary checkout from `git worktree list --porcelain`, the active GitHub login, and the default branch. Read the repository's applicable `AGENTS.md` instructions.
 2. Expand and validate the full selector set. Read each PR's `number`, `createdAt`, title, URL, state, draft state, base branch, head branch, and head SHA. Sort the selected PRs by `createdAt`, then number. Show the resolved order before the first merge.
 3. Process each PR in that fixed order. Refresh its live state, mergeability, merge state, reviews, review threads, checks, and exact head SHA immediately before deciding whether it can merge.
-4. Mark the current PR `BLOCKED` without merging when it is closed without merge, is a draft, has conflicts, has failing or pending required checks, lacks a repository-required current-head review, or changed head after validation. Do not invent review requirements the repository does not have. Continue to step 7 so cleanup runs before the next selected PR.
+4. Mark the current PR `BLOCKED` without merging when it is closed without merge, is a draft, has conflicts, has failing or pending required checks, lacks a current-head review required by the shared policy or repository, or changed head after validation. Use the shared policy for reviewer selection; installed optional bots do not add requirements. Continue to step 7 so cleanup runs before the next selected PR.
 5. From the clean primary checkout, run `mergepr {PR_NUMBER}`. Do not run it from a linked PR worktree that it may remove.
 6. If `mergepr` returns an error, re-read the PR before deciding what happened:
    - If GitHub reports it merged, continue to cleanup.
