@@ -1,6 +1,6 @@
 ---
 name: fleet
-description: "V1.10 - Commands: Connect, Run, Send, Retrieve. Operate the private Tailscale fleet across laptop, home, air, mini, grokbot, iphone, and ipad."
+description: "V1.11 - Commands: Connect, Run, Send, Retrieve. Operate the private Tailscale fleet across laptop, home, air, mini, grokbot, iphone, and ipad."
 disable-model-invocation: true
 ---
 
@@ -158,6 +158,25 @@ Use these native pickup paths when reporting completion:
 Taildrop is the file-sharing transport. Do not substitute FTP, SCP, SFTP,
 public links, or email attachments unless the user explicitly asks. Do not
 expose SSH beyond Tailscale or copy private SSH keys between machines.
+
+## Sync user-level skill edits
+
+Franz's 2026-09-05 instruction requires every user-level skill edit to be synced
+to the fleet. This authorizes routine transfer and installation after validation;
+no additional destination or action question is needed for this workflow.
+
+Home is the authoritative source. Sync changed active skill files and applicable
+shared `AGENTS.md` instructions to Laptop, Air, Mini, and Grokbot. Do not copy
+History directories, Git metadata, caches, archives, logs, or transfer artifacts.
+Preserve the receiver's History and back up replaced files outside active skill
+discovery paths. Keep machine-specific configuration unless explicitly changed.
+
+Use Taildrop archives and verify both the archive SHA-256 and every installed
+file against a source manifest. Check host identity and existing content before
+installation, and stop if it changes during staging. Report installed versions,
+hash parity, and any missing runtime dependencies. Offline peers and host-key
+failures remain pending; keep a named outbound package and report the next step.
+Do not treat sender acceptance as installation proof or bypass host-key checks.
 
 ## History
 

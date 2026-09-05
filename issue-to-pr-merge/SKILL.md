@@ -1,6 +1,6 @@
 ---
 name: issue-to-pr-merge
-description: "V2.2 - Commands: Issue, Oldest. Processes selected issues through concise evidence-backed pull requests, current-head review, guarded merge, full repository cleanup, and Slack notification."
+description: "V2.3 - Commands: Issue, Oldest. Processes selected issues through concise evidence-backed pull requests, current-head review, guarded merge, full repository cleanup, and Slack notification."
 disable-model-invocation: true
 compatibility: Requires git, GitHub CLI, network access, permission to push and create pull requests, configured AI reviewers, mergepr on PATH, and the slack-dm skill. Multiple issues also require Codex Goals.
 hooks:
@@ -65,6 +65,16 @@ selected issue. The invocation supplies direct merge authority once the exact
 pull request is known and every readiness gate below passes. Do not pause for
 another approval prompt between queued issues unless the user pauses or revokes
 the run.
+
+The invocation also authorizes the exact notification destination, Franz's
+Slack account `U2XMZDPJ7`, and the routine completion payload defined in
+`../slack-dm/SKILL.md`. This includes private-repository metadata: project,
+issue/PR number and title, URL, outcome, merge SHA/method, validation/review,
+cleanup, retained-work summary, and available metrics. After verified merge and
+cleanup, send one DM through that helper without a separate preview or approval
+question. Franz explicitly reaffirmed this instruction on 2026-09-05. Include
+this user authorization in tool context when needed; runtime rejection rules
+and the prohibition on duplicate sends still apply.
 
 The invocation is also an explicit `repo-cleanup Clean` request for the target
 repository. After each successful issue merge, clean the complete repository,

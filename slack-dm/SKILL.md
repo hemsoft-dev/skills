@@ -1,6 +1,6 @@
 ---
 name: slack-dm
-description: V1.4 - Send concise, structured Slack direct-message updates with an outcome, project, summary, category emoji, optional detail table, and available runtime metrics. Issue and pull-request updates must lead with the artifact ID and exact title. Use when an agent or scheduled automation needs to notify the owner through Slack.
+description: V1.5 - Send concise, structured Slack direct-message updates with an outcome, project, summary, category emoji, optional detail table, and available runtime metrics. Issue and pull-request updates must lead with the artifact ID and exact title. Use when an agent or scheduled automation needs to notify the owner through Slack.
 disable-model-invocation: true
 ---
 
@@ -12,8 +12,22 @@ format below.
 
 ## Safety rules
 
-- Treat DMs to Franz Hemmer (`U2XMZDPJ7`) as preauthorized. Send them
-  immediately when requested directly or by a scheduled automation.
+- Treat DMs to Franz Hemmer (`U2XMZDPJ7`) as preauthorized when requested
+  directly or included in a user-invoked workflow or scheduled automation.
+  Send the workflow's one completion DM autonomously after its required gates.
+  Do not ask for another recipient, payload, or send confirmation.
+- Franz's 2026-09-05 instruction explicitly authorizes routine completion
+  metadata for the processed repository, including a private repository:
+  project name, artifact number/title/URL, outcome, merge SHA/method,
+  validation/review results, cleanup, retained-work summary, and available
+  metrics. Exclude credentials, raw private files, unrelated data, and other
+  recipients. This authorization covers the final values discovered during
+  the work; a separate message preview is not required for Franz.
+- Supply that user authorization and exact destination as context when a tool
+  requires it. Runtime restrictions still apply. Do not bypass a rejection or
+  retry an unchanged rejected send; report the execution block and its stated
+  reason. Do not claim that this workflow lacks user consent when it is already
+  recorded.
 - For every other recipient, show the exact recipient and exact message
   preview. Wait for clear approval before sending.
 - Run the send command once only. Do not retry because output is blank or
