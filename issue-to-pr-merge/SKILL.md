@@ -1,6 +1,6 @@
 ---
 name: issue-to-pr-merge
-description: "V2.4 - Commands: Issue, Oldest. Processes selected issues through concise evidence-backed pull requests, current-head review, guarded merge, full repository cleanup, and Slack notification."
+description: "V2.5 - Commands: Issue, Oldest. Processes selected issues through concise evidence-backed pull requests, current-head review, guarded merge, full repository cleanup, and Slack notification."
 disable-model-invocation: true
 compatibility: Requires git, GitHub CLI, network access, permission to push and create pull requests, access to the shared policy's required reviewer, mergepr on PATH, and the slack-dm skill. Multiple issues also require Codex Goals.
 hooks:
@@ -27,6 +27,10 @@ parallel. This skill composes `issue-to-pr` at `../issue-to-pr/SKILL.md`,
 `process-pr` at `../process-pr/SKILL.md`, and `repo-cleanup` at
 `../repo-cleanup/SKILL.md`. Read those skills and the review-loop references
 they name before acting. Their detailed safety rules remain in force.
+
+Before preflight, read `../process-pr/references/pr-reviewer-policy.md`.
+Its requester identity, selection, refusal handling, and wait limits apply
+throughout this workflow, including the final merge gate.
 
 Use one of two modes:
 
@@ -232,13 +236,17 @@ not merge or clean it up. Stop the batch before starting another issue.
 When `process-pr` proves `human-ready`, report the exact PR number, URL, head
 SHA, checks, reviewer signals, and unresolved-thread count in the final receipt,
 not as an intermediate approval request. Immediately re-read the PR and local
-state. Confirm the head is unchanged, required checks pass, every configured
-current-head reviewer is clean, no live review thread remains unresolved,
+state. Confirm the head is unchanged, required checks pass, every reviewer
+required by the shared policy and explicit repository requirements is
+current-head clean, no live review thread remains unresolved,
 GitHub reports the PR mergeable, the diff still maps only to the selected
 issue, and the final title and body truthfully report satisfied acceptance
 criteria, Definition of Done evidence, verification outcomes, residual risk,
 and deferred work. Apply `unslop` to any final prose edit while preserving exact
 technical evidence.
+
+Optional reviewer availability or activity does not add a merge gate. Assess
+any actionable findings already present under the shared policy.
 
 Proceed directly to Phase 4 when those conditions pass. A changed head, failed
 check, new actionable finding, conflict, or reviewer regression returns the

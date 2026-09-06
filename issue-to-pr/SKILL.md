@@ -1,6 +1,6 @@
 ---
 name: issue-to-pr
-description: V1.9 - Turns one specified GitHub issue into a validated pull request with concise current-head evidence, then follows the shared PR reviewer policy for current-head review. Optional merge, cleanup, and Slack notification require direct user approval.
+description: V1.10 - Turns one specified GitHub issue into a validated pull request with concise current-head evidence, then follows the shared PR reviewer policy for current-head review. Optional merge, cleanup, and Slack notification require direct user approval.
 disable-model-invocation: true
 compatibility: Requires git, GitHub CLI, network access, and permission to push a branch and create a pull request in the target repository. Optional approved merge and cleanup requires mergepr on PATH and the slack-dm skill.
 hooks:
@@ -21,9 +21,10 @@ hooks:
 # Issue to PR
 
 Take one user-specified GitHub issue from verified repository state to an open,
-reviewed pull request. Resolve the canonical repository owner before requesting
-review, then apply the owner policy in section 6. Never infer the repository
-family from the active GitHub account or local path.
+reviewed pull request. Before preflight, read
+`../process-pr/references/pr-reviewer-policy.md` for requester identity and the
+shared review policy used in section 6. Resolve the canonical repository owner;
+never infer the repository family from the active GitHub account or local path.
 
 The default terminal state is an open pull request. Do not merge, enable an
 administrative bypass, force-push, delete a branch, or remove the worktree
@@ -266,8 +267,8 @@ refusals and unavailable reviews; do not substitute another product.
 ## 9. Closeout
 
 Report the issue, pull request URL, branch, worktree path, current head SHA,
-pull-request body contract status, validation results, check state, the routed
-reviewer set and each current-head signal, unresolved thread count, active
+pull-request body contract status, validation results, check state, the required
+reviewer set selected by the shared policy and each current-head signal, unresolved thread count, active
 GitHub identity, and any exact blocker.
 
 Keep the worktree and branch while the pull request is open so revisions remain
@@ -324,9 +325,10 @@ sending a duplicate DM; the composing skill must send it after its final proof.
 One issue maps to one intentionally named branch, one isolated worktree, and
 one open pull request whose title and body truthfully describe its current
 head, acceptance-criteria status, completion evidence, validation, and risk.
-The current head has repository-native validation and all available configured
-review evidence. No unrelated checkout, branch, worktree, stash, issue, or pull
-request is changed.
+The current head has repository-native validation and clean review evidence
+from every reviewer required by the shared policy and explicit repository
+requirements. Optional reviewer availability or activity does not add a gate.
+No unrelated checkout, branch, worktree, stash, issue, or pull request is changed.
 
 ## History
 
