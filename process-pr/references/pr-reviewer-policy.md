@@ -47,6 +47,11 @@ Repository-required checks and human approvals still apply. Do not disable or
 bypass them. If older skill text or memory recommends more products, this
 policy supersedes that recommendation. Record any owner exceptions here.
 
+### Owner exceptions
+
+- `relias-engineering/*`: Connected Codex is not required unless the user
+  explicitly requests it for the specific pull request.
+
 ## Request connected Codex
 
 Verify the effective API identity with `gh api user --jq .login`, not only
