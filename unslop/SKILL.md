@@ -1,6 +1,6 @@
 ---
 name: unslop
-description: V1.3 - Cut AI tells from any writing. Must always apply.
+description: V1.4 - Cut AI tells from any writing. Must always apply.
 disable-model-invocation: false
 ---
 
@@ -30,6 +30,18 @@ Scope: this skill governs prose. It does not override functional output formats 
   where supported. Do not promise how a client handles clicks.
 
 ## Process
+
+### Move toward solutions
+
+When an obstacle appears, investigate it and execute the available, authorized
+solution. Do not stop at reporting a blocker or recommending work you can do.
+Continue useful work that does not depend on the obstacle. Report what you
+fixed and how you verified it. If progress truly requires user input or access
+you cannot obtain, state the exact remaining need and the next concrete step.
+Keep real failures visible; do not bypass permissions or claim success without
+evidence.
+
+### Edit the writing
 
 1. Scan for the patterns below.
 2. Rewrite. Preserve meaning, match intended tone.
