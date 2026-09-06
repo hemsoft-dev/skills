@@ -1,6 +1,6 @@
 ---
 name: process-pr
-description: V1.9 - Takes one specified existing GitHub pull request to a human-ready state with truthful current-head evidence by following the shared PR reviewer policy and addressing feedback. Merge remains approval-gated by default, but a composing merge skill can supply documented invocation authority and owns the final Slack notification when it owns the merge.
+description: V1.10 - Takes one specified existing GitHub pull request to a human-ready state with truthful current-head evidence by following the shared PR reviewer policy and addressing feedback. Merge remains approval-gated by default, but a composing merge skill can supply documented invocation authority and owns the final Slack notification when it owns the merge.
 disable-model-invocation: true
 compatibility: Requires git, GitHub CLI, GitHub network access, permission to push to the PR branch, and permission to request the reviewers selected by the shared policy. Optional authorized merge and cleanup requires mergepr on PATH and the slack-dm skill.
 hooks:
@@ -35,6 +35,8 @@ Take one existing pull request from its current state to an open, human-ready st
 Read [references/pr-reviewer-policy.md](references/pr-reviewer-policy.md) for reviewer selection, request methods, and wait limits.
 
 Read [references/current-head-review-loop.md](references/current-head-review-loop.md) before requesting reviews or deciding that the PR is ready.
+
+Read [native-auto-merge.md](references/native-auto-merge.md) for the activated, maintainer-labeled `HemSoft/hs-buddy` exception. It replaces only the default approval checkpoint and local merge path below. Preserve current-head review, validation, scope, cleanup, and notification ownership.
 
 ## Boundaries
 

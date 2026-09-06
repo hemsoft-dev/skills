@@ -1,6 +1,6 @@
 ---
 name: merge-pr
-description: V1.3 - Merge one or more explicitly selected GitHub pull requests from oldest to newest, cleaning the repository between each merge and sending one final Slack notification per successful merge.
+description: V1.4 - Merge one or more explicitly selected GitHub pull requests from oldest to newest, cleaning the repository between each merge and sending one final Slack notification per successful merge.
 disable-model-invocation: true
 compatibility: Requires git, GitHub CLI, GitHub access, mergepr on PATH, the repo-cleanup skill, and the slack-dm skill.
 hooks:
@@ -49,6 +49,10 @@ readiness. Use its required reviewer set and current-head evidence rules.
 If review processing is needed, hand the exact PR and existing requests to
 `../process-pr/SKILL.md`; preserve this skill's merge and notification ownership.
 Do not add optional reviewers, duplicate requests, or restart refused waits.
+
+Read `../process-pr/references/native-auto-merge.md` before applying the default merge rules below. For an activated, maintainer-labeled `HemSoft/hs-buddy` PR, that policy supplies standing authority and replaces the local `mergepr` path. It preserves all review gates, frozen scope, cleanup requirements, and notification ownership.
+
+For this native path, skip the local merge and administrative fallback steps.
 
 ## Workflow
 

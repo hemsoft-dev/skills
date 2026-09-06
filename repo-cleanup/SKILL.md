@@ -1,6 +1,6 @@
 ---
 name: repo-cleanup
-description: "V1.4 - Commands: Audit, Clean. Runs a deterministic PowerShell fast path to commit all pending main-checkout changes, synchronize, push, and remove merged unused local branches; handles retained work separately. Explicit invocation means Clean, automatic use means Audit."
+description: "V1.5 - Commands: Audit, Clean. Runs a deterministic PowerShell fast path to commit all pending main-checkout changes, synchronize, push, and remove merged unused local branches; handles retained work separately. Explicit invocation means Clean, automatic use means Audit."
 disable-model-invocation: false
 compatibility: Requires PowerShell 7 and git. Automatic publication targets HemSoft GitHub repositories with main as the default branch; exceptional PR checks require GitHub CLI.
 hooks:
@@ -122,6 +122,8 @@ routine cleanup incomplete.
 authorize a network origin or another GitHub owner.
 
 ## Retained work and errors
+
+For a PR merged by GitHub native auto-merge, use the local cleanup section in `../process-pr/references/native-auto-merge.md`. Enrollment is not merge proof. A squash-merged branch may remain in the first receipt; verify the exact merged head and published merge commit before disposing of its clean, inactive worktree and unchanged refs. The existing caller still owns the cleanup scope and any completion DM.
 
 Handle only the items the receipt or error identifies, then rerun the fast path
 once if needed. The script preserves linked worktrees, unique branches, stashes,

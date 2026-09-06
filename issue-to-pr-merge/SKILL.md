@@ -1,6 +1,6 @@
 ---
 name: issue-to-pr-merge
-description: "V2.5 - Commands: Issue, Oldest. Processes selected issues through concise evidence-backed pull requests, current-head review, guarded merge, full repository cleanup, and Slack notification."
+description: "V2.6 - Commands: Issue, Oldest. Processes selected issues through concise evidence-backed pull requests, current-head review, guarded merge, full repository cleanup, and Slack notification."
 disable-model-invocation: true
 compatibility: Requires git, GitHub CLI, network access, permission to push and create pull requests, access to the shared policy's required reviewer, mergepr on PATH, and the slack-dm skill. Multiple issues also require Codex Goals.
 hooks:
@@ -100,7 +100,7 @@ The issue-work authority covers one pull request per selected issue, including
 a verified existing pull request that maps only to that issue. The separate
 cleanup authority above covers only explained baseline work split into coherent
 cleanup pull requests. Neither authority covers mixed or uncertain scope,
-administrative bypasses, force merges, or a merge method other than `mergepr`.
+administrative bypasses, force merges, or merge paths other than `mergepr` and the activated native auto-merge handoff below.
 
 An explicit `Oldest` invocation supplies issue-selection authority for only the
 issue that the lease protocol selects or resumes. It never extends to a second
@@ -254,6 +254,8 @@ workflow to `process-pr`. Stop without merging if authority is revoked, scope
 is mixed or uncertain, or any readiness condition cannot be proven.
 
 ## Phase 4: Merge, cleanup, and notification
+
+Read `../process-pr/references/native-auto-merge.md` before applying the default merge rules below. For an activated, maintainer-labeled `HemSoft/hs-buddy` PR, that policy supplies standing authority and replaces the local `mergepr` path. It preserves all review gates, frozen scope, cleanup requirements, and notification ownership.
 
 With the invocation-derived authority and a fresh readiness proof:
 

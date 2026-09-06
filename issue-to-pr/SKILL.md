@@ -1,6 +1,6 @@
 ---
 name: issue-to-pr
-description: V1.10 - Turns one specified GitHub issue into a validated pull request with concise current-head evidence, then follows the shared PR reviewer policy for current-head review. Optional merge, cleanup, and Slack notification require direct user approval.
+description: V1.11 - Turns one specified GitHub issue into a validated pull request with concise current-head evidence, then follows the shared PR reviewer policy for current-head review. Optional merge, cleanup, and Slack notification require direct user approval.
 disable-model-invocation: true
 compatibility: Requires git, GitHub CLI, network access, and permission to push a branch and create a pull request in the target repository. Optional approved merge and cleanup requires mergepr on PATH and the slack-dm skill.
 hooks:
@@ -276,6 +276,8 @@ safe and isolated. If the user later directly approves merging this exact pull
 request, follow the optional merge and cleanup section below.
 
 Restore any GitHub identity switched during preflight.
+
+Read `../process-pr/references/native-auto-merge.md` before applying the default merge rules below. For an activated, maintainer-labeled `HemSoft/hs-buddy` PR, that policy supplies standing authority and replaces the local `mergepr` path. It preserves all review gates, frozen scope, cleanup requirements, and notification ownership.
 
 ## Optional user-approved merge and cleanup
 
