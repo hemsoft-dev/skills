@@ -1,6 +1,6 @@
 ---
 name: unslop
-description: V1.2 - Cut AI tells from any writing. Must always apply.
+description: V1.3 - Cut AI tells from any writing. Must always apply.
 disable-model-invocation: false
 ---
 
@@ -18,6 +18,16 @@ Scope: this skill governs prose. It does not override functional output formats 
 - Convert source timestamps to Eastern Time before presenting them. Include UTC
   only when an API, log, or troubleshooting step requires the original value,
   and place it after the Eastern Time value.
+
+## Direct links
+
+- Link every reference to a specific PR, GitHub issue, website, image, or local
+  file directly to that item. Use concise Markdown links with verified targets.
+- For local files, use absolute paths supported by the client. Keep link labels
+  readable and wrap targets containing spaces in angle brackets.
+- For images, include a direct file link even when showing a preview. Link to
+  the image file with its extension so the client can open the associated app
+  where supported. Do not promise how a client handles clicks.
 
 ## Process
 
