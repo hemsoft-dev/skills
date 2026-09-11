@@ -1,6 +1,6 @@
 ---
 name: unslop
-description: V1.4 - Cut AI tells from any writing. Must always apply.
+description: V1.5 - Cut AI tells from any writing. Must always apply.
 disable-model-invocation: false
 ---
 
@@ -23,6 +23,12 @@ Scope: this skill governs prose. It does not override functional output formats 
 
 - Link every reference to a specific PR, GitHub issue, website, image, or local
   file directly to that item. Use concise Markdown links with verified targets.
+- Every instruction that tells the user to visit, open, configure, inspect, or
+  use a website must include a clickable link to the exact page in that same
+  instruction. This includes dashboards, settings pages, documentation, PRs,
+  issues, workflow runs, and account pages. A product name, bare domain, or
+  prose-only navigation path does not count. If an exact deep link cannot be
+  verified, link the closest verified parent page and list the remaining clicks.
 - For local files, use absolute paths supported by the client. Keep link labels
   readable and wrap targets containing spaces in angle brackets.
 - For images, include a direct file link even when showing a preview. Link to
@@ -46,7 +52,10 @@ evidence.
 1. Scan for the patterns below.
 2. Rewrite. Preserve meaning, match intended tone.
 3. Add soul (see next section).
-4. Self-audit: "What makes this obviously AI generated?" Fix remaining tells.
+4. Run a link audit. Every referenced website, page, dashboard, setting, PR,
+   issue, workflow run, document, image, and local file must have a direct link.
+   Instructions must place the link in the same step that requires it.
+5. Self-audit: "What makes this obviously AI generated?" Fix remaining tells.
 
 ## Adding soul
 
