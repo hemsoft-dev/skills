@@ -88,7 +88,7 @@ in these workflow instructions.
 
 Franz requires every user-level skill edit to be synced to the fleet. After
 validating and publishing an edit on Home, sync its active files through Taildrop
-to Laptop, Air, Mini, and Grokbot using `fleet/SKILL.md`. This is standing authority
+to Laptop, Air, and Mini using `fleet/SKILL.md`. This is standing authority
 for the transfer and installation; do not ask again for routine skill updates.
 Home is authoritative. Preserve peer histories and backups, verify SHA-256 after
 installation, and report offline or host-key-blocked peers as pending. Never
