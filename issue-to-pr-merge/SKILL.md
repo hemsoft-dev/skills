@@ -1,6 +1,6 @@
 ---
 name: issue-to-pr-merge
-description: "V2.6 - Commands: Issue, Oldest. Processes selected issues through concise evidence-backed pull requests, current-head review, guarded merge, full repository cleanup, and Slack notification."
+description: "V2.7 - Commands: Issue, Oldest. Processes selected issues through concise evidence-backed pull requests, current-head review, guarded merge, generated release follow-ups, full repository cleanup, and Slack notification."
 disable-model-invocation: true
 compatibility: Requires git, GitHub CLI, network access, permission to push and create pull requests, access to the shared policy's required reviewer, mergepr on PATH, and the slack-dm skill. Multiple issues also require Codex Goals.
 hooks:
@@ -264,16 +264,22 @@ With the invocation-derived authority and a fresh readiness proof:
    Do not run it from the pull-request worktree that `mergepr` will remove.
    Preserve dirty primary-checkout changes before invoking it.
 3. Re-read the PR, issue, branch, worktree, and default-branch state.
-4. Hand off to `repo-cleanup` in `Clean` mode. Integrate or preserve every
+4. Inspect workflows triggered by the merge. Wait for bounded repository
+   automation that publishes a release or opens a follow-up pull request tied
+   directly to the merged work. Run each generated release or changelog pull
+   request through `process-pr`, merge it with `mergepr`, and verify its local
+   cleanup before continuing. Do not absorb unrelated automation pull requests
+   or send a separate issue-completion notification for a generated follow-up.
+5. Hand off to `repo-cleanup` in `Clean` mode. Integrate or preserve every
    baseline change according to its ownership and purpose, remove only proven
    obsolete state, and return the primary checkout to clean default-branch
    parity. Process independent cleanup changes separately.
-5. If cleanup creates a pull request from baseline work, run it through
+6. If cleanup creates a pull request from baseline work, run it through
    `process-pr`, revalidate its immutable current head, merge it with `mergepr`,
    and resume `repo-cleanup Clean`. Do not send an issue-merge notification for
    a cleanup pull request.
-6. Complete any Oldest-mode lease and durable-state updates.
-7. Invoke the `slack-dm` skill at `../slack-dm/SKILL.md`. Send Franz one
+7. Complete any Oldest-mode lease and durable-state updates.
+8. Invoke the `slack-dm` skill at `../slack-dm/SKILL.md`. Send Franz one
    `merged` DM with
    the canonical `OWNER/REPO` project, `PR #<number> â€” <exact current title> â€”
    merged` outcome, PR URL, merge commit, and cleanup result. Send only after
@@ -301,6 +307,9 @@ After each merge, prove all of the following before continuing:
 
 - GitHub reports the pull request merged and its issue closed;
 - the merge commit and final pull-request head are recorded;
+- merge-triggered release automation finished, and every directly generated
+  release or changelog pull request is merged and cleaned up, or no such
+  follow-up was created;
 - the local default branch matches its remote;
 - the completed branch and worktree are removed or retained with an exact
   blocker;
