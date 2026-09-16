@@ -5,9 +5,10 @@ request methods, and retry limits. All PR workflows must read it before
 requesting reviews or deciding readiness. Update this file when products change;
 do not copy its roster or owner rules into other skills.
 
-Franz's 2026-09-05 policy selects connected Codex as the sole chosen product. The optional
-products use unstable free-tier access. Their installation or past activity
-does not justify discovery, requests, retries, or waiting.
+Franz's 2026-09-16 policy selects connected Codex as the default reviewer and
+GitHub Copilot PR Review as the required reviewer for `relias-engineering/*`.
+Other optional products use unstable free-tier access. Their installation or
+past activity does not justify discovery, requests, retries, or waiting.
 
 ## Product registry
 
@@ -21,7 +22,7 @@ installed or available in every repository.
 | CodeRabbit | Passive only | Read findings already present; do not probe availability or request |
 | Macroscope | Passive only | Read findings already present; do not probe availability or request |
 | Greptile | Passive only | Read findings already present; do not probe availability or request |
-| GitHub Copilot PR Review | Explicit requirement only | Request only when required by the user or repository |
+| GitHub Copilot PR Review | Required for `relias-engineering/*`; explicit requirement only elsewhere | Use the request procedure below |
 | SFL | Legacy, explicit requirement only | No fallback or deployment repair; follow a live required repository contract only |
 
 An unlisted product is passive only until the user changes this registry or an
@@ -49,8 +50,9 @@ policy supersedes that recommendation. Record any owner exceptions here.
 
 ### Owner exceptions
 
-- `relias-engineering/*`: Connected Codex is not required unless the user
-  explicitly requests it for the specific pull request.
+- `relias-engineering/*`: GitHub Copilot PR Review is required for every current
+  head. Connected Codex is not required unless the user explicitly requests it
+  for the specific pull request.
 
 ## Request connected Codex
 
@@ -84,10 +86,10 @@ A trigger comment, eyes reaction, silence, or disappearing reaction is not
 completion. Refresh issue comments before concluding that a review failed.
 Never call a clean comment or reaction a formal GitHub approval.
 
-## Required exceptions
+## Request GitHub Copilot PR Review
 
-For explicitly required Copilot, reuse a current-head request or result; when
-absent, request once with:
+For required Copilot, including every `relias-engineering/*` pull request, reuse
+a current-head request or result; when absent, request once with:
 
 ```powershell
 gh pr edit <pr> --repo <owner/repo> --add-reviewer "@copilot"
@@ -95,7 +97,12 @@ gh pr edit <pr> --repo <owner/repo> --add-reviewer "@copilot"
 
 Verify that GitHub retained or acted on the request. Require a completed
 current-head review with no actionable findings or unresolved threads; report
-the actual review state rather than assuming formal approval.
+the actual review state rather than assuming formal approval. After a fix is
+pushed, request one fresh Copilot review for the new head unless an automatic
+current-head review is already active or complete. A review of an older head
+cannot satisfy the gate.
+
+## Other required exceptions
 
 For any other explicitly required product, read that repository's documented
 trigger and completion contract. Allow an existing automatic run to finish.
