@@ -39,6 +39,14 @@ Capture evidence from the pull request's current head after exercising the
 actual affected path. Recapture any image or recording made stale by a later
 code change.
 
+## Accessibility validation
+
+Use keyboard navigation, automated accessibility checks, semantic markup, and
+browser accessibility-tree inspection when they apply to the changed UI. Do
+not require a manual screen-reader pass unless the user or repository explicitly
+requests one. Do not infer a manual screen-reader requirement from a general
+accessibility acceptance criterion.
+
 ## Attachment and rendering rules
 
 Upload screenshots and recordings as GitHub attachments. Put the generated

@@ -152,6 +152,11 @@ Then:
 6. Review the complete diff for scope, generated-file policy, secrets, debug
    artifacts, and accidental changes.
 
+For accessibility work, use keyboard navigation, automated checks, semantic
+markup, and browser accessibility-tree inspection by default. Do not introduce
+or retain a manual screen-reader gate unless the user or repository explicitly
+requires it.
+
 Do not expand into adjacent cleanup unless it is required for correctness or
 the user approves it.
 

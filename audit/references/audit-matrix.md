@@ -91,7 +91,7 @@ Never print secrets or exploit a live service. Use safe proofs and redact sensit
 
 ## Accessibility, UX, and compatibility
 
-- Run automated accessibility checks and inspect keyboard, focus, labels, contrast, reduced motion, zoom, screen-reader semantics, and error recovery for critical views.
+- Run automated accessibility checks and inspect keyboard behavior, focus, labels, semantic markup, accessibility-tree output, contrast, reduced motion, zoom, and error recovery for critical views. Do not require a manual screen-reader pass unless the user or repository explicitly requests one.
 - Check responsive layouts, localization, time and number formatting, high-DPI behavior, offline states, slow networks, and supported browser or OS matrices.
 - Validate that loading, empty, stale, partial, and failure states remain distinguishable.
 

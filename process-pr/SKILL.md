@@ -38,6 +38,8 @@ Read [references/current-head-review-loop.md](references/current-head-review-loo
 
 Read [references/ui-validation-evidence.md](references/ui-validation-evidence.md)
 for the issue and pull-request evidence required whenever the work changes UI.
+Do not introduce or retain a manual screen-reader gate unless the user or
+repository explicitly requires it.
 
 Read [native-auto-merge.md](references/native-auto-merge.md) for the activated, maintainer-labeled `HemSoft/hs-buddy` exception. It replaces only the default approval checkpoint and local merge path below. Preserve current-head review, validation, scope, cleanup, and notification ownership.
 

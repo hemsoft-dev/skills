@@ -102,6 +102,10 @@ them as GitHub attachments and verify them in the rendered issue.
 - Apply the `unslop` skill to the title and body before creation.
 - Do not call a UI issue implementation-ready when its required validation
   contract omits rendered PR screenshots.
+- Do not add a manual screen-reader acceptance criterion or validation step
+  unless the user or repository explicitly requires one. Use keyboard,
+  automated accessibility, semantic markup, and accessibility-tree evidence by
+  default.
 
 ## History
 
