@@ -1,10 +1,40 @@
 ---
 name: playwright-cli
 description: Automate browser interactions, test web pages and work with Playwright tests.
-allowed-tools: Bash(playwright-cli:*) Bash(npx:*) Bash(npm:*)
 ---
 
 # Browser Automation with playwright-cli
+
+## Authentication and browser choice
+
+Use the lowest-risk browser state that can complete the task:
+
+1. Use direct APIs or CLIs instead of a browser when they already have safe
+   authentication. For GitHub issue, pull-request, or comment screenshots and
+   videos, use GitHub CLI 2.99.0 or newer with repeatable `--attach` flags.
+2. Use a disposable Playwright session for public pages and test accounts.
+3. Use the official Playwright Extension for a real signed-in Chrome session,
+   SSO continuity, or installed extensions such as LastPass.
+4. If Playwright cannot reach browser chrome, an extension popup, an
+   authentication window, or a page that left its automation context, capture
+   the visible browser and continue with Pi computer use. Do this immediately
+   when CLI state contradicts what the user sees. Do not keep opening tabs or
+   hand routine clicks back to the user.
+
+Before authenticated browser work, read
+[references/authenticated-browser.md](references/authenticated-browser.md). Run
+`scripts/browser-auth-preflight.mjs` against the intended profile before
+attaching. The reference defines profile selection, extension attachment,
+LastPass handling, connection tokens, session-state safety, tab-scope checks,
+and the fallback order. On Windows, use
+`scripts/attach-authenticated.ps1 -Url <authorized-url>` for unattended token
+attachment so raw token-bearing output and artifacts do not reach the agent.
+After attachment, run every CLI command through
+`scripts/invoke-attached-safely.ps1`; ordinary Playwright CLI output can append
+an `Open tabs` section containing the connection token. Browser access does not
+grant authority for consequential actions. Never open a GitHub login form,
+switch browser accounts, or invoke password-manager autofill solely to upload
+validation evidence. Upgrade GitHub CLI and use `--attach` instead.
 
 ## Quick start
 
@@ -196,6 +226,12 @@ playwright-cli highlight --hide
 
 The global `--raw` option strips page status, generated code, and snapshot sections from the output, returning only the result value. Use it to pipe command output into other tools. Commands that don't produce output return nothing.
 
+For Playwright Extension sessions, `--raw` is mandatory but not sufficient as a
+policy. Use `scripts/invoke-attached-safely.ps1` so the command also gets a
+temporary artifact directory, connection-URL redaction, exact-token redaction,
+and bounded output. Never run a direct attached-session `eval`, `snapshot`,
+`tab-list`, `click`, or `run-code` command in an agent-visible terminal.
+
 ```bash
 playwright-cli --raw eval "JSON.stringify(performance.timing)" | jq '.loadEventEnd - .navigationStart'
 playwright-cli --raw eval "JSON.stringify([...document.querySelectorAll('a')].map(a => a.href))" > links.json
@@ -231,9 +267,11 @@ playwright-cli open --device="iPhone 15"
 # Use persistent profile (by default profile is in-memory)
 playwright-cli open --persistent
 # Use persistent profile with custom directory
+# Use a dedicated automation directory, not a person's normal Chrome data directory.
 playwright-cli open --profile=/path/to/profile
 
-# Connect to browser via Playwright Extension
+# Connect to a signed-in Chrome profile via the official Playwright Extension.
+# Read references/authenticated-browser.md before using this for real accounts.
 playwright-cli attach --extension=chrome
 
 # Connect to a running Chrome or Edge by channel name
@@ -420,6 +458,7 @@ playwright-cli show --annotate
 * **Request mocking** [references/request-mocking.md](references/request-mocking.md)
 * **Running Playwright code** [references/running-code.md](references/running-code.md)
 * **Browser session management** [references/session-management.md](references/session-management.md)
+* **Authenticated browser and LastPass access** [references/authenticated-browser.md](references/authenticated-browser.md)
 * **Storage state (cookies, localStorage)** [references/storage-state.md](references/storage-state.md)
 * **Test generation (plan / generate / heal)** [references/test-generation.md](references/test-generation.md)
 * **Tracing** [references/tracing.md](references/tracing.md)

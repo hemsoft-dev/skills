@@ -1,8 +1,8 @@
 ---
 name: process-pr
-description: V1.10 - Takes one specified existing GitHub pull request to a human-ready state with truthful current-head evidence by following the shared PR reviewer policy and addressing feedback. Merge remains approval-gated by default, but a composing merge skill can supply documented invocation authority and owns the final Slack notification when it owns the merge.
+description: V1.13 - Takes one specified existing GitHub pull request to a human-ready state with truthful current-head evidence, including CLI-uploaded UI screenshots when applicable, by following the shared PR reviewer policy and addressing feedback. Merge remains approval-gated by default, but a composing merge skill can supply documented invocation authority and owns the final Slack notification when it owns the merge.
 disable-model-invocation: true
-compatibility: Requires git, GitHub CLI, GitHub network access, permission to push to the PR branch, and permission to request the reviewers selected by the shared policy. Optional authorized merge and cleanup requires mergepr on PATH and the slack-dm skill.
+compatibility: Requires git, GitHub CLI with the gh-x extension, GitHub network access, permission to push to the PR branch, and permission to request the reviewers selected by the shared policy. Optional authorized merge and cleanup requires mergepr on PATH and the slack-dm skill.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -35,6 +35,9 @@ Take one existing pull request from its current state to an open, human-ready st
 Read [references/pr-reviewer-policy.md](references/pr-reviewer-policy.md) for reviewer selection, request methods, and wait limits.
 
 Read [references/current-head-review-loop.md](references/current-head-review-loop.md) before requesting reviews or deciding that the PR is ready.
+
+Read [references/ui-validation-evidence.md](references/ui-validation-evidence.md)
+for the issue and pull-request evidence required whenever the work changes UI.
 
 Read [native-auto-merge.md](references/native-auto-merge.md) for the activated, maintainer-labeled `HemSoft/hs-buddy` exception. It replaces only the default approval checkpoint and local merge path below. Preserve current-head review, validation, scope, cleanup, and notification ownership.
 
@@ -69,6 +72,16 @@ A PR is `human-ready` only when all of these are true for the same current head 
 9. The pull-request title and body accurately describe the current head, linked
    issue contract when one exists, acceptance-criteria status, final
    verification evidence, and any residual risk or deferred work.
+10. A final `gh x status` run from the target repository shows the exact PR row
+    as clean: `State` is `open`, `Rev` is approved, `AI` is `pass`, `Checks` is
+    `pass`, and `Cmts` carries the clean `!` marker with no unresolved threads.
+    The command's zero exit code is not evidence because `gh x status` also
+    exits zero when a PR row reports `fail` or `pending`.
+11. When the PR changes UI, its `## Validation` section contains one or more
+    current-head screenshots embedded through GitHub attachment URLs verified
+    under [references/ui-validation-evidence.md](references/ui-validation-evidence.md).
+    An interaction recording is included when practical, or the section states
+    the concrete reason it was omitted.
 
 Never reinterpret a comment-only review as a formal GitHub approval. Report each reviewer's actual signal.
 
@@ -92,7 +105,10 @@ Record before editing or requesting anything:
 - all review threads, including author, resolution, outdated state, and commit association;
 - required and optional checks plus current workflow runs;
 - merge state and draft state;
-- existing reviewer-trigger comments, labels, and current-head bot activity.
+- existing reviewer-trigger comments, labels, and current-head bot activity;
+- the exact PR row from `gh x status`, captured from the target repository;
+- whether the diff changes UI and, if so, the live body's validation section,
+  rendered screenshots, recording status, and the head those artifacts prove.
 
 Do not treat an outdated review, an old approval, or a green check from another SHA as current evidence.
 
@@ -133,11 +149,40 @@ Poll review and check state without issuing duplicate requests. Continue the bou
 2. fetch current-head reviews, threads, checks, and runs again;
 3. process new actionable findings;
 4. validate, commit, and push any fixes;
-5. request fresh reviews for the new head.
+5. request fresh reviews for the new head;
+6. run `gh x status` and inspect the exact PR row. A `Checks fail` result must
+   lead to check-log diagnosis and another fix cycle. `Checks pending`,
+   `AI pending`, unknown values, or a missing row remain incomplete.
 
-Stop as `blocked` when progress requires a product decision, expanded scope, credentials, unavailable required infrastructure, or repeated contradictory feedback that cannot be resolved safely. Report the exact blocker and the last proven state.
+A bounded wait expiry ends only that polling interval. It does not make a failed
+or pending `gh x status` row a completed processing result. Continue fixing any
+failure that can be addressed in the PR. Stop as `blocked` only when progress
+requires a product decision, expanded scope, credentials, unavailable required
+infrastructure, an evidenced unrelated baseline failure that cannot be fixed
+safely in the PR, or repeated contradictory feedback. Report `blocked` as an
+incomplete handoff, never as completed processing.
 
-### 7. Prove the Gate
+### 7. Validate UI evidence
+
+When the issue or diff changes UI, follow
+[references/ui-validation-evidence.md](references/ui-validation-evidence.md).
+Run the current head, exercise the affected states, capture screenshots, and
+capture a recording when practical. Put local media references in the
+`## Validation` body source and upload them with GitHub CLI 2.99.0 or newer by
+passing one `--attach` flag per file. Do not substitute local paths, repository
+file references, CI artifacts, or prose describing where a reviewer can find
+the files.
+
+Fetch the saved body and verify that GitHub CLI replaced every local reference
+with a GitHub attachment URL. Keep each video reference alone in its paragraph
+so GitHub renders an inline player. Use browser inspection only when the
+rendered presentation itself is under test or the CLI rewrite cannot be
+verified. If a later code push makes the media stale, recapture it. Missing
+verified screenshots leave the PR `blocked`, regardless of passing tests or
+reviews. Record the concrete reason when a recording is not practical. Never
+open a browser login or account-switch flow solely to upload this evidence.
+
+### 8. Prove the Gate
 
 Immediately before closeout, re-fetch all evidence and confirm it references the
 same head SHA. Re-read the pull-request title and body, compare their claims
@@ -152,6 +197,15 @@ still contains the required contract sections. On PowerShell, prefer a
 temporary file plus `--body-file <path>` for multiline content; piping a
 variable to `--body-file -` can store an empty body even when `gh` exits zero.
 
+Run `gh x status` from the target repository as the last aggregate gate. Locate
+the row by exact PR number rather than title or branch truncation. Do not rely
+on the process exit code. Do not declare processing complete or call the PR
+`human-ready` unless that row is clean under item 10 of the Human-Ready
+Contract. If the row says `fail`, inspect the failing run, fix or prove the
+failure, push when needed, and restart the current-head evidence epoch. If the
+row says `pending` or contains `?`, keep the result explicitly incomplete. If
+the command is unavailable or the exact row is absent, the gate is `blocked`.
+
 Report:
 
 - PR URL, base branch, head branch, and exact head SHA;
@@ -160,7 +214,10 @@ Report:
   count, unresolved-thread count, and evidence URL or run ID;
 - any actionable findings from passive reviewers and their disposition;
 - required-check and merge-state results;
+- the final exact-PR `gh x status` row and whether each clean-field condition passed;
 - local validation commands and exact pass/fail results;
+- for UI work, the rendered screenshot URLs, covered states, recording status,
+  and the current head they prove;
 - pull-request title and body accuracy, including acceptance-criteria and
   Definition of Done status when the linked issue defines them;
 - any unavailable reviewer, permission, rate-limit, baseline-failure, or configuration evidence;
@@ -235,7 +292,12 @@ retained unrelated work.
 - Treating `COMMENTED`, a confidence score, or an outdated approval as current-head approval.
 - Counting outdated unresolved threads as resolved.
 - Resolving live findings before addressing or disproving them.
-- Declaring readiness while a required reviewer or check is pending.
+- Calling a UI PR ready when its screenshots are local files, repository links,
+  CI artifacts, stale captures, or unverified Markdown rather than images
+  visibly rendered in the PR's `## Validation` section.
+- Declaring readiness or completed processing while the exact PR row from
+  `gh x status` reports `fail`, `pending`, `?`, lacks the clean comment marker,
+  or cannot be found.
 - Merging the PR or invoking `mergepr` without direct exact-PR approval or
   documented invocation authority from a composing merge skill.
 

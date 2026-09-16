@@ -1,6 +1,6 @@
 ---
 name: issue-to-pr
-description: V1.11 - Turns one specified GitHub issue into a validated pull request with concise current-head evidence, then follows the shared PR reviewer policy for current-head review. Optional merge, cleanup, and Slack notification require direct user approval.
+description: V1.13 - Turns one specified GitHub issue into a validated pull request with concise current-head evidence, including CLI-uploaded UI screenshots when applicable, then follows the shared PR reviewer policy for current-head review. Optional merge, cleanup, and Slack notification require direct user approval.
 disable-model-invocation: true
 compatibility: Requires git, GitHub CLI, network access, and permission to push a branch and create a pull request in the target repository. Optional approved merge and cleanup requires mergepr on PATH and the slack-dm skill.
 hooks:
@@ -23,8 +23,11 @@ hooks:
 Take one user-specified GitHub issue from verified repository state to an open,
 reviewed pull request. Before preflight, read
 `../process-pr/references/pr-reviewer-policy.md` for requester identity and the
-shared review policy used in section 6. Resolve the canonical repository owner;
-never infer the repository family from the active GitHub account or local path.
+shared review policy used in section 6. Read
+`../process-pr/references/ui-validation-evidence.md` for the issue and pull-request
+evidence required whenever the work changes UI. Resolve the canonical repository
+owner; never infer the repository family from the active GitHub account or local
+path.
 
 The default terminal state is an open pull request. Do not merge, enable an
 administrative bypass, force-push, delete a branch, or remove the worktree
@@ -143,7 +146,10 @@ Then:
 3. Add or update focused tests for changed behavior.
 4. Run the repository's relevant formatting, lint, typecheck, test, and build
    commands. Do not substitute invented commands for repository scripts.
-5. Review the complete diff for scope, generated-file policy, secrets, debug
+5. For UI work, run the affected interface from the current head, exercise the
+   changed states, and capture the screenshots and preferred recording required
+   by `../process-pr/references/ui-validation-evidence.md`.
+6. Review the complete diff for scope, generated-file policy, secrets, debug
    artifacts, and accidental changes.
 
 Do not expand into adjacent cleanup unless it is required for correctness or
@@ -173,10 +179,12 @@ Why, or Goal.
 - [x] `<completed applicable item>`: `<evidence>`
 - [ ] `<pending applicable item>`: `<what remains>`
 
-## Verification
+## Validation
 
 - `<exact command or manual step>`: pass, fail, or not run, plus the observed
   result.
+- For UI work, embed the current-head screenshots required by the shared UI
+  evidence policy and add an inline recording when practical.
 
 ## Risks and deferred work
 
@@ -198,6 +206,18 @@ Reference repository-wide policy instead of copying generic boilerplate. Apply
 the `unslop` skill to the title and prose before creation. Preserve exact
 commands, paths, check names, logs, and any issue wording that must remain
 exact.
+
+For UI work, follow
+`../process-pr/references/ui-validation-evidence.md`. Put local screenshot and
+recording references in the pull-request body, then use GitHub CLI 2.99.0 or
+newer with one `--attach` flag per file. Fetch the updated body and verify that
+GitHub CLI replaced every local reference with a GitHub attachment URL. Keep a
+video reference alone in its paragraph so it renders as an inline player. Local
+paths, repository file references, and CI artifact links do not count. Browser
+upload is a last resort only when the target GitHub host or environment cannot
+use `--attach`; never start a browser login or account switch solely for this
+upload. Missing verified screenshots block readiness. If no recording is
+practical, state the concrete reason in the section.
 
 Create the pull request ready for review by default. Automatic reviewers may
 skip drafts. Use a draft only when the user or repository explicitly requires
@@ -250,9 +270,11 @@ same current head SHA:
 - every reviewer required by the shared policy and repository is current-head
   clean; optional runs do not add a completion gate;
 - the final local validation is recorded;
+- for UI work, the `## Validation` section contains current-head GitHub
+  attachment URLs verified through the shared UI evidence policy;
 - the pull-request title and body accurately describe the current head, every
   acceptance criterion is proved or explicitly deferred by the user, and the
-  Definition of Done, verification outcomes, risks, and deferred work are
+  Definition of Done, validation outcomes, risks, and deferred work are
   current.
 
 Re-read and refresh the pull-request body after review-driven changes and before
@@ -267,8 +289,9 @@ refusals and unavailable reviews; do not substitute another product.
 ## 9. Closeout
 
 Report the issue, pull request URL, branch, worktree path, current head SHA,
-pull-request body contract status, validation results, check state, the required
-reviewer set selected by the shared policy and each current-head signal, unresolved thread count, active
+pull-request body contract status, validation results, UI attachment rendering
+and recording status when applicable, check state, the required reviewer set
+selected by the shared policy and each current-head signal, unresolved thread count, active
 GitHub identity, and any exact blocker.
 
 Keep the worktree and branch while the pull request is open so revisions remain
@@ -327,7 +350,10 @@ sending a duplicate DM; the composing skill must send it after its final proof.
 One issue maps to one intentionally named branch, one isolated worktree, and
 one open pull request whose title and body truthfully describe its current
 head, acceptance-criteria status, completion evidence, validation, and risk.
-The current head has repository-native validation and clean review evidence
+For UI work, the current-head screenshots are embedded through verified GitHub
+attachment URLs in the PR's `## Validation` section, with a recording included
+when practical or its omission explained. The current head has repository-native validation and clean
+review evidence
 from every reviewer required by the shared policy and explicit repository
 requirements. Optional reviewer availability or activity does not add a gate.
 No unrelated checkout, branch, worktree, stash, issue, or pull request is changed.
