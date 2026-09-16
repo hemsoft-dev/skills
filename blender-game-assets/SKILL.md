@@ -1,6 +1,6 @@
 ---
 name: blender-game-assets
-description: V1.4 - Creates game-ready assets that match approved designs as closely as feasible within measured size and performance budgets. Use for concept sheets, surfaces, Static Meshes, props, modular kits, foliage, optimization, and Unreal delivery.
+description: V1.5 - Creates game-ready assets that match approved designs as closely as feasible within measured size and performance budgets. Use for concept sheets, surfaces, Static Meshes, props, modular kits, foliage, optimization, and Unreal delivery.
 disable-model-invocation: true
 compatibility: Requires an image-generation capability for concept work. Build, validation, and export phases require Blender on PATH or at a verified absolute path. Engine delivery requires the target project and engine version.
 hooks:
@@ -139,8 +139,12 @@ Do not ask about harmless synonyms when the intended result is already clear.
 
 ## Generate reference imagery
 
-Use the highest-fidelity image-generation capability available in the current
-runtime. Do not invent a quality setting that the tool does not expose. Improve
+Load the installed global [generate-image skill](https://github.com/HemSoft/skills/blob/main/generate-image/SKILL.md)
+for the Codex-native image workflow, directly or through Codex CLI with the
+existing ChatGPT login. Do not
+start with Antigravity or an API-key fallback. The skill distinguishes image
+model selection from the coding agent's model and requires factual provenance.
+Do not invent quality controls that the native tool does not expose. Improve
 quality through a precise brief, strong references, controlled iteration, and
 inspection at original detail.
 
