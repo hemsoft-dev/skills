@@ -1,6 +1,6 @@
 ---
 name: blender-game-assets
-description: V1.3 - Creates professional game-ready assets by combining high-fidelity image generation, Blender modeling, and engine-specific validation. Use for concept sheets, surfaces, Static Meshes, props, modular kits, foliage, optimization, and Unreal delivery.
+description: V1.4 - Creates game-ready assets that match approved designs as closely as feasible within measured size and performance budgets. Use for concept sheets, surfaces, Static Meshes, props, modular kits, foliage, optimization, and Unreal delivery.
 disable-model-invocation: true
 compatibility: Requires an image-generation capability for concept work. Build, validation, and export phases require Blender on PATH or at a verified absolute path. Engine delivery requires the target project and engine version.
 hooks:
@@ -53,6 +53,46 @@ and the target engine for the final proof.
 - Do not install Blender, add-ons, models, or third-party assets without direct
   approval.
 - Record the source and license of every external or generated input.
+
+## Reference fidelity within a practical budget
+
+The goal is the closest feasible match to the approved design, not merely a
+recognizable version of the same object. Preserve its proportions, construction,
+material character, wear and distinctive details. A technically valid import or
+low polygon count does not prove that goal has been met.
+
+- Before modeling, identify the reference's defining visual traits and rank
+  them by importance at the intended gameplay and closest supported distances.
+  Use these traits as explicit acceptance criteria in the asset brief.
+- Establish size and performance budgets from project requirements or comparable
+  assets. If none exist, propose a starting budget and label it provisional.
+  Do not invent a restrictive ceiling to justify a weak visual match, or pursue
+  unlimited detail because no ceiling was supplied.
+- Track geometry per LOD, material slots, texture count and resolutions, runtime
+  asset bytes, and rebuild-required source/export bytes separately. Measure
+  cooked size, resident texture memory and frame cost when relevant tools are
+  available; otherwise mark them unmeasured. Source PNG size and triangle count
+  alone do not establish runtime memory or performance cost. Include repeated
+  instances and cumulative asset/LFS storage when relevant.
+- Spend detail where it changes the visible result. Use geometry for silhouette,
+  joints and depth that remains visible; use appropriate normal and roughness
+  detail for grain, dents and wear. Consider baking, shared materials, trim
+  sheets and LODs before adding dense geometry, unique maps or larger textures.
+  These are options to compare, not automatic substitutes for authored detail.
+- Improve the largest visible mismatch first. Compare before and after in the
+  engine and record the visual benefit against the added cost. Keep meaningful
+  improvements within budget; reject size increases that do not survive the
+  intended camera distance. Do not lower texture resolution or remove defining
+  details merely to make the asset smaller.
+- When fidelity and cost conflict, test a cheaper representation before dropping
+  a defining trait. Record the remaining mismatch, alternatives tried, measured
+  cost or saving, and the reason for the compromise. Agent convenience or an
+  untested claim that detail is expensive is not a budget justification.
+- Stop when the defining traits match at the required viewing distances and
+  further improvements have negligible visible benefit or exceed the agreed
+  budget. If a material visual gap remains, present the comparison and cost
+  options to the user for acceptance of that specific compromise or a revised
+  budget. Do not silently reduce the target or claim reference parity.
 
 ## Start every request
 
@@ -188,15 +228,20 @@ before claiming it meets budget.
 
 ## Compare in the engine
 
-For environment work based on a fixed target image, build a deterministic
-engine comparison loop before making fine art changes:
+For any reference-driven asset, including a single prop, build a deterministic
+engine comparison loop before making fine art changes. Apply the environment
+checks below only where relevant:
 
 1. Fix the map, camera transform, field of view, resolution, scalability, and
    post-process overrides in a repeatable offscreen capture command.
-2. Keep an append-only iteration log. Record a pass only when the engine result
-   improves. Blender-only renders and rejected experiments do not count.
-3. Compare the target and engine capture at original detail after each material,
-   placement, lighting, or composition change.
+2. Keep an append-only iteration log, including rejected experiments and cost
+   changes. Mark an iteration improved only when the engine comparison supports
+   it. A Blender-only render does not prove an engine improvement.
+3. Compare the target and engine capture side by side at original detail after
+   each significant geometry, material, placement, lighting or composition
+   change. Include matched views and crops of the defining traits, plus the
+   actual gameplay camera. Use comparable neutral lighting to separate asset
+   mismatches from scene lighting; do not bake reference highlights into maps.
 4. Save the export-ready `.blend` before moving objects into a preview lineup.
 5. Verify generated alpha textures by file format, corner pixels, and an
    in-engine opacity-mask test. Reject baked checkerboards.
@@ -249,6 +294,13 @@ Rebuilding source packages must not silently replace selected art.
 Read [references/quality-gates.md](references/quality-gates.md) before declaring
 an asset complete. Run every applicable automated check, create a turntable or
 equivalent review render, and inspect the final engine import.
+
+Completion requires both technical validation and visual-fidelity evidence.
+Deliver a final reference/engine comparison tied to the delivered revision, the
+actual costs against the brief's budget, and each accepted compromise. Concept
+approval alone does not approve a materially simplified result. Missing visual
+evidence or an unaccepted material mismatch means the asset is not complete,
+even when every automated check passes.
 
 Deliver only applicable artifacts:
 

@@ -5,7 +5,15 @@ marking unchecked work as complete.
 
 ## Design
 
-- The asset matches the accepted brief and selected references.
+- The asset matches the defining traits of the accepted brief and selected
+  references as closely as feasible within the agreed budget. Matching the
+  object category or broad silhouette alone is insufficient.
+- Final side-by-side reference/engine views and detail crops prove the match at
+  gameplay and closest supported distances. Evidence identifies the delivered
+  revision; neutral-light comparisons distinguish asset flaws from lighting.
+- Every material visual deviation has an explicit user decision supported by
+  the alternatives tried and their measured costs. Unaccepted deviations remain
+  unresolved, even if technical tests pass or the concept was approved.
 - Front, side, back, and gameplay silhouettes remain coherent.
 - Real dimensions, orientation, and pivot are recorded.
 - Generated references contain no unresolved construction contradictions.
@@ -35,6 +43,13 @@ marking unchecked work as complete.
 
 ## Game readiness
 
+- Actual geometry, materials, textures and asset/source bytes are compared with
+  the brief's budget. Cooked size, resident memory and frame cost are measured
+  where available; missing measurements are marked unmeasured, not passed.
+  An unmeasured required budget cannot be reported as satisfied.
+- Added detail produces a visible improvement at the required distances for a
+  justified cost. Cheaper representations were evaluated before accepting a
+  material fidelity loss; smaller files alone are not a successful outcome.
 - Collision matches gameplay needs without copying render complexity by
   default.
 - LODs, Nanite, cards, or another distance strategy match the asset type.
@@ -66,4 +81,8 @@ marking unchecked work as complete.
   authorship are recorded.
 - A turntable or equivalent review set shows the final asset, wireframe, and key
   material channels.
-- Known limitations and deferred work are explicit.
+- Known limitations and deferred work are explicit. The final evidence includes
+  the fidelity comparison, costs against budget and accepted compromises.
+- Technical readiness and visual fidelity have separate results. Do not declare
+  completion while a required comparison or material compromise decision is
+  missing.

@@ -11,18 +11,32 @@ would materially change the asset.
 | Purpose | Decorative, interactive, gatherable, building piece, equipment, character, or surface |
 | Target | Engine and version, platform, destination folder, and naming rules |
 | Art direction | Style, mood, references, materials, age, wear, and prohibited traits |
+| Fidelity priorities | Approved reference/version; defining traits ranked by visibility and importance; details that must survive optimization |
 | Dimensions | Real height, width, depth, pivot, orientation, and required clearances |
 | Viewing conditions | Typical distance, closest distance, camera type, and lighting |
 | Geometry | Static or Skeletal Mesh, silhouette, variants, modularity, and deformation needs |
 | Materials | Substances, texture sets, resolution, texel density, transparency, and channel packing |
 | Gameplay | Collision, interaction, sockets, damage states, animation, and replication relevance |
 | Performance | Representative scene, density, geometry budget, material slots, LOD or Nanite plan |
-| Delivery | Source, exports, textures, previews, manifest, and engine verification |
+| Size budget | Texture count/resolutions, runtime asset bytes, source/export bytes; cooked size and resident memory where measurable; source of each limit and whether provisional or agreed |
+| Compromises | Visible deviation, cheaper alternatives tried, cost delta, evidence and user decision for any material loss of fidelity |
+| Delivery | Source, exports, textures, previews, manifest, final reference/engine comparison, actual costs versus budget, and engine verification |
 | Provenance | Generated, authored, scanned, purchased, or modified inputs and their licenses |
 
 Do not require the user to supply technical budgets they have not established.
 Propose a measurable starting point based on project evidence, then label it as
 a proposal until validated in the target scene.
+
+Translate art direction into visible checks before building. For a weathered
+wooden prop, "wooden furniture" is insufficient. Relevant checks might include
+uneven plank edges, joinery, directional grain, worn corners and the metal's
+roughness response. Select traits from the actual reference, not this example.
+
+For each defining trait, record a reference crop or view, its expected appearance
+at the required viewing distances, and the final engine evidence. At delivery,
+mark it matched, an explicitly accepted compromise, or still unresolved. Keep
+this record and the cost comparison in the existing brief or asset manifest;
+do not create a separate document for every iteration.
 
 ## Vocabulary checkpoints
 
