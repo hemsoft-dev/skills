@@ -79,10 +79,24 @@ Do not treat React Doctor or any single score as the audit result. Reproduce hig
 - Security and supply chain: cargo-audit, cargo-deny, lockfile review, unsafe-code policy, and provenance.
 - Performance and memory: Criterion or project benchmarks, cargo-bloat, allocation or heap profilers, and sanitizer runs where supported.
 
+## Swift and Apple platforms
+
+- Inventory: distinguish Swift Package Manager libraries and tools from Xcode application, framework, extension, widget, watchOS, visionOS, and mixed Swift or Objective-C targets. Record the Swift and Xcode versions, SDKs, deployment targets, package resolution, schemes, configurations, test plans, destinations, and supported device and OS matrix.
+- Compiler and build: run the repository-owned `swift build` or `xcodebuild build` command for every supported configuration that CI claims to cover. Capture warnings, warnings-as-errors policy, strict concurrency settings, actor-isolation diagnostics, availability checks, generated-source behavior, and conditional compilation flags.
+- Lint and formatting: run the pinned SwiftLint configuration and SwiftFormat or `swift format` check mode as separate rows when present. Record enabled and disabled rules, baseline files, inline suppressions, excluded paths, analyzer rules, warning counts, and whether CI enforces the same scope.
+- Static analysis: run the repository's Xcode Analyze or `xcodebuild analyze` flow when declared. Include Clang Static Analyzer results for Objective-C, C, or C++ targets and any checked-in security or architecture analyzers. Do not treat a clean Swift compiler build as a substitute for these checks.
+- Tests and coverage: run Swift Testing or XCTest unit, integration, snapshot, and UI suites through the declared SwiftPM or Xcode test plan. Record skipped tests, expected failures, retries, destination coverage, parallelization, and code coverage from the current `.xcresult` or `xccov` output. Do not reuse an older result bundle as current evidence.
+- UI and accessibility: inspect XCUITest coverage of critical journeys, accessibility identifiers, Dynamic Type, VoiceOver labels and traits, contrast, reduced motion, localization, right-to-left layouts, keyboard input, multitasking, and supported form factors. Run automated accessibility audits when the repository and target OS support them.
+- Performance and memory: inspect XCTest performance metrics, launch and hang measurements, MetricKit evidence, Instruments or `xctrace` runs, retain cycles, task and notification cancellation, autorelease behavior, background execution, thermal impact, disk growth, and package size. Require repeatable evidence before calling a leak or regression.
+- Security and privacy: inspect entitlements, capabilities, App Transport Security, keychain access groups, data protection, URL schemes, universal links, WebView policy, local storage, logging, privacy manifests, required-reason APIs, usage descriptions, and secret handling. Treat code signing, provisioning, notarization, and App Store credentials as external controls that need authorization before use.
+- Release: inspect archive and export settings, signing identities, version and build numbering, dSYM and symbol upload, TestFlight or store workflows, phased release, migration and rollback behavior, and whether every shipped target comes from the audited revision.
+
+Apple-platform execution requires a compatible macOS host and installed Xcode toolchain. When the audit runs elsewhere, inspect project files and hosted CI evidence, then mark only the commands that require the unavailable host, simulator, device, signing identity, or store access as `Blocked`.
+
 ## Web, mobile, infrastructure, and mixed repositories
 
 - Web applications: Lighthouse, axe, browser performance traces, request waterfalls, bundle budgets, visual regression tests, and heap snapshots.
-- Native mobile: platform linters, unit and UI tests, startup metrics, package size, leak detectors, accessibility scans, signing, and store-policy checks.
+- Native mobile outside Apple platforms: platform linters, unit and UI tests, startup metrics, package size, leak detectors, accessibility scans, signing, and store-policy checks.
 - Shell and automation: ShellCheck, PSScriptAnalyzer, actionlint, zizmor, pinned action references, least-privilege workflow permissions, and safe quoting.
 - Containers and infrastructure: Hadolint, Trivy, Checkov, tfsec or TFLint, policy-as-code, kubeconform, image provenance, non-root execution, and minimal build context.
 - Databases and APIs: migration verification, schema lint, contract tests, query plans, N+1 detection, load tests, rate-limit behavior, and backup restore evidence.
