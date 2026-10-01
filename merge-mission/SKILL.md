@@ -1,6 +1,6 @@
 ---
 name: merge-mission
-description: V1.20 - Check composite prerequisites against authoritative dependency declarations. Verify UTF-8 notification previews before one-time sending. Prove UI reachability and application effects, not just selector or tap success. Freeze published artifact bytes before hashing and account for uploader exclusions. Keep generated dependency pins consistent with their source locks and compiler metadata. Honor explicit no-UI restrictions while preserving evidence provenance. Verify generated worktree remnants and preview one-time notifications. Resolve every open issue and pull request in the target repository, with rendered UI validation evidence when applicable. Unblock blockers, root-cause recurring ones, and work the queue until it is empty or every remaining item carries a proven hard-block. Runs as a persistent /goal across turns, documents the reasoning behind every incomplete run, and learns from its own runs. Manual invocation only.
+description: V1.21 - Add CI regression checks for recurring dependency-pin mismatches. Check composite prerequisites against authoritative dependency declarations. Verify UTF-8 notification previews before one-time sending. Prove UI reachability and application effects, not just selector or tap success. Freeze published artifact bytes before hashing and account for uploader exclusions. Keep generated dependency pins consistent with their source locks and compiler metadata. Honor explicit no-UI restrictions while preserving evidence provenance. Verify generated worktree remnants and preview one-time notifications. Resolve every open issue and pull request in the target repository, with rendered UI validation evidence when applicable. Unblock blockers, root-cause recurring ones, and work the queue until it is empty or every remaining item carries a proven hard-block. Runs as a persistent /goal across turns, documents the reasoning behind every incomplete run, and learns from its own runs. Manual invocation only.
 disable-model-invocation: true
 compatibility: Requires git, GitHub CLI, network access, permission to push branches and open pull requests, mergepr on PATH, the issue-to-pr, process-pr, repo-cleanup, and slack-dm skills, and a runtime that honors the /goal director. Without /goal, the state file alone carries resumption.
 hooks:
@@ -166,8 +166,14 @@ stop reasons. "I was not sure" is not a stop reason; decide and record.
    action lock and regenerate with the documented compiler and explicit intended
    action version. Verify metadata and every runtime reference agree, then prove
    a second generation is stable. Do not merge a `uses:`-only edit that the next
-   compile would undo. Treat compiler-driven permission, secret, telemetry, or
-   container changes as a wider diff to review, not incidental regeneration.
+   compile would undo. For handwritten workflows with no generator or lock,
+   update the authoritative YAML directly and verify the action's immutable SHA,
+   recorded release tag, and installed tool version together. When a paired-pin
+   mismatch recurs, add a regression check to the repository's existing CI suite.
+   Prove that it fails on the original mismatch and passes on the corrected pins;
+   another one-off version edit is not root-cause prevention. Treat compiler-driven
+   permission, secret, telemetry, or container changes as a wider diff to review,
+   not incidental regeneration.
    Before merging release-bearing work, compare its `Unreleased` notes
    with the automatic release/changelog path, including issue-to-PR links whose
    numbers differ. Reconcile notes that would repeat the generated release

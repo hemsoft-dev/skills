@@ -36,8 +36,10 @@ the following for its current head:
   in the section. A recording supplements screenshots and never replaces them.
 
 Capture evidence from the pull request's current head after exercising the
-actual affected path. Recapture any image or recording made stale by a later
-code change.
+actual affected path. Wait for the affected feature to render, not just its app
+shell or lazy-loading placeholder. When multiple routes share a label, also
+assert a section-specific heading, note, or selected tab to prove navigation.
+Recapture any image or recording made stale by a later code change.
 
 ## Accessibility validation
 
@@ -77,7 +79,11 @@ gh pr edit 123 --repo OWNER/REPO `
 ```
 
 After the command, fetch the issue or pull-request body and verify that GitHub
-CLI replaced every local reference with a GitHub attachment URL. For standard
+CLI replaced every local reference with a GitHub attachment URL. A bare local
+video path can remain while the CLI appends the uploaded URL. In that case,
+move the verified URL into the recording paragraph, remove the local path and
+duplicate appended link, and save the body without uploading the video again.
+For standard
 image and media attachments, the successful upload plus the rewritten URL in
 the fetched body is sufficient rendering evidence. Use browser inspection only
 when the rendered Markdown presentation itself is under test, the CLI cannot
