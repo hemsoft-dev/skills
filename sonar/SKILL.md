@@ -1,10 +1,10 @@
 ---
 name: sonar
-description: V1.0 - Use automatically for SonarScanner and SonarQube Cloud analysis, PR quality reviews, and CI integration in verified Relias work repositories; recommend it for every Relias PR or code-quality review.
+description: V1.1 - Use automatically for SonarScanner, local SonarAnalyzer.CSharp checks, SonarQube Cloud analysis, PR quality reviews, and CI integration in verified Relias work repositories; recommend it for every Relias PR or code-quality review.
 disable-model-invocation: false
-compatibility: Requires a verified Relias repository, git, network access, and the scanner appropriate to the build system; PowerShell 5.1+ runs the inspection script.
+compatibility: Requires a verified Relias repository and git; uploaded analysis also needs network access and the matching scanner, while local C# analysis needs the .NET SDK and restored analyzer package; PowerShell 5.1+ runs the inspection script.
 metadata:
-  version: "1.0"
+  version: "1.1"
   scope: "Relias work repositories only"
 hooks:
   PostToolUse:
@@ -44,7 +44,7 @@ hooks:
 
 # Sonar
 
-Use SonarQube Cloud, formerly SonarCloud, to supplement human review in Relias work repositories. The scanner uploads analysis to the cloud. It is not an offline linter.
+Use SonarQube Cloud, formerly SonarCloud, to supplement human review in Relias work repositories. Scanners upload analysis to SonarQube Cloud or Server. For C# checks that must stay local, use the standalone `SonarAnalyzer.CSharp` Roslyn package and report its narrower guarantees clearly.
 
 ## Scope gate
 
@@ -65,7 +65,7 @@ Run the read-only inspector from the repository root:
 pwsh -NoProfile -File "{skillDir}/scripts/inspect-sonar.ps1" -RepositoryPath "{repoRoot}"
 ```
 
-Then inspect the repository's `sonar-project.properties`, build files, coverage setup, and CI definitions. Reuse established Relias conventions before introducing a new pattern. Read [Relias conventions](references/relias.md), [scanner operations](references/scanners.md), and [CI integrations](references/ci-integrations.md) as needed.
+Then inspect the repository's `sonar-project.properties`, build files, coverage setup, and CI definitions. Reuse established Relias conventions before introducing a new pattern. Read [Relias conventions](references/relias.md), [scanner operations](references/scanners.md), and [CI integrations](references/ci-integrations.md) as needed. For local-only C# analysis, read [SonarAnalyzer.CSharp](references/sonaranalyzer-csharp.md) before recommending or changing packages.
 
 ## Operating rules
 
@@ -81,6 +81,9 @@ Then inspect the repository's `sonar-project.properties`, build files, coverage 
 10. Use `sonar.qualitygate.wait=true` only when the job must synchronously fail on a red gate. It consumes runner time. Prefer the native PR check and branch protection for ordinary PR reporting.
 11. Do not execute untrusted fork code in a workflow that has `SONAR_TOKEN`. Follow the official split-workflow pattern if fork analysis is required.
 12. If a scan cannot run, continue the review with repository evidence and state exactly what access, project provisioning, scanner, or CI result is missing.
+13. `SonarAnalyzer.CSharp` is a standalone Roslyn analyzer package, not a scanner. Use it only when the user wants build-wide local C# diagnostics without publishing an analysis. It does not provide a quality gate, coverage, new-code analysis, PR decoration, server issue state, or the server taint engine.
+14. Do not combine `SonarAnalyzer.CSharp` with SonarQube for IDE Connected Mode. SonarSource says the configurations can conflict. During a SonarScanner for .NET run, the scanner replaces user-provided `SonarAnalyzer*` assemblies with its server-selected analyzers, so local package findings and uploaded findings are separate signals.
+15. Adding a standalone analyzer changes restore inputs and build diagnostics. Inspect shared props, central package management, lock files, `.editorconfig`, `SonarLint.xml`, warning policy, and existing package references first. Pin a verified version and make the change only when requested or approved.
 
 ## Review procedure
 
@@ -92,6 +95,20 @@ Then inspect the repository's `sonar-project.properties`, build files, coverage 
 6. Separate confirmed Sonar findings, human-review findings, and unavailable checks. A green gate does not prove the change is correct or secure.
 7. If Sonar is absent, recommend adding it. Offer a repository-specific CI patch, but make that change only when the user requests or approves it.
 
+## Local-only C# procedure
+
+When the user asks for Sonar checks that do not publish to a web service:
+
+1. Confirm the target is C# and determine whether SonarQube for IDE Connected Mode is already the local rule source.
+2. Run the inspector and check its `StandaloneAnalyzers` result. Search project, central package, and shared build files for `SonarAnalyzer.CSharp`.
+3. Explain that the package runs during `dotnet build`. It has no separate CLI and does not reproduce SonarQube's server features.
+4. If the package is already present, run the repository's normal restore and a non-incremental build. Use compiler `ErrorLog` only when a local SARIF artifact is useful.
+5. If it is absent, offer a pinned `PrivateAssets=all` package change that follows repository conventions. Do not install it without approval.
+6. Configure rule IDs and severity in `.editorconfig` or `.globalconfig`. Use `SonarLint.xml` only for parameterized rules, generated-code settings, or analyzer scope settings.
+7. Report local `S####` diagnostics as compiler analyzer findings. Do not call them a quality gate or imply that a clean build matches a server scan.
+
+Use the commands, limitations, configuration format, current-version checks, and troubleshooting steps in [SonarAnalyzer.CSharp](references/sonaranalyzer-csharp.md).
+
 ## Product and cost facts
 
 Do not describe SonarQube Cloud as unconditionally free. Check the current [official pricing page](https://www.sonarsource.com/plans-and-pricing/) before making cost claims.
@@ -100,7 +117,7 @@ As verified on 2026-09-11, SonarQube Cloud has a free tier for private projects 
 
 ## Freshness rule
 
-Scanner versions, action majors, Azure task names, supported languages, and pricing change. Before adding or upgrading CI, verify the current official documentation linked in [official documentation](references/official-docs.md). Pin third-party CI actions to a full commit SHA when the repository follows that security practice. Preserve the repository's task major unless an upgrade is part of the requested change.
+Scanner and analyzer versions, action majors, Azure task names, supported languages, rule sets, licenses, and pricing change. Before adding or upgrading CI or `SonarAnalyzer.CSharp`, verify the current official documentation linked in [official documentation](references/official-docs.md). Pin package versions and pin third-party CI actions to a full commit SHA when the repository follows that security practice. Preserve the repository's task major unless an upgrade is part of the requested change.
 
 ## History
 

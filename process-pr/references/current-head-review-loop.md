@@ -12,7 +12,12 @@ This reference owns evidence collection and thread handling only.
 gh pr view <pr> --repo <owner/repo> --json 'number,url,state,isDraft,author,baseRefName,baseRefOid,headRefName,headRefOid,mergeStateStatus,reviewDecision,reviewRequests,reviews,statusCheckRollup'
 gh pr checks <pr> --repo <owner/repo>
 gh run list --repo <owner/repo> --branch <head-branch> --limit 30
+gh x status
 ```
+
+Run `gh x status` from the target repository. Capture the row for the exact PR
+number. Its exit code is not a cleanliness signal; the command exits zero even
+when the row says `fail` or `pending`.
 
 Fetch full thread state with paginated GraphQL because `gh pr view` does not expose review threads reliably:
 
@@ -72,6 +77,25 @@ Use this decision table for each current-head thread:
 
 An outdated thread with `isResolved: false` is still unresolved. A reply alone does not resolve a thread.
 
+## Cancelled checks and preserved event payloads
+
+A passing branch run does not necessarily replace checks attached to a PR's
+synthetic merge revision. Inspect the exact check URLs and revisions when
+`gh pr checks` or `gh x status` still reports a stale cancellation or failure.
+Record the synthetic revision's parents and tree before associating its results
+with the reviewed head.
+
+A rerun retains its original event payload. Rerunning a cancelled draft event
+can still defer memory qualification after the PR is marked ready. Do not count
+that deferral as a pass. When the caller authorizes CI execution and a verified
+non-draft PR run already exists for the unchanged head, rerun that correct event
+once, then wait for its real checks. A branch `workflow_dispatch` run can provide
+additional evidence but may not clear the PR-merge contexts.
+
+Do not create empty commits, change labels, retrigger paid reviews, manufacture
+check results, or weaken policies to clear stale state. If no safe authorized
+run can replace the context, preserve the evidence and report the blocker.
+
 ## Evidence Epochs
 
 The head SHA is the review epoch identifier:
@@ -87,11 +111,27 @@ Reviewer evidence from an earlier epoch can explain history but cannot satisfy t
 
 ## Final Gate
 
-Re-run the baseline queries after the last reviewer and required check complete. The final report must distinguish these states:
+Re-run the baseline queries after the last reviewer and required check complete.
+Then run `gh x status` from the target repository and locate the exact PR number.
+A clean aggregate row has `State open`, `AI pass`, `Checks pass`, and a `Cmts`
+value with the clean `!` marker and no unresolved threads. Apply the shared
+[formal-approval policy](pr-reviewer-policy.md#ai-review-and-formal-approval)
+to `Rev`: require approval only when effective repository rules, applicable
+instructions or explicit user direction require it. Otherwise a verified
+`Rev -` or comment-only clean review is acceptable. Report that state truthfully;
+do not manufacture approval or ask for it just to fill a display column.
+Required approvals, live change requests and unknown approval requirements
+still block readiness.
+
+A zero command exit code does not satisfy this requirement. A failed or pending
+required gate, unknown value, missing row or unresolved-comment result requires
+more processing or an explicitly incomplete handoff.
+
+The final report must distinguish these states:
 
 | Result | Meaning |
 | --- | --- |
-| `human-ready` | All required checks pass; the PR is mergeable; every reviewer required by the shared policy and repository is current-head clean or approved; no actionable thread remains |
-| `blocked` | A required reviewer/check is unavailable or pending, permissions are insufficient, product direction is required, or safe iteration cannot continue |
+| `human-ready` | All required checks pass; the PR is mergeable; every reviewer required by the shared policy and repository is current-head clean or approved; no actionable thread remains; the exact `gh x status` PR row is clean |
+| `blocked` | The exact `gh x status` PR row is not clean and further progress requires unavailable infrastructure, permissions, product direction, an unsafe scope expansion, or another hard blocker |
 
 Optional runs do not block readiness, but their actionable findings still need assessment. A required reviewer that is pending, refused, or unavailable prevents `human-ready` completion.

@@ -1,8 +1,8 @@
 ---
 name: merge-pr
-description: V1.4 - Merge one or more explicitly selected GitHub pull requests from oldest to newest, cleaning the repository between each merge and sending one final Slack notification per successful merge.
+description: V1.6 - Merge one or more explicitly selected GitHub pull requests from oldest to newest, enforcing rendered UI validation evidence when applicable, cleaning the repository between each merge, and sending one final Slack notification per successful merge.
 disable-model-invocation: true
-compatibility: Requires git, GitHub CLI, GitHub access, mergepr on PATH, the repo-cleanup skill, and the slack-dm skill.
+compatibility: Requires git, GitHub CLI, GitHub access, mergepr on PATH or at the documented Windows fallback, the repo-cleanup skill, and the slack-dm skill.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -44,8 +44,10 @@ Accept positive integers, comma-separated values, and inclusive `N-M` ranges. No
 
 ## Reviewer policy
 
-Read `../process-pr/references/pr-reviewer-policy.md` before evaluating review
-readiness. Use its required reviewer set and current-head evidence rules.
+Read `../process-pr/references/pr-reviewer-policy.md` and
+`../process-pr/references/ui-validation-evidence.md` before evaluating review
+readiness. Use the required reviewer set, current-head evidence rules, and UI
+evidence gate.
 If review processing is needed, hand the exact PR and existing requests to
 `../process-pr/SKILL.md`; preserve this skill's merge and notification ownership.
 Do not add optional reviewers, duplicate requests, or restart refused waits.
@@ -58,9 +60,9 @@ For this native path, skip the local merge and administrative fallback steps.
 
 1. Resolve the repository from `git remote get-url origin`, the primary checkout from `git worktree list --porcelain`, the active GitHub login, and the default branch. Read the repository's applicable `AGENTS.md` instructions.
 2. Expand and validate the full selector set. Read each PR's `number`, `createdAt`, title, URL, state, draft state, base branch, head branch, and head SHA. Sort the selected PRs by `createdAt`, then number. Show the resolved order before the first merge.
-3. Process each PR in that fixed order. Refresh its live state, mergeability, merge state, reviews, review threads, checks, and exact head SHA immediately before deciding whether it can merge.
-4. Mark the current PR `BLOCKED` without merging when it is closed without merge, is a draft, has conflicts, has failing or pending required checks, lacks a current-head review required by the shared policy or repository, or changed head after validation. Use the shared policy for reviewer selection; installed optional bots do not add requirements. Continue to step 7 so cleanup runs before the next selected PR.
-5. From the clean primary checkout, run `mergepr {PR_NUMBER}`. Do not run it from a linked PR worktree that it may remove.
+3. Process each PR in that fixed order. Refresh its live state, mergeability, merge state, reviews, review threads, checks, exact head SHA, body, and rendered validation evidence immediately before deciding whether it can merge.
+4. Mark the current PR `BLOCKED` without merging when it is closed without merge, is a draft, has conflicts, has failing or pending required checks, lacks a current-head review required by the shared policy or repository, changed head after validation, or changes UI without current-head screenshots visibly rendered in its `## Validation` section. Use the shared policy for reviewer selection; installed optional bots do not add requirements. Local paths, repository file references, CI artifacts, and unverified Markdown do not satisfy the UI gate. Require a recording when practical or a concrete reason for omission. Continue to step 7 so cleanup runs before the next selected PR.
+5. From the clean primary checkout, run `mergepr {PR_NUMBER}`. Do not run it from a linked PR worktree that it may remove. On Windows, use PowerShell 7. If `mergepr` is not on `PATH` but `$HOME/bin/mergepr.ps1` exists, run `pwsh -NoProfile -File "$HOME/bin/mergepr.ps1" {PR_NUMBER}` instead of guessing skill-relative script paths.
 6. If `mergepr` returns an error, re-read the PR before deciding what happened:
    - If GitHub reports it merged, continue to cleanup.
    - If it remains open and otherwise satisfies step 4, use `gh pr merge {PR_NUMBER} --squash --delete-branch --admin` only when the normal merge was refused by branch protection, merge queue policy, or an equivalent administrative gate.
@@ -69,7 +71,7 @@ For this native path, skip the local merge and administrative fallback steps.
 8. Invoke the `repo-cleanup` skill in `Clean` mode from the primary checkout after every selected PR, including a blocked, failed, or already-merged item. If the current PR remains open, classify its branch and worktree as `KEEP`. Cleanup must preserve unrelated or uncertain work.
 9. Do not start the next PR until cleanup proves the primary checkout is clean on the default branch and matches `origin/{DEFAULT_BRANCH}`. If cleanup cannot reach that safe state, stop the batch and report the remaining PRs as `NOT_ATTEMPTED`.
 10. For each PR newly proven `MERGED`, invoke the `slack-dm` skill at `../slack-dm/SKILL.md` after cleanup. Send Franz one `merged` DM with the canonical `OWNER/REPO` project, `PR #<number> - <exact current title> - merged` outcome, PR URL, merge commit, merge method, and cleanup result. Do not send a merged notification for blocked, failed, already-merged, or not-attempted items.
-11. After the last PR, prove the final repository state. Report the ordered input set and one result per PR, including URL, exact reviewed head, state, merge commit, merge method, admin-fallback use, cleanup result, and retained work. Also report primary branch cleanliness, `HEAD == origin/{DEFAULT_BRANCH}`, and ahead/behind counts.
+11. After the last PR, prove the final repository state. Report the ordered input set and one result per PR, including URL, exact reviewed head, state, UI screenshot rendering and recording status when applicable, merge commit, merge method, admin-fallback use, cleanup result, and retained work. Also report primary branch cleanliness, `HEAD == origin/{DEFAULT_BRANCH}`, and ahead/behind counts.
 
 ## History
 

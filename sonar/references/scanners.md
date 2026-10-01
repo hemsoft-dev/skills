@@ -39,6 +39,8 @@ Run the inspector and then verify:
 
 The scanner sends analysis data to SonarQube Cloud. A successful command only means upload succeeded. Quality-gate computation may still be pending.
 
+The standalone `SonarAnalyzer.CSharp` NuGet package is different. It runs Roslyn diagnostics during a C# build and does not upload analysis. The inspector reports package references under `StandaloneAnalyzers`.
+
 ## Generic CLI
 
 Typical `sonar-project.properties`:
@@ -97,6 +99,16 @@ dotnet-sonarscanner end /d:sonar.token="$env:SONAR_TOKEN"
 Pass the token to both `begin` and `end`. On Windows, `--disable-build-servers` or MSBuild `/nodeReuse:false` avoids scanner DLL locks during cleanup. Sonar's build hooks can turn off `WarningsAsErrors`; use a dedicated analysis build if that conflicts with the normal build.
 
 The .NET scanner does not support `sonar.sources` or `sonar.tests`. MSBuild project membership determines those inputs. Use exclusions and supported .NET properties instead.
+
+## Standalone local C# analyzer
+
+`SonarAnalyzer.CSharp` is a NuGet Roslyn analyzer, not another scanner command. Use it when the user explicitly wants build-wide C# findings without sending analysis to SonarQube Cloud or Server. It runs through `dotnet build`, can write compiler SARIF through `ErrorLog`, and uses standard Roslyn rule configuration.
+
+It does not provide a quality gate, coverage import, shared quality profiles, new-code tracking, PR decoration, server issue workflow, Software Composition Analysis, or server taint analysis. Do not describe a clean analyzer build as a clean Sonar scan.
+
+Before adding it, check every project and shared package file, existing Connected Mode usage, warning-as-error policy, and lock files. Pin the approved version and keep it private from downstream packages. During SonarScanner for .NET analysis, the scanner removes user-provided `SonarAnalyzer*` assemblies and loads the server-selected analyzer and profile.
+
+Read [SonarAnalyzer.CSharp](sonaranalyzer-csharp.md) for the selection rules, current evidence, installation, configuration, local SARIF command, limits, and troubleshooting.
 
 ## PR and branch parameters outside integrated CI
 

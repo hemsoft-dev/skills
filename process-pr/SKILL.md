@@ -1,6 +1,6 @@
 ---
 name: process-pr
-description: V1.13 - Takes one specified existing GitHub pull request to a human-ready state with truthful current-head evidence, including CLI-uploaded UI screenshots when applicable, by following the shared PR reviewer policy and addressing feedback. Merge remains approval-gated by default, but a composing merge skill can supply documented invocation authority and owns the final Slack notification when it owns the merge.
+description: V1.15 - Takes one specified existing GitHub pull request to a human-ready state with truthful current-head evidence, including CLI-uploaded UI screenshots when applicable, by following the shared PR reviewer policy and addressing feedback. Merge remains approval-gated by default, but a composing merge skill can supply documented invocation authority and owns the final Slack notification when it owns the merge.
 disable-model-invocation: true
 compatibility: Requires git, GitHub CLI with the gh-x extension, GitHub network access, permission to push to the PR branch, and permission to request the reviewers selected by the shared policy. Optional authorized merge and cleanup requires mergepr on PATH and the slack-dm skill.
 hooks:
@@ -75,10 +75,16 @@ A PR is `human-ready` only when all of these are true for the same current head 
    issue contract when one exists, acceptance-criteria status, final
    verification evidence, and any residual risk or deferred work.
 10. A final `gh x status` run from the target repository shows the exact PR row
-    as clean: `State` is `open`, `Rev` is approved, `AI` is `pass`, `Checks` is
-    `pass`, and `Cmts` carries the clean `!` marker with no unresolved threads.
-    The command's zero exit code is not evidence because `gh x status` also
-    exits zero when a PR row reports `fail` or `pending`.
+    as clean: `State` is `open`, `AI` is `pass`, `Checks` is `pass`, and `Cmts`
+    carries the clean `!` marker with no unresolved threads. Interpret `Rev`
+    under the shared reviewer's formal-approval policy: approval is required
+    only when repository rules, applicable instructions or explicit user
+    direction require it. With verified absence of that requirement, `Rev -`
+    or a comment-only clean review is acceptable; do not ask for another
+    approval solely to change that column. Required formal approvals and live
+    change requests remain gates. Record the actual state, never an invented
+    approval. Do not use the command's zero exit code as evidence;
+    `gh x status` also exits zero when a PR row reports `fail` or `pending`.
 11. When the PR changes UI, its `## Validation` section contains one or more
     current-head screenshots embedded through GitHub attachment URLs verified
     under [references/ui-validation-evidence.md](references/ui-validation-evidence.md).
@@ -107,6 +113,8 @@ Record before editing or requesting anything:
 - all review threads, including author, resolution, outdated state, and commit association;
 - required and optional checks plus current workflow runs;
 - merge state and draft state;
+- effective formal-approval requirements and their source, including required
+  human counts and code-owner review when applicable;
 - existing reviewer-trigger comments, labels, and current-head bot activity;
 - the exact PR row from `gh x status`, captured from the target repository;
 - whether the diff changes UI and, if so, the live body's validation section,

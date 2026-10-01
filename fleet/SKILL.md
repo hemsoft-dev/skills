@@ -1,6 +1,6 @@
 ---
 name: fleet
-description: "V1.12 - Commands: Connect, Run, Send, Retrieve. Operate the private Tailscale fleet across laptop, home, air, mini, iphone, and ipad."
+description: "V1.13 - Commands: Connect, Run, Send, Retrieve. Operate the private Tailscale fleet, including browser terminals and the live Herdr dashboard."
 disable-model-invocation: true
 ---
 
@@ -32,6 +32,27 @@ transfer files without a specific destination and action.
 
 Prefer aliases over IP addresses. Treat IP addresses and underlying hostnames
 as diagnostics and fallbacks, not user-facing names.
+
+## Browser access
+
+These HTTPS endpoints require Tailscale:
+
+| Destination | Herdr session |
+| --- | --- |
+| [Home terminal](https://home.hemsoft.net) | `default` |
+| [Air terminal](https://air.hemsoft.net) | `default` |
+| [Mini terminal](https://mini.hemsoft.net) | `browser` |
+| [Agent dashboard](https://agents.hemsoft.net) | Live Herdr states, plus session history |
+
+Mini is the gateway for all four URLs. Keep Mini online and the target awake;
+Home and Air also need their user logged in. Native clients use the same
+sessions; on Mini, attach with `herdr session attach browser`. Closing a browser
+does not stop the session. Each terminal allows eight browser connections.
+Dashboard live counts exclude existing tmux work; do not restart or migrate it.
+
+Keep commands hidden and browser checks headless where supported. Read
+[maintenance notes](references/browser-access.md) only for service changes,
+certificate work, deployment, or connection failures.
 
 ## Connect and run commands
 

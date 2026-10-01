@@ -54,6 +54,38 @@ policy supersedes that recommendation. Record any owner exceptions here.
   head. Connected Codex is not required unless the user explicitly requests it
   for the specific pull request.
 
+## AI review and formal approval
+
+Franz's 2026-09-30 instruction makes a clean, completed current-head review
+from the selected required AI reviewer sufficient for the AI-review gate.
+Do not invent a formal human-approval requirement or ask for another approval
+solely because the AI reviewer uses a comment or thumbs-up instead of GitHub's
+`APPROVED` review state. This rule applies to all composing PR workflows.
+
+Before deciding readiness, record whether formal approvals are required by
+applicable instructions, explicit user direction, effective base-branch
+protection, or active repository and organization rulesets. Keep required
+human approval counts, code-owner approvals and change-request rules intact.
+An inaccessible or ambiguous requirement remains a blocker, not proof that no
+approval is required. Never change protections, impersonate a reviewer or
+manufacture an approval to satisfy a status column.
+
+When no formal approval is required, `Rev -` or a comment-only review state is
+acceptable if the required AI reviewer is current-head clean, all other gates
+pass and no live change request remains. Report the actual formal review state
+and the evidence that formal approval is not required. An AI-clean receipt is
+not a formal GitHub approval and does not supply merge authority by itself.
+GitHub documents formal review and code-owner requirements in its
+[protected-branch policy](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches).
+
+| Evidence | Review gate |
+| --- | --- |
+| Current-head required AI review clean; no formal approval required; `Rev -` | Pass, subject to all other gates |
+| Current-head required AI review clean; required formal approval missing | Blocked |
+| Required AI review pending, refused, ambiguous or tied to an older head | Blocked |
+| Live change request or unresolved actionable finding | Blocked |
+| Review clean but required CI failed or pending | Overall readiness incomplete |
+
 ## Request connected Codex
 
 Verify the effective API identity with `gh api user --jq .login`, not only
@@ -79,8 +111,11 @@ trigger and automatic review setup are documented in
 Require a completed clean signal attributable to the current head, plus no
 unresolved actionable findings. Inspect ordinary PR comments as well as formal
 reviews. A bot-authored clean receipt or documented thumbs-up on the request
-can count only when the request and result can be tied to this head. Ambiguous
-head association is pending evidence, not a pass.
+can count only when the request and result can be tied to this head. For an
+automatic review, a completed summary naming the current SHA and a bot
+thumbs-up on the PR can qualify when both belong to that review. An old
+reaction alone never qualifies. Ambiguous head association is pending evidence,
+not a pass.
 
 A trigger comment, eyes reaction, silence, or disappearing reaction is not
 completion. Refresh issue comments before concluding that a review failed.

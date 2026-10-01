@@ -87,6 +87,28 @@ $sonarConfigFiles = @($trackedFiles | Where-Object {
     $_ -match '(^|/)[^/]*sonar[^/]*\.(yml|yaml|properties)$'
 } | Sort-Object -Unique)
 
+$dotNetBuildFiles = @($trackedFiles | Where-Object {
+    $_ -match '\.(csproj|vbproj|props|targets)$'
+})
+$csharpAnalyzerFiles = @()
+$visualBasicAnalyzerFiles = @()
+foreach ($relativeFile in $dotNetBuildFiles) {
+    $fullPath = Join-Path $root ($relativeFile -replace "/", [IO.Path]::DirectorySeparatorChar)
+    if (-not (Test-Path -LiteralPath $fullPath -PathType Leaf)) {
+        continue
+    }
+
+    $content = Get-Content -LiteralPath $fullPath -Raw -ErrorAction SilentlyContinue
+    if ($content -match 'SonarAnalyzer\.CSharp') {
+        $csharpAnalyzerFiles += $relativeFile
+    }
+    if ($content -match 'SonarAnalyzer\.VisualBasic') {
+        $visualBasicAnalyzerFiles += $relativeFile
+    }
+}
+$csharpAnalyzerFiles = @($csharpAnalyzerFiles | Sort-Object -Unique)
+$visualBasicAnalyzerFiles = @($visualBasicAnalyzerFiles | Sort-Object -Unique)
+
 $ciCandidates = @($trackedFiles | Where-Object {
     $_ -match '^\.github/workflows/.+\.(yml|yaml)$' -or
     $_ -match '(^|/)(azure-pipelines[^/]*|bitbucket-pipelines|\.gitlab-ci)\.(yml|yaml)$' -or
@@ -150,6 +172,9 @@ if (-not (Test-Path Env:SONAR_TOKEN)) {
 if ($sonarConfigFiles.Count -eq 0 -and $sonarCiFiles.Count -eq 0) {
     $warnings += "No tracked Sonar configuration or Sonar-enabled CI file was detected."
 }
+if ($csharpAnalyzerFiles.Count -gt 0 -or $visualBasicAnalyzerFiles.Count -gt 0) {
+    $warnings += "A standalone SonarAnalyzer package reference was detected. Its local compiler findings are not a SonarQube quality gate or proof of the scanner's server-selected rule profile."
+}
 
 $result = [ordered]@{
     Repository = [ordered]@{
@@ -166,6 +191,10 @@ $result = [ordered]@{
         Properties         = $sonarProperties
         LikelyMode         = if ($sonarCiFiles.Count -gt 0) { "CI-based" } else { "Unknown; check SonarQube Cloud Analysis Method" }
         TokenPresent       = [bool](Test-Path Env:SONAR_TOKEN)
+    }
+    StandaloneAnalyzers = [ordered]@{
+        CSharpFiles       = $csharpAnalyzerFiles
+        VisualBasicFiles = $visualBasicAnalyzerFiles
     }
     Tools = [ordered]@{
         DotNetSonarScanner = [ordered]@{

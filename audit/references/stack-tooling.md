@@ -74,6 +74,8 @@ Coverage is a fraction from 0 to 1. Prefer branch coverage, identify the coverag
 
 ## Tool-selection rules
 
+- Prefer a repository-owned quality runner after inspecting its side effects and comparing its gate list, targets, tool pins, exclusions, and failure behavior with CI and configuration. Run omitted independent gates separately.
+- Use the repository's pinned tool versions. A missing pin or unavailable pinned tool is a policy gap or blocker, not permission to install `latest` or substitute a different version.
 - A tool must cover a real audit question and support the repository's current language or framework version.
 - Prefer structured output and stable exit codes over subjective scores.
 - Do not stack multiple tools that report the same signal unless they catch meaningfully different defects.

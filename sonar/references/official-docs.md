@@ -18,6 +18,19 @@ Use SonarSource documentation as the source of truth. Check it before changing v
 - [SonarScanner for npm](https://docs.sonarsource.com/sonarqube-cloud/analyzing-source-code/scanners/sonarscanner-for-npm)
 - [SonarQube CLI distinction](https://docs.sonarsource.com/sonarqube-developer-tools/sonarqube-cli/)
 
+## Standalone .NET analyzer
+
+- [SonarAnalyzer.CSharp on NuGet](https://www.nuget.org/packages/SonarAnalyzer.CSharp)
+- [sonar-dotnet source](https://github.com/SonarSource/sonar-dotnet)
+- [sonar-dotnet releases](https://github.com/SonarSource/sonar-dotnet/releases)
+- [Standalone NuGet configuration](https://github.com/SonarSource/sonar-dotnet#standalone-nuget)
+- [C# language support](https://docs.sonarsource.com/sonarqube-cloud/analyzing-source-code/languages/csharp)
+- [SonarQube for IDE rule limits](https://docs.sonarsource.com/sonarqube-for-visual-studio/using/rules#unsupported-rules)
+- [SonarSource guidance on the package and Connected Mode](https://community.sonarsource.com/t/intention-of-nuget-package-sonaranalyzer-csharp-after-change-in-sonarlint/114941/4)
+- [Microsoft analyzer configuration](https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/configuration-options)
+- [Microsoft compiler ErrorLog and SARIF](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/errors-warnings#errorlog)
+- [NuGet PackageReference asset controls](https://learn.microsoft.com/en-us/nuget/consume-packages/package-references-in-project-files#controlling-dependency-assets)
+
 ## CI
 
 - [CI-based analysis](https://docs.sonarsource.com/sonarqube-cloud/analyzing-source-code/ci-based-analysis)

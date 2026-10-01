@@ -1,6 +1,6 @@
 ---
 name: audit-pr
-description: V1.1 - Audits one specified GitHub pull request at a fixed head and base revision across requirements, correctness, architecture, tests, security, performance, memory, documentation, and delivery, with verified findings and explicit coverage limits. Use for a thorough PR audit or review, not a repository-wide audit or implementation work.
+description: V1.2 - Audits one specified GitHub pull request at a fixed head and base revision across requirements, correctness, architecture, tests, security, performance, memory, documentation, UI evidence, and delivery, with verified findings and explicit coverage limits. Use for a thorough PR audit or review, not a repository-wide audit or implementation work.
 disable-model-invocation: true
 hooks:
   PostToolUse:
@@ -31,7 +31,7 @@ Audit one PR at fixed head and base revisions. Verify what the change does, whet
 - Keep scope on the diff and affected callers, contracts, workflows, and runtime paths. Do not turn unrelated repository debt into a PR blocker.
 - Never weaken acceptance criteria or quality thresholds to make the PR pass.
 
-Read [references/pr-audit-matrix.md](references/pr-audit-matrix.md) before planning. Read [references/pr-findings.md](references/pr-findings.md) before final triage or publication. This skill is self-contained and does not invoke `$audit` or inherit its issue-creation authorization.
+Read [references/pr-audit-matrix.md](references/pr-audit-matrix.md) before planning. Read [references/pr-findings.md](references/pr-findings.md) before final triage or publication. Read `../process-pr/references/ui-validation-evidence.md` when the issue or diff changes UI. This skill is self-contained and does not invoke `$audit` or inherit its issue-creation authorization.
 
 ## Resolve and freeze the PR
 
@@ -55,7 +55,7 @@ If metadata, source, or credentials are incomplete, continue the verifiable revi
 - Run focused checks for changed behavior first, then the repository's required validation when practical. Broaden checks for shared interfaces, migrations, dependencies, build configuration, or other changes with wide impact.
 - Capture each command, working revision, environment, tool version, exit code, relevant counts, thresholds, and supporting paths. Separate locally reproduced results from CI evidence.
 - For a failure, compare head with merge-base under equivalent conditions to establish attribution. Check the base tip separately when upstream changes or merge compatibility matter. Never call a failing baseline a PR regression without evidence that this change introduces or worsens it.
-- For UI or game changes, inspect the rendered application at the affected sizes and states when practical. Record screenshots and relevant geometry. A user's reproduced symptom remains unresolved until the reviewed revision addresses it.
+- For UI or game changes, inspect the rendered application at the affected sizes and states when practical. Require a `## Validation` section with one or more current-head screenshots visibly rendered in the PR itself. Local paths, repository file references, CI artifact links, and unverified Markdown do not count. Check for an inline-playable recording when practical for interaction or multi-step behavior, or a concrete reason for omission. Compare the media with the reviewed head and acceptance criteria. A user's reproduced symptom remains unresolved until the reviewed revision addresses it.
 
 ## Required measurements
 
@@ -105,7 +105,7 @@ Return findings first, ordered by severity, followed by:
 - PR number, title, URL, reviewed head, base tip, and merge-base SHAs;
 - requirement and Definition of Done coverage, including unsupported claims in the PR body;
 - the completed matrix, with evidence or a reason for each area's status;
-- exact validation results, CI revision attribution, blocked checks, and remaining uncertainty;
+- exact validation results, UI screenshot rendering and recording status when applicable, CI revision attribution, blocked checks, and remaining uncertainty;
 - existing discussions or issues covering findings, plus any verified publication URLs;
 - one assessment: `changes needed`, `no actionable findings`, or `incomplete`, with its reason. Separate merge-control blockers from code findings. This assessment is not a GitHub approval or merge authorization.
 

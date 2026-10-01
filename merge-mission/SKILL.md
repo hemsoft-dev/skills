@@ -1,6 +1,6 @@
 ---
 name: merge-mission
-description: V1.8 - Resolve every open issue and pull request in the target repository. Unblock blockers, root-cause recurring ones, and work the queue until it is empty or every remaining item carries a proven hard-block. Runs as a persistent /goal across turns, documents the reasoning behind every incomplete run, and learns from its own runs. Manual invocation only.
+description: V1.20 - Check composite prerequisites against authoritative dependency declarations. Verify UTF-8 notification previews before one-time sending. Prove UI reachability and application effects, not just selector or tap success. Freeze published artifact bytes before hashing and account for uploader exclusions. Keep generated dependency pins consistent with their source locks and compiler metadata. Honor explicit no-UI restrictions while preserving evidence provenance. Verify generated worktree remnants and preview one-time notifications. Resolve every open issue and pull request in the target repository, with rendered UI validation evidence when applicable. Unblock blockers, root-cause recurring ones, and work the queue until it is empty or every remaining item carries a proven hard-block. Runs as a persistent /goal across turns, documents the reasoning behind every incomplete run, and learns from its own runs. Manual invocation only.
 disable-model-invocation: true
 compatibility: Requires git, GitHub CLI, network access, permission to push branches and open pull requests, mergepr on PATH, the issue-to-pr, process-pr, repo-cleanup, and slack-dm skills, and a runtime that honors the /goal director. Without /goal, the state file alone carries resumption.
 hooks:
@@ -24,8 +24,10 @@ One job: resolve every open issue and pull request in the target repository.
 An issue normally ends as a merged pull request. An existing pull request ends
 merged or closed with evidence that it is superseded or not actionable.
 Invoking this skill is the user's standing authority to do whatever that
-requires, without asking first. Work the whole queue in one run. A run that
-merges one item and reports back while another stays open is a failed run.
+requires, without asking first. Read
+`../process-pr/references/ui-validation-evidence.md` before processing any UI
+issue or PR. Work the whole queue in one run. A run that merges one item and
+reports back while another stays open is a failed run.
 
 ## Standing authority
 
@@ -52,6 +54,25 @@ This authority stops at: repositories other than the target, secrets and
 credentials outside the repository, spending money, deleting or altering
 production data, and anything with legal weight. Those are hard blocks, not
 questions.
+
+## Desktop workspace ownership
+
+When the user reserves a monitor or assigns one for agent work, record that
+restriction in the state file and honor it for every test app, browser, dialog,
+screenshot, and recording. Discover monitor bounds with per-monitor DPI awareness
+before placing windows. Launch on the assigned monitor where supported; otherwise
+use a hidden launch and position the task window before showing it. Prefer headless
+browsers for public-page verification. Do not move user-owned windows or activate
+a task window unnecessarily. Mixed-DPI logical coordinates are not placement
+proof: verify the actual task window bounds and derive capture coordinates from
+that window. Never record the reserved display.
+
+An explicit user restriction against browser, UI, or desktop automation
+overrides the mission's normal current-head UI evidence requirement. Stop all
+such automation immediately. Preserve already-published evidence, label its
+exact commit provenance, disclose the current-head evidence gap, and use only
+allowed non-UI validation. Do not treat the missing rerun as a hard block and do
+not violate the restriction to satisfy a generic evidence rule.
 
 ## Goal director
 
@@ -97,13 +118,19 @@ the fallback carrier and every rule above applies to it.
    closed as already satisfied or not actionable with evidence, and every
    queued pull request has merged or closed with equivalent evidence. No
    inherited replacement or merge-generated follow-up pull request remains
-   open.
+   open. Delivery workflows triggered by mission merges, such as release or
+   deployment, have reached their expected successful or intentionally skipped
+   terminal state.
 2. Every remaining item is hard-blocked, and every one of those blocks is
    proven under "Earning a hard-block" below, with the incomplete-run report
    written. A block you cannot prove is work you have not finished.
 3. The environment is broken after recovery attempts, for example `gh` cannot
    authenticate at all.
 4. The user says stop.
+
+Tool-output truncation, context compaction, or a long-running session is not a
+broken environment. Persist the current evidence, resume from the state file,
+and keep working.
 
 Anything else is work. Ambiguity, an ugly diff, a flaky test, a merge
 conflict, a missing document, and a scary workflow file are work items, not
@@ -135,15 +162,49 @@ stop reasons. "I was not sure" is not a stop reason; decide and record.
    `process-pr` for the current-head review loop, then the guarded merge gate,
    `mergepr`, cleanup, and notification from `issue-to-pr-merge` phases 3 and
    4. Read `../process-pr/references/pr-reviewer-policy.md` before reviewer
-   work.
+   work. For a generated dependency update, update its authoritative source or
+   action lock and regenerate with the documented compiler and explicit intended
+   action version. Verify metadata and every runtime reference agree, then prove
+   a second generation is stable. Do not merge a `uses:`-only edit that the next
+   compile would undo. Treat compiler-driven permission, secret, telemetry, or
+   container changes as a wider diff to review, not incidental regeneration.
+   Before merging release-bearing work, compare its `Unreleased` notes
+   with the automatic release/changelog path, including issue-to-PR links whose
+   numbers differ. Reconcile notes that would repeat the generated release
+   entry on the source branch, then repeat current-head review and checks. If
+   the duplicate is discovered only in a generated PR, correct it before
+   merging; do not bypass its guarded gate. For UI work, require current-head
+   screenshots visibly rendered in the PR's `## Validation` section and a
+   recording when practical or a concrete reason for omission.
 4. Verify done. GitHub must report each merged pull request `MERGED`. For an
-   issue-backed item, GitHub must also report the issue closed. The pull-request
-   body carries `Closes #<n>`; if the issue did not auto-close, close it with a
+   issue-backed item, GitHub must also report the issue closed. For UI work,
+   inspect the rendered PR and verify its current-head screenshots are visible;
+   local paths, repository file references, CI artifacts, and unverified
+   Markdown are not evidence. The pull-request body carries `Closes #<n>`; if
+   the issue did not auto-close, close it with a
    one-line comment linking the merge commit. If Dependabot or another system
    replaces a queued pull request, add the replacement to the same queue item
    and keep going. Process every release or changelog pull request generated by
-   the merge before marking that item complete. Run the hygiene gate and update
-   the state file before the next item.
+   the merge before marking that item complete. Wait for release, deployment,
+   and other delivery workflows triggered by the merge to reach their expected
+   terminal result. A failed delivery run is inherited mission work: diagnose
+   it, merge the fix, and verify a successful replacement run. Run the hygiene
+   gate and update the state file before the next item.
+
+   If worktree cleanup leaves a directory-not-empty warning, inspect the
+   remaining paths before retrying. Verify the exact reviewed head and a clean
+   tracked tree. Remove only identified generated artifacts, never following
+   symbolic links or Windows junctions into source or another dependency store.
+   Let the guarded merge helper own branch and worktree removal.
+
+   Preview the notification helper's exact structured payload before its
+   one-time send. On Windows, set UTF-8 console and pipeline output encoding
+   before generating that preview. Inspect readable fallback text and structured
+   fields; question marks or replacement characters are not a verified preview.
+   Distinguish output-encoding damage from actual payload corruption and correct
+   the dry run before sending. Keep required field syntax, even when prose style
+   rules prefer different punctuation. A proven local validation failure before
+   any API call may be corrected; an indeterminate delivery must not be retried.
 5. Revisit. After each full pass, return to every blocked item with fresh
    evidence. Apply the blockage ladder again. Repeat until stop condition 1 or
    2 holds.
@@ -163,7 +224,11 @@ For every blocker, climb in order:
    in this pull request or a dedicated one. A recurring flaky test, a
    chronically red workflow, and a stale contributor doc are work items. Never
    mark the same symptom blocked twice without a root-cause attempt in
-   between.
+   between. For recurring prerequisite gaps in composite commands, follow the
+   called scripts and configs and validate the declared installation against its
+   authoritative dependency declarations. Test a missing secondary tooling
+   module. Adding the latest package name to a duplicated list is not a
+   root-cause fix.
 3. Bound the retries. Cap mechanical retries at three. Never request a review
    again for an unchanged head. Respect the shared policy's wait deadlines.
 4. Hard-block, but only after the proof required by "Earning a hard-block"
@@ -247,6 +312,18 @@ errors, fall back to direct `gh` queries and note that in the state file.
   means `gh issue view` confirms it.
 - Record exact SHAs, commands, and observed results. Never claim a check
   passed without reading its result.
+- Hash an immutable publication snapshot, not files still owned by background
+  writers. Size and digest must describe the same bytes. Match the manifest to
+  the uploader's exclusions, including hidden files. Verify downloaded bytes
+  before calling the artifact complete; disclose missing or changed files.
+- Semantic-tree presence and successful click metadata do not prove that a
+  control was reachable or its action happened. Inspect rendered target geometry
+  against headers, scroll boundaries and overlays, then assert the intended
+  application state change. Do not replace that evidence with repeated taps.
+- Never call a UI PR complete or merge-ready without screenshots from its
+  current head visibly rendered in `## Validation`, unless the user explicitly
+  prohibits further UI automation. In that case, state the published evidence's
+  exact commit provenance and the current-head evidence limitation.
 - A blocked report must include the two logged self-serve attempts and the
   exact human action. "Blocked" alone is not a report. A block without proof
   is an unfinished problem.

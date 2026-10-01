@@ -1,6 +1,6 @@
 ---
 name: issue-to-pr-merge
-description: "V2.7 - Commands: Issue, Oldest. Processes selected issues through concise evidence-backed pull requests, current-head review, guarded merge, generated release follow-ups, full repository cleanup, and Slack notification."
+description: "V2.10 - Commands: Issue, Oldest. Processes selected issues through concise evidence-backed pull requests, including rendered UI screenshots when applicable, current-head review, guarded merge, generated release follow-ups, full repository cleanup, and Slack notification."
 disable-model-invocation: true
 compatibility: Requires git, GitHub CLI, network access, permission to push and create pull requests, access to the shared policy's required reviewer, mergepr on PATH, and the slack-dm skill. Multiple issues also require Codex Goals.
 hooks:
@@ -28,9 +28,11 @@ parallel. This skill composes `issue-to-pr` at `../issue-to-pr/SKILL.md`,
 `../repo-cleanup/SKILL.md`. Read those skills and the review-loop references
 they name before acting. Their detailed safety rules remain in force.
 
-Before preflight, read `../process-pr/references/pr-reviewer-policy.md`.
-Its requester identity, selection, refusal handling, and wait limits apply
-throughout this workflow, including the final merge gate.
+Before preflight, read `../process-pr/references/pr-reviewer-policy.md` and
+`../process-pr/references/ui-validation-evidence.md`. The reviewer policy's
+requester identity, selection, refusal handling, and wait limits apply
+throughout this workflow, including the final merge gate. The UI evidence
+policy applies to every selected issue and resulting PR that changes UI.
 
 Use one of two modes:
 
@@ -120,8 +122,31 @@ If the user invokes `$issue-to-pr-merge` with multiple open issues without a
 leading `/goal`, create the Goal as the first action before repository work.
 Set the objective to the resolved repository, immutable issue queue,
 oldest-first order, serial merge requirement, and cleanup gate between issues.
-If a different unfinished Goal exists, do not replace it. Report the conflict
-and ask the user to edit, pause, or clear it.
+Check Goals in the current execution context, not every historical thread on
+the machine. With thread-scoped Goals, an independent Goal owned by another
+session or thread is not a conflict unless it contends for the requested
+repository, worktree, writer lease or another shared execution resource.
+Preserve unrelated Goals, active or stale; do not pause them merely to create
+a Goal in a different thread. Unknown ownership of a shared resource requires
+direction before taking it over.
+
+If a different unfinished Goal occupies this execution context or a required
+shared resource, investigate whether it is genuinely unfinished before
+reporting a conflict. Read its exact objective, frozen
+selector, durable receipts and live artifacts. A stale status alone is not
+proof of active work.
+
+Under Franz's 2026-09-30 instruction, a verified stale Goal may be paused
+without another prompt when every in-scope item is terminal, required cleanup
+and notification are accounted for, and no active execution or owned in-flight
+work remains. Record the old Goal ID, objective, artifact receipts, retained
+work disposition and pause reason. Preserve its history and recovery objects;
+pause it rather than clearing, overwriting or falsely completing it. Then
+create the new Goal. Merged PRs alone do not prove its entire objective is done.
+
+If work, cleanup, notification, ownership or execution remains unresolved or
+cannot be verified, preserve the Goal and ask for direction. Never silently
+replace a genuinely unfinished Goal or absorb its work into the new queue.
 
 Do not create a Goal for one exact issue or for `Oldest`. On a resumed batch
 turn, read the active Goal, frozen queue, GitHub artifacts, and local state
@@ -196,6 +221,8 @@ Follow `issue-to-pr` sections 1 through 5 for:
 - resume detection for existing issue work;
 - branch and isolated worktree naming;
 - the smallest complete implementation and repository-native validation;
+- current-head screenshots rendered in the PR and a recording when practical
+  for UI work, as required by the shared UI evidence policy; and
 - commit, push, and one pull request against the verified default branch.
 
 Whether the pull request is new or resumed, make its title and body satisfy the
@@ -222,8 +249,11 @@ Invoke `process-pr` for the exact PR and use its current-head review loop at
    current-head requests and wait deadlines;
 3. fix or disprove every actionable finding, with focused validation;
 4. repeat on every new head SHA; and
-5. refresh the title and body so their claims match the final current head; and
-6. prove the `human-ready` contract immediately before any merge decision.
+5. refresh the title and body so their claims match the final current head;
+6. for UI work, verify the PR's `## Validation` section visibly renders
+   current-head screenshots and includes a recording when practical or states
+   the concrete reason for omission; and
+7. prove the `human-ready` contract immediately before any merge decision.
 
 The reviewer set must include every reviewer required by the verified
 repository policy and the shared reviewer policy. Optional products do not
@@ -241,9 +271,18 @@ required by the shared policy and explicit repository requirements is
 current-head clean, no live review thread remains unresolved,
 GitHub reports the PR mergeable, the diff still maps only to the selected
 issue, and the final title and body truthfully report satisfied acceptance
-criteria, Definition of Done evidence, verification outcomes, residual risk,
-and deferred work. Apply `unslop` to any final prose edit while preserving exact
-technical evidence.
+criteria, Definition of Done evidence, validation outcomes, residual risk,
+and deferred work. For UI work, also confirm in the rendered PR that its
+`## Validation` section shows the current-head screenshots required by the
+shared UI evidence policy. Local paths, repository file references, CI
+artifacts, and unverified Markdown do not pass this gate. Apply `unslop` to any
+final prose edit while preserving exact technical evidence.
+
+Apply the shared policy's distinction between AI review and formal approval.
+A clean current-head required AI review satisfies the review gate when no
+formal approval is required; `Rev -` alone is not a blocker or a reason for
+another approval prompt. Preserve required human/code-owner approvals, live
+change requests and all other readiness gates.
 
 Optional reviewer availability or activity does not add a merge gate. Assess
 any actionable findings already present under the shared policy.
@@ -307,6 +346,8 @@ After each merge, prove all of the following before continuing:
 
 - GitHub reports the pull request merged and its issue closed;
 - the merge commit and final pull-request head are recorded;
+- for UI work, the final PR still visibly renders its current-head screenshots
+  and records the preferred interaction video or the reason it was omitted;
 - merge-triggered release automation finished, and every directly generated
   release or changelog pull request is merged and cleaned up, or no such
   follow-up was created;
@@ -330,7 +371,10 @@ or cleanup failure.
 For every processed issue, its one-to-one pull request is merged, the issue is
 closed, the merge commit and exact final head are recorded, the default branch
 matches its remote, the final pull-request body truthfully records the delivered
-outcome and proof, and full cleanup is proven. The primary checkout is clean.
+outcome and proof, and full cleanup is proven. For UI work, that proof includes
+current-head screenshots visibly rendered in `## Validation` and an interaction
+recording when practical or a concrete reason for omission. The primary checkout
+is clean.
 Any baseline work that cannot be integrated safely is preserved on a named
 branch or worktree and makes the run `blocked` until its next step is explicit.
 
@@ -345,7 +389,8 @@ active for a later turn.
 
 For one issue, report the issue and pull-request URLs, merge commit, repository
 and owner, final default branch and `origin` SHAs, pull-request body contract
-status, validation results, reviewer signals, active GitHub identity, branch
+status, validation results, UI screenshot rendering and recording status when
+applicable, reviewer signals, active GitHub identity, branch
 and worktree result, full-cleanup result, and any exact blocker or retained
 work.
 

@@ -92,13 +92,13 @@ try {
         $bare = (Invoke-CleanupGit @('-C', $origin, 'rev-parse', '--is-bare-repository')).Text
         if ($bare -ne 'true') { throw 'LocalRemote requires a bare repository.' }
     }
-    elseif ($origin -notmatch '^(?:https://github\.com/|ssh://git@github\.com/|git@(?:github\.com|github-personal1):)HemSoft/[^/]+?(?:\.git)?$') {
-        throw 'Automatic direct-main publication is limited to HemSoft GitHub origins. Use the repository PR workflow for other owners.'
-    }
     $inventory = Get-CleanupInventory
     if ($Audit -or -not $PSCmdlet.ShouldProcess($repo, 'Commit all non-ignored changes, synchronize and push main, remove merged local branches')) {
         [pscustomobject]@{ Status = 'Audit'; Repository = $repo; Branch = $branch; Inventory = $inventory }
         return
+    }
+    if (-not $LocalRemote -and $origin -notmatch '^(?:https://github\.com/|ssh://git@github\.com/|git@(?:github\.com|github-personal1):)HemSoft/[^/]+?(?:\.git)?$') {
+        throw 'Automatic direct-main publication is limited to HemSoft GitHub origins. Use the repository PR workflow for other owners.'
     }
 
     # An OS-held guard coordinates invocations without leaving a stale lock after a crash.

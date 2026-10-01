@@ -178,9 +178,11 @@ Describe 'Deterministic repository cleanup with real local Git remotes' {
         (& $script:cleanup -RepoPath $checkout -LocalRemote).Status | Should -Be 'Complete'
     }
 
-    It 'does not treat a network origin as a local test remote or accept another owner' {
+    It 'audits another owner read-only but refuses direct publication' {
         Invoke-FixtureGit $checkout @('remote', 'set-url', 'origin', 'https://github.com/another-owner/example.git') | Out-Null
         { & $script:cleanup -RepoPath $checkout -LocalRemote } | Should -Throw '*local bare*'
+        (& $script:cleanup -RepoPath $checkout -Audit).Status | Should -Be 'Audit'
+        (& $script:cleanup -RepoPath $checkout -WhatIf).Status | Should -Be 'Audit'
         { & $script:cleanup -RepoPath $checkout } | Should -Throw '*HemSoft*'
     }
 }

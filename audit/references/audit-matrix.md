@@ -1,6 +1,6 @@
 # Audit matrix
 
-Use this matrix to prevent blind spots. Mark each applicable area as verified, finding, covered by existing work, not applicable, or blocked. Keep the supporting evidence, not just the status.
+Use this matrix to prevent blind spots and supply evidence for the fixed concerns in `scoring.md`. Mark each applicable area as verified, finding, covered by existing work, not applicable, or blocked. Keep the supporting evidence, not just the status. The score sheet does not replace this matrix, and an `N/A` score does not permit skipping the applicability reason.
 
 ## Product and architecture
 
@@ -31,6 +31,9 @@ Use this matrix to prevent blind spots. Mark each applicable area as verified, f
 - Verify unit tests assert behavior and failure paths instead of implementation details or snapshots alone.
 - Inspect branch coverage and per-function complexity together. Calculate CRAP scores and identify the worst functions.
 - Verify mutation testing runs meaningful production targets, excludes generated code for documented reasons, uses maintained thresholds, and fails CI below the break threshold.
+- Distinguish enforced thresholds from aspirational, dashboard-only, or reporting-only targets. Do not fail a declared gate against a target the repository does not enforce.
+- Compare repository-owned quality runners with workflows, manifests, configuration, and instructions. Record drift, omitted gates, stale tool pins, hidden exclusions, and fail-fast behavior.
+- Treat cached status and prior audit artifacts as historical evidence. Use a fresh run for the audited revision, retain complete logs when available, and do not diagnose from an output tail alone.
 - For Gherkin, count feature files and scenarios, confirm matching executable step definitions, run them, and reject undefined, pending, skipped, or tag-orphaned scenarios.
 - Verify end-to-end tests cover the critical happy paths and recovery paths. Check isolation, retries, artifacts, platform coverage, and flake tracking.
 - Inspect property tests, fuzzing, contract tests, accessibility tests, migration tests, and compatibility matrices where the system's risks justify them.
@@ -39,7 +42,7 @@ Use this matrix to prevent blind spots. Mark each applicable area as verified, f
 ## CI, release, and repository governance
 
 - Enumerate workflow triggers, paths filters, job dependencies, conditional skips, timeouts, concurrency cancellation, artifacts, caches, permissions, and secret use.
-- Confirm lint, type, unit, behavior, mutation, E2E, architecture, security, performance, memory, packaging, and build checks run when their inputs change.
+- Confirm lint, type, unit, behavior, mutation, E2E, architecture, security, performance, memory, packaging, and build checks run when their inputs change across every supported platform, feature, and build matrix entry.
 - Inspect the live default-branch ruleset or branch protection. Match required status names to the current workflow output exactly.
 - Check whether an aggregate gate can pass when a required child job fails or skips unexpectedly.
 - Review action pinning, least-privilege permissions, fork safety, script injection, artifact provenance, dependency review, release signing, environments, approvals, and rollback.

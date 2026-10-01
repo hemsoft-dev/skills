@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "voices": [
+    {
+      "name": "narrator",
+      "description": "Narration voice. Configure a licensed reference or verified speaker ID.",
+      "speaker_id": "",
+      "reference_audio": "",
+      "reference_text": "",
+      "consent": false
+    },
+    {
+      "name": "guide",
+      "description": "Original synthetic female guide, designed for calm British delivery. Default voice.",
+      "speaker_id": "",
+      "reference_audio": "../assets/guide.mp3",
+      "reference_text": "",
+      "consent": true
+    },
+    {
+      "name": "character",
+      "description": "Character voice. Configure a licensed reference or verified speaker ID.",
+      "speaker_id": "",
+      "reference_audio": "",
+      "reference_text": "",
+      "consent": false
+    }
+  ]
+}
