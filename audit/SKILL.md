@@ -32,9 +32,10 @@ When the invocation's sole argument is `score`, use score-only mode. It is repor
 2. Read `AGENTS.md`, contribution guidance, goal or vision documents, architecture decisions, package manifests, lockfiles, test configuration, and workflow sources. Follow links only when they affect the audit.
 3. Inventory languages, frameworks, generated code, deployment targets, repository size, runtime boundaries, and existing quality tools.
 4. Discover the repository's declared quality gates from CI workflows, build and package manifests, configuration files, and documented scripts. Record each gate's exact command and declared target before running it. Distinguish enforced thresholds from aspirational or reporting-only targets.
-5. Identify any repository-owned audit runner. Compare its gates, targets, tool versions, exclusions, and fail-fast behavior with the authoritative sources. Report drift instead of trusting either side silently.
-6. Inspect open and closed issues and pull requests so the audit does not repeat known work.
-7. Record the audit revision and whether local changes prevent a clean default-branch assessment. Preserve all user work.
+5. Build the stack-specific analyzer plan from `references/stack-tooling.md`. Keep compiler, type checking, linting, formatting, framework diagnostics, and documentation linting as separate checks. Record every applicable baseline check, even when the repository has not configured it.
+6. Identify any repository-owned audit runner. Compare its gates, targets, tool versions, exclusions, and fail-fast behavior with the authoritative sources. Report drift instead of trusting either side silently.
+7. Inspect open and closed issues and pull requests so the audit does not repeat known work.
+8. Record the audit revision and whether local changes prevent a clean default-branch assessment. Preserve all user work.
 
 Do not claim repository-wide coverage from a partial checkout, unavailable service, missing credentials, or skipped platform. Record the limitation and audit everything else that remains verifiable.
 
@@ -55,6 +56,8 @@ Build a check plan from the audit matrix. For every applicable area:
 - treat cached status and prior audit output as historical evidence, not proof about the audited revision;
 - record `P`, `F`, `B`, or `N/A` for each score-sheet dimension as evidence is gathered;
 - compare test files with production boundaries and public behavior, not only raw coverage percentages;
+- execute every applicable stack baseline from `references/stack-tooling.md`; do not collapse a passing compiler, type checker, linter, formatter, framework analyzer, or Markdown linter into one generic check;
+- capture analyzer-native numeric scores, including React Doctor's score for compatible React projects, with the tool version, project scope, and raw finding counts; never substitute one tool's score for the repository score;
 - use current official documentation when interpreting a version-sensitive analyzer or platform setting;
 - use external analyzers in report-only mode and avoid lockfile or source changes. If a useful analyzer cannot run without modifying the repository, create an issue to adopt it instead of installing it during the audit.
 
@@ -66,6 +69,8 @@ Run the full repository-native validation when practical. A failing baseline is 
 
 Every audit must determine whether the repository measures and gates these signals:
 
+- language compiler diagnostics, type checking, formatting, linting, framework analyzers, and documentation linting applicable to every detected stack;
+- framework-native health scores when the compatible analyzer provides one, including React Doctor for React projects;
 - cyclomatic complexity and per-function CRAP score;
 - unit-test coverage, including branch coverage where supported;
 - mutation score with maintained break and target thresholds;
@@ -130,6 +135,7 @@ In the default full-audit mode, the HTML report contains:
 
 - the audited repository and commit;
 - the repository score, evidence coverage, and complete ranked score sheet from `references/scoring.md`;
+- the stack-specific analyzer table required by `references/stack-tooling.md`, including raw tool scores where available;
 - a declared quality-gate table with `Gate`, `Command`, `Target`, `Result`, and `Evidence` columns;
 - the completed audit matrix, with a status and evidence or blocker for every applicable area;
 - issue number, title, severity, and URL for every created issue;

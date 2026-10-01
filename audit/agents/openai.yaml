@@ -1,4 +1,4 @@
 interface:
   display_name: "Repository audit"
   short_description: "Audit and score a repository in one HTML report"
-  default_prompt: "Use $audit to review this repository, write audit/audit-score.html, and create evidence-backed GitHub issues."
+  default_prompt: "Use $audit to review this repository, run applicable stack-specific analyzers and preserve their native scores, write audit/audit-score.html, and create evidence-backed GitHub issues."

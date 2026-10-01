@@ -44,6 +44,8 @@ The document header must show:
 
 Both modes must include the complete ranked score table from `scoring.md`, with all 18 concern IDs. Preserve the fixed ranking order and display `Blocked` and `N/A` as text.
 
+Immediately after the score table, both modes must include the stack-specific analyzer table from `stack-tooling.md`. Preserve native analyzer scores as separate values. Show the tool version, full or partial scope, result, enforcement, and evidence. Do not blend React Doctor or another analyzer's score into the repository score.
+
 A full audit report must then include, in this order:
 
 1. declared quality gates;
@@ -53,7 +55,7 @@ A full audit report must then include, in this order:
 5. blocked commands and unavailable environments;
 6. report provenance, including the audit revision and report path.
 
-A score-only report stops after short blocker and applicability notes. It must not include issue drafts, publication details, recommendations, or the full narrative audit.
+A score-only report stops after the analyzer table and short blocker and applicability notes. It must not include issue drafts, publication details, recommendations, or the full narrative audit.
 
 Use stable section IDs and a short contents list for a full report. Evidence links must point to the exact URL or repository-relative file and line when available. Do not embed credentials, tokens, raw secrets, private file contents, or unredacted scanner output.
 
@@ -66,7 +68,8 @@ Before replacing the prior report, verify:
 3. the repository identity and full audited commit appear in text;
 4. each fixed concern ID appears exactly once in the score table body;
 5. the score, evidence coverage, mode, and generated time are present;
-6. full mode contains every required section, while score mode contains none of the excluded sections;
-7. no `script`, remote stylesheet, remote font, or remote image dependency is present.
+6. the stack-specific analyzer table contains one row for every applicable baseline check and includes any available native scores;
+7. full mode contains every required section, while score mode contains none of the excluded sections;
+8. no `script`, remote stylesheet, remote font, or remote image dependency is present.
 
 After the atomic replacement, verify that `audit/audit-score.html` exists and report its absolute path. The audit is incomplete until this verification succeeds.

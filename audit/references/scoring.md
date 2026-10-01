@@ -16,7 +16,7 @@ Every score sheet must contain these rows. Do not add, remove, merge, or rename 
 | MT | Mutation testing | Production targets, exclusions, break and target thresholds, current mutation score, and CI enforcement |
 | BS | Executable behavior specifications | Feature files, scenario and step matching, undefined or skipped scenarios, tags, execution, and maintained behavior gates |
 | EJ | End-to-end critical journeys | Critical happy and recovery paths, isolation, retries, artifacts, supported platforms, and flake tracking |
-| LQ | Lint and static quality | Code, configuration, workflow, and Markdown linting, formatting, type checks, warnings, and enforced exclusions |
+| LQ | Lint and static quality | Per-stack compiler and analyzer results, code, configuration, workflow, and Markdown linting, formatting, type checks, framework-native diagnostics and scores, warnings, and enforced exclusions |
 | ST | Specialized test coverage | Property, fuzz, contract, accessibility, migration, architecture, compatibility, and other risk-driven tests, including test discovery |
 | CG | CI, release, and repository governance | Workflow coverage, aggregate gates, required checks, rulesets, permissions, action pinning, provenance, release controls, and rollback |
 | CL | CI feedback latency | Queue and critical-path time, representative samples, reruns, change selection, fast feedback, final qualification, and expensive checks |
@@ -57,6 +57,12 @@ Decide applicability from repository contents, runtime boundaries, delivery path
 - A missing CI, release, security, or test control is usually `F` when contributors or users depend on that control. It is not evidence that the concern is unavailable.
 
 If applicability remains uncertain after inventorying the repository, use `B` and state what evidence would settle it. Do not use `N/A` to improve the score.
+
+## Tool-native scores
+
+Preserve numeric scores emitted by specialized analyzers, including React Doctor, as separate evidence. Record the exact tool version, project and scan scope, raw score, finding counts, and whether the run covered the full audited revision. Never convert, normalize, average, or add a tool-native score to the repository score.
+
+A missing or blocked tool-native score affects the relevant evidence dimensions according to the control and risk. It does not become zero. A high tool score does not override reproducible findings, missing enforcement, partial scope, or a failing repository gate.
 
 ## Score calculation
 
@@ -99,6 +105,7 @@ When the invocation's sole argument is `score`, write `audit/audit-score.html` w
 1. repository and audited commit;
 2. `Repository score`, `Evidence coverage`, and whether the score is provisional;
 3. the complete ranked table;
-4. short notes for blockers and `N/A` decisions that need more context than the table can hold.
+4. the stack-specific analyzer table from `stack-tooling.md`, including tool-native scores;
+5. short notes for blockers and `N/A` decisions that need more context than the table can hold.
 
 Follow `html-report.md` for the document shell, fixed destination, accessibility, and validation. Do not include issue drafts, publication sections, the full narrative audit, or recommendations in score-only output. Evidence collection remains as rigorous as a full audit. A shorter report does not permit estimated metrics or skipped applicable checks.
