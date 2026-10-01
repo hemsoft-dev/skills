@@ -9,6 +9,13 @@ Use this matrix to prevent blind spots and supply evidence for the fixed concern
 - Look for modules that expose implementation details or force callers to coordinate multiple low-level operations.
 - Identify dead code, unused exports and dependencies, duplicate implementations, excessive generated churn, and configuration split across competing sources of truth.
 - Check migrations, serialization formats, IPC or API contracts, backward compatibility, and rollback behavior.
+- After the tactical checks, produce the separate architecture rating and recommendations under [strategic-evaluations.md](strategic-evaluations.md).
+
+## Tech-stack suitability
+
+- Identify the application type, deployed component versions, workload, supported platforms, and operating constraints from current repository evidence.
+- Use fresh web search and verified primary sources to compare the chosen stack with current support, security, performance, stability, and compatibility guidance for that application type.
+- Produce the separate 1 to 10 tech-stack rating, criterion evidence, confidence, research source table, and recommendations under [strategic-evaluations.md](strategic-evaluations.md). Distinguish a justified patch or configuration change from a costly stack replacement.
 
 ## Correctness and resilience
 

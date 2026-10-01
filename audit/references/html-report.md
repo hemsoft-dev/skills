@@ -53,9 +53,13 @@ A full audit report must then include, in this order:
 3. created issues and existing issue coverage;
 4. evidence that did not justify an issue;
 5. blocked commands and unavailable environments;
-6. report provenance, including the audit revision and report path.
+6. architecture evaluation;
+7. tech-stack evaluation and current research sources;
+8. report provenance, including the audit revision and report path.
 
-A score-only report stops after the analyzer table and short blocker and applicability notes. It must not include issue drafts, publication details, recommendations, or the full narrative audit.
+Both evaluations follow [strategic-evaluations.md](strategic-evaluations.md). Display separate 1 to 10 ratings or explicit `Blocked` or `N/A` states, criterion evidence, confidence, and recommendation notes. Keep these ratings separate from the repository and analyzer scores. The tech-stack section includes the verified source table with direct links and research dates.
+
+A score-only report includes compact versions of both evaluations after the analyzer table, then short blocker and applicability notes. It must not include issue drafts, publication details, recommendations outside these evaluations, or the full narrative audit.
 
 Use stable section IDs and a short contents list for a full report. Evidence links must point to the exact URL or repository-relative file and line when available. Do not embed credentials, tokens, raw secrets, private file contents, or unredacted scanner output.
 
@@ -69,7 +73,9 @@ Before replacing the prior report, verify:
 4. each fixed concern ID appears exactly once in the score table body;
 5. the score, evidence coverage, mode, and generated time are present;
 6. the stack-specific analyzer table contains one row for every applicable baseline check and includes any available native scores;
-7. full mode contains every required section, while score mode contains none of the excluded sections;
-8. no `script`, remote stylesheet, remote font, or remote image dependency is present.
+7. both strategic evaluations are present, with criterion evidence, confidence, recommendation notes, and numeric ratings within 1 to 10 or explicit `Blocked` or `N/A` states;
+8. tech-stack research includes verified direct source links and the checked-on timestamp, an exact research blocker and blocked rating, or evidence that no application stack applies;
+9. full mode contains every required section, while score mode contains none of the excluded sections;
+10. no `script`, remote stylesheet, remote font, or remote image dependency is present.
 
 After the atomic replacement, verify that `audit/audit-score.html` exists and report its absolute path. The audit is incomplete until this verification succeeds.

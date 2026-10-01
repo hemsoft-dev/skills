@@ -1,6 +1,6 @@
 ---
 name: audit
-description: Performs a full evidence-backed repository health audit, runs declared quality gates, produces a deterministic concern score sheet, and creates non-duplicate GitHub issues for verified improvements. Use for a full repository audit or with the sole argument `score` for a report-only score. Do not use for ordinary code review or implementing fixes.
+description: V1.1 - Performs a full evidence-backed repository health audit, runs declared quality gates, produces a deterministic concern score sheet, rates architecture and tech-stack suitability from 1 to 10 with current web research and recommendations, and creates non-duplicate GitHub issues for verified improvements. Use for a full repository audit or with the sole argument `score` for a report-only score. Do not use for ordinary code review or implementing fixes.
 ---
 
 # Repository audit
@@ -18,7 +18,7 @@ Audit the repository at a fixed source revision, verify findings with the strong
 - Never weaken a quality threshold, add a suppression, update a snapshot, or exclude code to make a check pass. Report an unrealistic or noisy gate as its own evidence-backed problem.
 - Score the repository only from current audit evidence. Do not estimate a missing metric or treat an unavailable check as a zero.
 
-Read [references/audit-matrix.md](references/audit-matrix.md), [references/scoring.md](references/scoring.md), and [references/html-report.md](references/html-report.md) before planning the audit. After identifying the stack, read [references/stack-tooling.md](references/stack-tooling.md) and select only compatible tools. Before filing anything, read [references/issue-publication.md](references/issue-publication.md).
+Read [references/audit-matrix.md](references/audit-matrix.md), [references/scoring.md](references/scoring.md), and [references/html-report.md](references/html-report.md) before planning the audit. After identifying the stack, read [references/stack-tooling.md](references/stack-tooling.md) and select only compatible tools. Read [references/strategic-evaluations.md](references/strategic-evaluations.md) for the architecture and tech-stack ratings required in both modes. Before filing anything, read [references/issue-publication.md](references/issue-publication.md).
 
 ## Invocation modes
 
@@ -90,6 +90,12 @@ Follow `references/scoring.md` exactly. Include every fixed concern row, even wh
 
 Calculate concern scores, the repository score, and evidence coverage from the recorded dimension tokens. Rank the rows using the fixed sort rules. Keep finding severity separate from the numeric score, and cite the strongest evidence or the specific applicability reason for every row.
 
+## Evaluate architecture and tech stack
+
+After the tactical evidence pass, follow [references/strategic-evaluations.md](references/strategic-evaluations.md). Rate architecture and tech-stack suitability separately from 1 to 10 against the application type, workload, deployment model, and operating constraints. Explain the criterion ratings, evidence, confidence, and improvement recommendations. Require fresh web search and verified current sources for stack support, security, performance, stability, and compatibility advice. Report unavailable evidence as blocked instead of inventing a rating.
+
+These are judgment-based evaluations, not additional concern rows or tool-native scores. Do not blend them into the deterministic repository score. Include both evaluations in every report, with compact recommendation notes in `score` mode. Recommendations must meet the existing validation and duplicate rules before becoming issues.
+
 ## Inspect live delivery controls
 
 When the repository is hosted on GitHub, inspect the live state as well as workflow files. External dashboards count only when checked during the current audit. Label cached or historical results with their date:
@@ -138,6 +144,7 @@ In the default full-audit mode, the HTML report contains:
 - the stack-specific analyzer table required by `references/stack-tooling.md`, including raw tool scores where available;
 - a declared quality-gate table with `Gate`, `Command`, `Target`, `Result`, and `Evidence` columns;
 - the completed audit matrix, with a status and evidence or blocker for every applicable area;
+- separate 1 to 10 architecture and tech-stack evaluations, with criterion evidence, confidence, ranked recommendations, and the stack research source table;
 - issue number, title, severity, and URL for every created issue;
 - existing issues that already cover findings;
 - important evidence that did not justify an issue;

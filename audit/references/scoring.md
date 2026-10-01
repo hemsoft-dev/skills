@@ -27,7 +27,7 @@ Every score sheet must contain these rows. Do not add, remove, merge, or rename 
 | UX | Accessibility, UX, and compatibility | Semantics, keyboard and focus behavior, contrast, motion, zoom, responsive states, localization, offline behavior, and supported clients |
 | OD | Operations and data lifecycle | Logs, metrics, traces, health, alerts, runbooks, migrations, backup and restore, retention, deployment, rollback, flags, and cleanup |
 
-The catalog covers every section of `audit-matrix.md`. The required measurement list in `SKILL.md` maps to CX, UC, MT, BS, EJ, LQ, SP, PF, MR, and CL.
+The catalog covers every section of `audit-matrix.md`. Tech-stack evidence maps to the closest existing concerns, such as PA, MQ, SP, PF, MR, and OD; its separate suitability rating does not add a concern. The required measurement list in `SKILL.md` maps to CX, UC, MT, BS, EJ, LQ, SP, PF, MR, and CL.
 
 ## Four evidence dimensions
 
@@ -98,6 +98,10 @@ Render this table without omitting rows:
 
 Use `None` when a scored concern has no validated finding. Existing issues and accepted risks do not erase a current finding or raise the score. Link or cite the strongest evidence in the last column.
 
+## Separate strategic ratings
+
+Every audit also includes architecture and tech-stack ratings from 1 to 10 under [strategic-evaluations.md](strategic-evaluations.md). These judgment-based ratings use their own criteria, confidence, recommendation notes, and current stack research. They do not change the fixed catalog, dimension tokens, ranking, repository score, or evidence coverage. Never normalize a concern score or tool score into either rating.
+
 ## Score-only report
 
 When the invocation's sole argument is `score`, write `audit/audit-score.html` with only:
@@ -106,6 +110,7 @@ When the invocation's sole argument is `score`, write `audit/audit-score.html` w
 2. `Repository score`, `Evidence coverage`, and whether the score is provisional;
 3. the complete ranked table;
 4. the stack-specific analyzer table from `stack-tooling.md`, including tool-native scores;
-5. short notes for blockers and `N/A` decisions that need more context than the table can hold.
+5. compact architecture and tech-stack evaluations from [strategic-evaluations.md](strategic-evaluations.md), including criterion ratings and evidence, confidence, short recommendation notes, and the current research source table;
+6. short notes for blockers and `N/A` decisions that need more context than the table can hold.
 
-Follow `html-report.md` for the document shell, fixed destination, accessibility, and validation. Do not include issue drafts, publication sections, the full narrative audit, or recommendations in score-only output. Evidence collection remains as rigorous as a full audit. A shorter report does not permit estimated metrics or skipped applicable checks.
+Follow `html-report.md` for the document shell, fixed destination, accessibility, and validation. Do not include issue drafts, publication sections, the full narrative audit, or recommendations outside the two strategic evaluations in score-only output. Evidence collection remains as rigorous as a full audit. A shorter report does not permit estimated metrics or skipped applicable checks.
