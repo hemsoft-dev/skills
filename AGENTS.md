@@ -46,6 +46,16 @@ value very highly:
 
 \- Before sending any user-facing response, use the `unslop` skill at `C:/Users/User/.agents/skills/unslop/SKILL.md` as the final editing pass. Preserve meaning, technical accuracy, code, commands, citations, and required evidence or formatting. Higher-priority instructions take precedence.
 
+## Decision consultation
+
+Before asking Franz to choose a preference, design, or scope interpretation,
+consult [precedent](precedent/SKILL.md) for comparable, source-linked past
+choices. It runs in shadow mode. Honor an explicitly disabled advisor.
+Compare current instructions and source scope;
+never treat a historical choice or automated recommendation as new authority.
+Investigate facts directly and preserve genuine human-only actions. Continue
+independent authorized work while a real decision is pending.
+
 ## Repository-wide cleanup
 
 Franz explicitly requested this scope on 2026-09-05. A direct `$repo-cleanup`

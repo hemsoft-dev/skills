@@ -1,0 +1,15 @@
+{
+  "name": "@hemsoft/precedent",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Local source-linked personal decision consultation in shadow mode",
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*",
+    "typebox": "*"
+  },
+  "pi": {
+    "extensions": ["./scripts/pi-extension.ts"],
+    "skills": ["."]
+  }
+}

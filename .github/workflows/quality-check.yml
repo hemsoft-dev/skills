@@ -7,6 +7,25 @@ on:
     branches: [ main, master, develop ]
 
 jobs:
+  precedent:
+    name: Precedent offline tests
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+      - name: Test history, source verification and shadow decisions
+        run: python -m unittest discover -s precedent/tests -v
+      - name: Test bounded Pi recovery and subprocess protocol
+        run: node --test precedent/tests/guard.test.mjs
+
   powershell:
     name: PowerShell Quality
     runs-on: windows-latest
