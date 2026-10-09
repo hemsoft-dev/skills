@@ -3,13 +3,13 @@ set -euo pipefail
 
 runner_user=${RUNNER_USER:-actions}
 runner_service=${RUNNER_SERVICE:-}
-if [[ -z "${runner_service}" ]]; then
-  runner_service=$(sudo cat "${RUNNER_DIRECTORY:-/opt/actions-runner/yahtzee}/.service")
-fi
-if [[ ! "${runner_service}" =~ ^actions\.runner\.[A-Za-z0-9_.-]+\.service$ ]]; then
-  echo "Invalid runner service name" >&2
-  exit 1
-fi
+validate_runner_service() {
+  if [[ -n "${runner_service}" && ! "${runner_service}" =~ ^actions\.runner\.[A-Za-z0-9_.-]+\.service$ ]]; then
+    echo "Invalid runner service name" >&2
+    exit 1
+  fi
+}
+validate_runner_service
 
 if ! id "${runner_user}" >/dev/null 2>&1; then
   echo "Runner user does not exist: ${runner_user}" >&2
@@ -52,7 +52,14 @@ sudo apt-get install -y --no-install-recommends \
 sudo usermod -aG docker "${runner_user}"
 sudo systemctl enable --now docker
 
-if systemctl cat "${runner_service}" >/dev/null 2>&1; then
+# Provisioning runs before registration on a fresh guest, so .service may not
+# exist yet. Registered runners retain their generated unit across owner moves.
+runner_service_file="${RUNNER_DIRECTORY:-/opt/actions-runner/yahtzee}/.service"
+if [[ -z "${runner_service}" ]] && sudo test -f "${runner_service_file}"; then
+  runner_service=$(sudo cat "${runner_service_file}")
+  validate_runner_service
+fi
+if [[ -n "${runner_service}" ]] && systemctl cat "${runner_service}" >/dev/null 2>&1; then
   sudo systemctl restart "${runner_service}"
 fi
 
