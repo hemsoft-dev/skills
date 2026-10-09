@@ -70,6 +70,7 @@ Describe 'Deterministic repository cleanup with real local Git remotes' {
 
     It 'stops on a failing commit hook without publishing or discarding changes' {
         Set-Content -LiteralPath (Join-Path $emptyHooks 'pre-commit') -Value "#!/bin/sh`nexit 1" -NoNewline
+        if (-not $IsWindows) { & chmod +x (Join-Path $emptyHooks 'pre-commit') }
         Set-Content -LiteralPath (Join-Path $checkout 'pending.txt') -Value 'pending'
         $head = Invoke-FixtureGit $remote @('rev-parse', 'main')
         { & $script:cleanup -RepoPath $checkout -LocalRemote } | Should -Throw '*commit failed*'
@@ -137,6 +138,7 @@ Describe 'Deterministic repository cleanup with real local Git remotes' {
 
     It 'retains committed work after a rejected push' {
         Set-Content -LiteralPath (Join-Path $remote 'hooks/pre-receive') -Value "#!/bin/sh`nexit 1" -NoNewline
+        if (-not $IsWindows) { & chmod +x (Join-Path $remote 'hooks/pre-receive') }
         Set-Content -LiteralPath (Join-Path $checkout 'pending.txt') -Value 'pending'
         $head = Invoke-FixtureGit $remote @('rev-parse', 'main')
         { & $script:cleanup -RepoPath $checkout -LocalRemote } | Should -Throw '*push failed*'
@@ -163,6 +165,7 @@ Describe 'Deterministic repository cleanup with real local Git remotes' {
 
     It 'does not publish changes created by a post-commit hook' {
         Set-Content -LiteralPath (Join-Path $emptyHooks 'post-commit') -Value "#!/bin/sh`necho concurrent > concurrent.txt" -NoNewline
+        if (-not $IsWindows) { & chmod +x (Join-Path $emptyHooks 'post-commit') }
         Set-Content -LiteralPath (Join-Path $checkout 'pending.txt') -Value 'pending'
         $remoteHead = Invoke-FixtureGit $remote @('rev-parse', 'main')
         { & $script:cleanup -RepoPath $checkout -LocalRemote } | Should -Throw '*changed during validation or commit*'
@@ -184,5 +187,33 @@ Describe 'Deterministic repository cleanup with real local Git remotes' {
         (& $script:cleanup -RepoPath $checkout -Audit).Status | Should -Be 'Audit'
         (& $script:cleanup -RepoPath $checkout -WhatIf).Status | Should -Be 'Audit'
         { & $script:cleanup -RepoPath $checkout } | Should -Throw '*HemSoft*'
+    }
+}
+
+Describe 'Canonical personal GitHub destination allowlist' {
+    BeforeAll {
+        $tokens = $null
+        $errors = $null
+        $ast = [Management.Automation.Language.Parser]::ParseFile($script:cleanup, [ref]$tokens, [ref]$errors)
+        $guard = $ast.Find({
+            param($node)
+            $node -is [Management.Automation.Language.BinaryExpressionAst] -and
+            $node.Operator -eq [Management.Automation.Language.TokenKind]::Inotmatch -and
+            $node.Left.Extent.Text -eq '$origin'
+        }, $true)
+        $script:originPattern = $guard.Right.Value
+    }
+    It 'preserves destination authority for <Url>' -TestCases @(
+        @{ Url = 'https://github.com/hemsoft-dev/example.git'; Allowed = $true }
+        @{ Url = 'git@github-personal1:hemsoft-dev/example.git'; Allowed = $true }
+        @{ Url = 'ssh://git@github.com/hemsoft-dev/example.git'; Allowed = $true }
+        @{ Url = 'https://github.com/HemSoft/example.git'; Allowed = $true }
+        @{ Url = 'https://github.com/another-owner/example.git'; Allowed = $false }
+        @{ Url = 'git@github-work1:hemsoft-dev/example.git'; Allowed = $false }
+        @{ Url = 'https://github.com/hemsoft-dev/example/extra'; Allowed = $false }
+        @{ Url = 'https://github.com.evil.invalid/hemsoft-dev/example.git'; Allowed = $false }
+    ) {
+        param($Url, $Allowed)
+        ($Url -match $script:originPattern) | Should -Be $Allowed
     }
 }

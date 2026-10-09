@@ -97,8 +97,8 @@ try {
         [pscustomobject]@{ Status = 'Audit'; Repository = $repo; Branch = $branch; Inventory = $inventory }
         return
     }
-    if (-not $LocalRemote -and $origin -notmatch '^(?:https://github\.com/|ssh://git@github\.com/|git@(?:github\.com|github-personal1):)HemSoft/[^/]+?(?:\.git)?$') {
-        throw 'Automatic direct-main publication is limited to HemSoft GitHub origins. Use the repository PR workflow for other owners.'
+    if (-not $LocalRemote -and $origin -notmatch '^(?:https://github\.com/|ssh://git@github\.com/|git@(?:github\.com|github-personal1):)(?:HemSoft|hemsoft-dev)/[^/]+?(?:\.git)?$') {
+        throw 'Automatic direct-main publication is limited to HemSoft and hemsoft-dev GitHub origins. Use the repository PR workflow for other owners.'
     }
 
     # An OS-held guard coordinates invocations without leaving a stale lock after a crash.

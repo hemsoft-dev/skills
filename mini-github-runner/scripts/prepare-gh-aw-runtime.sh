@@ -2,7 +2,14 @@
 set -euo pipefail
 
 runner_user=${RUNNER_USER:-actions}
-runner_service=${RUNNER_SERVICE:-actions.runner.HemSoft-yahtzee.mini-github-runner-01.service}
+runner_service=${RUNNER_SERVICE:-}
+if [[ -z "${runner_service}" ]]; then
+  runner_service=$(sudo cat "${RUNNER_DIRECTORY:-/opt/actions-runner/yahtzee}/.service")
+fi
+if [[ ! "${runner_service}" =~ ^actions\.runner\.[A-Za-z0-9_.-]+\.service$ ]]; then
+  echo "Invalid runner service name" >&2
+  exit 1
+fi
 
 if ! id "${runner_user}" >/dev/null 2>&1; then
   echo "Runner user does not exist: ${runner_user}" >&2

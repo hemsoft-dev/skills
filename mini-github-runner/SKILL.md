@@ -49,7 +49,7 @@ Build and operate an isolated GitHub Actions self-hosted runner on `mini`.
 - Isolation: the guest does not join Tailscale and cannot reach the tailnet or home LAN.
 - Runtime: the GitHub runner and Docker engine run inside the guest, never as
   `franz` on the host.
-- Scope: repository-level registrations under the personal `HemSoft` account.
+- Scope: repository-level registrations in `hemsoft-dev`, authenticated as `HemSoft`.
 - Secrets: never write registration tokens, credentials, or private keys into this skill, `TODO.md`, history, logs, or shell output.
 
 ## Live implementation
@@ -82,7 +82,7 @@ Use these live checks:
 ```powershell
 ssh mini 'virsh -c qemu:///system dominfo github-runner-01; virsh -c qemu:///system net-info default; virsh -c qemu:///system nwfilter-binding-list'
 $env:GH_TOKEN = gh auth token --user HemSoft
-gh api repos/HemSoft/yahtzee/actions/runners --jq '.runners[] | select(.name=="mini-github-runner-01")'
+gh api repos/hemsoft-dev/yahtzee/actions/runners --jq '.runners[] | select(.name=="mini-github-runner-01")'
 gh run list --repo hemsoft-dev/yahtzee --workflow self-hosted-smoke.yml --limit 5
 ```
 
@@ -177,7 +177,7 @@ mini and inside the guest.
 
 ```powershell
 $env:GH_TOKEN = gh auth token --user HemSoft
-gh api repos/HemSoft/yahtzee/actions/runners --jq `
+gh api repos/hemsoft-dev/yahtzee/actions/runners --jq `
   '.runners[] | {id,name,status,busy,labels:[.labels[].name]}'
 gh run list --repo hemsoft-dev/yahtzee --workflow self-hosted-smoke.yml --limit 10
 ```
@@ -204,9 +204,10 @@ virsh -c qemu:///system autostart github-runner-01
 Run these inside the guest as `runner-admin`:
 
 ```bash
-sudo systemctl status actions.runner.HemSoft-yahtzee.mini-github-runner-01.service
-sudo systemctl restart actions.runner.HemSoft-yahtzee.mini-github-runner-01.service
-sudo journalctl -u actions.runner.HemSoft-yahtzee.mini-github-runner-01.service -n 100 --no-pager
+runner_service=$(sudo cat /opt/actions-runner/yahtzee/.service)
+sudo systemctl status "$runner_service"
+sudo systemctl restart "$runner_service"
+sudo journalctl -u "$runner_service" -n 100 --no-pager
 sudo -u actions /opt/actions-runner/yahtzee/bin/Runner.Listener --version
 ```
 
@@ -258,7 +259,7 @@ sudo ./svc.sh uninstall
 
 ```powershell
 $env:GH_TOKEN = gh auth token --user HemSoft
-gh api --method DELETE repos/HemSoft/yahtzee/actions/runners/21
+gh api --method DELETE repos/hemsoft-dev/yahtzee/actions/runners/21
 ```
 
 ### Troubleshooting
