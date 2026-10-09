@@ -20,7 +20,11 @@ if name == "sudo":
         if args[:1] == ["-H"]:
             args = args[1:]
     sys.exit(subprocess.call(args))
-if name == "tee":
+if name == "id":
+    sys.exit(0 if Path(os.environ["MOCK_USER"]).exists() else 1)
+elif name == "useradd":
+    Path(os.environ["MOCK_USER"]).touch()
+elif name == "tee":
     sys.stdin.read()
 elif name == "dpkg":
     print("amd64")
@@ -34,7 +38,7 @@ elif name in ["docker", "rg", "gh"]:
 
 
 class RuntimePreparationTests(unittest.TestCase):
-    def run_preparation(self, stored_service=None, override=None, registered=True):
+    def run_preparation(self, stored_service=None, override=None, registered=True, user_exists=True):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             commands = root / "commands"
@@ -43,17 +47,20 @@ class RuntimePreparationTests(unittest.TestCase):
             mock.write_text(MOCK)
             mock.chmod(0o755)
             for name in ["sudo", "id", "apt-get", "install", "curl", "dpkg",
-                         "tee", "usermod", "systemctl", "docker", "rg", "gh"]:
+                         "tee", "useradd", "usermod", "systemctl", "docker", "rg", "gh"]:
                 (commands / name).symlink_to(mock)
             runner = root / "runner"
             runner.mkdir()
             if stored_service is not None:
                 (runner / ".service").write_text(stored_service + "\n")
+            user = root / "user-exists"
+            if user_exists:
+                user.touch()
             log = root / "commands.jsonl"
             environment = dict(os.environ)
             environment.update(PATH=str(commands) + os.pathsep + environment["PATH"],
                                RUNNER_DIRECTORY=str(runner), MOCK_LOG=str(log),
-                               MOCK_REGISTERED="1" if registered else "0")
+                               MOCK_REGISTERED="1" if registered else "0", MOCK_USER=str(user))
             environment.pop("RUNNER_SERVICE", None)
             if override is not None:
                 environment["RUNNER_SERVICE"] = override
@@ -63,8 +70,11 @@ class RuntimePreparationTests(unittest.TestCase):
             return result, entries
 
     def test_fresh_guest_installs_dependencies_before_registration(self):
-        result, entries = self.run_preparation()
+        result, entries = self.run_preparation(user_exists=False)
         self.assertEqual(result.returncode, 0, result.stderr)
+        creation = next(i for i, e in enumerate(entries) if e[0] == "useradd")
+        installation = next(i for i, e in enumerate(entries) if e[0] == "apt-get")
+        self.assertLess(creation, installation)
         self.assertTrue(any(e[0] == "apt-get" and "docker-ce" in e for e in entries))
         self.assertFalse(any(e[:2] == ["systemctl", "restart"] for e in entries))
         self.assertTrue(any(e[:2] == ["docker", "version"] for e in entries))
@@ -89,10 +99,11 @@ class RuntimePreparationTests(unittest.TestCase):
         self.assertIn("Invalid runner service name", result.stderr)
         self.assertEqual(entries, [])
 
-    def test_missing_systemd_unit_is_not_restarted(self):
+    def test_missing_recorded_systemd_unit_is_an_error(self):
         result, entries = self.run_preparation(
             stored_service="actions.runner.hemsoft-dev-yahtzee.runner.service", registered=False)
-        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("Recorded runner service cannot be loaded", result.stderr)
         self.assertFalse(any(e[:2] == ["systemctl", "restart"] for e in entries))
 
 

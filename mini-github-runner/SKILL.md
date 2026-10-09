@@ -116,9 +116,11 @@ The tested first-build sequence is:
    any repository.
 5. When a trusted GH AW workflow is selected, stream
    `scripts/prepare-gh-aw-runtime.sh` into the guest as `runner-admin`. This
-   installs Docker from Docker's signed Ubuntu repository plus `gh` and
-   ripgrep, then restarts the runner service so `actions` receives its Docker
-   group membership.
+   creates the `actions` system account if needed, installs Docker from Docker's
+   signed Ubuntu repository plus `gh` and ripgrep, and adds Docker group access.
+   Before registration there is no runner service to restart. For a registered
+   runner, it restarts the unit recorded in `.service`; a missing recorded unit
+   fails preparation rather than reporting success.
 
 ### Register
 

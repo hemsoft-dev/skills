@@ -12,8 +12,12 @@ validate_runner_service() {
 validate_runner_service
 
 if ! id "${runner_user}" >/dev/null 2>&1; then
-  echo "Runner user does not exist: ${runner_user}" >&2
-  exit 1
+  if [[ "${runner_user}" != "actions" ]]; then
+    echo "Runner user does not exist: ${runner_user}" >&2
+    exit 1
+  fi
+  sudo useradd --system --create-home --home-dir /home/actions \
+    --shell /bin/bash "${runner_user}"
 fi
 
 export DEBIAN_FRONTEND=noninteractive
@@ -59,7 +63,11 @@ if [[ -z "${runner_service}" ]] && sudo test -f "${runner_service_file}"; then
   runner_service=$(sudo cat "${runner_service_file}")
   validate_runner_service
 fi
-if [[ -n "${runner_service}" ]] && systemctl cat "${runner_service}" >/dev/null 2>&1; then
+if [[ -n "${runner_service}" ]]; then
+  if ! systemctl cat "${runner_service}" >/dev/null 2>&1; then
+    echo "Recorded runner service cannot be loaded: ${runner_service}" >&2
+    exit 1
+  fi
   sudo systemctl restart "${runner_service}"
 fi
 
