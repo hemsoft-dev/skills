@@ -144,7 +144,7 @@ Example content:
 --detail "Quality=Added accessibility coverage and tests"
 --detail "Duration=8m 17s"
 --detail "Tokens=18,742"
---url "https://github.com/HemSoft/codexbar-ios/pull/102"
+--url "https://github.com/hemsoft-dev/codexbar-ios/pull/102"
 ```
 
 ## Step 2: Preview when required
@@ -161,7 +161,7 @@ python3 "$HOME/.agents/skills/slack-dm/scripts/slack_dm.py" \
   --summary "The squash merge passed review and CI gates." \
   --detail "Inventory=Added saved-reset selection flow" \
   --detail "Reliability=Added retry-safe redemption state" \
-  --url "https://github.com/HemSoft/codexbar-ios/pull/102"
+  --url "https://github.com/hemsoft-dev/codexbar-ios/pull/102"
 ```
 
 The preview prints the exact fallback text and Block Kit payload.
@@ -177,7 +177,7 @@ Windows agents use the same arguments with PowerShell parameter names:
   -Summary "The squash merge passed review and CI gates." `
   -Detail "Inventory=Added saved-reset selection flow", `
           "Reliability=Added retry-safe redemption state" `
-  -Url "https://github.com/HemSoft/codexbar-ios/pull/102"
+  -Url "https://github.com/hemsoft-dev/codexbar-ios/pull/102"
 ```
 
 ## Step 3: Send once
@@ -194,7 +194,7 @@ python3 "$HOME/.agents/skills/slack-dm/scripts/slack_dm.py" \
   --summary "The squash merge passed review and CI gates." \
   --detail "Inventory=Added saved-reset selection flow" \
   --detail "Reliability=Added retry-safe redemption state" \
-  --url "https://github.com/HemSoft/codexbar-ios/pull/102" \
+  --url "https://github.com/hemsoft-dev/codexbar-ios/pull/102" \
   --confirm-send
 ```
 

@@ -139,7 +139,7 @@ Do not ask about harmless synonyms when the intended result is already clear.
 
 ## Generate reference imagery
 
-Load the installed global [generate-image skill](https://github.com/HemSoft/skills/blob/main/generate-image/SKILL.md)
+Load the installed global [generate-image skill](https://github.com/hemsoft-dev/skills/blob/main/generate-image/SKILL.md)
 for the Codex-native image workflow, directly or through Codex CLI with the
 existing ChatGPT login. Do not
 start with Antigravity or an API-key fallback. The skill distinguishes image

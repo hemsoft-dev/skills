@@ -294,7 +294,7 @@ is mixed or uncertain, or any readiness condition cannot be proven.
 
 ## Phase 4: Merge, cleanup, and notification
 
-Read `../process-pr/references/native-auto-merge.md` before applying the default merge rules below. For an activated, maintainer-labeled `HemSoft/hs-buddy` PR, that policy supplies standing authority and replaces the local `mergepr` path. It preserves all review gates, frozen scope, cleanup requirements, and notification ownership.
+Read `../process-pr/references/native-auto-merge.md` before applying the default merge rules below. For an activated, maintainer-labeled `hemsoft-dev/hs-buddy` PR, that policy supplies standing authority and replaces the local `mergepr` path. It preserves all review gates, frozen scope, cleanup requirements, and notification ownership.
 
 With the invocation-derived authority and a fresh readiness proof:
 

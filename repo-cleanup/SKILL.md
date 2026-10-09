@@ -2,7 +2,7 @@
 name: repo-cleanup
 description: "V1.5 - Commands: Audit, Clean. Runs a deterministic PowerShell fast path to commit all pending main-checkout changes, synchronize, push, and remove merged unused local branches; handles retained work separately. Explicit invocation means Clean, automatic use means Audit."
 disable-model-invocation: false
-compatibility: Requires PowerShell 7 and git. Automatic publication targets HemSoft GitHub repositories with main as the default branch; exceptional PR checks require GitHub CLI.
+compatibility: Requires PowerShell 7 and git. Automatic publication targets HemSoft and hemsoft-dev GitHub repositories with main as the default branch; exceptional PR checks require GitHub CLI.
 hooks:
   PostToolUse:
     - matcher: "Read|Write|Edit"
@@ -51,7 +51,7 @@ intentional. Do not split it by task, create preservation worktrees, or ask agai
 solely because files are unrelated, include skill instructions, or were discovered
 later. Honor explicit exclusions and active ownership conflicts.
 
-For HemSoft repositories, an explicit Clean authorizes staging all non-ignored
+For HemSoft and hemsoft-dev repositories, an explicit Clean authorizes staging all non-ignored
 changes, running validation, committing, synchronizing and pushing unprotected
 main, and deleting proven-obsolete local state. Follow the PR workflow for shared
 repositories or protected branches. Never bypass hooks or server protections.

@@ -14,9 +14,9 @@ Run trusted GitHub Actions jobs on an isolated virtual machine hosted by `mini`,
 - [x] Coolify is out of scope.
 - [x] Use KVM guest `github-runner-01` instead of installing the runner under `franz`.
 - [x] Keep the guest off Tailscale and block access to the tailnet and home LAN.
-- [x] Use repository-level runners because `HemSoft` is a GitHub personal account.
+- [x] Keep repository-level registrations in `hemsoft-dev` for the isolated runner scope.
 - [x] Track implementation and proof in this file until closeout.
-- [x] Use `HemSoft/yahtzee` as the first repository for registration and smoke testing.
+- [x] Use `hemsoft-dev/yahtzee` for registration and smoke testing.
 - [x] Treat Yahtzee as a public-repository exception with a manual-only smoke
   workflow that never runs pull-request or other untrusted code.
 
@@ -69,7 +69,7 @@ Run trusted GitHub Actions jobs on an isolated virtual machine hosted by `mini`,
 
 ## Milestone 5: Register GitHub runner
 
-- [x] Confirm the exact target repository as `HemSoft/yahtzee`.
+- [x] Confirm the exact target repository as `hemsoft-dev/yahtzee`.
 - [x] Confirm GitHub authentication uses the `HemSoft` account with repository
   administration permission.
 - [x] Verify public-repository Actions and fork-approval settings before runner registration.
@@ -81,7 +81,7 @@ Run trusted GitHub Actions jobs on an isolated virtual machine hosted by `mini`,
 
 ## Milestone 6: End-to-end validation
 
-- [x] Add a harmless `workflow_dispatch`-only smoke workflow for `HemSoft/yahtzee`.
+- [x] Add a harmless `workflow_dispatch`-only smoke workflow for `hemsoft-dev/yahtzee`.
 - [x] Prove no Yahtzee workflow routes `pull_request` or other untrusted events to the self-hosted runner.
 - [x] Prove the workflow ran on `mini-github-runner-01`.
 - [x] Record workflow URL, run ID, commit SHA, conclusion, and runner labels.
@@ -136,6 +136,12 @@ Run trusted GitHub Actions jobs on an isolated virtual machine hosted by `mini`,
 - [x] All four skill-capable fleet computers have matching verified copies.
 - [x] Repository checks pass for the complete user-authorized worktree.
 - [x] Status changes from `In progress` to `Complete` only after every check above passes.
+
+## Organization migration
+
+Operational GitHub destinations now use `hemsoft-dev/yahtzee`. The dated evidence
+below retains the owner used at capture time. Endpoint preparation does not
+claim a fresh runner health, isolation or smoke-workflow check.
 
 ## Evidence log
 

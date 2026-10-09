@@ -89,7 +89,7 @@ GitHub documents formal review and code-owner requirements in its
 ## Request connected Codex
 
 Verify the effective API identity with `gh api user --jq .login`, not only
-`gh auth status`. For `HemSoft/*`, use `HemSoft` for reads and requests. The
+`gh auth status`. For `HemSoft/*` and `hemsoft-dev/*`, use `HemSoft` for reads and requests. The
 requesting account must be connected to Codex with access to the repository.
 Do not assume `GITHUB_TOKEN`, an installation token, or `github-actions[bot]`
 inherits a human's Codex connection. Never post from a bot identity known to

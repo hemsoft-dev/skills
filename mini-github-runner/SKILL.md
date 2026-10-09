@@ -49,7 +49,7 @@ Build and operate an isolated GitHub Actions self-hosted runner on `mini`.
 - Isolation: the guest does not join Tailscale and cannot reach the tailnet or home LAN.
 - Runtime: the GitHub runner and Docker engine run inside the guest, never as
   `franz` on the host.
-- Scope: repository-level registrations under the personal `HemSoft` account.
+- Scope: repository-level registrations in `hemsoft-dev`, authenticated as `HemSoft`.
 - Secrets: never write registration tokens, credentials, or private keys into this skill, `TODO.md`, history, logs, or shell output.
 
 ## Live implementation
@@ -67,7 +67,7 @@ Build and operate an isolated GitHub Actions self-hosted runner on `mini`.
 - GH AW runtime: Docker Engine 29.7.2, Docker Compose 5.5.0, GitHub CLI
   2.45.0, and ripgrep 14.1.0. The `actions` user belongs to the guest-local
   `docker` group. Node.js remains workflow-managed through `actions/setup-node`.
-- Repository: `HemSoft/yahtzee`. Its only self-hosted workflow is
+- Repository: `hemsoft-dev/yahtzee`. Its only self-hosted workflow is
   `.github/workflows/self-hosted-smoke.yml`, triggered only by
   `workflow_dispatch` with zero token permissions.
 
@@ -82,8 +82,8 @@ Use these live checks:
 ```powershell
 ssh mini 'virsh -c qemu:///system dominfo github-runner-01; virsh -c qemu:///system net-info default; virsh -c qemu:///system nwfilter-binding-list'
 $env:GH_TOKEN = gh auth token --user HemSoft
-gh api repos/HemSoft/yahtzee/actions/runners --jq '.runners[] | select(.name=="mini-github-runner-01")'
-gh run list --repo HemSoft/yahtzee --workflow self-hosted-smoke.yml --limit 5
+gh api repos/hemsoft-dev/yahtzee/actions/runners --jq '.runners[] | select(.name=="mini-github-runner-01")'
+gh run list --repo hemsoft-dev/yahtzee --workflow self-hosted-smoke.yml --limit 5
 ```
 
 Resolve the current DHCP lease and use strict host-key checking for guest
@@ -116,9 +116,12 @@ The tested first-build sequence is:
    any repository.
 5. When a trusted GH AW workflow is selected, stream
    `scripts/prepare-gh-aw-runtime.sh` into the guest as `runner-admin`. This
-   installs Docker from Docker's signed Ubuntu repository plus `gh` and
-   ripgrep, then restarts the runner service so `actions` receives its Docker
-   group membership.
+   creates the `actions` system account if needed, installs Docker from Docker's
+   signed Ubuntu repository plus `gh` and ripgrep, and adds Docker group access.
+   Before registration there is no runner service to restart. For a registered
+   runner, it restarts the unit recorded in `.service`. A configured `.runner`
+   without a service record, an empty record or a missing recorded unit fails
+   preparation rather than reporting success.
 
 ### Register
 
@@ -137,8 +140,8 @@ Prove the service is online, run a harmless repository workflow on the self-host
 
 ```powershell
 $env:GH_TOKEN = gh auth token --user HemSoft
-gh workflow run self-hosted-smoke.yml --repo HemSoft/yahtzee --ref main
-gh run list --repo HemSoft/yahtzee --workflow self-hosted-smoke.yml --limit 1
+gh workflow run self-hosted-smoke.yml --repo hemsoft-dev/yahtzee --ref main
+gh run list --repo hemsoft-dev/yahtzee --workflow self-hosted-smoke.yml --limit 1
 ```
 
 After any network, runner, or VM change, rerun
@@ -166,9 +169,9 @@ Distribute only after implementation and validation are complete. Install the sk
 
 Use these GitHub pages:
 
-- [Yahtzee self-hosted runners](https://github.com/HemSoft/yahtzee/settings/actions/runners)
-- [Manual smoke workflow](https://github.com/HemSoft/yahtzee/actions/workflows/self-hosted-smoke.yml)
-- [All Yahtzee Actions runs](https://github.com/HemSoft/yahtzee/actions)
+- [Yahtzee self-hosted runners](https://github.com/hemsoft-dev/yahtzee/settings/actions/runners)
+- [Manual smoke workflow](https://github.com/hemsoft-dev/yahtzee/actions/workflows/self-hosted-smoke.yml)
+- [All Yahtzee Actions runs](https://github.com/hemsoft-dev/yahtzee/actions)
 
 The runner page shows online, offline, and busy state plus labels. The workflow
 page shows each manual smoke run and its job logs. GitHub does not provide
@@ -177,9 +180,9 @@ mini and inside the guest.
 
 ```powershell
 $env:GH_TOKEN = gh auth token --user HemSoft
-gh api repos/HemSoft/yahtzee/actions/runners --jq `
+gh api repos/hemsoft-dev/yahtzee/actions/runners --jq `
   '.runners[] | {id,name,status,busy,labels:[.labels[].name]}'
-gh run list --repo HemSoft/yahtzee --workflow self-hosted-smoke.yml --limit 10
+gh run list --repo hemsoft-dev/yahtzee --workflow self-hosted-smoke.yml --limit 10
 ```
 
 ```bash
@@ -204,9 +207,10 @@ virsh -c qemu:///system autostart github-runner-01
 Run these inside the guest as `runner-admin`:
 
 ```bash
-sudo systemctl status actions.runner.HemSoft-yahtzee.mini-github-runner-01.service
-sudo systemctl restart actions.runner.HemSoft-yahtzee.mini-github-runner-01.service
-sudo journalctl -u actions.runner.HemSoft-yahtzee.mini-github-runner-01.service -n 100 --no-pager
+runner_service=$(sudo cat /opt/actions-runner/yahtzee/.service)
+sudo systemctl status "$runner_service"
+sudo systemctl restart "$runner_service"
+sudo journalctl -u "$runner_service" -n 100 --no-pager
 sudo -u actions /opt/actions-runner/yahtzee/bin/Runner.Listener --version
 ```
 
@@ -258,7 +262,7 @@ sudo ./svc.sh uninstall
 
 ```powershell
 $env:GH_TOKEN = gh auth token --user HemSoft
-gh api --method DELETE repos/HemSoft/yahtzee/actions/runners/21
+gh api --method DELETE repos/hemsoft-dev/yahtzee/actions/runners/21
 ```
 
 ### Troubleshooting

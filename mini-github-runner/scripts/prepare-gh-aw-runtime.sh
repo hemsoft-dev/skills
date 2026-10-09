@@ -2,11 +2,38 @@
 set -euo pipefail
 
 runner_user=${RUNNER_USER:-actions}
-runner_service=${RUNNER_SERVICE:-actions.runner.HemSoft-yahtzee.mini-github-runner-01.service}
+runner_service=${RUNNER_SERVICE:-}
+validate_runner_service() {
+  if [[ -n "${runner_service}" && ! "${runner_service}" =~ ^actions\.runner\.[A-Za-z0-9_.-]+\.service$ ]]; then
+    echo "Invalid runner service name" >&2
+    exit 1
+  fi
+}
+validate_runner_service
+
+# Only an unconfigured guest may lack a service record. Validate registration
+# before provisioning so a missing listener cannot be mistaken for success.
+runner_directory=${RUNNER_DIRECTORY:-/opt/actions-runner/yahtzee}
+runner_service_file="${runner_directory}/.service"
+if [[ -z "${runner_service}" ]] && sudo test -f "${runner_service_file}"; then
+  runner_service=$(sudo cat "${runner_service_file}")
+  if [[ -z "${runner_service}" ]]; then
+    echo "Recorded runner service is empty" >&2
+    exit 1
+  fi
+  validate_runner_service
+elif [[ -z "${runner_service}" ]] && sudo test -e "${runner_directory}/.runner"; then
+  echo "Configured runner has no service record: ${runner_service_file}" >&2
+  exit 1
+fi
 
 if ! id "${runner_user}" >/dev/null 2>&1; then
-  echo "Runner user does not exist: ${runner_user}" >&2
-  exit 1
+  if [[ "${runner_user}" != "actions" ]]; then
+    echo "Runner user does not exist: ${runner_user}" >&2
+    exit 1
+  fi
+  sudo useradd --system --create-home --home-dir /home/actions \
+    --shell /bin/bash "${runner_user}"
 fi
 
 export DEBIAN_FRONTEND=noninteractive
@@ -45,7 +72,11 @@ sudo apt-get install -y --no-install-recommends \
 sudo usermod -aG docker "${runner_user}"
 sudo systemctl enable --now docker
 
-if systemctl cat "${runner_service}" >/dev/null 2>&1; then
+if [[ -n "${runner_service}" ]]; then
+  if ! systemctl cat "${runner_service}" >/dev/null 2>&1; then
+    echo "Recorded runner service cannot be loaded: ${runner_service}" >&2
+    exit 1
+  fi
   sudo systemctl restart "${runner_service}"
 fi
 

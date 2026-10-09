@@ -28,7 +28,7 @@ sudo -u "${runner_user}" tar -xzf "${archive_path}" -C "${install_dir}"
 sudo "${install_dir}/bin/installdependencies.sh"
 
 sudo -u "${runner_user}" "${install_dir}/config.sh" \
-  --url https://github.com/HemSoft/yahtzee \
+  --url https://github.com/hemsoft-dev/yahtzee \
   --token "${RUNNER_REGISTRATION_TOKEN}" \
   --name mini-github-runner-01 \
   --labels mini,yahtzee \

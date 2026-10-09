@@ -1,6 +1,6 @@
 # Native auto-merge handoff
 
-Franz authorized the opt-in AI review auto-merge policy for `HemSoft/hs-buddy`
+Franz authorized the opt-in AI review auto-merge policy for `hemsoft-dev/hs-buddy`
 on 2026-09-06. This is a narrow exception to the default exact-PR approval
 checkpoint and local `mergepr` path. It does not grant authority in other
 repositories or authorize bypassing a review or check.
