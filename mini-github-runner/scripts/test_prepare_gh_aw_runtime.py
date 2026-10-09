@@ -38,7 +38,7 @@ elif name in ["docker", "rg", "gh"]:
 
 
 class RuntimePreparationTests(unittest.TestCase):
-    def run_preparation(self, stored_service=None, override=None, registered=True, user_exists=True):
+    def run_preparation(self, stored_service=None, override=None, registered=True, user_exists=True, configured=False):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             commands = root / "commands"
@@ -53,6 +53,8 @@ class RuntimePreparationTests(unittest.TestCase):
             runner.mkdir()
             if stored_service is not None:
                 (runner / ".service").write_text(stored_service + "\n")
+            if configured:
+                (runner / ".runner").write_text("{}\n")
             user = root / "user-exists"
             if user_exists:
                 user.touch()
@@ -78,6 +80,18 @@ class RuntimePreparationTests(unittest.TestCase):
         self.assertTrue(any(e[0] == "apt-get" and "docker-ce" in e for e in entries))
         self.assertFalse(any(e[:2] == ["systemctl", "restart"] for e in entries))
         self.assertTrue(any(e[:2] == ["docker", "version"] for e in entries))
+
+    def test_configured_runner_without_service_fails_before_provisioning(self):
+        result, entries = self.run_preparation(configured=True)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("Configured runner has no service record", result.stderr)
+        self.assertFalse(any(e[0] in ["apt-get", "usermod", "docker"] for e in entries))
+
+    def test_empty_service_record_fails_before_provisioning(self):
+        result, entries = self.run_preparation(stored_service="", configured=True)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("Recorded runner service is empty", result.stderr)
+        self.assertFalse(any(e[0] in ["apt-get", "usermod", "docker"] for e in entries))
 
     def test_registered_units_keep_their_generated_name(self):
         for service in ["actions.runner.HemSoft-yahtzee.mini-github-runner-01.service",

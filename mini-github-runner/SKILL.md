@@ -119,8 +119,9 @@ The tested first-build sequence is:
    creates the `actions` system account if needed, installs Docker from Docker's
    signed Ubuntu repository plus `gh` and ripgrep, and adds Docker group access.
    Before registration there is no runner service to restart. For a registered
-   runner, it restarts the unit recorded in `.service`; a missing recorded unit
-   fails preparation rather than reporting success.
+   runner, it restarts the unit recorded in `.service`. A configured `.runner`
+   without a service record, an empty record or a missing recorded unit fails
+   preparation rather than reporting success.
 
 ### Register
 

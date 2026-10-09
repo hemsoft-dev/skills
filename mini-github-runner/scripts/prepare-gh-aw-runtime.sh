@@ -11,6 +11,22 @@ validate_runner_service() {
 }
 validate_runner_service
 
+# Only an unconfigured guest may lack a service record. Validate registration
+# before provisioning so a missing listener cannot be mistaken for success.
+runner_directory=${RUNNER_DIRECTORY:-/opt/actions-runner/yahtzee}
+runner_service_file="${runner_directory}/.service"
+if [[ -z "${runner_service}" ]] && sudo test -f "${runner_service_file}"; then
+  runner_service=$(sudo cat "${runner_service_file}")
+  if [[ -z "${runner_service}" ]]; then
+    echo "Recorded runner service is empty" >&2
+    exit 1
+  fi
+  validate_runner_service
+elif [[ -z "${runner_service}" ]] && sudo test -e "${runner_directory}/.runner"; then
+  echo "Configured runner has no service record: ${runner_service_file}" >&2
+  exit 1
+fi
+
 if ! id "${runner_user}" >/dev/null 2>&1; then
   if [[ "${runner_user}" != "actions" ]]; then
     echo "Runner user does not exist: ${runner_user}" >&2
@@ -56,13 +72,6 @@ sudo apt-get install -y --no-install-recommends \
 sudo usermod -aG docker "${runner_user}"
 sudo systemctl enable --now docker
 
-# Provisioning runs before registration on a fresh guest, so .service may not
-# exist yet. Registered runners retain their generated unit across owner moves.
-runner_service_file="${RUNNER_DIRECTORY:-/opt/actions-runner/yahtzee}/.service"
-if [[ -z "${runner_service}" ]] && sudo test -f "${runner_service_file}"; then
-  runner_service=$(sudo cat "${runner_service_file}")
-  validate_runner_service
-fi
 if [[ -n "${runner_service}" ]]; then
   if ! systemctl cat "${runner_service}" >/dev/null 2>&1; then
     echo "Recorded runner service cannot be loaded: ${runner_service}" >&2
