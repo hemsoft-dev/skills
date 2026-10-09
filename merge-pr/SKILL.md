@@ -52,7 +52,7 @@ If review processing is needed, hand the exact PR and existing requests to
 `../process-pr/SKILL.md`; preserve this skill's merge and notification ownership.
 Do not add optional reviewers, duplicate requests, or restart refused waits.
 
-Read `../process-pr/references/native-auto-merge.md` before applying the default merge rules below. For an activated, maintainer-labeled `HemSoft/hs-buddy` PR, that policy supplies standing authority and replaces the local `mergepr` path. It preserves all review gates, frozen scope, cleanup requirements, and notification ownership.
+Read `../process-pr/references/native-auto-merge.md` before applying the default merge rules below. For an activated, maintainer-labeled `hemsoft-dev/hs-buddy` PR, that policy supplies standing authority and replaces the local `mergepr` path. It preserves all review gates, frozen scope, cleanup requirements, and notification ownership.
 
 For this native path, skip the local merge and administrative fallback steps.
 

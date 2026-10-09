@@ -67,7 +67,7 @@ Build and operate an isolated GitHub Actions self-hosted runner on `mini`.
 - GH AW runtime: Docker Engine 29.7.2, Docker Compose 5.5.0, GitHub CLI
   2.45.0, and ripgrep 14.1.0. The `actions` user belongs to the guest-local
   `docker` group. Node.js remains workflow-managed through `actions/setup-node`.
-- Repository: `HemSoft/yahtzee`. Its only self-hosted workflow is
+- Repository: `hemsoft-dev/yahtzee`. Its only self-hosted workflow is
   `.github/workflows/self-hosted-smoke.yml`, triggered only by
   `workflow_dispatch` with zero token permissions.
 
@@ -83,7 +83,7 @@ Use these live checks:
 ssh mini 'virsh -c qemu:///system dominfo github-runner-01; virsh -c qemu:///system net-info default; virsh -c qemu:///system nwfilter-binding-list'
 $env:GH_TOKEN = gh auth token --user HemSoft
 gh api repos/HemSoft/yahtzee/actions/runners --jq '.runners[] | select(.name=="mini-github-runner-01")'
-gh run list --repo HemSoft/yahtzee --workflow self-hosted-smoke.yml --limit 5
+gh run list --repo hemsoft-dev/yahtzee --workflow self-hosted-smoke.yml --limit 5
 ```
 
 Resolve the current DHCP lease and use strict host-key checking for guest
@@ -137,8 +137,8 @@ Prove the service is online, run a harmless repository workflow on the self-host
 
 ```powershell
 $env:GH_TOKEN = gh auth token --user HemSoft
-gh workflow run self-hosted-smoke.yml --repo HemSoft/yahtzee --ref main
-gh run list --repo HemSoft/yahtzee --workflow self-hosted-smoke.yml --limit 1
+gh workflow run self-hosted-smoke.yml --repo hemsoft-dev/yahtzee --ref main
+gh run list --repo hemsoft-dev/yahtzee --workflow self-hosted-smoke.yml --limit 1
 ```
 
 After any network, runner, or VM change, rerun
@@ -166,9 +166,9 @@ Distribute only after implementation and validation are complete. Install the sk
 
 Use these GitHub pages:
 
-- [Yahtzee self-hosted runners](https://github.com/HemSoft/yahtzee/settings/actions/runners)
-- [Manual smoke workflow](https://github.com/HemSoft/yahtzee/actions/workflows/self-hosted-smoke.yml)
-- [All Yahtzee Actions runs](https://github.com/HemSoft/yahtzee/actions)
+- [Yahtzee self-hosted runners](https://github.com/hemsoft-dev/yahtzee/settings/actions/runners)
+- [Manual smoke workflow](https://github.com/hemsoft-dev/yahtzee/actions/workflows/self-hosted-smoke.yml)
+- [All Yahtzee Actions runs](https://github.com/hemsoft-dev/yahtzee/actions)
 
 The runner page shows online, offline, and busy state plus labels. The workflow
 page shows each manual smoke run and its job logs. GitHub does not provide
@@ -179,7 +179,7 @@ mini and inside the guest.
 $env:GH_TOKEN = gh auth token --user HemSoft
 gh api repos/HemSoft/yahtzee/actions/runners --jq `
   '.runners[] | {id,name,status,busy,labels:[.labels[].name]}'
-gh run list --repo HemSoft/yahtzee --workflow self-hosted-smoke.yml --limit 10
+gh run list --repo hemsoft-dev/yahtzee --workflow self-hosted-smoke.yml --limit 10
 ```
 
 ```bash

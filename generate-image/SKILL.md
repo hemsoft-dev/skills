@@ -80,7 +80,7 @@ do not silently change provider, downgrade models or retry indefinitely.
   art without explicit replacement authority. Prefer the project's asset
   directory; otherwise use a task-specific folder under `output/imagegen/`.
 - For Blender concepts, load the installed global
-  [blender-game-assets skill](https://github.com/HemSoft/skills/blob/main/blender-game-assets/SKILL.md)
+  [blender-game-assets skill](https://github.com/hemsoft-dev/skills/blob/main/blender-game-assets/SKILL.md)
   for measured dimensions, coherent views, material studies and approval gates.
   Generated dimensions are guidance, not CAD measurements.
 
