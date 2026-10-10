@@ -19,11 +19,15 @@ Use `Pass`, `Fail`, `Blocked`, or `Missing control` for `Result`. A missing conf
 - formatter check mode;
 - framework-specific diagnostics;
 - Markdown and documentation linting;
-- workflow, configuration, and infrastructure linting.
+- workflow, configuration, and infrastructure linting;
+- cross-suite test reliability, including skipped and quarantined tests, configured retries, order or timing dependence, and current flake evidence;
+- current-tree and reachable-history secret scanning, including scan scope and revocation evidence without secret values.
 
 Record tool-native scores verbatim with the tool version, scan scope, project name, and finding counts. Do not normalize, average, or add them to the repository score. Map their evidence to the appropriate fixed concerns instead. If a score requires network access, source upload, telemetry, or a write, follow the audit safety contract and mark only that score `Blocked` when it cannot run safely.
 
 Run Markdown linting for maintained Markdown whenever the repository contains it. Exclude generated, vendored, fixture, and cached files only with evidence. Inspect configuration, ignored paths, and whether CI enforces the same scope.
+
+Test reliability and secret-history inspection are cross-stack baselines. Prefer repository-pinned commands and structured CI artifacts. Do not invent retry loops that distort suite cost or authenticate with a discovered credential. Record partial Git history and unavailable hosted evidence as explicit blockers or scope limits.
 
 ## JavaScript and TypeScript
 

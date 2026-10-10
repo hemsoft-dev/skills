@@ -1,7 +1,6 @@
 ---
 name: fleet
 description: "V1.13 - Commands: Connect, Run, Send, Retrieve. Operate the private Tailscale fleet, including browser terminals and the live Herdr dashboard."
-disable-model-invocation: true
 ---
 
 # Fleet

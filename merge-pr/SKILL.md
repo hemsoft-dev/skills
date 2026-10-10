@@ -1,28 +1,7 @@
 ---
 name: merge-pr
 description: V1.6 - Merge one or more explicitly selected GitHub pull requests from oldest to newest, enforcing rendered UI validation evidence when applicable, cleaning the repository between each merge, and sending one final Slack notification per successful merge.
-disable-model-invocation: true
 compatibility: Requires git, GitHub CLI, GitHub access, mergepr on PATH or at the documented Windows fallback, the repo-cleanup skill, and the slack-dm skill.
-hooks:
-  PostToolUse:
-    - matcher: "Read|Write|Edit"
-      hooks:
-        - type: prompt
-          prompt: |
-            If a file was read, written, or edited in the merge-pr directory (path contains 'merge-pr'), verify that history logging occurred.
-
-            Check if History/{YYYY-MM-DD}.md exists and contains an entry for this interaction with:
-            - Format: "## HH:MM - {Action Taken}"
-            - One-line summary
-            - Accurate timestamp obtained with Get-Date -Format "HH:mm"
-
-            If history is missing or incomplete, state what must be added. Otherwise acknowledge completion.
-  Stop:
-    - matcher: "*"
-      hooks:
-        - type: prompt
-          prompt: |
-            Before stopping, if merge-pr was used, verify that History/{YYYY-MM-DD}.md contains an accurate "## HH:MM - {Action Taken}" entry and a one-line summary. Obtain the time with Get-Date -Format "HH:mm". Block completion if the entry is missing.
 ---
 
 # Merge PRs

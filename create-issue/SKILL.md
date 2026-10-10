@@ -1,36 +1,6 @@
 ---
 name: create-issue
 description: V1.2 - Creates one evidence-backed GitHub issue with concise required sections, measurable acceptance criteria, reproducible validation, CLI-uploaded UI evidence when applicable, and repository-appropriate labels.
-disable-model-invocation: true
-hooks:
-  PostToolUse:
-    - matcher: "Read|Write|Edit"
-      hooks:
-        - type: prompt
-          prompt: |
-            If a file was read, written, or edited in the create-issue directory (path contains 'create-issue'), verify that history logging occurred.
-
-            Check if History/{YYYY-MM-DD}.md exists and contains an entry for this interaction with:
-            - Format: "## HH:MM - {Action Taken}"
-            - One-line summary
-            - Accurate timestamp (obtained via `Get-Date -Format "HH:mm"` command, never guessed)
-
-            If history entry is missing or incomplete, provide specific feedback on what needs to be added.
-            If history entry exists and is properly formatted, acknowledge completion.
-  Stop:
-    - matcher: "*"
-      hooks:
-        - type: prompt
-          prompt: |
-            Before stopping, if create-issue was used, verify that the interaction was logged:
-
-            1. Check if History/{YYYY-MM-DD}.md exists in the create-issue directory
-            2. Verify it contains an entry with format "## HH:MM - {Action Taken}" where HH:MM was obtained via `Get-Date -Format "HH:mm"`
-            3. Ensure the entry includes a one-line summary of what was done
-            4. Verify a retrospective check was performed
-
-            If history is missing, return a blocking decision that names the required entry.
-            If history exists, approve stopping.
 ---
 
 # Create issue

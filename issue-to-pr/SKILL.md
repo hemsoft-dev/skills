@@ -1,21 +1,7 @@
 ---
 name: issue-to-pr
 description: V1.13 - Turns one specified GitHub issue into a validated pull request with concise current-head evidence, including CLI-uploaded UI screenshots when applicable, then follows the shared PR reviewer policy for current-head review. Optional merge, cleanup, and Slack notification require direct user approval.
-disable-model-invocation: true
 compatibility: Requires git, GitHub CLI, network access, and permission to push a branch and create a pull request in the target repository. Optional approved merge and cleanup requires mergepr on PATH and the slack-dm skill.
-hooks:
-  PostToolUse:
-    - matcher: "Read|Write|Edit"
-      hooks:
-        - type: prompt
-          prompt: |
-            If a file was read, written, or edited in the issue-to-pr directory, verify that History/{YYYY-MM-DD}.md contains an entry for this interaction with an accurate timestamp, action, and one-line summary. If it is missing, state exactly what must be added.
-  Stop:
-    - matcher: "*"
-      hooks:
-        - type: prompt
-          prompt: |
-            Before stopping after issue-to-pr was used, verify that History/{YYYY-MM-DD}.md contains an accurate interaction entry and that a retrospective check was performed. Block completion if either is missing.
 ---
 
 # Issue to PR

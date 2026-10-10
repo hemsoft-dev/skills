@@ -1,41 +1,6 @@
 ---
 name: personal-review
 description: V1.9 - Expert in drafting, analyzing, and improving quarterly and annual work performance reviews based on historical review patterns and achievements.
-disable-model-invocation: true
-hooks:
-  PostToolUse:
-    - matcher: "Read|Write|Edit"
-      hooks:
-        - type: prompt
-          prompt: |
-            If a file was read, written, or edited in the personal-review directory (path contains 'personal-review'), verify that history logging occurred.
-
-            Check if History/{YYYY-MM-DD}.md exists and contains an entry for this interaction with:
-            - Format: "## HH:MM - {Action Taken}"
-            - One-line summary
-            - Accurate timestamp
-
-            If history entry is missing or incomplete, provide specific feedback on what needs to be added.
-            If history entry exists and is properly formatted, acknowledge completion.
-  Stop:
-    - matcher: "*"
-      hooks:
-        - type: prompt
-          prompt: |
-            Before stopping, if personal-review was used (check if any files in personal-review directory were modified), verify that the interaction was logged:
-
-            1. Check if History/{YYYY-MM-DD}.md exists in personal-review directory
-            2. Verify it contains an entry with format "## HH:MM - {Action Taken}"
-            3. Ensure the entry includes a one-line summary of what was done
-            4. Verify retrospective check was performed
-
-            If history entry is missing:
-            - Return {"decision": "block", "reason": "History entry missing. Please log this interaction to History/{YYYY-MM-DD}.md"}
-
-            If history entry exists:
-            - Return {"decision": "approve"}
-
-            Include a systemMessage with details about the history entry status.
 ---
 
 # Personal Review Assistant

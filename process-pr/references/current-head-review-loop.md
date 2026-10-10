@@ -15,6 +15,12 @@ gh run list --repo <owner/repo> --branch <head-branch> --limit 30
 gh x status
 ```
 
+A latest-N run listing cannot prove that no workflow is active: newer completed
+review runs can hide an older CI run. Follow the pending check's exact run/job
+URL and query `gh run list --status in_progress` and `--status queued` separately
+when investigating that mismatch. Distinguish a sampler timeout or missing
+artifact from an actual metric-budget failure.
+
 Run `gh x status` from the target repository. Capture the row for the exact PR
 number. Its exit code is not a cleanliness signal; the command exits zero even
 when the row says `fail` or `pending`.
@@ -75,6 +81,11 @@ Use this decision table for each current-head thread:
 | Outdated after a fix | Verify the finding is absent on the new head; resolve if the workflow permits it |
 | Contradictory or repeatedly recurring | Stop before risky churn and report the conflict with evidence |
 
+For an authorship finding, compare both author and committer in the local Git
+object and GitHub's canonical Git Database API. A synthetic reviewer-workspace
+commit is not proof of the published commit's identity. Record the actual
+metadata before accepting an identity rewrite or resolving a false positive.
+
 An outdated thread with `isResolved: false` is still unresolved. A reply alone does not resolve a thread.
 
 ## Cancelled checks and preserved event payloads
@@ -108,6 +119,16 @@ The head SHA is the review epoch identifier:
 6. Read the new head SHA and begin a new epoch.
 
 Reviewer evidence from an earlier epoch can explain history but cannot satisfy the final gate.
+
+## Findings fixed without a new head
+
+A body or attachment correction can fix a finding without changing the head SHA.
+Verify the saved body, passing current-head checks and thread resolution, then
+refresh the aggregate status. A retained "Changes recommended" summary is not a
+clean reviewer signal merely because every thread is resolved. Keep the shared
+one-request rule: do not manufacture a commit or silently request another review
+to change the verdict. If the current-head AI verdict remains failed, report the
+incomplete gate and seek explicit authorization for an unchanged-head retry.
 
 ## Final Gate
 

@@ -1,20 +1,6 @@
 ---
 name: audit-pr
 description: V1.2 - Audits one specified GitHub pull request at a fixed head and base revision across requirements, correctness, architecture, tests, security, performance, memory, documentation, UI evidence, and delivery, with verified findings and explicit coverage limits. Use for a thorough PR audit or review, not a repository-wide audit or implementation work.
-disable-model-invocation: true
-hooks:
-  PostToolUse:
-    - matcher: "Read|Write|Edit"
-      hooks:
-        - type: prompt
-          prompt: |
-            If audit-pr was used or modified, verify a timestamped entry in audit-pr/History/{YYYY-MM-DD}.md. Use the shell time, never an estimate. Follow the body-level History rule.
-  Stop:
-    - matcher: "*"
-      hooks:
-        - type: prompt
-          prompt: |
-            Before finishing audit-pr, verify its History entry has the format "## HH:MM - {Action Taken}", a one-line summary, and the retrospective result. Report a missing entry. Do not change the audited repository to satisfy logging.
 ---
 
 # Pull request audit

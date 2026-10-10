@@ -40,7 +40,10 @@ The document header must show:
 - full audited commit;
 - generation time in Eastern Time with `EDT` or `EST`;
 - audit mode, either `full` or `score`;
-- repository score, evidence coverage, and provisional state.
+- repository score, evidence coverage, worst validated severity, and provisional state;
+- a prominent severity warning when a Critical or High finding exists, and a separate prominent blocked-evidence warning with blocked and applicable concern counts when the score is provisional.
+
+Keep each warning as text in a semantic status or callout element next to the headline metrics. Do not rely on color, and do not let a high numeric score visually dominate either warning.
 
 Both modes must include the complete ranked score table from `scoring.md`, with all 18 concern IDs. Preserve the fixed ranking order and display `Blocked` and `N/A` as text.
 
@@ -71,11 +74,12 @@ Before replacing the prior report, verify:
 2. it contains one doctype, one opening and closing `html`, `head`, and `body` element;
 3. the repository identity and full audited commit appear in text;
 4. each fixed concern ID appears exactly once in the score table body;
-5. the score, evidence coverage, mode, and generated time are present;
-6. the stack-specific analyzer table contains one row for every applicable baseline check and includes any available native scores;
-7. both strategic evaluations are present, with criterion evidence, confidence, recommendation notes, and numeric ratings within 1 to 10 or explicit `Blocked` or `N/A` states;
-8. tech-stack research includes verified direct source links and the checked-on timestamp, an exact research blocker and blocked rating, or evidence that no application stack applies;
-9. full mode contains every required section, while score mode contains none of the excluded sections;
-10. no `script`, remote stylesheet, remote font, or remote image dependency is present.
+5. the score, evidence coverage, worst validated severity, mode, and generated time are present;
+6. every required severity or blocked-evidence headline warning is present with the correct text and counts;
+7. the stack-specific analyzer table contains one row for every applicable baseline check and includes any available native scores;
+8. both strategic evaluations are present, with criterion evidence, confidence, recommendation notes, and numeric ratings within 1 to 10 or explicit `Blocked` or `N/A` states;
+9. tech-stack research includes verified direct source links and the checked-on timestamp, an exact research blocker and blocked rating, or evidence that no application stack applies;
+10. full mode contains every required section, while score mode contains none of the excluded sections;
+11. no `script`, remote stylesheet, remote font, or remote image dependency is present.
 
 After the atomic replacement, verify that `audit/audit-score.html` exists and report its absolute path. The audit is incomplete until this verification succeeds.

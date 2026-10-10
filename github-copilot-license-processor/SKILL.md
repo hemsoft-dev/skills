@@ -2,24 +2,6 @@
 name: github-copilot-license-processor
 description: "V1.7 - Commands: Process, Status, Install, SetMode. Polls Slack for Relias GitHub Copilot license requests, validates organization membership, safely assigns seats, and posts audit receipts."
 compatibility: Requires PowerShell 7, GitHub CLI authentication, Slack bot access, and Windows Task Scheduler or a Linux systemd user timer
-disable-model-invocation: true
-hooks:
-  PostToolUse:
-    - matcher: "Read|Write|Edit"
-      hooks:
-        - type: prompt
-          prompt: |
-            If a file was read, written, or edited in the
-            github-copilot-license-processor directory, verify that
-            History/{YYYY-MM-DD}.md contains an accurate timestamped entry.
-  Stop:
-    - matcher: "*"
-      hooks:
-        - type: prompt
-          prompt: |
-            If github-copilot-license-processor was used, verify that today's
-            History file contains an accurate timestamped summary and that a
-            brief retrospective check was performed.
 ---
 
 # GitHub Copilot License Processor

@@ -1,34 +1,7 @@
 ---
 name: blender-game-assets
 description: V1.5 - Creates game-ready assets that match approved designs as closely as feasible within measured size and performance budgets. Use for concept sheets, surfaces, Static Meshes, props, modular kits, foliage, optimization, and Unreal delivery.
-disable-model-invocation: true
 compatibility: Requires an image-generation capability for concept work. Build, validation, and export phases require Blender on PATH or at a verified absolute path. Engine delivery requires the target project and engine version.
-hooks:
-  PostToolUse:
-    - matcher: "Read|Write|Edit"
-      hooks:
-        - type: prompt
-          prompt: |
-            If a file was read, written, or edited in the blender-game-assets directory, verify that history logging occurred.
-
-            Check whether History/{YYYY-MM-DD}.md contains:
-            - Format: "## HH:MM - {Action Taken}"
-            - One-line summary
-            - Accurate time from the shell, never an estimate
-
-            If the entry is missing or incomplete, state exactly what must be added.
-  Stop:
-    - matcher: "*"
-      hooks:
-        - type: prompt
-          prompt: |
-            Before stopping after blender-game-assets was used, verify:
-
-            1. History/{YYYY-MM-DD}.md contains an accurate interaction entry.
-            2. The entry states whether the retrospective found a reusable improvement.
-            3. Every promised artifact exists and every reported validation actually ran.
-
-            Block completion when any requirement is missing.
 ---
 
 # Blender game assets
@@ -190,7 +163,8 @@ with inconsistent construction that cannot exist in three dimensions.
 Use Blender for distinctive forms, props, building pieces, and controlled
 variations. Treat foliage, hair, cloth, skeletal assets, photogrammetry, and
 procedural generation as specialized work that requires an explicit brief and
-extra validation.
+extra validation. For human characters built from reference sheets, read
+[references/human-characters.md](references/human-characters.md).
 
 ## Create materials and surfaces
 

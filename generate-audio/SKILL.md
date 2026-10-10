@@ -1,26 +1,7 @@
 ---
 name: generate-audio
 description: "V1.0 - Commands: audio, stop-hook. Generate speech with Seed Audio and saved reference voices, defaulting to guide. Use stop-hook to generate a clip and install a repository-local Pi completion hook."
-disable-model-invocation: false
 compatibility: Requires PowerShell 7, OPENROUTER_API_KEY for generation, and Node.js 24 for the hook installer and tests. Playback uses ffplay on Windows/Linux or afplay on macOS.
-hooks:
-  PostToolUse:
-    - matcher: "Read|Write|Edit"
-      hooks:
-        - type: prompt
-          prompt: |
-            If generate-audio was used or edited, verify a shell-timestamped
-            entry exists in its History folder. Never log credentials,
-            private prompts, transcripts, or reference recordings in history.
-  Stop:
-    - matcher: "*"
-      hooks:
-        - type: prompt
-          prompt: |
-            Verify the requested audio exists, required checks ran, and
-            generate-audio history records the outcome and retrospective.
-            For stop-hook, verify repository scope and the final asset path.
-            Do not claim listening or transcription checks that did not run.
 ---
 
 # Generate audio

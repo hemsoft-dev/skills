@@ -1,33 +1,6 @@
 ---
 name: mini-github-runner
 description: "V1.0 - Commands: Status, Plan, Provision, Register, Verify, Distribute. Build and maintain the isolated GitHub Actions runner hosted on mini, with implementation state tracked in TODO.md."
-disable-model-invocation: true
-hooks:
-  PostToolUse:
-    - matcher: "Read|Write|Edit"
-      hooks:
-        - type: prompt
-          prompt: |
-            If a file was read, written, or edited in the mini-github-runner directory, verify that history logging occurred.
-
-            Check if History/{YYYY-MM-DD}.md exists and contains an entry for this interaction with:
-            - Format: "## HH:MM - {Action Taken}"
-            - One-line summary
-            - Accurate timestamp obtained with Get-Date -Format "HH:mm", never guessed
-
-            If history is missing or incomplete, state exactly what needs to be added.
-  Stop:
-    - matcher: "*"
-      hooks:
-        - type: prompt
-          prompt: |
-            Before stopping after mini-github-runner was used, verify all of the following:
-
-            1. TODO.md reflects the current implementation state and evidence.
-            2. History/{YYYY-MM-DD}.md contains an entry in the format "## HH:MM - {Action Taken}" using a timestamp obtained with Get-Date -Format "HH:mm".
-            3. No completed checkbox relies on planned or assumed work.
-
-            If any check fails, block completion and identify the missing update.
 ---
 
 # Mini GitHub runner
@@ -296,3 +269,8 @@ Current references:
 ## Completion
 
 The project is complete only when every acceptance item in `TODO.md` is checked, the smoke workflow passes, isolation tests pass, and all skill-capable fleet computers have matching skill hashes.
+
+## History
+
+After using this skill, append `## HH:MM - {Action Taken}` and a one-line summary to `History/{YYYY-MM-DD}.md` in
+this skill folder. Take the time from the shell (`Get-Date -Format "HH:mm"`), never an estimate.

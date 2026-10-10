@@ -1,40 +1,6 @@
 ---
 name: skill-creator
-description: V1.16 - Creates new skills with optimized SKILL.md files following the agentskills.io open standard. Default location is .agents/skills/ (universal, all vendors). Uses hooks for history tracking and retrospectives (enabled by default). Includes explicit instructions for getting accurate timestamps.
-disable-model-invocation: true
-hooks:
-  PostToolUse:
-    - matcher: "Read|Write|Edit"
-      hooks:
-        - type: prompt
-          prompt: |
-            If a file was read, written, or edited in the skill-creator directory (path contains 'skill-creator'), verify that history logging occurred.
-            
-            Check if History/{YYYY-MM-DD}.md exists and contains an entry for this interaction with:
-            - Format: "## HH:MM - {Action Taken}"
-            - One-line summary
-            - Accurate timestamp (obtained via `Get-Date -Format "HH:mm"` command, never guessed)
-            
-            If history entry is missing or incomplete, provide specific feedback on what needs to be added.
-            If history entry exists and is properly formatted, acknowledge completion.
-  Stop:
-    - matcher: "*"
-      hooks:
-        - type: prompt
-          prompt: |
-            Before stopping, if skill-creator was used (check if any files in skill-creator directory were modified), verify that the interaction was logged:
-            
-            1. Check if History/{YYYY-MM-DD}.md exists in skill-creator directory
-            2. Verify it contains an entry with format "## HH:MM - {Action Taken}" where HH:MM was obtained via `Get-Date -Format "HH:mm"` (never guessed)
-            3. Ensure the entry includes a one-line summary of what was done
-            
-            If history entry is missing:
-            - Return {"decision": "block", "reason": "History entry missing. Please log this interaction to History/{YYYY-MM-DD}.md with format: ## HH:MM - {Action Taken}\n{One-line summary}\n\nCRITICAL: Get the current time using `Get-Date -Format \"HH:mm\"` command - never guess the timestamp."}
-            
-            If history entry exists:
-            - Return {"decision": "approve"}
-            
-            Include a systemMessage with details about the history entry status.
+description: V1.17 - Creates new skills with optimized SKILL.md files following the agentskills.io open standard. Default location is .agents/skills/ (universal, all vendors). Adds a body-level History section for history tracking and retrospectives (enabled by default), never frontmatter hooks. Includes explicit instructions for getting accurate timestamps.
 ---
 
 # Skill Creator
@@ -122,7 +88,7 @@ immediately visible when the user types `/{skill-name}` in the chat prompt.
 Only add `Commands:` when the skill genuinely has multiple distinct modes or
 entry points — simple single-purpose skills should omit it.
 
-**With optional fields and hooks:**
+**With optional fields:**
 
 ```markdown
 ---
@@ -134,19 +100,6 @@ compatibility: Requires git, network access
 metadata:
   author: {author-name}
   version: "1.0"
-hooks:
-  PostToolUse:
-    - matcher: "Read|Write|Edit"
-      hooks:
-        - type: prompt
-          prompt: |
-            If a file was read, written, or edited in the {skill-name} directory...
-  Stop:
-    - matcher: "*"
-      hooks:
-        - type: prompt
-          prompt: |
-            Before stopping, verify history entry exists...
 ---
 ```
 
@@ -190,61 +143,32 @@ for missing details that would materially change the result.
 
 > **Note**: The `.agents/skills/` path is the agentskills.io universal standard, supported by Claude, Copilot, Codex CLI, Cursor, Gemini CLI, and others. Avoid vendor-specific paths like `.claude/skills/` or `.github/skills/` unless explicitly requested.
 
-### Step 3: Enable History Tracking & Retrospectives via Hooks
+### Step 3: Enable History Tracking & Retrospectives
 
 **Default: Enabled (unless user specifies otherwise)**
 
-History tracking and retrospectives are now handled via hooks in the SKILL.md frontmatter.
-
 **Only disable if**: User explicitly says "no history", "don't track", "no retrospective", or "disable history/retrospective".
 
-**When enabled** (default), add this to the frontmatter after `description`:
+**When enabled** (default), give the skill a body-level `## History` section that states the rule in plain
+instructions, for example:
 
-```yaml
-hooks:
-  PostToolUse:
-    - matcher: "Read|Write|Edit"
-      hooks:
-        - type: prompt
-          prompt: |
-            If a file was read, written, or edited in the {skill-name} directory (path contains '{skill-name}'), verify that history logging occurred.
-            
-            Check if History/{YYYY-MM-DD}.md exists and contains an entry for this interaction with:
-            - Format: "## HH:MM - {Action Taken}"
-            - One-line summary
-            - Accurate timestamp (obtained via `Get-Date -Format "HH:mm"` command, never guessed)
-            
-            If history entry is missing or incomplete, provide specific feedback on what needs to be added.
-            If history entry exists and is properly formatted, acknowledge completion.
-  Stop:
-    - matcher: "*"
-      hooks:
-        - type: prompt
-          prompt: |
-            Before stopping, if {skill-name} was used (check if any files in {skill-name} directory were modified), verify that the interaction was logged:
-            
-            1. Check if History/{YYYY-MM-DD}.md exists in {skill-name} directory
-            2. Verify it contains an entry with format "## HH:MM - {Action Taken}" where HH:MM was obtained via `Get-Date -Format "HH:mm"` (never guessed)
-            3. Ensure the entry includes a one-line summary of what was done
-            4. If retrospectives are enabled, verify retrospective check was performed
-            
-            If history entry is missing:
-            - Return {"decision": "block", "reason": "History entry missing. Please log this interaction to History/{YYYY-MM-DD}.md with format: ## HH:MM - {Action Taken}\n{One-line summary}"}
-            
-            If history entry exists:
-            - Return {"decision": "approve"}
-            
-            Include a systemMessage with details about the history entry status.
+```markdown
+## History
+
+After using this skill, append `## HH:MM - {Action Taken}` and a one-line summary to `History/{YYYY-MM-DD}.md` in
+this skill folder. Take the time from the shell (`Get-Date -Format "HH:mm"`), never an estimate.
 ```
 
-**Important**: Replace `{skill-name}` with the actual skill name throughout the hooks configuration.
-
-**Client support caveat**: frontmatter `hooks` are a Claude Code extension. Opencode reads only `name`, `description`, `license`, `compatibility`, and `metadata` from skill frontmatter and ignores every other field, including `hooks` and `disable-model-invocation`. The same applies to other clients with partial spec support. Because of that, every skill created here must also carry a short body-level `## History` section stating the logging rule in plain instructions. The body section is the mechanism that works everywhere; the hooks block is a Claude Code enhancement layered on top, not a replacement.
+**Never add frontmatter `hooks`** (no `PostToolUse` or `Stop` prompt hooks) for history or retrospectives. A
+prompt-type hook is a separate model that sees only the transcript, can't read the History file, and returns
+"block" whenever it can't confirm the entry. It stopped turns on every Read/Write/Edit of the skill folder and kept
+refusing to let a session end over an ordering it couldn't verify (2026-10-10; removed from all 19 skills, backup in
+`~/.agents/skills-hooks-backup-2026-10-10`). The body section works in every client.
 
 ### Step 4: Create Files
 
 1. Create directory at chosen location (default: user folder)
-2. Write SKILL.md with `disable-model-invocation: true` by default, frontmatter hooks if enabled, and instructions
+2. Write SKILL.md with `disable-model-invocation: true` by default, a `## History` section if enabled, and instructions
 3. Apply version prefix (V1.0)
 4. Create History/ directory if history tracking enabled (default: enabled)
 5. Create initial History/{YYYY-MM-DD}.md entry if history tracking enabled

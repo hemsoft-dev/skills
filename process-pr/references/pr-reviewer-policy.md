@@ -10,6 +10,14 @@ GitHub Copilot PR Review as the required reviewer for `relias-engineering/*`.
 Other optional products use unstable free-tier access. Their installation or
 past activity does not justify discovery, requests, retries, or waiting.
 
+Franz reaffirmed on 2026-10-05 that `HemSoft/*` uses connected Codex for PR
+reviews. It is the only required AI reviewer for those repositories. Older
+multi-product rosters and trigger examples must not cause agents to request or
+wait for other products. Assess actionable findings already present without
+turning an optional integration's refusal into a merge blocker. A later direct
+user instruction can select an additional reviewer; preserve effective GitHub
+status-check and formal-approval requirements separately.
+
 ## Product registry
 
 These are workflow choices, not a claim that every product is currently
@@ -102,6 +110,16 @@ automatic review. Otherwise post exactly once:
 ```powershell
 gh pr comment <pr> --repo <owner/repo> --body "@codex review"
 ```
+
+For long or concurrent runs, verify identity immediately before each review
+request and other PR write; an earlier preflight login can become stale. If
+another session changes the shared `gh` login, bind the already-stored required
+account credential per process and verify `gh api user` under that binding.
+Do not print or persist tokens, initiate a login, or overwrite the other
+session's shared account selection. If identity drift produced an accepted
+current-head request, preserve its actual requester and reuse the accepted run;
+do not post a duplicate merely to correct the requester recorded in a receipt.
+Explicit refusals still follow the access-correction limits below.
 
 The repository must have connected Codex code review enabled. The exact comment
 trigger and automatic review setup are documented in

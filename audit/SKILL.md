@@ -1,6 +1,6 @@
 ---
 name: audit
-description: V1.1 - Performs a full evidence-backed repository health audit, runs declared quality gates, produces a deterministic concern score sheet, rates architecture and tech-stack suitability from 1 to 10 with current web research and recommendations, and creates non-duplicate GitHub issues for verified improvements. Use for a full repository audit or with the sole argument `score` for a report-only score. Do not use for ordinary code review or implementing fixes.
+description: V1.2 - Performs a full evidence-backed repository health audit, runs declared quality gates, produces a deterministic concern score sheet with severity and evidence warnings, rates architecture and tech-stack suitability from 1 to 10 with current web research and recommendations, and creates non-duplicate GitHub issues for verified improvements. Use for a full repository audit or with the sole argument `score` for a report-only score. Do not use for ordinary code review or implementing fixes.
 ---
 
 # Repository audit
@@ -73,11 +73,12 @@ Every audit must determine whether the repository measures and gates these signa
 - framework-native health scores when the compatible analyzer provides one, including React Doctor for React projects;
 - cyclomatic complexity and per-function CRAP score;
 - unit-test coverage, including branch coverage where supported;
+- test-suite reliability across unit, integration, behavior, property, fuzz, architecture, and end-to-end suites, including skipped and quarantined tests, retries, order dependence, timing dependence, and current flake evidence;
 - mutation score with maintained break and target thresholds;
 - executable behavior or Gherkin scenarios when the repository uses feature files;
 - end-to-end coverage of critical user journeys;
 - code, configuration, workflow, and Markdown linting;
-- dependency, secret, static-analysis, and supply-chain security;
+- dependency, secret, static-analysis, and supply-chain security, including current-tree and reachable-history secret exposure and verified revocation status;
 - performance budgets or regression benchmarks appropriate to the product;
 - memory or resource-growth checks for long-running applications and services.
 - CI time to actionable feedback and final qualification, including expensive memory, performance, soak, and end-to-end checks during review iterations.
@@ -140,7 +141,7 @@ Do not include the generated report in the audited source revision, quality resu
 In the default full-audit mode, the HTML report contains:
 
 - the audited repository and commit;
-- the repository score, evidence coverage, and complete ranked score sheet from `references/scoring.md`;
+- the repository score, evidence coverage, worst validated severity, required headline warnings, and complete ranked score sheet from `references/scoring.md`;
 - the stack-specific analyzer table required by `references/stack-tooling.md`, including raw tool scores where available;
 - a declared quality-gate table with `Gate`, `Command`, `Target`, `Result`, and `Evidence` columns;
 - the completed audit matrix, with a status and evidence or blocker for every applicable area;

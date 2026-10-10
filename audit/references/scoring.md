@@ -17,17 +17,17 @@ Every score sheet must contain these rows. Do not add, remove, merge, or rename 
 | BS | Executable behavior specifications | Feature files, scenario and step matching, undefined or skipped scenarios, tags, execution, and maintained behavior gates |
 | EJ | End-to-end critical journeys | Critical happy and recovery paths, isolation, retries, artifacts, supported platforms, and flake tracking |
 | LQ | Lint and static quality | Per-stack compiler and analyzer results, code, configuration, workflow, and Markdown linting, formatting, type checks, framework-native diagnostics and scores, warnings, and enforced exclusions |
-| ST | Specialized test coverage | Property, fuzz, contract, accessibility, migration, architecture, compatibility, and other risk-driven tests, including test discovery |
+| ST | Specialized test coverage | Property, fuzz, contract, accessibility, migration, architecture, compatibility, and other risk-driven tests, including test discovery, quarantines, retries, order and timing dependence, and flake evidence across every suite |
 | CG | CI, release, and repository governance | Workflow coverage, aggregate gates, required checks, rulesets, permissions, action pinning, provenance, release controls, and rollback |
 | CL | CI feedback latency | Queue and critical-path time, representative samples, reruns, change selection, fast feedback, final qualification, and expensive checks |
-| SP | Security, privacy, and supply chain | Dependency, secret, static, container, infrastructure, and license scanning; trust boundaries; data handling; workflow and artifact supply chain |
+| SP | Security, privacy, and supply chain | Dependency, current-tree and reachable-history secret exposure, credential revocation evidence, static, container, infrastructure, and license scanning; trust boundaries; data handling; workflow and artifact supply chain |
 | PF | Performance and efficiency | Budgets and benchmarks for latency, throughput, startup, build, size, requests, queries, allocation, and hot paths |
 | MR | Memory and long-running stability | Retained growth, heap and native memory, processes, descriptors, threads, listeners, queues, caches, cleanup, and leak evidence |
 | DD | Documentation and developer experience | Setup, build, test, release, architecture, troubleshooting, links, metadata, reproducible tools, supported environments, and failure messages |
 | UX | Accessibility, UX, and compatibility | Semantics, keyboard and focus behavior, contrast, motion, zoom, responsive states, localization, offline behavior, and supported clients |
 | OD | Operations and data lifecycle | Logs, metrics, traces, health, alerts, runbooks, migrations, backup and restore, retention, deployment, rollback, flags, and cleanup |
 
-The catalog covers every section of `audit-matrix.md`. Tech-stack evidence maps to the closest existing concerns, such as PA, MQ, SP, PF, MR, and OD; its separate suitability rating does not add a concern. The required measurement list in `SKILL.md` maps to CX, UC, MT, BS, EJ, LQ, SP, PF, MR, and CL.
+The catalog covers every section of `audit-matrix.md`. Tech-stack evidence maps to the closest existing concerns, such as PA, MQ, SP, PF, MR, and OD; its separate suitability rating does not add a concern. The required measurement list in `SKILL.md` maps to CX, UC, MT, BS, EJ, LQ, ST, SP, PF, MR, and CL.
 
 ## Four evidence dimensions
 
@@ -87,6 +87,17 @@ Exclude `N/A` rows from both terms. If any concern is `Blocked`, label the repos
 
 Do not map the result to letter grades, maturity names, colors, or pass/fail labels. The repository's declared gates decide pass or fail. The score is a compact comparison of the evidence, not a replacement for the evidence.
 
+## Headline safety context
+
+Never present the repository score by itself. Place these fields beside it wherever the headline score appears:
+
+- `Worst validated severity`, calculated from the concern rows using `Critical`, `High`, `Medium`, `Low`, then `None`;
+- a prominent `Critical finding present` warning when the worst validated severity is Critical, or `High-severity finding present` when it is High;
+- a prominent `Provisional: blocked evidence` warning when any applicable concern is blocked, including the count of blocked and total applicable concerns;
+- evidence coverage as defined above.
+
+Show severity and blocked-evidence warnings independently when both apply. Do not lower, cap, or reweight the numeric score because of these warnings. Their purpose is to prevent a high average from hiding severe findings or missing evidence.
+
 ## Ranking and table
 
 Sort numeric concerns from lowest score to highest. Break ties by worst validated severity in this order: Critical, High, Medium, Low, None. Break remaining ties by concern ID. List `Blocked` rows next by concern ID, then `N/A` rows by concern ID. Number only numeric rows in the `Rank` column. Use `Not ranked` for the rest.
@@ -107,7 +118,7 @@ Every audit also includes architecture and tech-stack ratings from 1 to 10 under
 When the invocation's sole argument is `score`, write `audit/audit-score.html` with only:
 
 1. repository and audited commit;
-2. `Repository score`, `Evidence coverage`, and whether the score is provisional;
+2. `Repository score`, `Evidence coverage`, `Worst validated severity`, and every required headline warning;
 3. the complete ranked table;
 4. the stack-specific analyzer table from `stack-tooling.md`, including tool-native scores;
 5. compact architecture and tech-stack evaluations from [strategic-evaluations.md](strategic-evaluations.md), including criterion ratings and evidence, confidence, short recommendation notes, and the current research source table;

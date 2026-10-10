@@ -137,6 +137,14 @@ Embrace creativity, overlays are powerful.
 | Use case | Demos, documentation | Debugging, analysis |
 | Size | Larger | Smaller |
 
+## Browser clocks during diagnostics
+
+Keep real time running when recording a flow or running asynchronous accessibility scans. A paused `page.clock` can stall a scan or recorder cleanup. Response fixtures built with host timestamps can also appear newer than the paused browser clock.
+
+For held-response tests, prefer an application-supported long polling interval. Test the shipped timer separately with unit-level mocks. If a paused browser clock is necessary, resume it before running the scan or stopping the recorder, and derive response timestamps from that browser clock.
+
+If a run stalls, preserve partial media and correct its timing before retrying. Close only the browser owned by the task. Do not use broad process-kill commands against unrelated sessions.
+
 ## Limitations
 
 - Recording adds slight overhead to automation

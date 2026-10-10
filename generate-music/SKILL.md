@@ -1,25 +1,7 @@
 ---
 name: generate-music
 description: "V1.0 - Generate Lyria music, songs, instrumentals and soundtrack drafts through the Gemini API. Use when the user invokes this skill or requests a Lyria music workflow. Not for speech, voice cloning or general sound effects."
-disable-model-invocation: true
 compatibility: Requires Python 3.10+, ffmpeg, ffprobe, network access, and GEMINI_API_KEY with paid Lyria access. API billing is separate from an Antigravity or Gemini app subscription.
-hooks:
-  PostToolUse:
-    - matcher: "Read|Write|Edit"
-      hooks:
-        - type: prompt
-          prompt: |
-            If generate-music files were used or changed, verify a factual,
-            shell-timestamped History entry exists. Never invent timestamps.
-  Stop:
-    - matcher: "*"
-      hooks:
-        - type: prompt
-          prompt: |
-            Verify that any claimed generated music exists and passed file
-            validation. Distinguish technical validation from listening review.
-            Confirm paid-call approval and record the outcome and retrospective
-            in the skill History. Never claim success from prose alone.
 ---
 
 # Generate music

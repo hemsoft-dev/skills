@@ -1,26 +1,7 @@
 ---
 name: precedent
 description: "V1.0 - Commands: Consult, Index, Status. Consult Franz's source-linked past choices before asking him a decision question, clarifying a preference, choosing a design or scope interpretation, or disposing of retained work. Separate facts and authority from preferences."
-disable-model-invocation: false
 compatibility: Requires Python 3.10+ with SQLite FTS5. Optional Pi integration requires Pi extension APIs and Node.js 22.19+. No extra Python packages or external model service.
-hooks:
-  PostToolUse:
-    - matcher: "Read|Write|Edit"
-      hooks:
-        - type: prompt
-          prompt: |
-            If precedent files were read or changed, verify a truthful History
-            entry. Obtain the timestamp from the shell. Keep private questions,
-            quotes and source paths out of published skill history.
-  Stop:
-    - matcher: "*"
-      hooks:
-        - type: prompt
-          prompt: |
-            If precedent was used, verify a truthful History entry and retrospective.
-            Get the timestamp from the shell. Never log private questions or quotes
-            in the published skill history, and never treat an automated proposal
-            as a human decision.
 ---
 
 # Precedent

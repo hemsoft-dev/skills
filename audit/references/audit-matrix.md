@@ -43,6 +43,7 @@ Use this matrix to prevent blind spots and supply evidence for the fixed concern
 - Treat cached status and prior audit artifacts as historical evidence. Use a fresh run for the audited revision, retain complete logs when available, and do not diagnose from an output tail alone.
 - For Gherkin, count feature files and scenarios, confirm matching executable step definitions, run them, and reject undefined, pending, skipped, or tag-orphaned scenarios.
 - Verify end-to-end tests cover the critical happy paths and recovery paths. Check isolation, retries, artifacts, platform coverage, and flake tracking.
+- Assess reliability across every discovered test suite, not only end-to-end tests. Inventory skipped, disabled, quarantined, retried, order-dependent, timing-dependent, and environment-dependent tests. Inspect current CI history and structured artifacts for flakes and reruns. Record each quarantine's reason, owner, age, and removal condition when available. Use repeated or randomized execution only when the repository already provides a safe deterministic command, and do not call a suite reliable from one passing run.
 - Inspect property tests, fuzzing, contract tests, accessibility tests, migration tests, and compatibility matrices where the system's risks justify them.
 - Check that test discovery includes all intended files and that coverage collection does not silently omit untested production code.
 
@@ -68,6 +69,7 @@ Use this matrix to prevent blind spots and supply evidence for the fixed concern
 ## Security and privacy
 
 - Run supported dependency, secret, static-analysis, container, infrastructure, and license scanners. Inspect recent GitHub security runs and unresolved alerts when authorized.
+- Scan both the current tree and all locally available reachable history for exposed credentials. Record shallow clones, partial history, unfetched refs, unavailable hosted secret-scanning evidence, and other scope limits. Distinguish verified fixtures and placeholders from credentials. Determine revocation status through authorized metadata or control-plane evidence when available. Never print a secret, authenticate with it, or treat deletion from the current tree as revocation.
 - Review authentication, authorization, tenant and account isolation, session and token storage, cryptography, trust boundaries, and privilege transitions.
 - Check injection, SSRF, path traversal, unsafe deserialization, prototype pollution, XSS, CSRF, open redirects, insecure temporary files, archive extraction, and command execution where applicable.
 - Review dependency confusion, lockfile integrity, install scripts, unpinned downloads, action references, SBOM or provenance, and release artifact verification.

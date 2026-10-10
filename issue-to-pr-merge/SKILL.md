@@ -1,21 +1,7 @@
 ---
 name: issue-to-pr-merge
 description: "V2.10 - Commands: Issue, Oldest. Processes selected issues through concise evidence-backed pull requests, including rendered UI screenshots when applicable, current-head review, guarded merge, generated release follow-ups, full repository cleanup, and Slack notification."
-disable-model-invocation: true
 compatibility: Requires git, GitHub CLI, network access, permission to push and create pull requests, access to the shared policy's required reviewer, mergepr on PATH, and the slack-dm skill. Multiple issues also require Codex Goals.
-hooks:
-  PostToolUse:
-    - matcher: "Read|Write|Edit"
-      hooks:
-        - type: prompt
-          prompt: |
-            If a file was read, written, or edited in the issue-to-pr-merge directory, verify that History/{YYYY-MM-DD}.md contains an entry for this interaction with an accurate timestamp, action, and one-line summary. If it is missing, state exactly what must be added.
-  Stop:
-    - matcher: "*"
-      hooks:
-        - type: prompt
-          prompt: |
-            Before stopping after issue-to-pr-merge was used, verify that History/{YYYY-MM-DD}.md contains an accurate interaction entry and that a retrospective check was performed. Block completion if either is missing.
 ---
 
 # Issue to PR merge

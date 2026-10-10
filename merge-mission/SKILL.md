@@ -1,21 +1,7 @@
 ---
 name: merge-mission
-description: V1.21 - Add CI regression checks for recurring dependency-pin mismatches. Check composite prerequisites against authoritative dependency declarations. Verify UTF-8 notification previews before one-time sending. Prove UI reachability and application effects, not just selector or tap success. Freeze published artifact bytes before hashing and account for uploader exclusions. Keep generated dependency pins consistent with their source locks and compiler metadata. Honor explicit no-UI restrictions while preserving evidence provenance. Verify generated worktree remnants and preview one-time notifications. Resolve every open issue and pull request in the target repository, with rendered UI validation evidence when applicable. Unblock blockers, root-cause recurring ones, and work the queue until it is empty or every remaining item carries a proven hard-block. Runs as a persistent /goal across turns, documents the reasoning behind every incomplete run, and learns from its own runs. Manual invocation only.
-disable-model-invocation: true
+description: V1.40 - Resolve every open issue and pull request in a repository, processing existing PRs first and then oldest-first issues. Runs as a persistent goal with current-head review, validation, guarded merges, delivery verification, cleanup, and one-time notifications. Repairs CI and delivery failures, preserves evidence and recovery state, proves remaining hard blocks, and records retrospective lessons. Manual invocation only.
 compatibility: Requires git, GitHub CLI, network access, permission to push branches and open pull requests, mergepr on PATH, the issue-to-pr, process-pr, repo-cleanup, and slack-dm skills, and a runtime that honors the /goal director. Without /goal, the state file alone carries resumption.
-hooks:
-  PostToolUse:
-    - matcher: "Read|Write|Edit"
-      hooks:
-        - type: prompt
-          prompt: |
-            If a file was read, written, or edited in the merge-mission directory, verify that History/{YYYY-MM-DD}.md contains an entry for this interaction with an accurate timestamp, action, and one-line summary. If it is missing, state exactly what must be added.
-  Stop:
-    - matcher: "*"
-      hooks:
-        - type: prompt
-          prompt: |
-            Before stopping after merge-mission was used, verify that History/{YYYY-MM-DD}.md contains an accurate interaction entry, that a retrospective check was performed, that an incomplete run left its completion report, and that any qualifying lessons were applied or recorded as Lesson lines. Block completion if any part is missing.
 ---
 
 # Merge mission
@@ -105,9 +91,16 @@ While the goal is active:
   state what changed since the last incomplete-run report.
 - Complete the goal only when the stop conditions in "The only ways to stop"
   hold, including the written incomplete-run report.
-- If a different unfinished goal exists, do not replace it. Report the
-  conflict and ask the user once to edit, pause, or clear it. That and
-  target resolution are the only legitimate mid-run questions.
+- If a different unfinished goal exists, preserve it and consult
+  `../precedent/SKILL.md` before asking a coordination question. Precedent is
+  advisory and supplies no authority. Current explicit instructions win. When
+  the user delegates coordination and the existing goal covers compatible work
+  in this same repository, edit that carrier rather than create a competing
+  goal. Preserve its ID, original scope, receipts, recovery state and one-time
+  notification accounting; record the expanded objective and ordering. Do not
+  absorb unrelated goals or take over another session's active ownership. If a
+  genuine authority or ownership conflict remains, ask once to edit, pause or
+  clear it. That and target resolution are the only mid-run questions.
 
 If the runtime offers no goal director, proceed anyway; the state file is
 the fallback carrier and every rule above applies to it.
@@ -143,23 +136,43 @@ stop reasons. "I was not sure" is not a stop reason; decide and record.
    origin remote, or from the repository named in the invocation. If the
    invocation lands outside any checkout and names no repository, ask once
    which `OWNER/REPO` to run against, then continue without further
-   questions. Run both `gh issue list` and `gh pr list`; neither command is a
+   questions. Resolve identity and repository instructions, then run
+   `gh x status`, the command behind the user's `gs` shortcut, before selecting
+   work. Inspect current PR checks and the latest default-branch CI and delivery
+   runs. An old failure superseded by a successful run is history, not a new
+   repair item. Run both `gh issue list` and `gh pr list`; neither command is a
    substitute for the other. Link issue-backed pull requests to their issues
    as one queue item, and queue standalone pull requests in their own right.
    Verify each issue still applies to the default branch; classify
    already-satisfied or not-actionable issues and close them with an evidence
-   comment. Build the combined queue, oldest first unless labels say otherwise.
-   Write the state file.
-2. Pick. Take the first item that is not blocked and not owned by a human. Do
-   not take over a human's in-flight branch or push to it without explicit
-   permission. You may still review, validate, and merge a human pull request
+   comment. Build the queue in two phases: existing open pull
+   requests first, then issues without an open pull request. Sort each phase by
+   its artifact's `createdAt` ascending, then number ascending. An issue-backed
+   pull request belongs to the PR phase, ordered by the PR's creation time.
+   Record any dependency, security, explicit label, or user-directed exception
+   to age order with its concrete reason. Write the state file.
+2. Pick. Drain the existing-PR phase before starting the issue backlog. An
+   existing PR leaves that phase only after it merges, closes with evidence,
+   or earns a proven hard block. CI or reviewer waiting is not a drained item.
+   Among runnable items in the active phase, take the first one not owned by
+   a human. After the PR phase, repair any current default-branch CI failure
+   before starting ordinary backlog work, then process issues oldest-first.
+   Reuse a queued issue or PR for that repair when it already covers the cause;
+   otherwise create a mission-owned repair item and record why it inherits the
+   mission despite being created after the snapshot. Do not take over a human's
+   in-flight branch or push to it without explicit permission. You may still review, validate, and merge a human pull request
    when it needs no branch changes. If it needs author changes, follow the
    blockage ladder and leave a precise review comment before parking it.
 3. Drive the item to completion. For an issue without a pull request, compose
    `issue-to-pr` sections 1 through 5 for identity, resume detection,
    worktree, implementation, and pull request. For an existing pull request,
    start with its live head and existing review state. In both cases, use
-   `process-pr` for the current-head review loop, then the guarded merge gate,
+   `process-pr` for the current-head review loop. Keep driving fixes, tests,
+   pushes, fresh-head reviews, and thread resolution until no actionable AI
+   feedback remains and required reviewers have completed clean reviews of
+   that exact head. Silence is not a clean review, and optional pending runs
+   do not add a wait gate. Diagnose failing CI from its logs and fix the cause
+   rather than handing back a red or waiting PR. Then use the guarded merge gate,
    `mergepr`, cleanup, and notification from `issue-to-pr-merge` phases 3 and
    4. Read `../process-pr/references/pr-reviewer-policy.md` before reviewer
    work. For a generated dependency update, update its authoritative source or
@@ -174,6 +187,11 @@ stop reasons. "I was not sure" is not a stop reason; decide and record.
    another one-off version edit is not root-cause prevention. Treat compiler-driven
    permission, secret, telemetry, or container changes as a wider diff to review,
    not incidental regeneration.
+   Review requests must branch on the refreshed evidence. Do not append an
+   unconditional trigger to a command that only prints comments or reactions.
+   If an automatic review is running or complete for the current head, reuse it
+   and record its receipt. Persist the head-specific request decision before any
+   later polling loop can issue another trigger.
    Before merging release-bearing work, compare its `Unreleased` notes
    with the automatic release/changelog path, including issue-to-PR links whose
    numbers differ. Reconcile notes that would repeat the generated release
@@ -191,11 +209,19 @@ stop reasons. "I was not sure" is not a stop reason; decide and record.
    one-line comment linking the merge commit. If Dependabot or another system
    replaces a queued pull request, add the replacement to the same queue item
    and keep going. Process every release or changelog pull request generated by
-   the merge before marking that item complete. Wait for release, deployment,
+   the merge before marking that item complete. Inspect the exact current-head
+   check suites when generated PRs have blocked or unstable native merge state.
+   Latest passing contexts can hide an original bot-event CI run awaiting
+   execution approval. When the workflow and unchanged same-repository diff
+   are verified and execution is authorized, approve that exact pending run
+   once; do not fabricate review approval, weaken settings, reset reviewer
+   deadlines or race an existing auto-merge owner. Wait for release, deployment,
    and other delivery workflows triggered by the merge to reach their expected
    terminal result. A failed delivery run is inherited mission work: diagnose
-   it, merge the fix, and verify a successful replacement run. Run the hygiene
-   gate and update the state file before the next item.
+   it, merge the fix, and verify a successful replacement run. Re-run
+   `gh x status`, inspect the exact item's fields rather than the command's
+   exit code, then run the hygiene gate and update the state file before the
+   next item.
 
    If worktree cleanup leaves a directory-not-empty warning, inspect the
    remaining paths before retrying. Verify the exact reviewed head and a clean
@@ -264,6 +290,10 @@ mark anything hard-blocked:
 3. Ask the ship-anyway question: if the answer arrived, what would I do, and
    is there a safe reversible default I can ship right now? If yes, ship it
    with the assumption documented. A block means no reversible default exists.
+   For a missing third-party client registration or API grant, check first
+   whether the provider's own official CLI or app can do the work for the
+   product (sign-in, renewal, sign-out), each account in its own config folder.
+   Delegating to it is a reversible default, not a block.
 4. Check the anti-list. Failing tests, flaky tests, merge conflicts, missing
    documentation, ambiguous acceptance criteria, and reviewer silence are
    work, not blocks.
@@ -281,9 +311,18 @@ them. If that pass moves any item, keep going.
 Waiting for CI is cheap; treat it as part of the work, never as a reason to
 stop, rush, or skip. Never end a turn to wait. Either poll with bounded
 sleeps (`gh pr checks --watch --fail-fast`, or 60 to 120 second sleeps up to
-the shared policy deadline) or start the next queue issue and come back. Keep
-at most three issues in flight, and never two branches that touch the same
-files. A waiting pull request is parked, not finished.
+the shared policy deadline) or process another existing PR and come back.
+Do not start an ordinary backlog issue just because an existing PR is waiting.
+Once every existing PR is resolved or proven hard-blocked, bounded pipelining
+of oldest-first backlog issues is allowed. A prerequisite repair needed to
+finish an existing PR is part of that PR's work, not a backlog-order bypass.
+Keep at most three queue items in flight, and never two branches that touch
+the same files. A waiting pull request is parked, not finished.
+
+During each CI-wait poll, refresh published review threads as well as checks,
+even after the required reviewer has reported clean. Assess new passive
+findings promptly. This does not authorize triggering or waiting for optional
+review runs.
 
 When results land, re-read the live situation and act the same turn, on your
 own judgment:
@@ -301,11 +340,21 @@ own judgment:
 
 Keep durable state in `.git/merge-mission/STATE.md` inside the target
 repository so git never tracks it. After every queue or item-state change,
-record: the combined queue in order, each issue or pull request's status
+record: the frozen queue in PR-first order, the active phase and documented
+ordering exceptions, each issue or pull request's status
 (QUEUED, IN-FLIGHT, WAITING, MERGED, CLOSED-EVIDENCE, HARD-BLOCKED with the
 exact human ask), inherited replacements and generated follow-ups, in-flight
 branch, worktree, head SHAs, and every decision made. A fresh invocation
-resumes from this file instead of re-deriving state.
+resumes from this file instead of re-deriving state. When resuming a state file
+written under an older ordering policy, preserve its frozen scope, evidence,
+and reviewer requests, but apply PR-first selection before new backlog work.
+
+Resolve the primary checkout's mission directory once. Use absolute paths for
+its state, helper scripts, body files and logs whenever a command runs in a
+worktree. A worktree's `.git` is a pointer file, not the primary `.git`
+directory. Check each prerequisite command's exit before continuing to a
+dependent PR write, review request or server launch; a failed path must not
+silently skip evidence publication.
 
 Run `gh x status` to see the current state of the mission's progress. Use it
 at run start, on resumed turns, and before any merge or block decision,
@@ -318,14 +367,75 @@ errors, fall back to direct `gh` queries and note that in the state file.
   means `gh issue view` confirms it.
 - Record exact SHAs, commands, and observed results. Never claim a check
   passed without reading its result.
+- A newer qualification harness does not raise the shipped application's runtime
+  floor. Compare documented support with actual exercised host versions. When
+  behavior changed within a supported major version, qualify representative hosts
+  on both sides of that boundary and any supported compatibility mode. Run real
+  isolated hosts and assert their versions; changing a version variable cannot
+  prove runtime behavior. Preserve separate harness and production prerequisites.
+- Reviewer workspace commits are not necessarily published history. Before
+  acting on an attribution or history finding, verify the actual published PR
+  head and the cited object's relationship to it with local Git and canonical
+  Git Database metadata. Record the evidence. A reviewer-only copy does not
+  justify rewriting repository history or changing legitimate attribution.
 - Hash an immutable publication snapshot, not files still owned by background
   writers. Size and digest must describe the same bytes. Match the manifest to
   the uploader's exclusions, including hidden files. Verify downloaded bytes
   before calling the artifact complete; disclose missing or changed files.
+- Complete source qualification and checklist updates before merging. Do not
+  rewrite merged-PR bodies for routine delivery closeout: an edited event can
+  rerun stale-head CI, which correctly rejects a closed PR and may compare an
+  old changelog with a newer release. Put later delivery receipts in the state
+  file or a completion comment instead. If this already happened, retain and
+  diagnose the failed metadata runs separately from verified main/release
+  delivery; do not weaken the open-PR guard or resend completion notifications.
+- A matching destination does not prove configuration ownership. Before native
+  commands replace a task, route or handler, compare the complete relevant
+  settings against the intended setup. Preserve or refuse TLS modes, capability
+  lists and unknown fields; never silently discard them. Inspect layered or
+  foreground configuration that can override a successful background write.
+  Maintain regressions for same-destination records with different settings.
+- Validation claims require assertions that can detect the claimed failure.
+  Comparing a wrapper with the helper it delegates to proves wiring, not the
+  helper's output. An unchanged by-value input, an empty result collection with
+  no providers, or a cached Load cannot prove instant preservation, absence of
+  fetch calls, or disk integrity. Pin concrete output, record the actual receiver
+  call, and read persisted bytes or a fresh instance as appropriate.
+- Qualification must require a structurally valid policy document. Do not let
+  JavaScript truthiness treat parsed JSON `null`, `false`, zero or empty text as
+  an absent budget. Permit a missing budget only in an explicit baseline mode
+  that cannot mark the candidate qualified. Test both malformed root values and
+  valid JSON falsy values through policy assertions and the actual command path.
+- Expected-failure fixtures must consume evidence from that invocation. Remove
+  the exact prior report or bind a unique invocation identifier before starting
+  the tool, then require fresh output. A nonzero startup exit plus a stale
+  negative report is not a measured rejection. Prove that an actual tool startup
+  failure cannot qualify against seeded prior evidence.
+- Ancillary timing, diagnostic writes and cleanup must not replace an observed
+  primary failure. Test real write or shutdown failure and assert the original
+  exception identity, exact returned data, request count and no replay. Keep
+  unavailable telemetry visible with a fixed non-sensitive notice. A successful
+  exercise followed by failed required cleanup must still fail qualification.
 - Semantic-tree presence and successful click metadata do not prove that a
   control was reachable or its action happened. Inspect rendered target geometry
   against headers, scroll boundaries and overlays, then assert the intended
   application state change. Do not replace that evidence with repeated taps.
+- A short scroll correction can become a press. Start framing gestures on
+  noninteractive content, account for observed touch slop, and keep the complete
+  gesture inside the intended viewport. For display-only fixtures, inspect and
+  retain the resulting saved bytes after both successful and failed navigation.
+  Reject unintended mutation; never restore or replay the fixture to manufacture
+  a pass. A failed navigation step does not excuse missing integrity evidence.
+- When screenshots must have no alpha channel, inspect PNG color type and
+  transparency chunks before publication. Opaque RGBA is not RGB; different
+  capture tools can produce different formats within one evidence set. Preserve
+  sources and disclose explicit RGB exports. Verify decoded samples, dimensions,
+  metadata, size and hash. Never silently composite, crop, resize or normalize
+  orientation. Check both published bytes and rendering after conversion.
+- Attachment arguments must match the staged Markdown references. Inspect the
+  published body for local references and appended duplicates. If upload succeeded
+  but reference rewriting failed, repair with existing asset URLs rather than
+  uploading the same images again.
 - Never call a UI PR complete or merge-ready without screenshots from its
   current head visibly rendered in `## Validation`, unless the user explicitly
   prohibits further UI automation. In that case, state the published evidence's
@@ -367,7 +477,9 @@ answer four questions:
    signal.
 
 Write each finding as a `Lesson:` line in the day's history entry, with issue
-or pull-request numbers as evidence.
+or pull-request numbers as evidence. Write the four answers into the history
+entry in the same step as the entry itself, before the final report, including
+on a re-run that finds nothing new; an entry without them is incomplete.
 
 **Incomplete runs.** A run that ends while any queued issue or pull request is
 still unresolved owes the user a completion report, written so it can be

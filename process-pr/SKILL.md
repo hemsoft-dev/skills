@@ -1,31 +1,7 @@
 ---
 name: process-pr
-description: V1.15 - Takes one specified existing GitHub pull request to a human-ready state with truthful current-head evidence, including CLI-uploaded UI screenshots when applicable, by following the shared PR reviewer policy and addressing feedback. Merge remains approval-gated by default, but a composing merge skill can supply documented invocation authority and owns the final Slack notification when it owns the merge.
-disable-model-invocation: true
+description: V1.16 - Takes one specified existing GitHub pull request to a human-ready state with truthful current-head evidence, including CLI-uploaded UI screenshots when applicable, by following the shared PR reviewer policy and addressing feedback. Merge remains approval-gated by default, but a composing merge skill can supply documented invocation authority and owns the final Slack notification when it owns the merge.
 compatibility: Requires git, GitHub CLI with the gh-x extension, GitHub network access, permission to push to the PR branch, and permission to request the reviewers selected by the shared policy. Optional authorized merge and cleanup requires mergepr on PATH and the slack-dm skill.
-hooks:
-  PostToolUse:
-    - matcher: "Read|Write|Edit"
-      hooks:
-        - type: prompt
-          prompt: |
-            If a file was read, written, or edited in the process-pr directory, verify that History/{YYYY-MM-DD}.md contains an entry for this interaction in this format:
-
-            ## HH:MM - {Action Taken}
-            {One-line summary}
-
-            The timestamp must come from `Get-Date -Format "HH:mm"`, never from an estimate. If the entry is missing or incomplete, state exactly what must be added.
-  Stop:
-    - matcher: "*"
-      hooks:
-        - type: prompt
-          prompt: |
-            Before stopping, if process-pr was used or modified, verify both requirements:
-
-            1. History/{YYYY-MM-DD}.md contains an accurate `## HH:MM - {Action Taken}` entry with a one-line summary.
-            2. A brief retrospective checked whether this run revealed a reusable improvement to the skill. If so, update the skill and record that update in history; otherwise record that no skill change was needed.
-
-            Obtain the timestamp with `Get-Date -Format "HH:mm"`. Block completion when either requirement is missing.
 ---
 
 # Process PR

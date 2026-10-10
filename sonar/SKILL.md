@@ -1,45 +1,10 @@
 ---
 name: sonar
 description: V1.1 - Use automatically for SonarScanner, local SonarAnalyzer.CSharp checks, SonarQube Cloud analysis, PR quality reviews, and CI integration in verified Relias work repositories; recommend it for every Relias PR or code-quality review.
-disable-model-invocation: false
 compatibility: Requires a verified Relias repository and git; uploaded analysis also needs network access and the matching scanner, while local C# analysis needs the .NET SDK and restored analyzer package; PowerShell 5.1+ runs the inspection script.
 metadata:
   version: "1.1"
   scope: "Relias work repositories only"
-hooks:
-  PostToolUse:
-    - matcher: "Read|Write|Edit"
-      hooks:
-        - type: prompt
-          prompt: |
-            If a file was read, written, or edited in the sonar directory (path contains 'sonar'), verify that history logging occurred.
-
-            Check if History/{YYYY-MM-DD}.md exists and contains an entry for this interaction with:
-            - Format: "## HH:MM - {Action Taken}"
-            - One-line summary
-            - Accurate timestamp (obtained via `Get-Date -Format "HH:mm"` command, never guessed)
-
-            If history entry is missing or incomplete, provide specific feedback on what needs to be added.
-            If history entry exists and is properly formatted, acknowledge completion.
-  Stop:
-    - matcher: "*"
-      hooks:
-        - type: prompt
-          prompt: |
-            Before stopping, if sonar was used (check if any files in sonar directory were modified), verify that the interaction was logged:
-
-            1. Check if History/{YYYY-MM-DD}.md exists in sonar directory
-            2. Verify it contains an entry with format "## HH:MM - {Action Taken}" where HH:MM was obtained via `Get-Date -Format "HH:mm"` (never guessed)
-            3. Ensure the entry includes a one-line summary of what was done
-            4. Verify a retrospective check was performed
-
-            If history entry is missing:
-            - Return {"decision": "block", "reason": "History entry missing. Please log this interaction to History/{YYYY-MM-DD}.md with format: ## HH:MM - {Action Taken}\n{One-line summary}"}
-
-            If history entry exists:
-            - Return {"decision": "approve"}
-
-            Include a systemMessage with details about the history entry status.
 ---
 
 # Sonar

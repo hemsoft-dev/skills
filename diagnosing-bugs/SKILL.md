@@ -119,6 +119,16 @@ A correct seam is one where the test exercises the **real bug pattern** as it oc
 
 **If no correct seam exists, that itself is the finding.** Note it. The codebase architecture is preventing the bug from being locked down. Flag this for the next phase.
 
+For recurring asynchronous work, test requests that outlast the scheduling interval as well as reversed completion order. A latest-request guard can starve the view if every timer tick supersedes pending work. Include delayed response-body parsing, failure recovery, and shutdown; an obsolete completion must not clear a newer request's pending state.
+
+For opaque computation, prove that cancellation stops the owned work rather
+than only rejecting its caller's promise. Test a CPU-blocked reader, abrupt
+parent death, and idle shutdown in a standalone subprocess. Keep its termination
+listener outside the computation's blocked event loop. A test runner's handles
+can hide shutdown failures. In process-exit tests, distinguish signalable PIDs
+from running work, account for zombies, and retire confirmed-exited ownership
+before cleanup.
+
 If a correct seam exists:
 
 1. Turn the minimised repro into a failing test at that seam.
