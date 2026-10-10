@@ -35,6 +35,14 @@ function Get-CleanupGitHubStatus {
     }
 }
 
+function Get-CleanupBranchPullRequest {
+    param([string]$Repository, [string]$Branch)
+    $owner = ($Repository -split '/')[0]
+    $headQuery = [Uri]::EscapeDataString("${owner}:$Branch")
+    $pages = Invoke-CleanupGh @('api', '--paginate', '--slurp', "repos/$Repository/pulls?state=all&head=$headQuery&per_page=100") | ConvertFrom-Json
+    @($pages | ForEach-Object { $_ } | ForEach-Object { $_ })
+}
+
 function Test-CleanupIntegratedTip {
     param([string]$Tip, [string]$Name)
     if ((Invoke-CleanupGit @('merge-base', '--is-ancestor', $Tip, $head) @(0, 1)).ExitCode -eq 0) { return $true }
@@ -139,9 +147,7 @@ function Invoke-CleanupSweep {
             else { '' }
             if ($reason) { Add-Disposition 'RemoteBranch' "$remote/$name" 'Retained' $reason; continue }
             if (-not $LocalRemote) {
-                $headQuery = [Uri]::EscapeDataString("HemSoft:$name")
-                $freshPages = Invoke-CleanupGh @('api', '--paginate', '--slurp', "repos/$githubRepository/pulls?state=all&head=$headQuery&per_page=100") | ConvertFrom-Json
-                $freshPulls = @($freshPages | ForEach-Object { $_ } | ForEach-Object { $_ })
+                $freshPulls = @(Get-CleanupBranchPullRequest -Repository $githubRepository -Branch $name)
                 if (@($freshPulls | Where-Object state -EQ 'open').Count -or
                     ($name -notin $OwnedBranch -and -not @($freshPulls | Where-Object { $_.merged_at -and $_.head.sha -eq $tip -and $_.user.login -eq $cleanupLogin }).Count)) {
                     Add-Disposition 'RemoteBranch' "$remote/$name" 'Retained' 'Fresh PR ownership/state no longer permits deletion'; continue

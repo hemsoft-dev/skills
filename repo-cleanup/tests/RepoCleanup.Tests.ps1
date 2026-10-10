@@ -419,3 +419,21 @@ Describe 'Required GitHub status reporting' {
         Should -Invoke Invoke-CleanupGh -Times 0 -Exactly
     }
 }
+
+Describe 'Fresh branch pull request ownership queries' {
+    BeforeAll { . (Join-Path $PSScriptRoot '../scripts/cleanup-sweep.ps1') }
+    It 'queries the repository owner for <Repository> and retains all pages' -TestCases @(
+        @{ Repository = 'hemsoft-dev/example'; Owner = 'hemsoft-dev' }
+        @{ Repository = 'HemSoft/example'; Owner = 'HemSoft' }
+    ) {
+        param($Repository, $Owner)
+        Mock Invoke-CleanupGh { '[[{"number":1}],[{"number":2}]]' }
+        $pulls = @(Get-CleanupBranchPullRequest -Repository $Repository -Branch 'feature/cleanup')
+        $pulls.Count | Should -Be 2
+        $pulls.number | Should -Be @(1, 2)
+        $expectedPath = "repos/$Repository/pulls?state=all&head=${Owner}%3Afeature%2Fcleanup&per_page=100"
+        Should -Invoke Invoke-CleanupGh -Times 1 -Exactly -ParameterFilter {
+            ($Arguments -join ' ') -eq "api --paginate --slurp $expectedPath"
+        }
+    }
+}
