@@ -23,7 +23,6 @@ installed or available in every repository.
 | Macroscope | Passive only | Read findings already present; do not probe availability or request |
 | Greptile | Passive only | Read findings already present; do not probe availability or request |
 | GitHub Copilot PR Review | Required for `relias-engineering/*`; explicit requirement only elsewhere | Use the request procedure below |
-| SFL | Legacy, explicit requirement only | No fallback or deployment repair; follow a live required repository contract only |
 
 An unlisted product is passive only until the user changes this registry or an
 explicit repository requirement puts it in scope. Passive means findings are
