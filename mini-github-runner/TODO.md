@@ -165,7 +165,8 @@ claim a fresh runner health, isolation or smoke-workflow check.
 - A viable SFL experiment therefore needs a distinct repository runner service,
   a dedicated guest user with device-authenticated Codex, and a manual-only
   direct `codex exec` probe before any reviewer or consumer deployment. This is
-  proposed work, not completed runner scope.
+  historical proposed work. The owner froze that project on October 9, 2026;
+  do not provision or deploy the proposed experiment.
 
 ### 2026-08-19
 

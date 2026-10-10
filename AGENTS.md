@@ -26,16 +26,6 @@ value very highly:
 
 &#x20; evidence before diving into complex problems.
 
-\- Historically, working the SFL (set-it-free-loop) seems easy on the surface, but has proven
-
-&#x20; to be the most comlex project so far leading to many frustrations. Learn from the past and
-
-&#x20; learn from the current state of the relias-engineering/set-it-free-loop project. It has a
-
-&#x20; working version with the PR reviewer which is the most important part right now. I want that
-
-&#x20; to be working well in my private HemSoft account as well.
-
 \- I want you to make me aware of any conflicting instructions you encounter throughout your
 
 &#x20; set of instructions and also make me aware of anything you find that appears stale.
