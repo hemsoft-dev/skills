@@ -70,14 +70,6 @@ results.
    - Review angles: Repo launch, reusable workflow catalog, documentation and
      examples, adoption by teams, and measurable reuse impact.
 
-2. `sfl-pr-reviewer` — Q3/26
-   - Purpose: SFL PR Reviewer full-spectrum reviewer (`sfl-pr-review.lock.yml`) — three evidence-based passes (Security, Correctness/Reliability, Quality/Maintainability) with Critical/High/Medium/Low severity, inline threads, review sheet verdict, and `SFL Reviewer Approval` check gate. Historical work included a dual-review loop. Current PR product selection lives in `../process-pr/references/pr-reviewer-policy.md`.
-   - Review angles: Reviewer workflow dispatch (`workflow_dispatch` with `item_number`/`aw_context`), severity taxonomy and clean-sheet target (zero findings across all severities), `APPROVE` verdict vs. approval-gate distinction, thread resolution via `resolveReviewThread`, head-SHA matching, dual-reviewer readiness criteria, legacy `sfl-review` label fallback, and adoption across SFL-managed repos.
-
-3. `sfl-canvas` (GitHub Copilot App) — Q3/26
-   - Purpose: SFL Canvas GitHub Copilot App — Copilot extensibility surface (Copilot App / extension) for SFL orchestration, providing canvas-style UI and app-based interaction with the Set It Free Loop pipeline.
-   - Review angles: Copilot App registration and installation model, canvas UI for issue/PR orchestration, SFL pipeline visibility (`sfl-issue` → `sfl-pr` → `sfl-done`), app permissions and auth, integration with existing `gh sfl` CLI and `workflows/` deployment model, and measurable impact on SFL adoption/throughput.
-
 ## Core Principles (Research-Backed)
 
 ### 1. Be Specific and Focused
