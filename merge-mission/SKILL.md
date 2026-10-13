@@ -1,6 +1,6 @@
 ---
 name: merge-mission
-description: V1.40 - Resolve every open issue and pull request in a repository, processing existing PRs first and then oldest-first issues. Runs as a persistent goal with current-head review, validation, guarded merges, delivery verification, cleanup, and one-time notifications. Repairs CI and delivery failures, preserves evidence and recovery state, proves remaining hard blocks, and records retrospective lessons. Manual invocation only.
+description: V1.44 - Resolve every open issue and pull request in a repository, processing existing PRs first and then oldest-first issues. Runs as a persistent goal with current-head review, validation, guarded merges, delivery verification, cleanup, and one-time notifications. Repairs CI and delivery failures, preserves evidence and recovery state, proves remaining hard blocks, and records retrospective lessons. Manual invocation only.
 compatibility: Requires git, GitHub CLI, network access, permission to push branches and open pull requests, mergepr on PATH, the issue-to-pr, process-pr, repo-cleanup, and slack-dm skills, and a runtime that honors the /goal director. Without /goal, the state file alone carries resumption.
 ---
 
@@ -187,11 +187,22 @@ stop reasons. "I was not sure" is not a stop reason; decide and record.
    another one-off version edit is not root-cause prevention. Treat compiler-driven
    permission, secret, telemetry, or container changes as a wider diff to review,
    not incidental regeneration.
+   Preserve an unchanged reviewed head after an unrelated base-branch advance
+   when effective rules allow it. Verify current mergeability and that the
+   combined changes preserve both branches' intended behavior. Rebase when
+   required up-to-date checks, a conflict, an actionable finding, or a verified
+   integration failure calls for it. Keep the head's review and check receipts
+   otherwise, and verify delivery on the resulting published main revision.
    Review requests must branch on the refreshed evidence. Do not append an
    unconditional trigger to a command that only prints comments or reactions.
    If an automatic review is running or complete for the current head, reuse it
    and record its receipt. Persist the head-specific request decision before any
    later polling loop can issue another trigger.
+   Poll the complete review comments, reviews and threads, including edited
+   summary comments. A reviewer may update an early comment in place, so the
+   latest ordinary post is not proof of silence. Late feedback on an earlier
+   head can contain distinct findings; compare full bodies and cited locations
+   before treating anything as a duplicate.
    Before merging release-bearing work, compare its `Unreleased` notes
    with the automatic release/changelog path, including issue-to-PR links whose
    numbers differ. Reconcile notes that would repeat the generated release
@@ -222,6 +233,10 @@ stop reasons. "I was not sure" is not a stop reason; decide and record.
    `gh x status`, inspect the exact item's fields rather than the command's
    exit code, then run the hygiene gate and update the state file before the
    next item.
+
+   Before invoking a merge helper that removes worktrees, inspect their ignored
+   content and preserve identified evidence or retained work outside the tree.
+   A clean tracked status does not establish that ignored files are disposable.
 
    If worktree cleanup leaves a directory-not-empty warning, inspect the
    remaining paths before retrying. Verify the exact reviewed head and a clean
@@ -256,13 +271,22 @@ For every blocker, climb in order:
    in this pull request or a dedicated one. A recurring flaky test, a
    chronically red workflow, and a stale contributor doc are work items. Never
    mark the same symptom blocked twice without a root-cause attempt in
-   between. For recurring prerequisite gaps in composite commands, follow the
+   between. A native crash inside a test binary (access violation, segfault)
+   is a product or test bug, not tool flakiness, until the suspect test, run
+   alone and single-threaded, passes repeatedly; find the last test started
+   and bisect before calling it flaky. For recurring prerequisite gaps in composite commands, follow the
    called scripts and configs and validate the declared installation against its
    authoritative dependency declarations. Test a missing secondary tooling
    module. Adding the latest package name to a duplicated list is not a
    root-cause fix.
 3. Bound the retries. Cap mechanical retries at three. Never request a review
    again for an unchanged head. Respect the shared policy's wait deadlines.
+   Bound review rounds too. Once a pull request has had two rounds of fixes
+   and the latest current-head review raises no P1, fix those findings, record
+   the decision in the state file, and merge on green checks without
+   requesting another round. When reading review comments, fetch them all
+   (`per_page=100` or `--paginate`); an unpaginated query can make a round look
+   clean.
 4. Hard-block, but only after the proof required by "Earning a hard-block"
    below. A block is a finding you must prove, not a feeling you may report.
 
@@ -293,7 +317,11 @@ mark anything hard-blocked:
    For a missing third-party client registration or API grant, check first
    whether the provider's own official CLI or app can do the work for the
    product (sign-in, renewal, sign-out), each account in its own config folder.
-   Delegating to it is a reversible default, not a block.
+   Delegating to it is a reversible default, not a block. For a missing
+   production signing identity or distribution channel, a self-signed
+   certificate and a local or file-share channel are the reversible default.
+   Ship packaging, update and platform-integration work on them, and leave
+   only the production choice open.
 4. Check the anti-list. Failing tests, flaky tests, merge conflicts, missing
    documentation, ambiguous acceptance criteria, and reviewer silence are
    work, not blocks.
@@ -367,6 +395,10 @@ errors, fall back to direct `gh` queries and note that in the state file.
   means `gh issue view` confirms it.
 - Record exact SHAs, commands, and observed results. Never claim a check
   passed without reading its result.
+- Update state only after checking each claimed action's receipt and resulting
+  data. Transport success, a later command's exit code, or an accepted request
+  does not prove that an earlier mutation completed. Validate response errors,
+  typed artifact IDs and per-item outcomes before recording completion.
 - A newer qualification harness does not raise the shipped application's runtime
   floor. Compare documented support with actual exercised host versions. When
   behavior changed within a supported major version, qualify representative hosts
@@ -458,6 +490,11 @@ force. It overrides them in these ways only, for this run:
   batch.
 - Bounded pipelining is allowed while a pull request waits on CI or review,
   instead of strict serial processing.
+- The bounded-review rule permits merging the published corrections after two
+  finding-fix rounds when the latest reviewed head raises no P1, without another
+  AI review request. Resolve every known finding and require green checks and
+  current-head UI evidence. Preserve required formal approvals and disclose the
+  exact review provenance; do not describe the corrected head as clean-reviewed.
 
 ## Learning from every run
 
