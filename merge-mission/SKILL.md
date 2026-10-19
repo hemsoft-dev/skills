@@ -1,6 +1,6 @@
 ---
 name: merge-mission
-description: V1.44 - Resolve every open issue and pull request in a repository, processing existing PRs first and then oldest-first issues. Runs as a persistent goal with current-head review, validation, guarded merges, delivery verification, cleanup, and one-time notifications. Repairs CI and delivery failures, preserves evidence and recovery state, proves remaining hard blocks, and records retrospective lessons. Manual invocation only.
+description: V1.51 - Resolve every open issue and pull request in a repository, processing existing PRs first and then oldest-first issues. Runs as a persistent goal with current-head review, validation, guarded merges, delivery verification, cleanup, and one-time notifications. Repairs CI and delivery failures, preserves evidence and recovery state, proves remaining hard blocks, and records retrospective lessons. Manual invocation only.
 compatibility: Requires git, GitHub CLI, network access, permission to push branches and open pull requests, mergepr on PATH, the issue-to-pr, process-pr, repo-cleanup, and slack-dm skills, and a runtime that honors the /goal director. Without /goal, the state file alone carries resumption.
 ---
 
@@ -52,6 +52,19 @@ browsers for public-page verification. Do not move user-owned windows or activat
 a task window unnecessarily. Mixed-DPI logical coordinates are not placement
 proof: verify the actual task window bounds and derive capture coordinates from
 that window. Never record the reserved display.
+
+Before choosing native resize or DPI fixtures, inspect the host's tracking limits
+and distinguish client size from outer size, including frame or decoration
+insets. Fit the complete transition sequence within those limits while retaining
+the app's supported minimum. Assert the actual resulting bounds after every
+transition. A clamped request is a failed qualification, not permission to waive
+the assertion or infer success from a later cleanup/upload phase.
+
+In an isolated headless compositor, account for missing physical input devices.
+Removing the last transient virtual keyboard can drop seat focus between
+actions. Keep an owned input device attached for the full app exercise when
+needed, reap it on success and failure, and assert menu/zoom results. Successful
+input-tool exits alone do not prove that the app received the sequence.
 
 An explicit user restriction against browser, UI, or desktop automation
 overrides the mission's normal current-head UI evidence requirement. Stop all
@@ -252,6 +265,12 @@ stop reasons. "I was not sure" is not a stop reason; decide and record.
    the dry run before sending. Keep required field syntax, even when prose style
    rules prefer different punctuation. A proven local validation failure before
    any API call may be corrected; an indeterminate delivery must not be retried.
+   Persist terminal provider refusals across the whole mission, including
+   resumed sessions. A provider-level error such as `account_inactive` blocks
+   later completion messages through the same unchanged account, even when
+   their PR numbers differ. Record those messages as unsent without repeating
+   the failed provider request. Resume sends only after explicit user direction
+   or verified recovery of the account; a new merge alone is not recovery.
 5. Revisit. After each full pass, return to every blocked item with fresh
    evidence. Apply the blockage ladder again. Repeat until stop condition 1 or
    2 holds.
@@ -279,6 +298,13 @@ For every blocker, climb in order:
    authoritative dependency declarations. Test a missing secondary tooling
    module. Adding the latest package name to a duplicated list is not a
    root-cause fix.
+   Before reusing a build cache or moving validation into a source copy, preserve
+   the effective working directory, discovered tool configuration, target,
+   profile and compiler flags. A manifest path does not necessarily load the
+   original working-directory configuration. When this mistake repeats, put
+   those assertions in the validation runner. Stop an unintended rebuild,
+   retain its actual incomplete result, and run the correctly configured command;
+   do not call the interrupted invocation a test failure or a pass.
 3. Bound the retries. Cap mechanical retries at three. Never request a review
    again for an unchanged head. Respect the shared policy's wait deadlines.
    Bound review rounds too. Once a pull request has had two rounds of fixes
@@ -359,6 +385,10 @@ own judgment:
   A green pull request that sits unmerged is an unfinished decision.
 - Red means read the actual logs, not the check name. Apply the blockage
   ladder, fix, push, and wait again.
+- A stale in-progress status is not proof of a hung producer. Compare step
+  timestamps, completed-job logs and immutable uploaded artifacts before
+  canceling or rerunning. Preserve those receipts while waiting for GitHub's
+  terminal check state; producer evidence does not replace the merge gate.
 - Flaky means one rerun, then root-cause per the ladder.
 - Optional checks and optional reviewers never add a gate, per the shared
   policy. Weigh them with judgment instead of obeying them.
@@ -382,7 +412,11 @@ its state, helper scripts, body files and logs whenever a command runs in a
 worktree. A worktree's `.git` is a pointer file, not the primary `.git`
 directory. Check each prerequisite command's exit before continuing to a
 dependent PR write, review request or server launch; a failed path must not
-silently skip evidence publication.
+silently skip evidence publication. Use a checked static, variable-bound GraphQL
+template rather than constructing escaped braces in shell or interpolated strings.
+Make dependent mutation chains fail fast. After a failed prerequisite, inspect live
+state before any retry; reuse any request that was actually accepted despite the
+failure instead of posting it again.
 
 Run `gh x status` to see the current state of the mission's progress. Use it
 at run start, on resumed turns, and before any merge or block decision,
@@ -495,6 +529,9 @@ force. It overrides them in these ways only, for this run:
   AI review request. Resolve every known finding and require green checks and
   current-head UI evidence. Preserve required formal approvals and disclose the
   exact review provenance; do not describe the corrected head as clean-reviewed.
+  If the user directly invokes `process-pr` (or asks for a review) on a mission
+  pull request, this shortcut no longer applies to it: request one review of the
+  current head and merge only after it comes back clean.
 
 ## Learning from every run
 
