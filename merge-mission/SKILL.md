@@ -1,6 +1,6 @@
 ---
 name: merge-mission
-description: V1.52 - Resolve every open issue and pull request in a repository, processing existing PRs first and then oldest-first issues. Runs as a persistent goal with current-head review, validation, guarded merges, delivery verification, cleanup, and one-time notifications. Repairs CI and delivery failures, preserves evidence and recovery state, proves remaining hard blocks, and records retrospective lessons. Manual invocation only.
+description: V1.53 - Resolve every open issue and pull request in a repository, processing existing PRs first and then oldest-first issues. Runs as a persistent goal with current-head review, validation, guarded merges, delivery verification, cleanup, and one-time notifications. Repairs CI and delivery failures, preserves evidence and recovery state, proves remaining hard blocks, and records retrospective lessons. Manual invocation only.
 compatibility: Requires git, GitHub CLI, network access, permission to push branches and open pull requests, mergepr on PATH, the issue-to-pr, process-pr, repo-cleanup, and slack-dm skills, and a runtime that honors the /goal director. Without /goal, the state file alone carries resumption.
 ---
 
@@ -26,8 +26,9 @@ further approval:
 - Implement any change the issues require, including tests, workflows, CI
   configuration, dependencies, and documentation.
 - Comment on, label, close, and reopen issues to keep the record truthful.
-- Merge through the guarded gate, including the `--admin` fallback when branch
-  protection is the only refusal.
+- Merge through the guarded gate. Never bypass branch protection: no `--admin`,
+  no rule edits, no dismissed reviews. A protection refusal is a finding about
+  the pull request, and an unresolved review thread is a reviewer saying no.
 - Make scope and design decisions for ambiguous issues, recorded in the
   pull-request body.
 
@@ -184,8 +185,14 @@ stop reasons. "I was not sure" is not a stop reason; decide and record.
    pushes, fresh-head reviews, and thread resolution until no actionable AI
    feedback remains and required reviewers have completed clean reviews of
    that exact head. Silence is not a clean review, and optional pending runs
-   do not add a wait gate. Diagnose failing CI from its logs and fix the cause
-   rather than handing back a red or waiting PR. Then use the guarded merge gate,
+   do not add a wait gate. Reviewer consent is mechanical: before any merge,
+   query the pull request's review threads (GraphQL `reviewThreads`, paginated)
+   and require zero unresolved. Resolve a thread yourself only after its fix is
+   pushed and the reviewer's clean review names the current head, with
+   `resolveReviewThread` and a reply citing the fixing commit; a reply alone
+   leaves the thread open and the merge blocked. Diagnose failing CI from its
+   logs and fix the cause rather than handing back a red or waiting PR. Then use
+   the guarded merge gate,
    `mergepr`, cleanup, and notification from `issue-to-pr-merge` phases 3 and
    4. Read `../process-pr/references/pr-reviewer-policy.md` before reviewer
    work. For a generated dependency update, update its authoritative source or
@@ -434,7 +441,8 @@ errors, fall back to direct `gh` queries and note that in the state file.
 
 ## Honesty gates
 
-- Merged means GitHub reports `MERGED`, checked with `gh pr view`. Closed
+- Merged means GitHub reports `MERGED`, checked with `gh pr view`, reached
+  with every review thread resolved and no protection bypassed. Closed
   means `gh issue view` confirms it.
 - Record exact SHAs, commands, and observed results. Never claim a check
   passed without reading its result.

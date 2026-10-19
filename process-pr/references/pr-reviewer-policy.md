@@ -189,7 +189,12 @@ replace it.
 - Every push requires fresh review evidence for the new head. Do not create
   empty commits, base updates, or label changes merely to wake a reviewer.
 - Assess actionable findings from every source, including passive products.
-  Fix or disprove them and resolve threads when permitted. Passive products
+  Fix or disprove them and resolve threads when permitted. A finding thread is
+  resolved by the agent only after its fix is pushed and the reviewer's clean
+  review names the current head: reply with the fixing commit, then call
+  `resolveReviewThread`. Before readiness or merge, count unresolved threads
+  with GraphQL `reviewThreads(first:100){nodes{isResolved}}` and require zero;
+  a reply alone does not close a thread (codexbar#205/#211). Passive products
   need no clean rerun unless explicitly required. Re-fetch findings and required
   gates immediately before readiness or merge.
 
