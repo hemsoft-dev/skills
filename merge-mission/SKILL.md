@@ -1,6 +1,6 @@
 ---
 name: merge-mission
-description: V1.53 - Resolve every open issue and pull request in a repository, processing existing PRs first and then oldest-first issues. Runs as a persistent goal with current-head review, validation, guarded merges, delivery verification, cleanup, and one-time notifications. Repairs CI and delivery failures, preserves evidence and recovery state, proves remaining hard blocks, and records retrospective lessons. Manual invocation only.
+description: V1.54 - Resolve every open issue and pull request in a repository, processing existing PRs first and then oldest-first issues. Runs as a persistent goal with current-head review, validation, guarded merges, delivery verification, cleanup, and one-time notifications. Repairs CI and delivery failures, preserves evidence and recovery state, proves remaining hard blocks, and records retrospective lessons. Manual invocation only.
 compatibility: Requires git, GitHub CLI, network access, permission to push branches and open pull requests, mergepr on PATH, the issue-to-pr, process-pr, repo-cleanup, and slack-dm skills, and a runtime that honors the /goal director. Without /goal, the state file alone carries resumption.
 ---
 
@@ -233,7 +233,12 @@ stop reasons. "I was not sure" is not a stop reason; decide and record.
    the duplicate is discovered only in a generated PR, correct it before
    merging; do not bypass its guarded gate. For UI work, require current-head
    screenshots visibly rendered in the PR's `## Validation` section and a
-   recording when practical or a concrete reason for omission.
+   recording when practical or a concrete reason for omission. Look at every
+   capture yourself before publishing it, enlarged where detail matters, and
+   treat it as a review: captures caught layout defects that every test passed
+   over, twice (codexbar#205, #214). When the issue states a measurable visual
+   criterion, such as a contrast ratio, measure it from the capture with a
+   script and put the numbers in the PR.
 4. Verify done. GitHub must report each merged pull request `MERGED`. For an
    issue-backed item, GitHub must also report the issue closed. For UI work,
    inspect the rendered PR and verify its current-head screenshots are visible;
