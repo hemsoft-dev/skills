@@ -1,6 +1,6 @@
 ---
 name: merge-mission
-description: V1.54 - Resolve every open issue and pull request in a repository, processing existing PRs first and then oldest-first issues. Runs as a persistent goal with current-head review, validation, guarded merges, delivery verification, cleanup, and one-time notifications. Repairs CI and delivery failures, preserves evidence and recovery state, proves remaining hard blocks, and records retrospective lessons. Manual invocation only.
+description: V1.55 - Resolve every open issue and pull request in a repository, processing existing PRs first and then oldest-first issues. Runs as a persistent goal with current-head review, validation, guarded merges, delivery verification, cleanup, and one-time notifications. Repairs CI and delivery failures, preserves evidence and recovery state, proves remaining hard blocks, and records retrospective lessons. Manual invocation only.
 compatibility: Requires git, GitHub CLI, network access, permission to push branches and open pull requests, mergepr on PATH, the issue-to-pr, process-pr, repo-cleanup, and slack-dm skills, and a runtime that honors the /goal director. Without /goal, the state file alone carries resumption.
 ---
 
@@ -554,6 +554,14 @@ force. It overrides them in these ways only, for this run:
   If the user directly invokes `process-pr` (or asks for a review) on a mission
   pull request, this shortcut no longer applies to it: request one review of the
   current head and merge only after it comes back clean.
+  This shortcut is the only case where the agent resolves a thread without a
+  clean review of the current head, so use it deliberately. Each thread first
+  gets a reply citing its fixing commit, or the reason it was declined. Then
+  resolve it, put the review provenance in the pull request's risks section,
+  and let the mechanical thread gate pass. When a reviewer keeps raising new
+  P2s on every round and it is unclear whether the user wants the shortcut,
+  ask once with this as the recommended option; the user chose it for
+  codexbar#216 after seven P2-only Codex rounds (2026-10-19).
 
 ## Learning from every run
 
