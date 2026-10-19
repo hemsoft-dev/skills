@@ -57,6 +57,10 @@ policy supersedes that recommendation. Record any owner exceptions here.
 
 ### Owner exceptions
 
+- `hemsoft-dev/*`: Codex is the only AI reviewer. Copilot never reviews there
+  (Franz, 2026-10-19: no seats, rulesets removed); never request `@copilot` and
+  never wait for it. Reviewer consent is the Codex clean review of the current
+  head plus zero unresolved review threads.
 - `relias-engineering/*`: GitHub Copilot PR Review is required for every current
   head. Connected Codex is not required unless the user explicitly requests it
   for the specific pull request.
