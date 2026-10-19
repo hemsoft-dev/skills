@@ -1,6 +1,6 @@
 ---
 name: merge-mission
-description: V1.51 - Resolve every open issue and pull request in a repository, processing existing PRs first and then oldest-first issues. Runs as a persistent goal with current-head review, validation, guarded merges, delivery verification, cleanup, and one-time notifications. Repairs CI and delivery failures, preserves evidence and recovery state, proves remaining hard blocks, and records retrospective lessons. Manual invocation only.
+description: V1.52 - Resolve every open issue and pull request in a repository, processing existing PRs first and then oldest-first issues. Runs as a persistent goal with current-head review, validation, guarded merges, delivery verification, cleanup, and one-time notifications. Repairs CI and delivery failures, preserves evidence and recovery state, proves remaining hard blocks, and records retrospective lessons. Manual invocation only.
 compatibility: Requires git, GitHub CLI, network access, permission to push branches and open pull requests, mergepr on PATH, the issue-to-pr, process-pr, repo-cleanup, and slack-dm skills, and a runtime that honors the /goal director. Without /goal, the state file alone carries resumption.
 ---
 
@@ -215,7 +215,10 @@ stop reasons. "I was not sure" is not a stop reason; decide and record.
    summary comments. A reviewer may update an early comment in place, so the
    latest ordinary post is not proof of silence. Late feedback on an earlier
    head can contain distinct findings; compare full bodies and cited locations
-   before treating anything as a duplicate.
+   before treating anything as a duplicate. A review the reviewer itself
+   reports as failed ("Something went wrong, try again by commenting …") is
+   neither clean nor silence: re-request it once per failure, counted against
+   the retry cap, and treat the earlier findings as the latest word meanwhile.
    Before merging release-bearing work, compare its `Unreleased` notes
    with the automatic release/changelog path, including issue-to-PR links whose
    numbers differ. Reconcile notes that would repeat the generated release
@@ -371,7 +374,13 @@ Once every existing PR is resolved or proven hard-blocked, bounded pipelining
 of oldest-first backlog issues is allowed. A prerequisite repair needed to
 finish an existing PR is part of that PR's work, not a backlog-order bypass.
 Keep at most three queue items in flight, and never two branches that touch
-the same files. A waiting pull request is parked, not finished.
+the same files. A shared test file counts: branches that each append tests at
+the same anchor conflict on every merge, so give each its own section anchor
+or merge them serially. A waiting pull request is parked, not finished.
+A watcher's done-condition must name the head: require the reviewer's summary
+to report the current head completed and at least one check in the rollup.
+"Nothing pending and nothing running" is also true of an empty rollup right
+after a push and of a review that failed, so it proves nothing by itself.
 
 During each CI-wait poll, refresh published review threads as well as checks,
 even after the required reviewer has reported clean. Assess new passive
