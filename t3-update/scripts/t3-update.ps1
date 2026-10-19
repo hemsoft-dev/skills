@@ -6,21 +6,25 @@
     1. Reads the state: installed version, pending update, patch status, whether the running T3 predates
        the patched server.asar, and the watcher task.
     2. Applies t3-waiting-patch.ps1 (same folder).
-    3. Restarts T3 when it runs stale code, when a downloaded update is waiting to install, or with -Force.
+    3. Brings the remote T3 CLI servers (-Remote, default mini and air) to the same version as this desktop
+       app (or the update waiting to install), through remote-server.sh over SSH. A remote with running
+       threads is skipped unless -AllowBusy. This runs before any local restart.
+    4. Restarts T3 when it runs stale code, when a downloaded update is waiting to install, or with -Force.
        It launches T3 when it isn't running.
 
     The restart runs in a one-shot scheduled task ("T3 Update Worker"), outside T3's process tree. A caller
     inside a T3 thread dies with T3, but the worker still finishes: it closes T3 gracefully (forced after
     30 s), waits for the updater's installer, patches, relaunches T3 through Explorer and writes a result file.
 
-    Exit codes: 0 done, 2 patch rule not found in this build, 3 restart failed or timed out.
+    Exit codes: 0 done, 2 patch rule not found in this build, 3 local restart failed or timed out,
+    4 a remote update failed (it rolls back), 5 a remote was skipped because threads are running there.
 
 .EXAMPLE
     pwsh -NoProfile -File t3-update.ps1 -Status
 .EXAMPLE
     pwsh -NoProfile -File t3-update.ps1
 .EXAMPLE
-    pwsh -NoProfile -File t3-update.ps1 -Force
+    pwsh -NoProfile -File t3-update.ps1 -Remote mini -AllowBusy
 #>
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '')]
 [CmdletBinding(PositionalBinding = $false)]
@@ -28,6 +32,9 @@ param(
     [switch]$Status,
     [switch]$Force,
     [switch]$NoRestart,
+    [string[]]$Remote = @('mini', 'air'),
+    [switch]$NoRemote,
+    [switch]$AllowBusy,
     [switch]$Worker,
     [string]$RunId,
     [int]$TimeoutSeconds = 600
@@ -37,6 +44,7 @@ $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 
 $PatchScript = Join-Path $PSScriptRoot 't3-waiting-patch.ps1'
+$RemoteScript = Join-Path $PSScriptRoot 'remote-server.sh'
 $InstallDir = Join-Path $env:LOCALAPPDATA 'Programs\t3code'
 $Exe = Join-Path $InstallDir 'T3 Code (Nightly).exe'
 $Asar = Join-Path $InstallDir 'resources\server.asar'
@@ -206,6 +214,80 @@ function Submit-Worker {
     $id
 }
 
+# Sends remote-server.sh over SSH stdin with LF line endings (a Windows checkout may hold CRLF) and
+# parses its key=value output.
+function Invoke-RemoteServer([string]$HostName, [string[]]$Arguments, [int]$Seconds) {
+    $script = (Get-Content -Raw -LiteralPath $RemoteScript) -replace "`r`n", "`n"
+    $psi = [Diagnostics.ProcessStartInfo]::new((Get-Command ssh).Source)
+    foreach ($a in @('-o', 'BatchMode=yes', '-o', 'ConnectTimeout=10', $HostName, "bash -s -- $($Arguments -join ' ')")) {
+        $psi.ArgumentList.Add($a)
+    }
+    $psi.UseShellExecute = $false
+    $psi.CreateNoWindow = $true
+    $psi.RedirectStandardInput = $true
+    $psi.RedirectStandardOutput = $true
+    $psi.RedirectStandardError = $true
+    $psi.StandardInputEncoding = [Text.UTF8Encoding]::new($false)
+    $process = [Diagnostics.Process]::Start($psi)
+    $stdout = $process.StandardOutput.ReadToEndAsync()
+    $stderr = $process.StandardError.ReadToEndAsync()
+    $process.StandardInput.Write($script)
+    $process.StandardInput.Close()
+    if (-not $process.WaitForExit($Seconds * 1000)) {
+        $process.Kill($true)
+        return [pscustomobject]@{ ExitCode = 124; Values = @{}; Error = "timed out after $Seconds s" }
+    }
+    $values = @{}
+    foreach ($line in ($stdout.Result -split "`n")) {
+        if ($line -match '^([a-z_]+)=(.*)$') { $values[$Matches[1]] = $Matches[2].TrimEnd("`r") }
+    }
+    [pscustomobject]@{ ExitCode = $process.ExitCode; Values = $values; Error = $stderr.Result.Trim() }
+}
+
+# Nightly versions compare by base version, then date, then build number.
+function ConvertTo-VersionKey([string]$Version) {
+    if ($Version -match '^(\d+)\.(\d+)\.(\d+)-nightly\.(\d{8})\.(\d+)$') {
+        return '{0:D4}.{1:D4}.{2:D4}.{3}.{4:D8}' -f [int]$Matches[1], [int]$Matches[2], [int]$Matches[3], $Matches[4], [int]$Matches[5]
+    }
+    $null
+}
+
+# Returns 0 when every reachable remote matches the target, 4 when an update failed, 5 when one was skipped
+# as busy. Unreachable machines (asleep, offline) are reported but don't change the exit code.
+function Sync-Remote([string]$Target, [bool]$ReportOnly) {
+    $failed = $false
+    $skipped = $false
+    foreach ($name in $Remote) {
+        $status = Invoke-RemoteServer $name @('status') 90
+        if ($status.ExitCode -in 124, 255) { Write-Host "Remote ${name}: unreachable ($($status.Error -split "`n" | Select-Object -Last 1))"; continue }
+        $v = $status.Values
+        if ($status.ExitCode -ne 0) { Write-Host "Remote ${name}: not checked ($($v['error']))"; $failed = $true; continue }
+        $running = $v['running_version']
+        $busy = if ($v['active_runs'] -and $v['active_runs'] -ne '0') { "$($v['active_runs']) running thread(s): $($v['active_titles'])" } else { $null }
+        $runningKey = ConvertTo-VersionKey $running
+        $targetKey = ConvertTo-VersionKey $Target
+        if ($running -eq $Target -and $v['service_version'] -eq $Target) { Write-Host "Remote ${name}: $running, current"; continue }
+        if ($runningKey -and $targetKey -and $runningKey -gt $targetKey) { Write-Host "Remote ${name}: $running, newer than $Target; left alone"; continue }
+        if ($ReportOnly) {
+            Write-Host "Remote ${name}: $(if ($running) { $running } else { 'not responding' }), behind $Target$(if ($busy) { "; $busy" })"
+            continue
+        }
+        $arguments = @('update', $Target) + $(if ($AllowBusy) { @('--allow-busy') } else { @() })
+        Write-Host "Remote ${name}: updating $running -> $Target ..."
+        $result = Invoke-RemoteServer $name $arguments 1200
+        $r = $result.Values
+        switch ($result.ExitCode) {
+            0 { Write-Host "Remote ${name}: $($r['result']) to $Target" }
+            10 { Write-Host "Remote ${name}: skipped, $busy. Re-run with -Remote $name -AllowBusy to interrupt them."; $skipped = $true }
+            default {
+                Write-Host "Remote ${name}: update failed ($($r['error'])); $($r['result'])"
+                $failed = $true
+            }
+        }
+    }
+    if ($failed) { 4 } elseif ($skipped) { 5 } else { 0 }
+}
+
 if ($Worker) {
     Invoke-Worker
     exit 0
@@ -213,7 +295,11 @@ if ($Worker) {
 
 $before = Get-T3State
 Write-Host (Format-T3State $before)
-if ($Status) { exit 0 }
+$target = if ($before.PendingUpdate) { $before.PendingUpdate } else { $before.Version }
+if ($Status) {
+    if (-not $NoRemote) { $null = Sync-Remote $target $true }
+    exit 0
+}
 
 if ($before.WatchTask -eq 'missing') {
     $null = Invoke-PatchScript @('-InstallTask')
@@ -228,6 +314,10 @@ Write-Host "Patch: $(($patch.Output | Select-Object -Last 1))"
 if ($patch.ExitCode -ne 0 -and $patch.ExitCode -ne 2) { throw "t3-waiting-patch failed: $($patch.Output -join ' ')" }
 $after = Get-T3State
 
+# Remotes first: a local restart ends this process when it runs inside a T3 thread.
+$remoteCode = if ($NoRemote) { 0 } else { Sync-Remote $target $false }
+$patchCode = if ($patch.ExitCode -eq 2) { 2 } else { $remoteCode }
+
 $reasons = @()
 if ($Force) { $reasons += 'forced' }
 if ($after.PendingUpdate) { $reasons += "update $($after.PendingUpdate) waiting to install" }
@@ -236,11 +326,11 @@ if (-not $after.Running) { $reasons += 'T3 is not running' }
 
 if (-not $reasons.Count) {
     Write-Host 'T3 already runs the patched build; no restart needed.'
-    exit ([int]($patch.ExitCode -eq 2) * 2)
+    exit $patchCode
 }
 if ($NoRestart) {
     Write-Host "Restart needed ($($reasons -join '; ')), skipped because of -NoRestart."
-    exit ([int]($patch.ExitCode -eq 2) * 2)
+    exit $patchCode
 }
 
 $id = Submit-Worker
@@ -256,4 +346,4 @@ if (-not (Test-Path $resultPath)) {
 $result = Get-Content -Raw $resultPath | ConvertFrom-Json
 $result.steps | ForEach-Object { Write-Host "  $_" }
 Write-Host $result.state
-exit $result.exitCode
+exit $(if ($result.exitCode -ne 0) { $result.exitCode } else { $remoteCode })
