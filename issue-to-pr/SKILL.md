@@ -1,6 +1,6 @@
 ---
 name: issue-to-pr
-description: V1.15 - Turns one specified GitHub issue into a validated pull request with concise current-head evidence, including CLI-uploaded UI screenshots when applicable, then follows the shared PR reviewer policy for current-head review. Optional merge, cleanup, and Slack notification require direct user approval.
+description: V1.16 - Turns one specified GitHub issue into a validated pull request with concise current-head evidence, including CLI-uploaded UI screenshots when applicable, then follows the shared PR reviewer policy for current-head review. Optional merge, cleanup, and Slack notification require direct user approval.
 compatibility: Requires git, GitHub CLI, network access, and permission to push a branch and create a pull request in the target repository. Optional approved merge and cleanup requires mergepr on PATH and the slack-dm skill.
 ---
 
@@ -247,8 +247,10 @@ Repeat until the current head's required review is clean, however many rounds
 it takes, and never ask whether to stop after N rounds. Do not create an
 infinite reviewer loop on one head: after one valid request for an unchanged
 head, observe the resulting run instead of repeatedly requesting it. The shared
-policy's "Hung reviews" section allows up to 3 re-requests for a hung review,
-at most one per 60 minutes, without asking. Under
+policy's "Hung reviews" section allows one re-request for a hung review; if
+it stays hung, or Codex is unavailable, run its "Cross-model review fallback"
+without asking. A clean cross-model review of the current head counts as its
+review. Under
 T3 Code, wait as its "Waiting under T3 Code" section says: `watch_pull_request`
 and end the turn for required checks, reviews and conflicts, and bounded in-turn
 polling for workflow runs that aren't required checks. If a reviewer remains

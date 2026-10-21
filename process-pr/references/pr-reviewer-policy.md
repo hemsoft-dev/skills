@@ -60,7 +60,8 @@ policy supersedes that recommendation. Record any owner exceptions here.
 - `hemsoft-dev/*`: Codex is the only AI reviewer. Copilot never reviews there
   (Franz, 2026-10-19: no seats, rulesets removed); never request `@copilot` and
   never wait for it. Reviewer consent is the Codex clean review of the current
-  head plus zero unresolved review threads.
+  head, or a clean cross-model review of it under "Cross-model review fallback"
+  below, plus zero unresolved review threads.
 - `relias-engineering/*`: GitHub Copilot PR Review is required for every current
   head. Connected Codex is not required unless the user explicitly requests it
   for the specific pull request.
@@ -72,6 +73,8 @@ from the selected required AI reviewer sufficient for the AI-review gate.
 Do not invent a formal human-approval requirement or ask for another approval
 solely because the AI reviewer uses a comment or thumbs-up instead of GitHub's
 `APPROVED` review state. This rule applies to all composing PR workflows.
+Where Codex is the required reviewer, a clean cross-model review of the current
+head under "Cross-model review fallback" below satisfies the same gate.
 
 Before deciding readiness, record whether formal approvals are required by
 applicable instructions, explicit user direction, effective base-branch
@@ -169,7 +172,7 @@ replace it.
 ## Wait and failure limits
 
 - Make at most one request per required reviewer per unchanged head, plus the
-  re-requests for a hung review under "Hung reviews" below. A composing
+  one re-request for a hung review under "Hung reviews" below. A composing
   workflow must reuse the same request and evidence rather than start another
   review loop.
 - Outside T3 Code, poll required reviews and checks at 60-second intervals,
@@ -178,7 +181,9 @@ replace it.
   evidence. This is a local wait budget, not a provider SLA or proof of failure.
   Under T3, follow "Waiting under T3 Code" below instead.
 - On explicit quota, plan, permission, or configuration failure, record it
-  once and stop attempts. Do not try the passive products as fallbacks.
+  once and stop attempts. Do not try the passive products as fallbacks. When
+  the failing reviewer is Codex, go straight to "Cross-model review fallback"
+  below.
   Treat messages such as "create a Codex account and connect to github" as
   terminal access refusals for that requester, not queued reviews. Attribute
   refusals to the request and head; an old refusal does not invalidate a later
@@ -192,7 +197,8 @@ replace it.
   the request so a resumed run checks it instead of posting again. Retry an
   unchanged head only after explicit user direction, a hung review under
   "Hung reviews" below, or evidence that the blocking condition changed and the
-  prior request is no longer active.
+  prior request is no longer active. A hung or unavailable Codex review goes to
+  "Cross-model review fallback" below instead of staying blocked.
 - Every push requires fresh review evidence for the new head. Do not create
   empty commits, base updates, or label changes merely to wake a reviewer.
 - Assess actionable findings from every source, including passive products.
@@ -214,7 +220,8 @@ replace it.
 For automated callers, persist request URL, requester, head SHA, start time,
 and terminal status across jobs and reruns. Use one wait owner per PR and head;
 a duplicate job must reuse the original request and deadline. Explicit refusal
-must end the gate immediately with the response URL and required access repair.
+must end the gate immediately with the response URL and required access repair;
+for Codex, the cross-model fallback below then supplies the review.
 Never turn refusal or timeout into success. A skill edit does not repair a
 repository's implemented gate; report any conflicting automation separately.
 
@@ -250,16 +257,102 @@ re-read the PR state, reviews and the runs you depend on before acting.
 
 ## Hung reviews
 
-A review is hung when the reviewer has shown "Running" on the unchanged head
-for about 1 hour. For Codex, read this from its `codex-review-state` summary
-comment. Check for it whenever you are awake and before you end a turn on a
-watch. On a hung review, re-request it (`@codex review` for Codex) without
-asking: up to 3 re-requests per unchanged head, at most one per 60 minutes.
-Every `@codex review` posted for that head after the first request counts
-toward the 3, including any the stall check posted. Only when the third
-re-request has gone 60 minutes with no result, report the PR blocked to the
-user as a question, with the head, every request link and the elapsed time,
-and don't wait on it again.
+A review is hung when it has no result about 60 minutes after the request on
+the unchanged head: still "Running", or no response at all. For Codex, read
+this from its `codex-review-state` summary comment. Check for it whenever you
+are awake and before you end a turn on a watch. On a hung review, re-request it
+once for that head (`@codex review` for Codex), without asking. A
+`@codex review` already posted for that head after the first request counts as
+that one re-request, including one posted by the stall check. If the review is
+still hung about 60 minutes after the re-request, run "Cross-model review
+fallback" below right away. Don't ask the user and don't report the PR
+blocked. Franz replaced the "up to 3 re-requests" rule with this on 2026-10-21:
+"if the Codex review isn't working we can always revert to using an
+adversarial internal review."
+
+## Cross-model review fallback
+
+Use this where Codex is the required reviewer, as soon as the Codex review of
+the current head is hung after its one re-request, or Codex review is
+unavailable for it (quota, plan, access or configuration refusal, or the
+integration is down). Don't ask first. It never replaces a required Copilot
+review or a formal human approval.
+
+1. **Pick the reviewer.** It runs on the other provider from the one whose
+   agent wrote the PR's changes: a Claude-written PR gets Codex `gpt-6.1-sol`,
+   and a Codex-written PR gets Claude `claude-opus-5-5`. When both wrote
+   commits, go by who wrote the current head's latest commits. Read the live
+   provider instance and model IDs, plus the reasoning option, from
+   `orchestrator_capabilities`. Use the best model only, at `xhigh` reasoning
+   (`reasoningEffort` for Codex, `effort` for Claude). Never downgrade to a
+   smaller or older model. If that model isn't in the catalog or can't run a
+   child task, report the PR blocked with that reason.
+2. **Launch it.** Call `delegate_task` with `role: "review"`, `mode: "async"`,
+   that `target`, a title like `GPT-6.1-Sol cross-model review of PR #<n> at
+   <short sha> (posts to PR)`, and a `clientRequestId` that names the repo, PR,
+   short head and round (`<repo>-pr<n>-xmodel-<sha7>-r<round>`), stable across
+   retries of that round. Leave `isolation` shared when the child only reads
+   with `git show` and `git diff`; use `worktree` if it needs to build or test.
+   The child's completion wakes your thread, so end the turn (on the PR watch)
+   instead of polling it. Outside T3 Code, with no `delegate_task`, report the
+   PR blocked with the hung request links instead.
+3. **Brief it.** The task prompt must be self-contained (the child gets no
+   history):
+   - repository, PR number and title, linked issue, base SHA, full head SHA,
+     and the local checkout path; tell it to confirm the head with
+     `gh pr view <n> --json headRefOid` and post nothing if it moved;
+   - "You are the required AI reviewer for this PR, standing in for connected
+     Codex, whose review of this head is hung or unavailable. Be adversarial
+     and evidence-based." Use the `audit-pr` skill at the fixed head and base;
+     its contract, matrix and finding rules apply. Each finding is P1, P2 or P3
+     (P0 for a stop-delivery defect) with a path, line and proof;
+   - a scope list of what to check: the specific risks of this change, and
+     whether the PR body's claims are true;
+   - for later rounds, the earlier findings, the fixing commits and replies, and
+     any objection still open, so it rechecks each fix;
+   - read-only rules: no edits, commits, checkouts, branch switches, worktrees,
+     resets or stashes in the shared checkout; no resolving threads, approving
+     or merging;
+   - publication, below, as an explicit request to post (audit-pr posts only
+     when asked), and a final answer with the findings or "clean" plus the URL
+     and id of what it posted.
+4. **Publication.** The child posts as `HemSoft` (verify `gh api user --jq
+   .login`) after refreshing the head:
+   - Findings: one PR review, event `COMMENT`, `commit_id` = full head SHA,
+     posted with `gh api -X POST repos/<owner>/<repo>/pulls/<n>/reviews --input
+     <json>`. One inline comment per finding on the exact RIGHT-side line,
+     starting `**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  <title>**`,
+     a blank line, then one short paragraph with trigger, impact and fix (P0
+     red, P1 orange, P3 lightgrey). A finding with no valid diff line goes in
+     the review body. Body: `### 💡 Cross-model review (GPT-6.1-Sol via T3)`,
+     then `Reviewed head <full sha>. GPT-6.1-Sol (xhigh) is reviewing in place
+     of connected Codex, whose review of this head is hung or unavailable.` and
+     a one-line summary.
+   - Clean: one PR comment headed `### Cross-model review (GPT-6.1-Sol via T3)`
+     with the same reviewed-head sentence, `Didn't find any major issues. 🎉`,
+     and one line on what it verified and which commands it ran.
+   - Name the actual model in both (`Claude Opus 5.5` for a Claude reviewer),
+     read back what was posted, and confirm the head it names.
+5. **Use the result.** A clean cross-model review that names the current head
+   counts as that head's review for readiness and merge, the same as a clean
+   Codex review. Findings are review findings: fix every meaningful one (only an
+   ultra-nitpick may be declined, with the reason on its thread), push, reply
+   on each thread with the fixing commit, and run a new round on the new head.
+   Request Codex for it as usual, unless Codex is still unavailable. If Codex
+   hung on this PR's earlier head and has no result 60 minutes after this
+   head's request, skip the re-request and run this fallback again. Repeat until
+   a current-head review comes back clean.
+   Resolve a finding's thread only after a clean review names the fixed head.
+   Codex findings that arrive later on the same head are findings like any
+   others.
+6. **Record it.** Keep the task ID, child thread, model, reviewed head and
+   posted URL with the PR's review evidence, and report the review as
+   `cross-model (<model> via T3)` wherever you report the Codex review.
+
+The codexbar-ios sessions on air used this procedure first, as a "Codex
+substitute" while Codex review quota was exhausted (hemsoft-dev/codexbar-ios
+[#487](https://github.com/hemsoft-dev/codexbar-ios/pull/487) and
+[#489](https://github.com/hemsoft-dev/codexbar-ios/pull/489), 2026-10-18).
 
 Use [current-head-review-loop.md](current-head-review-loop.md) for pagination,
 thread decisions, and final evidence. Product changes belong only in this file.

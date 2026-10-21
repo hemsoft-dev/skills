@@ -1,6 +1,6 @@
 ---
 name: process-pr
-description: V1.18 - Takes one specified existing GitHub pull request to a human-ready state with truthful current-head evidence, including CLI-uploaded UI screenshots when applicable, by following the shared PR reviewer policy and addressing feedback. Merge remains approval-gated by default, but a composing merge skill can supply documented invocation authority and owns the final Slack notification when it owns the merge.
+description: V1.19 - Takes one specified existing GitHub pull request to a human-ready state with truthful current-head evidence, including CLI-uploaded UI screenshots when applicable, by following the shared PR reviewer policy and addressing feedback. Merge remains approval-gated by default, but a composing merge skill can supply documented invocation authority and owns the final Slack notification when it owns the merge.
 compatibility: Requires git, GitHub CLI with the gh-x extension, GitHub network access, permission to push to the PR branch, and permission to request the reviewers selected by the shared policy. Optional authorized merge and cleanup requires mergepr on PATH and the slack-dm skill.
 ---
 
@@ -109,8 +109,10 @@ Do not discover a roster from recent PRs or probe optional product availability.
 ### 4. Request and wait within the shared limits
 
 Follow the shared policy's request, identity, deduplication, refusal, and wait
-rules. Under T3 Code, follow its "Waiting under T3 Code" and "Hung reviews"
-sections: wait for required checks, reviews and conflicts with
+rules. Under T3 Code, follow its "Waiting under T3 Code", "Hung reviews" and
+"Cross-model review fallback" sections: a hung Codex review gets one
+re-request, then a cross-model review posted to the PR, without asking. Wait
+for required checks, reviews and conflicts with
 `watch_pull_request` and end the turn, and poll workflow runs that aren't
 required checks in-turn up to the stated cap. Reuse current-head requests across
 composing workflows. Record each request URL, requester, head, start time, and

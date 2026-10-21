@@ -1,6 +1,6 @@
 ---
 name: merge-mission
-description: V1.70 - Resolve every open issue and pull request in a repository, processing existing PRs first and then oldest-first issues. Runs as a persistent goal with current-head review, validation, guarded merges, delivery verification, cleanup, and one-time notifications. Repairs CI and delivery failures, preserves evidence and recovery state, proves remaining hard blocks, and records retrospective lessons. Manual invocation only.
+description: V1.72 - Resolve every open issue and pull request in a repository, processing existing PRs first and then oldest-first issues. Runs as a persistent goal with current-head review, validation, guarded merges, delivery verification, cleanup, and one-time notifications. Repairs CI and delivery failures, preserves evidence and recovery state, proves remaining hard blocks, and records retrospective lessons. Manual invocation only.
 compatibility: Requires git, GitHub CLI, network access, permission to push branches and open pull requests, mergepr on PATH, the issue-to-pr, process-pr, repo-cleanup, and slack-dm skills, and a runtime that honors the /goal director. Without /goal, the state file alone carries resumption.
 ---
 
@@ -269,6 +269,12 @@ stop reasons. "I was not sure" is not a stop reason; decide and record.
    If an automatic review is running or complete for the current head, reuse it
    and record its receipt. Persist the head-specific request decision before any
    later polling loop can issue another trigger.
+   If the user supplies a mission-specific hung-review retry limit or cadence,
+   preserve that exact direction in mission state and use it without asking
+   again. Track accepted retries by PR and full head SHA, including requests
+   from other agents, with URLs and times. Reconcile an uncertain send before
+   another request. Do not turn a mission exception into a global reviewer
+   policy change or relax the current-head clean-review gate.
    Poll the complete review comments, reviews and threads, including edited
    summary comments. A reviewer may update an early comment in place, so the
    latest ordinary post is not proof of silence. Late feedback on an earlier
@@ -382,9 +388,11 @@ For every blocker, climb in order:
    one target can link another branch's newer crate and pass or fail on code the
    branch doesn't contain (codexbar#235/#236).
 3. Bound the retries. Cap mechanical retries at three. Never request a review
-   again for an unchanged head, except once for a failed review (above) or up
-   to 3 times, an hour apart, for a hung one (the shared policy's "Hung
-   reviews"). Respect the shared policy's
+   again for an unchanged head, except once for a failed review (above) or
+   once for a hung one (the shared policy's "Hung reviews"). A Codex review
+   still hung after that, or unavailable, goes to the shared policy's
+   "Cross-model review fallback" without asking; a clean cross-model review of
+   the current head counts as its review. Respect the shared policy's
    wait deadlines. Review rounds have no cap: keep fixing and requesting a
    review of each new head until the current head's review is clean, however
    many rounds it takes (Franz, 2026-10-21). Never merge without that clean
@@ -457,7 +465,8 @@ says. For required checks, reviews and comments from other accounts, and
 conflicts, call `watch_pull_request` and end the turn. That is a watch
 checkpoint, not a stop; keep the mission goal active. Poll workflow runs that
 aren't required checks in-turn up to the policy's cap, and handle a review
-stuck on "Running" per its "Hung reviews" section. Don't start a timer,
+stuck on "Running" per its "Hung reviews" and "Cross-model review fallback"
+sections. Don't start a timer,
 background watcher or polling loop alongside a watch. Your own comments don't
 wake it; the Chief's stall check wakes a stalled watch. On waking, re-read the
 PR state, reviews and the runs you depend on before acting.
