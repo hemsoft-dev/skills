@@ -172,12 +172,18 @@ BACKUP="$BASE/t3-update-backup"
 mkdir -p "$BACKUP"
 SAVED="$BACKUP/$(basename "$DEF").$SERVICE_VERSION"
 cp "$DEF" "$SAVED"
+REPOINTED=1
 if [ "$OS" = macos ]; then
-  plutil -replace ProgramArguments.0 -string "$DIR/t3" "$DEF" && plutil -lint "$DEF" >/dev/null
+  # `plutil -replace` on an array index inserts instead of replacing, which left the old binary as the
+  # first argument of `serve` and rolled back every update. Remove, insert, and check the count held.
+  ARGS=$(plutil -extract ProgramArguments raw -o - "$DEF")
+  { plutil -remove ProgramArguments.0 "$DEF" && plutil -insert ProgramArguments.0 -string "$DIR/t3" "$DEF" &&
+    [ "$(plutil -extract ProgramArguments raw -o - "$DEF")" = "$ARGS" ] && plutil -lint "$DEF" >/dev/null; } ||
+    REPOINTED=0
 else
   sed -i "s#/runtime/versions/$SERVICE_VERSION/t3 #/runtime/versions/$TARGET/t3 #" "$DEF"
 fi
-if [ "$(defined_binary)" != "$DIR/t3" ]; then
+if [ $REPOINTED -eq 0 ] || [ "$(defined_binary)" != "$DIR/t3" ]; then
   cp "$SAVED" "$DEF"
   echo "error=could not repoint $DEF"
   exit 3

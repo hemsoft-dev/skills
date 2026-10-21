@@ -1,6 +1,6 @@
 ---
 name: t3-update
-description: "V1.1 - Commands: Update, Status. After a T3 Code nightly update on Home, re-applies the local Waiting patch (threads waiting on a background shell command show Waiting), brings the remote T3 servers on mini and air to the same version, and restarts local T3 only when it is stale or an update is pending."
+description: "V1.2 - Commands: Update, Status. After a T3 Code nightly update on Home, re-applies the local Waiting patch (threads waiting on a background shell command show Waiting), brings the remote T3 servers on mini and air to the same version, and restarts local T3 only when it is stale or an update is pending."
 disable-model-invocation: true
 compatibility: Windows only (Home). Requires PowerShell 7 and the T3 Code Nightly desktop install under %LOCALAPPDATA%\Programs\t3code.
 ---
