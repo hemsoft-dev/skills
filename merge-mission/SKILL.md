@@ -1,6 +1,6 @@
 ---
 name: merge-mission
-description: V1.64 - Resolve every open issue and pull request in a repository, processing existing PRs first and then oldest-first issues. Runs as a persistent goal with current-head review, validation, guarded merges, delivery verification, cleanup, and one-time notifications. Repairs CI and delivery failures, preserves evidence and recovery state, proves remaining hard blocks, and records retrospective lessons. Manual invocation only.
+description: V1.65 - Resolve every open issue and pull request in a repository, processing existing PRs first and then oldest-first issues. Runs as a persistent goal with current-head review, validation, guarded merges, delivery verification, cleanup, and one-time notifications. Repairs CI and delivery failures, preserves evidence and recovery state, proves remaining hard blocks, and records retrospective lessons. Manual invocation only.
 compatibility: Requires git, GitHub CLI, network access, permission to push branches and open pull requests, mergepr on PATH, the issue-to-pr, process-pr, repo-cleanup, and slack-dm skills, and a runtime that honors the /goal director. Without /goal, the state file alone carries resumption.
 ---
 
@@ -557,6 +557,16 @@ errors, fall back to direct `gh` queries and note that in the state file.
   on both sides of that boundary and any supported compatibility mode. Run real
   isolated hosts and assert their versions; changing a version variable cannot
   prove runtime behavior. Preserve separate harness and production prerequisites.
+- Keep expected recurring subscription charges distinct from metered usage or
+  overage. Preserve exact API totals and classify known subscription SKUs before
+  raising missing-cap alerts. When a control is owner-confirmed but unavailable
+  through the API, label explicit host configuration with its source; that
+  configuration must not hide observed unexpected usage charges.
+- For hub-and-agent features, delivery covers every in-scope online agent, its
+  required producer version, and its configured input list. Inventory these
+  before rollout; a deployed hub with unsupported agent endpoints is unfinished
+  delivery. Respect remote UI exclusions while updating headless services, and
+  compare every configured agent row with the hub.
 - For upstream compatibility or presentation parity, verify a review's proposed
   behavior against the pinned upstream implementation and equivalent inputs
   before changing semantics. A generic recommendation that would break the
