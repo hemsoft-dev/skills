@@ -48,6 +48,18 @@ if sudo test -e "${install_dir}/.runner"; then
   echo "${install_dir} is already configured for ${existing:-an unknown repository}; remove that runner first" >&2
   exit 2
 fi
+# Any existing tree may have been written by a runner account; root runs the
+# archive's installer from this directory, so it must be created fresh.
+if sudo test -e "${install_dir}"; then
+  echo "${install_dir} already exists; unregister removes it, so remove it before registering" >&2
+  exit 2
+fi
+# Dots and hyphens make owner, repo and runner name ambiguous inside a unit
+# name; refuse one that another runner already uses.
+if sudo test -e "/etc/systemd/system/${unit}" || sudo grep -qxF -- "${unit}" "${records}"/units/* 2>/dev/null; then
+  echo "unit ${unit} is already in use" >&2
+  exit 2
+fi
 # The account name is derived and truncated, so two repositories could map to
 # the same one. Root records the repository each account was created for, in
 # a directory the account cannot write, and an account owned by another

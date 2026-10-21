@@ -165,13 +165,15 @@ A runner that needs the GH AW Docker runtime gets it after registration, for
 its own account and unit:
 
 ```bash
-# From mini: stream the installed script into the guest; it runs there.
+# From mini: stream the installed script into the guest; it runs there, for
+# the account and unit the helper recorded (never a hand-typed account name).
 script="$HOME/.agents/skills/mini-github-runner/scripts/prepare-gh-aw-runtime.sh"
 test -s "$script" || { echo "missing $script" >&2; exit 1; }
 ssh -o BatchMode=yes -o StrictHostKeyChecking=yes \
   -o UserKnownHostsFile="$HOME/.ssh/github-runner-01_known_hosts" \
   -i "$HOME/.ssh/github-runner-01_ed25519" runner-admin@"$ip" \
-  'RUNNER_USER=actions-<repo> RUNNER_DIRECTORY=/opt/actions-runner/<repo> bash -s' < "$script"
+  'd=/opt/actions-runner/<repo>; u=$(sudo stat -c %U "$d"); s=$(sudo cat "/etc/actions-runner/units/${d##*/}")
+   RUNNER_USER="$u" RUNNER_DIRECTORY="$d" RUNNER_SERVICE="$s" bash -s' < "$script"
 ```
 
 It adds that account to the guest-local `docker` group and restarts the
@@ -350,29 +352,44 @@ same shell. Removing the VM, volumes, key, or backups is a separate
 destructive action and needs an exact user request.
 
 `config.sh remove` deletes both the GitHub registration and the local
-configuration (`.runner`, credentials), so the helper can register the
-directory again later. Stop the unit first, then stream a removal token as the
-first stdin line of the guest command, as with registration:
-
-```powershell
-$env:GH_TOKEN = gh auth token --user HemSoft
-gh api -X POST "repos/$repo/actions/runners/remove-token" --jq .token
-```
+configuration, then the runner directory is removed so a later registration
+starts from a fresh, root-created tree. From mini, stream the removal token and
+the guest steps the same way as registration (the guest side validates the
+recorded unit name before any root operation):
 
 ```bash
-# In the guest, with the removal token on stdin:
+set -euo pipefail
+repo=hemsoft-dev/project-manager; runner_dir=/opt/actions-runner/project-manager
+guest=$(cat <<'GUEST'
+set -euo pipefail
 IFS= read -r t; [ -n "$t" ] || exit 2
+runner_dir=$1
+runner_user=$(sudo stat -c %U "$runner_dir")
+record="/etc/actions-runner/units/$(basename "$runner_dir")"
+if sudo test -f "$record"; then runner_service=$(sudo cat "$record")
+else runner_service=$(sudo cat "$runner_dir/.service"); fi
+[[ "$runner_service" =~ ^actions\.runner\.[A-Za-z0-9_.-]+\.service$ ]] ||
+  { echo "refusing unit name: $runner_service" >&2; exit 1; }
 sudo systemctl disable --now "$runner_service"
 ACTIONS_RUNNER_INPUT_TOKEN="$t" sudo --preserve-env=ACTIONS_RUNNER_INPUT_TOKEN -u "$runner_user" \
   bash -c 'cd "$1" && exec ./config.sh remove --unattended' _ "$runner_dir"
 unset t
-sudo rm -f "/etc/systemd/system/$runner_service" "/etc/actions-runner/units/$(basename "$runner_dir")"
+sudo rm -f "/etc/systemd/system/$runner_service" "$record"
 sudo systemctl daemon-reload
+sudo rm -rf --one-file-system "$runner_dir"
+GUEST
+)
+{ gh api -X POST "repos/$repo/actions/runners/remove-token" --jq .token &&
+  printf '%s\n' "$guest"; } |
+  ssh -o BatchMode=yes -o StrictHostKeyChecking=yes \
+    -o UserKnownHostsFile="$HOME/.ssh/github-runner-01_known_hosts" \
+    -i "$HOME/.ssh/github-runner-01_ed25519" runner-admin@"$ip" \
+    "IFS= read -r t; s=\$(cat); [ -n \"\$t\" ] && [ -n \"\$s\" ] || exit 2; printf '%s\\n' \"\$t\" | bash -c \"\$s\" _ $runner_dir"
 ```
 
 If `config.sh remove` cannot reach GitHub, delete the resolved ID instead
-(never a hard-coded one) and then remove the local `.runner`, `.credentials`
-and `.credentials_rsaparams` files:
+(never a hard-coded one), then finish the guest steps after the `config.sh`
+line:
 
 ```powershell
 if (-not $id) { throw "runner $name not found in $repo" }
