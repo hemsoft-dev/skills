@@ -136,13 +136,21 @@ alone, and `config.sh` rejects a configured installation even with
 `config.sh remove` first. For example, from mini:
 
 ```bash
-{ gh api -X POST repos/hemsoft-dev/project-manager/actions/runners/registration-token --jq .token
-  cat scripts/register-repo-runner.sh; } |
+set -o pipefail
+helper="$HOME/.agents/skills/mini-github-runner/scripts/register-repo-runner.sh"
+test -s "$helper" || { echo "missing $helper" >&2; exit 1; }
+{ gh api -X POST repos/hemsoft-dev/project-manager/actions/runners/registration-token --jq .token &&
+  cat "$helper"; } |
   ssh -o BatchMode=yes -o StrictHostKeyChecking=yes \
     -o UserKnownHostsFile="$HOME/.ssh/github-runner-01_known_hosts" \
     -i "$HOME/.ssh/github-runner-01_ed25519" runner-admin@"$ip" \
-    'IFS= read -r t; s=$(cat); printf "%s\n" "$t" | bash -c "$s" _ hemsoft-dev/project-manager mini-github-runner-01-pm mini,project-manager'
+    'IFS= read -r t; s=$(cat); [ -n "$t" ] && [ -n "$s" ] || { echo "token or helper missing" >&2; exit 2; }
+     printf "%s\n" "$t" | bash -c "$s" _ hemsoft-dev/project-manager mini-github-runner-01-pm mini,project-manager'
 ```
+
+The helper path is the installed skill copy, so the example works from any
+directory; both sides refuse an empty token or script instead of running an
+empty program.
 
 `scripts/register-yahtzee-runner.sh` is the original single-repository helper;
 it takes the token from `RUNNER_REGISTRATION_TOKEN` in its own process
