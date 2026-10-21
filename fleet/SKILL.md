@@ -1,6 +1,6 @@
 ---
 name: fleet
-description: "V1.13 - Commands: Connect, Run, Send, Retrieve. Operate the private Tailscale fleet, including browser terminals and the live Herdr dashboard."
+description: "V1.14 - Commands: Connect, Run, Send, Retrieve. Operate the private Tailscale fleet, including browser terminals and the live Herdr dashboard."
 ---
 
 # Fleet
@@ -191,6 +191,32 @@ installation, and stop if it changes during staging. Report installed versions,
 hash parity, and any missing runtime dependencies. Offline peers and host-key
 failures remain pending; keep a named outbound package and report the next step.
 Do not treat sender acceptance as installation proof or bypass host-key checks.
+
+### Edits made on another machine
+
+Mini, Air and Laptop are not Git checkouts, so an edit made there lives only on
+that machine until someone brings it home. Unsynced edits split
+merge-mission into four versions (Home V1.57, Mini V1.63, Air V1.41, GitHub
+V1.52), each missing the others' rules, and the reconciliation cost a full
+session ([chief#21](https://github.com/hemsoft-dev/chief/issues/21)).
+
+- An agent that edits a skill on any machine other than Home must sync the
+  changed files to Home the same day. Send them with Taildrop (or stream them
+  over SSH when Home is reachable), apply them to
+  `C:\Users\User\.agents\skills`, commit and push to `main`, then sync the
+  published version to the fleet as above. When that isn't possible in the
+  session, report the edit to Franz as pending with the machine, files and
+  version, and don't call the work done.
+- Take the next free version number from GitHub `main`, not from the local
+  copy, so two machines never reuse a number. Before editing a non-Home copy,
+  compare its `SKILL.md` hash with GitHub `main`. If it differs, merge GitHub's
+  version first.
+- When copies have diverged anyway, merge by hand against the last common
+  version (find it in `git log` by matching the receiver's text), keep both
+  sides' rules, settle real conflicts in favor of the newer explicit
+  instruction from Franz, and bump the version once.
+- History stays per machine. Don't copy History directories in either
+  direction; record the sync in the History of the machine where it ran.
 
 ## History
 

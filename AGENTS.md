@@ -34,7 +34,7 @@ value very highly:
 
 &#x20; questions (like 20-30 or more) can be exhausting.
 
-\- Before sending any user-facing response, use the `unslop` skill at `C:/Users/User/.agents/skills/unslop/SKILL.md` as the final editing pass. Preserve meaning, technical accuracy, code, commands, citations, and required evidence or formatting. Higher-priority instructions take precedence.
+\- Before sending any user-facing response, use the `unslop` skill at `~/.agents/skills/unslop/SKILL.md` (`C:/Users/User/...` on Windows, `/home/franz/...` on mini, `/Users/home/...` on air) as the final editing pass across all projects and conversations. Funnel every response through it. Preserve meaning, technical accuracy, code, commands, citations, and required evidence or formatting. Higher-priority instructions take precedence.
 
 ## Decision consultation
 

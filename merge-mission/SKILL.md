@@ -1,6 +1,6 @@
 ---
 name: merge-mission
-description: V1.57 - Resolve every open issue and pull request in a repository, processing existing PRs first and then oldest-first issues. Runs as a persistent goal with current-head review, validation, guarded merges, delivery verification, cleanup, and one-time notifications. Repairs CI and delivery failures, preserves evidence and recovery state, proves remaining hard blocks, and records retrospective lessons. Manual invocation only.
+description: V1.64 - Resolve every open issue and pull request in a repository, processing existing PRs first and then oldest-first issues. Runs as a persistent goal with current-head review, validation, guarded merges, delivery verification, cleanup, and one-time notifications. Repairs CI and delivery failures, preserves evidence and recovery state, proves remaining hard blocks, and records retrospective lessons. Manual invocation only.
 compatibility: Requires git, GitHub CLI, network access, permission to push branches and open pull requests, mergepr on PATH, the issue-to-pr, process-pr, repo-cleanup, and slack-dm skills, and a runtime that honors the /goal director. Without /goal, the state file alone carries resumption.
 ---
 
@@ -67,6 +67,13 @@ actions. Keep an owned input device attached for the full app exercise when
 needed, reap it on success and failure, and assert menu/zoom results. Successful
 input-tool exits alone do not prove that the app received the sequence.
 
+When UI evidence uses synthetic fixtures, isolate every local collector's home
+or profile as well as the remote fixture source. Assert that no unrelated real
+records reach the rendered fixture. After changing a fixture phase, wait for its
+specific values through every background cache before capturing it. A visible
+row from the previous phase does not prove readiness. Keep the fixture harness's
+owned processes and bounded readiness probes in the evidence directory.
+
 An explicit user restriction against browser, UI, or desktop automation
 overrides the mission's normal current-head UI evidence requirement. Stop all
 such automation immediately. Preserve already-published evidence, label its
@@ -124,6 +131,13 @@ While the goal is active:
   absorb unrelated goals or take over another session's active ownership. If a
   genuine authority or ownership conflict remains, ask once to edit, pause or
   clear it. That and target resolution are the only mid-run questions.
+- A direct user instruction to continue the mission in this thread resolves
+  the ownership question. Do not ask it again on the same evidence. Preserve
+  the existing queue, files, receipts and one-time request accounting. If an
+  overlapping agent run is still live, use the supported interruption control
+  to establish one writer, verify its terminal state, and continue here. A stale
+  paused goal with no supported resume operation uses this skill's state-file
+  fallback; it is not a reason to stop authorized work.
 
 If the runtime offers no goal director, proceed anyway; the state file is
 the fallback carrier and every rule above applies to it.
@@ -203,8 +217,30 @@ stop reasons. "I was not sure" is not a stop reason; decide and record.
    logs and fix the cause rather than handing back a red or waiting PR. Then use
    the guarded merge gate,
    `mergepr`, cleanup, and notification from `issue-to-pr-merge` phases 3 and
-   4. Read `../process-pr/references/pr-reviewer-policy.md` before reviewer
-   work. For a generated dependency update, update its authoritative source or
+   4. When `mergepr` is not on PATH (Linux hosts), run it as `pwsh ~/bin/mergepr.ps1 <PR>`
+   from the clean primary checkout; it is the same guarded helper. Read `../process-pr/references/pr-reviewer-policy.md` before reviewer
+   work. For protocol or serialized-artifact changes, pair hostile/mutated
+   fixtures with a positive artifact from the actual pinned producer or real
+   transport. Hand-built examples can repeat the consumer's mistaken field or
+   framing assumptions. Use authorized no-auth runs, local transports or fake
+   backends and preserve exact provenance. Never invent a captured artifact or
+   cross a live credential/inference gate to obtain it. If the actual producer
+   cannot run, keep that qualification gap explicit while completing source work.
+   When a review exposes an ingress or transport bypass, enumerate every route
+   using that mechanism and its alternate entry paths before fixing one endpoint.
+   Record mixed transport requirements explicitly in trusted policy. Test each
+   restricted route class through both permitted and denied paths, alongside
+   positive cases for intentionally permitted entry paths. A regression for the
+   first reported endpoint does not prove that sibling routes enforce the same
+   boundary.
+   For machine-readable CLI changes, test every early exit through global
+   option extraction, command flags, positional arguments, acquisition,
+   cancellation and output failure. Put the JSON flag before and after failing
+   arguments; include repeated booleans, `--` boundaries and flags consumed as
+   values. Compare non-JSON terminal bytes with the prior producer on equivalent
+   inputs, including failures. Continuing a scan must not apply terminal state
+   from arguments that the previous parser never reached.
+   For a generated dependency update, update its authoritative source or
    action lock and regenerate with the documented compiler and explicit intended
    action version. Verify metadata and every runtime reference agree, then prove
    a second generation is stable. Do not merge a `uses:`-only edit that the next
@@ -222,6 +258,12 @@ stop reasons. "I was not sure" is not a stop reason; decide and record.
    required up-to-date checks, a conflict, an actionable finding, or a verified
    integration failure calls for it. Keep the head's review and check receipts
    otherwise, and verify delivery on the resulting published main revision.
+   Before a guarded merge whose cleanup deletes the source branch, retarget
+   every open child PR that uses that branch to the intended surviving base.
+   GitHub can close stacked children when their base branch is deleted. Record
+   the old/new bases and preserve child head SHAs. After a squash merge, rebase
+   only the child-owned commit range onto the merged parent; a plain rebase may
+   replay the already-squashed parent and create add/add conflicts.
    Review requests must branch on the refreshed evidence. Do not append an
    unconditional trigger to a command that only prints comments or reactions.
    If an automatic review is running or complete for the current head, reuse it
@@ -339,7 +381,11 @@ For every blocker, climb in order:
    Bound review rounds too. Once a pull request has had two rounds of fixes
    and the latest current-head review raises no P1, fix those findings, record
    the decision in the state file, and merge on green checks without
-   requesting another round. When reading review comments, fetch them all
+   requesting another round. If a required repository check enforces exact-head
+   review without a supported bounded-round exemption, the shortcut cannot make
+   checks green. Preserve that check, record its contract, and request exactly
+   once for each corrected head that the gate needs. Never weaken the check or
+   invent a review receipt. When reading review comments, fetch them all
    (`per_page=100` or `--paginate`); an unpaginated query can make a round look
    clean.
 4. Hard-block, but only after the proof required by "Earning a hard-block"
@@ -377,6 +423,16 @@ mark anything hard-blocked:
    certificate and a local or file-share channel are the reversible default.
    Ship packaging, update and platform-integration work on them, and leave
    only the production choice open.
+   Separate implementation from live qualification for every unfinished
+   acceptance criterion. Missing credentials, App registration, account policy,
+   activation authority or human measurements block the relevant live action,
+   not reversible code, packaging or tests that can use fake providers, local
+   transports and synthetic credentials. Before parking a whole issue, record
+   its remaining source work separately from actual external observations and
+   complete that source work. A partial library or test seam is not proof that
+   all authorized implementation is exhausted. Revisit prerequisite assumptions
+   when a later item can be implemented without exercising the blocked live
+   dependency. Waiting for review also leaves the mission active.
 4. Check the anti-list. Failing tests, flaky tests, merge conflicts, missing
    documentation, ambiguous acceptance criteria, and reviewer silence are
    work, not blocks.
@@ -390,6 +446,17 @@ Ending the run with hard-blocked items requires one final pass over all of
 them. If that pass moves any item, keep going.
 
 ## Waiting discipline
+
+Honor a native runtime's watch-and-yield contract instead of the polling loop
+below, especially when the user limits CI checks. A persistent goal can keep the
+provider run active while a watcher queues a completion turn behind it. Read the
+owning thread's queued monitor message rather than re-polling GitHub. Use the
+app's canonical thread identifier, not a goal or harness identifier, and prefer
+supported read tools. If those tools omit queued text, a read-only lookup of the
+exact message in that own thread's projection can recover the receipt; never
+edit the queue or inspect unrelated threads. A queued run alone is not a pass:
+require the completion message to name the unchanged head and successful checks.
+Keep the mission goal active through this wait.
 
 Waiting for CI is cheap; treat it as part of the work, never as a reason to
 stop, rush, or skip. Never end a turn to wait. Either poll with bounded
@@ -407,6 +474,12 @@ A watcher's done-condition must name the head: require the reviewer's summary
 to report the current head completed and at least one check in the rollup.
 "Nothing pending and nothing running" is also true of an empty rollup right
 after a push and of a review that failed, so it proves nothing by itself.
+
+Never run a long-lived process, such as a dev server, test fixture, browser
+session, or watcher, as a blocking foreground command. It never returns, so
+the mission silently stalls. Start it detached or through the runtime's
+background execution, confirm readiness with a bounded probe, record its PID in
+the state file, and stop it when the evidence is captured.
 
 During each CI-wait poll, refresh published review threads as well as checks,
 even after the required reviewer has reported clean. Assess new passive
@@ -460,6 +533,15 @@ errors, fall back to direct `gh` queries and note that in the state file.
 
 ## Honesty gates
 
+- Partial implementation PRs use plain related-issue references. Never negate a
+  GitHub closing-keyword reference: GitHub can still interpret "does not close"
+  followed by an issue number as an automatic closure. Commit messages count
+  too: a squash merge carries `Closes #n` from any commit into the default
+  branch, so decide closing versus partial before the first commit and reword
+  commits when that decision changes. Inspect `closingIssuesReferences`
+  immediately after creating the PR and again before merge, and remove
+  unintended closing references. Recheck the issue state after merge; reopen an
+  incomplete issue with an evidence comment if automatic closure was accidental.
 - Merged means GitHub reports `MERGED`, checked with `gh pr view`, reached
   with every review thread resolved and no protection bypassed. Closed
   means `gh issue view` confirms it.
@@ -475,6 +557,12 @@ errors, fall back to direct `gh` queries and note that in the state file.
   on both sides of that boundary and any supported compatibility mode. Run real
   isolated hosts and assert their versions; changing a version variable cannot
   prove runtime behavior. Preserve separate harness and production prerequisites.
+- For upstream compatibility or presentation parity, verify a review's proposed
+  behavior against the pinned upstream implementation and equivalent inputs
+  before changing semantics. A generic recommendation that would break the
+  stated parity contract is nonactionable when source and regression evidence
+  prove the difference. Record that evidence and any documented local override;
+  do not silently substitute the reviewer's preferred behavior for the spec.
 - Reviewer workspace commits are not necessarily published history. Before
   acting on an attribution or history finding, verify the actual published PR
   head and the cited object's relationship to it with local Git and canonical
