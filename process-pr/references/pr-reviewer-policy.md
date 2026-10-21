@@ -169,7 +169,7 @@ replace it.
 ## Wait and failure limits
 
 - Make at most one request per required reviewer per unchanged head, plus the
-  single re-request for a hung review under "Hung reviews" below. A composing
+  re-requests for a hung review under "Hung reviews" below. A composing
   workflow must reuse the same request and evidence rather than start another
   review loop.
 - Outside T3 Code, poll required reviews and checks at 60-second intervals,
@@ -253,11 +253,13 @@ re-read the PR state, reviews and the runs you depend on before acting.
 A review is hung when the reviewer has shown "Running" on the unchanged head
 for about 1 hour. For Codex, read this from its `codex-review-state` summary
 comment. Check for it whenever you are awake and before you end a turn on a
-watch. On a hung review, re-request it once for that head (`@codex review` for
-Codex). A `@codex review` already posted for that head counts as the one
-re-request, including one posted by the stall check. If the re-request also
-hangs, report the PR blocked with the head, both request links and the elapsed
-time, and don't wait on it again.
+watch. On a hung review, re-request it (`@codex review` for Codex) without
+asking: up to 3 re-requests per unchanged head, at most one per 60 minutes.
+Every `@codex review` posted for that head after the first request counts
+toward the 3, including any the stall check posted. Only when the third
+re-request has gone 60 minutes with no result, report the PR blocked to the
+user as a question, with the head, every request link and the elapsed time,
+and don't wait on it again.
 
 Use [current-head-review-loop.md](current-head-review-loop.md) for pagination,
 thread decisions, and final evidence. Product changes belong only in this file.

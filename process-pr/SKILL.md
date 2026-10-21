@@ -1,6 +1,6 @@
 ---
 name: process-pr
-description: V1.17 - Takes one specified existing GitHub pull request to a human-ready state with truthful current-head evidence, including CLI-uploaded UI screenshots when applicable, by following the shared PR reviewer policy and addressing feedback. Merge remains approval-gated by default, but a composing merge skill can supply documented invocation authority and owns the final Slack notification when it owns the merge.
+description: V1.18 - Takes one specified existing GitHub pull request to a human-ready state with truthful current-head evidence, including CLI-uploaded UI screenshots when applicable, by following the shared PR reviewer policy and addressing feedback. Merge remains approval-gated by default, but a composing merge skill can supply documented invocation authority and owns the final Slack notification when it owns the merge.
 compatibility: Requires git, GitHub CLI with the gh-x extension, GitHub network access, permission to push to the PR branch, and permission to request the reviewers selected by the shared policy. Optional authorized merge and cleanup requires mergepr on PATH and the slack-dm skill.
 ---
 

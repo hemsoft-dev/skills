@@ -1,6 +1,6 @@
 ---
 name: merge-mission
-description: V1.69 - Resolve every open issue and pull request in a repository, processing existing PRs first and then oldest-first issues. Runs as a persistent goal with current-head review, validation, guarded merges, delivery verification, cleanup, and one-time notifications. Repairs CI and delivery failures, preserves evidence and recovery state, proves remaining hard blocks, and records retrospective lessons. Manual invocation only.
+description: V1.70 - Resolve every open issue and pull request in a repository, processing existing PRs first and then oldest-first issues. Runs as a persistent goal with current-head review, validation, guarded merges, delivery verification, cleanup, and one-time notifications. Repairs CI and delivery failures, preserves evidence and recovery state, proves remaining hard blocks, and records retrospective lessons. Manual invocation only.
 compatibility: Requires git, GitHub CLI, network access, permission to push branches and open pull requests, mergepr on PATH, the issue-to-pr, process-pr, repo-cleanup, and slack-dm skills, and a runtime that honors the /goal director. Without /goal, the state file alone carries resumption.
 ---
 
@@ -376,9 +376,15 @@ For every blocker, climb in order:
    those assertions in the validation runner. Stop an unintended rebuild,
    retain its actual incomplete result, and run the correctly configured command;
    do not call the interrupted invocation a test failure or a pass.
+   Give each worktree of one repository its own build output directory (for
+   example its own `CARGO_TARGET_DIR`). Cargo fingerprints workspace members by
+   their workspace-relative path and source times, so sibling worktrees sharing
+   one target can link another branch's newer crate and pass or fail on code the
+   branch doesn't contain (codexbar#235/#236).
 3. Bound the retries. Cap mechanical retries at three. Never request a review
-   again for an unchanged head, except once for a failed review (above) or a
-   hung one (the shared policy's "Hung reviews"). Respect the shared policy's
+   again for an unchanged head, except once for a failed review (above) or up
+   to 3 times, an hour apart, for a hung one (the shared policy's "Hung
+   reviews"). Respect the shared policy's
    wait deadlines. Review rounds have no cap: keep fixing and requesting a
    review of each new head until the current head's review is clean, however
    many rounds it takes (Franz, 2026-10-21). Never merge without that clean
