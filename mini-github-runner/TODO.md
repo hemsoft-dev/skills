@@ -376,6 +376,21 @@ claim a fresh runner health, isolation or smoke-workflow check.
   source hash matched. This evidence authorizes the final status change and one
   final distribution of the closed source set.
 
+## 2026-10-21 16:46 EDT: second repository, hemsoft-dev/project-manager
+
+- Chief-approved (2026-10-21 16:31 ET): hosted Actions minutes are blocked for private hemsoft-dev
+  repos by the org's $0 Actions budget, so project-manager CI runs here.
+- Registered `mini-github-runner-01-pm` (runner 2.336.0, archive SHA-256 verified) under
+  `/opt/actions-runner/project-manager`, user `actions`, labels `mini,project-manager`, unit
+  `actions.runner.hemsoft-dev-project-manager.mini-github-runner-01-pm.service`. The token went
+  over stdin only; the post-config grep found no copy under the install directory.
+- Installed `gcc` and `libc6-dev` in the guest (Ubuntu repo) for `go test -race`.
+- `verify-guest-isolation.sh` after the change: `ISOLATION_OK`, Tailscale absent.
+- First green run on it: hemsoft-dev/project-manager CI run 39673198467 (job `verify`,
+  all steps green), 2026-10-21 16:47 EDT.
+- Skill V1.1: `scripts/register-repo-runner.sh OWNER/REPO NAME LABELS` generalizes the
+  registration (token on stdin only); SKILL.md lists both runners.
+
 ## Current blockers
 
 None. The GH AW host runtime, durable provisioning helper, documentation, and

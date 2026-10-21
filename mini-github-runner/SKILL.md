@@ -1,6 +1,6 @@
 ---
 name: mini-github-runner
-description: "V1.0 - Commands: Status, Plan, Provision, Register, Verify, Distribute. Build and maintain the isolated GitHub Actions runner hosted on mini, with implementation state tracked in TODO.md."
+description: "V1.1 - Commands: Status, Plan, Provision, Register, Verify, Distribute. Build and maintain the isolated GitHub Actions runner hosted on mini, with implementation state tracked in TODO.md."
 ---
 
 # Mini GitHub runner
@@ -34,15 +34,27 @@ Build and operate an isolated GitHub Actions self-hosted runner on `mini`.
 - Network: libvirt `default` NAT with filter `github-runner-locked`. The guest
   may reach the libvirt gateway and public Internet, but not RFC1918,
   `100.64.0.0/10`, or IPv4 link-local destinations.
-- Runner: v2.336.0 under `/opt/actions-runner/yahtzee`, systemd unit
-  `actions.runner.HemSoft-yahtzee.mini-github-runner-01.service`, user
-  `actions`, labels `mini` and `yahtzee` plus GitHub's default labels.
+- Runners (v2.336.0, user `actions`, one repository-scoped registration each,
+  never org-wide):
+  - `mini-github-runner-01` under `/opt/actions-runner/yahtzee`, unit
+    `actions.runner.HemSoft-yahtzee.mini-github-runner-01.service`, labels
+    `mini` and `yahtzee`.
+  - `mini-github-runner-01-pm` for `hemsoft-dev/project-manager` under
+    `/opt/actions-runner/project-manager`, unit
+    `actions.runner.hemsoft-dev-project-manager.mini-github-runner-01-pm.service`,
+    labels `mini` and `project-manager`. Its CI runs here because hosted
+    minutes for private hemsoft-dev repos are blocked by the org's $0 Actions
+    budget (Chief approval, 2026-10-21).
+- Guest build tools: `gcc` and `libc6-dev` (for Go `-race`), from the Ubuntu
+  repository.
 - GH AW runtime: Docker Engine 29.7.2, Docker Compose 5.5.0, GitHub CLI
   2.45.0, and ripgrep 14.1.0. The `actions` user belongs to the guest-local
   `docker` group. Node.js remains workflow-managed through `actions/setup-node`.
-- Repository: `hemsoft-dev/yahtzee`. Its only self-hosted workflow is
-  `.github/workflows/self-hosted-smoke.yml`, triggered only by
-  `workflow_dispatch` with zero token permissions.
+- Repositories: `hemsoft-dev/yahtzee`, whose only self-hosted workflow is
+  `.github/workflows/self-hosted-smoke.yml` (`workflow_dispatch`, zero token
+  permissions), and `hemsoft-dev/project-manager`, whose `ci.yml` runs on
+  `[self-hosted, mini, project-manager]` with `contents: read`. Both are
+  private repositories owned by Franz, so only trusted code runs here.
 
 ## Commands
 
@@ -100,12 +112,28 @@ The tested first-build sequence is:
 
 Require an exact `OWNER/REPOSITORY`. Confirm the repository owner and authenticated GitHub account before requesting a short-lived registration token. Register a distinct runner service for each repository and discard the token after use.
 
-For Yahtzee, request the token from home with the `HemSoft` GitHub CLI account
-and stream it as the first stdin line to `scripts/register-yahtzee-runner.sh`.
-The helper reads it into process memory, verifies the official runner archive,
-checks that the raw token was not written under the installation directory,
-unsets it, and starts the service. Never put the token in an argument, command
-history, temporary file, TODO, or history entry.
+For any repository, request the token with the `HemSoft` GitHub CLI account
+(`gh api -X POST repos/OWNER/REPO/actions/runners/registration-token --jq .token`)
+and stream it as the first stdin line into the guest, where
+`scripts/register-repo-runner.sh OWNER/REPO RUNNER_NAME LABELS` reads it into
+memory, verifies the official runner archive, registers under
+`/opt/actions-runner/<repo>`, checks that the raw token was not written there,
+and starts the service. For example, from mini:
+
+```bash
+{ gh api -X POST repos/hemsoft-dev/project-manager/actions/runners/registration-token --jq .token
+  cat scripts/register-repo-runner.sh; } |
+  ssh -o BatchMode=yes -o StrictHostKeyChecking=yes \
+    -o UserKnownHostsFile="$HOME/.ssh/github-runner-01_known_hosts" \
+    -i "$HOME/.ssh/github-runner-01_ed25519" runner-admin@"$ip" \
+    'IFS= read -r t; s=$(cat); printf "%s\n" "$t" | bash -c "$s" _ hemsoft-dev/project-manager mini-github-runner-01-pm mini,project-manager'
+```
+
+`scripts/register-yahtzee-runner.sh` is the original single-repository helper;
+it takes the token from `RUNNER_REGISTRATION_TOKEN` in its own process
+environment. Never put the token in an argument, command history, temporary
+file, TODO, or history entry. Rerun `scripts/verify-guest-isolation.sh` after
+every registration.
 
 ### Verify
 
