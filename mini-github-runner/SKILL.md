@@ -152,16 +152,26 @@ The helper path is the installed skill copy, so the example works from any
 directory; both sides refuse an empty token or script instead of running an
 empty program.
 
-The account records its repository in `/home/actions-<repo>/.runner-repository`
-(root-owned); the helper refuses an existing account that belongs to another
-repository, so truncated or normalized names cannot share a UID.
+Root records which repository owns each account in
+`/etc/actions-runner/accounts/<account>` and each runner's unit in
+`/etc/actions-runner/units/<repo>`, outside anything a runner account can
+write; the helper refuses an existing account owned by another repository, so
+truncated or normalized names cannot share a UID. It registers without
+`--replace`, so a runner name already in use in the repository fails instead
+of silently taking over that runner. Runner names are limited to letters,
+digits, `.`, `_` and `-` (up to 64 characters).
 
 A runner that needs the GH AW Docker runtime gets it after registration, for
 its own account and unit:
 
 ```bash
-sudo RUNNER_USER=actions-<repo> RUNNER_DIRECTORY=/opt/actions-runner/<repo> \
-  bash scripts/prepare-gh-aw-runtime.sh
+# From mini: stream the installed script into the guest; it runs there.
+script="$HOME/.agents/skills/mini-github-runner/scripts/prepare-gh-aw-runtime.sh"
+test -s "$script" || { echo "missing $script" >&2; exit 1; }
+ssh -o BatchMode=yes -o StrictHostKeyChecking=yes \
+  -o UserKnownHostsFile="$HOME/.ssh/github-runner-01_known_hosts" \
+  -i "$HOME/.ssh/github-runner-01_ed25519" runner-admin@"$ip" \
+  'RUNNER_USER=actions-<repo> RUNNER_DIRECTORY=/opt/actions-runner/<repo> bash -s' < "$script"
 ```
 
 It adds that account to the guest-local `docker` group and restarts the
@@ -186,6 +196,21 @@ gh run list --repo hemsoft-dev/yahtzee --workflow self-hosted-smoke.yml --limit 
 After any network, runner, or VM change, rerun
 `scripts/verify-guest-isolation.sh` inside the guest. A package delivery or an
 online status alone is not verification.
+
+For project-manager, which has no manual smoke workflow, rerun its most recent
+CI run (read-only, `contents: read`) and confirm the job ran on the expected
+runner:
+
+```powershell
+$env:GH_TOKEN = gh auth token --user HemSoft
+$run = gh run list --repo hemsoft-dev/project-manager --workflow ci.yml --limit 1 --json databaseId --jq '.[0].databaseId'
+gh run rerun $run --repo hemsoft-dev/project-manager
+gh run watch $run --repo hemsoft-dev/project-manager --exit-status
+gh api "repos/hemsoft-dev/project-manager/actions/runs/$run/jobs" --jq '.jobs[] | {name, runner_name, conclusion}'
+```
+
+Require `runner_name` to be `mini-github-runner-01-pm` and `conclusion` to be
+`success`.
 
 ### Distribute
 
@@ -246,9 +271,16 @@ user named:
 | `mini-github-runner-01-pm` | `hemsoft-dev/project-manager` | `/opt/actions-runner/project-manager` |
 
 ```bash
+set -euo pipefail
 runner_dir=/opt/actions-runner/project-manager # or /opt/actions-runner/yahtzee
 runner_user=$(sudo stat -c %U "$runner_dir")
-runner_service=$(sudo cat "$runner_dir/.service")
+# Prefer root's record; the .service file sits in a directory the runner
+# account can write, so whatever is read must be a plain unit basename.
+record="/etc/actions-runner/units/$(basename "$runner_dir")"
+if sudo test -f "$record"; then runner_service=$(sudo cat "$record")
+else runner_service=$(sudo cat "$runner_dir/.service"); fi
+[[ "$runner_service" =~ ^actions\.runner\.[A-Za-z0-9_.-]+\.service$ ]] ||
+  { echo "refusing unit name: $runner_service" >&2; exit 1; }
 ```
 
 ```powershell
@@ -312,17 +344,35 @@ public share. Restart the guest and verify the runner after the copy.
 
 ### Unregister
 
-Unregister only when the user requests it, and only the selected runner.
-Stop and disable its unit inside the guest, then delete its resolved ID with
-the authenticated GitHub API (never a hard-coded ID). Removing the VM,
-volumes, key, or backups is a separate destructive action and needs an exact
-user request.
+Unregister only when the user requests it, and only the selected runner, with
+the selection block above (validated `$runner_service`) already run in the
+same shell. Removing the VM, volumes, key, or backups is a separate
+destructive action and needs an exact user request.
+
+`config.sh remove` deletes both the GitHub registration and the local
+configuration (`.runner`, credentials), so the helper can register the
+directory again later. Stop the unit first, then stream a removal token as the
+first stdin line of the guest command, as with registration:
+
+```powershell
+$env:GH_TOKEN = gh auth token --user HemSoft
+gh api -X POST "repos/$repo/actions/runners/remove-token" --jq .token
+```
 
 ```bash
+# In the guest, with the removal token on stdin:
+IFS= read -r t; [ -n "$t" ] || exit 2
 sudo systemctl disable --now "$runner_service"
-sudo rm -f "/etc/systemd/system/$runner_service"
+ACTIONS_RUNNER_INPUT_TOKEN="$t" sudo --preserve-env=ACTIONS_RUNNER_INPUT_TOKEN -u "$runner_user" \
+  bash -c 'cd "$1" && exec ./config.sh remove --unattended' _ "$runner_dir"
+unset t
+sudo rm -f "/etc/systemd/system/$runner_service" "/etc/actions-runner/units/$(basename "$runner_dir")"
 sudo systemctl daemon-reload
 ```
+
+If `config.sh remove` cannot reach GitHub, delete the resolved ID instead
+(never a hard-coded one) and then remove the local `.runner`, `.credentials`
+and `.credentials_rsaparams` files:
 
 ```powershell
 if (-not $id) { throw "runner $name not found in $repo" }

@@ -19,6 +19,9 @@ runner_name="${2:?runner name}"
 labels="${3:?labels}"
 [[ "$repo" =~ ^[A-Za-z0-9-]+/[A-Za-z0-9_.-]+$ ]] || { echo "bad repository $repo" >&2; exit 2; }
 case "${repo#*/}" in .|..) echo "bad repository $repo" >&2; exit 2 ;; esac
+# The name becomes part of a systemd unit name and a path, so restrict it to
+# characters both accept, and keep the unit name within systemd's 255 bytes.
+[[ "$runner_name" =~ ^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$ ]] || { echo "bad runner name $runner_name" >&2; exit 2; }
 IFS= read -r token
 [ -n "$token" ] || { echo "no token on stdin" >&2; exit 2; }
 
@@ -31,6 +34,10 @@ name="${repo#*/}"
 install_dir="/opt/actions-runner/${name}"
 runner_user=$(printf 'actions-%s' "${name,,}" | tr -c 'a-z0-9-' '-' | cut -c1-32)
 unit="actions.runner.${owner}-${name}.${runner_name}.service"
+[ "${#unit}" -le 255 ] || { echo "unit name too long: ${unit}" >&2; exit 2; }
+# Root-owned records the runner account cannot change: which repository owns
+# each account, and which unit each runner directory has.
+records=/etc/actions-runner
 
 # Refuse an already configured directory before touching it: config.sh
 # rejects a configured installation even with --replace, and the directory is
@@ -42,9 +49,11 @@ if sudo test -e "${install_dir}/.runner"; then
   exit 2
 fi
 # The account name is derived and truncated, so two repositories could map to
-# the same one. The account records the repository it was created for, and an
-# account owned by another repository (or by nobody we know) is refused.
-marker="/home/${runner_user}/.runner-repository"
+# the same one. Root records the repository each account was created for, in
+# a directory the account cannot write, and an account owned by another
+# repository (or with no record) is refused.
+sudo install -d -o root -g root -m 0755 "${records}" "${records}/accounts" "${records}/units"
+marker="${records}/accounts/${runner_user}"
 if id "${runner_user}" >/dev/null 2>&1; then
   owned_by=$(sudo cat "${marker}" 2>/dev/null || true)
   if [ "${owned_by,,}" != "${repo,,}" ]; then
@@ -54,7 +63,6 @@ if id "${runner_user}" >/dev/null 2>&1; then
 else
   sudo useradd --system --create-home --home-dir "/home/${runner_user}" --shell /usr/sbin/nologin "${runner_user}"
   printf '%s\n' "${repo}" | sudo tee "${marker}" >/dev/null
-  sudo chown root:root "${marker}"
   sudo chmod 0644 "${marker}"
 fi
 
@@ -74,7 +82,7 @@ sudo chmod 0750 "${install_dir}"
 ACTIONS_RUNNER_INPUT_TOKEN="${token}" sudo --preserve-env=ACTIONS_RUNNER_INPUT_TOKEN -u "${runner_user}" \
   bash -c 'cd "$1" && shift && exec ./config.sh "$@"' _ "${install_dir}" \
   --url "https://github.com/${repo}" --name "${runner_name}" --labels "${labels}" \
-  --work _work --unattended --replace >/dev/null
+  --work _work --unattended >/dev/null
 if printf '%s\n' "${token}" | sudo grep -RIlF -f - "${install_dir}" >/dev/null 2>&1; then
   echo "Registration token unexpectedly remained under ${install_dir}." >&2
   exit 1
@@ -98,7 +106,7 @@ TimeoutStopSec=5min
 [Install]
 WantedBy=multi-user.target
 UNIT
-printf '%s\n' "${unit}" | sudo tee "${install_dir}/.service" >/dev/null
+printf '%s\n' "${unit}" | sudo tee "${install_dir}/.service" "${records}/units/${name}" >/dev/null
 sudo systemctl daemon-reload
 sudo systemctl enable --now "${unit}" >/dev/null 2>&1
 sudo systemctl is-active "${unit}"
