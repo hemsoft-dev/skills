@@ -3,10 +3,15 @@
 # Usage (run in the guest as runner-admin):
 #   <token on the first stdin line> | register-repo-runner.sh OWNER/REPO RUNNER_NAME LABELS
 # Example: ... | register-repo-runner.sh hemsoft-dev/project-manager mini-github-runner-01-pm mini,project-manager
-# The short-lived registration token is read from stdin into memory only. It is
-# never an argument or a file: config.sh gets it through its
-# ACTIONS_RUNNER_INPUT_TOKEN environment variable, which only the runner user
-# and root can read.
+# Each repository runner runs as its own Unix account (actions-<repo>), so a
+# job from one repository (Yahtzee is public) cannot read another runner's
+# processes or files. The short-lived registration token is read from stdin
+# into memory only. It is never an argument or a file: config.sh gets it
+# through its ACTIONS_RUNNER_INPUT_TOKEN environment variable, which only that
+# account and root can read. Root never executes a file the runner account
+# could have changed: the archive is unpacked and its dependency installer run
+# while the tree is root-owned, and the systemd unit is written here instead
+# of by the archive's svc.sh.
 set -euo pipefail
 
 repo="${1:?OWNER/REPO}"
@@ -21,30 +26,38 @@ runner_version="2.336.0"
 runner_sha256="04cf0be1aff4c3ec3554466c39124ca250e3effd8873bb7e8d68535aa9505d5d"
 runner_archive="actions-runner-linux-x64-${runner_version}.tar.gz"
 runner_url="https://github.com/actions/runner/releases/download/v${runner_version}/${runner_archive}"
-install_dir="/opt/actions-runner/${repo#*/}"
-runner_user="actions"
+owner="${repo%%/*}"
+name="${repo#*/}"
+install_dir="/opt/actions-runner/${name}"
+runner_user=$(printf 'actions-%s' "${name,,}" | tr -c 'a-z0-9-' '-' | cut -c1-32)
+unit="actions.runner.${owner}-${name}.${runner_name}.service"
 
-id "${runner_user}" >/dev/null
 # Refuse an already configured directory before touching it: config.sh
 # rejects a configured installation even with --replace, and the directory is
 # keyed by the repository name alone, so it may belong to another OWNER/REPO.
-# To re-register, stop and uninstall the service and run config.sh remove first.
+# To re-register, stop and disable the unit and run config.sh remove first.
 if sudo test -e "${install_dir}/.runner"; then
   existing=$(sudo sed -n 's/.*"gitHubUrl": *"\([^"]*\)".*/\1/p' "${install_dir}/.runner" | tr -d '\r')
   echo "${install_dir} is already configured for ${existing:-an unknown repository}; remove that runner first" >&2
   exit 2
 fi
-sudo install -d -o "${runner_user}" -g "${runner_user}" -m 0750 "${install_dir}"
+if ! id "${runner_user}" >/dev/null 2>&1; then
+  sudo useradd --system --create-home --home-dir "/home/${runner_user}" --shell /usr/sbin/nologin "${runner_user}"
+fi
+
 archive_path=$(mktemp)
 trap 'rm -f "${archive_path}"' EXIT
 curl -fsSL --retry 3 --retry-delay 2 -o "${archive_path}" "${runner_url}"
 printf '%s  %s\n' "${runner_sha256}" "${archive_path}" | sha256sum --check --strict - >/dev/null
-chmod 0644 "${archive_path}"
-sudo -u "${runner_user}" tar -xzf "${archive_path}" -C "${install_dir}"
+# Unpack and install dependencies while only root can write the tree.
+sudo install -d -o root -g root -m 0755 /opt/actions-runner "${install_dir}"
+sudo tar -xzf "${archive_path}" -C "${install_dir}" --no-same-owner
 sudo "${install_dir}/bin/installdependencies.sh" >/dev/null
+sudo install -m 0755 "${install_dir}/bin/runsvc.sh" "${install_dir}/runsvc.sh"
+# From here root only runs systemctl and fixed commands, never the tree's files.
+sudo chown -R "${runner_user}:${runner_user}" "${install_dir}"
+sudo chmod 0750 "${install_dir}"
 
-# runner-admin cannot enter the 0750 actions-owned directory, so every step
-# that runs from it changes directory as the runner user or root.
 ACTIONS_RUNNER_INPUT_TOKEN="${token}" sudo --preserve-env=ACTIONS_RUNNER_INPUT_TOKEN -u "${runner_user}" \
   bash -c 'cd "$1" && shift && exec ./config.sh "$@"' _ "${install_dir}" \
   --url "https://github.com/${repo}" --name "${runner_name}" --labels "${labels}" \
@@ -55,6 +68,25 @@ if printf '%s\n' "${token}" | sudo grep -RIlF -f - "${install_dir}" >/dev/null 2
 fi
 unset token
 
-sudo bash -c 'cd "$1" && ./svc.sh install "$2" && ./svc.sh start' _ "${install_dir}" "${runner_user}" >/dev/null
-sudo systemctl is-active "$(sudo cat "${install_dir}/.service")"
-echo "RUNNER_REGISTERED repo=${repo} name=${runner_name} version=${runner_version} dir=${install_dir}"
+# The unit svc.sh would write, written by root from this script.
+sudo tee "/etc/systemd/system/${unit}" >/dev/null <<UNIT
+[Unit]
+Description=GitHub Actions Runner (${repo} ${runner_name})
+After=network-online.target
+
+[Service]
+ExecStart=${install_dir}/runsvc.sh
+User=${runner_user}
+WorkingDirectory=${install_dir}
+KillMode=process
+KillSignal=SIGTERM
+TimeoutStopSec=5min
+
+[Install]
+WantedBy=multi-user.target
+UNIT
+printf '%s\n' "${unit}" | sudo tee "${install_dir}/.service" >/dev/null
+sudo systemctl daemon-reload
+sudo systemctl enable --now "${unit}" >/dev/null 2>&1
+sudo systemctl is-active "${unit}"
+echo "RUNNER_REGISTERED repo=${repo} name=${runner_name} version=${runner_version} dir=${install_dir} user=${runner_user} unit=${unit}"

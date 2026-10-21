@@ -1,6 +1,6 @@
 # mini-github-runner implementation
 
-Status: Complete
+Status: In progress
 
 Last verified: 2026-08-19 at 22:03 on `home`
 
@@ -124,6 +124,20 @@ Run trusted GitHub Actions jobs on an isolated virtual machine hosted by `mini`,
 - [x] Add and idempotently verify the durable GH AW runtime provisioning script.
 - [x] Update skill documentation and source hashes for the live runtime.
 - [x] Redistribute and verify the updated skill on every skill-capable computer.
+
+## Milestone 10: Second repository runner (V1.1)
+
+- [x] Register `mini-github-runner-01-pm` for `hemsoft-dev/project-manager`
+      (repository-scoped, labels `mini` and `project-manager`).
+- [x] Generalize registration into `scripts/register-repo-runner.sh` with a
+      per-repository account, a root-owned unpack, and a script-written unit.
+- [x] Provision `gcc` and `libc6-dev` through cloud-init and
+      `scripts/prepare-gh-aw-runtime.sh`.
+- [ ] Re-register `mini-github-runner-01-pm` under `actions-project-manager`
+      with the V1.1 helper, so it no longer shares the public Yahtzee runner's
+      `actions` account, and rerun `scripts/verify-guest-isolation.sh`.
+- [ ] Distribute V1.1 to home, laptop, air, and mini and verify each
+      destination's `MANIFEST.sha256`.
 
 ## Acceptance checks
 
@@ -393,6 +407,6 @@ claim a fresh runner health, isolation or smoke-workflow check.
 
 ## Current blockers
 
-None. The GH AW host runtime, durable provisioning helper, documentation, and
-fleet distribution are complete. Yahtzee workflow implementation now continues
+None. V1.1 follow-ups (Milestone 10) are pending: the project-manager runner
+account migration and fleet distribution after this change merges. Yahtzee workflow implementation now continues
 in `D:\github\HemSoft\yahtzee\TODO.md`.

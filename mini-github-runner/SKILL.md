@@ -34,8 +34,10 @@ Build and operate an isolated GitHub Actions self-hosted runner on `mini`.
 - Network: libvirt `default` NAT with filter `github-runner-locked`. The guest
   may reach the libvirt gateway and public Internet, but not RFC1918,
   `100.64.0.0/10`, or IPv4 link-local destinations.
-- Runners (v2.336.0, user `actions`, one repository-scoped registration each,
-  never org-wide):
+- Runners (v2.336.0, one repository-scoped registration each, never
+  org-wide). New registrations run as their own account, `actions-<repo>`;
+  both live runners predate that and still run as `actions` (migration of the
+  project-manager runner is pending in `TODO.md`):
   - `mini-github-runner-01` under `/opt/actions-runner/yahtzee`, unit
     `actions.runner.HemSoft-yahtzee.mini-github-runner-01.service`, labels
     `mini` and `yahtzee`.
@@ -54,8 +56,10 @@ Build and operate an isolated GitHub Actions self-hosted runner on `mini`.
 - Repositories: `hemsoft-dev/yahtzee`, whose only self-hosted workflow is
   `.github/workflows/self-hosted-smoke.yml` (`workflow_dispatch`, zero token
   permissions), and `hemsoft-dev/project-manager`, whose `ci.yml` runs on
-  `[self-hosted, mini, project-manager]` with `contents: read`. Both are
-  private repositories owned by Franz, so only trusted code runs here.
+  `[self-hosted, mini, project-manager]` with `contents: read`. Yahtzee is
+  public and stays the restricted public-repository exception (manual-only
+  workflow, fork approval required, see `TODO.md`); project-manager is
+  private, and only its own pull requests and pushes run on its runner.
 
 ## Commands
 
@@ -70,6 +74,8 @@ ssh mini 'virsh -c qemu:///system dominfo github-runner-01; virsh -c qemu:///sys
 $env:GH_TOKEN = gh auth token --user HemSoft
 gh api repos/hemsoft-dev/yahtzee/actions/runners --jq '.runners[] | select(.name=="mini-github-runner-01")'
 gh run list --repo hemsoft-dev/yahtzee --workflow self-hosted-smoke.yml --limit 5
+gh api repos/hemsoft-dev/project-manager/actions/runners --jq '.runners[] | select(.name=="mini-github-runner-01-pm")'
+gh run list --repo hemsoft-dev/project-manager --workflow ci.yml --limit 5
 ```
 
 Resolve the current DHCP lease and use strict host-key checking for guest
@@ -117,14 +123,16 @@ For any repository, request the token with the `HemSoft` GitHub CLI account
 (`gh api -X POST repos/OWNER/REPO/actions/runners/registration-token --jq .token`)
 and stream it as the first stdin line into the guest, where
 `scripts/register-repo-runner.sh OWNER/REPO RUNNER_NAME LABELS` reads it into
-memory, verifies the official runner archive, registers under
-`/opt/actions-runner/<repo>`, checks that the raw token was not written there,
-and starts the service. It hands the token to `config.sh` through
+memory, verifies the official runner archive, creates the runner's own account
+`actions-<repo>` when missing, registers under `/opt/actions-runner/<repo>`,
+checks that the raw token was not written there, and writes and starts the
+systemd unit itself (root never runs the archive's `svc.sh` or any file the
+runner account could have changed). It hands the token to `config.sh` through
 `ACTIONS_RUNNER_INPUT_TOKEN` (readable only by the runner user and root), never
 argv. It rejects `.`/`..` repository names and refuses any already configured
 directory before unpacking (the directory is keyed by the repository name
 alone, and `config.sh` rejects a configured installation even with
-`--replace`). To re-register, stop and uninstall the service and run
+`--replace`). To re-register, stop and disable the unit and run
 `config.sh remove` first. For example, from mini:
 
 ```bash
@@ -180,6 +188,8 @@ Use these GitHub pages:
 - [Yahtzee self-hosted runners](https://github.com/hemsoft-dev/yahtzee/settings/actions/runners)
 - [Manual smoke workflow](https://github.com/hemsoft-dev/yahtzee/actions/workflows/self-hosted-smoke.yml)
 - [All Yahtzee Actions runs](https://github.com/hemsoft-dev/yahtzee/actions)
+- [project-manager self-hosted runners](https://github.com/hemsoft-dev/project-manager/settings/actions/runners)
+- [project-manager CI runs](https://github.com/hemsoft-dev/project-manager/actions/workflows/ci.yml)
 
 The runner page shows online, offline, and busy state plus labels. The workflow
 page shows each manual smoke run and its job logs. GitHub does not provide
