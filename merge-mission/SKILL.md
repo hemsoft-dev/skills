@@ -1,6 +1,6 @@
 ---
 name: merge-mission
-description: V1.65 - Resolve every open issue and pull request in a repository, processing existing PRs first and then oldest-first issues. Runs as a persistent goal with current-head review, validation, guarded merges, delivery verification, cleanup, and one-time notifications. Repairs CI and delivery failures, preserves evidence and recovery state, proves remaining hard blocks, and records retrospective lessons. Manual invocation only.
+description: V1.66 - Resolve every open issue and pull request in a repository, processing existing PRs first and then oldest-first issues. Runs as a persistent goal with current-head review, validation, guarded merges, delivery verification, cleanup, and one-time notifications. Repairs CI and delivery failures, preserves evidence and recovery state, proves remaining hard blocks, and records retrospective lessons. Manual invocation only.
 compatibility: Requires git, GitHub CLI, network access, permission to push branches and open pull requests, mergepr on PATH, the issue-to-pr, process-pr, repo-cleanup, and slack-dm skills, and a runtime that honors the /goal director. Without /goal, the state file alone carries resumption.
 ---
 
@@ -562,6 +562,14 @@ errors, fall back to direct `gh` queries and note that in the state file.
   raising missing-cap alerts. When a control is owner-confirmed but unavailable
   through the API, label explicit host configuration with its source; that
   configuration must not hide observed unexpected usage charges.
+- Before deploying recurring API collectors, calculate aggregate work across all
+  agents sharing the credential, using configured item counts, polling intervals,
+  concurrency and requests per item. Use the user's active list, never every
+  discovered checkout. Empty configuration must fail closed. Choose a conservative
+  cadence, serialize or stagger calls, and avoid catch-up bursts after slow sweeps.
+  Verify the installed arguments and endpoint counts. A service restart proving
+  connectivity does not prove that its ongoing API cost is safe. On quota incidents,
+  reduce deployed load first and use a separate available transport for repairs.
 - For hub-and-agent features, delivery covers every in-scope online agent, its
   required producer version, and its configured input list. Inventory these
   before rollout; a deployed hub with unsupported agent endpoints is unfinished
