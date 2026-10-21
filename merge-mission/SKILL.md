@@ -1,6 +1,6 @@
 ---
 name: merge-mission
-description: V1.66 - Resolve every open issue and pull request in a repository, processing existing PRs first and then oldest-first issues. Runs as a persistent goal with current-head review, validation, guarded merges, delivery verification, cleanup, and one-time notifications. Repairs CI and delivery failures, preserves evidence and recovery state, proves remaining hard blocks, and records retrospective lessons. Manual invocation only.
+description: V1.67 - Resolve every open issue and pull request in a repository, processing existing PRs first and then oldest-first issues. Runs as a persistent goal with current-head review, validation, guarded merges, delivery verification, cleanup, and one-time notifications. Repairs CI and delivery failures, preserves evidence and recovery state, proves remaining hard blocks, and records retrospective lessons. Manual invocation only.
 compatibility: Requires git, GitHub CLI, network access, permission to push branches and open pull requests, mergepr on PATH, the issue-to-pr, process-pr, repo-cleanup, and slack-dm skills, and a runtime that honors the /goal director. Without /goal, the state file alone carries resumption.
 ---
 
@@ -546,7 +546,11 @@ errors, fall back to direct `gh` queries and note that in the state file.
   with every review thread resolved and no protection bypassed. Closed
   means `gh issue view` confirms it.
 - Record exact SHAs, commands, and observed results. Never claim a check
-  passed without reading its result.
+  passed without reading its result. Read times, versions, and tool
+  availability from the system (clock, log timestamps, `which`) before
+  writing them into a PR, issue, or outward message; an omission reason like
+  "no recorder installed" or a stated event time is a claim that needs the
+  same receipt.
 - Update state only after checking each claimed action's receipt and resulting
   data. Transport success, a later command's exit code, or an accepted request
   does not prove that an earlier mutation completed. Validate response errors,
