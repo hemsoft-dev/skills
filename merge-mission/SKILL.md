@@ -1,6 +1,6 @@
 ---
 name: merge-mission
-description: V1.67 - Resolve every open issue and pull request in a repository, processing existing PRs first and then oldest-first issues. Runs as a persistent goal with current-head review, validation, guarded merges, delivery verification, cleanup, and one-time notifications. Repairs CI and delivery failures, preserves evidence and recovery state, proves remaining hard blocks, and records retrospective lessons. Manual invocation only.
+description: V1.68 - Resolve every open issue and pull request in a repository, processing existing PRs first and then oldest-first issues. Runs as a persistent goal with current-head review, validation, guarded merges, delivery verification, cleanup, and one-time notifications. Repairs CI and delivery failures, preserves evidence and recovery state, proves remaining hard blocks, and records retrospective lessons. Manual invocation only.
 compatibility: Requires git, GitHub CLI, network access, permission to push branches and open pull requests, mergepr on PATH, the issue-to-pr, process-pr, repo-cleanup, and slack-dm skills, and a runtime that honors the /goal director. Without /goal, the state file alone carries resumption.
 ---
 
@@ -525,6 +525,13 @@ template rather than constructing escaped braces in shell or interpolated string
 Make dependent mutation chains fail fast. After a failed prerequisite, inspect live
 state before any retry; reuse any request that was actually accepted despite the
 failure instead of posting it again.
+
+After pushing or retargeting a stacked PR, verify both its remote Git ref and
+GitHub head/base metadata before publishing head-specific evidence or requesting
+review. Git refs can update before PR metadata. A stale first read is pending
+synchronization: reread within a bounded interval, without another push,
+retarget, artificial commit or review trigger. If it stays stale, preserve the
+accepted write receipt and exact expected heads; continue independent work.
 
 Run `gh x status` to see the current state of the mission's progress. Use it
 at run start, on resumed turns, and before any merge or block decision,
