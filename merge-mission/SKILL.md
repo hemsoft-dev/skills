@@ -1,6 +1,6 @@
 ---
 name: merge-mission
-description: V1.55 - Resolve every open issue and pull request in a repository, processing existing PRs first and then oldest-first issues. Runs as a persistent goal with current-head review, validation, guarded merges, delivery verification, cleanup, and one-time notifications. Repairs CI and delivery failures, preserves evidence and recovery state, proves remaining hard blocks, and records retrospective lessons. Manual invocation only.
+description: V1.57 - Resolve every open issue and pull request in a repository, processing existing PRs first and then oldest-first issues. Runs as a persistent goal with current-head review, validation, guarded merges, delivery verification, cleanup, and one-time notifications. Repairs CI and delivery failures, preserves evidence and recovery state, proves remaining hard blocks, and records retrospective lessons. Manual invocation only.
 compatibility: Requires git, GitHub CLI, network access, permission to push branches and open pull requests, mergepr on PATH, the issue-to-pr, process-pr, repo-cleanup, and slack-dm skills, and a runtime that honors the /goal director. Without /goal, the state file alone carries resumption.
 ---
 
@@ -73,6 +73,15 @@ such automation immediately. Preserve already-published evidence, label its
 exact commit provenance, disclose the current-head evidence gap, and use only
 allowed non-UI validation. Do not treat the missing rerun as a hard block and do
 not violate the restriction to satisfy a generic evidence rule.
+
+When the user has said to ask before testing on their machine, ask once during
+inventory, not when the first PR is ready. Offer the validation tiers the queue
+needs (headless build and tests, app windows for screenshots, input-driving UI
+tests) with a recommended option, record the answer in the state file, and
+follow it for the whole run. In the same step, check that any self-hosted runner
+the required checks depend on is online, and ask for it then if it is not. Both
+asks came too late on survival-shelter#50; asking them at inventory kept #52
+moving.
 
 ## Goal director
 
@@ -238,7 +247,12 @@ stop reasons. "I was not sure" is not a stop reason; decide and record.
    treat it as a review: captures caught layout defects that every test passed
    over, twice (codexbar#205, #214). When the issue states a measurable visual
    criterion, such as a contrast ratio, measure it from the capture with a
-   script and put the numbers in the PR.
+   script and put the numbers in the PR. Compare two builds' captures only
+   when they were rendered back to back: renders minutes apart differ in clock
+   text, pace markers and time-seeded demo history. List every capture that
+   differs, not the top few, and classify each region before calling a change
+   visual or none. A diff that looked like a regression vanished when both
+   heads were rendered together (codexbar#228, #232).
 4. Verify done. GitHub must report each merged pull request `MERGED`. For an
    issue-backed item, GitHub must also report the issue closed. For UI work,
    inspect the rendered PR and verify its current-head screenshots are visible;
