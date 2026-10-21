@@ -152,6 +152,21 @@ The helper path is the installed skill copy, so the example works from any
 directory; both sides refuse an empty token or script instead of running an
 empty program.
 
+The account records its repository in `/home/actions-<repo>/.runner-repository`
+(root-owned); the helper refuses an existing account that belongs to another
+repository, so truncated or normalized names cannot share a UID.
+
+A runner that needs the GH AW Docker runtime gets it after registration, for
+its own account and unit:
+
+```bash
+sudo RUNNER_USER=actions-<repo> RUNNER_DIRECTORY=/opt/actions-runner/<repo> \
+  bash scripts/prepare-gh-aw-runtime.sh
+```
+
+It adds that account to the guest-local `docker` group and restarts the
+recorded unit. project-manager's CI does not use Docker and skips this step.
+
 `scripts/register-yahtzee-runner.sh` is the original single-repository helper;
 it takes the token from `RUNNER_REGISTRATION_TOKEN` in its own process
 environment. Never put the token in an argument, command history, temporary
@@ -219,6 +234,29 @@ virsh -c qemu:///system domstats github-runner-01
 Inside the guest, use `systemctl status`, `journalctl`, `free -h`, `df -h`, and
 `uptime` for service and host-resource monitoring.
 
+### Select the runner
+
+Every per-runner command below acts on one selected runner. Set these first,
+inside the guest as `runner-admin` and on the GitHub side, for the runner the
+user named:
+
+| Runner | Repository | Directory |
+| --- | --- | --- |
+| `mini-github-runner-01` | `hemsoft-dev/yahtzee` | `/opt/actions-runner/yahtzee` |
+| `mini-github-runner-01-pm` | `hemsoft-dev/project-manager` | `/opt/actions-runner/project-manager` |
+
+```bash
+runner_dir=/opt/actions-runner/project-manager # or /opt/actions-runner/yahtzee
+runner_user=$(sudo stat -c %U "$runner_dir")
+runner_service=$(sudo cat "$runner_dir/.service")
+```
+
+```powershell
+$repo = 'hemsoft-dev/project-manager'; $name = 'mini-github-runner-01-pm'
+$env:GH_TOKEN = gh auth token --user HemSoft
+$id = gh api "repos/$repo/actions/runners" --jq ".runners[] | select(.name==`"$name`") | .id"
+```
+
 ### Guest and runner lifecycle
 
 Run these on mini:
@@ -233,11 +271,10 @@ virsh -c qemu:///system autostart github-runner-01
 Run these inside the guest as `runner-admin`:
 
 ```bash
-runner_service=$(sudo cat /opt/actions-runner/yahtzee/.service)
 sudo systemctl status "$runner_service"
 sudo systemctl restart "$runner_service"
 sudo journalctl -u "$runner_service" -n 100 --no-pager
-sudo -u actions /opt/actions-runner/yahtzee/bin/Runner.Listener --version
+sudo -u "$runner_user" "$runner_dir/bin/Runner.Listener" --version
 ```
 
 ### Updates
@@ -247,7 +284,7 @@ self-hosted runner to update within 30 days of a release and can require an
 immediate critical-security update. Compare versions without changing state:
 
 ```bash
-installed=$(sudo -u actions /opt/actions-runner/yahtzee/bin/Runner.Listener --version)
+installed=$(sudo -u "$runner_user" "$runner_dir/bin/Runner.Listener" --version)
 latest=$(curl -fsS https://api.github.com/repos/actions/runner/releases/latest |
   jq -r '.tag_name | ltrimstr("v")')
 printf 'installed=%s latest=%s\n' "$installed" "$latest"
@@ -275,20 +312,21 @@ public share. Restart the guest and verify the runner after the copy.
 
 ### Unregister
 
-Unregister only when the user requests it. Stop and uninstall the guest service
-first with `svc.sh`, then delete runner ID 21 or its currently resolved ID with
-the authenticated GitHub API. Removing the VM, volumes, key, or backups is a
-separate destructive action and needs an exact user request.
+Unregister only when the user requests it, and only the selected runner.
+Stop and disable its unit inside the guest, then delete its resolved ID with
+the authenticated GitHub API (never a hard-coded ID). Removing the VM,
+volumes, key, or backups is a separate destructive action and needs an exact
+user request.
 
 ```bash
-cd /opt/actions-runner/yahtzee
-sudo ./svc.sh stop
-sudo ./svc.sh uninstall
+sudo systemctl disable --now "$runner_service"
+sudo rm -f "/etc/systemd/system/$runner_service"
+sudo systemctl daemon-reload
 ```
 
 ```powershell
-$env:GH_TOKEN = gh auth token --user HemSoft
-gh api --method DELETE repos/hemsoft-dev/yahtzee/actions/runners/21
+if (-not $id) { throw "runner $name not found in $repo" }
+gh api --method DELETE "repos/$repo/actions/runners/$id"
 ```
 
 ### Troubleshooting
@@ -301,7 +339,7 @@ gh api --method DELETE repos/hemsoft-dev/yahtzee/actions/runners/21
   short-lived and should never be reused from files or history.
 - Disk pressure: inspect `df -h /` and `_work`; remove only disposable build
   output after proving no job is running. Do not delete runner credentials.
-- Docker failure: run `sudo -u actions -H docker version`, inspect
+- Docker failure: run `sudo -u "$runner_user" -H docker version`, inspect
   `systemctl status docker`, and confirm the live runner process lists the
   guest-local Docker group. Never substitute mini's host Docker socket.
 - Network failure: distinguish public DNS/HTTPS failure from an expected

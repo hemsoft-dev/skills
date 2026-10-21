@@ -41,8 +41,21 @@ if sudo test -e "${install_dir}/.runner"; then
   echo "${install_dir} is already configured for ${existing:-an unknown repository}; remove that runner first" >&2
   exit 2
 fi
-if ! id "${runner_user}" >/dev/null 2>&1; then
+# The account name is derived and truncated, so two repositories could map to
+# the same one. The account records the repository it was created for, and an
+# account owned by another repository (or by nobody we know) is refused.
+marker="/home/${runner_user}/.runner-repository"
+if id "${runner_user}" >/dev/null 2>&1; then
+  owned_by=$(sudo cat "${marker}" 2>/dev/null || true)
+  if [ "${owned_by,,}" != "${repo,,}" ]; then
+    echo "account ${runner_user} belongs to ${owned_by:-an unknown owner}, not ${repo}; choose another layout" >&2
+    exit 2
+  fi
+else
   sudo useradd --system --create-home --home-dir "/home/${runner_user}" --shell /usr/sbin/nologin "${runner_user}"
+  printf '%s\n' "${repo}" | sudo tee "${marker}" >/dev/null
+  sudo chown root:root "${marker}"
+  sudo chmod 0644 "${marker}"
 fi
 
 archive_path=$(mktemp)
