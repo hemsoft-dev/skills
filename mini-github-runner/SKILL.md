@@ -118,7 +118,11 @@ and stream it as the first stdin line into the guest, where
 `scripts/register-repo-runner.sh OWNER/REPO RUNNER_NAME LABELS` reads it into
 memory, verifies the official runner archive, registers under
 `/opt/actions-runner/<repo>`, checks that the raw token was not written there,
-and starts the service. For example, from mini:
+and starts the service. It hands the token to `config.sh` through
+`ACTIONS_RUNNER_INPUT_TOKEN` (readable only by the runner user and root), never
+argv. It rejects `.`/`..` repository names and refuses a directory whose
+`.runner` already belongs to another `OWNER/REPO`, since the directory is keyed
+by the repository name alone. For example, from mini:
 
 ```bash
 { gh api -X POST repos/hemsoft-dev/project-manager/actions/runners/registration-token --jq .token
