@@ -1,6 +1,6 @@
 ---
 name: process-pr
-description: V1.16 - Takes one specified existing GitHub pull request to a human-ready state with truthful current-head evidence, including CLI-uploaded UI screenshots when applicable, by following the shared PR reviewer policy and addressing feedback. Merge remains approval-gated by default, but a composing merge skill can supply documented invocation authority and owns the final Slack notification when it owns the merge.
+description: V1.17 - Takes one specified existing GitHub pull request to a human-ready state with truthful current-head evidence, including CLI-uploaded UI screenshots when applicable, by following the shared PR reviewer policy and addressing feedback. Merge remains approval-gated by default, but a composing merge skill can supply documented invocation authority and owns the final Slack notification when it owns the merge.
 compatibility: Requires git, GitHub CLI with the gh-x extension, GitHub network access, permission to push to the PR branch, and permission to request the reviewers selected by the shared policy. Optional authorized merge and cleanup requires mergepr on PATH and the slack-dm skill.
 ---
 
@@ -109,8 +109,12 @@ Do not discover a roster from recent PRs or probe optional product availability.
 ### 4. Request and wait within the shared limits
 
 Follow the shared policy's request, identity, deduplication, refusal, and wait
-rules. Reuse current-head requests across composing workflows. Record each
-request URL, requester, head, start time, and resulting signal or exact failure.
+rules. Under T3 Code, follow its "Waiting under T3 Code" and "Hung reviews"
+sections: wait for required checks, reviews and conflicts with
+`watch_pull_request` and end the turn, and poll workflow runs that aren't
+required checks in-turn up to the stated cap. Reuse current-head requests across
+composing workflows. Record each request URL, requester, head, start time, and
+resulting signal or exact failure.
 Do not start another wait budget when a caller or duplicate run already owns it.
 
 ### 5. Process Feedback
@@ -129,7 +133,10 @@ Any pushed commit creates a new evidence epoch. Re-read the PR head SHA, discard
 
 ### 6. Wait and Iterate
 
-Poll review and check state without issuing duplicate requests. Continue the bounded loop while useful progress is possible:
+Wait for review and check state without issuing duplicate requests, polling
+outside T3 Code and through `watch_pull_request` under it, as the shared policy
+says. Continue the loop until the current head's required review is clean,
+however many rounds it takes. Never ask whether to stop after N rounds:
 
 1. wait only for required reviewers and checks within the shared policy limits;
 2. fetch current-head reviews, threads, checks, and runs again;

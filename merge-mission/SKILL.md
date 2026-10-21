@@ -1,6 +1,6 @@
 ---
 name: merge-mission
-description: V1.68 - Resolve every open issue and pull request in a repository, processing existing PRs first and then oldest-first issues. Runs as a persistent goal with current-head review, validation, guarded merges, delivery verification, cleanup, and one-time notifications. Repairs CI and delivery failures, preserves evidence and recovery state, proves remaining hard blocks, and records retrospective lessons. Manual invocation only.
+description: V1.69 - Resolve every open issue and pull request in a repository, processing existing PRs first and then oldest-first issues. Runs as a persistent goal with current-head review, validation, guarded merges, delivery verification, cleanup, and one-time notifications. Repairs CI and delivery failures, preserves evidence and recovery state, proves remaining hard blocks, and records retrospective lessons. Manual invocation only.
 compatibility: Requires git, GitHub CLI, network access, permission to push branches and open pull requests, mergepr on PATH, the issue-to-pr, process-pr, repo-cleanup, and slack-dm skills, and a runtime that honors the /goal director. Without /goal, the state file alone carries resumption.
 ---
 
@@ -377,17 +377,16 @@ For every blocker, climb in order:
    retain its actual incomplete result, and run the correctly configured command;
    do not call the interrupted invocation a test failure or a pass.
 3. Bound the retries. Cap mechanical retries at three. Never request a review
-   again for an unchanged head. Respect the shared policy's wait deadlines.
-   Bound review rounds too. Once a pull request has had two rounds of fixes
-   and the latest current-head review raises no P1, fix those findings, record
-   the decision in the state file, and merge on green checks without
-   requesting another round. If a required repository check enforces exact-head
-   review without a supported bounded-round exemption, the shortcut cannot make
-   checks green. Preserve that check, record its contract, and request exactly
-   once for each corrected head that the gate needs. Never weaken the check or
-   invent a review receipt. When reading review comments, fetch them all
-   (`per_page=100` or `--paginate`); an unpaginated query can make a round look
-   clean.
+   again for an unchanged head, except once for a failed review (above) or a
+   hung one (the shared policy's "Hung reviews"). Respect the shared policy's
+   wait deadlines. Review rounds have no cap: keep fixing and requesting a
+   review of each new head until the current head's review is clean, however
+   many rounds it takes (Franz, 2026-10-21). Never merge without that clean
+   review and never ask whether to stop after N rounds. Fix every valid
+   finding; only an ultra-nitpick may be declined, with the reason in a reply on
+   its thread. When reading
+   review comments, fetch them all (`per_page=100` or `--paginate`); an
+   unpaginated query can make a round look clean.
 4. Hard-block, but only after the proof required by "Earning a hard-block"
    below. A block is a finding you must prove, not a feeling you may report.
 
@@ -447,11 +446,21 @@ them. If that pass moves any item, keep going.
 
 ## Waiting discipline
 
-Honor a native runtime's watch-and-yield contract instead of the polling loop
-below, especially when the user limits CI checks. A persistent goal can keep the
-provider run active while a watcher queues a completion turn behind it. Read the
-owning thread's queued monitor message rather than re-polling GitHub. Use the
-app's canonical thread identifier, not a goal or harness identifier, and prefer
+Under T3 Code, wait as the shared policy's "Waiting under T3 Code" section
+says. For required checks, reviews and comments from other accounts, and
+conflicts, call `watch_pull_request` and end the turn. That is a watch
+checkpoint, not a stop; keep the mission goal active. Poll workflow runs that
+aren't required checks in-turn up to the policy's cap, and handle a review
+stuck on "Running" per its "Hung reviews" section. Don't start a timer,
+background watcher or polling loop alongside a watch. Your own comments don't
+wake it; the Chief's stall check wakes a stalled watch. On waking, re-read the
+PR state, reviews and the runs you depend on before acting.
+
+More generally, honor a native runtime's watch-and-yield contract instead of
+the polling loop below, especially when the user limits CI checks. A persistent
+goal can keep the provider run active while a watcher queues a completion turn
+behind it. Read the owning thread's queued monitor message rather than
+re-polling GitHub. Use the app's canonical thread identifier, not a goal or harness identifier, and prefer
 supported read tools. If those tools omit queued text, a read-only lookup of the
 exact message in that own thread's projection can recover the receipt; never
 edit the queue or inspect unrelated threads. A queued run alone is not a pass:
@@ -459,9 +468,10 @@ require the completion message to name the unchanged head and successful checks.
 Keep the mission goal active through this wait.
 
 Waiting for CI is cheap; treat it as part of the work, never as a reason to
-stop, rush, or skip. Never end a turn to wait. Either poll with bounded
-sleeps (`gh pr checks --watch --fail-fast`, or 60 to 120 second sleeps up to
-the shared policy deadline) or process another existing PR and come back.
+stop, rush, or skip. Outside T3, and under T3 for the waits a watch can't see,
+never end a turn to wait. Either poll with bounded sleeps (`gh pr checks
+--watch --fail-fast`, or 60 to 120 second sleeps up to the shared policy
+deadline) or process another existing PR and come back.
 Do not start an ordinary backlog issue just because an existing PR is waiting.
 Once every existing PR is resolved or proven hard-blocked, bounded pipelining
 of oldest-first backlog issues is allowed. A prerequisite repair needed to
@@ -470,8 +480,9 @@ Keep at most three queue items in flight, and never two branches that touch
 the same files. A shared test file counts: branches that each append tests at
 the same anchor conflict on every merge, so give each its own section anchor
 or merge them serially. A waiting pull request is parked, not finished.
-A watcher's done-condition must name the head: require the reviewer's summary
-to report the current head completed and at least one check in the rollup.
+Outside T3, a watcher's done-condition must name the head: require the
+reviewer's summary to report the current head completed and at least one check
+in the rollup.
 "Nothing pending and nothing running" is also true of an empty rollup right
 after a push and of a review that failed, so it proves nothing by itself.
 
@@ -677,22 +688,6 @@ force. It overrides them in these ways only, for this run:
   batch.
 - Bounded pipelining is allowed while a pull request waits on CI or review,
   instead of strict serial processing.
-- The bounded-review rule permits merging the published corrections after two
-  finding-fix rounds when the latest reviewed head raises no P1, without another
-  AI review request. Resolve every known finding and require green checks and
-  current-head UI evidence. Preserve required formal approvals and disclose the
-  exact review provenance; do not describe the corrected head as clean-reviewed.
-  If the user directly invokes `process-pr` (or asks for a review) on a mission
-  pull request, this shortcut no longer applies to it: request one review of the
-  current head and merge only after it comes back clean.
-  This shortcut is the only case where the agent resolves a thread without a
-  clean review of the current head, so use it deliberately. Each thread first
-  gets a reply citing its fixing commit, or the reason it was declined. Then
-  resolve it, put the review provenance in the pull request's risks section,
-  and let the mechanical thread gate pass. When a reviewer keeps raising new
-  P2s on every round and it is unclear whether the user wants the shortcut,
-  ask once with this as the recommended option; the user chose it for
-  codexbar#216 after seven P2-only Codex rounds (2026-10-19).
 
 ## Learning from every run
 
