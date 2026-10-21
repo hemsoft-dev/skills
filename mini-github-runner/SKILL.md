@@ -46,7 +46,8 @@ Build and operate an isolated GitHub Actions self-hosted runner on `mini`.
     minutes for private hemsoft-dev repos are blocked by the org's $0 Actions
     budget (Chief approval, 2026-10-21).
 - Guest build tools: `gcc` and `libc6-dev` (for Go `-race`), from the Ubuntu
-  repository.
+  repository; cloud-init and `scripts/prepare-gh-aw-runtime.sh` both install
+  them, so a rebuilt guest has them.
 - GH AW runtime: Docker Engine 29.7.2, Docker Compose 5.5.0, GitHub CLI
   2.45.0, and ripgrep 14.1.0. The `actions` user belongs to the guest-local
   `docker` group. Node.js remains workflow-managed through `actions/setup-node`.
@@ -120,9 +121,11 @@ memory, verifies the official runner archive, registers under
 `/opt/actions-runner/<repo>`, checks that the raw token was not written there,
 and starts the service. It hands the token to `config.sh` through
 `ACTIONS_RUNNER_INPUT_TOKEN` (readable only by the runner user and root), never
-argv. It rejects `.`/`..` repository names and refuses a directory whose
-`.runner` already belongs to another `OWNER/REPO`, since the directory is keyed
-by the repository name alone. For example, from mini:
+argv. It rejects `.`/`..` repository names and refuses any already configured
+directory before unpacking (the directory is keyed by the repository name
+alone, and `config.sh` rejects a configured installation even with
+`--replace`). To re-register, stop and uninstall the service and run
+`config.sh remove` first. For example, from mini:
 
 ```bash
 { gh api -X POST repos/hemsoft-dev/project-manager/actions/runners/registration-token --jq .token

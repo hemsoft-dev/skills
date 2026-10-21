@@ -66,7 +66,9 @@ sudo apt-get install -y --no-install-recommends \
   docker-ce \
   docker-ce-cli \
   docker-compose-plugin \
+  gcc \
   gh \
+  libc6-dev \
   ripgrep
 
 sudo usermod -aG docker "${runner_user}"

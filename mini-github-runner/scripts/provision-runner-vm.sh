@@ -60,8 +60,10 @@ package_upgrade: true
 packages:
   - ca-certificates
   - curl
+  - gcc
   - git
   - jq
+  - libc6-dev
   - qemu-guest-agent
 runcmd:
   - [systemctl, enable, --now, qemu-guest-agent]

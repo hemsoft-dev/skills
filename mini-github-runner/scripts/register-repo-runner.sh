@@ -25,14 +25,14 @@ install_dir="/opt/actions-runner/${repo#*/}"
 runner_user="actions"
 
 id "${runner_user}" >/dev/null
-# The directory is keyed by the repository name alone (the existing layout),
-# so refuse one that already belongs to a different OWNER/REPO.
-if sudo test -f "${install_dir}/.runner"; then
+# Refuse an already configured directory before touching it: config.sh
+# rejects a configured installation even with --replace, and the directory is
+# keyed by the repository name alone, so it may belong to another OWNER/REPO.
+# To re-register, stop and uninstall the service and run config.sh remove first.
+if sudo test -e "${install_dir}/.runner"; then
   existing=$(sudo sed -n 's/.*"gitHubUrl": *"\([^"]*\)".*/\1/p' "${install_dir}/.runner" | tr -d '\r')
-  if [ "${existing,,}" != "https://github.com/${repo,,}" ]; then
-    echo "${install_dir} already belongs to ${existing:-another runner}" >&2
-    exit 2
-  fi
+  echo "${install_dir} is already configured for ${existing:-an unknown repository}; remove that runner first" >&2
+  exit 2
 fi
 sudo install -d -o "${runner_user}" -g "${runner_user}" -m 0750 "${install_dir}"
 archive_path=$(mktemp)
