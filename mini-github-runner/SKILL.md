@@ -389,6 +389,15 @@ for u in $(grep -lx "User=$runner_user" /etc/systemd/system/actions.runner.*.ser
   xargs -r -n1 basename | grep -vxF "$runner_service" || true); do
   if systemctl is-active --quiet "$u"; then sudo systemctl stop "$u"; others="$others $u"; fi
 done
+# Older units use KillMode=process, so job processes can outlive a stop. No
+# process of this account may run while the token is in its environment.
+sudo pkill -KILL -u "$runner_user" || true
+for _ in 1 2 3 4 5; do pgrep -u "$runner_user" >/dev/null || break; sleep 1; done
+if pgrep -u "$runner_user" >/dev/null; then
+  echo "processes of $runner_user are still running; not exporting the token" >&2
+  for u in $others; do sudo systemctl start "$u"; done
+  exit 1
+fi
 ACTIONS_RUNNER_INPUT_TOKEN="$t" sudo --preserve-env=ACTIONS_RUNNER_INPUT_TOKEN -u "$runner_user" \
   bash -c 'cd "$1" && exec ./config.sh remove --unattended' _ "$runner_dir"
 unset t

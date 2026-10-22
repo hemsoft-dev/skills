@@ -87,6 +87,7 @@ cleanup() {
   rm -f "${archive_path}"
   if [ "${created}" = 1 ] && ! sudo test -e "${install_dir}/.runner"; then
     sudo rm -rf --one-file-system "${install_dir}"
+    sudo rm -f "/etc/systemd/system/${unit}" "${records}/units/${name}"
   fi
 }
 trap cleanup EXIT
@@ -103,6 +104,29 @@ sudo install -m 0755 "${install_dir}/bin/runsvc.sh" "${install_dir}/runsvc.sh"
 sudo chown -R "${runner_user}:${runner_user}" "${install_dir}"
 sudo chmod 0750 "${install_dir}"
 
+# Write the unit and root's records before configuring: once config.sh has
+# created .runner the EXIT trap keeps the tree, and the Unregister procedure
+# needs these records to clean up a registration that fails after that point.
+sudo tee "/etc/systemd/system/${unit}" >/dev/null <<UNIT
+[Unit]
+Description=GitHub Actions Runner (${repo} ${runner_name})
+After=network-online.target
+
+[Service]
+ExecStart=${install_dir}/runsvc.sh
+User=${runner_user}
+WorkingDirectory=${install_dir}
+# mixed: SIGTERM to the listener, then the whole cgroup is killed, so no job
+# process outlives the service.
+KillMode=mixed
+KillSignal=SIGTERM
+TimeoutStopSec=5min
+
+[Install]
+WantedBy=multi-user.target
+UNIT
+printf '%s\n' "${unit}" | sudo tee "${install_dir}/.service" "${records}/units/${name}" >/dev/null
+
 ACTIONS_RUNNER_INPUT_TOKEN="${token}" sudo --preserve-env=ACTIONS_RUNNER_INPUT_TOKEN -u "${runner_user}" \
   bash -c 'cd "$1" && shift && exec ./config.sh "$@"' _ "${install_dir}" \
   --url "https://github.com/${repo}" --name "${runner_name}" --labels "${labels}" \
@@ -113,24 +137,6 @@ if printf '%s\n' "${token}" | sudo grep -RIlF -f - "${install_dir}" >/dev/null 2
 fi
 unset token
 
-# The unit svc.sh would write, written by root from this script.
-sudo tee "/etc/systemd/system/${unit}" >/dev/null <<UNIT
-[Unit]
-Description=GitHub Actions Runner (${repo} ${runner_name})
-After=network-online.target
-
-[Service]
-ExecStart=${install_dir}/runsvc.sh
-User=${runner_user}
-WorkingDirectory=${install_dir}
-KillMode=process
-KillSignal=SIGTERM
-TimeoutStopSec=5min
-
-[Install]
-WantedBy=multi-user.target
-UNIT
-printf '%s\n' "${unit}" | sudo tee "${install_dir}/.service" "${records}/units/${name}" >/dev/null
 sudo systemctl daemon-reload
 sudo systemctl enable --now "${unit}" >/dev/null 2>&1
 sudo systemctl is-active "${unit}"
