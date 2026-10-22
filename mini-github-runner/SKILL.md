@@ -383,9 +383,12 @@ else runner_service=$(sudo cat "$runner_dir/.service"); fi
 sudo systemctl disable --now "$runner_service"
 # Other runners on the same account (both live runners still use actions)
 # could read the token from config.sh's environment: stop them meanwhile.
-others=$(grep -lx "User=$runner_user" /etc/systemd/system/actions.runner.*.service 2>/dev/null |
-  xargs -r -n1 basename | grep -vxF "$runner_service" || true)
-for u in $others; do sudo systemctl stop "$u"; done
+# Only active ones are stopped, and only those are started again afterwards.
+others=""
+for u in $(grep -lx "User=$runner_user" /etc/systemd/system/actions.runner.*.service 2>/dev/null |
+  xargs -r -n1 basename | grep -vxF "$runner_service" || true); do
+  if systemctl is-active --quiet "$u"; then sudo systemctl stop "$u"; others="$others $u"; fi
+done
 ACTIONS_RUNNER_INPUT_TOKEN="$t" sudo --preserve-env=ACTIONS_RUNNER_INPUT_TOKEN -u "$runner_user" \
   bash -c 'cd "$1" && exec ./config.sh remove --unattended' _ "$runner_dir"
 unset t
