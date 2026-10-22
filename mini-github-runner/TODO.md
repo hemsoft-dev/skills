@@ -147,7 +147,8 @@ Run trusted GitHub Actions jobs on an isolated virtual machine hosted by `mini`,
 - [x] Runner service survives a guest reboot.
 - [x] No secrets exist in the project files or git diff.
 - [x] Skill documentation matches the live implementation.
-- [x] All four skill-capable fleet computers have matching verified copies.
+- [x] V1.0: all four skill-capable fleet computers have matching verified copies
+      (V1.1 distribution is pending in Milestone 10).
 - [x] Repository checks pass for the complete user-authorized worktree.
 - [x] Status changes from `In progress` to `Complete` only after every check above passes.
 

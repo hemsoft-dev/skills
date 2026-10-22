@@ -78,21 +78,29 @@ else
   sudo chmod 0644 "${marker}"
 fi
 
-archive_path=$(mktemp)
+# The verified archive is cached in a root-owned directory, so a retry after
+# an expired registration token (it lasts an hour) does not download it again.
+cache=/var/cache/actions-runner
+archive_path="${cache}/${runner_archive}"
 # If registration fails before the runner is configured (expired token, name
 # in use, GitHub unreachable), remove the tree this run created, so a retry is
 # not refused by the fresh-directory check.
 created=0
 cleanup() {
-  rm -f "${archive_path}"
   if [ "${created}" = 1 ] && ! sudo test -e "${install_dir}/.runner"; then
     sudo rm -rf --one-file-system "${install_dir}"
     sudo rm -f "/etc/systemd/system/${unit}" "${records}/units/${name}"
   fi
 }
 trap cleanup EXIT
-curl -fsSL --retry 3 --retry-delay 2 -o "${archive_path}" "${runner_url}"
-printf '%s  %s\n' "${runner_sha256}" "${archive_path}" | sha256sum --check --strict - >/dev/null
+sudo install -d -o root -g root -m 0755 "${cache}"
+if ! printf '%s  %s\n' "${runner_sha256}" "${archive_path}" | sha256sum --check --strict --status - 2>/dev/null; then
+  download=$(mktemp)
+  curl -fsSL --retry 3 --retry-delay 2 -o "${download}" "${runner_url}"
+  printf '%s  %s\n' "${runner_sha256}" "${download}" | sha256sum --check --strict - >/dev/null
+  sudo install -o root -g root -m 0644 "${download}" "${archive_path}"
+  rm -f "${download}"
+fi
 # Unpack and install dependencies while only root can write the tree.
 sudo install -d -o root -g root -m 0755 /opt/actions-runner
 sudo install -d -o root -g root -m 0755 "${install_dir}"

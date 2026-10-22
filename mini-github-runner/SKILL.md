@@ -97,6 +97,10 @@ Refine `TODO.md` without changing infrastructure. Record decisions that affect r
 
 Complete the next unchecked host or guest provisioning item. Use the `fleet` skill for remote access. Stop for an interactive sudo prompt when required. Do not weaken SSH, Tailscale, or host firewall policy to avoid that prompt.
 
+The Register and Unregister commands also need `gh` on mini signed in as
+`HemSoft` (`gh auth login`, interactive, once); their blocks check
+`gh auth status` and stop otherwise.
+
 The tested first-build sequence is:
 
 1. Run `scripts/Invoke-PrepareMiniHost.ps1` on home and enter mini's sudo
@@ -140,6 +144,8 @@ set -euo pipefail
 ip=$(virsh -c qemu:///system domifaddr github-runner-01 --source lease |
   awk '/ipv4/ {sub(/\/.*/, "", $4); print $4; exit}')
 [ -n "$ip" ] || { echo "no DHCP lease for github-runner-01" >&2; exit 1; }
+gh auth status --hostname github.com >/dev/null 2>&1 ||
+  { echo "gh on mini is not signed in; run gh auth login as HemSoft first" >&2; exit 1; }
 helper="$HOME/.agents/skills/mini-github-runner/scripts/register-repo-runner.sh"
 test -s "$helper" || { echo "missing $helper" >&2; exit 1; }
 { gh api -X POST repos/hemsoft-dev/project-manager/actions/runners/registration-token --jq .token &&
@@ -170,6 +176,7 @@ its own account and unit:
 ```bash
 # From mini: stream the installed script into the guest; it runs there, for
 # the account and unit the helper recorded (never a hand-typed account name).
+# Replace project-manager in the directory below with the runner's repo name.
 set -euo pipefail
 ip=$(virsh -c qemu:///system domifaddr github-runner-01 --source lease |
   awk '/ipv4/ {sub(/\/.*/, "", $4); print $4; exit}')
@@ -179,7 +186,7 @@ test -s "$script" || { echo "missing $script" >&2; exit 1; }
 ssh -o BatchMode=yes -o StrictHostKeyChecking=yes \
   -o UserKnownHostsFile="$HOME/.ssh/github-runner-01_known_hosts" \
   -i "$HOME/.ssh/github-runner-01_ed25519" runner-admin@"$ip" \
-  'd=/opt/actions-runner/<repo>; u=$(sudo stat -c %U "$d"); s=$(sudo cat "/etc/actions-runner/units/${d##*/}")
+  'd=/opt/actions-runner/project-manager; u=$(sudo stat -c %U "$d"); s=$(sudo cat "/etc/actions-runner/units/${d##*/}")
    RUNNER_USER="$u" RUNNER_DIRECTORY="$d" RUNNER_SERVICE="$s" bash -s' < "$script"
 ```
 
@@ -373,6 +380,8 @@ set -euo pipefail
 ip=$(virsh -c qemu:///system domifaddr github-runner-01 --source lease |
   awk '/ipv4/ {sub(/\/.*/, "", $4); print $4; exit}')
 [ -n "$ip" ] || { echo "no DHCP lease for github-runner-01" >&2; exit 1; }
+gh auth status --hostname github.com >/dev/null 2>&1 ||
+  { echo "gh on mini is not signed in; run gh auth login as HemSoft first" >&2; exit 1; }
 repo=hemsoft-dev/project-manager; runner_dir=/opt/actions-runner/project-manager
 guest=$(cat <<'GUEST'
 set -euo pipefail
