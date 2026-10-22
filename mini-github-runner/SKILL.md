@@ -136,7 +136,10 @@ first: it removes the GitHub registration, the unit and its record, and the
 runner directory. For example, from mini:
 
 ```bash
-set -o pipefail
+set -euo pipefail
+ip=$(virsh -c qemu:///system domifaddr github-runner-01 --source lease |
+  awk '/ipv4/ {sub(/\/.*/, "", $4); print $4; exit}')
+[ -n "$ip" ] || { echo "no DHCP lease for github-runner-01" >&2; exit 1; }
 helper="$HOME/.agents/skills/mini-github-runner/scripts/register-repo-runner.sh"
 test -s "$helper" || { echo "missing $helper" >&2; exit 1; }
 { gh api -X POST repos/hemsoft-dev/project-manager/actions/runners/registration-token --jq .token &&
@@ -167,6 +170,10 @@ its own account and unit:
 ```bash
 # From mini: stream the installed script into the guest; it runs there, for
 # the account and unit the helper recorded (never a hand-typed account name).
+set -euo pipefail
+ip=$(virsh -c qemu:///system domifaddr github-runner-01 --source lease |
+  awk '/ipv4/ {sub(/\/.*/, "", $4); print $4; exit}')
+[ -n "$ip" ] || { echo "no DHCP lease for github-runner-01" >&2; exit 1; }
 script="$HOME/.agents/skills/mini-github-runner/scripts/prepare-gh-aw-runtime.sh"
 test -s "$script" || { echo "missing $script" >&2; exit 1; }
 ssh -o BatchMode=yes -o StrictHostKeyChecking=yes \
@@ -359,6 +366,9 @@ recorded unit name before any root operation):
 
 ```bash
 set -euo pipefail
+ip=$(virsh -c qemu:///system domifaddr github-runner-01 --source lease |
+  awk '/ipv4/ {sub(/\/.*/, "", $4); print $4; exit}')
+[ -n "$ip" ] || { echo "no DHCP lease for github-runner-01" >&2; exit 1; }
 repo=hemsoft-dev/project-manager; runner_dir=/opt/actions-runner/project-manager
 guest=$(cat <<'GUEST'
 set -euo pipefail
@@ -371,9 +381,15 @@ else runner_service=$(sudo cat "$runner_dir/.service"); fi
 [[ "$runner_service" =~ ^actions\.runner\.[A-Za-z0-9_.-]+\.service$ ]] ||
   { echo "refusing unit name: $runner_service" >&2; exit 1; }
 sudo systemctl disable --now "$runner_service"
+# Other runners on the same account (both live runners still use actions)
+# could read the token from config.sh's environment: stop them meanwhile.
+others=$(grep -lx "User=$runner_user" /etc/systemd/system/actions.runner.*.service 2>/dev/null |
+  xargs -r -n1 basename | grep -vxF "$runner_service" || true)
+for u in $others; do sudo systemctl stop "$u"; done
 ACTIONS_RUNNER_INPUT_TOKEN="$t" sudo --preserve-env=ACTIONS_RUNNER_INPUT_TOKEN -u "$runner_user" \
   bash -c 'cd "$1" && exec ./config.sh remove --unattended' _ "$runner_dir"
 unset t
+for u in $others; do sudo systemctl start "$u"; done
 sudo rm -f "/etc/systemd/system/$runner_service" "$record"
 sudo systemctl daemon-reload
 sudo rm -rf --one-file-system "$runner_dir"

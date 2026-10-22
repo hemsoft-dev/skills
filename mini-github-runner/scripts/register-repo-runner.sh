@@ -79,11 +79,23 @@ else
 fi
 
 archive_path=$(mktemp)
-trap 'rm -f "${archive_path}"' EXIT
+# If registration fails before the runner is configured (expired token, name
+# in use, GitHub unreachable), remove the tree this run created, so a retry is
+# not refused by the fresh-directory check.
+created=0
+cleanup() {
+  rm -f "${archive_path}"
+  if [ "${created}" = 1 ] && ! sudo test -e "${install_dir}/.runner"; then
+    sudo rm -rf --one-file-system "${install_dir}"
+  fi
+}
+trap cleanup EXIT
 curl -fsSL --retry 3 --retry-delay 2 -o "${archive_path}" "${runner_url}"
 printf '%s  %s\n' "${runner_sha256}" "${archive_path}" | sha256sum --check --strict - >/dev/null
 # Unpack and install dependencies while only root can write the tree.
-sudo install -d -o root -g root -m 0755 /opt/actions-runner "${install_dir}"
+sudo install -d -o root -g root -m 0755 /opt/actions-runner
+sudo install -d -o root -g root -m 0755 "${install_dir}"
+created=1
 sudo tar -xzf "${archive_path}" -C "${install_dir}" --no-same-owner
 sudo "${install_dir}/bin/installdependencies.sh" >/dev/null
 sudo install -m 0755 "${install_dir}/bin/runsvc.sh" "${install_dir}/runsvc.sh"
