@@ -99,7 +99,7 @@ Complete the next unchecked host or guest provisioning item. Use the `fleet` ski
 
 The Register and Unregister commands also need `gh` on mini signed in as
 `HemSoft` (`gh auth login`, interactive, once); their blocks check
-`gh auth status` and stop otherwise.
+that the active account is `HemSoft` and stop otherwise.
 
 The tested first-build sequence is:
 
@@ -144,8 +144,8 @@ set -euo pipefail
 ip=$(virsh -c qemu:///system domifaddr github-runner-01 --source lease |
   awk '/ipv4/ {sub(/\/.*/, "", $4); print $4; exit}')
 [ -n "$ip" ] || { echo "no DHCP lease for github-runner-01" >&2; exit 1; }
-gh auth status --hostname github.com >/dev/null 2>&1 ||
-  { echo "gh on mini is not signed in; run gh auth login as HemSoft first" >&2; exit 1; }
+[ "$(gh api user --jq .login 2>/dev/null)" = HemSoft ] ||
+  { echo "gh on mini must be signed in as HemSoft (gh auth login / gh auth switch --user HemSoft)" >&2; exit 1; }
 helper="$HOME/.agents/skills/mini-github-runner/scripts/register-repo-runner.sh"
 test -s "$helper" || { echo "missing $helper" >&2; exit 1; }
 { gh api -X POST repos/hemsoft-dev/project-manager/actions/runners/registration-token --jq .token &&
@@ -170,8 +170,14 @@ truncated or normalized names cannot share a UID. It registers without
 of silently taking over that runner. Runner names are limited to letters,
 digits, `.`, `_` and `-` (up to 64 characters).
 
-A runner that needs the GH AW Docker runtime gets it after registration, for
-its own account and unit:
+Separate accounts isolate runners only while none of them can use Docker:
+membership in the guest's `docker` group is root-equivalent. Today the
+Yahtzee runner's `actions` account has Docker (the GH AW runtime), so in this
+shared guest a Yahtzee job could reach project-manager's runner files; that
+risk is accepted only because Yahtzee's sole self-hosted workflow is manual
+(`workflow_dispatch`, started by Franz). A new runner that needs Docker
+belongs in its own guest. In such a dedicated guest the step below gives the
+runner's account Docker access, for its own account and unit:
 
 ```bash
 # From mini: stream the installed script into the guest; it runs there, for
@@ -186,7 +192,8 @@ test -s "$script" || { echo "missing $script" >&2; exit 1; }
 ssh -o BatchMode=yes -o StrictHostKeyChecking=yes \
   -o UserKnownHostsFile="$HOME/.ssh/github-runner-01_known_hosts" \
   -i "$HOME/.ssh/github-runner-01_ed25519" runner-admin@"$ip" \
-  'd=/opt/actions-runner/project-manager; u=$(sudo stat -c %U "$d"); s=$(sudo cat "/etc/actions-runner/units/${d##*/}")
+  'set -eu; d=/opt/actions-runner/project-manager; u=$(sudo stat -c %U "$d")
+   s=$(sudo cat "/etc/actions-runner/units/${d##*/}"); [ -n "$s" ] || { echo "no root-owned unit record for $d" >&2; exit 1; }
    RUNNER_USER="$u" RUNNER_DIRECTORY="$d" RUNNER_SERVICE="$s" bash -s' < "$script"
 ```
 
@@ -380,8 +387,8 @@ set -euo pipefail
 ip=$(virsh -c qemu:///system domifaddr github-runner-01 --source lease |
   awk '/ipv4/ {sub(/\/.*/, "", $4); print $4; exit}')
 [ -n "$ip" ] || { echo "no DHCP lease for github-runner-01" >&2; exit 1; }
-gh auth status --hostname github.com >/dev/null 2>&1 ||
-  { echo "gh on mini is not signed in; run gh auth login as HemSoft first" >&2; exit 1; }
+[ "$(gh api user --jq .login 2>/dev/null)" = HemSoft ] ||
+  { echo "gh on mini must be signed in as HemSoft (gh auth login / gh auth switch --user HemSoft)" >&2; exit 1; }
 repo=hemsoft-dev/project-manager; runner_dir=/opt/actions-runner/project-manager
 guest=$(cat <<'GUEST'
 set -euo pipefail

@@ -138,6 +138,10 @@ Run trusted GitHub Actions jobs on an isolated virtual machine hosted by `mini`,
       `actions` account, and rerun `scripts/verify-guest-isolation.sh`.
 - [ ] Distribute V1.1 to home, laptop, air, and mini and verify each
       destination's `MANIFEST.sha256`.
+- [ ] Decide where project-manager's runner should live long term: the
+      shared guest gives Yahtzee's Docker-enabled `actions` account
+      root-equivalent reach over it (accepted while Yahtzee's workflow is
+      manual-only); a dedicated guest would remove that.
 
 ## Acceptance checks
 
