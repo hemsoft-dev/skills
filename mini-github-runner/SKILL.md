@@ -1,6 +1,6 @@
 ---
 name: mini-github-runner
-description: "V1.0 - Commands: Status, Plan, Provision, Register, Verify, Distribute. Build and maintain the isolated GitHub Actions runner hosted on mini, with implementation state tracked in TODO.md."
+description: "V1.1 - Commands: Status, Plan, Provision, Register, Verify, Distribute. Build and maintain the isolated GitHub Actions runner hosted on mini, with implementation state tracked in TODO.md."
 ---
 
 # Mini GitHub runner
@@ -34,15 +34,32 @@ Build and operate an isolated GitHub Actions self-hosted runner on `mini`.
 - Network: libvirt `default` NAT with filter `github-runner-locked`. The guest
   may reach the libvirt gateway and public Internet, but not RFC1918,
   `100.64.0.0/10`, or IPv4 link-local destinations.
-- Runner: v2.336.0 under `/opt/actions-runner/yahtzee`, systemd unit
-  `actions.runner.HemSoft-yahtzee.mini-github-runner-01.service`, user
-  `actions`, labels `mini` and `yahtzee` plus GitHub's default labels.
+- Runners (v2.336.0, one repository-scoped registration each, never
+  org-wide). New registrations run as their own account, `actions-<repo>`;
+  both live runners predate that and still run as `actions` (migration of the
+  project-manager runner is pending in `TODO.md`):
+  - `mini-github-runner-01` under `/opt/actions-runner/yahtzee`, unit
+    `actions.runner.HemSoft-yahtzee.mini-github-runner-01.service`, labels
+    `mini` and `yahtzee`.
+  - `mini-github-runner-01-pm` for `hemsoft-dev/project-manager` under
+    `/opt/actions-runner/project-manager`, unit
+    `actions.runner.hemsoft-dev-project-manager.mini-github-runner-01-pm.service`,
+    labels `mini` and `project-manager`. Its CI runs here because hosted
+    minutes for private hemsoft-dev repos are blocked by the org's $0 Actions
+    budget (Chief approval, 2026-10-21).
+- Guest build tools: `gcc` and `libc6-dev` (for Go `-race`), from the Ubuntu
+  repository; cloud-init and `scripts/prepare-gh-aw-runtime.sh` both install
+  them, so a rebuilt guest has them.
 - GH AW runtime: Docker Engine 29.7.2, Docker Compose 5.5.0, GitHub CLI
   2.45.0, and ripgrep 14.1.0. The `actions` user belongs to the guest-local
   `docker` group. Node.js remains workflow-managed through `actions/setup-node`.
-- Repository: `hemsoft-dev/yahtzee`. Its only self-hosted workflow is
-  `.github/workflows/self-hosted-smoke.yml`, triggered only by
-  `workflow_dispatch` with zero token permissions.
+- Repositories: `hemsoft-dev/yahtzee`, whose only self-hosted workflow is
+  `.github/workflows/self-hosted-smoke.yml` (`workflow_dispatch`, zero token
+  permissions), and `hemsoft-dev/project-manager`, whose `ci.yml` runs on
+  `[self-hosted, mini, project-manager]` with `contents: read`. Yahtzee is
+  public and stays the restricted public-repository exception (manual-only
+  workflow, fork approval required, see `TODO.md`); project-manager is
+  private, and only its own pull requests and pushes run on its runner.
 
 ## Commands
 
@@ -57,6 +74,8 @@ ssh mini 'virsh -c qemu:///system dominfo github-runner-01; virsh -c qemu:///sys
 $env:GH_TOKEN = gh auth token --user HemSoft
 gh api repos/hemsoft-dev/yahtzee/actions/runners --jq '.runners[] | select(.name=="mini-github-runner-01")'
 gh run list --repo hemsoft-dev/yahtzee --workflow self-hosted-smoke.yml --limit 5
+gh api repos/hemsoft-dev/project-manager/actions/runners --jq '.runners[] | select(.name=="mini-github-runner-01-pm")'
+gh run list --repo hemsoft-dev/project-manager --workflow ci.yml --limit 5
 ```
 
 Resolve the current DHCP lease and use strict host-key checking for guest
@@ -77,6 +96,10 @@ Refine `TODO.md` without changing infrastructure. Record decisions that affect r
 ### Provision
 
 Complete the next unchecked host or guest provisioning item. Use the `fleet` skill for remote access. Stop for an interactive sudo prompt when required. Do not weaken SSH, Tailscale, or host firewall policy to avoid that prompt.
+
+The Register and Unregister commands also need `gh` on mini signed in as
+`HemSoft` (`gh auth login`, interactive, once); their blocks check
+that the active account is `HemSoft` and stop otherwise.
 
 The tested first-build sequence is:
 
@@ -100,12 +123,88 @@ The tested first-build sequence is:
 
 Require an exact `OWNER/REPOSITORY`. Confirm the repository owner and authenticated GitHub account before requesting a short-lived registration token. Register a distinct runner service for each repository and discard the token after use.
 
-For Yahtzee, request the token from home with the `HemSoft` GitHub CLI account
-and stream it as the first stdin line to `scripts/register-yahtzee-runner.sh`.
-The helper reads it into process memory, verifies the official runner archive,
-checks that the raw token was not written under the installation directory,
-unsets it, and starts the service. Never put the token in an argument, command
-history, temporary file, TODO, or history entry.
+For any repository, request the token with the `HemSoft` GitHub CLI account
+(`gh api -X POST repos/OWNER/REPO/actions/runners/registration-token --jq .token`)
+and stream it as the first stdin line into the guest, where
+`scripts/register-repo-runner.sh OWNER/REPO RUNNER_NAME LABELS` reads it into
+memory, verifies the official runner archive, creates the runner's own account
+`actions-<repo>` when missing, registers under `/opt/actions-runner/<repo>`,
+checks that the raw token was not written there, and writes and starts the
+systemd unit itself (root never runs the archive's `svc.sh` or any file the
+runner account could have changed). It hands the token to `config.sh` through
+`ACTIONS_RUNNER_INPUT_TOKEN` (readable only by the runner user and root), never
+argv. It rejects `.`/`..` repository names and refuses any existing runner
+directory before unpacking, so root only runs installers in a tree it just
+created. To re-register, run the full [Unregister](#unregister) procedure
+first: it removes the GitHub registration, the unit and its record, and the
+runner directory. For example, from mini:
+
+```bash
+set -euo pipefail
+ip=$(virsh -c qemu:///system domifaddr github-runner-01 --source lease |
+  awk '/ipv4/ {sub(/\/.*/, "", $4); print $4; exit}')
+[ -n "$ip" ] || { echo "no DHCP lease for github-runner-01" >&2; exit 1; }
+[ "$(gh api user --jq .login 2>/dev/null)" = HemSoft ] ||
+  { echo "gh on mini must be signed in as HemSoft (gh auth login / gh auth switch --user HemSoft)" >&2; exit 1; }
+helper="$HOME/.agents/skills/mini-github-runner/scripts/register-repo-runner.sh"
+test -s "$helper" || { echo "missing $helper" >&2; exit 1; }
+{ gh api -X POST repos/hemsoft-dev/project-manager/actions/runners/registration-token --jq .token &&
+  cat "$helper"; } |
+  ssh -o BatchMode=yes -o StrictHostKeyChecking=yes \
+    -o UserKnownHostsFile="$HOME/.ssh/github-runner-01_known_hosts" \
+    -i "$HOME/.ssh/github-runner-01_ed25519" runner-admin@"$ip" \
+    'IFS= read -r t; s=$(cat); [ -n "$t" ] && [ -n "$s" ] || { echo "token or helper missing" >&2; exit 2; }
+     printf "%s\n" "$t" | bash -c "$s" _ hemsoft-dev/project-manager mini-github-runner-01-pm mini,project-manager'
+```
+
+The helper path is the installed skill copy, so the example works from any
+directory; both sides refuse an empty token or script instead of running an
+empty program.
+
+Root records which repository owns each account in
+`/etc/actions-runner/accounts/<account>` and each runner's unit in
+`/etc/actions-runner/units/<repo>`, outside anything a runner account can
+write; the helper refuses an existing account owned by another repository, so
+truncated or normalized names cannot share a UID. It registers without
+`--replace`, so a runner name already in use in the repository fails instead
+of silently taking over that runner. Runner names are limited to letters,
+digits, `.`, `_` and `-` (up to 64 characters).
+
+Separate accounts isolate runners only while none of them can use Docker:
+membership in the guest's `docker` group is root-equivalent. Today the
+Yahtzee runner's `actions` account has Docker (the GH AW runtime), so in this
+shared guest a Yahtzee job could reach project-manager's runner files; that
+risk is accepted only because Yahtzee's sole self-hosted workflow is manual
+(`workflow_dispatch`, started by Franz). A new runner that needs Docker
+belongs in its own guest. In such a dedicated guest the step below gives the
+runner's account Docker access, for its own account and unit:
+
+```bash
+# From mini: stream the installed script into the guest; it runs there, for
+# the account and unit the helper recorded (never a hand-typed account name).
+# Replace project-manager in the directory below with the runner's repo name.
+set -euo pipefail
+ip=$(virsh -c qemu:///system domifaddr github-runner-01 --source lease |
+  awk '/ipv4/ {sub(/\/.*/, "", $4); print $4; exit}')
+[ -n "$ip" ] || { echo "no DHCP lease for github-runner-01" >&2; exit 1; }
+script="$HOME/.agents/skills/mini-github-runner/scripts/prepare-gh-aw-runtime.sh"
+test -s "$script" || { echo "missing $script" >&2; exit 1; }
+ssh -o BatchMode=yes -o StrictHostKeyChecking=yes \
+  -o UserKnownHostsFile="$HOME/.ssh/github-runner-01_known_hosts" \
+  -i "$HOME/.ssh/github-runner-01_ed25519" runner-admin@"$ip" \
+  'set -eu; d=/opt/actions-runner/project-manager; u=$(sudo stat -c %U "$d")
+   s=$(sudo cat "/etc/actions-runner/units/${d##*/}"); [ -n "$s" ] || { echo "no root-owned unit record for $d" >&2; exit 1; }
+   RUNNER_USER="$u" RUNNER_DIRECTORY="$d" RUNNER_SERVICE="$s" bash -s' < "$script"
+```
+
+It adds that account to the guest-local `docker` group and restarts the
+recorded unit. project-manager's CI does not use Docker and skips this step.
+
+`scripts/register-yahtzee-runner.sh` is the original single-repository helper;
+it takes the token from `RUNNER_REGISTRATION_TOKEN` in its own process
+environment. Never put the token in an argument, command history, temporary
+file, TODO, or history entry. Rerun `scripts/verify-guest-isolation.sh` after
+every registration.
 
 ### Verify
 
@@ -120,6 +219,21 @@ gh run list --repo hemsoft-dev/yahtzee --workflow self-hosted-smoke.yml --limit 
 After any network, runner, or VM change, rerun
 `scripts/verify-guest-isolation.sh` inside the guest. A package delivery or an
 online status alone is not verification.
+
+For project-manager, which has no manual smoke workflow, rerun its most recent
+CI run (read-only, `contents: read`) and confirm the job ran on the expected
+runner:
+
+```powershell
+$env:GH_TOKEN = gh auth token --user HemSoft
+$run = gh run list --repo hemsoft-dev/project-manager --workflow ci.yml --limit 1 --json databaseId --jq '.[0].databaseId'
+gh run rerun $run --repo hemsoft-dev/project-manager
+gh run watch $run --repo hemsoft-dev/project-manager --exit-status
+gh api "repos/hemsoft-dev/project-manager/actions/runs/$run/jobs" --jq '.jobs[] | {name, runner_name, conclusion}'
+```
+
+Require `runner_name` to be `mini-github-runner-01-pm` and `conclusion` to be
+`success`.
 
 ### Distribute
 
@@ -145,6 +259,8 @@ Use these GitHub pages:
 - [Yahtzee self-hosted runners](https://github.com/hemsoft-dev/yahtzee/settings/actions/runners)
 - [Manual smoke workflow](https://github.com/hemsoft-dev/yahtzee/actions/workflows/self-hosted-smoke.yml)
 - [All Yahtzee Actions runs](https://github.com/hemsoft-dev/yahtzee/actions)
+- [project-manager self-hosted runners](https://github.com/hemsoft-dev/project-manager/settings/actions/runners)
+- [project-manager CI runs](https://github.com/hemsoft-dev/project-manager/actions/workflows/ci.yml)
 
 The runner page shows online, offline, and busy state plus labels. The workflow
 page shows each manual smoke run and its job logs. GitHub does not provide
@@ -166,6 +282,40 @@ virsh -c qemu:///system domstats github-runner-01
 Inside the guest, use `systemctl status`, `journalctl`, `free -h`, `df -h`, and
 `uptime` for service and host-resource monitoring.
 
+### Select the runner
+
+Every per-runner command below acts on one selected runner. Set these first,
+inside the guest as `runner-admin` and on the GitHub side, for the runner the
+user named:
+
+| Runner | Repository | Directory |
+| --- | --- | --- |
+| `mini-github-runner-01` | `hemsoft-dev/yahtzee` | `/opt/actions-runner/yahtzee` |
+| `mini-github-runner-01-pm` | `hemsoft-dev/project-manager` | `/opt/actions-runner/project-manager` |
+
+```bash
+set -euo pipefail
+runner_dir=/opt/actions-runner/project-manager # or /opt/actions-runner/yahtzee
+runner_user=$(sudo stat -c %U "$runner_dir")
+# Prefer root's record; the .service file sits in a directory the runner
+# account can write, so whatever is read must be a plain unit basename.
+record="/etc/actions-runner/units/$(basename "$runner_dir")"
+if sudo test -f "$record"; then runner_service=$(sudo cat "$record")
+else runner_service=$(sudo cat "$runner_dir/.service"); fi
+[[ "$runner_service" =~ ^actions\.runner\.[A-Za-z0-9_.-]+\.service$ ]] ||
+  { echo "refusing unit name: $runner_service" >&2; exit 1; }
+# The unit file is root-owned; its WorkingDirectory must be this runner, so a
+# rewritten .service cannot point root at another runner's unit.
+[ "$(systemctl show -p WorkingDirectory --value "$runner_service")" = "$runner_dir" ] ||
+  { echo "$runner_service does not belong to $runner_dir" >&2; exit 1; }
+```
+
+```powershell
+$repo = 'hemsoft-dev/project-manager'; $name = 'mini-github-runner-01-pm'
+$env:GH_TOKEN = gh auth token --user HemSoft
+$id = gh api "repos/$repo/actions/runners" --jq ".runners[] | select(.name==`"$name`") | .id"
+```
+
 ### Guest and runner lifecycle
 
 Run these on mini:
@@ -180,11 +330,10 @@ virsh -c qemu:///system autostart github-runner-01
 Run these inside the guest as `runner-admin`:
 
 ```bash
-runner_service=$(sudo cat /opt/actions-runner/yahtzee/.service)
 sudo systemctl status "$runner_service"
 sudo systemctl restart "$runner_service"
 sudo journalctl -u "$runner_service" -n 100 --no-pager
-sudo -u actions /opt/actions-runner/yahtzee/bin/Runner.Listener --version
+sudo -u "$runner_user" "$runner_dir/bin/Runner.Listener" --version
 ```
 
 ### Updates
@@ -194,7 +343,7 @@ self-hosted runner to update within 30 days of a release and can require an
 immediate critical-security update. Compare versions without changing state:
 
 ```bash
-installed=$(sudo -u actions /opt/actions-runner/yahtzee/bin/Runner.Listener --version)
+installed=$(sudo -u "$runner_user" "$runner_dir/bin/Runner.Listener" --version)
 latest=$(curl -fsS https://api.github.com/repos/actions/runner/releases/latest |
   jq -r '.tag_name | ltrimstr("v")')
 printf 'installed=%s latest=%s\n' "$installed" "$latest"
@@ -222,20 +371,83 @@ public share. Restart the guest and verify the runner after the copy.
 
 ### Unregister
 
-Unregister only when the user requests it. Stop and uninstall the guest service
-first with `svc.sh`, then delete runner ID 21 or its currently resolved ID with
-the authenticated GitHub API. Removing the VM, volumes, key, or backups is a
-separate destructive action and needs an exact user request.
+Unregister only when the user requests it, and only the selected runner, with
+the selection block above (validated `$runner_service`) already run in the
+same shell. Removing the VM, volumes, key, or backups is a separate
+destructive action and needs an exact user request.
+
+`config.sh remove` deletes both the GitHub registration and the local
+configuration, then the runner directory is removed so a later registration
+starts from a fresh, root-created tree. From mini, stream the removal token and
+the guest steps the same way as registration (the guest side validates the
+recorded unit name before any root operation):
 
 ```bash
-cd /opt/actions-runner/yahtzee
-sudo ./svc.sh stop
-sudo ./svc.sh uninstall
+set -euo pipefail
+ip=$(virsh -c qemu:///system domifaddr github-runner-01 --source lease |
+  awk '/ipv4/ {sub(/\/.*/, "", $4); print $4; exit}')
+[ -n "$ip" ] || { echo "no DHCP lease for github-runner-01" >&2; exit 1; }
+[ "$(gh api user --jq .login 2>/dev/null)" = HemSoft ] ||
+  { echo "gh on mini must be signed in as HemSoft (gh auth login / gh auth switch --user HemSoft)" >&2; exit 1; }
+repo=hemsoft-dev/project-manager; runner_dir=/opt/actions-runner/project-manager
+guest=$(cat <<'GUEST'
+set -euo pipefail
+IFS= read -r t; [ -n "$t" ] || exit 2
+runner_dir=$1
+runner_user=$(sudo stat -c %U "$runner_dir")
+record="/etc/actions-runner/units/$(basename "$runner_dir")"
+if sudo test -f "$record"; then runner_service=$(sudo cat "$record")
+else runner_service=$(sudo cat "$runner_dir/.service"); fi
+[[ "$runner_service" =~ ^actions\.runner\.[A-Za-z0-9_.-]+\.service$ ]] ||
+  { echo "refusing unit name: $runner_service" >&2; exit 1; }
+# The unit file is root-owned; its WorkingDirectory must be this runner, so a
+# rewritten .service cannot point root at another runner's unit.
+[ "$(systemctl show -p WorkingDirectory --value "$runner_service")" = "$runner_dir" ] ||
+  { echo "$runner_service does not belong to $runner_dir" >&2; exit 1; }
+sudo systemctl disable --now "$runner_service"
+# Other runners on the same account (both live runners still use actions)
+# could read the token from config.sh's environment: stop them meanwhile.
+# Only active ones are stopped, and only those are started again, on every
+# exit path (a failed config.sh remove included).
+others=""
+trap 'for u in $others; do sudo systemctl start "$u"; done' EXIT
+for u in $(grep -lx "User=$runner_user" /etc/systemd/system/actions.runner.*.service 2>/dev/null |
+  xargs -r -n1 basename | grep -vxF "$runner_service" || true); do
+  if systemctl is-active --quiet "$u"; then sudo systemctl stop "$u"; others="$others $u"; fi
+done
+# Older units use KillMode=process, so job processes can outlive a stop. No
+# process of this account may run while the token is in its environment.
+sudo pkill -KILL -u "$runner_user" || true
+for _ in 1 2 3 4 5; do pgrep -u "$runner_user" >/dev/null || break; sleep 1; done
+if pgrep -u "$runner_user" >/dev/null; then
+  echo "processes of $runner_user are still running; not exporting the token" >&2
+  exit 1
+fi
+ACTIONS_RUNNER_INPUT_TOKEN="$t" sudo --preserve-env=ACTIONS_RUNNER_INPUT_TOKEN -u "$runner_user" \
+  bash -c 'cd "$1" && exec ./config.sh remove --unattended' _ "$runner_dir"
+unset t
+for u in $others; do sudo systemctl start "$u"; done
+trap - EXIT
+sudo rm -f "/etc/systemd/system/$runner_service" "$record"
+sudo systemctl daemon-reload
+sudo rm -rf --one-file-system "$runner_dir"
+GUEST
+)
+{ gh api -X POST "repos/$repo/actions/runners/remove-token" --jq .token &&
+  printf '%s\n' "$guest"; } |
+  ssh -o BatchMode=yes -o StrictHostKeyChecking=yes \
+    -o UserKnownHostsFile="$HOME/.ssh/github-runner-01_known_hosts" \
+    -i "$HOME/.ssh/github-runner-01_ed25519" runner-admin@"$ip" \
+    "IFS= read -r t; s=\$(cat); [ -n \"\$t\" ] && [ -n \"\$s\" ] || exit 2; printf '%s\\n' \"\$t\" | bash -c \"\$s\" _ $runner_dir"
 ```
 
+If `config.sh remove` cannot reach GitHub, delete the resolved ID instead
+(never a hard-coded one), then finish the guest steps after the `config.sh`
+line:
+
 ```powershell
-$env:GH_TOKEN = gh auth token --user HemSoft
-gh api --method DELETE repos/hemsoft-dev/yahtzee/actions/runners/21
+if (-not $id) { throw "runner $name not found in $repo" }
+gh api --method DELETE "repos/$repo/actions/runners/$id"
 ```
 
 ### Troubleshooting
@@ -248,7 +460,7 @@ gh api --method DELETE repos/hemsoft-dev/yahtzee/actions/runners/21
   short-lived and should never be reused from files or history.
 - Disk pressure: inspect `df -h /` and `_work`; remove only disposable build
   output after proving no job is running. Do not delete runner credentials.
-- Docker failure: run `sudo -u actions -H docker version`, inspect
+- Docker failure: run `sudo -u "$runner_user" -H docker version`, inspect
   `systemctl status docker`, and confirm the live runner process lists the
   guest-local Docker group. Never substitute mini's host Docker socket.
 - Network failure: distinguish public DNS/HTTPS failure from an expected

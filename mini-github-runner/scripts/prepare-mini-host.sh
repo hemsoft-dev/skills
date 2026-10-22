@@ -11,6 +11,7 @@ export DEBIAN_FRONTEND=noninteractive
 apt-get update
 apt-get install -y --no-install-recommends \
   cloud-image-utils \
+  gh \
   libvirt-clients \
   libvirt-daemon-system \
   nftables \

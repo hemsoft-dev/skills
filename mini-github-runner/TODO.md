@@ -1,6 +1,6 @@
 # mini-github-runner implementation
 
-Status: Complete
+Status: In progress
 
 Last verified: 2026-08-19 at 22:03 on `home`
 
@@ -125,6 +125,24 @@ Run trusted GitHub Actions jobs on an isolated virtual machine hosted by `mini`,
 - [x] Update skill documentation and source hashes for the live runtime.
 - [x] Redistribute and verify the updated skill on every skill-capable computer.
 
+## Milestone 10: Second repository runner (V1.1)
+
+- [x] Register `mini-github-runner-01-pm` for `hemsoft-dev/project-manager`
+      (repository-scoped, labels `mini` and `project-manager`).
+- [x] Generalize registration into `scripts/register-repo-runner.sh` with a
+      per-repository account, a root-owned unpack, and a script-written unit.
+- [x] Provision `gcc` and `libc6-dev` through cloud-init and
+      `scripts/prepare-gh-aw-runtime.sh`.
+- [ ] Re-register `mini-github-runner-01-pm` under `actions-project-manager`
+      with the V1.1 helper, so it no longer shares the public Yahtzee runner's
+      `actions` account, and rerun `scripts/verify-guest-isolation.sh`.
+- [ ] Distribute V1.1 to home, laptop, air, and mini and verify each
+      destination's `MANIFEST.sha256`.
+- [ ] Decide where project-manager's runner should live long term: the
+      shared guest gives Yahtzee's Docker-enabled `actions` account
+      root-equivalent reach over it (accepted while Yahtzee's workflow is
+      manual-only); a dedicated guest would remove that.
+
 ## Acceptance checks
 
 - [x] `mini-github-runner-01` is online in the selected GitHub repository.
@@ -133,7 +151,8 @@ Run trusted GitHub Actions jobs on an isolated virtual machine hosted by `mini`,
 - [x] Runner service survives a guest reboot.
 - [x] No secrets exist in the project files or git diff.
 - [x] Skill documentation matches the live implementation.
-- [x] All four skill-capable fleet computers have matching verified copies.
+- [x] V1.0: all four skill-capable fleet computers have matching verified copies
+      (V1.1 distribution is pending in Milestone 10).
 - [x] Repository checks pass for the complete user-authorized worktree.
 - [x] Status changes from `In progress` to `Complete` only after every check above passes.
 
@@ -376,8 +395,23 @@ claim a fresh runner health, isolation or smoke-workflow check.
   source hash matched. This evidence authorizes the final status change and one
   final distribution of the closed source set.
 
+## 2026-10-21 16:46 EDT: second repository, hemsoft-dev/project-manager
+
+- Chief-approved (2026-10-21 16:31 ET): hosted Actions minutes are blocked for private hemsoft-dev
+  repos by the org's $0 Actions budget, so project-manager CI runs here.
+- Registered `mini-github-runner-01-pm` (runner 2.336.0, archive SHA-256 verified) under
+  `/opt/actions-runner/project-manager`, user `actions`, labels `mini,project-manager`, unit
+  `actions.runner.hemsoft-dev-project-manager.mini-github-runner-01-pm.service`. The token went
+  over stdin only; the post-config grep found no copy under the install directory.
+- Installed `gcc` and `libc6-dev` in the guest (Ubuntu repo) for `go test -race`.
+- `verify-guest-isolation.sh` after the change: `ISOLATION_OK`, Tailscale absent.
+- First green run on it: hemsoft-dev/project-manager CI run 39673198467 (job `verify`,
+  all steps green), 2026-10-21 16:47 EDT.
+- Skill V1.1: `scripts/register-repo-runner.sh OWNER/REPO NAME LABELS` generalizes the
+  registration (token on stdin only); SKILL.md lists both runners.
+
 ## Current blockers
 
-None. The GH AW host runtime, durable provisioning helper, documentation, and
-fleet distribution are complete. Yahtzee workflow implementation now continues
+None. V1.1 follow-ups (Milestone 10) are pending: the project-manager runner
+account migration and fleet distribution after this change merges. Yahtzee workflow implementation now continues
 in `D:\github\HemSoft\yahtzee\TODO.md`.
