@@ -290,6 +290,10 @@ if sudo test -f "$record"; then runner_service=$(sudo cat "$record")
 else runner_service=$(sudo cat "$runner_dir/.service"); fi
 [[ "$runner_service" =~ ^actions\.runner\.[A-Za-z0-9_.-]+\.service$ ]] ||
   { echo "refusing unit name: $runner_service" >&2; exit 1; }
+# The unit file is root-owned; its WorkingDirectory must be this runner, so a
+# rewritten .service cannot point root at another runner's unit.
+[ "$(systemctl show -p WorkingDirectory --value "$runner_service")" = "$runner_dir" ] ||
+  { echo "$runner_service does not belong to $runner_dir" >&2; exit 1; }
 ```
 
 ```powershell
@@ -380,11 +384,17 @@ if sudo test -f "$record"; then runner_service=$(sudo cat "$record")
 else runner_service=$(sudo cat "$runner_dir/.service"); fi
 [[ "$runner_service" =~ ^actions\.runner\.[A-Za-z0-9_.-]+\.service$ ]] ||
   { echo "refusing unit name: $runner_service" >&2; exit 1; }
+# The unit file is root-owned; its WorkingDirectory must be this runner, so a
+# rewritten .service cannot point root at another runner's unit.
+[ "$(systemctl show -p WorkingDirectory --value "$runner_service")" = "$runner_dir" ] ||
+  { echo "$runner_service does not belong to $runner_dir" >&2; exit 1; }
 sudo systemctl disable --now "$runner_service"
 # Other runners on the same account (both live runners still use actions)
 # could read the token from config.sh's environment: stop them meanwhile.
-# Only active ones are stopped, and only those are started again afterwards.
+# Only active ones are stopped, and only those are started again, on every
+# exit path (a failed config.sh remove included).
 others=""
+trap 'for u in $others; do sudo systemctl start "$u"; done' EXIT
 for u in $(grep -lx "User=$runner_user" /etc/systemd/system/actions.runner.*.service 2>/dev/null |
   xargs -r -n1 basename | grep -vxF "$runner_service" || true); do
   if systemctl is-active --quiet "$u"; then sudo systemctl stop "$u"; others="$others $u"; fi
@@ -395,13 +405,13 @@ sudo pkill -KILL -u "$runner_user" || true
 for _ in 1 2 3 4 5; do pgrep -u "$runner_user" >/dev/null || break; sleep 1; done
 if pgrep -u "$runner_user" >/dev/null; then
   echo "processes of $runner_user are still running; not exporting the token" >&2
-  for u in $others; do sudo systemctl start "$u"; done
   exit 1
 fi
 ACTIONS_RUNNER_INPUT_TOKEN="$t" sudo --preserve-env=ACTIONS_RUNNER_INPUT_TOKEN -u "$runner_user" \
   bash -c 'cd "$1" && exec ./config.sh remove --unattended' _ "$runner_dir"
 unset t
 for u in $others; do sudo systemctl start "$u"; done
+trap - EXIT
 sudo rm -f "/etc/systemd/system/$runner_service" "$record"
 sudo systemctl daemon-reload
 sudo rm -rf --one-file-system "$runner_dir"
