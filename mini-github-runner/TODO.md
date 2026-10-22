@@ -412,8 +412,9 @@ claim a fresh runner health, isolation or smoke-workflow check.
 
 ## Current blockers
 
-None. V1.1 follow-ups (Milestone 10) are pending: the project-manager runner
-account migration and fleet distribution after this change merges. Yahtzee workflow implementation now continues
+None. The project-manager runner runs on its own account since 2026-10-21.
+V1.1 follow-ups still pending (Milestone 10): fleet distribution, and the
+decision on a dedicated guest for project-manager. Yahtzee workflow implementation now continues
 in `D:\github\HemSoft\yahtzee\TODO.md`.
 
 ## 2026-10-21 21:30 EDT: project-manager runner migrated to its own account

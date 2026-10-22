@@ -407,8 +407,9 @@ else runner_service=$(sudo cat "$runner_dir/.service"); fi
 [ "$(systemctl show -p WorkingDirectory --value "$runner_service")" = "$runner_dir" ] ||
   { echo "$runner_service does not belong to $runner_dir" >&2; exit 1; }
 sudo systemctl disable --now "$runner_service"
-# Other runners on the same account (both live runners still use actions)
-# could read the token from config.sh's environment: stop them meanwhile.
+# Other runners on the same account could read the token from config.sh's
+# environment: stop them meanwhile. (Each live runner now has its own account,
+# so normally there are none; the step stays for runners that share one.)
 # Only active ones are stopped, and only those are started again, on every
 # exit path (a failed config.sh remove included).
 others=""
