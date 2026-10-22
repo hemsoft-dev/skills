@@ -1,6 +1,6 @@
 ---
 name: merge-mission
-description: V1.72 - Resolve every open issue and pull request in a repository, processing existing PRs first and then oldest-first issues. Runs as a persistent goal with current-head review, validation, guarded merges, delivery verification, cleanup, and one-time notifications. Repairs CI and delivery failures, preserves evidence and recovery state, proves remaining hard blocks, and records retrospective lessons. Manual invocation only.
+description: V1.75 - Resolve every open issue and pull request in a repository, processing existing PRs first and then oldest-first issues. Runs as a persistent goal with current-head review, validation, guarded merges, delivery verification, cleanup, and one-time notifications. Repairs CI and delivery failures, preserves evidence and recovery state, proves remaining hard blocks, and records retrospective lessons. Manual invocation only.
 compatibility: Requires git, GitHub CLI, network access, permission to push branches and open pull requests, mergepr on PATH, the issue-to-pr, process-pr, repo-cleanup, and slack-dm skills, and a runtime that honors the /goal director. Without /goal, the state file alone carries resumption.
 ---
 
@@ -41,6 +41,12 @@ This authority stops at: repositories other than the target, secrets and
 credentials outside the repository, spending money, deleting or altering
 production data, and anything with legal weight. Those are hard blocks, not
 questions.
+
+Distinguish the local work machine from CI runner policy. A direction to build
+and test locally on a named machine does not by itself waive or prohibit
+documented hosted release gates. Preserve required statuses and the local
+machine restriction separately. Ask only when the user explicitly creates
+a conflict; never infer a CI waiver from the local machine choice.
 
 ## Desktop workspace ownership
 
@@ -258,6 +264,19 @@ stop reasons. "I was not sure" is not a stop reason; decide and record.
    required up-to-date checks, a conflict, an actionable finding, or a verified
    integration failure calls for it. Keep the head's review and check receipts
    otherwise, and verify delivery on the resulting published main revision.
+   Bind cleanup or cancellation to the original captured resource instance.
+   A metadata check followed by stopping a reusable unit, job or container name
+   is still a race. Use an original kernel handle or a provider operation with
+   an instance/revision precondition. If neither exists, do not mutate a possible
+   replacement: use the already-authorized bounded lifecycle, require fresh stop
+   evidence and retain an unknown result when proof is missing. Test replacement
+   between observation and the proposed action.
+   For documentation that changes completion or readiness claims, inspect full
+   paragraphs in linked component and overview documents, including wrapped
+   future-work statements. Reconcile their scope against the actual source;
+   distinguish implemented mechanisms from unpassed physical, account or live
+   qualification. Valid links and keyword matches alone do not prove consistent
+   status. Preserve dated observations and gate failures.
    Before a guarded merge whose cleanup deletes the source branch, retarget
    every open child PR that uses that branch to the intended surviving base.
    GitHub can close stacked children when their base branch is deleted. Record
@@ -370,7 +389,9 @@ For every blocker, climb in order:
    between. A native crash inside a test binary (access violation, segfault)
    is a product or test bug, not tool flakiness, until the suspect test, run
    alone and single-threaded, passes repeatedly; find the last test started
-   and bisect before calling it flaky. For recurring prerequisite gaps in composite commands, follow the
+   and bisect before calling it flaky. A test that passes alone but fails under the full parallel run usually
+   waits a fixed budget (a settle loop, a fake-clock advance) for work done on real threads; make it wait, bounded,
+   for the asserted effect itself instead of raising the budget (project-dashboard#18, #22). For recurring prerequisite gaps in composite commands, follow the
    called scripts and configs and validate the declared installation against its
    authoritative dependency declarations. Test a missing secondary tooling
    module. Adding the latest package name to a duplicated list is not a
