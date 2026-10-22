@@ -35,16 +35,18 @@ Build and operate an isolated GitHub Actions self-hosted runner on `mini`.
   may reach the libvirt gateway and public Internet, but not RFC1918,
   `100.64.0.0/10`, or IPv4 link-local destinations.
 - Runners (v2.336.0, one repository-scoped registration each, never
-  org-wide). New registrations run as their own account, `actions-<repo>`;
-  both live runners predate that and still run as `actions` (migration of the
-  project-manager runner is pending in `TODO.md`):
+  org-wide). Registrations made with `scripts/register-repo-runner.sh` run as
+  their own account, `actions-<repo>`; the Yahtzee runner predates that and
+  runs as `actions`:
   - `mini-github-runner-01` under `/opt/actions-runner/yahtzee`, unit
     `actions.runner.HemSoft-yahtzee.mini-github-runner-01.service`, labels
     `mini` and `yahtzee`.
   - `mini-github-runner-01-pm` for `hemsoft-dev/project-manager` under
     `/opt/actions-runner/project-manager`, unit
     `actions.runner.hemsoft-dev-project-manager.mini-github-runner-01-pm.service`,
-    labels `mini` and `project-manager`. Its CI runs here because hosted
+    labels `mini` and `project-manager`, account `actions-project-manager`
+    (re-registered with the V1.1 helper on 2026-10-21). Its CI runs here
+    because hosted
     minutes for private hemsoft-dev repos are blocked by the org's $0 Actions
     budget (Chief approval, 2026-10-21).
 - Guest build tools: `gcc` and `libc6-dev` (for Go `-race`), from the Ubuntu
@@ -405,8 +407,9 @@ else runner_service=$(sudo cat "$runner_dir/.service"); fi
 [ "$(systemctl show -p WorkingDirectory --value "$runner_service")" = "$runner_dir" ] ||
   { echo "$runner_service does not belong to $runner_dir" >&2; exit 1; }
 sudo systemctl disable --now "$runner_service"
-# Other runners on the same account (both live runners still use actions)
-# could read the token from config.sh's environment: stop them meanwhile.
+# Other runners on the same account could read the token from config.sh's
+# environment: stop them meanwhile. (Each live runner now has its own account,
+# so normally there are none; the step stays for runners that share one.)
 # Only active ones are stopped, and only those are started again, on every
 # exit path (a failed config.sh remove included).
 others=""
@@ -423,8 +426,11 @@ if pgrep -u "$runner_user" >/dev/null; then
   echo "processes of $runner_user are still running; not exporting the token" >&2
   exit 1
 fi
+# config.sh remove refuses while the directory still records a service, so
+# drop that record (the unit is already stopped and disabled) first.
+sudo rm -f "$runner_dir/.service"
 ACTIONS_RUNNER_INPUT_TOKEN="$t" sudo --preserve-env=ACTIONS_RUNNER_INPUT_TOKEN -u "$runner_user" \
-  bash -c 'cd "$1" && exec ./config.sh remove --unattended' _ "$runner_dir"
+  bash -c 'cd "$1" && exec ./config.sh remove' _ "$runner_dir"
 unset t
 for u in $others; do sudo systemctl start "$u"; done
 trap - EXIT
