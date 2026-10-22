@@ -129,11 +129,11 @@ checks that the raw token was not written there, and writes and starts the
 systemd unit itself (root never runs the archive's `svc.sh` or any file the
 runner account could have changed). It hands the token to `config.sh` through
 `ACTIONS_RUNNER_INPUT_TOKEN` (readable only by the runner user and root), never
-argv. It rejects `.`/`..` repository names and refuses any already configured
-directory before unpacking (the directory is keyed by the repository name
-alone, and `config.sh` rejects a configured installation even with
-`--replace`). To re-register, stop and disable the unit and run
-`config.sh remove` first. For example, from mini:
+argv. It rejects `.`/`..` repository names and refuses any existing runner
+directory before unpacking, so root only runs installers in a tree it just
+created. To re-register, run the full [Unregister](#unregister) procedure
+first: it removes the GitHub registration, the unit and its record, and the
+runner directory. For example, from mini:
 
 ```bash
 set -o pipefail
