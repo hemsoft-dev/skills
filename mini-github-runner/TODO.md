@@ -133,7 +133,7 @@ Run trusted GitHub Actions jobs on an isolated virtual machine hosted by `mini`,
       per-repository account, a root-owned unpack, and a script-written unit.
 - [x] Provision `gcc` and `libc6-dev` through cloud-init and
       `scripts/prepare-gh-aw-runtime.sh`.
-- [ ] Re-register `mini-github-runner-01-pm` under `actions-project-manager`
+- [x] Re-register `mini-github-runner-01-pm` under `actions-project-manager`
       with the V1.1 helper, so it no longer shares the public Yahtzee runner's
       `actions` account, and rerun `scripts/verify-guest-isolation.sh`.
 - [ ] Distribute V1.1 to home, laptop, air, and mini and verify each
@@ -415,3 +415,16 @@ claim a fresh runner health, isolation or smoke-workflow check.
 None. V1.1 follow-ups (Milestone 10) are pending: the project-manager runner
 account migration and fleet distribution after this change merges. Yahtzee workflow implementation now continues
 in `D:\github\HemSoft\yahtzee\TODO.md`.
+
+## 2026-10-21 21:30 EDT: project-manager runner migrated to its own account
+
+- Ran the documented Unregister block for `mini-github-runner-01-pm`. The first run found two
+  defects: `config.sh remove` rejects `--unattended`, and it refuses while the directory still
+  has a `.service` record ("Uninstall service first"). The EXIT trap restarted the Yahtzee
+  runner as designed. After the fix (drop the `.service` record first, no `--unattended`) the
+  rerun removed the GitHub registration, credentials and directory.
+- Ran the documented Register block: `RUNNER_REGISTERED ... user=actions-project-manager`,
+  unit `KillMode=mixed`, root records in `/etc/actions-runner/{accounts,units}`, archive cached
+  in `/var/cache/actions-runner`. The runner came online.
+- Verification: rerun of project-manager CI run 39705100067 succeeded on
+  `mini-github-runner-01-pm`; `verify-guest-isolation.sh` returned `ISOLATION_OK`.
