@@ -96,7 +96,7 @@ function Get-T3State {
         }
     }
 
-    $processes = Get-T3Process
+    $processes = @(Get-T3Process)
     $startedAt = if ($processes.Count) { ($processes | Measure-Object -Property StartTime -Minimum).Minimum } else { $null }
     $asarWrittenAt = (Get-Item -LiteralPath $Asar).LastWriteTime
     $task = Get-ScheduledTask -TaskName $WatchTask -ErrorAction SilentlyContinue
@@ -128,7 +128,7 @@ function Format-T3State($State) {
 }
 
 function Close-T3 {
-    $processes = Get-T3Process
+    $processes = @(Get-T3Process)
     if (-not $processes.Count) { return 'not running' }
     $main = $processes | Where-Object { $_.MainWindowHandle -ne 0 } | Select-Object -First 1
     if ($main) {
@@ -139,12 +139,12 @@ function Close-T3 {
         foreach ($id in $ids) { & taskkill.exe /PID $id 2>&1 | Out-Null }
     }
     $deadline = (Get-Date).AddSeconds(30)
-    while ((Get-T3Process).Count -and (Get-Date) -lt $deadline) { Start-Sleep -Milliseconds 500 }
-    $left = Get-T3Process
+    while (@(Get-T3Process).Count -and (Get-Date) -lt $deadline) { Start-Sleep -Milliseconds 500 }
+    $left = @(Get-T3Process)
     if ($left.Count) {
         $left | Stop-Process -Force
         Start-Sleep -Seconds 2
-        if ((Get-T3Process).Count) { throw 'T3 processes survived a forced stop' }
+        if (@(Get-T3Process).Count) { throw 'T3 processes survived a forced stop' }
         return "forced after 30 s ($($left.Count) processes)"
     }
     'closed gracefully'
@@ -153,11 +153,11 @@ function Close-T3 {
 function Wait-Installer {
     # electron-updater installs a downloaded update when the app quits; give it a moment to start.
     $deadline = (Get-Date).AddSeconds(8)
-    while (-not (Get-InstallerProcess).Count -and (Get-Date) -lt $deadline) { Start-Sleep -Milliseconds 500 }
-    if (-not (Get-InstallerProcess).Count) { return 'no installer ran' }
+    while (-not @(Get-InstallerProcess).Count -and (Get-Date) -lt $deadline) { Start-Sleep -Milliseconds 500 }
+    if (-not @(Get-InstallerProcess).Count) { return 'no installer ran' }
     $deadline = (Get-Date).AddMinutes(5)
-    while ((Get-InstallerProcess).Count -and (Get-Date) -lt $deadline) { Start-Sleep -Seconds 1 }
-    if ((Get-InstallerProcess).Count) { throw 'The T3 installer is still running after 5 minutes' }
+    while (@(Get-InstallerProcess).Count -and (Get-Date) -lt $deadline) { Start-Sleep -Seconds 1 }
+    if (@(Get-InstallerProcess).Count) { throw 'The T3 installer is still running after 5 minutes' }
     Start-Sleep -Seconds 2
     'installer finished'
 }
@@ -183,7 +183,7 @@ function Invoke-Worker {
         Write-UpdateLog "Worker $RunId started"
         $steps.Add("close: $(Close-T3)")
         $steps.Add("update: $(Wait-Installer)")
-        if ((Get-T3Process).Count) { $steps.Add("close after install: $(Close-T3)") }
+        if (@(Get-T3Process).Count) { $steps.Add("close after install: $(Close-T3)") }
         $patch = Invoke-PatchScript @()
         $steps.Add("patch: $(($patch.Output | Select-Object -Last 1))")
         if ($patch.ExitCode -eq 2) { $exitCode = 2 } elseif ($patch.ExitCode -ne 0) { throw "patch failed: $($patch.Output -join ' ')" }
@@ -191,7 +191,7 @@ function Invoke-Worker {
     } catch {
         $steps.Add("error: $($_.Exception.Message)")
         $exitCode = 3
-        if (-not (Get-T3Process).Count) {
+        if (-not @(Get-T3Process).Count) {
             try { $steps.Add("recovery launch: $(Open-T3)") } catch { $steps.Add("recovery launch failed: $($_.Exception.Message)") }
         }
     }

@@ -1,6 +1,6 @@
 ---
 name: merge-mission
-description: V1.75 - Resolve every open issue and pull request in a repository, processing existing PRs first and then oldest-first issues. Runs as a persistent goal with current-head review, validation, guarded merges, delivery verification, cleanup, and one-time notifications. Repairs CI and delivery failures, preserves evidence and recovery state, proves remaining hard blocks, and records retrospective lessons. Manual invocation only.
+description: V1.76 - Resolve every open issue and pull request in a repository, processing existing PRs first and then oldest-first issues. Runs as a persistent goal with current-head review, validation, guarded merges, delivery verification, cleanup, and one-time notifications. Repairs CI and delivery failures, preserves evidence and recovery state, proves remaining hard blocks, and records retrospective lessons. Manual invocation only.
 compatibility: Requires git, GitHub CLI, network access, permission to push branches and open pull requests, mergepr on PATH, the issue-to-pr, process-pr, repo-cleanup, and slack-dm skills, and a runtime that honors the /goal director. Without /goal, the state file alone carries resumption.
 ---
 
@@ -224,8 +224,9 @@ stop reasons. "I was not sure" is not a stop reason; decide and record.
    the guarded merge gate,
    `mergepr`, cleanup, and notification from `issue-to-pr-merge` phases 3 and
    4. When `mergepr` is not on PATH (Linux hosts), run it as `pwsh ~/bin/mergepr.ps1 <PR>`
-   from the clean primary checkout; it is the same guarded helper. Read `../process-pr/references/pr-reviewer-policy.md` before reviewer
-   work. For protocol or serialized-artifact changes, pair hostile/mutated
+   from the clean primary checkout; it is the same guarded helper. Read
+   `../process-pr/references/pr-reviewer-policy.md` before reviewer work.
+   For protocol or serialized-artifact changes, pair hostile/mutated
    fixtures with a positive artifact from the actual pinned producer or real
    transport. Hand-built examples can repeat the consumer's mistaken field or
    framing assumptions. Use authorized no-auth runs, local transports or fake
@@ -343,6 +344,15 @@ stop reasons. "I was not sure" is not a stop reason; decide and record.
    exit code, then run the hygiene gate and update the state file before the
    next item.
 
+   If a release published its assets and generated branch before PR creation
+   failed, verify the release revision, asset set and generated diff. Use an
+   already authorized identity to open the missing PR, preserving the generated
+   head and normal review/check gates. After it merges, rerun the failed job
+   once only if the existing workflow can reconcile the published release and
+   merged notes without the unavailable permission or credential. Verify its
+   terminal success. Do not change secrets or organization settings, duplicate
+   a release, or bypass protection to recover this delivery.
+
    Before invoking a merge helper that removes worktrees, inspect their ignored
    content and preserve identified evidence or retained work outside the tree.
    A clean tracked status does not establish that ignored files are disposable.
@@ -391,8 +401,9 @@ For every blocker, climb in order:
    alone and single-threaded, passes repeatedly; find the last test started
    and bisect before calling it flaky. A test that passes alone but fails under the full parallel run usually
    waits a fixed budget (a settle loop, a fake-clock advance) for work done on real threads; make it wait, bounded,
-   for the asserted effect itself instead of raising the budget (project-dashboard#18, #22). For recurring prerequisite gaps in composite commands, follow the
-   called scripts and configs and validate the declared installation against its
+   for the asserted effect itself instead of raising the budget (project-dashboard#18, #22).
+   For recurring prerequisite gaps in composite commands, follow the called
+   scripts and configs and validate the declared installation against its
    authoritative dependency declarations. Test a missing secondary tooling
    module. Adding the latest package name to a duplicated list is not a
    root-cause fix.
