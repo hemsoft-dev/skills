@@ -1,6 +1,6 @@
 ---
 name: merge-mission
-description: V1.76 - Resolve every open issue and pull request in a repository, processing existing PRs first and then oldest-first issues. Runs as a persistent goal with current-head review, validation, guarded merges, delivery verification, cleanup, and one-time notifications. Repairs CI and delivery failures, preserves evidence and recovery state, proves remaining hard blocks, and records retrospective lessons. Manual invocation only.
+description: V1.77 - Resolve every open issue and pull request in a repository, processing existing PRs first and then oldest-first issues. Runs as a persistent goal with current-head review, validation, guarded merges, delivery verification, cleanup, and one-time notifications. Repairs CI and delivery failures, preserves evidence and recovery state, proves remaining hard blocks, and records retrospective lessons. Manual invocation only.
 compatibility: Requires git, GitHub CLI, network access, permission to push branches and open pull requests, mergepr on PATH, the issue-to-pr, process-pr, repo-cleanup, and slack-dm skills, and a runtime that honors the /goal director. Without /goal, the state file alone carries resumption.
 ---
 
@@ -95,6 +95,16 @@ follow it for the whole run. In the same step, check that any self-hosted runner
 the required checks depend on is online, and ask for it then if it is not. Both
 asks came too late on survival-shelter#50; asking them at inventory kept #52
 moving.
+
+## Pool selection across subscription status
+
+When the user identifies an active quota pool and excludes another, apply that
+choice to every consumer of subscription status. A preferred table metric alone
+is insufficient. Trace account and fleet scores, severity, risk badges, urgency,
+alerts, tray and widgets through a shared eligibility policy. Test the active
+pool missing, arriving and disappearing while an excluded pool remains risky.
+Replay sanitized real provider data when authorized, and distinguish saved-data
+verification from a successful fresh provider fetch.
 
 ## Goal director
 
@@ -303,6 +313,27 @@ stop reasons. "I was not sure" is not a stop reason; decide and record.
    reports as failed ("Something went wrong, try again by commenting …") is
    neither clean nor silence: re-request it once per failure, counted against
    the retry cap, and treat the earlier findings as the latest word meanwhile.
+   For differential coverage failures, compare the actual uncovered lines in
+   paired artifacts before dismissing unchanged code. Replace incidental IO
+   or timer coverage with explicit fixtures and controlled clocks. Do not
+   rerun an unchanged head just to win a favorable coverage sample. For
+   platform-unmapped control flow, share the tested algorithm across native
+   adapters instead of weakening unknown-coverage handling or the gate.
+   For kernel or provider teardown races, check successful payloads as well as
+   vanished-record errors. Producers can emit sentinel fields after ownership
+   disappears. Capture a native sample, verify the producer contract, and add a
+   parser regression without accepting arbitrary malformed records or relaxing
+   cleanup verification. A successful read is not proof of a stable live snapshot.
+   For process-cleanup changes, prove termination separately from record or
+   resource disappearance. Zombie records can outlive termination, and OS file
+   locks can clear afterward. Keep fixture readiness independent of resources
+   held under test, verify process state directly, and bound any additional
+   resource-release wait. Require a documented completion barrier: a Windows
+   job active-process count reaching zero does not prove that its process
+   handles are signaled. Verify retained handle identity and job membership
+   before termination, wait on those handles, and rescan for newly created
+   descendants within the same deadline. Qualify these assertions on each supported OS; do
+   not infer another platform's lock or reaping semantics from local success.
    Before merging release-bearing work, compare its `Unreleased` notes
    with the automatic release/changelog path, including issue-to-PR links whose
    numbers differ. Reconcile notes that would repeat the generated release
@@ -598,6 +629,7 @@ errors, fall back to direct `gh` queries and note that in the state file.
 
 ## Honesty gates
 
+- Isolate compiler output directories when qualifying different revisions or mutation workers. A shared test binary can be replaced between build and execution, and copied sources can reuse stale artifacts. Use producer-supported isolated outputs and rerun suspect measurements before publishing counts. Dependency download caches may remain shared.
 - Partial implementation PRs use plain related-issue references. Never negate a
   GitHub closing-keyword reference: GitHub can still interpret "does not close"
   followed by an issue number as an automatic closure. Commit messages count
